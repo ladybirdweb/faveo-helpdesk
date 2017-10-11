@@ -177,7 +177,6 @@ class ApiController extends Controller
                         'reply_content' => 'required',
             ]);
             if ($v->fails()) {
-               
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
@@ -185,11 +184,12 @@ class ApiController extends Controller
             $user_id = $this->user->id;
             $attach = $this->request->input('attachments');
             $this->request->merge(['content' => preg_replace('/[ ](?=[^>]*(?:<|$))/', '&nbsp;', nl2br($this->request->get('reply_content')))]);
-            $result = $this->ticket->reply($this->request, $this->request->input('ticket_id'),true,true,$user_id,false);
+            $result = $this->ticket->reply($this->request, $this->request->input('ticket_id'), true, true, $user_id, false);
             $result = $result->join('users', 'ticket_thread.user_id', '=', 'users.id')
                     ->select('ticket_thread.*', 'users.first_name as first_name')
                     ->orderBy('ticket_thread.id', 'desc')
                     ->first();
+
             return response()->json(compact('result'));
         } catch (\Exception $e) {
             $error = $e->getMessage();

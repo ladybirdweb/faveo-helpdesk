@@ -262,7 +262,7 @@ class TicketController extends Controller
      *
      * @return type bool
      */
-    public function reply(Request $request, $ticketid = "", $mail = true, $system_reply
+    public function reply(Request $request, $ticketid = '', $mail = true, $system_reply
     = true, $user_id = '', $api = true)
     {
         if (\Input::get('billable')) {
@@ -276,27 +276,26 @@ class TicketController extends Controller
                 ], [
             'content.required' => 'Reply Content Required',
         ]);
-        try {
 
+        try {
             if (!$ticketid) {
                 $ticketid = $request->input('ticket_id');
             }
-            $body       = $request->input('content');
-            $email      = $request->input('email');
-            $inline     = $request->input('inline');
+            $body = $request->input('content');
+            $email = $request->input('email');
+            $inline = $request->input('inline');
             $attachment = $request->input('attachment');
-            $source     = source($ticketid);
-            $form_data  = $request->except('content', 'ticket_id', 'attachment', 'inline');
+            $source = source($ticketid);
+            $form_data = $request->except('content', 'ticket_id', 'attachment', 'inline');
             //\Event::fire(new \App\Events\ClientTicketFormPost($form_data, $email, $source));
             if (!$request->has('do-not-send')) {
                 \Event::fire('Reply-Ticket', [['ticket_id' => $ticketid, 'body' => $body]]);
             }
             if ($system_reply == true && Auth::user()) {
                 $user_id = Auth::user()->id;
-            }
-            else {
+            } else {
                 $user_id = requester($ticketid);
-                if ($user_id !== "") {
+                if ($user_id !== '') {
                     $user_id = $user_id;
                 }
             }
@@ -306,30 +305,31 @@ class TicketController extends Controller
                 return $thread;
             }
             if (\Input::get('billable')) {
-
-                $bill                = new Bill();
-                $bill->level         = 'thread';
-                $bill->model_id      = $request->input('ticket_id');
-                $bill->agent         = Auth::user()->id;
-                $bill->ticket_id     = $request->input('ticket_id');
-                $bill->hours         = \Input::get('hours');
-                $bill->billable      = \Input::get('billable');
+                $bill = new Bill();
+                $bill->level = 'thread';
+                $bill->model_id = $request->input('ticket_id');
+                $bill->agent = Auth::user()->id;
+                $bill->ticket_id = $request->input('ticket_id');
+                $bill->hours = \Input::get('hours');
+                $bill->billable = \Input::get('billable');
                 $bill->amount_hourly = \Input::get('amount_hourly');
-                $bill->note          = $body;
+                $bill->note = $body;
                 $bill->save();
             }
         } catch (\Exception $e) {
             $result = $e->getMessage();
+
             return response()->json(compact('result'), 500);
         }
-        $result = ["success" => "Replyed successfully"];
+        $result = ['success' => 'Replyed successfully'];
+
         return response()->json(compact('result'));
     }
-    
+
     public function saveReply($ticket_id, $body, $user_id, $system_reply, $attachment
     = [], $inline = [], $mail = true, $poster = 'support', $email_content = [])
     {
-        $user   = User::where('id', $user_id)->select('id', 'role')->first();
+        $user = User::where('id', $user_id)->select('id', 'role')->first();
         $ticket = $this->saveReplyTicket($ticket_id, $system_reply, $user);
         $thread = $ticket->thread()->create([
             'ticket_id' => $ticket_id,
@@ -340,7 +340,6 @@ class TicketController extends Controller
         $this->saveEmailThread($thread, $email_content);
         $this->saveReplyAttachment($thread, $attachment, $inline);
         $this->replyNotification($ticket, $thread, $mail);
-
 
         return $thread;
     }
