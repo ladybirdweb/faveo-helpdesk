@@ -764,44 +764,47 @@ class TicketController extends Controller
      *
      * @return type bool
      */
-    public function ticketEditPost($ticket_id, Ticket_Thread $thread, Tickets $ticket)
+    public function ticketEditPost($ticket_id, Ticket_Thread $thread, Tickets $tickets, Request $request)
     {
         if (!$this->ticket_policy->edit()) {
-            $response = ['message' => 'permission denied'];
-
+            $response = ['message' => Lang::get('lang.permission_denied')];
             return response()->json(compact('response'), 403);
         }
-
+        $this->validate($request, [
+            "subject"         => 'required',
+            'help_topic'      => 'required',
+            'ticket_source'   => 'required',
+            'ticket_priority' => 'required',
+            'ticket_type'     => 'required',
+        ]);
         try {
-            $ticket = $tickets->where('id', '=', $ticket_id)->first();
+            $ticket   = $tickets->where('id', '=', $ticket_id)->first();
             $tkt_dept = $ticket->dept_id;
             // dd($tkt_dept->dept_id);
             $priority = Input::get('ticket_priority');
-
+            if ($request->has('assigned')) {
+                $ticket->assigned_to = Input::get('assigned');
+            }
             $ticket->help_topic_id = Input::get('help_topic');
             // $dept = Help_topic::select('department')->where('id', '=', $ticket->help_topic_id)->first();
             // $dept = $tkt_dept->dept_id;
-            $sla = $this->getSla(Input::get('ticket_type'), $ticket->user_id, $tkt_dept, Input::get('ticket_source'), $priority);
-            $priority_id = $this->getPriority($priority, $sla);
-            $ticket->sla = $sla;
-            $ticket->source = Input::get('ticket_source');
-            $ticket->priority_id = $priority_id;
-            $ticket->type = Input::get('ticket_type');
-            $ticket->dept_id = $tkt_dept;
-            $ticket = $this->updateOverdue($ticket, $sla);
+         
+            $priority_id           = $priority; //$this->getPriority($priority, $sla);
+            $ticket->source        = Input::get('ticket_source');
+            $ticket->priority_id   = $priority_id;
+            $ticket->type          = Input::get('ticket_type');
+            $ticket->dept_id       = $tkt_dept;
+            //$ticket = $this->updateOverdue($ticket, $sla);
             $ticket->save();
-
-            $threads = $thread->where('ticket_id', '=', $ticket_id)->first();
-            $threads->title = Input::get('subject');
+            $threads               = $thread->where('ticket_id', '=', $ticket_id)->first();
+            $threads->title        = Input::get('subject');
             $threads->save();
             \Event::fire('notification', [$threads]);
         } catch (\Exception $ex) {
             $result = $ex->getMessage();
-
             return response()->json(compact('result'), 500);
         }
-        $result = ['success' => 'Edited successfully'];
-
+        $result = ["success" => "Edited successfully"];
         return response()->json(compact('result'));
     }
 

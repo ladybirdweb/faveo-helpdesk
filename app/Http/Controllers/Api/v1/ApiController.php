@@ -211,24 +211,37 @@ class ApiController extends Controller
      */
     public function editTicket()
     {
-        try {
+            try {
             $v = \Validator::make($this->request->all(), [
                         'ticket_id'       => 'required|exists:tickets,id',
                         'subject'         => 'required',
-                        'sla_plan'        => 'required|exists:sla_plan,id',
-                        'help_topic'      => 'required|exists:help_topic,id',
-                        'ticket_source'   => 'required|exists:ticket_source,id',
-                        'ticket_priority' => 'required|exists:ticket_priority,priority_id',
+                        'help_topic'      => 'required',
+                        'ticket_source'   => 'required',
+                        'ticket_priority' => 'required',
+                        'ticket_type'     => 'required',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
-            $ticket_id = $this->request->input('ticket_id');
-            $result = $this->ticket->ticketEditPost($ticket_id, $this->thread, $this->model);
+            
+            if ($this->request->has('assigned') && !is_numeric($this->request->get('assigned'))) {
+                return response()->json(['error' => ['assigned' => ['The assigned feild must me an integer value.']]]);
+            } elseif ($this->request->has('assigned') && is_numeric($this->request->get('assigned'))) {
+                $ticket_policy = new \App\Policies\TicketPolicy();
+                if (!$ticket_policy->assign()) {
+                    return response()->json(['message' => Lang::get('lang.permission_denied')], 403);
+                }
+            }
 
-            return response()->json(compact('result'));
+            $ticket_id              = $this->request->input('ticket_id');
+            $PhpMailController      = new \App\Http\Controllers\Common\PhpMailController();
+            $NotificationController = new \App\Http\Controllers\Common\NotificationController();
+            $core                   = new CoreTicketController($PhpMailController, $NotificationController);
+            $thread                 = new Ticket_Thread();
+            $tickets                = new Tickets();
+            return $core->ticketEditPost($ticket_id, $thread, $tickets, $this->request);
         } catch (\Exception $e) {
             $error = $e->getMessage();
             $line = $e->getLine();
