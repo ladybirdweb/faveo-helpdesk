@@ -945,12 +945,11 @@ class ApiController extends Controller
     public function inbox()
     {
         try {
-            $user  = \JWTAuth::parseToken()->authenticate();
-                            $inbox = $this->user->join('tickets', function ($join) {
-                                        $join->on('users.id', '=', 'tickets.user_id');
-                                    })
-                                    ->leftjoin('department', function($join)
-                                    {
+            $user = \JWTAuth::parseToken()->authenticate();
+            $inbox = $this->user->join('tickets', function ($join) {
+                $join->on('users.id', '=', 'tickets.user_id');
+            })
+                                    ->leftjoin('department', function ($join) {
                                         $join->on('department.id', '=', 'tickets.dept_id');
                                     })
                                     ->join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
@@ -963,21 +962,22 @@ class ApiController extends Controller
                                     })
                                     ->leftJoin('ticket_attachment', 'ticket_attachment.thread_id', '=', 'ticket_thread.id')
                                     ->where('ticket_status.id', '1');
-                            if ($user->role == 'agent') {
-                                $id    = $user->id;
-                                $dept  = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
-                                $inbox = $inbox->where(function ($query) use ($dept, $id) {
-                                    $query->whereIn('tickets.dept_id', $dept)
+            if ($user->role == 'agent') {
+                $id = $user->id;
+                $dept = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
+                $inbox = $inbox->where(function ($query) use ($dept, $id) {
+                    $query->whereIn('tickets.dept_id', $dept)
                                             ->orWhere('assigned_to', '=', $id);
-                                });
-                            }
-                            $inbox = $inbox->select(\DB::raw('max(ticket_thread.updated_at) as updated_at'), 'user_name', 'first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', \DB::raw('substring_index(group_concat(ticket_thread.title order by ticket_thread.id asc) , ",", 1) as title'), 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'ticket_priority.priority_color as priority_color', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name', 'department.id as department_id', 'users.primary_dpt as user_dpt', \DB::raw('count(ticket_attachment.id) as attachment'), 'tickets.duedate as overdue_date')
+                });
+            }
+            $inbox = $inbox->select(\DB::raw('max(ticket_thread.updated_at) as updated_at'), 'user_name', 'first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', \DB::raw('substring_index(group_concat(ticket_thread.title order by ticket_thread.id asc) , ",", 1) as title'), 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'ticket_priority.priority_color as priority_color', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name', 'department.id as department_id', 'users.primary_dpt as user_dpt', \DB::raw('count(ticket_attachment.id) as attachment'), 'tickets.duedate as overdue_date')
                                     ->orderBy('updated_at', 'desc')
                                     ->groupby('tickets.id')
                                     ->distinct()
                                     ->paginate(10)
                                     ->toJson();
-                            return $inbox;
+
+            return $inbox;
         } catch (\Exception $ex) {
             $error = $ex->getMessage();
             $line = $ex->getLine();
@@ -1544,6 +1544,4 @@ class ApiController extends Controller
             return response()->json(compact('error'));
         }
     }
-    
-    
 }
