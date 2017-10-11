@@ -262,124 +262,87 @@ class TicketController extends Controller
      *
      * @return type bool
      */
-    public function reply($thread, $request, $ta, $attach = '')
+    public function reply(Request $request, $ticketid = "", $mail = true, $system_reply
+    = true, $user_id = '', $api = true)
     {
-        try {
-            $check_attachment = null;
-            $eventthread = $thread->where('ticket_id', $request->input('ticket_ID'))->first();
-            //dd($request->input('ticket_ID'));
-            //dd($eventthread);
-            $eventuserid = $eventthread->user_id;
-            $emailadd = User::where('id', $eventuserid)->first()->email;
-            //dd($emailadd);
-            $source = $eventthread->source;
+        if (\Input::get('billable')) {
+            $this->validate($request, [
 
-            $form_data = $request->except('reply_content', 'ticket_ID', 'attachment');
-            \Event::fire(new \App\Events\ClientTicketFormPost($form_data, $emailadd, $source));
-            //dd('yes');
-            $reply_content = $request->input('reply_content');
-            $thread->ticket_id = $request->input('ticket_ID');
-            $thread->poster = 'support';
-            $thread->body = $request->input('reply_content');
-            $thread->user_id = Auth::user()->id;
-            $ticket_id = $request->input('ticket_ID');
-            $tickets = Tickets::where('id', '=', $ticket_id)->first();
-            $tickets->isanswered = '1';
-            $tickets->save();
-
-            $ticket_user = User::where('id', '=', $tickets->user_id)->first();
-
-            if ($tickets->assigned_to == 0) {
-                $tickets->assigned_to = Auth::user()->id;
-                $tickets->save();
-                $thread2 = new Ticket_Thread();
-                $thread2->ticket_id = $thread->ticket_id;
-                $thread2->user_id = Auth::user()->id;
-                $thread2->is_internal = 1;
-                $thread2->body = 'This Ticket have been assigned to '.Auth::user()->first_name.' '.Auth::user()->last_name;
-                $thread2->save();
-            }
-            if ($tickets->status > 1) {
-                $tickets->status = '1';
-                $tickets->isanswered = '1';
-                $tickets->save();
-            }
-            $thread->save();
-
-            if (!empty($attach)) {
-                $check_attachment = $this->attach($thread->id, $attach);
-            }
-
-            $thread1 = Ticket_Thread::where('ticket_id', '=', $ticket_id)->first();
-            $ticket_subject = $thread1->title;
-            $user_id = $tickets->user_id;
-            $user = User::where('id', '=', $user_id)->first();
-            $email = $user->email;
-            $user_name = $user->user_name;
-            $ticket_number = $tickets->ticket_number;
-            $company = $this->company();
-            $username = $ticket_user->user_name;
-            if (!empty(Auth::user()->agent_sign)) {
-                $agentsign = Auth::user()->agent_sign;
-            } else {
-                $agentsign = null;
-            }
-            \Event::fire(new \App\Events\FaveoAfterReply($reply_content, $user->phone_number, $request, $tickets));
-
-//             Mail::send(array('html' => 'emails.ticket_re-reply'), ['content' => $reply_content, 'ticket_number' => $ticket_number, 'From' => $company, 'name' => $username, 'Agent_Signature' => $agentsign], function ($message) use ($email, $user_name, $ticket_number, $ticket_subject, $check_attachment) {
-//                 $message->to($email, $user_name)->subject($ticket_subject . '[#' . $ticket_number . ']');
-//                 // if(isset($attachments)){
-            // //                if ($check_attachment == 1) {
-            // //                    $size = count($attach);
-            // //                    for ($i = 0; $i < $size; $i++) {
-            // //                        $message->attach($attachments[$i]->getRealPath(), ['as' => $attachments[$i]->getClientOriginalName(), 'mime' => $attachments[$i]->getClientOriginalExtension()]);
-            // //                    }
-            // //                }
-//             }, true);
-            //dd('reply');
-            /*
-             * Getting the subject of the thread
-             */
-            //dd($eventthread);
-            try {
-                $re = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $eventthread->title, 'scenario' => 'create-ticket-by-agent', 'body' => $thread->body], $template_variables = ['agent_sign' => Auth::user()->agent_sign, 'ticket_number' => $tickets->number]);
-                //dd($re);
-            } catch (\Exception $e) {
-                throw new \Exception($e->getMessage());
-            }
-
-            $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket_id)->get();
-            foreach ($collaborators as $collaborator) {
-                //mail to collaborators
-                $collab_user_id = $collaborator->user_id;
-                $user_id_collab = User::where('id', '=', $collab_user_id)->first();
-                $collab_email = $user_id_collab->email;
-                if ($user_id_collab->role == 'user') {
-                    $collab_user_name = $user_id_collab->user_name;
-                } else {
-                    $collab_user_name = $user_id_collab->first_name.' '.$user_id_collab->last_name;
-                }
-//                 Mail::send('emails.ticket_re-reply', ['content' => $reply_content, 'ticket_number' => $ticket_number, 'From' => $company, 'name' => $collab_user_name, 'Agent_Signature' => $agentsign], function ($message) use ($collab_email, $collab_user_name, $ticket_number, $ticket_subject, $check_attachment) {
-//                     $message->to($collab_email, $collab_user_name)->subject($ticket_subject . '[#' . $ticket_number . ']');
-                // //                    if ($check_attachment == 1) {
-                // //                        $size = sizeOf($attachments);
-                // //                        for ($i = 0; $i < $size; $i++) {
-                // //                            $message->attach($attachments[$i]->getRealPath(), ['as' => $attachments[$i]->getClientOriginalName(), 'mime' => $attachments[$i]->getClientOriginalExtension()]);
-                // //                        }
-                // //                    }
-//                 }, true);
-
-                try {
-                    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $admin_user, 'email' => $admin_email], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $admin_user, 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $admin_user, 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
-                } catch (\Exception $e) {
-                }
-            }
-
-            return $thread;
-        } catch (\Exception $e) {
-            //dd($e);
-            return $e->getMessage();
+                'hours' => ['required', 'regex:/^([0-9]|0[0-9]|1[0-9]|2[0-9]|0[0-9][0-9]|1[0-9][0-9]|2[0-9][0-9]):[0-5][0-9]$/'],
+            ]);
         }
+        $this->validate($request, [
+            'content' => 'required',
+                ], [
+            'content.required' => 'Reply Content Required',
+        ]);
+        try {
+
+            if (!$ticketid) {
+                $ticketid = $request->input('ticket_id');
+            }
+            $body       = $request->input('content');
+            $email      = $request->input('email');
+            $inline     = $request->input('inline');
+            $attachment = $request->input('attachment');
+            $source     = source($ticketid);
+            $form_data  = $request->except('content', 'ticket_id', 'attachment', 'inline');
+            //\Event::fire(new \App\Events\ClientTicketFormPost($form_data, $email, $source));
+            if (!$request->has('do-not-send')) {
+                \Event::fire('Reply-Ticket', [['ticket_id' => $ticketid, 'body' => $body]]);
+            }
+            if ($system_reply == true && Auth::user()) {
+                $user_id = Auth::user()->id;
+            }
+            else {
+                $user_id = requester($ticketid);
+                if ($user_id !== "") {
+                    $user_id = $user_id;
+                }
+            }
+
+            $thread = $this->saveReply($ticketid, $body, $user_id, $system_reply, $attachment, $inline, $mail);
+            if (!$api) {
+                return $thread;
+            }
+            if (\Input::get('billable')) {
+
+                $bill                = new Bill();
+                $bill->level         = 'thread';
+                $bill->model_id      = $request->input('ticket_id');
+                $bill->agent         = Auth::user()->id;
+                $bill->ticket_id     = $request->input('ticket_id');
+                $bill->hours         = \Input::get('hours');
+                $bill->billable      = \Input::get('billable');
+                $bill->amount_hourly = \Input::get('amount_hourly');
+                $bill->note          = $body;
+                $bill->save();
+            }
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            return response()->json(compact('result'), 500);
+        }
+        $result = ["success" => "Replyed successfully"];
+        return response()->json(compact('result'));
+    }
+    
+    public function saveReply($ticket_id, $body, $user_id, $system_reply, $attachment
+    = [], $inline = [], $mail = true, $poster = 'support', $email_content = [])
+    {
+        $user   = User::where('id', $user_id)->select('id', 'role')->first();
+        $ticket = $this->saveReplyTicket($ticket_id, $system_reply, $user);
+        $thread = $ticket->thread()->create([
+            'ticket_id' => $ticket_id,
+            'user_id'   => $user_id,
+            'poster'    => $poster,
+            'body'      => $body,
+        ]);
+        $this->saveEmailThread($thread, $email_content);
+        $this->saveReplyAttachment($thread, $attachment, $inline);
+        $this->replyNotification($ticket, $thread, $mail);
+
+
+        return $thread;
     }
 
     /**
