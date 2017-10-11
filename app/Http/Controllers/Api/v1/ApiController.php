@@ -211,7 +211,7 @@ class ApiController extends Controller
      */
     public function editTicket()
     {
-            try {
+        try {
             $v = \Validator::make($this->request->all(), [
                         'ticket_id'       => 'required|exists:tickets,id',
                         'subject'         => 'required',
@@ -225,7 +225,7 @@ class ApiController extends Controller
 
                 return response()->json(compact('error'));
             }
-            
+
             if ($this->request->has('assigned') && !is_numeric($this->request->get('assigned'))) {
                 return response()->json(['error' => ['assigned' => ['The assigned feild must me an integer value.']]]);
             } elseif ($this->request->has('assigned') && is_numeric($this->request->get('assigned'))) {
@@ -235,12 +235,13 @@ class ApiController extends Controller
                 }
             }
 
-            $ticket_id              = $this->request->input('ticket_id');
-            $PhpMailController      = new \App\Http\Controllers\Common\PhpMailController();
+            $ticket_id = $this->request->input('ticket_id');
+            $PhpMailController = new \App\Http\Controllers\Common\PhpMailController();
             $NotificationController = new \App\Http\Controllers\Common\NotificationController();
-            $core                   = new CoreTicketController($PhpMailController, $NotificationController);
-            $thread                 = new Ticket_Thread();
-            $tickets                = new Tickets();
+            $core = new CoreTicketController($PhpMailController, $NotificationController);
+            $thread = new Ticket_Thread();
+            $tickets = new Tickets();
+
             return $core->ticketEditPost($ticket_id, $thread, $tickets, $this->request);
         } catch (\Exception $e) {
             $error = $e->getMessage();
@@ -1169,30 +1170,30 @@ class ApiController extends Controller
             $v = \Validator::make($this->request->all(), [
                                         'user_id' => 'required|exists:users,id',
                             ]);
-                            if ($v->fails()) {
-                                $error = $v->errors();
+            if ($v->fails()) {
+                $error = $v->errors();
 
-                                return response()->json(compact('error'));
-                            }
-                            $id = $this->request->input('user_id');
-                            if ($this->user->where('id', $id)->first()->role == 'admin'
+                return response()->json(compact('error'));
+            }
+            $id = $this->request->input('user_id');
+            if ($this->user->where('id', $id)->first()->role == 'admin'
                                     || $this->user->where('id', $id)->first()->role
                                     == 'agent') {
-                                $error = 'This is not a client';
+                $error = 'This is not a client';
 
-                                return response()->json(compact('error'));
-                            }
-                            $user   = User::where('users.id', $id)
+                return response()->json(compact('error'));
+            }
+            $user = User::where('users.id', $id)
                                             ->leftJoin('user_assign_organization', 'users.id', '=', 'user_assign_organization.user_id')
                                             ->leftJoin('organization', 'user_assign_organization.org_id', '=', 'organization.id')
                                             ->select(
                                                     'users.first_name', 'users.last_name', 'users.user_name', 'users.email', 'users.id', 'users.profile_pic', 'users.ban', 'users.active', 'users.is_delete', 'users.phone_number', 'users.ext', 'users.country_code', 'users.mobile', 'organization.name as company'
                                             )->first()->toArray();
-                            //dd($user);
-                            $result = $this->user->join('tickets', function ($join) use ($id) {
-                                        $join->on('users.id', '=', 'tickets.user_id')
+            //dd($user);
+            $result = $this->user->join('tickets', function ($join) use ($id) {
+                $join->on('users.id', '=', 'tickets.user_id')
                                         ->where('user_id', '=', $id);
-                                    })
+            })
                                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                                     ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
@@ -1207,10 +1208,9 @@ class ApiController extends Controller
                                     ->groupby('tickets.id')
                                     ->distinct()
                                     ->get()
-                                    ->toArray()
-                            ;
+                                    ->toArray();
 
-                            return response()->json(['tickets' => $result, 'requester' => $user]);
+            return response()->json(['tickets' => $result, 'requester' => $user]);
         } catch (\Exception $e) {
             $error = $e->getMessage();
             $line = $e->getLine();
