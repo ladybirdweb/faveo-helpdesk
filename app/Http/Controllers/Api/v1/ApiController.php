@@ -668,7 +668,7 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'id' => 'required|exists:tickets,id',
+                        'id' => 'required',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -677,9 +677,10 @@ class ApiController extends Controller
             }
             $id = $this->request->input('id');
             $result = $this->user
-                    ->leftjoin('ticket_thread', 'ticket_thread.user_id', '=', 'users.id')
+                    ->rightjoin('ticket_thread', 'ticket_thread.user_id', '=', 'users.id')
                     ->select('ticket_thread.id', 'ticket_id', 'user_id', 'poster', 'source', 'title', 'body', 'is_internal', 'format', 'ip_address', 'ticket_thread.created_at', 'ticket_thread.updated_at', 'users.first_name', 'users.last_name', 'users.user_name', 'users.email', 'users.profile_pic')
                     ->where('ticket_id', $id)
+                    ->orderBy('ticket_thread.id', 'desc')
                     ->get()
                     ->toJson();
 
