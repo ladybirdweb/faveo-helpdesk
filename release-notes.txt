@@ -24,6 +24,11 @@
 |=====================================================
 | v1.9.7-BETA Framework updates
 |=====================================================
+This pre-release is a BETA version of the upcoming features of Faveo Helpdesk. While using/testing the software you may encounter some bugs. You can report those issues on our GitHub community page. If you are not sure to test new features you can still download stable code v1.9.6 and use the software in production.
+
+Download link for v1.9.6
+https://github.com/ladybirdweb/faveo-helpdesk/releases/tag/v1.9.6
+
 ## Updates
     Updated Laravel Framework 5.5.14
     New installer with support of command line or terminal commands
