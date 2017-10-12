@@ -92,7 +92,7 @@ class RouteServiceProvider extends ServiceProvider
                     require base_path('routes/installer.php');
                 });
     }
-    
+
     /**
      * Define the "update" routes for the application.
      *
@@ -103,9 +103,9 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapUpdateRoutes()
     {
         Route::group([
-            'middleware' => ['web', 'redirect','install'],
+            'middleware' => ['web', 'redirect', 'install'],
             'namespace'  => $this->namespace,
-            'prefix'=>'app/update',
+            'prefix'     => 'app/update',
                 ], function ($router) {
                     require base_path('routes/update.php');
                 });
