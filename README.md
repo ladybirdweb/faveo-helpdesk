@@ -2,6 +2,8 @@ Faveo Helpdesk Community
 ========
 <br><img src="https://travis-ci.org/ladybirdweb/faveo-helpdesk.svg?branch=master">&nbsp;<img src="https://img.shields.io/badge/License-OSL-blue.svg">&nbsp;<a href="https://gitter.im/ladybirdweb/faveo-helpdesk" target="_blank"><img src="https://badges.gitter.im/ladybirdweb/faveo-helpdesk.svg"></a>&nbsp;<a href="https://styleci.io/repos/34716238"><img src="https://styleci.io/repos/34716238/shield" alt="StyleCI" height="19px"></a>&nbsp;<a href="http://squizlabs.github.io/PHP_CodeSniffer/analysis/ladybirdweb/faveo-helpdesk/index.html" target="_blank"><img src="http://squizlabs.github.io/PHP_CodeSniffer/analysis/ladybirdweb/faveo-helpdesk/grade.svg" height="20px"></a>&nbsp;<a href="https://scrutinizer-ci.com/g/ladybirdweb/faveo-helpdesk/?branch=master" target="_blank"><img src="https://scrutinizer-ci.com/g/mverma16/faveo-helpdesk/badges/quality-score.png?b=master" height="20px"></a></br>
 
+#### :new: Faveo Helpdesk Community [v1.9.7-BETA](https://github.com/ladybirdweb/faveo-helpdesk/releases/tag/v1.9.7-BETA) is out. Click [here](https://github.com/ladybirdweb/faveo-helpdesk/archive/v1.9.7-BETA.zip) to download it now.
+
 Faveo Helpdesk provides Businesses with an automated Helpdesk system to manage customer support. 
 
 The word Faveo comes from Latin which means to be favourable. Which truly highlights vision and the scope as well as the functionality of the product that Faveo is. In today’s competitive startup scenario customer retention is one of the major challenges. Handling client query diligently is all the difference between retaining or losing a long lasting relationship. The company is driven with passion of providing tools for managing consumer queries for strategic insights and helping companies take those decisive decisions.
@@ -15,7 +17,7 @@ Flavors of Faveo
   * Faveo Community Edition – Free, Open source edition
   * Faveo Pro Edition – Paid version with many advance features and integrations
   * Faveo Service Desk - Paid version for IT Assest management
-
+  
 Faveo Documentation
 --------------------------
   * <a href="http://www.ladybirdweb.com/support/knowledgebase" target="_blank">Faveo user Manual</a>
