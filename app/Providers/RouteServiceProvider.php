@@ -37,6 +37,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiRoutes();
         $this->mapWebRoutes();
         $this->mapInstallerRoutes();
+        $this->mapUpdateRoutes();
         //
     }
 
@@ -89,6 +90,24 @@ class RouteServiceProvider extends ServiceProvider
             'namespace'  => $this->namespace,
                 ], function ($router) {
                     require base_path('routes/installer.php');
+                });
+    }
+    
+    /**
+     * Define the "update" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapUpdateRoutes()
+    {
+        Route::group([
+            'middleware' => ['web', 'redirect','install'],
+            'namespace'  => $this->namespace,
+            'prefix'=>'app/update',
+                ], function ($router) {
+                    require base_path('routes/update.php');
                 });
     }
 }
