@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Http\Requests\helpdesk;
+
 use App\Http\Requests\Request;
-use App\Http\Controllers\Utility\FormController;
+
 /**
  * CreateTicketRequest.
  *
@@ -18,11 +20,12 @@ class CreateTicketRequest extends Request
     {
         return true;
     }
-    
+
     public function wantsJson()
     {
         return true;
     }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -30,35 +33,35 @@ class CreateTicketRequest extends Request
      */
     public function rules()
     {
-       $panel = 'agent';
-       $rules = $this->check($panel);
-       return $rules;
+        $panel = 'agent';
+        $rules = $this->check($panel);
+
+        return $rules;
     }
 
     public function check($panel)
     {
         $required = \App\Model\Custom\Required::
-                 where('form','ticket')
-                ->select("$panel as panel",'field','option')
-                ->where(function($query)use($panel){
+                 where('form', 'ticket')
+                ->select("$panel as panel", 'field', 'option')
+                ->where(function ($query) use ($panel) {
                     return $query->whereNotNull($panel)
-                            ->where($panel,'!=','')
-                            ;
+                            ->where($panel, '!=', '');
                 })
                 ->get()
-                ->transform(function($value){
+                ->transform(function ($value) {
                     $option = $value->option;
-                    if($option){
-                        $option = ",".$value->option;
+                    if ($option) {
+                        $option = ','.$value->option;
                     }
-                    $request[$value->field]=$value->panel.$option;
+                    $request[$value->field] = $value->panel.$option;
+
                     return $request;
                 })
                 ->collapse()
                 ->toArray();
-                ;
-                //dd($required);
+
+        //dd($required);
         return $required;
     }
-    
 }
