@@ -44,7 +44,6 @@ return [
     'password'                              => 'Mot de passe',
     'woops'                                 => 'Oups!',
     'theirisproblem'                        => 'Il y a eu un problème avec ce que vous avez saisi',
-    'login'                                 => 'Connexion',
     'e-mail'                                => 'E-mail',
     'reg_new_member'                        => 'Inscrivez-vous',
     'this_account_is_currently_inactive'    => 'Ce compte est actuellement inactif!',

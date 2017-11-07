@@ -37,7 +37,6 @@ return [
     'password'                    => 'Password',
     'woops'                       => 'Whoops!',
     'theirisproblem'              => 'Ci sono problemi con ciò che hai inserito.',
-    'login'                       => 'Login',
     'e-mail'                      => 'E-mail',
     'reg_new_member'              => 'Registra una nuova associazione',
     /*

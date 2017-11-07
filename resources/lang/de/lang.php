@@ -28,7 +28,7 @@ return [
       |--------------------------------------
      */
     'Login_to_start_your_session' => 'Einloggen um Ihre Sitzung zu starten',
-    'login'                       => 'Login',
+    'login'                       => 'Anmeldung',
     'remember'                    => 'Erinnere dich an mich',
     'signmein'                    => 'Melde mich an',
     'iforgot'                     => 'Ich habe mein Passwort vergessen',
@@ -36,7 +36,6 @@ return [
     'password'                    => 'Passwort',
     'woops'                       => 'Whoops!',
     'theirisproblem'              => 'Es gab einige Probleme mit Ihrer Eingabe.',
-    'login'                       => 'Anmeldung',
     'e-mail'                      => 'E-Mail',
     'reg_new_member'              => 'Registrieren für eine neue Mitgliedschaft',
     /*

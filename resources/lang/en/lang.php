@@ -51,7 +51,6 @@ return [
      'password_confirmation'                 => 'Password confirmation',
     'woops'                                  => 'Whoops!',
     'theirisproblem'                         => 'There were some problems with your input.',
-    'login'                                  => 'Login',
     'e-mail'                                 => 'Email',
     'reg_new_member'                         => 'Register a new membership',
     'this_account_is_currently_inactive'     => 'This account is currently inactive!',

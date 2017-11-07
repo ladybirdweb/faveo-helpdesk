@@ -57,7 +57,6 @@ return [
     'password'                              => 'Senha',
     'woops'                                 => 'Whoops!',
     'theirisproblem'                        => 'Ocorreu um erro durante o login.',
-    'login'                                 => 'Login',
     'e-mail'                                => 'E-mail',
     'reg_new_member'                        => 'Registrar uma nova associação.',
     'this_account_is_currently_inactive'    => 'Essa conta está inativa!',

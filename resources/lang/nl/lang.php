@@ -64,7 +64,6 @@ return [
     'password'                           => 'Wachtwoord',
     'woops'                              => 'Oeps!!',
     'theirisproblem'                     => 'Er is een probleem met je invoer.',
-    'login'                              => 'Login',
     'e-mail'                             => 'E-mailadres',
     'reg_new_member'                     => 'Registreren',
     'this_account_is_currently_inactive' => 'Dit account is niet actief!',

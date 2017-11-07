@@ -34,7 +34,6 @@ return [
     'password'                    => 'Пароль',
     'woops'                       => 'Whoops!',
     'theirisproblem'              => 'There were some problems with your input.',
-    'login'                       => 'Login',
     'e-mail'                      => 'E-mail',
     'reg_new_member'              => 'Register a new membership',
     /*
