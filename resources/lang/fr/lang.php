@@ -1562,7 +1562,6 @@ return [
      'banned-users'        => 'Utilisateurs bannis',
      'inactive-users'      => 'Utilisateurs inactifs',
      'all-users'           => 'Tous les utilisateurs',
-     'search'              => 'Rechercher...',
      //update 21-12-2016
      'selected-user-is-already-the-owner' => 'L\'utilisateur sélectionné est déjà le propriétaire du ticket.',
      //updated 15-5-2017
