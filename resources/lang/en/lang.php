@@ -1591,7 +1591,6 @@ return [
      'banned-users'        => 'Banned users',
      'inactive-users'      => 'Inactive users',
      'all-users'           => 'All users',
-     'search'              => 'Search...',
      //update 21-12-2016
      'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
      //updated 15-5-2017

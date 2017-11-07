@@ -883,7 +883,7 @@ return [
     /*                 Translation Required after this line                       */
     /******************************************************************************/
     'edit_profile'                                                                     => 'Edit profile',
-    'you_are_here'                                                                     => 'You are here',
+    'you_are_here'                                                                     => 'Sei qui',
     'Send'                                                                             => 'SEND',
     'no_article'                                                                       => 'No article',
     'profile_settings'                                                                 => 'Profile settings',
@@ -1114,7 +1114,6 @@ return [
      'banned-users'        => 'Banned users',
      'inactive-users'      => 'Inactive users',
      'all-users'           => 'All users',
-     'search'              => 'Search...',
      //update 21-12-2016
      'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
      //updated 15-5-2017
