@@ -629,7 +629,7 @@ return [
       |  Dashboard
       |-----------------------------------------------
      */
-    'dashboard'  => 'Cruscotto',
+    'dashboard'  => 'Dashboard',
     'line_chart' => 'Tabella lineare',
     'statistics' => 'Statistiche',
     'opened'     => 'Aperto',
