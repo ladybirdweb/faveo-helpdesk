@@ -20,7 +20,7 @@ return [
 
     'success'        => 'Successo',
     'fails'          => 'Fallito',
-    'alert'          => 'Allerta',
+    'alert'          => 'Errore',
     'required-error' => 'Per favore inserire i campi richiesti',
     'invalid'        => 'Id Utente o Password sbagliate',
     /*
