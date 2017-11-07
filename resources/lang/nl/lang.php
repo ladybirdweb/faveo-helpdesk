@@ -1378,7 +1378,6 @@ return [
     'post_comment'                                                                     => 'Plaats reactie',
     'plugin'                                                                           => 'Plugin',
     'edit_profile'                                                                     => 'Bewerk profiel',
-    'you_are_here'                                                                     => 'Je bent hier',
     'Send'                                                                             => 'Verstuur',
     'no_article'                                                                       => 'Geen artikel',
     'profile_settings'                                                                 => 'Profiel instellingen',

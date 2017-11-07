@@ -1322,7 +1322,6 @@ return [
     'post_comment'                                                                     => 'Poster commentaire',
     'plugin'                                                                           => 'Plugin',
     'edit_profile'                                                                     => 'Modifier profil',
-    'you_are_here'                                                                     => 'Vous êtes ici',
     'Send'                                                                             => 'VALIDER',
     'no_article'                                                                       => 'Pas d\'article',
     'profile_settings'                                                                 => 'Paramètres du profil',
