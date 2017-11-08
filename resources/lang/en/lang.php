@@ -827,7 +827,6 @@ return [
     'the_associated_helptopic_has_been_deactivated'    => 'The associated helptopic has been deactivated',
     'department_deleted_sucessfully'                   => 'Department deleted successfully',
     'department_can_not_delete'                        => 'Department can not be deleted',
-    'select_a_department'                              => 'Select a department',
     'make-default-department'                          => 'Make system\'s default department',
     /*
       |--------------------------------------

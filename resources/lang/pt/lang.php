@@ -788,7 +788,6 @@ return [
     'the_associated_helptopic_has_been_deactivated'    => 'O tópico de ajuda associado foi desativado',
     'department_deleted_sucessfully'                   => 'Departamento deletado com sucesso',
     'department_can_not_delete'                        => 'Departamento não pode ser deletado',
-    'select_a_department'                              => 'Selecione um departamento',
     'make-default-department'                          => 'Criar departamento padrão',
     /*
       |--------------------------------------

@@ -789,7 +789,6 @@ return [
     'the_associated_helptopic_has_been_deactivated'    => 'La branche de support associée a été désactivée',
     'department_deleted_sucessfully'                   => 'Département supprimé avec succès',
     'department_can_not_delete'                        => 'Le département ne peut pas être supprimé',
-    'select_a_department'                              => 'Sélectionner un département',
     'make-default-department'                          => 'Marquer comme département par défaut du système',
     /*
       |--------------------------------------

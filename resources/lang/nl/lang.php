@@ -852,7 +852,6 @@ return [
     'the_associated_helptopic_has_been_deactivated'    => 'Het gerelateerde help-onderwerp is uitgeschakeld',
     'department_deleted_sucessfully'                   => 'Afdeling succesvol verwijderd',
     'department_can_not_delete'                        => 'Afdeling kan niet verwijderd worden',
-    'select_a_department'                              => 'Selecteer een afdeling',
     'make-default-department'                          => 'Maak hier de standaard afdeling van',
     /*
       |--------------------------------------
