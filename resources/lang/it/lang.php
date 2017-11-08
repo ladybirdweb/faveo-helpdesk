@@ -125,7 +125,6 @@ return [
      */
     'ban_lists'  => 'Lista Ban',
     'ban_email'  => 'Email Ban',
-    'banlists'   => 'Liste Ban',
     'ban_status' => 'Status Ban',
     /*
       |--------------------------------------

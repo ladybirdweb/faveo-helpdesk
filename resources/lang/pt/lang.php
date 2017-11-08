@@ -160,7 +160,6 @@ return [
      */
     'ban_lists'                         => 'Lista de bloqueio',
     'ban_email'                         => 'E-mails bloqueados',
-    'banlists'                          => 'Lista de bloqueio',
     'ban_status'                        => 'Status de bloqueio',
     'list_of_banned_emails'             => 'Lista de E-mails bloqueados',
     'edit_banned_email'                 => 'Editar um bloqueio de E-mails',

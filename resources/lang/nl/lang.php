@@ -182,7 +182,6 @@ return [
      */
     'ban_lists'                        => 'Blokkeringslijst',
     'ban_email'                        => 'Blokkeer E-mailadres',
-    'banlists'                         => 'Blokkeringslijst',
     'ban_status'                       => 'Blokkeringsstatus',
     'list_of_banned_emails'            => 'Lijst van geblokkeerde e-mailadressen',
     'edit_banned_email'                => 'Bewerk geblokkeerde e-mailadressen',
