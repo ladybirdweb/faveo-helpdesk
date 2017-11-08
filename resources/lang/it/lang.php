@@ -214,6 +214,7 @@ return [
     'date_time'             => 'Formato Data e Ora',
     'day_date_time'         => 'Formato Giorno,Data e Ora',
     'timezone'              => 'Fuso orario di default',
+    'select_a_time_zone'    => 'Seleziona un fuso orario',
     'api'                   => 'Api',
     'api_key'               => 'Chiave Api',
     'api_key_mandatory'     => 'Chiave Api obbligatoria',
@@ -500,6 +501,7 @@ return [
     'edit'         => 'Modifica',
     'departments'  => 'Dipartimenti',
     'groups'       => 'Gruppi',
+    'time_zones'   => 'Fusi orari',
     /*
       |--------------------------------------
       |  Staff Create Page
@@ -544,6 +546,7 @@ return [
     'recipient'                                        => 'Recipient',
     'group_access'                                     => 'Accesso Gruppo',
     'department_signature'                             => 'Firma Dipartimento',
+    'list_of_departments'                              => 'Elenco dipartimenti',
     /*
       |--------------------------------------
       |  Team Create Page
@@ -554,6 +557,7 @@ return [
     'assignment_alert'      => 'Allerta Assegnamento',
     'disable_for_this_team' => 'Disattiva per questo team',
     'teams'                 => 'Teams',
+    'list_of_teams'         => 'Elenco teams',
     /*
       |--------------------------------------
       |  Group Create Page
@@ -801,6 +805,7 @@ return [
     'gender'               => 'Genere',
     'ticket_number'        => 'Numero di Ticket',
     'content'              => 'Contenuto',
+    'show'                 => 'Visualizza',
     /*
       |------------------------------------------------
       |   Error Pages
