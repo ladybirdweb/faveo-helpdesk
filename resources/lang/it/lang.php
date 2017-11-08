@@ -487,7 +487,7 @@ return [
     'staffs'       => 'Staffs',
     'name'         => 'Nome',
     'user_name'    => 'Nome Utente',
-    'status'       => 'Status',
+    'status'       => 'Stato',
     'group'        => 'Gruppo',
     'department'   => 'Dipartimento',
     'created'      => 'Creato',
@@ -496,7 +496,7 @@ return [
     'delete'       => 'Cancella',
     'agents'       => 'Agenti',
     'create'       => 'Crea',
-    'edit'         => 'modifica',
+    'edit'         => 'Modifica',
     'departments'  => 'Dipartimenti',
     'groups'       => 'Gruppi',
     /*
@@ -509,7 +509,7 @@ return [
     'last_name'              => 'Cognome',
     'mobile_number'          => 'Numero Mobile',
     'agent_signature'        => 'Firma Agente',
-    'account_status_setting' => 'Status Account & Settaggi',
+    'account_status_setting' => 'Stato & Impostazioni Account',
     'account_type'           => 'Tipo Account',
     'admin'                  => 'Admin',
     'agent'                  => 'Agente',
@@ -517,12 +517,14 @@ return [
     'locked'                 => 'Bloccato',
     'assigned_group'         => 'Gruppo Assegnato',
     'primary_department'     => 'Dipartimento Principale',
-    'agent_time_zone'        => 'Agent Time Zone',
+    'agent_time_zone'        => 'Fuso orario',
     'day_light_saving'       => 'Day Light Saving',
     'limit_access'           => 'Limita Accesso',
     'directory_listing'      => 'Directory Listing',
     'vocation_mode'          => 'Vocation Mode',
     'assigned_team'          => 'Team Assegnato',
+    'list_of_agents'         => 'Elenco agenti',
+    'create_an_agent'        => 'Crea un agente',
     /*
       |--------------------------------------
       |  Department Create Page
@@ -573,6 +575,7 @@ return [
     'admin_notes'          => 'Note Admin',
     'group_members'        => 'Componenti del Gruppo',
     'group_name'           => 'Nome Gruppo',
+    'select_a_group'       => 'Seleziona un gruppo',
     /*
       |--------------------------------------
       |  SMTP Page
