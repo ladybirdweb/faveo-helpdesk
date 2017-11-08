@@ -886,6 +886,7 @@ return [
     'group_deleted_successfully'                                                             => 'Group deleted successfully',
     'group_cannot_delete'                                                                    => 'Group cannot delete',
     'failed_to_load_the_page'                                                                => 'Failed to load the page',
+    'list_of_groups'                                                                         => 'List of groups',
     /*
       |--------------------------------------
       |  SMTP Page

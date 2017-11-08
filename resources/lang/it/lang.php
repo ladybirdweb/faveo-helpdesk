@@ -572,6 +572,7 @@ return [
     'admin_notes'          => 'Note Admin',
     'group_members'        => 'Componenti del Gruppo',
     'group_name'           => 'Nome Gruppo',
+    'list_of_groups'       => 'Elenco gruppi',
     /*
       |--------------------------------------
       |  SMTP Page

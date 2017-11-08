@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{ Lang::get('lang.staffs')}} </h1>
+<h1>{{ Lang::get('lang.agents')}} </h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -40,7 +40,7 @@ class="active"
         <div class="alert alert-success alert-dismissable">
             <i class="fa  fa-check-circle"></i>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('success')}} 
+            {{Session::get('success')}}
         </div>
         @endif
         <!-- failure message -->
