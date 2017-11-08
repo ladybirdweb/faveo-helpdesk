@@ -756,7 +756,6 @@ return [
     'edit'               => 'Edit',
     'departments'        => 'Departments',
     'groups'             => 'Groups',
-    'select_a_time_zone' => 'Select a time zone',
     'time_zones'         => 'Time zones',
     /*
       |--------------------------------------
