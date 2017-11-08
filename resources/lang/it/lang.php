@@ -126,6 +126,7 @@ return [
     'ban_lists'  => 'Lista Ban',
     'ban_email'  => 'Email Ban',
     'ban_status' => 'Status Ban',
+    'version'    => 'Versione',
     /*
       |--------------------------------------
       |  Templates Index Page

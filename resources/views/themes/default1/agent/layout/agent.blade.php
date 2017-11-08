@@ -242,10 +242,10 @@
                         @if($replaceside==0)
                         @yield('sidebar')
                         <li class="header">{!! Lang::get('lang.Tickets') !!}</li>
-                        
+
                         <li @yield('inbox')>
                              <a href="{{ url('/ticket/inbox')}}" id="load-inbox">
-                                <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green">{{$tickets -> count()}}</small>                                            
+                                <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green">{{$tickets -> count()}}</small>
                             </a>
                         </li>
                         <li @yield('myticket')>
@@ -266,7 +266,7 @@
                                 <small class="label pull-right bg-green">{{$overdues->count()}}</small>
                             </a>
                         </li>
-                       
+
                         <li @yield('trash')>
                              <a href="{{url('trash')}}">
                                 <i class="fa fa-trash-o"></i> <span>{!! Lang::get('lang.trash') !!}</span>
@@ -287,15 +287,15 @@
                                     $segment.="/".$seg;
                                 }
                                 if(count($segments) > 2) {
-                                    $dept2 = $segments[1]; 
+                                    $dept2 = $segments[1];
                                     $status2 = $segments[2];
                                 } else {
-                                     $dept2 = ''; 
+                                     $dept2 = '';
                                     $status2 = '';
                                 }
                             ?>
-                        @foreach($department as $name=>$dept) 
-                        
+                        @foreach($department as $name=>$dept)
+
                         <li class="treeview @if($dept2 === $name) @yield('ticket-bar') @endif ">
                             <a href="#">
                                 <i class="fa fa-folder-open"></i> <span>{!! $name !!}</span> <i class="fa fa-angle-left pull-right"></i>
@@ -307,7 +307,7 @@
                             </ul>
                            @endif
                             @endforeach
-                            
+
                         </li>
                         @endforeach
                         @else
@@ -337,7 +337,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                                 <ul class="nav navbar-nav">
                                     <li id="bar" @yield('user')><a href="{{ url('user')}}" >{!! Lang::get('lang.user_directory') !!}</a></li></a></li>
                                     <li id="bar" @yield('organizations')><a href="{{ url('organizations')}}" >{!! Lang::get('lang.organizations') !!}</a></li></a></li>
-                                    
+
                                 </ul>
                             </div>
                             <div class="tabs-pane @yield('ticket-bar')" id="tabC">
@@ -379,7 +379,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
             </div>
             <footer class="main-footer">
                 <div class="pull-right hidden-xs">
-                    <b>Version</b> {!! Config::get('app.version') !!}
+                    <b>{!! Lang::get('lang.version') !!}</b> {!! Config::get('app.version') !!}
                 </div>
                 <strong>{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>.</strong> {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/" target="_blank">Faveo</a>
             </footer>
@@ -523,16 +523,16 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
         </script>
         <script>
     $(function() {
-      
-        
+
+
         $('input[type="checkbox"]').iCheck({
             checkboxClass: 'icheckbox_flat-blue'
         });
         $('input[type="radio"]:not(.not-apply)').iCheck({
             radioClass: 'iradio_flat-blue'
         });
-    
-    });        
+
+    });
 </script>
 <?php Event::fire('show.calendar.script', array()); ?>
 <?php Event::fire('load-calendar-scripts', array()); ?>

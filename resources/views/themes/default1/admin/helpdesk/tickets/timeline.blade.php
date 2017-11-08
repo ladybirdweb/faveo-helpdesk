@@ -12,7 +12,7 @@
         <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
         <link href="dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
-        <!-- AdminLTE Skins. Choose a skin from the css/skins 
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
              folder instead of downloading all of them to reduce the load. -->
         <link href="dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
         <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
@@ -22,7 +22,7 @@
         <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
 
         <link href="dist/css/editor.css" type="text/css" rel="stylesheet"/>
-        <script src="dist/js/jquery-2.1.0.min.js"></script>        
+        <script src="dist/js/jquery-2.1.0.min.js"></script>
         <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -121,19 +121,19 @@
                         <li class="header">TICKET INFORMATION</li>
                         <li>
                             <a href="">
-                                <span>TICKET ID</span> 
+                                <span>TICKET ID</span>
                                 </br><b>#123456</b>
                             </a>
                         </li>
                         <li>
                             <a href="">
-                                <span>USER</span> 
+                                <span>USER</span>
                                 </br><i class="fa fa-user"> </i> <b>Username</b>
                             </a>
                         </li>
                         <li>
                             <a href="">
-                                <span>ASSIGNED TO</span> 
+                                <span>ASSIGNED TO</span>
                                 </br> <b>Name</b>
                             </a>
                         </li>
@@ -252,7 +252,7 @@
                                 <button type="button" class="btn btn-default"><i class="fa fa-print" style="color:blue;"> </i> Print</button>
                                 <!-- </div> -->
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-exchange" style="color:teal;"> </i> 
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-exchange" style="color:teal;"> </i>
                                         Change Status <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
@@ -261,7 +261,7 @@
                                     </ul>
                                 </div>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cogs" style="color:teal;"> </i> 
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cogs" style="color:teal;"> </i>
                                         More <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu pull-right">
@@ -276,25 +276,25 @@
                         <div class="box-body">
                             <div class="row">
                                 <section class="content">
-                                    <div class="col-md-12"> 
+                                    <div class="col-md-12">
                                         <div class="callout callout-info">
                                             <div class="row">
-                                                <div class="col-md-3"> 
+                                                <div class="col-md-3">
                                                     <b>SLA Plan: </b> Default SLA Plan
                                                 </div>
-                                                <div class="col-md-3"> 
+                                                <div class="col-md-3">
                                                     <b>Create Date: </b> 12/03/2015 1:40 Pm
                                                 </div>
-                                                <div class="col-md-3"> 
+                                                <div class="col-md-3">
                                                     <b>Due Date: </b> 15/03/2015 1:05 pm
                                                 </div>
-                                                <div class="col-md-3"> 
+                                                <div class="col-md-3">
                                                     <b>Last Response: </b> 15/03/2015 1:05 pm
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>      
-                                    <div class="col-md-6"> 
+                                    </div>
+                                    <div class="col-md-6">
                                         <table class="table table-hover">
                                             <!-- <tr><th></th><th></th></tr> -->
                                             <tr><td><b>Status:</b></td>       <td>Open</td></tr>
@@ -304,7 +304,7 @@
                                         </table>
                                         <!-- </div> -->
                                     </div>
-                                    <div class="col-md-6"> 
+                                    <div class="col-md-6">
                                         <!-- <div class="callout callout-success"> -->
                                         <table class="table table-hover">
                                             <!-- <tr><th></th><th></th></tr> -->
@@ -315,7 +315,7 @@
                                         </table>
                                     </div>
                                     <!-- </div> -->
-                                </section> 
+                                </section>
                             </div>
                         </div>
 
@@ -358,7 +358,7 @@
                                                     <div class="col-md-10">
                                                         <input type="text" class="form-control" name="to" id="to" style="width:55%"/>
                                                     </div>
-                                                </div>          
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="row">
@@ -372,7 +372,7 @@
                                                             <option>Last Message</option>
                                                         </select>
                                                     </div>
-                                                </div>          
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="row">
@@ -380,13 +380,13 @@
                                                         <label>Reply Content</label>
                                                     </div>
                                                     <div class="col-md-10">
-                                                        <textarea id="txtEditor"></textarea>                                            
+                                                        <textarea id="txtEditor"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
 
 
-                                        </form>               
+                                        </form>
 
 
 
@@ -416,7 +416,7 @@
                                                     <div class="col-md-10">
                                                         <input type="text" class="form-control" name="to" id="to" style="width:55%" />
                                                     </div>
-                                                </div>      
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="row">
@@ -456,7 +456,7 @@
                                             </div>
 
 
-                                        </form>               
+                                        </form>
                                     </div>
 
                                 </div>
@@ -583,7 +583,7 @@
             </div><!-- /.content-wrapper -->
             <footer class="main-footer">
                 <div class="pull-right hidden-xs">
-                    <b>Version</b> 2.0
+                    <b>{!! Lang::get('lang.version') !!}</b> 2.0
                 </div>
                 <strong>Copyright &copy; 2014-2015 <a href="http://www.ladybirdweb.com">Ladybird Web Solution</a>.</strong> All rights reserved.
             </footer>

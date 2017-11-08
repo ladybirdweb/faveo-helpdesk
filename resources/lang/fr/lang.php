@@ -1125,6 +1125,7 @@ return [
     'copyright'           => 'Copyright',
     'all_rights_reserved' => 'Tous droits réservés',
     'powered_by'          => 'Powered by',
+    'version'             => 'Version',
     /*
       |------------------------------------------------
       |Guest-User Page

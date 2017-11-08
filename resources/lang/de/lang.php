@@ -813,6 +813,7 @@ return [
     'copyright'           => 'Copyright',
     'all_rights_reserved' => 'All right Reserved',
     'powered_by'          => 'Powered by',
+    'version'             => 'Version',
     /*
       |------------------------------------------------
       |Guest-User Page

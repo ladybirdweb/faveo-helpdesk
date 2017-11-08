@@ -1164,6 +1164,7 @@ return [
     'copyright'           => 'Copyright',
     'all_rights_reserved' => 'All rights reserved',
     'powered_by'          => 'Powered by',
+    'version'             => 'Version',
     /*
       |------------------------------------------------
       |Guest-User Page
