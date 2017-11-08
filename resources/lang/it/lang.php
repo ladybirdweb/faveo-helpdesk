@@ -392,6 +392,7 @@ return [
     'system_default'       => 'Default di Sistema',
     'custom'               => 'Personalizzato',
     'internal_notes'       => 'Note Interne',
+    'select_a_department'  => 'Seleziona un dipartimento',
     /*
       |--------------------------------------
       |  SLA plan Index Page
