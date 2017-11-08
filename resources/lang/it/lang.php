@@ -162,7 +162,7 @@ return [
       |  Diagnostics Page
       |--------------------------------------
      */
-    'diagnostics' => 'Diagnostici',
+    'diagnostics' => 'Diagnostica',
     'from'        => 'Da',
     'to'          => 'A',
     'subject'     => 'Soggetto',
@@ -184,7 +184,7 @@ return [
       |   Company Settings Page
       |--------------------------------------
      */
-    'company' => 'Compagnia',
+    'company' => 'Azienda',
     'website' => 'Sito Web',
     'phone'   => 'Telefono',
     'address' => 'Indirizzo',
@@ -225,6 +225,7 @@ return [
       |--------------------------------------
      */
     'email'                               => 'Email',
+    'email-settings'                      => 'Impostazioni Email',
     'default_template'                    => 'Template Set di Default:',
     'default_system_email'                => 'Sistema Email di Default:',
     'default_alert_email'                 => 'Allerta Email di Default:',
@@ -826,7 +827,7 @@ return [
     'sidewidget1'                                     => 'Side Widget 1',
     'sidewidget2'                                     => 'Side Widget 2',
     'comments'                                        => 'Commenti',
-    'settings'                                        => 'Settaggi',
+    'settings'                                        => 'Impostazioni',
     'parent'                                          => 'Padre',
     'description'                                     => 'Descrizione',
     'enter_the_description'                           => 'Inserisci la Descrizione',
@@ -952,8 +953,8 @@ return [
      * Latest update 27-07-2016
      * -----------------------------------------------------------------------------------
      */
-    'queue'  => 'Queue',
-    'queues' => 'Queues',
+    'queue'  => 'Coda',
+    'queues' => 'Code',
     /*     * -------------------------------------------------------------------------------------------------
      * OTP  messages body to send to user while registering, resetting passwords
      * --------------------------------------------------------------------------------------------------
