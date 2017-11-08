@@ -12,6 +12,19 @@ use Illuminate\Http\Request;
 
 class QueueController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     * constructor to check
+     * 1. authentication
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        // checking for authentication
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         try {
