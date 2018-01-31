@@ -339,7 +339,7 @@ class UnAuthController extends Controller
             // app()->setLocale($lang);
 
             \Cache::forever('language', $lang);
-            // dd(Cache::get('language'));
+        // dd(Cache::get('language'));
             // dd()
         } else {
             return false;
