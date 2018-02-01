@@ -108,15 +108,13 @@ class AgentLayout
     public function unassigned()
     {
         $ticket = $this->tickets();
+        
+        $unassigned = $ticket->where('assigned_to', '=', null)->where('status', '=', '1')->select('id');
+        
         if ($this->auth->role == 'admin') {
-            return $ticket->where('assigned_to', '=', null)
-                    ->where('status', '=', '1')
-                    ->select('id');
+            return $unassigned;
         } elseif ($this->auth->role == 'agent') {
-            return $ticket->where('assigned_to', '=', null)
-                    ->where('status', '=', '1')
-                    ->where('dept_id', '=', $this->auth->primary_dpt)
-                    ->select('id');
+            return $unassigned->where('dept_id', '=', $this->auth->primary_dpt);
         }
     }
 
