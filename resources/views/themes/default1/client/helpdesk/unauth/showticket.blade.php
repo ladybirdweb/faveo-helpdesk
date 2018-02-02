@@ -37,7 +37,6 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tick
                 </div>
             </div>
         </div>
-        <br/>
         <div class="row">
             <div class="col-md-12">
                 <div class="alert alert-success alert-dismissable" id="alert11" style="display:none;">
@@ -170,69 +169,11 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tick
 </div>
 <?php
 $conversations = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->where('is_internal', '=', 0)->paginate(10);
+$ij = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->first();
+$user = App\User::where('id', '=', $tickets->user_id)->first();
 foreach ($conversations as $conversation) {
-    $ConvDate1 = $conversation->created_at;
-    $ConvDate = explode(' ', $ConvDate1);
-
-    $date = $ConvDate[0];
-    $time = $ConvDate[1];
-    $time = substr($time, 0, -3);
-    if (isset($data) && $date == $data) {
-        
-    } else {
-        $data = $ConvDate[0];
-    }
-    $role = App\User::where('id', '=', $conversation->user_id)->first();
-
-    $attachment = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $conversation->id)->first();
-    if ($attachment == null) {
-        $body = $conversation->body;
-    } else {
-        $body = $conversation->body;
-        $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $conversation->id)->orderBy('id', 'DESC')->get();
-        foreach ($attachments as $attachment) {
-            if ($attachment->type == 'pdf') {
-                
-            } elseif ($attachment->type == 'docx') {
-                
-            } else {
-                $image = @imagecreatefromstring($attachment->file);
-                ob_start();
-                imagejpeg($image, null, 80);
-                $data = ob_get_contents();
-                ob_end_clean();
-                $var = '<img src="data:image/jpg;base64,' . base64_encode($data) . '" />';
-                $body = str_replace($attachment->name, "data:image/jpg;base64," . base64_encode($data), $body);
-
-                $string = $body;
-                $start = "<head>";
-                $end = "</head>";
-                if (strpos($string, $start) == false || strpos($string, $start) == false) {
-                    
-                } else {
-                    $ini = strpos($string, $start);
-                    $ini += strlen($start);
-                    $len = strpos($string, $end, $ini) - $ini;
-                    $parsed = substr($string, $ini, $len);
-                    $body2 = $parsed;
-                    $body = str_replace($body2, " ", $body);
-                }
-            }
-        }
-    }
-    $string = $body;
-    $start = "<head>";
-    $end = "</head>";
-    if (strpos($string, $start) == false || strpos($string, $start) == false) {
-        
-    } else {
-        $ini = strpos($string, $start);
-        $ini += strlen($start);
-        $len = strpos($string, $end, $ini) - $ini;
-        $parsed = substr($string, $ini, $len);
-        $body2 = $parsed;
-        $body = str_replace($body2, " ", $body);
-    }
+    $role = $conversation->user;
+    $body = $conversation->thread($conversation->body);
     ?>
     <ol class="comment-list" >
         <li class="comment">
@@ -264,10 +205,10 @@ foreach ($conversations as $conversation) {
                                         <?php for ($i = 1; $i <= $rating->rating_scale; $i++) { ?>
                                             <input type="radio" class="star" id="star5" name="{!! $rating->name !!},{!! $conversation->id !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
                                         <?php } ?>
-                    <!--    <input type="radio" class="star" id="star4" name="rating" value="2"<?php echo ($tickets->rating == '2') ? 'checked' : '' ?> />
-                        <input type="radio" class="star" id="star3" name="rating" value="3"<?php echo ($tickets->rating == '3') ? 'checked' : '' ?>/>
-                        <input type="radio" class="star" id="star2" name="rating" value="4"<?php echo ($tickets->rating == '4') ? 'checked' : '' ?>/>
-                        <input type="radio" class="star" id="star1" name="rating" value="5"<?php echo ($tickets->rating == '5') ? 'checked' : '' ?> />-->
+                                        <!--    <input type="radio" class="star" id="star4" name="rating" value="2"<?php echo ($tickets->rating == '2') ? 'checked' : '' ?> />
+                                        <input type="radio" class="star" id="star3" name="rating" value="3"<?php echo ($tickets->rating == '3') ? 'checked' : '' ?>/>
+                                        <input type="radio" class="star" id="star2" name="rating" value="4"<?php echo ($tickets->rating == '4') ? 'checked' : '' ?>/>
+                                        <input type="radio" class="star" id="star1" name="rating" value="5"<?php echo ($tickets->rating == '5') ? 'checked' : '' ?> />-->
                                     </td> 
                                     </tr>
                                 </form>
@@ -283,9 +224,71 @@ foreach ($conversations as $conversation) {
                     </div><!-- .comment-metadata -->
                 </footer><!-- .comment-meta -->
                 <div class="comment-content">
-                    <p>{!! $body !!}</p>
+                    @if($conversation->firstContent()=='yes')
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe id="loader_frame{{$conversation->id}}" class="embed-responsive-item">Body of html email here</iframe>
+                            <script type="text/javascript">
+                                jQuery(document).ready(function () {
+                                    /*          setInterval(function(){
+                                                var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
+            var h     = mydiv.height();
+alert(h+20);
+            }, 2000);*/
+                                    jQuery('.embed-responsive-16by9').css('height','auto');
+                                    jQuery('.embed-responsive-16by9').css('padding','0');
+                                    jQuery('#loader_frame{{$conversation->id}}').css('width','100%');
+                                    jQuery('#loader_frame{{$conversation->id}}').css('position','static');
+                                    jQuery('#loader_frame{{$conversation->id}}').css('border','none');
+                                    var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
+                                    var h     = mydiv.height();
+                                    jQuery('#loader_frame{{$conversation->id}}').css('height', h+20);
+                                    setInterval(function(){
+                                        //var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
+                                        //alert(mydiv.height());
+                                        h = jQuery('#loader_frame{{$conversation->id}}').height();
+                                        if (!!navigator.userAgent.match(/Trident\/7\./)){
+                                            jQuery('#loader_frame{{$conversation->id}}').css('height', h);
+                                        }else {
+                                            jQuery('#loader_frame{{$conversation->id}}').css('height', h);
+                                        }
+                                    }, 2000);
+                                });
+                            </script>
+                        </div>
+                        <script>
+                            setTimeout(function(){
+                                $('#loader_frame{{$conversation->id}}')[0].contentDocument.body.innerHTML = '<body><style>body{display:inline-block;}</style>{!!$conversation->purify()!!}<body>';   }, 1000);
+
+                        </script>
+                    @else
+                        {!! $conversation->body !!}
+                    @endif
+
+                    @if($conversation->id == $ij->id)
+                        <?php $ticket_form_datas = App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $tickets->id)->get(); ?>
+                        @if(isset($ticket_form_datas))
+
+                            <br/>
+                            <table class="table table-bordered">
+                                <tbody>
+                                @foreach($ticket_form_datas as $ticket_form_data)
+                                    <tr>
+                                        <td style="width: 30%">{!! $ticket_form_data->getFieldKeyLabel() !!}</td>
+                                        <td>{!! removeUnderscore($ticket_form_data->content) !!}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody></table>
+
+                        @endif
+                    @endif
                 </div><!-- .comment-content -->
+                <br/><br/>
                 <div class="timeline-footer" style="margin-bottom:-5px">
+                    @if(!$conversation->is_internal)
+                    @if($conversation->user_id != null)
+                    <?php Event::fire(new App\Events\Timeline($conversation, $role, $user)); ?>
+                    @endif
+                    @endif
                     <?php
                     $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $conversation->id)->get();
                     $i = 0;
@@ -306,16 +309,14 @@ foreach ($conversations as $conversation) {
                             $power = $size > 0 ? floor(log($size, 1024)) : 0;
                             $value = number_format($size / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
                             if ($attachment->poster == 'ATTACHMENT') {
-                                if ($attachment->type == 'jpg' || $attachment->type == 'JPG' || $attachment->type == 'jpeg' || $attachment->type == 'JPEG' || $attachment->type == 'png' || $attachment->type == 'PNG' || $attachment->type == 'gif' || $attachment->type == 'GIF') {
-                                    $image = @imagecreatefromstring($attachment->file);
-                                    ob_start();
-                                    imagejpeg($image, null, 80);
-                                    $data = ob_get_contents();
-                                    ob_end_clean();
-                                    $var = '<a href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><img style="max-width:200px;height:133px;" src="data:image/jpg;base64,' . base64_encode($data) . '"/></a>';
+                                if (mime($attachment->type) == true) {
+                                    $var = '<a href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><img style="max-width:200px;height:133px;" src="data:image/jpg;base64,' . $attachment->file . '"/></a>';
+
                                     echo '<li style="background-color:#f4f4f4;"><span class="mailbox-attachment-icon has-img">' . $var . '</span><div class="mailbox-attachment-info"><b style="word-wrap: break-word;">' . $attachment->name . '</b><br/><p>' . $value . '</p></div></li>';
                                 } else {
-                                    $var = '<a style="max-width:200px;height:133px;color:#666;" href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><span class="mailbox-attachment-icon" style="background-color:#fff;">' . strtoupper($attachment->type) . '</span><div class="mailbox-attachment-info"><span ><b style="word-wrap: break-word;">' . $attachment->name . '</b><br/><p>' . $value . '</p></span></div></a>';
+                                    //$var = '<a href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><img style="max-width:200px;height:133px;" src="data:'.$attachment->type.';base64,' . base64_encode($data) . '"/></a>';
+                                    $var = '<a style="max-width:200px;height:133px;color:#666;" href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><span class="mailbox-attachment-icon" style="background-color:#fff; font-size:18px;">' . strtoupper($attachment->type) . '</span><div class="mailbox-attachment-info"><span ><b style="word-wrap: break-word;">' . $attachment->name . '</b><br/><p>' . $value . '</p></span></div></a>';
+
                                     echo '<li style="background-color:#f4f4f4;">' . $var . '</li>';
                                 }
                             }
