@@ -32,7 +32,7 @@ class="active"
 <div class="col-md-12">
 <div class="box box-primary">
 <div class="box-header">
-	<h2 class="box-title">{{Lang::get('lang.templates')}}</h2><a href="{{route('template.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_template')}}</a></div>
+	<h2 class="box-title">{{trans('lang.templates')}}</h2><a href="{{route('template.create')}}" class="btn btn-primary pull-right">{{trans('lang.create_template')}}</a></div>
 
 <div class="box-body table-responsive no-padding">
 
@@ -58,12 +58,12 @@ class="active"
 
 				<table class="table table-bordered dataTable" style="overflow:hidden;">
 	<tr>
-		<th width="100px">{{Lang::get('lang.name')}}</th>
-		<th width="100px">{{Lang::get('lang.status')}}</th>
-		<th width="100px">{{Lang::get('lang.in_use')}}</th>
-		<th width="100px">{{Lang::get('lang.created')}}</th>
-		<th width="100px">{{Lang::get('lang.last_updated')}}</th>
-		<th width="100px">{{Lang::get('lang.action')}}</th>
+		<th width="100px">{{trans('lang.name')}}</th>
+		<th width="100px">{{trans('lang.status')}}</th>
+		<th width="100px">{{trans('lang.in_use')}}</th>
+		<th width="100px">{{trans('lang.created')}}</th>
+		<th width="100px">{{trans('lang.last_updated')}}</th>
+		<th width="100px">{{trans('lang.action')}}</th>
 	</tr>
 	<!-- Foreach @var templates as @var template -->
 		@foreach($templates as $template)

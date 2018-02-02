@@ -12,7 +12,7 @@ active
 class="active"
 @stop
 @section('PageHeader')
-<h1>{{Lang::get('lang.tickets')}}</h1>
+<h1>{{trans('lang.tickets')}}</h1>
 <style>
  .tooltip1 {
      position: relative;
@@ -52,7 +52,7 @@ if (Auth::user()->role == 'agent') {
 <!-- Main content -->
 <div class="box box-warning">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.trash') !!} </h3> <small id="title_refresh">{!! $tickets !!} {!! Lang::get('lang.tickets') !!}</small>
+        <h3 class="box-title">{!! trans('lang.trash') !!} </h3> <small id="title_refresh">{!! $tickets !!} {!! trans('lang.tickets') !!}</small>
     </div><!-- /.box-header -->
     <div class="box-body">
         @if(Session::has('success'))
@@ -66,7 +66,7 @@ if (Auth::user()->role == 'agent') {
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"> </i> 
-            <b> {!! Lang::get('lang.alert') !!}! </b>
+            <b> {!! trans('lang.alert') !!}! </b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('fails')}}
         </div>
@@ -75,25 +75,25 @@ if (Auth::user()->role == 'agent') {
         <!--<div class="mailbox-controls">-->
         <!-- Check all button -->
         <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
-        <!--<input type="submit" class="btn btn-default text-blue btn-sm" id="delete"  name="submit" value="{!! Lang::get('lang.open') !!}">
-        <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit"  id="close" value="{!! Lang::get('lang.close') !!}">-->
+        <!--<input type="submit" class="btn btn-default text-blue btn-sm" id="delete"  name="submit" value="{!! trans('lang.open') !!}">
+        <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit"  id="close" value="{!! trans('lang.close') !!}">-->
         <div class="btn-group">
             <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" id="d1"><i class="fa fa-exchange" style="color:teal;" id="hidespin"> </i><i class="fa fa-spinner fa-spin" style="color:teal; display:none;" id="spin"></i>
-                {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
+                {!! trans('lang.change_status') !!} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li ><input type="submit" class="btn btn-block btn-default btn-sm text-green" id="delete"  name="submit" value="{!! Lang::get('lang.open') !!}">
+                <li ><input type="submit" class="btn btn-block btn-default btn-sm text-green" id="delete"  name="submit" value="{!! trans('lang.open') !!}">
                 </li>
-                <li ><input type="submit" class="btn btn-block btn-default btn-sm text-yellow" name="submit"  id="close" value="{!! Lang::get('lang.close') !!}"></li>
+                <li ><input type="submit" class="btn btn-block btn-default btn-sm text-yellow" name="submit"  id="close" value="{!! trans('lang.close') !!}"></li>
 
             </ul>
         </div>
-        <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit"  id="hard-delete" value="{{Lang::get('lang.clean-up')}}" title="{{Lang::get('lang.trash-delete-title-msg')}}">
+        <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit"  id="hard-delete" value="{{trans('lang.clean-up')}}" title="{{trans('lang.trash-delete-title-msg')}}">
         
         <!--</div>-->
         <p><p/>
         <div class="mailbox-messages"  id="refresh">
-            <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>{!! Lang::get('lang.loading') !!}...</b></p>
+            <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>{!! trans('lang.loading') !!}...</b></p>
             <!-- table -->
 
             {!!$table->render('vendor.Chumper.template')!!}
@@ -115,8 +115,8 @@ if (Auth::user()->role == 'agent') {
                 <div class="modal-body" id="custom-alert-body" >
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary pull-left yes" data-dismiss="modal">{{Lang::get('lang.ok')}}</button>
-                    <button type="button" class="btn btn-default no">{{Lang::get('lang.cancel')}}</button>
+                    <button type="button" class="btn btn-primary pull-left yes" data-dismiss="modal">{{trans('lang.ok')}}</button>
+                    <button type="button" class="btn btn-default no">{{trans('lang.cancel')}}</button>
                 </div>
             </div>
         </div>
@@ -168,27 +168,27 @@ if (Auth::user()->role == 'agent') {
 
         $('#delete').on('click', function() {
             option = 0;
-            $('#myModalLabel').html("{{Lang::get('lang.open-tickets')}}");
+            $('#myModalLabel').html("{{trans('lang.open-tickets')}}");
         });
 
         $('#close').on('click', function() {
             option = 1;
-            $('#myModalLabel').html("{{Lang::get('lang.close-tickets')}}");
+            $('#myModalLabel').html("{{trans('lang.close-tickets')}}");
         });
 
         $('#hard-delete').on('click', function() {
             option = 2;
-            $('#myModalLabel').html("{{Lang::get('lang.trash-delete-ticket')}}");
+            $('#myModalLabel').html("{{trans('lang.trash-delete-ticket')}}");
         });
 
         $("#modalpopup").on('submit', function(e) {
             e.preventDefault();
-            var msg = "{{Lang::get('lang.confirm')}}";
+            var msg = "{{trans('lang.confirm')}}";
             var values = getValues();
             if (values == "") {
-                msg = "{{Lang::get('lang.select-ticket')}}";
-                $('.yes').html("{{Lang::get('lang.ok')}}");
-                $('#myModalLabel').html("{{Lang::get('lang.alert')}}");
+                msg = "{{trans('lang.select-ticket')}}";
+                $('.yes').html("{{trans('lang.ok')}}");
+                $('#myModalLabel').html("{{trans('lang.alert')}}");
             } else {
                 $('.yes').html("Yes");
             }

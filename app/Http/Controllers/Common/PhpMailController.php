@@ -11,7 +11,6 @@ use App\Model\helpdesk\Settings\Email;
 use App\User;
 use Auth;
 use Exception;
-use Lang;
 use Mail;
 
 class PhpMailController extends Controller
@@ -74,7 +73,7 @@ class PhpMailController extends Controller
     {
         $from_address = $this->fetch_smtp_details($from);
         if ($from_address == null) {
-            throw new Exception(Lang::get('lang.system-email-not-configured'));
+            throw new Exception(trans('lang.system-email-not-configured'));
         }
 
         $this->setMailConfig($from_address);

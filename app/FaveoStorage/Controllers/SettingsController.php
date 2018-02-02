@@ -7,7 +7,6 @@ use App\Model\helpdesk\Settings\CommonSettings;
 use Artisan;
 use Exception;
 use Illuminate\Http\Request;
-use Lang;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -24,7 +23,7 @@ class SettingsController extends Controller
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >'.Lang::get('storage::lang.storage').'</p>
+                        <p class="box-title" >'.trans('storage::lang.storage').'</p>
                     </div>
                 </div>';
     }

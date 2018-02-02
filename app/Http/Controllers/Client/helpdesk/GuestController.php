@@ -29,7 +29,6 @@ use GeoIP;
 use Hash;
 use Illuminate\Http\Request;
 use Input;
-use Lang;
 use Socialite;
 
 /**
@@ -84,11 +83,11 @@ class GuestController extends Controller
             // geet authenticated user details
             $user = Auth::user();
             if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
-                return redirect()->back()->with(['fails' => Lang::get('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
+                return redirect()->back()->with(['fails' => trans('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
             } else {
                 $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
                 if (!count($code)) {
-                    return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
+                    return redirect()->back()->with(['fails' => trans('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
                 }
                 $user->country_code = $request->country_code;
             }
@@ -113,9 +112,9 @@ class GuestController extends Controller
                 $user->mobile = null;
             }
             if ($user->save()) {
-                return redirect()->back()->with('success', Lang::get('lang.Profile-Updated-sucessfully'));
+                return redirect()->back()->with('success', trans('lang.Profile-Updated-sucessfully'));
             } else {
-                return redirect()->back()->route('profile')->with('fails', Lang::get('lang.Profile-Updated-sucessfully'));
+                return redirect()->back()->route('profile')->with('fails', trans('lang.Profile-Updated-sucessfully'));
             }
         } catch (Exception $e) {
             return redirect()->back()->route('profile')->with('fails', $e->getMessage());
@@ -241,12 +240,12 @@ class GuestController extends Controller
             try {
                 $user->save();
 
-                return redirect()->back()->with('success2', Lang::get('lang.password_updated_sucessfully'));
+                return redirect()->back()->with('success2', trans('lang.password_updated_sucessfully'));
             } catch (Exception $e) {
                 return redirect()->back()->with('fails2', $e->getMessage());
             }
         } else {
-            return redirect()->back()->with('fails2', Lang::get('lang.password_was_not_updated_incorrect_old_password'));
+            return redirect()->back()->with('fails2', trans('lang.password_was_not_updated_incorrect_old_password'));
         }
     }
 
@@ -312,7 +311,7 @@ class GuestController extends Controller
         $Ticket_number = $request->input('ticket_number');
         $ticket = Tickets::where('ticket_number', '=', $Ticket_number)->first();
         if ($ticket == null) {
-            return \Redirect::route('form')->with('fails', Lang::get('lang.there_is_no_such_ticket_number'));
+            return \Redirect::route('form')->with('fails', trans('lang.there_is_no_such_ticket_number'));
         } else {
             $userId = $ticket->user_id;
             $user = User::where('id', '=', $userId)->first();
@@ -322,7 +321,7 @@ class GuestController extends Controller
                 $username = $user->first_name.' '.$user->last_name;
             }
             if ($user->email != $Email) {
-                return \Redirect::route('form')->with('fails', Lang::get("lang.email_didn't_match_with_ticket_number"));
+                return \Redirect::route('form')->with('fails', trans("lang.email_didn't_match_with_ticket_number"));
             } else {
                 $code = $ticket->id;
                 $code = \Crypt::encrypt($code);
@@ -334,7 +333,7 @@ class GuestController extends Controller
                 );
 
                 return \Redirect::back()
-                                ->with('success', Lang::get('lang.we_have_sent_you_a_link_by_email_please_click_on_that_link_to_view_ticket'));
+                                ->with('success', trans('lang.we_have_sent_you_a_link_by_email_please_click_on_that_link_to_view_ticket'));
             }
         }
     }
@@ -414,7 +413,7 @@ class GuestController extends Controller
                 $time2 = new DateTime($date1);
                 $interval = $time1->diff($time2);
                 if ($interval->i > 10 || $interval->h > 0) {
-                    $message = Lang::get('lang.otp-expired');
+                    $message = trans('lang.otp-expired');
 
                     return $message;
                 } else {
@@ -426,18 +425,18 @@ class GuestController extends Controller
                         // $this->openTicketAfterVerification($user->id);
                         return 1;
                     } else {
-                        $message = Lang::get('lang.otp-not-matched');
+                        $message = trans('lang.otp-not-matched');
 
                         return $message;
                     }
                 }
             } else {
-                $message = Lang::get('lang.otp-invalid');
+                $message = trans('lang.otp-invalid');
 
                 return $message;
             }
         } else {
-            $message = Lang::get('lang.otp-not-matched');
+            $message = trans('lang.otp-not-matched');
 
             return $message;
         }

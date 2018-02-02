@@ -4,7 +4,7 @@
 
     <div class="content-header">
         {!! Form::open(['route'=>'templates.store','method'=>'post']) !!}
-        <h4>{{Lang::get('lang.templates')}}	{!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}</h4>
+        <h4>{{trans('lang.templates')}}	{!! Form::submit(trans('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}</h4>
 
     </div>
 
@@ -28,7 +28,7 @@
                 @if(Session::has('success'))
                 <div class="alert alert-success alert-dismissable">
                     <i class="fa fa-ban"></i>
-                    <b>{{Lang::get('lang.alert')}}!</b> {{Lang::get('lang.success')}}.
+                    <b>{{trans('lang.alert')}}!</b> {{trans('lang.success')}}.
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     {{Session::get('success')}}
                 </div>
@@ -37,7 +37,7 @@
                 @if(Session::has('fails'))
                 <div class="alert alert-danger alert-dismissable">
                     <i class="fa fa-ban"></i>
-                    <b>{{Lang::get('lang.alert')}}!</b> {{Lang::get('lang.failed')}}.
+                    <b>{{trans('lang.alert')}}!</b> {{trans('lang.failed')}}.
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     {{Session::get('fails')}}
                 </div>
@@ -47,14 +47,14 @@
 
                     <div class="col-md-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                         <!-- first name -->
-                        {!! Form::label('name',Lang::get('lang.name'),['class'=>'required']) !!}
+                        {!! Form::label('name',trans('lang.name'),['class'=>'required']) !!}
                         {!! Form::text('name',null,['class' => 'form-control']) !!}
 
                     </div>
 
                     <div class="col-md-6 form-group {{ $errors->has('type') ? 'has-error' : '' }}">
                         <!-- last name -->
-                        {!! Form::label('type',Lang::get('lang.template-types'),['class'=>'required']) !!}
+                        {!! Form::label('type',trans('lang.template-types'),['class'=>'required']) !!}
                         {!! Form::select('type',[''=>'Select','Type'=>$type],null,['class' => 'form-control']) !!}
 
                     </div>
@@ -64,7 +64,7 @@
 <!--                <div class="row">
                     <div class="col-md-12 form-group {{ $errors->has('subject') ? 'has-error' : '' }}">
          
-                        {!! Form::label('subject',Lang::get('lang.subject')) !!}
+                        {!! Form::label('subject',trans('lang.subject')) !!}
                         {!! Form::text('subject',null,['class' => 'form-control']) !!}
 
                     </div>
@@ -74,7 +74,7 @@
                     <div class="col-md-12 form-group {{ $errors->has('message') ? 'has-error' : '' }}">
                        
                         
-                        {!! Form::label('message',Lang::get('lang.content'),['class'=>'required']) !!}
+                        {!! Form::label('message',trans('lang.content'),['class'=>'required']) !!}
                         {!! Form::textarea('message',null,['class'=>'form-control','id'=>'textarea']) !!}
                        
                     </div>

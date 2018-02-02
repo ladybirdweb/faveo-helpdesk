@@ -3,7 +3,7 @@
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.admin_panel') !!}</h1>
+<h1>{!! trans('lang.admin_panel') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -15,14 +15,14 @@
 <!-- failure message -->
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!}! </b>
+            <i class="fa fa-ban"> </i> <b> {!! trans('lang.alert') !!}! </b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('fails')}}
         </div>
         @endif
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.staffs') !!}</h3>
+        <h3 class="box-title">{!! trans('lang.staffs') !!}</h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -38,7 +38,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.agents') !!}</p>
+                        <p class="box-title" >{!! trans('lang.agents') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -52,7 +52,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.departments') !!}</p>
+                        <p class="box-title" >{!! trans('lang.departments') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -66,7 +66,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.teams') !!}</p>
+                        <p class="box-title" >{!! trans('lang.teams') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -80,7 +80,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.groups') !!}</p>
+                        <p class="box-title" >{!! trans('lang.groups') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -94,7 +94,7 @@
 
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.email') !!}</h3>
+        <h3 class="box-title">{!! trans('lang.email') !!}</h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -110,7 +110,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.emails') !!}</p>
+                        <p class="box-title" >{!! trans('lang.emails') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -124,7 +124,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.ban_lists') !!}</p>
+                        <p class="box-title" >{!! trans('lang.ban_lists') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -138,7 +138,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.templates') !!}</p>
+                        <p class="box-title" >{!! trans('lang.templates') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -152,7 +152,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.email-settings') !!}</p>
+                        <p class="box-title" >{!! trans('lang.email-settings') !!}</p>
                     </div>
                 </div>
                 <div class="col-md-2 col-sm-6">
@@ -164,7 +164,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.queues') !!}</p>
+                        <p class="box-title" >{!! trans('lang.queues') !!}</p>
                     </div>
                 </div>
                 <!--col-md-2-->
@@ -177,7 +177,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.diagnostics') !!}</p>
+                        <p class="box-title" >{!! trans('lang.diagnostics') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -190,7 +190,7 @@
 
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.manage') !!}</h3>
+        <h3 class="box-title">{!! trans('lang.manage') !!}</h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -206,7 +206,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.help_topics') !!}</p>
+                        <p class="box-title" >{!! trans('lang.help_topics') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -220,7 +220,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.sla_plans') !!}</p>
+                        <p class="box-title" >{!! trans('lang.sla_plans') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -235,7 +235,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.forms') !!}</p>
+                        <p class="box-title" >{!! trans('lang.forms') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -249,7 +249,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.workflow') !!}</p>
+                        <p class="box-title" >{!! trans('lang.workflow') !!}</p>
                     </div>
                 </div>
                 <!-- priority -->
@@ -263,7 +263,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.priority') !!}</p>
+                        <p class="box-title" >{!! trans('lang.priority') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -289,7 +289,7 @@
 </div>
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.ticket') !!}</h3>
+        <h3 class="box-title">{!! trans('lang.ticket') !!}</h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -306,7 +306,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.ticket') !!}</p>
+                        <p class="box-title" >{!! trans('lang.ticket') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -321,7 +321,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.auto_response') !!}</p>
+                        <p class="box-title" >{!! trans('lang.auto_response') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -336,7 +336,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.alert_notices') !!}</p>
+                        <p class="box-title" >{!! trans('lang.alert_notices') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -363,7 +363,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.ratings') !!}</p>
+                        <p class="box-title" >{!! trans('lang.ratings') !!}</p>
                     </div>
                 </div>
                 <div class="col-md-2 col-sm-6">
@@ -375,7 +375,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.close_ticket_workflow') !!}</p>
+                        <p class="box-title" >{!! trans('lang.close_ticket_workflow') !!}</p>
                     </div>
                 </div>
                <?php \Event::fire('settings.ticket.view',[]); ?>
@@ -388,7 +388,7 @@
 </div>
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.settings') !!}</h3>
+        <h3 class="box-title">{!! trans('lang.settings') !!}</h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -404,7 +404,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.company') !!}</p>
+                        <p class="box-title" >{!! trans('lang.company') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -418,7 +418,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.system') !!}</p>
+                        <p class="box-title" >{!! trans('lang.system') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -434,7 +434,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{{Lang::get('lang.social-login')}}</p>
+                        <p class="box-title" >{{trans('lang.social-login')}}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -447,7 +447,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title">{!! Lang::get('lang.language') !!}</p>
+                        <p class="box-title">{!! trans('lang.language') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -460,7 +460,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.cron') !!}</p>
+                        <p class="box-title" >{!! trans('lang.cron') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -473,7 +473,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.security') !!}</p>
+                        <p class="box-title" >{!! trans('lang.security') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -487,7 +487,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.notification') !!}</p>
+                        <p class="box-title" >{!! trans('lang.notification') !!}</p>
                     </div>
                 </div>
                 
@@ -501,7 +501,7 @@
 
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.error-debug') !!}</h3>
+        <h3 class="box-title">{!! trans('lang.error-debug') !!}</h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -517,7 +517,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.view-logs') !!}</p>
+                        <p class="box-title" >{!! trans('lang.view-logs') !!}</p>
                     </div>
                 </div>
          -->        <!--/.col-md-2-->                                        
@@ -531,7 +531,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.debug-options') !!}</p>
+                        <p class="box-title" >{!! trans('lang.debug-options') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->                                        
@@ -545,7 +545,7 @@
 
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.widgets') !!}</h3>
+        <h3 class="box-title">{!! trans('lang.widgets') !!}</h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -561,7 +561,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.widgets') !!}</p>
+                        <p class="box-title" >{!! trans('lang.widgets') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->                                        
@@ -575,7 +575,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.social') !!}</p>
+                        <p class="box-title" >{!! trans('lang.social') !!}</p>
                     </div>
                 </div>
                 
@@ -589,7 +589,7 @@
 
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.plugin') !!}</h3>
+        <h3 class="box-title">{!! trans('lang.plugin') !!}</h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -605,7 +605,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.plugin') !!}</p>
+                        <p class="box-title" >{!! trans('lang.plugin') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->
@@ -618,7 +618,7 @@
 </div>
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.api') !!}</h3>
+        <h3 class="box-title">{!! trans('lang.api') !!}</h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -634,7 +634,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.api') !!}</p>
+                        <p class="box-title" >{!! trans('lang.api') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->

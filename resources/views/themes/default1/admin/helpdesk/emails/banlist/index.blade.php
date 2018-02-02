@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.ban_email') !!}</h1>
+<h1>{!! trans('lang.ban_email') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -30,7 +30,7 @@ class="active"
 @section('content')
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h2 class="box-title">{{Lang::get('lang.list_of_banned_emails')}}</h2><a href="{{route('banlist.create')}}" class="pull-right btn btn-primary">{{Lang::get('lang.ban_email')}}</a>
+        <h2 class="box-title">{{trans('lang.list_of_banned_emails')}}</h2><a href="{{route('banlist.create')}}" class="pull-right btn btn-primary">{{trans('lang.ban_email')}}</a>
     </div>
     <div class="box-body">
         <!-- check whether success or not -->
@@ -45,16 +45,16 @@ class="active"
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.fails') !!} ! </b>
+            <b>{!! trans('lang.fails') !!} ! </b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('fails')}}
         </div>
         @endif
         <table class="table table-bordered dataTable" style="overflow:hidden;">
             <tr>
-                <th width="100px">{{Lang::get('lang.email_address')}}</th>
-                <th width="100px">{{Lang::get('lang.last_updated')}}</th>
-                <th width="100px">{{Lang::get('lang.action')}}</th>
+                <th width="100px">{{trans('lang.email_address')}}</th>
+                <th width="100px">{{trans('lang.last_updated')}}</th>
+                <th width="100px">{{trans('lang.action')}}</th>
             </tr>
             <!-- Foreach @var bans as @var ban -->
             @foreach($bans as $ban)
@@ -65,7 +65,7 @@ class="active"
                 <td> {!! UTC::usertimezone($ban->updated_at) !!} </td>
                 <!-- Deleting Fields -->
                 <td>
-                    <a href="{{route('banlist.edit',$ban->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a> <a href="{{route('banlist.delete',$ban->id)}}" class="btn btn-danger btn-xs btn-flat"><i class="fa fa-trash" style="color:black;"> </i> {!! Lang::get('lang.delete') !!}</a>
+                    <a href="{{route('banlist.edit',$ban->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! trans('lang.edit') !!}</a> <a href="{{route('banlist.delete',$ban->id)}}" class="btn btn-danger btn-xs btn-flat"><i class="fa fa-trash" style="color:black;"> </i> {!! trans('lang.delete') !!}</a>
                 </td>
                 @endforeach
             </tr>

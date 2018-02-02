@@ -85,7 +85,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/teams/show/{id}', ['as' => 'teams.show', 'uses' => 'Admin\helpdesk\TeamController@show']); /*  Get Team View */
         Breadcrumbs::register('teams.show', function ($breadcrumbs) {
             $breadcrumbs->parent('teams.index');
-            $breadcrumbs->push(Lang::get('lang.show'), url('teams/{teams}/show'));
+            $breadcrumbs->push(trans('lang.show'), url('teams/{teams}/show'));
         });
         Route::get('getshow/{id}', ['as' => 'teams.getshow.list', 'uses' => 'Admin\helpdesk\TeamController@getshow']);
         Route::resource('agents', 'Admin\helpdesk\AgentController'); // in agents module, for CRUD
@@ -836,6 +836,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']); /*  Get Open Ticket */
         // Breadcrumbs::register('open.ticket', function ($breadcrumbs) {
         //     $breadcrumbs->parent('dashboard');
-        //     $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.open'), route('open.ticket'));
+        //     $breadcrumbs->push(trans('lang.tickets') . '&nbsp; > &nbsp;' . trans('lang.open'), route('open.ticket'));
         // });
 });

@@ -9,7 +9,7 @@ active
 @stop
 
 @section('PageHeader')
-<h1>{{Lang::get('lang.ticket-details')}}</h1>
+<h1>{{trans('lang.ticket-details')}}</h1>
 @include('themes.default1.agent.helpdesk.ticket.response-messages')
 @stop
 <?php
@@ -20,34 +20,34 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
 ?>
 
 @section('sidebar')
-<li class="header">{!! Lang::get('lang.Ticket_Information') !!} </li>
+<li class="header">{!! trans('lang.Ticket_Information') !!} </li>
 <li>
     <a href="">
-        <span>{!! Lang::get('lang.Ticket_Id') !!} </span>
+        <span>{!! trans('lang.Ticket_Id') !!} </span>
         </br><b>#{{$tickets->ticket_number}}</b>
     </a>
 </li>
 <li>
     <a href="{!! URL('user/'.$user->id) !!}">
-        <span>{!! Lang::get('lang.User') !!} </span>
+        <span>{!! trans('lang.User') !!} </span>
         </br><i class="fa fa-user"></i> <b>{{$user->name() }}</b>
     </a>
 </li>
 <li >
     @if($tickets->assigned_to > 0)
     <a href="{!! URL('user/'.$tickets->assigned_to) !!}">
-        <span>{!! Lang::get('lang.Assigned_To') !!} </span>
+        <span>{!! trans('lang.Assigned_To') !!} </span>
         </br> {{$assignedto->first_name}}
     </a>
     @else
     <a href="">
-        <span>{!! Lang::get('lang.Unassigned') !!} </span>
+        <span>{!! trans('lang.Unassigned') !!} </span>
     </a>
     @endif
 </li>
 
 <li  class="header">
-    {!! Lang::get('lang.ticket_ratings') !!}
+    {!! trans('lang.ticket_ratings') !!}
 </li>
 <li> 
     <?php $ratings = App\Model\helpdesk\Ratings\Rating::orderby('display_order')->get(); ?>
@@ -113,65 +113,65 @@ if ($thread->title != "") {
 
             if ($group->can_edit_ticket == 1) {
                 ?>
-                <button type="button" class="btn btn-sm btn-default" id="Edit_Ticket" data-toggle="modal" data-target="#Edit"><i class="fa fa-edit" style="color:green;"> </i> {!! Lang::get('lang.edit') !!}</button>
+                <button type="button" class="btn btn-sm btn-default" id="Edit_Ticket" data-toggle="modal" data-target="#Edit"><i class="fa fa-edit" style="color:green;"> </i> {!! trans('lang.edit') !!}</button>
             <?php } ?>
 
             <?php if ($group->can_assign_ticket == 1) { ?>
-                <button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#{{$tickets->id}}assign"><i class="fa fa-hand-o-right" style="color:orange;"> </i> {!! Lang::get('lang.assign') !!}</button>
+                <button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#{{$tickets->id}}assign"><i class="fa fa-hand-o-right" style="color:orange;"> </i> {!! trans('lang.assign') !!}</button>
             <?php } ?>
 
             @if($tickets->assigned_to == Auth::user()->id)
-            <button type="button" id="surrender_button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#surrender"> <i class="fa fa-arrows-alt" style="color:red;"> </i>  {!! Lang::get('lang.surrender') !!}</button>
+            <button type="button" id="surrender_button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#surrender"> <i class="fa fa-arrows-alt" style="color:red;"> </i>  {!! trans('lang.surrender') !!}</button>
             @endif
 
 
             <?php Event::fire('show-add-event-btn', array()); ?>
 
-            <a href="{{url('ticket/print/'.$tickets->id)}}" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-print" > </i> {!! Lang::get('lang.generate_pdf') !!}</a>
+            <a href="{{url('ticket/print/'.$tickets->id)}}" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-print" > </i> {!! trans('lang.generate_pdf') !!}</a>
             <div class="btn-group">
                 <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="d1"><i class="fa fa-exchange" style="color:teal;" id="hidespin"> </i><i class="fa fa-spinner fa-spin" style="color:teal; display:none;" id="spin"></i>
-                    {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
+                    {!! trans('lang.change_status') !!} <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li id="open"><a href="#"><i class="fa fa-folder-open-o" style="color:red;"> </i>{!! Lang::get('lang.open') !!}</a></li>
+                    <li id="open"><a href="#"><i class="fa fa-folder-open-o" style="color:red;"> </i>{!! trans('lang.open') !!}</a></li>
                    
                     <?php if ( $tickets_approval->status==7) {?>
                   @if(Auth::user()->role == 'admin')
-                     <li id="approval_close"><a href="#"><i class="glyphicon glyphicon-thumbs-up" style="color:red;"> </i>{!! Lang::get('lang.approval') !!}</a></li>
+                     <li id="approval_close"><a href="#"><i class="glyphicon glyphicon-thumbs-up" style="color:red;"> </i>{!! trans('lang.approval') !!}</a></li>
                      @endif
                     
                     <?php } ?>
 
                      <?php if ( $tickets_approval->status==3) {?>
                     <?php if ($group->can_edit_ticket == 1) {?>
-                    <li id="close"><a href="#"><i class="fa fa-check" style="color:green;"> </i>{!! Lang::get('lang.close') !!}</a></li>
+                    <li id="close"><a href="#"><i class="fa fa-check" style="color:green;"> </i>{!! trans('lang.close') !!}</a></li>
                     <?php } ?>
                      <?php } ?>
 
                      <?php if ( $tickets_approval->status==1) {?>
                     <?php if ($group->can_edit_ticket == 1) {?>
-                    <li id="close"><a href="#"><i class="fa fa-check" style="color:green;"> </i>{!! Lang::get('lang.close') !!}</a></li>
+                    <li id="close"><a href="#"><i class="fa fa-check" style="color:green;"> </i>{!! trans('lang.close') !!}</a></li>
                     <?php } ?>
                      <?php } ?>
-                    <li id="resolved"><a href="#"><i class="fa fa-check-circle-o " style="color:green;"> </i>{!! Lang::get('lang.resolved') !!} </a></li>
+                    <li id="resolved"><a href="#"><i class="fa fa-check-circle-o " style="color:green;"> </i>{!! trans('lang.resolved') !!} </a></li>
                 </ul>
             </div>
             <?php if ($group->can_delete_ticket == 1 || $group->can_ban_email == 1) { ?>
                 <div id="more-option" class="btn-group">
                     <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="d2"><i class="fa fa-cogs" style="color:teal;"> </i>
-                        {!! Lang::get('lang.more') !!} <span class="caret"></span>
+                        {!! trans('lang.more') !!} <span class="caret"></span>
                     </button>
                     <ul  class="dropdown-menu pull-right">
                         <li data-toggle="modal" data-target="#ChangeOwner"><a href="#"><i class="fa fa-users" style="color:green;"> </i>Change Owner</a></li>
                         @if($tickets->status != 3 && $tickets->status != 2)
-                        <li data-toggle="modal" data-target="#MergeTickets"><a href="#"><i class="fa fa-code-fork" style="color:teal;"> </i>{!! Lang::get('lang.merge-ticket') !!}</a></li>
+                        <li data-toggle="modal" data-target="#MergeTickets"><a href="#"><i class="fa fa-code-fork" style="color:teal;"> </i>{!! trans('lang.merge-ticket') !!}</a></li>
                         @endif
                         <?php if ($group->can_delete_ticket == 1) { ?>
-                            <li id="delete"><a href="#"><i class="fa fa-trash-o" style="color:red;"> </i>{!! Lang::get('lang.delete_ticket') !!}</a></li>
+                            <li id="delete"><a href="#"><i class="fa fa-trash-o" style="color:red;"> </i>{!! trans('lang.delete_ticket') !!}</a></li>
                         <?php }
                         ?>
                         <?php if ($group->can_ban_email == 1) { ?>
-                            <li data-toggle="modal" data-target="#banemail"><a href="#"><i class="fa fa-ban" style="color:red;"></i>{!! Lang::get('lang.ban_email') !!}</a></li>
+                            <li data-toggle="modal" data-target="#banemail"><a href="#"><i class="fa fa-ban" style="color:red;"></i>{!! trans('lang.ban_email') !!}</a></li>
                         <?php 
                         \Event::fire('ticket.details.more.list',[$tickets]);
                         }
@@ -185,17 +185,17 @@ if ($thread->title != "") {
     <div class="box-body">
         <div id="alert11" class="alert alert-success alert-dismissable" style="display:none;">
             <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h4><i class="icon fa fa-check"></i>{!! Lang::get('lang.alert') !!}!</h4>
+            <h4><i class="icon fa fa-check"></i>{!! trans('lang.alert') !!}!</h4>
             <div id="message-success1"></div>
         </div>
         <div id="alert12" class="alert alert-warning alert-dismissable" style="display:none;">
             <button id="dismiss12" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h4><i class="icon fa fa-warning"></i>{!! Lang::get('lang.alert') !!}!</h4>
+            <h4><i class="icon fa fa-warning"></i>{!! trans('lang.alert') !!}!</h4>
             <div id="message-warning1"></div>
         </div>
         <div id="alert13" class="alert alert-danger alert-dismissable" style="display:none;">
             <button id="dismiss13" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h4><i class="icon fa fa-ban"></i>{!! Lang::get('lang.alert') !!}!</h4>
+            <h4><i class="icon fa fa-ban"></i>{!! trans('lang.alert') !!}!</h4>
             <div id="message-danger1"></div>
         </div>
         <div class="row">
@@ -211,13 +211,13 @@ if ($thread->title != "") {
                                 $sla = $tickets->sla;
                                 $SlaPlan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', $sla)->first();
                                 ?>
-                                <b>{!! Lang::get('lang.sla_plan') !!}: {{$SlaPlan->grace_period}} </b>
+                                <b>{!! trans('lang.sla_plan') !!}: {{$SlaPlan->grace_period}} </b>
                             </div>
                             <div class="col-md-3">
-                                <b>{!! Lang::get('lang.created_date') !!}: </b> {{ UTC::usertimezone($tickets->created_at) }}
+                                <b>{!! trans('lang.created_date') !!}: </b> {{ UTC::usertimezone($tickets->created_at) }}
                             </div>
                             <div class="col-md-3">
-                                <b>{!! Lang::get('lang.due_date') !!}: </b>
+                                <b>{!! trans('lang.due_date') !!}: </b>
                                 <?php
                                 $time = $tickets->created_at;
                                 $time = date_create($time);
@@ -230,7 +230,7 @@ if ($thread->title != "") {
                                 @foreach($response as $last)
                                 <?php $ResponseDate = $last->created_at; ?>
                                 @endforeach
-                                <b>{!! Lang::get('lang.last_response') !!}: </b> {{ UTC::usertimezone($ResponseDate) }}
+                                <b>{!! trans('lang.last_response') !!}: </b> {{ UTC::usertimezone($ResponseDate) }}
                             </div>
                         </div>
                     </div>
@@ -246,26 +246,26 @@ if ($thread->title != "") {
                     <div class="col-md-6">
                         <table class="table table-hover">
                             <div id="refresh">
-                                <tr><td><b>{!! Lang::get('lang.status') !!}:</b></td>       
+                                <tr><td><b>{!! trans('lang.status') !!}:</b></td>
                                     <?php $status = App\Model\helpdesk\Ticket\Ticket_Status::where('id', '=', $tickets->status)->first(); ?>
                                     @if($status)
                                     <td title="{{$status->properties}}">{{$status->name}}</td>
                                     @endif
                                 </tr>
-                                <tr><td><b>{!! Lang::get('lang.priority') !!}:</b></td>     
+                                <tr><td><b>{!! trans('lang.priority') !!}:</b></td>
                                     <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first(); ?>
                                     @if($priority)
                                     <td title="{{$priority->priority_desc}}">{{$priority->priority_desc}}</td>
                                     @endif
                                 </tr>
-                                <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   
+                                <tr><td><b>{!! trans('lang.department') !!}:</b></td>
                                     <?php $dept123 = App\Model\helpdesk\Agent\Department::where('id', '=', $tickets->dept_id)->first(); ?>
                                     @if($dept123)
                                     <td title="{{$dept123->name}}">{{$dept123->name}}</td></tr>
                                     @endif
-                                <tr><td><b>{!! Lang::get('lang.email') !!}:</b></td>        <td>{{str_limit($user->email,30)}}</td></tr>
+                                <tr><td><b>{!! trans('lang.email') !!}:</b></td>        <td>{{str_limit($user->email,30)}}</td></tr>
                                 @if($user->ban > 0)  <tr><td style="color:orange;"><i class="fa fa-warning"></i><b>
-                                            {!!  Lang::get('lang.this_ticket_is_under_banned_user')!!}</td><td></td></tr>@endif
+                                            {!!  trans('lang.this_ticket_is_under_banned_user')!!}</td><td></td></tr>@endif
                             </div>
                         </table>
                     </div>
@@ -296,12 +296,12 @@ if ($thread->title != "") {
                         <table class="table table-hover">
                             <div id="refresh3">
 
-                                @if($user->phone_number !=null)<tr><td><b>{!! Lang::get('lang.phone') !!}:</b></td>          <td>{{$user->phone_number}}</td></tr>@endif
-                                @if($user->mobile !=null)<tr><td><b>{!! Lang::get('lang.mobile') !!}:</b></td>          <td>{{$user->ext . $user->mobile}}</td></tr>@endif
-                                <tr><td><b>{!! Lang::get('lang.source') !!}:</b></td>         <td>{{$ticket_source}}</td></tr>
-                                <tr><td><b>{!! Lang::get('lang.help_topic') !!}:</b></td>     <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first(); ?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
-                                <tr><td><b>{!! Lang::get('lang.last_message') !!}:</b></td>   <td>{{str_limit($username,30)}}</td></tr>
-                                <tr><td><b>{!! Lang::get('lang.organization') !!}:</b></td>   <td>{!!$LastResponse->getOrgWithLink()!!}</td></tr>
+                                @if($user->phone_number !=null)<tr><td><b>{!! trans('lang.phone') !!}:</b></td>          <td>{{$user->phone_number}}</td></tr>@endif
+                                @if($user->mobile !=null)<tr><td><b>{!! trans('lang.mobile') !!}:</b></td>          <td>{{$user->ext . $user->mobile}}</td></tr>@endif
+                                <tr><td><b>{!! trans('lang.source') !!}:</b></td>         <td>{{$ticket_source}}</td></tr>
+                                <tr><td><b>{!! trans('lang.help_topic') !!}:</b></td>     <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first(); ?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
+                                <tr><td><b>{!! trans('lang.last_message') !!}:</b></td>   <td>{{str_limit($username,30)}}</td></tr>
+                                <tr><td><b>{!! trans('lang.organization') !!}:</b></td>   <td>{!!$LastResponse->getOrgWithLink()!!}</td></tr>
                                 <?php Event::fire(new App\Events\TicketDetailTable($TicketData)); ?>
                             </div>
                         </table>
@@ -322,8 +322,8 @@ if ($thread->title != "") {
     <div class='col-xs-12'>
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#General" data-toggle="tab" style="color:#27C116;" id="aa"><i class="fa fa-reply-all"> </i> {!! Lang::get('lang.reply') !!}</a></li>
-                <li><a href="#Internal" data-toggle="tab" style="color:#0495FF;" id="bb"><i class="fa fa-file-text"> </i> {!! Lang::get('lang.internal_notes') !!}</a></li>
+                <li class="active"><a href="#General" data-toggle="tab" style="color:#27C116;" id="aa"><i class="fa fa-reply-all"> </i> {!! trans('lang.reply') !!}</a></li>
+                <li><a href="#Internal" data-toggle="tab" style="color:#0495FF;" id="bb"><i class="fa fa-file-text"> </i> {!! trans('lang.internal_notes') !!}</a></li>
                 <?php Event::fire('timeline.tab.list',[$TicketData]); ?>
                 <!-- <li><a href="#Reply" data-toggle="tab" style="color:orange;"><i class="fa fa-mail-forward" > </i> Forward</a></li> -->
             </ul>
@@ -333,12 +333,12 @@ if ($thread->title != "") {
                     <div id="message-success2"></div>
                 </div>
                 <div id="alert22" class="alert alert-warning alert-dismissable" style="display:none;">
-                    <h4><i class="icon fa fa-warning"></i>{!! Lang::get('lang.alert') !!}!</h4>
+                    <h4><i class="icon fa fa-warning"></i>{!! trans('lang.alert') !!}!</h4>
                     <div id="message-warning2"></div>
                 </div>
                 <div id="alert23" class="alert alert-danger alert-dismissable" style="display:none;">
                     <button id="dismiss23" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <i class="icon fa fa-ban"></i><b>{!! Lang::get('lang.alert') !!} !</b>
+                    <i class="icon fa fa-ban"></i><b>{!! trans('lang.alert') !!} !</b>
                     <div id="message-danger2"></div>
                 </div>
                 <div class="tab-pane active" id="General">
@@ -369,20 +369,20 @@ if ($thread->title != "") {
                                 <input type="hidden" name="ticket_ID" value="{{$tickets->id}}">
                                 <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                                     <div class="col-md-2">
-                                        {!! Form::label('To', Lang::get('lang.to').':') !!}
+                                        {!! Form::label('To', trans('lang.to').':') !!}
                                     </div>
                                     <div class="col-md-10">
                                         <div id="refreshTo">
                                             {!! Form::text('To',$user->email,['disabled'=>'disabled','id'=>'email','class'=>'form-control','style'=>'width:55%'])!!}
                                             {!! $errors->first('To', '<spam class="help-block text-red">:message</spam>') !!}
-                                            <a href="#" data-toggle="modal" data-target="#addccc"> {!! Lang::get('lang.add_cc') !!} </a>
+                                            <a href="#" data-toggle="modal" data-target="#addccc"> {!! trans('lang.add_cc') !!} </a>
                                             <div id="recepients">
                                                 <?php
                                                 $Collaborator = App\Model\helpdesk\Ticket\Ticket_Collaborator::where('ticket_id', '=', $tickets->id)->get();
                                                 $count_collaborator = count($Collaborator);
                                                 ?>
                                                 @if($count_collaborator > 0)
-                                                <a href="#" data-toggle="modal" data-target="#surrender2">({!! $count_collaborator !!}) {!! Lang::get('lang.recepients') !!} </a>
+                                                <a href="#" data-toggle="modal" data-target="#surrender2">({!! $count_collaborator !!}) {!! trans('lang.recepients') !!} </a>
                                                 @endif
                                             </div>
                                         </div>
@@ -394,7 +394,7 @@ if ($thread->title != "") {
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-2">
-                                    <label>{!! Lang::get('lang.response') !!}</label>
+                                    <label>{!! trans('lang.response') !!}</label>
                                 </div>
                                 <div class="col-md-10">
                                     <select class="form-control" style="width:55%" id="select" onchange="addCannedResponse()">
@@ -402,7 +402,7 @@ if ($thread->title != "") {
                                         <?php
                                         $canneds = App\Model\helpdesk\Agent_panel\Canned::where('user_id', '=', Auth::user()->id)->get();
                                         ?>                                                  
-                                        <option value="zzz">{!! Lang::get('lang.select_a_canned_response') !!}</option>
+                                        <option value="zzz">{!! trans('lang.select_a_canned_response') !!}</option>
                                         @foreach($canneds as $canned)
                                         <option value="{!! $canned->message !!}" >{!! $canned->title !!}</option>
                                         @endforeach
@@ -416,7 +416,7 @@ if ($thread->title != "") {
                                 <!-- reply content -->
                                 <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}" id="reply_content_class">
                                     <div class="col-md-2">
-                                        {!! Form::label('Reply Content', Lang::get('lang.reply_content').':') !!}<span class="text-red"> *</span>
+                                        {!! Form::label('Reply Content', trans('lang.reply_content').':') !!}<span class="text-red"> *</span>
                                     </div>
                                     <div class="col-md-10">
                                         <div id="newtextarea">
@@ -451,12 +451,12 @@ if ($thread->title != "") {
                                 <!-- reply content -->
                                 <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}" id="reply_content_class">
                                     <div class="col-md-2">
-                                        <label> {!! Lang::get('lang.attachment') !!}</label>
+                                        <label> {!! trans('lang.attachment') !!}</label>
                                     </div>
                                     <div class="col-md-10">
                                         <div id="reset-attachment">
-                                            <span class='btn btn-default btn-file'> <i class='fa fa-paperclip'></i> <span>{!! Lang::get('lang.upload') !!}</span><input type='file' name='attachment[]' id='attachment' multiple/></span>
-                                            <div id='file_details'></div><div id='total-size'></div>{!! Lang::get('lang.max') !!}. {!! $max_size_in_actual !!}
+                                            <span class='btn btn-default btn-file'> <i class='fa fa-paperclip'></i> <span>{!! trans('lang.upload') !!}</span><input type='file' name='attachment[]' id='attachment' multiple/></span>
+                                            <div id='file_details'></div><div id='total-size'></div>{!! trans('lang.max') !!}. {!! $max_size_in_actual !!}
                                             <div>
                                                 <a id='clear-file' onClick='clearAll()' style='display:none; cursor:pointer;'><i class='fa fa-close'></i>Clear all</a>
                                             </div>
@@ -472,7 +472,7 @@ if ($thread->title != "") {
                                     <div class="col-md-2"></div>
                                     <div class="col-md-10">
                                         <div id="t5">
-                                            <button id="replybtn" type="submit" class="btn btn-primary"><i class="fa fa-check-square-o" style="color:white;"> </i> {!! Lang::get('lang.update') !!}</button>
+                                            <button id="replybtn" type="submit" class="btn btn-primary"><i class="fa fa-check-square-o" style="color:white;"> </i> {!! trans('lang.update') !!}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -506,7 +506,7 @@ if ($thread->title != "") {
                                     <!-- internal note -->
                                     <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}" id="internal_content_class">
                                         <div class="col-md-2">
-                                            <label>{!! Lang::get('lang.internal_note') !!}:<span class="text-red"> *</span></label>
+                                            <label>{!! trans('lang.internal_note') !!}:<span class="text-red"> *</span></label>
                                         </div>
                                         <div class="col-md-10">
                                             <div id="newtextarea1">
@@ -522,7 +522,7 @@ if ($thread->title != "") {
                                     <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                                         <div class="col-md-2"></div>
                                         <div class="col-md-10">
-                                            <button type="submit"  class="btn btn-primary"><i class="fa fa-check-square-o" style="color:white;"> </i> {!! Lang::get('lang.update') !!}</button>
+                                            <button type="submit"  class="btn btn-primary"><i class="fa fa-check-square-o" style="color:white;"> </i> {!! trans('lang.update') !!}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -667,7 +667,7 @@ if ($thread->title != "") {
                                                     $usernam = $role->first_name . " " . $role->last_name;
                                                 }
                                             } else {
-                                                $usernam = Lang::get('lang.system');
+                                                $usernam = trans('lang.system');
                                             }
                                             
                                             ?>
@@ -809,18 +809,18 @@ alert(h+20);
                     {!! Form::model($tickets->id, ['id'=>'form','method' => 'PATCH'] )!!}
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidd en="true">&times;</span></button>
-                        <h4 class="modal-title">{!! Lang::get('lang.edit') !!} <b>[#{!! $tickets->ticket_number !!}]</b>[{!! $user->user_name !!}]</h4>
+                        <h4 class="modal-title">{!! trans('lang.edit') !!} <b>[#{!! $tickets->ticket_number !!}]</b>[{!! $user->user_name !!}]</h4>
                     </div>
                     <div class="modal-body" id="hide">
                         <div class="form-group">
-                            <label>{!! Lang::get('lang.title') !!} <span class="text-red"> *</span></label>
+                            <label>{!! trans('lang.title') !!} <span class="text-red"> *</span></label>
                             <input type="text" name="subject" class="form-control" value="{{$thread->title}}" >
                             <spam id="error-subject" style="display:none" class="help-block text-red">This is a required field</spam>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{!! Lang::get('lang.sla_plan') !!} <span class="text-red"> *</span></label>
+                                    <label>{!! trans('lang.sla_plan') !!} <span class="text-red"> *</span></label>
     <?php $sla_plans = App\Model\helpdesk\Manage\Sla_plan::where('status', '=', 1)->get() ?>
                                     <select class="form-control" name="sla_paln">
                                         @foreach($sla_plans as $sla_plan)
@@ -836,7 +836,7 @@ alert(h+20);
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{!! Lang::get('lang.help_topic') !!} <span class="text-red"> *</span></label>
+                                    <label>{!! trans('lang.help_topic') !!} <span class="text-red"> *</span></label>
 
     <?php $help_topics = App\Model\helpdesk\Manage\Help_topic::where('status', '=', 1)->get(); ?>
                                     <select class="form-control" name="help_topic">
@@ -853,7 +853,7 @@ alert(h+20);
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{!! Lang::get('lang.ticket_source') !!} <span class="text-red"> *</span></label>
+                                    <label>{!! trans('lang.ticket_source') !!} <span class="text-red"> *</span></label>
     <?php $ticket_sources = App\Model\helpdesk\Ticket\Ticket_source::all() ?>
                                     <select class="form-control" name="ticket_source">
                                         @foreach($ticket_sources as $ticketsource)
@@ -870,7 +870,7 @@ alert(h+20);
     <?php ?>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{!! Lang::get('lang.priority') !!} <span class="text-red"> *</span></label>
+                                    <label>{!! trans('lang.priority') !!} <span class="text-red"> *</span></label>
     <?php $ticket_prioritys = App\Model\helpdesk\Ticket\Ticket_Priority::where('status','=',1)->get(); ?>
                                     <select class="form-control" name="ticket_priority">
                                         @foreach($ticket_prioritys as $ticket_priority)
@@ -898,8 +898,8 @@ alert(h+20);
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis">{!! Lang::get('lang.close') !!}</button>
-                        <input type="submit" class="btn btn-primary pull-right" value="{!! Lang::get('lang.update') !!}">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis">{!! trans('lang.close') !!}</button>
+                        <input type="submit" class="btn btn-primary pull-right" value="{!! trans('lang.update') !!}">
                     </div>
                     {!! Form::close() !!}
                 </div><!-- /.modal-content -->
@@ -914,15 +914,15 @@ alert(h+20);
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">{!! Lang::get('lang.ban_email') !!} </h4>
+                        <h4 class="modal-title">{!! trans('lang.ban_email') !!} </h4>
                     </div>
                     <div class="modal-body">
-                        {!! Lang::get('lang.are_you_sure_to_ban') !!} {!! $user->email !!}
+                        {!! trans('lang.are_you_sure_to_ban') !!} {!! $user->email !!}
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">{!! Lang::get('lang.close') !!}</button>
-                        <button id="ban" type="button" class="btn btn-warning pull-right" >{!! Lang::get('lang.ban_email') !!}</button>
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">{!! trans('lang.close') !!}</button>
+                        <button id="ban" type="button" class="btn btn-warning pull-right" >{!! trans('lang.ban_email') !!}</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -937,12 +937,12 @@ alert(h+20);
                 {!! Form::open(['id'=>'form4','method' => 'PATCH'] )!!}
                 <div class="modal-header">
                     <button type="button" class="close" id="close101" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">{!! Lang::get('lang.change_owner_for_ticket') !!} <b>#{!! $tickets->ticket_number !!}</b></h4>
+                    <h4 class="modal-title">{!! trans('lang.change_owner_for_ticket') !!} <b>#{!! $tickets->ticket_number !!}</b></h4>
                 </div>
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#ahah1" data-toggle="tab" style="color:green;" id="aa"><i class="fa fa-users"> </i> {!! Lang::get('lang.search_existing_users') !!}</a></li>
-                        <li><a href="#haha2" data-toggle="tab" style="color:orange;"><i class="fa fa-user-plus" > </i> {!! Lang::get('lang.add_new_user') !!}</a></li>
+                        <li class="active"><a href="#ahah1" data-toggle="tab" style="color:green;" id="aa"><i class="fa fa-users"> </i> {!! trans('lang.search_existing_users') !!}</a></li>
+                        <li><a href="#haha2" data-toggle="tab" style="color:orange;"><i class="fa fa-user-plus" > </i> {!! trans('lang.add_new_user') !!}</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="ahah1">
@@ -961,19 +961,19 @@ alert(h+20);
                                 </div>
                                 <div id="change_body">
 <?php $users = App\User::where('role', '=', 'user')->get(); ?>
-                                    {!! Lang::get('lang.add_another_owner') !!}
-                                    <input type="text" class="form-control" id="tags2" name="email" placeholder="{!! Lang::get('lang.search_user') !!}"\>
+                                    {!! trans('lang.add_another_owner') !!}
+                                    <input type="text" class="form-control" id="tags2" name="email" placeholder="{!! trans('lang.search_user') !!}"\>
                                     <input type="hidden" name="ticket_id" value="{!! $tickets->id !!}">
                                     <input type="hidden" name="action" value="change-owner">
                                     <div class="row">
                                         <div class="col-md-2"><spam class="glyphicon glyphicon-user fa-5x"></spam></div>
                                         <div id="change-refresh" class="col-md-10">
 <?php $user = App\User::where('id', '=', $tickets->user_id)->first(); ?>
-                                            <!-- <b>{!! Lang::get('lang.user_details') !!}User Details</b><br/> -->
+                                            <!-- <b>{!! trans('lang.user_details') !!}User Details</b><br/> -->
                                             <b>Current owner</b><br/>
                                             {!! $user->user_name !!}<br/>{!! $user->email !!}<br/>
                                             @if($user->phone != null)
-                                            <b>{!! Lang::get('lang.contact_informations') !!}Contact Informations</b><br/>
+                                            <b>{!! trans('lang.contact_informations') !!}Contact Informations</b><br/>
                                             {!! $user->phone !!}
                                             @endif
                                         </div>
@@ -982,9 +982,9 @@ alert(h+20);
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis42">{!! Lang::get('lang.close') !!}</button>
+                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis42">{!! trans('lang.close') !!}</button>
                                 <!--<input type='checkbox' name='send-mail' class='icheckbox_flat-blue' value='".$ticket->id."'><span disabled class="btn btn-sm">Check to notify user</span></input>-->
-                                <button type="submit" class="btn btn-primary pull-right" id="submt2">{!! Lang::get('lang.update') !!}</button>
+                                <button type="submit" class="btn btn-primary pull-right" id="submt2">{!! trans('lang.update') !!}</button>
                             </div>
                             {!! Form::close()!!}
                         </div><!--tab-pane active-->
@@ -995,7 +995,7 @@ alert(h+20);
                                 <div id="message-success422"></div>
                             </div>
                             <div class="modal-body" id="abc">
-                                <h4 class="modal-title pull-left">{!! Lang::get('lang.add_new_user') !!}</h4>            
+                                <h4 class="modal-title pull-left">{!! trans('lang.add_new_user') !!}</h4>
                                 <br/><br/>
                                 <div id="here2"></div>
                                 {!! Form::model($tickets->id, ['id'=>'change-add-owner','method' => 'PATCH'] )!!} 
@@ -1012,11 +1012,11 @@ alert(h+20);
                                     <br/><br/><br/><br/>
                                 </div>
                                 <div id="add-change-body">
-                                    <input type="text" name="name" class="form-control" placeholder="{!! Lang::get('lang.name') !!}" required>
-                                    <input type="email" name="email" class="form-control" placeholder="{!! Lang::get('lang.e-mail') !!}" required> 
+                                    <input type="text" name="name" class="form-control" placeholder="{!! trans('lang.name') !!}" required>
+                                    <input type="email" name="email" class="form-control" placeholder="{!! trans('lang.e-mail') !!}" required>
                                     <input type="hidden" name="ticket_id" value="{!! $tickets->id !!}">
                                     <input type="hidden" name="action" value="change-add-owner">
-                                    <input type="submit" class="btn" value="{!! Lang::get('lang.submit') !!}">
+                                    <input type="submit" class="btn" value="{!! trans('lang.submit') !!}">
                                 </div>
                                 {!! Form::close() !!}
                             </div>
@@ -1035,7 +1035,7 @@ alert(h+20);
                     {!! Form::open(['id'=>'form1','method' => 'PATCH'] )!!}
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">{!! Lang::get('lang.assign') !!}</h4>
+                        <h4 class="modal-title">{!! trans('lang.assign') !!}</h4>
                     </div>
                     <div id="assign_alert" class="alert alert-success alert-dismissable" style="display:none;">
                         <button id="assign_dismiss" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -1051,7 +1051,7 @@ alert(h+20);
                             </div>
                         </div>
                         <div id="assign_body">
-                            <p>{!! Lang::get('lang.whome_do_you_want_to_assign_ticket') !!}?</p>
+                            <p>{!! trans('lang.whome_do_you_want_to_assign_ticket') !!}?</p>
                             <select id="asssign" class="form-control" name="assign_to">
                                 <?php
                                 $assign = App\User::where('role', '!=', 'user')->where('active', '=', '1')->orderBy('first_name')->get();
@@ -1069,8 +1069,8 @@ alert(h+20);
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis4">{!! Lang::get('lang.close') !!}</button>
-                        <button type="submit" class="btn btn-success pull-right" id="submt2">{!! Lang::get('lang.assign') !!}</button>
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis4">{!! trans('lang.close') !!}</button>
+                        <button type="submit" class="btn btn-success pull-right" id="submt2">{!! trans('lang.assign') !!}</button>
                     </div>
                     {!! Form::close()!!}
                 </div><!-- /.modal-content -->
@@ -1084,14 +1084,14 @@ alert(h+20);
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">{!! Lang::get('lang.surrender') !!}</h4>
+                    <h4 class="modal-title">{!! trans('lang.surrender') !!}</h4>
                 </div>
                 <div class="modal-body">
-                    <p>{!! Lang::get('lang.are_you_sure_you_want_to_surrender_this_ticket') !!}?</p>
+                    <p>{!! trans('lang.are_you_sure_you_want_to_surrender_this_ticket') !!}?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis6">{!! Lang::get('lang.close') !!}</button>
-                    <button type="button" class="btn btn-warning pull-right" id="Surrender">{!! Lang::get('lang.surrender') !!}</button>
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis6">{!! trans('lang.close') !!}</button>
+                    <button type="button" class="btn btn-warning pull-right" id="Surrender">{!! trans('lang.surrender') !!}</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -1103,17 +1103,17 @@ alert(h+20);
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" id="cc-close" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">{!! Lang::get('lang.add_collaborator') !!}</h4>
+                    <h4 class="modal-title">{!! trans('lang.add_collaborator') !!}</h4>
                 </div>
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#ahah" data-toggle="tab" style="color:green;" id="aa"><i class="fa fa-users"> </i> {!! Lang::get('lang.search_existing_users') !!}</a></li>
-                        <li><a href="#haha" data-toggle="tab" style="color:orange;"><i class="fa fa-user-plus" > </i> {!! Lang::get('lang.add_new_user') !!}</a></li>
+                        <li class="active"><a href="#ahah" data-toggle="tab" style="color:green;" id="aa"><i class="fa fa-users"> </i> {!! trans('lang.search_existing_users') !!}</a></li>
+                        <li><a href="#haha" data-toggle="tab" style="color:orange;"><i class="fa fa-user-plus" > </i> {!! trans('lang.add_new_user') !!}</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="ahah">
                             <div class="modal-body" id="def">
-                                <div class="callout callout-info" id="hide1234" ><i class="icon fa fa-info"> </i>&nbsp;&nbsp;&nbsp; {!! Lang::get('lang.search_existing_users_or_add_new_users') !!}</div>
+                                <div class="callout callout-info" id="hide1234" ><i class="icon fa fa-info"> </i>&nbsp;&nbsp;&nbsp; {!! trans('lang.search_existing_users_or_add_new_users') !!}</div>
                                 <div id="here"></div>
                                 <div id="show7" style="display:none;">
                                     <div class="row col-md-12">
@@ -1129,15 +1129,15 @@ alert(h+20);
                                 
                                 {!! Form::model($tickets->id, ['id'=>'search-user','method' => 'PATCH'] )!!}    
                                 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-                                <input type="text" class="form-control" name="search" id="tags" placeholder="{!! Lang::get('lang.search_by_email') !!}">
+                                <input type="text" class="form-control" name="search" id="tags" placeholder="{!! trans('lang.search_by_email') !!}">
                                 <input type="hidden" name="ticket_id" value="{!! $tickets->id !!}">
-                                <input type="submit" class="btn btn-submit" value="{!! Lang::get('lang.submit') !!}">
+                                <input type="submit" class="btn btn-submit" value="{!! trans('lang.submit') !!}">
                                 {!! Form::close() !!}
                             </div>
                         </div>
                         <div class="tab-pane" id="haha">
                             <div class="modal-body" id="abc">
-                                <h4 class="modal-title pull-left">{!! Lang::get('lang.add_new_user') !!}</h4>            
+                                <h4 class="modal-title pull-left">{!! trans('lang.add_new_user') !!}</h4>
                                 <br/><br/>
                                 <div id="here2"></div>
                                 {!! Form::model($tickets->id, ['id'=>'add-user','method' => 'PATCH'] )!!} 
@@ -1154,10 +1154,10 @@ alert(h+20);
                                     <br/><br/><br/><br/>
                                 </div>
                                 <div id="hide12345">
-                                    <input type="text" name="name" class="form-control" placeholder="{!! Lang::get('lang.name') !!}" required>
-                                    <input type="email" name="email" class="form-control" placeholder="{!! Lang::get('lang.e-mail') !!}" required> 
+                                    <input type="text" name="name" class="form-control" placeholder="{!! trans('lang.name') !!}" required>
+                                    <input type="email" name="email" class="form-control" placeholder="{!! trans('lang.e-mail') !!}" required>
                                     <input type="hidden" name="ticket_id" value="{!! $tickets->id !!}">
-                                    <input type="submit" class="btn" value="{!! Lang::get('lang.submit') !!}">
+                                    <input type="submit" class="btn" value="{!! trans('lang.submit') !!}">
                                 </div>
                                 {!! Form::close() !!}
                             </div>
@@ -1177,7 +1177,7 @@ alert(h+20);
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">{!! Lang::get('lang.list_of_collaborators_of_this_ticket') !!}</h4>
+                    <h4 class="modal-title">{!! trans('lang.list_of_collaborators_of_this_ticket') !!}</h4>
                 </div>
                 <div class="modal-body" id="surrender22">
                     @foreach($Collaborator as $ccc)
@@ -1219,7 +1219,7 @@ alert(h+20);
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" id="merge-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">{!! Lang::get('lang.merge-ticket') !!} </h4>&nbsp;<b>#{!! $tickets->ticket_number !!}</b>
+                <h4 class="modal-title">{!! trans('lang.merge-ticket') !!} </h4>&nbsp;<b>#{!! $tickets->ticket_number !!}</b>
             </div><!-- /.modal-header-->
             <div class ="modal-body">
                 <div class="row">
@@ -1250,20 +1250,20 @@ alert(h+20);
                         <div class="row">
                             <div class="col-md-6">
                                 {!! Form::open(['id'=>'merge-form','method' => 'PATCH'] )!!}
-                                <label>{!! Lang::get('lang.title') !!}</label>
+                                <label>{!! trans('lang.title') !!}</label>
                                 <input type="text" name='title' class="form-control" value="<?php
                                        $ticket_data = App\Model\helpdesk\Ticket\Ticket_Thread::select('title')->where('ticket_id', "=", $tickets->id)->first();
                                        echo $ticket_data->title;
                                        ?>"/>
                             </div>
                             <div class="col-md-6">
-                                <label>{!! Lang::get('lang.select-pparent-ticket') !!}</label>
+                                <label>{!! trans('lang.select-pparent-ticket') !!}</label>
                                 <div id="parent-loader" style="display:none;">
                                     <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" height="30px" width="30px">
                                 </div>
                                 <div id="parent-body" >
 
-                                    <select class="form-control" id="select-merge-parent"  name='p_id' data-placeholder="{!! Lang::get('lang.select_tickets') !!}" style="width: 100%;"><option value="{{$tickets->id}}"><?php
+                                    <select class="form-control" id="select-merge-parent"  name='p_id' data-placeholder="{!! trans('lang.select_tickets') !!}" style="width: 100%;"><option value="{{$tickets->id}}"><?php
                                        $ticket_data = App\Model\helpdesk\Ticket\Ticket_Thread::select('title')->where('ticket_id', "=", $tickets->id)->first();
                                        echo $ticket_data->title;
                                        ?></option></select>
@@ -1274,8 +1274,8 @@ alert(h+20);
                         <div class="row">
                             <div class="col-md-8">
 
-                                <label>{!! Lang::get('lang.select_tickets') !!}</label>
-                                <select class="form-control select2" id="select-merge-tickts" name="t_id[]" multiple="multiple" data-placeholder="{!! Lang::get('lang.select_tickets') !!}" style="width: 100%;">
+                                <label>{!! trans('lang.select_tickets') !!}</label>
+                                <select class="form-control select2" id="select-merge-tickts" name="t_id[]" multiple="multiple" data-placeholder="{!! trans('lang.select_tickets') !!}" style="width: 100%;">
 
                                 </select>
 
@@ -1283,7 +1283,7 @@ alert(h+20);
                         </div>
                         <div class="row">
                             <div class="col-md-8">
-                                <label>{!! Lang::get('lang.merge-reason') !!}</label>
+                                <label>{!! trans('lang.merge-reason') !!}</label>
                                 <textarea  name="reason" class="form-control"></textarea>
                             </div>
 
@@ -1292,8 +1292,8 @@ alert(h+20);
                 </div><!-- merge-body -->
             </div><!-- /.modal-body -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">{!! Lang::get('lang.close') !!}</button>
-                <input  type="submit" id="merge-btn" class="btn btn-primary pull-right" value="{!! Lang::get('lang.merge') !!}"></input>
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">{!! trans('lang.close') !!}</button>
+                <input  type="submit" id="merge-btn" class="btn btn-primary pull-right" value="{!! trans('lang.merge') !!}"></input>
                 {!! Form::close() !!}
             </div><!-- /.modal-footer -->
         </div><!-- /.modal-content -->
@@ -1313,7 +1313,7 @@ alert(h+20);
                 <div class="modal-body" id="custom-alert-body" >
                 </div>
                 <div class="modal-footer">
-                    <a href="{!! URL::route('ticket.thread',$tickets->id) !!}"><button type="button" class="btn btn-primary yes" data-dismiss="modal">{{Lang::get('lang.reload-now')}}</button></a>
+                    <a href="{!! URL::route('ticket.thread',$tickets->id) !!}"><button type="button" class="btn btn-primary yes" data-dismiss="modal">{{trans('lang.reload-now')}}</button></a>
                 </div>
             </div>
         </div>
@@ -1399,7 +1399,7 @@ alert(h+20);
                     $("#hide2").show();
                     $("#hidespin").show();
                     $("#d1").trigger("click");
-                    var message = "{!! Lang::get('lang.your_ticket_have_been_closed') !!}";
+                    var message = "{!! trans('lang.your_ticket_have_been_closed') !!}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
                     setTimeout(function() {
@@ -1460,7 +1460,7 @@ alert(h+20);
                     $("#d1").trigger("click");
                     $("#hide2").show();
                     $("#show2").hide();
-                    var message = "{!! Lang::get('lang.your_ticket_have_been_resolved') !!}";
+                    var message = "{!! trans('lang.your_ticket_have_been_resolved') !!}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
                     setInterval(function(){$("#alert11").hide();
@@ -1490,7 +1490,7 @@ alert(h+20);
                     $("#d1").trigger("click");
                     $("#hide2").show();
                     $("#show2").hide();
-                    var message = "{!! Lang::get('lang.your_ticket_have_been_opened') !!}";
+                    var message = "{!! trans('lang.your_ticket_have_been_opened') !!}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
                     setInterval(function(){$("#alert11").hide(); }, 4000);
@@ -1512,7 +1512,7 @@ alert(h+20);
                     $("#d2").trigger("click");
                     $("#hide2").show();
                     $("#show2").hide();
-                    var message = "{!! Lang::get('lang.your_ticket_have_been_moved_to_trash') !!}";
+                    var message = "{!! trans('lang.your_ticket_have_been_moved_to_trash') !!}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
                     //alert(document.referrer);
@@ -1537,7 +1537,7 @@ alert(h+20);
             success: function(response) {
             $("#dismis2").trigger("click");
                     $("#refresh").load("../thread/{{$tickets->id}}   #refresh");
-                    var message = "{!! Lang::get('lang.this_email_have_been_banned') !!}";
+                    var message = "{!! trans('lang.this_email_have_been_banned') !!}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
                     setInterval(function(){$("#alert11").hide(); }, 4000);
@@ -1572,7 +1572,7 @@ alert(h+20);
             $("#show").hide();
                     $("#hide").show();
                     if (response == 0) {
-            // message = "{!! Lang::get('lang.ticket_updated_successfully') !!}"
+            // message = "{!! trans('lang.ticket_updated_successfully') !!}"
             //         $("#dismis").trigger("click");
             //         $("#refresh1").load("../thread/{{$tickets->id}}   #refresh1");
             //         $("#refresh2").load("../thread/{{$tickets->id}}   #refresh2");
@@ -1647,9 +1647,9 @@ alert(h+20);
             success: function(response) {
             if (response != 1) {
                 // $("#assign_body").show();
-                var message = "{{Lang::get('lang.user-not-found')}}";
+                var message = "{{trans('lang.user-not-found')}}";
                 if (response == 400) {
-                    message = "{{Lang::get('lang.selected-user-is-already-the-owner')}}";
+                    message = "{{trans('lang.selected-user-is-already-the-owner')}}";
                 }
                 $('#change_alert').show();
                 $('#message-success42').html(message);
@@ -1668,7 +1668,7 @@ alert(h+20);
                     $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
                     $("#refreshTo").load("../thread/{{$tickets->id}}  #refreshTo");
                     $("#change-refresh").load("../thread/{{$tickets->id}}  #change-refresh");
-                    var message = "{{Lang::get('lang.change-success')}}";
+                    var message = "{{trans('lang.change-success')}}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
                     setInterval(function(){$("#alert11").hide(); }, 4000);
@@ -1698,15 +1698,15 @@ alert(h+20);
                     $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                     $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
                     $("#refreshTo").load("../thread/{{$tickets->id}}  #refreshTo");
-                    var message = "{{Lang::get('lang.change-success')}}";
+                    var message = "{{trans('lang.change-success')}}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
                     setInterval(function(){$("#alert11").hide(); }, 4000);
             } else {
             if (response == 4){
-            var message = "{{Lang::get('lang.user-exists')}}";
+            var message = "{{trans('lang.user-exists')}}";
             } else if (response == 5){
-            var message = "{{Lang::get('lang.valid-email')}}";
+            var message = "{{trans('lang.valid-email')}}";
             } else {
             //var message = "Can't process your request. Try after some time.";
             }
@@ -1727,7 +1727,7 @@ alert(h+20);
                     $("#internal_content_class").removeClass('has-error');
                     $("#alert23").hide();
                 } else {
-                    var message = "<li>{!! Lang::get('lang.internal_content_is_a_required_field') !!}</li>";
+                    var message = "<li>{!! trans('lang.internal_content_is_a_required_field') !!}</li>";
                     $("#internal_content_class").addClass('has-error');
                     $("#alert23").show();
                     $('#message-danger2').html(message);
@@ -1752,7 +1752,7 @@ alert(h+20);
             $(".embed-responsive-item").load("../thread/{{$tickets->id}}   .embed-responsive-item");
             
                     // $("#t4").load("../thread/{{$tickets->id}}   #t4");
-                    var message = "{!! Lang::get('lang.internal-note-has-been-added') !!}";
+                    var message = "{!! trans('lang.internal-note-has-been-added') !!}";
                     $("#alert21").show();
                     $('#message-success2').html(message);
                     setInterval(function(){$("#alert21").hide(); }, 4000);
@@ -1775,7 +1775,7 @@ alert(h+20);
                         }, 4000);
             } else {
             // alert('fail');
-            var message = "{!! Lang::get('lang.for_some_reason_your_message_was_not_posted_please_try_again_later') !!}";
+            var message = "{!! trans('lang.for_some_reason_your_message_was_not_posted_please_try_again_later') !!}";
                     $("#alert23").show();
                     $('#message-danger2').html(message);
                     setInterval(function(){$("#alert23").hide(); }, 4000);
@@ -1840,7 +1840,7 @@ alert(h+20);
                 $("#reply_content_class").removeClass('has-error');
                 $("#alert23").hide();
             } else {
-                var message = "<li>{!! Lang::get('lang.reply_content_is_a_required_field') !!}</li>";
+                var message = "<li>{!! trans('lang.reply_content_is_a_required_field') !!}</li>";
                 $("#reply_content_class").addClass('has-error');
                 $("#alert23").show();
                 $('#message-danger2').html(message);
@@ -1888,7 +1888,7 @@ alert(h+20);
             if (response == 1)
             {
             // alert('ticket has been un assigned');
-            var message = "{!! Lang::get('lang.you_have_unassigned_your_ticket') !!}";
+            var message = "{!! trans('lang.you_have_unassigned_your_ticket') !!}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
                     setInterval(function(){$("#dismiss11").trigger("click"); }, 2000);
@@ -1897,7 +1897,7 @@ alert(h+20);
             }
             else
             {
-            var message = "{!! Lang::get('lang.for_some_reason_your_request_failed') !!}";
+            var message = "{!! trans('lang.for_some_reason_your_request_failed') !!}";
                     $("#alert13").show();
                     $('#message-danger1').html(message);
                     setInterval(function(){$("#dismiss13").trigger("click"); }, 2000);
@@ -1983,7 +1983,7 @@ alert(h+20);
                     $("#merge-body-form").hide();
                     $("#merge_loader").hide();
                     $("#merge-btn").attr('disabled', true);
-                    var message = "{{Lang::get('lang.no-tickets-to-merge')}}";
+                    var message = "{{trans('lang.no-tickets-to-merge')}}";
                     $("#merge-err-alert").show();
                     $('#message-merge-err').html(message);
             } else {
@@ -2026,7 +2026,7 @@ alert(h+20);
                     $("#merge-body-form").hide();
                     $("#merge_loader").hide();
                     $("#merge-btn").attr('disabled', true);
-                    var message = "{{Lang::get('lang.merge-error')}}";
+                    var message = "{{trans('lang.merge-error')}}";
                     $("#merge-err-alert").show();
                     $('#message-merge-err').html(message);
             } else if (response == 2) {
@@ -2036,7 +2036,7 @@ alert(h+20);
                     $("#merge-body-form").hide();
                     $("#merge_loader").hide();
                     $("#merge-btn").attr('disabled', true);
-                    var message = "{{Lang::get('lang.merge-error2')}}";
+                    var message = "{{trans('lang.merge-error2')}}";
                     $("#merge-err-alert").show();
                     $('#message-merge-err').html(message);
             } else {
@@ -2052,7 +2052,7 @@ alert(h+20);
                     $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
                     $("#refreshTo").load("../thread/{{$tickets->id}}  #refreshTo");
                     $("#more-option").load("../thread/{{$tickets->id}}  #more-option");
-                    var message = "{{Lang::get('lang.merge-success')}}";
+                    var message = "{{trans('lang.merge-success')}}";
                     $("#merge-succ-alert").show();
                     $('#message-merge-succ').html(message);
             }
@@ -2139,8 +2139,8 @@ echo $ticket_data->title;
                             // do work
                             setTimeout(function(){
                                 clearInterval(myVar);
-                                $("#myModalLabel").html("{!! Lang::get('lang.alert') !!}");
-                                $("#custom-alert-body").html("{!! Lang::get('lang.ticket-lock-inactive') !!}");
+                                $("#myModalLabel").html("{!! trans('lang.alert') !!}");
+                                $("#custom-alert-body").html("{!! trans('lang.ticket-lock-inactive') !!}");
                                 $("#myModal").css("display", "block");
                             }, locktime);
                             break;
@@ -2164,8 +2164,8 @@ echo $ticket_data->title;
                     success: function(response) {
                     if (response == 2) {
                     // alert(response);
-                    // var message = "{{Lang::get('lang.access-ticket')}}"+locktime/(60*1000)
-                    // +"{{Lang::get('lang.minutes')}}";
+                    // var message = "{{trans('lang.access-ticket')}}"+locktime/(60*1000)
+                    // +"{{trans('lang.minutes')}}";
                     $("#alert22").hide();
                             $("#hide2").load("../thread/{{$tickets->id}}  #hide2");
                             $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
@@ -2178,8 +2178,8 @@ echo $ticket_data->title;
                             // setInterval(function(){$("#alert21").hide(); },8000);  
                     } else if (response == 1 || response == 4){
                     // alert(response);
-                    // var message = "{{Lang::get('lang.access-ticket')}}"+locktime/(60*1000)
-                    // +"{{Lang::get('lang.minutes')}}";
+                    // var message = "{{trans('lang.access-ticket')}}"+locktime/(60*1000)
+                    // +"{{trans('lang.minutes')}}";
                     $("#alert22").hide();
                             $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
                             // $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");

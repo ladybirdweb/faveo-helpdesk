@@ -10,7 +10,6 @@ use App\Model\helpdesk\Settings\Security;
 // Request
 use Illuminate\Http\Request;
 // Class
-use Lang;
 use Redirect;
 
 /**
@@ -85,7 +84,7 @@ class SecurityController extends Controller
             $securitys->days_to_keep_logs = $request->input('days_to_keep_logs');
             $securitys->save();
 
-            return Redirect::back()->with('success', Lang::get('lang.security_settings_saved_successfully'));
+            return Redirect::back()->with('success', trans('lang.security_settings_saved_successfully'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }

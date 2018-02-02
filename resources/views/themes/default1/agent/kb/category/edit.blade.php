@@ -7,14 +7,14 @@ active
 @stop
 
 @section('PageHeader')
-<h1>{{Lang::get('lang.category')}}</h1>
+<h1>{{trans('lang.category')}}</h1>
 @stop
 
 @section('content')
 {!! Form::model($category,['url' => 'category/'.$category->id , 'method' => 'PATCH'] )!!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.edit') !!}</h3>
+        <h3 class="box-title">{!! trans('lang.edit') !!}</h3>
     </div>
     <div class="box-body">
         @if(Session::has('success'))
@@ -28,7 +28,7 @@ active
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('fails')}}
         </div>
@@ -37,7 +37,7 @@ active
         <?php //dd($errors); ?>
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <br/>
             @if($errors->first('name'))
@@ -59,36 +59,36 @@ active
         @endif
         <div class="row">
             <div class="col-xs-3 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                {!! Form::label('name',Lang::get('lang.name')) !!}<span class="text-red"> *</span>
+                {!! Form::label('name',trans('lang.name')) !!}<span class="text-red"> *</span>
 
                 {!! Form::text('name',null,['class' => 'form-control']) !!}
             </div>
             <div class="col-xs-3 form-group {{ $errors->has('parent') ? 'has-error' : '' }}">
-                {!! Form::label('parent',Lang::get('lang.parent')) !!}
+                {!! Form::label('parent',trans('lang.parent')) !!}
 
                 {!!Form::select('parent',[''=>'Select a Group','Categorys'=>$categories],null,['class' => 'form-control select']) !!}
             </div>
             <div class="col-xs-3 form-group {{ $errors->has('status') ? 'has-error' : '' }}">
-                {!! Form::label('status',Lang::get('lang.status')) !!}
+                {!! Form::label('status',trans('lang.status')) !!}
 
                 <div class="row">
                     <div class="col-xs-4">
-                        {!! Form::radio('status','1',true) !!} {{Lang::get('lang.active')}}
+                        {!! Form::radio('status','1',true) !!} {{trans('lang.active')}}
                     </div>
                     <div class="col-xs-6">
-                        {!! Form::radio('status','0',null) !!} {{Lang::get('lang.inactive')}}
+                        {!! Form::radio('status','0',null) !!} {{trans('lang.inactive')}}
                     </div>
                 </div>
             </div>
             <div class="col-md-12 form-group {{ $errors->has('description') ? 'has-error' : '' }}">
-                {!! Form::label('description',Lang::get('lang.description')) !!}<span class="text-red"> *</span>
+                {!! Form::label('description',trans('lang.description')) !!}<span class="text-red"> *</span>
 
                 {!! Form::textarea('description',null,['class' => 'form-control','size' => '128x10','id'=>'description','placeholder'=>'Enter the description']) !!}
             </div>
         </div>
     </div>
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.update'),['class'=>'form-group btn btn-primary'])!!}
+        {!! Form::submit(trans('lang.update'),['class'=>'form-group btn btn-primary'])!!}
     </div>
 </div>
 <script type="text/javascript">

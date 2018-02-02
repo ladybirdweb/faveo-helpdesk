@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{ Lang::get('lang.settings') }}</h1>
+<h1>{{ trans('lang.settings') }}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -31,7 +31,7 @@ class="active"
 {!! Form::model($tickets,['url' => 'postticket/'.$tickets->id, 'method' => 'PATCH']) !!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.ticket-setting')}}</h3>
+        <h3 class="box-title">{{trans('lang.ticket-setting')}}</h3>
     </div>
     <div class="box-body">
         <!-- check whether success or not -->
@@ -46,7 +46,7 @@ class="active"
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {!! Session::get('fails') !!}
         </div>
@@ -55,7 +55,7 @@ class="active"
         <?php //dd($errors); ?>
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <br/>
             @if($errors->first('status'))
@@ -79,7 +79,7 @@ class="active"
             <!-- Default Status: Required : manual: Dropdowm  -->
             <div class="col-md-6">
                 <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
-                    {!! Form::label('status',Lang::get('lang.default_status')) !!}
+                    {!! Form::label('status',trans('lang.default_status')) !!}
                     <select class="form-control" id="status" name="status">
                         <option value="1" >Open</option>
                     </select>
@@ -88,7 +88,7 @@ class="active"
             <!-- Default Priority:	Required : manual : Dropdowm  -->
             <div class="col-md-6">
                 <div class="form-group {{ $errors->has('priority') ? 'has-error' : '' }}">
-                    {!! Form::label('priority',Lang::get('lang.default_priority')) !!}
+                    {!! Form::label('priority',trans('lang.default_priority')) !!}
                     {!!Form::select('priority', [''=>'select a priority','Priorities'=>$priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control']) !!}
                 </div>
             </div>
@@ -97,37 +97,37 @@ class="active"
             <!-- Default SLA:	Required : manual : Dropdowm  -->
             <!-- <div class="col-md-4">
                 <div class="form-group {{ $errors->has('sla') ? 'has-error' : '' }}">
-                    {!! Form::label('sla',Lang::get('lang.default_sla')) !!}
+                    {!! Form::label('sla',trans('lang.default_sla')) !!}
                     {!!Form::select('sla', $slas->lists('grace_period','id'),null,['class' => 'form-control']) !!}
                 </div>
             </div> -->
             <!-- Default Help Topic:  Dropdowm from Help topic table	 -->
             <!-- <div class="col-md-4">
                 <div class="form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
-                    {!! Form::label('help_topic',Lang::get('lang.default_help_topic')) !!}
+                    {!! Form::label('help_topic',trans('lang.default_help_topic')) !!}
                     {!!Form::select('help_topic', $topics->lists('topic','id'),null,['class' => 'form-control']) !!}
                 </div>
             </div>
             --><!-- Agent Collision Avoidance Duration: text-number   -minutes  -->
             <div class="col-md-6">
                 <div class="form-group {{ $errors->has('collision_avoid') ? 'has-error' : '' }}">
-                    {!! Form::label('collision_avoid',Lang::get('lang.agent_collision_avoidance_duration')) !!} 
+                    {!! Form::label('collision_avoid',trans('lang.agent_collision_avoidance_duration')) !!}
                     <div class="input-group">
                         <input type="number" class="form-control" name="collision_avoid" min="0"  step="1" value="{{$tickets->collision_avoid}}" placeholder="in minutes">
                         <div class="input-group-addon">
-                            <span><i class="fa fa-clock-o"></i> {!!Lang::get('lang.in_minutes')!!}</span>
+                            <span><i class="fa fa-clock-o"></i> {!!trans('lang.in_minutes')!!}</span>
                         </div>
                     </div>
                 </div> 
             </div> 
             <div class="col-md-6">
                 <div class="form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
-                    {!! Form::label('help_topic',Lang::get('lang.lock_ticket_frequency')) !!}
+                    {!! Form::label('help_topic',trans('lang.lock_ticket_frequency')) !!}
 
                     <select name='lock_ticket_frequency' class="form-control">
-                        <option @if($tickets->lock_ticket_frequency == null) selected="true" @endif value="0">{!! Lang::get('lang.no')!!}</option>
-                        <option @if($tickets->lock_ticket_frequency == 1) selected="true" @endif value="1">{!! Lang::get('lang.only-once')!!}</option>
-                        <option @if($tickets->lock_ticket_frequency == 2) selected="true" @endif value="2">{!! Lang::get('lang.frequently')!!}</option>
+                        <option @if($tickets->lock_ticket_frequency == null) selected="true" @endif value="0">{!! trans('lang.no')!!}</option>
+                        <option @if($tickets->lock_ticket_frequency == 1) selected="true" @endif value="1">{!! trans('lang.only-once')!!}</option>
+                        <option @if($tickets->lock_ticket_frequency == 2) selected="true" @endif value="2">{!! trans('lang.frequently')!!}</option>
                     </select>
 
                 </div>
@@ -136,8 +136,8 @@ class="active"
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group {{ $errors->has('num_format') ? 'has-error' : '' }}">
-                    {!! Form::label('num_format',Lang::get('lang.format')) !!} 
-                     <a href="#" data-toggle="tooltip" data-placement="right" title="{{Lang::get('lang.ticket-number-format')}}"><i class="fa fa-question-circle" style="padding: 0px;"></i></a>
+                    {!! Form::label('num_format',trans('lang.format')) !!}
+                     <a href="#" data-toggle="tooltip" data-placement="right" title="{{trans('lang.ticket-number-format')}}"><i class="fa fa-question-circle" style="padding: 0px;"></i></a>
                     {!! Form::text('num_format',null,['class'=>'form-control','id'=>'format']) !!}
 
                     <div id="result"></div>
@@ -148,8 +148,8 @@ class="active"
 
             <div class="col-md-6">
                 <div class="form-group {{ $errors->has('num_sequence') ? 'has-error' : '' }}">
-                    {!! Form::label('num_sequence',Lang::get('lang.type')) !!} 
-                    <a href="#" data-toggle="tooltip" data-placement="right" title="{{Lang::get('lang.ticket-number-type')}}"><i class="fa fa-question-circle" style="padding: 0px;"></i></a>
+                    {!! Form::label('num_sequence',trans('lang.type')) !!}
+                    <a href="#" data-toggle="tooltip" data-placement="right" title="{{trans('lang.ticket-number-type')}}"><i class="fa fa-question-circle" style="padding: 0px;"></i></a>
         
                     {!! Form::select('num_sequence',[''=>'Select','sequence'=>'Sequence','random'=>'Random'],null,['class'=>'form-control','id'=>'type']) !!}
 
@@ -163,7 +163,7 @@ class="active"
 
 
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
+        {!! Form::submit(trans('lang.submit'),['class'=>'btn btn-primary'])!!}
     </div>
 </div>
 {!! Form::close() !!}

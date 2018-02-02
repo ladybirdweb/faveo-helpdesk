@@ -1,13 +1,13 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('PageHeader')
-<h1>{!! Lang::get('lang.templates') !!}</h1>
+<h1>{!! trans('lang.templates') !!}</h1>
 @stop
 
 @section('content')
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.edit_templates') !!}</h3>
+        <h3 class="box-title">{!! trans('lang.edit_templates') !!}</h3>
     </div><!-- /.box-header -->
     <div class="box-body">
         @if(Session::has('success'))
@@ -20,7 +20,7 @@
         @if(Session::has('failed'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <p>{{Session::get('failed')}}</p>                
         </div>
@@ -28,9 +28,9 @@
         <table id="example1" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>{!! Lang::get('lang.type') !!}</th>
-                    <th>{!! Lang::get('lang.description') !!}</th>
-                    <th>{!! Lang::get('lang.action') !!}</th>
+                    <th>{!! trans('lang.type') !!}</th>
+                    <th>{!! trans('lang.description') !!}</th>
+                    <th>{!! trans('lang.action') !!}</th>
                 </tr>
             </thead>
             <tbody>
@@ -40,7 +40,7 @@
                     <td>{!! $type->name !!}</td>
                     <td>{!! $template->name !!}</td>
                     <td>
-                        {!! link_to_route('templates.edit', Lang::get('lang.edit_templates'),[$template->id],['class'=>'btn btn-success btn-sm']) !!}
+                        {!! link_to_route('templates.edit', trans('lang.edit_templates'),[$template->id],['class'=>'btn btn-success btn-sm']) !!}
                     </td>
                 </tr>
                 @endforeach

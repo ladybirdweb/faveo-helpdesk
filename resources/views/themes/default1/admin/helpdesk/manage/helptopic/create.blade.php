@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.help_topic') !!}</h1>
+<h1>{!! trans('lang.help_topic') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -31,7 +31,7 @@ class="active"
 {!! Form::open(['action' => 'Admin\helpdesk\HelptopicController@store', 'method' => 'post']) !!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.create')}}</h3>
+        <h3 class="box-title">{{trans('lang.create')}}</h3>
     </div>
     <div class="box-body">
         @if(Session::has('errors'))
@@ -76,45 +76,45 @@ class="active"
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group {{ $errors->has('ticket_status') ? 'has-error' : '' }}">
-                            {!! Form::label('ticket_status',Lang::get('lang.status')) !!}&nbsp;&nbsp;
-                            {!! Form::radio('status','1',true) !!} {{Lang::get('lang.active')}}&nbsp;&nbsp;&nbsp;
-                            {!! Form::radio('status','0') !!} {{Lang::get('lang.inactive')}}
+                            {!! Form::label('ticket_status',trans('lang.status')) !!}&nbsp;&nbsp;
+                            {!! Form::radio('status','1',true) !!} {{trans('lang.active')}}&nbsp;&nbsp;&nbsp;
+                            {!! Form::radio('status','0') !!} {{trans('lang.inactive')}}
                         </div>
                     </div>
                     <!-- Type : Radio : required : Public|private -->
                     <div class="col-md-6">
                         <div class="form-group {{ $errors->has('type') ? 'has-error' : '' }}">
-                            {!! Form::label('type',Lang::get('lang.type')) !!}&nbsp;&nbsp;
-                            {!! Form::radio('type','1',true) !!} {{Lang::get('lang.public')}}&nbsp;&nbsp;&nbsp;
-                            {!! Form::radio('type','0') !!} {{Lang::get('lang.private')}}
+                            {!! Form::label('type',trans('lang.type')) !!}&nbsp;&nbsp;
+                            {!! Form::radio('type','1',true) !!} {{trans('lang.public')}}&nbsp;&nbsp;&nbsp;
+                            {!! Form::radio('type','0') !!} {{trans('lang.private')}}
                         </div>
                     </div>
                     <!-- Topic text form Required -->
                     <div class="col-md-6">
                         <div class="form-group {{ $errors->has('topic') ? 'has-error' : '' }}">
-                            {!! Form::label('topic',Lang::get('lang.topic')) !!} <span class="text-red"> *</span>
+                            {!! Form::label('topic',trans('lang.topic')) !!} <span class="text-red"> *</span>
                             {!! Form::text('topic',null,['class' => 'form-control']) !!}
                         </div>
                     </div>
                     <!-- Parent Topic: Drop down: value from helptopic table -->
                     <div class="col-md-6">
                         <div class="form-group {{ $errors->has('parent_topic') ? 'has-error' : '' }}">
-                            {!! Form::label('parent_topic',Lang::get('lang.parent_topic')) !!}
-                            {!!Form::select('parent_topic', [''=>Lang::get('lang.select_a_parent_topic'),Lang::get('lang.help_topic')=>$topics->lists('topic','topic')->toArray()],1,['class' => 'form-control']) !!}
+                            {!! Form::label('parent_topic',trans('lang.parent_topic')) !!}
+                            {!!Form::select('parent_topic', [''=>trans('lang.select_a_parent_topic'),trans('lang.help_topic')=>$topics->lists('topic','topic')->toArray()],1,['class' => 'form-control']) !!}
                         </div>
                     </div>
                     <!-- Custom Form: Drop down: value from form table -->
                     <div class="col-md-6">
                         <div class="form-group {{ $errors->has('custom_form') ? 'has-error' : '' }}">
-                            {!! Form::label('custom_form',Lang::get('lang.Custom_form')) !!}
-                            {!!Form::select('custom_form', [''=>Lang::get('lang.select_a_form'),Lang::get('lang.custom_form')=>$forms->lists('formname','id')->toArray()],1,['class' => 'form-control']) !!}
+                            {!! Form::label('custom_form',trans('lang.Custom_form')) !!}
+                            {!!Form::select('custom_form', [''=>trans('lang.select_a_form'),trans('lang.custom_form')=>$forms->lists('formname','id')->toArray()],1,['class' => 'form-control']) !!}
                         </div>
                     </div>
                     <!-- Department:	Drop down: value Department form table -->
                     <div class="col-md-6">
                         <div class="form-group {{ $errors->has('department') ? 'has-error' : '' }}">
-                            {!! Form::label('department',Lang::get('lang.department')) !!}
-                            {!!Form::select('department', [''=>Lang::get('lang.select_a_department'),Lang::get('lang.departments')=>$departments->lists('name','id')->toArray()],1,['class' => 'form-control']) !!}
+                            {!! Form::label('department',trans('lang.department')) !!}
+                            {!!Form::select('department', [''=>trans('lang.select_a_department'),trans('lang.departments')=>$departments->lists('name','id')->toArray()],1,['class' => 'form-control']) !!}
                         </div>
                     </div>
                 </div>
@@ -122,22 +122,22 @@ class="active"
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group {{ $errors->has('priority') ? 'has-error' : '' }}">
-                            {!! Form::label('priority',Lang::get('lang.priority')) !!} <span class="text-red"> *</span>
-                            {!!Form::select('priority', [''=>Lang::get('lang.select_a_priority'),Lang::get('lang.priorities')=>$priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control']) !!}
+                            {!! Form::label('priority',trans('lang.priority')) !!} <span class="text-red"> *</span>
+                            {!!Form::select('priority', [''=>trans('lang.select_a_priority'),trans('lang.priorities')=>$priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control']) !!}
                         </div>
                     </div>
                     <!-- SLA Plan:	 Drop down: value SLA Plan  table-->
                     <div class="col-md-4">
                         <div class="form-group {{ $errors->has('sla_plan') ? 'has-error' : '' }}">
-                            {!! Form::label('sla_plan',Lang::get('lang.SLA_plan')) !!}
-                            {!!Form::select('sla_plan', [''=>Lang::get('lang.select_a_sla_plan'),Lang::get('lang.sla_plans')=>$slas->lists('name','id')->toArray()],1,['class' => 'form-control']) !!}
+                            {!! Form::label('sla_plan',trans('lang.SLA_plan')) !!}
+                            {!!Form::select('sla_plan', [''=>trans('lang.select_a_sla_plan'),trans('lang.sla_plans')=>$slas->lists('name','id')->toArray()],1,['class' => 'form-control']) !!}
                         </div>
                     </div>
                     <!-- Auto-assign To:	Drop Down: value  from Agent table   -->
                     <div class="col-md-4">
                         <div class="form-group {{ $errors->has('auto_assign') ? 'has-error' : '' }}">
-                            {!! Form::label('auto_assign',Lang::get('lang.auto_assign')) !!}
-                            {!!Form::select('auto_assign', [''=>Lang::get('lang.select_an_agent'),Lang::get('lang.agents')=>$agents->lists('full_name','id')->toArray()],null,['class' => 'form-control']) !!}
+                            {!! Form::label('auto_assign',trans('lang.auto_assign')) !!}
+                            {!!Form::select('auto_assign', [''=>trans('lang.select_an_agent'),trans('lang.agents')=>$agents->lists('full_name','id')->toArray()],null,['class' => 'form-control']) !!}
                         </div>
                     </div>
                 </div>
@@ -146,7 +146,7 @@ class="active"
                     <!-- intrnal Notes : Textarea :  -->
                     <div class="col-md-12">
                         <div class="form-group">
-                            {!! Form::label('internal_notes',Lang::get('lang.internal_notes')) !!}
+                            {!! Form::label('internal_notes',trans('lang.internal_notes')) !!}
                             {!! Form::textarea('internal_notes',null,['class' => 'form-control','size' => '10x5']) !!}
                         </div>
                     </div>
@@ -155,7 +155,7 @@ class="active"
         </div>
     </div>
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
+        {!! Form::submit(trans('lang.submit'),['class'=>'btn btn-primary'])!!}
     </div>
 </div>
 {!! Form::close() !!}

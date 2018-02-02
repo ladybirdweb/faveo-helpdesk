@@ -13,7 +13,7 @@ class="active"
 @stop
 
 @section('PageHeader')
-<h1>{{Lang::get('lang.tickets')}}</h1>
+<h1>{{trans('lang.tickets')}}</h1>
 <style>
  .tooltip1 {
      position: relative;
@@ -54,7 +54,7 @@ if (Auth::user()->role == 'agent') {
 <!-- Main content -->
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.open') !!} </h3> <small id="title_refresh">{!! $tickets !!} {!! Lang::get('lang.tickets') !!}</small>
+        <h3 class="box-title">{!! trans('lang.open') !!} </h3> <small id="title_refresh">{!! $tickets !!} {!! trans('lang.tickets') !!}</small>
         <div class="box-tools pull-right">
             <div class="has-feedback">
             </div>
@@ -82,16 +82,16 @@ if (Auth::user()->role == 'agent') {
         <!--<div class="mailbox-controls">-->
         <!-- Check all button -->
         <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
-        <input type="submit" class="submit btn btn-default text-orange btn-sm" id="delete" name="submit" value="{!! Lang::get('lang.delete') !!}">
-        <input type="submit" class="submit btn btn-default text-yellow btn-sm" id="close" name="submit" value="{!! Lang::get('lang.close') !!}">
-        <button type="button" class="btn btn-sm btn-default text-green" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets"><i class="fa fa-code-fork"> </i> {!! Lang::get('lang.merge') !!}</button>
+        <input type="submit" class="submit btn btn-default text-orange btn-sm" id="delete" name="submit" value="{!! trans('lang.delete') !!}">
+        <input type="submit" class="submit btn btn-default text-yellow btn-sm" id="close" name="submit" value="{!! trans('lang.close') !!}">
+        <button type="button" class="btn btn-sm btn-default text-green" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets"><i class="fa fa-code-fork"> </i> {!! trans('lang.merge') !!}</button>
         
-        <button type="button" class="btn btn-sm btn-default" id="assign_Ticket" data-toggle="modal" data-target="#AssignTickets" style="display: none;"><i class="fa fa-hand-o-right"> </i> {!! Lang::get('lang.assign') !!}</button>
+        <button type="button" class="btn btn-sm btn-default" id="assign_Ticket" data-toggle="modal" data-target="#AssignTickets" style="display: none;"><i class="fa fa-hand-o-right"> </i> {!! trans('lang.assign') !!}</button>
         
         <!--</div>-->
         <p><p/>
         <div class="mailbox-messages" id="refresh">
-            <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>{!! Lang::get('lang.loading') !!}...</b></p>
+            <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>{!! trans('lang.loading') !!}...</b></p>
             <!-- table -->
              {!!$table->render('vendor.Chumper.template')!!}
         </div><!-- /.mail-box-messages -->
@@ -104,7 +104,7 @@ if (Auth::user()->role == 'agent') {
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" id="merge-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">{!! Lang::get('lang.merge-ticket') !!} </h4>
+                <h4 class="modal-title">{!! trans('lang.merge-ticket') !!} </h4>
             </div><!-- /.modal-header-->
             <div class ="modal-body">
                 <div class="row">
@@ -120,12 +120,12 @@ if (Auth::user()->role == 'agent') {
                             <div class="col-md-12">
                                 <div id="merge-succ-alert" class="alert alert-success alert-dismissable" style="display:none;" >
                                     <!--<button id="dismiss-merge" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>-->
-                                    <h4><i class="icon fa fa-check"></i>{!! Lang::get('lang.alert') !!}!</h4>
+                                    <h4><i class="icon fa fa-check"></i>{!! trans('lang.alert') !!}!</h4>
                                     <div id="message-merge-succ"></div>
                                 </div>
                                 <div id="merge-err-alert" class="alert alert-danger alert-dismissable" style="display:none;">
                                     <!--<button id="dismiss-merge2" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>-->
-                                    <h4><i class="icon fa fa-ban"></i>{!! Lang::get('lang.alert') !!}!</h4>
+                                    <h4><i class="icon fa fa-ban"></i>{!! trans('lang.alert') !!}!</h4>
                                     <div id="message-merge-err"></div>
                                 </div>
                             </div>
@@ -135,18 +135,18 @@ if (Auth::user()->role == 'agent') {
                         <div class="row">
                             <div class="col-md-6">
                                 {!! Form::open(['id'=>'merge-form','method' => 'PATCH'] )!!}
-                                <label>{!! Lang::get('lang.title') !!}</label>
+                                <label>{!! trans('lang.title') !!}</label>
                                 <input type="text" name='title' class="form-control" value="" placeholder="Optional" />
                             </div>
                             <div class="col-md-6">
-                                <label>{!! Lang::get('lang.select-pparent-ticket') !!}</label>
-                                <select class="form-control" id="select-merge-parent"  name='p_id' data-placeholder="{!! Lang::get('lang.select_tickets') !!}" style="width: 100%;"><option value=""></option></select>
+                                <label>{!! trans('lang.select-pparent-ticket') !!}</label>
+                                <select class="form-control" id="select-merge-parent"  name='p_id' data-placeholder="{!! trans('lang.select_tickets') !!}" style="width: 100%;"><option value=""></option></select>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-8">
-                                <label>{!! Lang::get('lang.merge-reason') !!}</label>
+                                <label>{!! trans('lang.merge-reason') !!}</label>
                                 <textarea  name="reason" class="form-control"></textarea>
                             </div>
 
@@ -155,8 +155,8 @@ if (Auth::user()->role == 'agent') {
                 </div><!-- merge-body -->
             </div><!-- /.modal-body -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">{!! Lang::get('lang.close') !!}</button>
-                <input  type="submit" id="merge-btn" class="btn btn-primary pull-right" value="{!! Lang::get('lang.merge') !!}"></input>
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">{!! trans('lang.close') !!}</button>
+                <input  type="submit" id="merge-btn" class="btn btn-primary pull-right" value="{!! trans('lang.merge') !!}"></input>
                 {!! Form::close() !!}
             </div><!-- /.modal-footer -->
         </div><!-- /.modal-content -->
@@ -168,7 +168,7 @@ if (Auth::user()->role == 'agent') {
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" id="assign-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">{!! Lang::get('lang.assign-ticket') !!} </h4>
+                <h4 class="modal-title">{!! trans('lang.assign-ticket') !!} </h4>
             </div><!-- /.modal-header-->
             <div class ="modal-body">
                 <div class="row">
@@ -182,15 +182,15 @@ if (Auth::user()->role == 'agent') {
                         <div class="row">
                             <div class="col-md-12">
                                 {!! Form::open(['id'=>'assign-form','method' => 'PATCH'] )!!}
-                                <label>{!! Lang::get('lang.whome_do_you_want_to_assign_ticket') !!}</label>
-                                <select class="form-control" id="select-assign-agent"  name="assign_to" data-placeholder="{!! Lang::get('lang.select_agent') !!}" style="width: 100%;"><option value=""></option></select>
+                                <label>{!! trans('lang.whome_do_you_want_to_assign_ticket') !!}</label>
+                                <select class="form-control" id="select-assign-agent"  name="assign_to" data-placeholder="{!! trans('lang.select_agent') !!}" style="width: 100%;"><option value=""></option></select>
                             </div>
                         </div>
                     </div><!-- mereg-body-form -->
                 </div><!-- merge-body -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">{!! Lang::get('lang.close') !!}</button>
-                <input  type="submit" id="merge-btn" class="btn btn-primary pull-right" value="{!! Lang::get('lang.assign') !!}"></input>
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">{!! trans('lang.close') !!}</button>
+                <input  type="submit" id="merge-btn" class="btn btn-primary pull-right" value="{!! trans('lang.assign') !!}"></input>
                 {!! Form::close() !!}
             </div><!-- /.modal-footer -->
         </div><!-- /.modal-content -->
@@ -210,8 +210,8 @@ if (Auth::user()->role == 'agent') {
                 <div class="modal-body" id="custom-alert-body" >
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary pull-left yes" data-dismiss="modal">{{Lang::get('lang.ok')}}</button>
-                    <button type="button" class="btn btn-default no">{{Lang::get('lang.cancel')}}</button>
+                    <button type="button" class="btn btn-primary pull-left yes" data-dismiss="modal">{{trans('lang.ok')}}</button>
+                    <button type="button" class="btn btn-default no">{{trans('lang.cancel')}}</button>
                 </div>
             </div>
         </div>
@@ -272,20 +272,20 @@ if (Auth::user()->role == 'agent') {
         $(".select2").select2();
         $('#delete').on('click', function() {
             option = 0;
-            $('#myModalLabel').html("{{Lang::get('lang.delete-tickets')}}");
+            $('#myModalLabel').html("{{trans('lang.delete-tickets')}}");
         });
         $('#close').on('click', function() {
             option = 1;
-            $('#myModalLabel').html("{{Lang::get('lang.close-tickets')}}");
+            $('#myModalLabel').html("{{trans('lang.close-tickets')}}");
         });
         $("#modalpopup").on('submit', function(e) {
             e.preventDefault();
-            var msg = "{{Lang::get('lang.confirm')}}";
+            var msg = "{{trans('lang.confirm')}}";
             var values = getValues();
             if (values == "") {
-                msg = "{{Lang::get('lang.select-ticket')}}";
-                $('.yes').html("{{Lang::get('lang.ok')}}");
-                $('#myModalLabel').html("{{Lang::get('lang.alert')}}");
+                msg = "{{trans('lang.select-ticket')}}";
+                $('.yes').html("{{trans('lang.ok')}}");
+                $('#myModalLabel').html("{{trans('lang.alert')}}");
             } else {
                 $('.yes').html("Yes");
             }
@@ -340,7 +340,7 @@ if (Auth::user()->role == 'agent') {
                         $("#merge-body-form").hide();
                         $("#merge_loader").hide();
                         $("#merge-btn").attr('disabled', true);
-                        var message = "{{Lang::get('lang.select-tickets-to merge')}}";
+                        var message = "{{trans('lang.select-tickets-to merge')}}";
                         $("#merge-err-alert").show();
                         $('#message-merge-err').html(message);
                     } else if (response == 2) {
@@ -350,7 +350,7 @@ if (Auth::user()->role == 'agent') {
                         $("#merge-body-form").hide();
                         $("#merge_loader").hide();
                         $("#merge-btn").attr('disabled', true);
-                        var message = "{{Lang::get('lang.different-users')}}";
+                        var message = "{{trans('lang.different-users')}}";
                         $("#merge-err-alert").show();
                         $('#message-merge-err').html(message);
                     } else {
@@ -393,7 +393,7 @@ if (Auth::user()->role == 'agent') {
                         $("#merge-body-form").hide();
                         $("#merge_loader").hide();
                         $("#merge-btn").attr('disabled', true);
-                        var message = "{{Lang::get('lang.merge-error')}}";
+                        var message = "{{trans('lang.merge-error')}}";
                         $("#merge-err-alert").show();
                         $('#message-merge-err').html(message);
                     } else {
@@ -403,7 +403,7 @@ if (Auth::user()->role == 'agent') {
                         $("#merge-body-form").hide();
                         $("#merge_loader").hide();
                         $("#merge-btn").attr('disabled', true);
-                        var message = "{{Lang::get('lang.merge-success')}}";
+                        var message = "{{trans('lang.merge-success')}}";
                         $("#merge-succ-alert").show();
                         $('#message-merge-succ').html(message);
                         setTimeout(function () {

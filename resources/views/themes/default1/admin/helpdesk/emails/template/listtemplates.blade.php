@@ -32,7 +32,7 @@ class="active"
 <div class="col-md-12">
 <div class="box box-primary">
 <div class="box-header">
-	<h2 class="box-title">{{Lang::get('lang.templates')}}</h2>
+	<h2 class="box-title">{{trans('lang.templates')}}</h2>
 </div>
 
 <div class="box-body table-responsive">
@@ -59,8 +59,8 @@ class="active"
 
 				<table id="example1" class="table table-bordered table-striped">
 	<tr>
-        <th>{{Lang::get('lang.name')}}</th>
-        <th>{{Lang::get('lang.description')}}</th>
+        <th>{{trans('lang.name')}}</th>
+        <th>{{trans('lang.description')}}</th>
 	</tr>
 	<!-- Foreach @var templates as @var template -->
         
@@ -69,7 +69,7 @@ class="active"
 	<tr>
 		<!-- Template Name with Link to Edit page along Id -->
 		<td><a href="{{route('template.read',[$template,$directory])}}"><?php $parts = explode('.',$template); $names  = $parts[0]; $name = str_replace('-', ' ', $names); $cname = ucfirst($name); echo $cname?></a></td>
-        <td>{{ Lang::get('lang.'.$cname) }}</td>
+        <td>{{ trans('lang.'.$cname) }}</td>
 		<!-- template Status : if status==1 active -->
 		<!-- Deleting Fields -->
 	</tr>

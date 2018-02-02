@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.staffs')}}</h1>
+<h1>{{trans('lang.staffs')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -31,7 +31,7 @@ class="active"
     <div class="col-md-12">
         <div class="box box-primary">
             <div class="box-header">
-                <h2 class="box-title">{!! Lang::get('lang.groups') !!}</h2><a href="{{route('groups.create')}}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> &nbsp;{{Lang::get('lang.create_group')}}</a></div>
+                <h2 class="box-title">{!! trans('lang.groups') !!}</h2><a href="{{route('groups.create')}}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> &nbsp;{{trans('lang.create_group')}}</a></div>
             <div class="box-body table-responsive">
                 <!-- check whether success or not -->
                 @if(Session::has('success'))
@@ -53,9 +53,9 @@ class="active"
                 <!-- Table -->
                 <table class="table table-bordered dataTable" style="overflow:hidden;">
                     <tr>
-                        <th>{{Lang::get('lang.group_name')}}</th>
-                        <th>{{Lang::get('lang.status')}}</th>
-                        <th>{{Lang::get('lang.action')}}</th>
+                        <th>{{trans('lang.group_name')}}</th>
+                        <th>{{trans('lang.status')}}</th>
+                        <th>{{trans('lang.action')}}</th>
                     </tr>
                     @foreach($groups as $group)
                     <tr>

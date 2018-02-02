@@ -60,13 +60,13 @@ class="active"
     <div class="box box-primary">
         <div class="box-header with-border">
         @if($team_lead_name)
-            <span class="lead border-right">{!! Lang::get('lang.team_lead') !!} : {!! $team_lead !!} </span>
+            <span class="lead border-right">{!! trans('lang.team_lead') !!} : {!! $team_lead !!} </span>
          @endif
-            <span class="lead border-left">{!! Lang::get('lang.status') !!} : <?php if($teams->status == 1) { $stat = Lang::get('lang.active'); } elseif($teams->status == 0) { $stat = Lang::get('lang.inactive'); } ?>{!! $stat !!} </span>
+            <span class="lead border-left">{!! trans('lang.status') !!} : <?php if($teams->status == 1) { $stat = trans('lang.active'); } elseif($teams->status == 0) { $stat = trans('lang.inactive'); } ?>{!! $stat !!} </span>
             
 
             <div class="pull-right">
-                <a href="{{URL::route('teams.index')}}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{Lang::get('lang.go_back')}}</a>
+                <a href="{{URL::route('teams.index')}}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{trans('lang.go_back')}}</a>
             </div>
         </div>
         <input type="hidden" name="show_id" value={{$id}}>
@@ -74,12 +74,12 @@ class="active"
         <div class="box-body">             
             {!! Datatable::table()
                     ->addColumn(
-                        Lang::get('lang.user_name'),
-                        Lang::get('lang.name'),
-                        Lang::get('lang.status'),
-                        Lang::get('lang.group'),
-                        Lang::get('lang.depertment'),
-                        Lang::get('lang.role')
+                        trans('lang.user_name'),
+                        trans('lang.name'),
+                        trans('lang.status'),
+                        trans('lang.group'),
+                        trans('lang.depertment'),
+                        trans('lang.role')
                     )
                     ->setUrl(route('teams.getshow.list', $id))  // this is the route where data will be retrieved
                     ->render() 

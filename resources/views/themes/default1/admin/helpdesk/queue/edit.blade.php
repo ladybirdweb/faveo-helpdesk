@@ -59,7 +59,7 @@ class="active"
 <div class="box">
     <div class="box-header">
         <div class="box-title">
-            {!! Lang::get('lang.queues') !!}
+            {!! trans('lang.queues') !!}
         </div>
 
     </div>

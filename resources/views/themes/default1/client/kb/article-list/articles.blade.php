@@ -21,7 +21,7 @@
                 <blockquote class="archive-description">
                     <?php $content = trim(preg_replace("/<img[^>]+\>/i", "", $excerpt), " \t.") ?>
                     {!! strip_tags($content) !!}
-                    <p><a class="readmore-link" href="{{url('show/'.$arti->slug)}}">{!! Lang::get('lang.read_more') !!}</a></p>
+                    <p><a class="readmore-link" href="{{url('show/'.$arti->slug)}}">{!! trans('lang.read_more') !!}</a></p>
                 </blockquote>    
                 <footer class="entry-footer">
                     <div class="entry-meta text-muted">
@@ -38,7 +38,7 @@
 @stop
 
 @section('category')
-<h2 class="section-title h4 clearfix">{!! Lang::get('lang.categories') !!}<small class="pull-right"><i class="fa fa-hdd-o fa-fw"></i></small></h2>
+<h2 class="section-title h4 clearfix">{!! trans('lang.categories') !!}<small class="pull-right"><i class="fa fa-hdd-o fa-fw"></i></small></h2>
 <ul class="nav nav-pills nav-stacked nav-categories">
 
     @foreach($categorys as $category)

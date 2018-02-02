@@ -91,10 +91,10 @@
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         @if($replacetop==0)
                         <ul class="tabs tabs-horizontal nav navbar-nav navbar-left">
-                            <li @yield('Dashboard')><a id="dash" data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard(event);">{!! Lang::get('lang.dashboard') !!}</a></li>
-                            <li @yield('Users')><a data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
-                            <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
-                            <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
+                            <li @yield('Dashboard')><a id="dash" data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard(event);">{!! trans('lang.dashboard') !!}</a></li>
+                            <li @yield('Users')><a data-target="#tabB" href="#">{!! trans('lang.users') !!}</a></li>
+                            <li @yield('Tickets')><a data-target="#tabC" href="#">{!! trans('lang.tickets') !!}</a></li>
+                            <li @yield('Tools')><a data-target="#tabD" href="#">{!! trans('lang.tools') !!}</a></li>
                             @if($auth_user_role == 'admin')
                             <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">Report</a></li>
                             @endif
@@ -106,7 +106,7 @@
 
                         <ul class="nav navbar-nav navbar-right">
                             @if($auth_user_role == 'admin')
-                            <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
+                            <li><a href="{{url('admin')}}">{!! trans('lang.admin_panel') !!}</a></li>
 
                             @endif
                             @include('themes.default1.update.notification')
@@ -193,10 +193,10 @@
                                 <!-- Menu Footer-->
                                 <li class="user-footer" style="background-color:#1a2226;">
                                     <div class="pull-left">
-                                        <a href="{{URL::route('profile')}}" class="btn btn-info btn-sm"><b>{!! Lang::get('lang.profile') !!}</b></a>
+                                        <a href="{{URL::route('profile')}}" class="btn btn-info btn-sm"><b>{!! trans('lang.profile') !!}</b></a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href="{{url('auth/logout')}}" class="btn btn-danger btn-sm"><b>{!! Lang::get('lang.sign_out') !!}</b></a>
+                                        <a href="{{url('auth/logout')}}" class="btn btn-danger btn-sm"><b>{!! trans('lang.sign_out') !!}</b></a>
                                     </div>
                                 </li>
 
@@ -241,39 +241,39 @@
                     <ul id="side-bar" class="sidebar-menu">
                         @if($replaceside==0)
                         @yield('sidebar')
-                        <li class="header">{!! Lang::get('lang.Tickets') !!}</li>
+                        <li class="header">{!! trans('lang.Tickets') !!}</li>
                         
                         <li @yield('inbox')>
                              <a href="{{ url('/ticket/inbox')}}" id="load-inbox">
-                                <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green">{{$tickets -> count()}}</small>                                            
+                                <i class="fa fa-envelope"></i> <span>{!! trans('lang.inbox') !!}</span> <small class="label pull-right bg-green">{{$tickets -> count()}}</small>
                             </a>
                         </li>
                         <li @yield('myticket')>
                              <a href="{{url('ticket/myticket')}}" id="load-myticket">
-                                <i class="fa fa-user"></i> <span>{!! Lang::get('lang.my_tickets') !!} </span>
+                                <i class="fa fa-user"></i> <span>{!! trans('lang.my_tickets') !!} </span>
                                 <small class="label pull-right bg-green">{{$myticket -> count()}}</small>
                             </a>
                         </li>
                         <li @yield('unassigned')>
                              <a href="{{url('unassigned')}}" id="load-unassigned">
-                                <i class="fa fa-th"></i> <span>{!! Lang::get('lang.unassigned') !!}</span>
+                                <i class="fa fa-th"></i> <span>{!! trans('lang.unassigned') !!}</span>
                                 <small class="label pull-right bg-green">{{$unassigned -> count()}}</small>
                             </a>
                         </li>
                         <li @yield('overdue')>
                              <a href="{{url('ticket/overdue')}}" id="load-unassigned">
-                                <i class="fa fa-calendar-times-o"></i> <span>{!! Lang::get('lang.overdue') !!}</span>
+                                <i class="fa fa-calendar-times-o"></i> <span>{!! trans('lang.overdue') !!}</span>
                                 <small class="label pull-right bg-green">{{$overdues->count()}}</small>
                             </a>
                         </li>
                        
                         <li @yield('trash')>
                              <a href="{{url('trash')}}">
-                                <i class="fa fa-trash-o"></i> <span>{!! Lang::get('lang.trash') !!}</span>
+                                <i class="fa fa-trash-o"></i> <span>{!! trans('lang.trash') !!}</span>
                                 <small class="label pull-right bg-green">{{$deleted -> count()}}</small>
                             </a>
                         </li>
-                        <li class="header">{!! Lang::get('lang.Departments') !!}</li>
+                        <li class="header">{!! trans('lang.Departments') !!}</li>
                         <?php
             $flattened = $department->flatMap(function ($values) {
                 return $values->keyBy('status');
@@ -335,26 +335,26 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                             </div>
                             <div class="tabs-pane @yield('user-bar')" id="tabB">
                                 <ul class="nav navbar-nav">
-                                    <li id="bar" @yield('user')><a href="{{ url('user')}}" >{!! Lang::get('lang.user_directory') !!}</a></li></a></li>
-                                    <li id="bar" @yield('organizations')><a href="{{ url('organizations')}}" >{!! Lang::get('lang.organizations') !!}</a></li></a></li>
+                                    <li id="bar" @yield('user')><a href="{{ url('user')}}" >{!! trans('lang.user_directory') !!}</a></li></a></li>
+                                    <li id="bar" @yield('organizations')><a href="{{ url('organizations')}}" >{!! trans('lang.organizations') !!}</a></li></a></li>
                                     
                                 </ul>
                             </div>
                             <div class="tabs-pane @yield('ticket-bar')" id="tabC">
                                 <ul class="nav navbar-nav">
-                                    <li id="bar" @yield('open')><a href="{{ url('/ticket/open')}}" id="load-open">{!! Lang::get('lang.open') !!}</a></li>
-                                    <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered')}}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
-                                    <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned')}}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
-                                    <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed')}}" >{!! Lang::get('lang.closed') !!}</a></li>
+                                    <li id="bar" @yield('open')><a href="{{ url('/ticket/open')}}" id="load-open">{!! trans('lang.open') !!}</a></li>
+                                    <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered')}}" id="load-answered">{!! trans('lang.answered') !!}</a></li>
+                                    <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned')}}" id="load-assigned" >{!! trans('lang.assigned') !!}</a></li>
+                                    <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed')}}" >{!! trans('lang.closed') !!}</a></li>
 <?php if ($group->can_create_ticket == 1) { ?>
-                                        <li id="bar" @yield('newticket')><a href="{{ url('/newticket')}}" >{!! Lang::get('lang.create_ticket') !!}</a></li>
+                                        <li id="bar" @yield('newticket')><a href="{{ url('/newticket')}}" >{!! trans('lang.create_ticket') !!}</a></li>
                                     <?php } ?>
                                 </ul>
                             </div>
                             <div class="tabs-pane @yield('tools-bar')" id="tabD">
                                 <ul class="nav navbar-nav">
-                                    <li id="bar" @yield('tools')><a href="{{ url('/canned/list')}}" >{!! Lang::get('lang.canned_response') !!}</a></li>
-                                    <li id="bar" @yield('kb')><a href="{{ url('/comment')}}" >{!! Lang::get('lang.knowledge_base') !!}</a></li>
+                                    <li id="bar" @yield('tools')><a href="{{ url('/canned/list')}}" >{!! trans('lang.canned_response') !!}</a></li>
+                                    <li id="bar" @yield('kb')><a href="{{ url('/comment')}}" >{!! trans('lang.knowledge_base') !!}</a></li>
                                 </ul>
                             </div>
                             @if($auth_user_role == 'admin')
@@ -381,7 +381,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                 <div class="pull-right hidden-xs">
                     <b>Version</b> {!! Config::get('app.version') !!}
                 </div>
-                <strong>{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>.</strong> {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/" target="_blank">Faveo</a>
+                <strong>{!! trans('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>.</strong> {!! trans('lang.all_rights_reserved') !!}. {!! trans('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/" target="_blank">Faveo</a>
             </footer>
         </div><!-- ./wrapper -->
 

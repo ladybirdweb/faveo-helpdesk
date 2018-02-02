@@ -19,7 +19,7 @@
 <!-- @if (count($errors) > 0)
 <div class="alert alert-danger alert-dismissable">
     <i class="fa fa-ban"></i>
-    <b>{!! Lang::get('lang.alert') !!} !</b>
+    <b>{!! trans('lang.alert') !!} !</b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     @foreach ($errors->all() as $error)
     <li>{{ $error }}</li>
@@ -31,8 +31,8 @@
 @section('breadcrumb')
     <div class="site-hero clearfix">
         <ol class="breadcrumb breadcrumb-custom">
-            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
-            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.home') !!}</a></li>
+            <li class="text">{!! trans('lang.you_are_here') !!}: </li>
+            <li><a href="{!! URL::route('/') !!}">{!! trans('lang.home') !!}</a></li>
         </ol>
     </div>
 @stop
@@ -40,7 +40,7 @@
 
 @if(Session::has('status'))
 <div class="alert alert-success alert-dismissable">
-    <i class="fa  fa-check-circle"> </i> <b> {!! Lang::get('lang.success') !!} </b>
+    <i class="fa  fa-check-circle"> </i> <b> {!! trans('lang.success') !!} </b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {{Session::get('status')}}
 </div>
@@ -49,7 +49,7 @@
 
 @if(Session::has('error'))
 <div class="alert alert-danger alert-dismissable">
-    <i class="fa  fa-check-circle"> </i> <b> {!! Lang::get('lang.alert') !!} </b>
+    <i class="fa  fa-check-circle"> </i> <b> {!! trans('lang.alert') !!} </b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {{Session::get('error')}}
 </div>
@@ -58,7 +58,7 @@
 @if (count($errors) > 0)
 <div class="alert alert-danger alert-dismissable">
     <i class="fa fa-ban"></i>
-    <b>{!! Lang::get('lang.alert') !!} !</b>
+    <b>{!! trans('lang.alert') !!} !</b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     @foreach ($errors->all() as $error)
     <li>{{ $error }}</li>
@@ -74,7 +74,7 @@
         @else
             <span onclick="javascript: window.location.href='{{url('auth/register')}}';">
                 <a href="{{url('auth/register')}}"  style="background-image:url({{ URL::asset('lb-faveo/media/images/register.png') }})">
-                    <span class="widgetitemtitle">{!! Lang::get('lang.register') !!}</span>
+                    <span class="widgetitemtitle">{!! trans('lang.register') !!}</span>
                 </a>
             </span>
         @endif
@@ -85,7 +85,7 @@
                 @if($system->status == 1)
                     <span onclick="javascript: window.location.href='{!! URL::route('form') !!}';">
                         <a href="{!! URL::route('form') !!}" class="widgetrowitem defaultwidget" style="background-image:url({{ URL::asset('lb-faveo/media/images/submitticket.png') }})">
-                            <span class="widgetitemtitle">{!! Lang::get('lang.submit_a_ticket') !!}</span>
+                            <span class="widgetitemtitle">{!! trans('lang.submit_a_ticket') !!}</span>
                         </a>
                     </span>
                 @endif
@@ -93,12 +93,12 @@
         @endif
             <span onclick="javascript: window.location.href='{{url('mytickets')}}';">
                 <a href="{{url('mytickets')}}" class="widgetrowitem defaultwidget" style="background-image:url({{ URL::asset('lb-faveo/media/images/news.png') }})">
-                    <span class="widgetitemtitle">{!! Lang::get('lang.my_tickets') !!}</span>
+                    <span class="widgetitemtitle">{!! trans('lang.my_tickets') !!}</span>
                 </a>
             </span>
             <span onclick="javascript: window.location.href='{{url('/knowledgebase')}}';">
                 <a href="{{url('/knowledgebase')}}" class="widgetrowitem defaultwidget" style="background-image:url({{ URL::asset('lb-faveo/media/images/knowledgebase.png') }})">
-                    <span class="widgetitemtitle">{!! Lang::get('lang.knowledge_base') !!}</span>
+                    <span class="widgetitemtitle">{!! trans('lang.knowledge_base') !!}</span>
                 </a>
             </span>
         </div>
@@ -117,7 +117,7 @@
                 </div>
                
                 <div>
- <h4 class="box-title" align="center">{{Lang::get('lang.login_to_start_your_session')}}</h4>
+ <h4 class="box-title" align="center">{{trans('lang.login_to_start_your_session')}}</h4>
                   
                 </div>
 
@@ -127,7 +127,7 @@
 <!-- Email -->
  <div class="col-xs-12">
 <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
-    {!! Form::text('email',null,['placeholder'=> Lang::get("lang.email") ,'class' => 'form-control']) !!}
+    {!! Form::text('email',null,['placeholder'=> trans("lang.email") ,'class' => 'form-control']) !!}
     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 
 </div>
@@ -137,7 +137,7 @@
 <!-- Password -->
 <div class="form-group has-feedback {{ $errors->has('password') ? 'has-error' : '' }}">
         
- {!! Form::password('password',['placeholder'=>Lang::get("lang.password"),'class' => 'form-control']) !!}
+ {!! Form::password('password',['placeholder'=>trans("lang.password"),'class' => 'form-control']) !!}
     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
 
 </div>
@@ -145,7 +145,7 @@
         
         
     <div class="col-xs-12">
-        <button type="submit" class="btn btn-primary btn-block btn-flat">{!! Lang::get("lang.login") !!}</button>
+        <button type="submit" class="btn btn-primary btn-block btn-flat">{!! trans("lang.login") !!}</button>
     </div><!-- /.col -->
 
 
@@ -160,19 +160,19 @@
 
 <div>
             <label>
-                <input type="checkbox" name="remember"> {!! Lang::get("lang.remember") !!}
+                <input type="checkbox" name="remember"> {!! trans("lang.remember") !!}
             </label>
         </div>  </div>
     <!-- /.col -->
 
     <div class="col-xs-6">
  
-<a href="{{url('password/email')}}">{!! Lang::get("lang.iforgot") !!}</a><br> 
+<a href="{{url('password/email')}}">{!! trans("lang.iforgot") !!}</a><br>
 
 </div>
  <div class="col-xs-2">
  
-<a href="{{url('auth/register')}}" class="text-center">{!! Lang::get("lang.register") !!}</a>
+<a href="{{url('auth/register')}}" class="text-center">{!! trans("lang.register") !!}</a>
 
 
 </div>

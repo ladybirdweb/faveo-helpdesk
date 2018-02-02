@@ -17,7 +17,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.departments')}}</h1>
+<h1>{{trans('lang.departments')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -33,7 +33,7 @@ class="active"
 {!! Form::open(array('action' => 'Admin\helpdesk\DepartmentController@store' , 'method' => 'post') )!!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.create_a_department') !!}</h3>	
+        <h3 class="box-title">{!! trans('lang.create_a_department') !!}</h3>
     </div>
     <div class="box-body">
         @if(Session::has('errors'))
@@ -63,18 +63,18 @@ class="active"
         <div class="row">
             <!-- name -->
             <div class="col-xs-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                {!! Form::label('name',Lang::get('lang.name')) !!}  <span class="text-red"> *</span>
+                {!! Form::label('name',trans('lang.name')) !!}  <span class="text-red"> *</span>
                 {!! Form::text('name',null,['class' => 'form-control']) !!}
             </div>
             <!-- account status -->
             <div class="col-xs-6 form-group {{ $errors->has('account_status') ? 'has-error' : '' }}">
-                {!! Form::label('type',Lang::get('lang.type')) !!}
+                {!! Form::label('type',trans('lang.type')) !!}
                 <div class="row">
                     <div class="col-xs-2">
-                        {!! Form::radio('type','1',true) !!} {{Lang::get('lang.public')}}
+                        {!! Form::radio('type','1',true) !!} {{trans('lang.public')}}
                     </div>
                     <div class="col-xs-3">
-                        {!! Form::radio('type','0',null) !!} {{Lang::get('lang.private')}}
+                        {!! Form::radio('type','0',null) !!} {{trans('lang.private')}}
                     </div>
                 </div>
             </div>
@@ -82,33 +82,33 @@ class="active"
         <div class="row">
             <!-- slaplan -->
             <div class="col-xs-6 form-group {{ $errors->has('sla') ? 'has-error' : '' }}">
-                {!! Form::label('sla',Lang::get('lang.SLA_plan')) !!}
-                {!!Form::select('sla', [''=>Lang::get('lang.select_a_sla'), Lang::get('lang.sla_plans')=>$slas->lists('grace_period','id')->toArray()],null,['class' => 'form-control select']) !!}
+                {!! Form::label('sla',trans('lang.SLA_plan')) !!}
+                {!!Form::select('sla', [''=>trans('lang.select_a_sla'), trans('lang.sla_plans')=>$slas->lists('grace_period','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
             <!-- manager -->
             <div class="col-xs-6 form-group {{ $errors->has('manager') ? 'has-error' : '' }}">
-                {!! Form::label('manager',Lang::get('lang.manager')) !!}
-                {!!Form::select('manager',[''=>Lang::get('lang.select_a_manager'),Lang::get('lang.manager')=>$user->lists('full_name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                {!! Form::label('manager',trans('lang.manager')) !!}
+                {!!Form::select('manager',[''=>trans('lang.select_a_manager'),trans('lang.manager')=>$user->lists('full_name','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
         </div>
     </div>
     <div class="box-header with-border">
-        <h4 class="box-title">{!! Lang::get('lang.outgoing_email_settings') !!}</h4>
+        <h4 class="box-title">{!! trans('lang.outgoing_email_settings') !!}</h4>
     </div>
     <div class="box-body">
         <div class="row">
             <!-- sla -->
             <div class="col-xs-6 form-group {{ $errors->has('outgoing_email') ? 'has-error' : '' }}">
-                {!! Form::label('outgoing_email',Lang::get('lang.outgoing_email')) !!}
-                {!!Form::select('outgoing_email', ['' => Lang::get('lang.system_default'), Lang::get('lang.emails')=>$emails->lists('email_name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                {!! Form::label('outgoing_email',trans('lang.outgoing_email')) !!}
+                {!!Form::select('outgoing_email', ['' => trans('lang.system_default'), trans('lang.emails')=>$emails->lists('email_name','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
         </div>
         <div class="form-group">
-            <input type="checkbox" name="sys_department"> {{ Lang::get('lang.make-default-department')}}
+            <input type="checkbox" name="sys_department"> {{ trans('lang.make-default-department')}}
         </div>
     </div>
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.submit'),['class'=>'form-group btn btn-primary'])!!}    
+        {!! Form::submit(trans('lang.submit'),['class'=>'form-group btn btn-primary'])!!}
     </div>
     {!!Form::close()!!}
 </div>

@@ -1,10 +1,10 @@
 @extends('themes.default1.agent.layout.agent')
 
 @section('sidebar')
-<li class="header">{!! Lang::get('lang.Report') !!}</li>
+<li class="header">{!! trans('lang.Report') !!}</li>
 <li>
     <a href="">
-        <i class="fa fa-area-chart"></i> <span>{!! Lang::get('lang.help_topic') !!}</span> <small class="label pull-right bg-green"></small>
+        <i class="fa fa-area-chart"></i> <span>{!! trans('lang.help_topic') !!}</span> <small class="label pull-right bg-green"></small>
     </a>
 </li>
 <li>
@@ -21,7 +21,7 @@ active
 @stop
 
 @section('PageHeader')
-<h1>{!! Lang::get('lang.report') !!}</h1>
+<h1>{!! trans('lang.report') !!}</h1>
 @stop
 
 @section('dashboard')
@@ -42,7 +42,7 @@ class="active"
 @if(Session::has('fails'))
 <div class="alert alert-danger alert-dismissable">
     <i class="fa fa-ban"></i>
-    <b>{!! Lang::get('lang.alert') !!}!</b>
+    <b>{!! trans('lang.alert') !!}!</b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {{Session::get('fails')}}
 </div>
@@ -52,7 +52,7 @@ class="active"
  
 <div class="box box-info">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.help_topic') !!}</h3>
+        <h3 class="box-title">{!! trans('lang.help_topic') !!}</h3>
     </div>
     <div class="box-body">
         <form id="foo">
@@ -61,7 +61,7 @@ class="active"
             <div  class="form-group">
                 <div class="row">
                     <div class='col-sm-2'>
-                        {!! Form::label('helptopic', Lang::get('lang.help_topic')) !!}
+                        {!! Form::label('helptopic', trans('lang.help_topic')) !!}
                         <select name="help_topic" id="help_topic" class="form-control">
                             <?php $helptopics = App\Model\helpdesk\Manage\Help_topic::where('status', '=', '1')->get([ 'id', 'topic']); ?>
                             @foreach($helptopics as $helptopic)
@@ -70,7 +70,7 @@ class="active"
                         </select>
                     </div>
                     <div class='col-sm-2 form-group' id="start_date">
-                        {!! Form::label('date', Lang::get('lang.start_date').':') !!}
+                        {!! Form::label('date', trans('lang.start_date').':') !!}
                         {!! Form::text('start_date',null,['class'=>'form-control','id'=>'datepicker4'])!!}
                     </div>
                     <?php
@@ -96,7 +96,7 @@ class="active"
                         });
                     </script>
                     <div class='col-sm-2 form-group' id="end_date">
-                        {!! Form::label('start_time', Lang::get('lang.end_date').':') !!}
+                        {!! Form::label('start_time', trans('lang.end_date').':') !!}
                         {!! Form::text('end_date',null,['class'=>'form-control','id'=>'datetimepicker3'])!!}
                     </div>
                     <script type="text/javascript">
@@ -111,17 +111,17 @@ class="active"
                         });
                     </script>
                     <div class='col-sm-1' style="padding-right:0px;padding-left:0px">
-                        <label>{!! Lang::get('lang.status') !!}</label>
+                        <label>{!! trans('lang.status') !!}</label>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default">{!! Lang::get('lang.select') !!}</button>
+                            <button type="button" class="btn btn-default">{!! trans('lang.select') !!}</button>
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="#" id="stop"><input type="checkbox" name="open" id="open"> {!! lang::get('lang.created') !!} {!! lang::get('lang.tickets') !!}</a></li>
-                                <li><a href="#" id="stop"><input type="checkbox" name="closed" id="closed"> {!! lang::get('lang.closed') !!} {!! lang::get('lang.tickets') !!}</a></li>
-                                <li><a href="#" id="stop"><input type="checkbox" name="reopened" id="reopened"> {!! lang::get('lang.reopened') !!} {!! lang::get('lang.tickets') !!}</a></li>
+                                <li><a href="#" id="stop"><input type="checkbox" name="open" id="open"> {!! trans('lang.created') !!} {!! trans('lang.tickets') !!}</a></li>
+                                <li><a href="#" id="stop"><input type="checkbox" name="closed" id="closed"> {!! trans('lang.closed') !!} {!! trans('lang.tickets') !!}</a></li>
+                                <li><a href="#" id="stop"><input type="checkbox" name="reopened" id="reopened"> {!! trans('lang.reopened') !!} {!! trans('lang.tickets') !!}</a></li>
                             </ul>
                         </div>
                     </div>
@@ -132,13 +132,13 @@ class="active"
                     <br/>
                     <div class="col-md-4">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default">{!! Lang::get('lang.generate') !!}</button>
+                            <button type="button" class="btn btn-default">{!! trans('lang.generate') !!}</button>
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="#" id="pdf">{!! Lang::get('lang.generate_pdf') !!}</a></li>
+                                <li><a href="#" id="pdf">{!! trans('lang.generate_pdf') !!}</a></li>
                             </ul>
                         </div>
                         <div class="pull-right">
@@ -153,14 +153,14 @@ class="active"
 
                 <div class="row">
                     <div class="col-sm-1" style="margin-bottom:0px;">
-                        <label>{!! Lang::get('lang.Legend') !!}:</label>
+                        <label>{!! trans('lang.Legend') !!}:</label>
                     </div>
                     <style>
                         #legend-holder { float: left; width: 32px; height: 16px;}
                     </style>
-                    <div class="col-md-2"><span id="legend-holder" style="background-color: #6C96DF;"></span>&nbsp; <span> <span id="total-created-tickets1" ></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.created') !!}</span></div> 
-                    <div class="col-md-2"><span id="legend-holder" style="background-color: #6DC5B2;"></span>&nbsp; <span> <span id="total-reopen-tickets1"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.reopen') !!}</span></div> 
-                    <div class="col-md-2"><span id="legend-holder" style="background-color: #E3B870;"></span>&nbsp; <span> <span id="total-closed-tickets1"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.closed') !!}</span></div> 
+                    <div class="col-md-2"><span id="legend-holder" style="background-color: #6C96DF;"></span>&nbsp; <span> <span id="total-created-tickets1" ></span> {!! trans('lang.tickets') !!} {!! trans('lang.created') !!}</span></div>
+                    <div class="col-md-2"><span id="legend-holder" style="background-color: #6DC5B2;"></span>&nbsp; <span> <span id="total-reopen-tickets1"></span> {!! trans('lang.tickets') !!} {!! trans('lang.reopen') !!}</span></div>
+                    <div class="col-md-2"><span id="legend-holder" style="background-color: #E3B870;"></span>&nbsp; <span> <span id="total-closed-tickets1"></span> {!! trans('lang.tickets') !!} {!! trans('lang.closed') !!}</span></div>
                 </div>
             </div>
         </form>
@@ -174,7 +174,7 @@ class="active"
             <div class="col-sm-3 col-xs-6">
                 <div class="description-block border-right">
                     <h3><span class="description-percentage text-yellow" ><i class="fa fa-file-text-o"> </i> <small class="text-yellow"><i class="fa fa-random"> </i></small> <span id="total-inprogress-tickets"> </span> </span></h3>
-                    <span class="">{!! Lang::get('lang.Currnet_In_Progress') !!}</span>
+                    <span class="">{!! trans('lang.Currnet_In_Progress') !!}</span>
                 </div>
                 <!-- /.description-block -->
             </div>
@@ -182,7 +182,7 @@ class="active"
             <div class="col-sm-3 col-xs-6">
                 <div class="description-block border-right">
                     <h3><span class="description-percentage text-blue" ><i class="fa fa-file-text-o"> </i> + <span id="total-created-tickets"> </span> </span></h3>
-                    <span class="">{!! Lang::get('lang.Total_Created') !!}</span>
+                    <span class="">{!! trans('lang.Total_Created') !!}</span>
                 </div>
                 <!-- /.description-block -->
             </div>
@@ -190,7 +190,7 @@ class="active"
             <div class="col-sm-3 col-xs-6">
                 <div class="description-block border-right">
                     <h3><span class="description-percentage text-yellow" ><i class="fa fa-file-text-o"></i> <small class="text-yellow"><i class="fa fa-refresh"> </i></small> <span id="total-reopen-tickets"> </span> </span></h3>
-                    <span class="">{!! Lang::get('lang.Total_Reopened') !!}</span>
+                    <span class="">{!! trans('lang.Total_Reopened') !!}</span>
                 </div>
                 <!-- /.description-block -->
             </div>
@@ -198,7 +198,7 @@ class="active"
             <div class="col-sm-3 col-xs-6">
                 <div class="description-block">
                     <h3><span class="description-percentage text-green" ><i class="fa fa-file-text-o"> </i> <small class="text-green"><i class="fa fa-times"> </i></small> <span id="total-closed-tickets"> </span> </span></h3>
-                    <span class="">{!! Lang::get('lang.Total_Closed') !!}</span>
+                    <span class="">{!! trans('lang.Total_Closed') !!}</span>
                 </div>
                 <!-- /.description-block -->
             </div>
@@ -255,13 +255,13 @@ class="active"
                                     open.push(result[i].open);
                                     if (i == 1) {
                                         var cell = row.insertCell(0);
-                                        cell.innerHTML = "<b>{!! Lang::get('lang.reopened') !!}</b>";
+                                        cell.innerHTML = "<b>{!! trans('lang.reopened') !!}</b>";
                                         var cell = row.insertCell(0);
-                                        cell.innerHTML = "<b>{!! Lang::get('lang.closed') !!}</b>";
+                                        cell.innerHTML = "<b>{!! trans('lang.closed') !!}</b>";
                                         var cell = row.insertCell(0);
-                                        cell.innerHTML = "<b>{!! Lang::get('lang.created') !!}</b>";
+                                        cell.innerHTML = "<b>{!! trans('lang.created') !!}</b>";
                                         var cell = row.insertCell(0);
-                                        cell.innerHTML = "<b>{!! Lang::get('lang.date') !!}</b>";
+                                        cell.innerHTML = "<b>{!! trans('lang.date') !!}</b>";
                                     }
                                     var cell1 = row1.insertCell(0);
                                     cell1.innerHTML = "<b>" + result[i].reopened + "</b>";
@@ -469,7 +469,7 @@ class="active"
                                                 reopened_total += parseInt(result2[i].reopened);
                                                 if (i == 1) {
                                                     var cell = row.insertCell(0);
-                                                    cell.innerHTML = "<b>{!! Lang::get('lang.reopened') !!}</b>";
+                                                    cell.innerHTML = "<b>{!! trans('lang.reopened') !!}</b>";
                                                 }
                                                 var cell1 = row1.insertCell(0);
                                                 cell1.innerHTML = "<b>" + result2[i].reopened + "</b>";
@@ -483,7 +483,7 @@ class="active"
                                                 closed_total += parseInt(result2[i].closed);
                                                 if (i == 1) {
                                                     var cell = row.insertCell(0);
-                                                    cell.innerHTML = "<b>{!! Lang::get('lang.closed') !!}</b>";
+                                                    cell.innerHTML = "<b>{!! trans('lang.closed') !!}</b>";
                                                 }
                                                 var cell1 = row1.insertCell(0);
                                                 cell1.innerHTML = "<b>" + result2[i].closed + "</b>";
@@ -497,7 +497,7 @@ class="active"
                                                 open_total += parseInt(result2[i].open);
                                                 if (i == 1) {
                                                     var cell = row.insertCell(0);
-                                                    cell.innerHTML = "<b>{!! Lang::get('lang.created') !!}</b>";
+                                                    cell.innerHTML = "<b>{!! trans('lang.created') !!}</b>";
                                                 }
                                                 var cell1 = row1.insertCell(0);
                                                 cell1.innerHTML = "<b>" + result2[i].open + "</b>";
@@ -508,7 +508,7 @@ class="active"
 
                                             if (i == 1) {
                                                 var cell = row.insertCell(0);
-                                                cell.innerHTML = "<b>{!! Lang::get('lang.date') !!}</b>";
+                                                cell.innerHTML = "<b>{!! trans('lang.date') !!}</b>";
                                             }
 
                                             var cell1 = row1.insertCell(0);

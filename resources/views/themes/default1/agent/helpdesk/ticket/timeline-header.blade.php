@@ -1,23 +1,23 @@
 <?php
     $array = [
-        Lang::get('lang.status')=>$status->name,
-        Lang::get('lang.priority')=>$priority->priority_desc,
-        Lang::get('lang.department')=>$dept123->name,
-        Lang::get('lang.email')=>str_limit($user->email,30),
-        Lang::get('lang.source')=>$ticket_source,
-        Lang::get('lang.help_topic')=>$help_topic->topic,
-        Lang::get('lang.last_message')=>str_limit($username,30),
-        Lang::get('lang.organization') => $LastResponse->getOrgWithLink(),   
+        trans('lang.status')=>$status->name,
+        trans('lang.priority')=>$priority->priority_desc,
+        trans('lang.department')=>$dept123->name,
+        trans('lang.email')=>str_limit($user->email,30),
+        trans('lang.source')=>$ticket_source,
+        trans('lang.help_topic')=>$help_topic->topic,
+        trans('lang.last_message')=>str_limit($username,30),
+        trans('lang.organization') => $LastResponse->getOrgWithLink(),
     ];
     
     if($user->ban > 0){
-        array_push($array, [Lang::get('lang.this_ticket_is_under_banned_user')=>'']);
+        array_push($array, [trans('lang.this_ticket_is_under_banned_user')=>'']);
     }
     if($user->phone_number !=null){
-        array_push($array, [Lang::get('lang.phone')=>$user->phone_number]);
+        array_push($array, [trans('lang.phone')=>$user->phone_number]);
     }
     if($user->mobile !=null){
-        array_push($array, [Lang::get('lang.mobile')=>$user->mobile]);
+        array_push($array, [trans('lang.mobile')=>$user->mobile]);
     }
     $collection = collect($array);
     ?>

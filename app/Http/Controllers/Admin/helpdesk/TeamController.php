@@ -16,7 +16,6 @@ use App\User;
 // classes
 use DB;
 use Exception;
-use Lang;
 
 /**
  * TeamController.
@@ -104,10 +103,10 @@ class TeamController extends Controller
             }
 
             /* redirect to Index page with Success Message */
-            return redirect('teams')->with('success', Lang::get('lang.teams_created_successfully'));
+            return redirect('teams')->with('success', trans('lang.teams_created_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('teams')->with('fails', Lang::get('lang.teams_can_not_create').'<li>'.$e->getMessage().'</li>');
+            return redirect('teams')->with('fails', trans('lang.teams_can_not_create').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -255,10 +254,10 @@ class TeamController extends Controller
         try {
             $teams->fill($request->except('team_lead'))->save();
             /* redirect to Index page with Success Message */
-            return redirect('teams')->with('success', Lang::get('lang.teams_updated_successfully'));
+            return redirect('teams')->with('success', trans('lang.teams_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('teams')->with('fails', Lang::get('lang.teams_can_not_update').'<li>'.$e->getMessage().'</li>');
+            return redirect('teams')->with('fails', trans('lang.teams_can_not_update').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -280,10 +279,10 @@ class TeamController extends Controller
             /* Check whether function success or not */
             $teams->delete();
             /* redirect to Index page with Success Message */
-            return redirect('teams')->with('success', Lang::get('lang.teams_deleted_successfully'));
+            return redirect('teams')->with('success', trans('lang.teams_deleted_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('teams')->with('fails', Lang::get('lang.teams_can_not_delete').'<li>'.$e->getMessage().'</li>');
+            return redirect('teams')->with('fails', trans('lang.teams_can_not_delete').'<li>'.$e->getMessage().'</li>');
         }
     }
 }

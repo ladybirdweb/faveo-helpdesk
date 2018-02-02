@@ -21,8 +21,8 @@
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="javascript:rename('{{ $dir_name }}')">{{ Lang::get('laravel-filemanager::lfm.menu-rename') }}</a></li>
-                                <li><a href="javascript:trash('{{ $dir_name }}')">{{ Lang::get('laravel-filemanager::lfm.menu-delete') }}</a></li>
+                                <li><a href="javascript:rename('{{ $dir_name }}')">{{ trans('laravel-filemanager::lfm.menu-rename') }}</a></li>
+                                <li><a href="javascript:trash('{{ $dir_name }}')">{{ trans('laravel-filemanager::lfm.menu-delete') }}</a></li>
                             </ul>
                         </div>
 
@@ -51,15 +51,15 @@
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="javascript:rename('{{ $file_name }}')">{{ Lang::get('laravel-filemanager::lfm.menu-rename') }}</a></li>
-                                <li><a href="javascript:fileView('{{ $file_name }}')">{{ Lang::get('laravel-filemanager::lfm.menu-view') }}</a></li>
-                                <li><a href="javascript:download('{{ $file_name }}')">{{ Lang::get('laravel-filemanager::lfm.menu-download') }}</a></li>
+                                <li><a href="javascript:rename('{{ $file_name }}')">{{ trans('laravel-filemanager::lfm.menu-rename') }}</a></li>
+                                <li><a href="javascript:fileView('{{ $file_name }}')">{{ trans('laravel-filemanager::lfm.menu-view') }}</a></li>
+                                <li><a href="javascript:download('{{ $file_name }}')">{{ trans('laravel-filemanager::lfm.menu-download') }}</a></li>
                                 <li class="divider"></li>
                                 {{--<li><a href="javascript:notImp()">Rotate</a></li>--}}
-                                <li><a href="javascript:resizeImage('{{ $file_name }}')">{{ Lang::get('laravel-filemanager::lfm.menu-resize') }}</a></li>
-                                <li><a href="javascript:cropImage('{{ $file_name }}')">{{ Lang::get('laravel-filemanager::lfm.menu-crop') }}</a></li>
+                                <li><a href="javascript:resizeImage('{{ $file_name }}')">{{ trans('laravel-filemanager::lfm.menu-resize') }}</a></li>
+                                <li><a href="javascript:cropImage('{{ $file_name }}')">{{ trans('laravel-filemanager::lfm.menu-crop') }}</a></li>
                                 <li class="divider"></li>
-                                <li><a href="javascript:trash('{{ $file_name }}')">{{ Lang::get('laravel-filemanager::lfm.menu-delete') }}</a></li>
+                                <li><a href="javascript:trash('{{ $file_name }}')">{{ trans('laravel-filemanager::lfm.menu-delete') }}</a></li>
                             </ul>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
 
         @else
             <div class="col-md-12">
-                <p>{{ Lang::get('laravel-filemanager::lfm.message-empty') }}</p>
+                <p>{{ trans('laravel-filemanager::lfm.message-empty') }}</p>
             </div>
         @endif
 

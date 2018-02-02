@@ -13,7 +13,7 @@ class = "active"
     <!-- Start of Page Container -->
     <div class="row home-listing-area">
         <div class="span8">
-            <h2>{!! Lang::get('lang.categories') !!}</h2>
+            <h2>{!! trans('lang.categories') !!}</h2>
         </div>
     </div>
     <div class="row separator">
@@ -47,7 +47,7 @@ class = "active"
                             <span class="article-meta">{{$arti->created_at->format('l, d-m-Y')}}
                                 <?php $str = $arti->description ?>
                                 <?php $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 55) ?>
-                                <p>{!!$excerpt!!} <a class="readmore-link" href="{{url('show/'.$arti->slug)}}">{!! Lang::get('lang.read_more') !!}</a></p>
+                                <p>{!!$excerpt!!} <a class="readmore-link" href="{{url('show/'.$arti->slug)}}">{!! trans('lang.read_more') !!}</a></p>
                         </li>
                         @empty 
                         <li>No articles available</li>

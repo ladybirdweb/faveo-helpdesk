@@ -1,7 +1,7 @@
 {!! Form::model($emails,['url' => 'post-scheduler', 'method' => 'PATCH']) !!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.cron_settings')}}</h3>
+        <h3 class="box-title">{{trans('lang.cron_settings')}}</h3>
     </div>
 
     <div class="box-body table-responsive"style="overflow:hidden;">
@@ -33,7 +33,7 @@
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {!!Session::get('fails')!!}
         </div>
@@ -49,8 +49,8 @@
         </div>
         
         <div class="alert  alert-dismissable" style="background: #F3F3F3">
-            <i class="fa  fa-info-circle"></i>&nbsp;{!!Lang::get('lang.crone-url-message')!!}
-            <a href="http://ladybirdweb.com/support/show/cron-job-scheduling" style="color:black" target="blank">{!!Lang::get('lang.click')!!}</a> {!!Lang::get('lang.check-cron-set')!!}
+            <i class="fa  fa-info-circle"></i>&nbsp;{!!trans('lang.crone-url-message')!!}
+            <a href="http://ladybirdweb.com/support/show/cron-job-scheduling" style="color:black" target="blank">{!!trans('lang.click')!!}</a> {!!trans('lang.check-cron-set')!!}
         </div>
         <div class="col-md-6">
             <div class="info-box">
@@ -60,8 +60,8 @@
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            {!! Form::label('email_fetching',Lang::get('lang.email_fetch')) !!}<br>
-                            {!! Form::checkbox('email_fetching',1,$condition->checkActiveJob()['fetching'],['id'=>'email_fetching']) !!}&nbsp;{{Lang::get('lang.fetch_auto-corn')}}
+                            {!! Form::label('email_fetching',trans('lang.email_fetch')) !!}<br>
+                            {!! Form::checkbox('email_fetching',1,$condition->checkActiveJob()['fetching'],['id'=>'email_fetching']) !!}&nbsp;{{trans('lang.fetch_auto-corn')}}
                         </div>
 
                     </div>
@@ -83,8 +83,8 @@
                 <div class="info-box-content">
                     <div class="col-md-6">
                         <div class="form-group">
-                            {!! Form::label('notification_cron',Lang::get('lang.notification-email')) !!}<br>
-                            {!! Form::checkbox('notification_cron',1,$condition->checkActiveJob()['notification'],['id'=>'notification_cron']) !!}&nbsp;{{Lang::get('lang.cron_notification')}}
+                            {!! Form::label('notification_cron',trans('lang.notification-email')) !!}<br>
+                            {!! Form::checkbox('notification_cron',1,$condition->checkActiveJob()['notification'],['id'=>'notification_cron']) !!}&nbsp;{{trans('lang.cron_notification')}}
                         </div>
                     </div>
                     <div class="col-md-6" id="notification">
@@ -103,9 +103,9 @@
                 <div class="info-box-content">
                     <div class="col-md-6">
                         <div class="form-group">
-                            {!! Form::label('condition',Lang::get('lang.auto_close_workflow')) !!}<br>
+                            {!! Form::label('condition',trans('lang.auto_close_workflow')) !!}<br>
                             {!! Form::checkbox('condition',1,$condition->checkActiveJob()['work'],['id'=>'auto_close']) !!}
-                                   {{Lang::get('lang.enable_workflow')}}
+                                   {{trans('lang.enable_workflow')}}
                         </div>
                     </div>
                     <div class="col-md-6" id="workflow">
@@ -120,7 +120,7 @@
 
     </div>
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
+        {!! Form::submit(trans('lang.submit'),['class'=>'btn btn-primary'])!!}
     </div>
 </div>
 <script>

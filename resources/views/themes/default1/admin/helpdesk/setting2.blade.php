@@ -3,7 +3,7 @@
 @stop
 <!-- header -->
 @section('PageHeader')
-        <h1>{!! Lang::get('lang.admin_panel') !!}</h1>
+        <h1>{!! trans('lang.admin_panel') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -16,7 +16,7 @@
 @section('content')
                         <div class="box">
                             <div class="box-header with-border">
-                                <h3 class="box-title">{!! Lang::get('lang.staffs') !!}</h3>
+                                <h3 class="box-title">{!! trans('lang.staffs') !!}</h3>
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
@@ -30,7 +30,7 @@
                                                         <i class="fa fa-user fa-stack-1x"></i>
                                                     </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.agents') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.agents') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -42,7 +42,7 @@
                                                         <i class="fa fa-sitemap fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.departments') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.departments') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -55,7 +55,7 @@
                                                         <i class="fa fa-users fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.teams') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.teams') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -68,7 +68,7 @@
                                                         <i class="fa fa-group fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.groups') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.groups') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -84,7 +84,7 @@
 
                         <div class="box">
                             <div class="box-header with-border">
-                                <h3 class="box-title">{!! Lang::get('lang.email') !!}</h3>
+                                <h3 class="box-title">{!! trans('lang.email') !!}</h3>
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
@@ -98,7 +98,7 @@
                                                     <i class="fa fa-envelope-o fa-stack-1x"></i>
                                                     </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.emails') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.emails') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -111,7 +111,7 @@
                                                         <i class="fa fa-ban fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.ban_lists') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.ban_lists') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -125,7 +125,7 @@
                                                         <i class="fa fa-mail-forward fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.templates') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.templates') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -139,7 +139,7 @@
                                                         <i class="fa fa-plus fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.diagnostics') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.diagnostics') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -156,7 +156,7 @@
 
                         <div class="box">
                             <div class="box-header with-border">
-                                <h3 class="box-title">{!! Lang::get('lang.manage') !!}</h3>
+                                <h3 class="box-title">{!! trans('lang.manage') !!}</h3>
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
@@ -171,7 +171,7 @@
                                                         <i class="fa fa-file-text-o fa-stack-1x"></i>
                                                     </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.help_topics') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.help_topics') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -184,7 +184,7 @@
                                                         <i class="fa fa-clock-o fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.sla_plans') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.sla_plans') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -198,7 +198,7 @@
                                                         <i class="fa fa-file-text fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.forms') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.forms') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -211,7 +211,7 @@
                                                         <i class="fa fa-sitemap fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.workflow') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.workflow') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -227,7 +227,7 @@
 
                         <div class="box">
                             <div class="box-header with-border">
-                                <h3 class="box-title">{!! Lang::get('lang.settings') !!}</h3>
+                                <h3 class="box-title">{!! trans('lang.settings') !!}</h3>
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
@@ -242,7 +242,7 @@
                                                         <i class="fa fa-building-o fa-stack-1x"></i>
                                                     </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.company') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.company') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -255,7 +255,7 @@
                                                         <i class="fa fa-laptop fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.system') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.system') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -269,7 +269,7 @@
                                                         <i class="fa fa-at fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.email') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.email') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -283,7 +283,7 @@
                                                         <i class="fa fa-file-text-o fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.ticket') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.ticket') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -297,7 +297,7 @@
                                                         <i class="fa fa-reply-all fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.auto_response') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.auto_response') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -310,7 +310,7 @@
                                                         <i class="fa fa-bell-o fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.alert_notices') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.alert_notices') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -323,7 +323,7 @@
                                                         <i class="fa fa-language fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title">{!! Lang::get('lang.language') !!}</center>
+                                                <center class="box-title">{!! trans('lang.language') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -335,7 +335,7 @@
                                                         <i class="fa  fa-hourglass-o fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.cron') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.cron') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -352,7 +352,7 @@
 
                         <div class="box">
                             <div class="box-header with-border">
-                                <h3 class="box-title">{!! Lang::get('lang.widgets') !!}</h3>
+                                <h3 class="box-title">{!! trans('lang.widgets') !!}</h3>
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
@@ -366,7 +366,7 @@
                                                         <i class="fa fa-list-alt fa-stack-1x"></i>
                                                     </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.widgets') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.widgets') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->                                        
@@ -380,7 +380,7 @@
                                                         <i class="fa fa-cubes fa-stack-1x"></i>
                                                     </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.social') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.social') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->                                        
@@ -396,7 +396,7 @@
 
                         <div class="box">
                             <div class="box-header with-border">
-                                <h3 class="box-title">{!! Lang::get('lang.plugin') !!}</h3>
+                                <h3 class="box-title">{!! trans('lang.plugin') !!}</h3>
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
@@ -411,7 +411,7 @@
                                                         <i class="fa fa-plug fa-stack-1x"></i>
                                                     </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.plugin') !!}</center>
+                                                <center class="box-title" >{!! trans('lang.plugin') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->

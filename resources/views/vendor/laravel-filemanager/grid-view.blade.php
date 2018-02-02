@@ -12,7 +12,7 @@
 
   @else
   <div class="col-md-12">
-    <p>{{ Lang::get('laravel-filemanager::lfm.message-empty') }}</p>
+    <p>{{ trans('laravel-filemanager::lfm.message-empty') }}</p>
   </div>
   @endif
 

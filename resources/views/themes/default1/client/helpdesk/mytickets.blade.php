@@ -25,8 +25,8 @@ class="active"
     ?>
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">{!! Lang::get('lang.opened') !!} <small class="label bg-orange">{!! $open->total() !!}</small></a></li>
-            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">{!! Lang::get('lang.closed') !!} <small class="label bg-green">{!! $close->total() !!}</small></a></li>
+            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">{!! trans('lang.opened') !!} <small class="label bg-orange">{!! $open->total() !!}</small></a></li>
+            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">{!! trans('lang.closed') !!} <small class="label bg-green">{!! $close->total() !!}</small></a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="tab_1">
@@ -35,7 +35,7 @@ class="active"
                     <!-- Check all button -->
                     <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
                     <a class="btn btn-default btn-sm" id="click1"><i class="fa fa-refresh"></i></a>
-                    <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
+                    <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! trans('lang.close') !!}">
                     <div class="pull-right" id="refresh21">
                         {!! $open->count().'-'.$open->total(); !!}
                     </div>
@@ -47,22 +47,22 @@ class="active"
                         <thead>
                         <th></th>
                         <th>
-                            {!! Lang::get('lang.subject') !!}
+                            {!! trans('lang.subject') !!}
                         </th>
                         <th>
-                            {!! Lang::get('lang.ticket_id') !!}
+                            {!! trans('lang.ticket_id') !!}
                         </th>
                         <th>
-                            {!! Lang::get('lang.priority') !!}
+                            {!! trans('lang.priority') !!}
                         </th>
                         <th>
-                            {!! Lang::get('lang.last_replier') !!}
+                            {!! trans('lang.last_replier') !!}
                         </th>
                         <th>
-                            {!! Lang::get('lang.last_activity') !!}
+                            {!! trans('lang.last_activity') !!}
                         </th>
                         <th>
-                            {!! Lang::get('lang.status') !!}
+                            {!! trans('lang.status') !!}
                         </th>
                         </thead>
                         <tbody id="hello">
@@ -124,7 +124,7 @@ class="active"
                     <!-- Check all button -->
                     <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
                     <a class="btn btn-default btn-sm" id="click2"><i class="fa fa-refresh"></i></a>
-                    <input type="submit" class="btn btn-default text-blue btn-sm" name="submit" value="{!! Lang::get('lang.open') !!}">
+                    <input type="submit" class="btn btn-default text-blue btn-sm" name="submit" value="{!! trans('lang.open') !!}">
                     <div class="pull-right" id="refresh22">
                         {!! $close->count().'-'.$close->total(); !!}
                     </div>
@@ -136,22 +136,22 @@ class="active"
                         <thead>
                         <th></th>
                         <th>
-                            {!! Lang::get('lang.subject') !!}
+                            {!! trans('lang.subject') !!}
                         </th>
                         <th>
-                            {!! Lang::get('lang.ticket_id') !!}
+                            {!! trans('lang.ticket_id') !!}
                         </th>
                         <th>
-                            {!! Lang::get('lang.priority') !!}
+                            {!! trans('lang.priority') !!}
                         </th>
                         <th>
-                            {!! Lang::get('lang.last_replier') !!}
+                            {!! trans('lang.last_replier') !!}
                         </th>
                         <th>
-                            {!! Lang::get('lang.last_activity') !!}
+                            {!! trans('lang.last_activity') !!}
                         </th>
                         <th>
-                            {!! Lang::get('lang.status') !!}
+                            {!! trans('lang.status') !!}
                         </th>
                         </thead>
                         <tbody id="hello">

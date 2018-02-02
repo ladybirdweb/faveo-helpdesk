@@ -39,7 +39,6 @@ use Exception;
 use File;
 use Illuminate\Http\Request;
 use Input;
-use Lang;
 
 /**
  * SettingsController.
@@ -107,10 +106,10 @@ class SettingsController extends Controller
         try {
             $companys->fill($request->except('logo'))->save();
             /* redirect to Index page with Success Message */
-            return redirect('getcompany')->with('success', Lang::get('lang.company_updated_successfully'));
+            return redirect('getcompany')->with('success', trans('lang.company_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getcompany')->with('fails', Lang::get('lang.company_can_not_updated').'<li>'.$e->getMessage().'</li>');
+            return redirect('getcompany')->with('fails', trans('lang.company_can_not_updated').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -215,10 +214,10 @@ class SettingsController extends Controller
                 $sett->save();
             }
             /* redirect to Index page with Success Message */
-            return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
+            return redirect('getsystem')->with('success', trans('lang.system_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getsystem')->with('fails', Lang::get('lang.system_can_not_updated').'<br>'.$e->getMessage());
+            return redirect('getsystem')->with('fails', trans('lang.system_can_not_updated').'<br>'.$e->getMessage());
         }
     }
 
@@ -276,10 +275,10 @@ class SettingsController extends Controller
             /* Check whether function success or not */
             $tickets->save();
             /* redirect to Index page with Success Message */
-            return redirect('getticket')->with('success', Lang::get('lang.ticket_updated_successfully'));
+            return redirect('getticket')->with('success', trans('lang.ticket_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getticket')->with('fails', Lang::get('lang.ticket_can_not_updated').'<li>'.$e->getMessage().'</li>');
+            return redirect('getticket')->with('fails', trans('lang.ticket_can_not_updated').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -334,10 +333,10 @@ class SettingsController extends Controller
             /* Check whether function success or not */
             $emails->save();
             /* redirect to Index page with Success Message */
-            return redirect('getemail')->with('success', Lang::get('lang.email_updated_successfully'));
+            return redirect('getemail')->with('success', trans('lang.email_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getemail')->with('fails', Lang::get('lang.email_can_not_updated').'<li>'.$e->getMessage().'</li>');
+            return redirect('getemail')->with('fails', trans('lang.email_can_not_updated').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -435,10 +434,10 @@ class SettingsController extends Controller
             $work->save();
             $this->saveConditions();
             /* redirect to Index page with Success Message */
-            return redirect('job-scheduler')->with('success', Lang::get('lang.job-scheduler-success'));
+            return redirect('job-scheduler')->with('success', trans('lang.job-scheduler-success'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('job-scheduler')->with('fails', Lang::get('lang.job-scheduler-error').'<li>'.$e->getMessage().'</li>');
+            return redirect('job-scheduler')->with('fails', trans('lang.job-scheduler-error').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -484,10 +483,10 @@ class SettingsController extends Controller
             /* Check whether function success or not */
             $responders->save();
             /* redirect to Index page with Success Message */
-            return redirect('getresponder')->with('success', Lang::get('lang.auto_response_updated_successfully'));
+            return redirect('getresponder')->with('success', trans('lang.auto_response_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getresponder')->with('fails', Lang::get('lang.auto_response_can_not_updated').'<li>'.$e->getMessage().'</li>');
+            return redirect('getresponder')->with('fails', trans('lang.auto_response_can_not_updated').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -572,10 +571,10 @@ class SettingsController extends Controller
             /* Check whether function success or not */
             $alerts->save();
             /* redirect to Index page with Success Message */
-            return redirect('getalert')->with('success', Lang::get('lang.alert_&_notices_updated_successfully'));
+            return redirect('getalert')->with('success', trans('lang.alert_&_notices_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getalert')->with('fails', Lang::get('lang.alert_&_notices_can_not_updated').'<li>'.$e->getMessage().'</li>');
+            return redirect('getalert')->with('fails', trans('lang.alert_&_notices_can_not_updated').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -667,7 +666,7 @@ class SettingsController extends Controller
             $statuss->sort = $request->input('sort');
             $statuss->save();
             /* Direct to Company Settings Page */
-            return redirect()->back()->with('success', Lang::get('lang.status_has_been_updated_successfully'));
+            return redirect()->back()->with('success', trans('lang.status_has_been_updated_successfully'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -698,7 +697,7 @@ class SettingsController extends Controller
             $statuss->sort = $request->input('sort');
             $statuss->save();
             /* Direct to Company Settings Page */
-            return redirect()->back()->with('success', Lang::get('lang.status_has_been_created_successfully'));
+            return redirect()->back()->with('success', trans('lang.status_has_been_created_successfully'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -718,9 +717,9 @@ class SettingsController extends Controller
                 /* fetch the values of company from company table */
                 \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->delete();
                 /* Direct to Company Settings Page */
-                return redirect()->back()->with('success', Lang::get('lang.status_has_been_deleted'));
+                return redirect()->back()->with('success', trans('lang.status_has_been_deleted'));
             } else {
-                return redirect()->back()->with('failed', Lang::get('lang.you_cannot_delete_this_status'));
+                return redirect()->back()->with('failed', trans('lang.you_cannot_delete_this_status'));
             }
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -750,7 +749,7 @@ class SettingsController extends Controller
             \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
         }
 
-        return redirect()->back()->with('success', Lang::get('lang.you_have_deleted_all_the_read_notifications'));
+        return redirect()->back()->with('success', trans('lang.you_have_deleted_all_the_read_notifications'));
     }
 
     /**
@@ -773,7 +772,7 @@ class SettingsController extends Controller
             \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
         }
 
-        return redirect()->back()->with('success', Lang::get('lang.you_have_deleted_all_the_notification_records_since').$days.' days.');
+        return redirect()->back()->with('success', trans('lang.you_have_deleted_all_the_notification_records_since').$days.' days.');
     }
 
     /**
@@ -827,7 +826,7 @@ class SettingsController extends Controller
             $rating->restrict = $request->input('restrict');
             $rating->save();
 
-            return redirect()->back()->with('success', Lang::get('lang.ratings_updated_successfully'));
+            return redirect()->back()->with('success', trans('lang.ratings_updated_successfully'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -843,7 +842,7 @@ class SettingsController extends Controller
         try {
             return view('themes.default1.admin.helpdesk.settings.create-ratings');
         } catch (Exception $ex) {
-            return redirect('getratings')->with('fails', Lang::get('lang.ratings_can_not_be_created').'<li>'.$ex->getMessage().'</li>');
+            return redirect('getratings')->with('fails', trans('lang.ratings_can_not_be_created').'<li>'.$ex->getMessage().'</li>');
         }
     }
 
@@ -868,7 +867,7 @@ class SettingsController extends Controller
         $ratingrefs->rating_id = $rating->id;
         $ratingrefs->save();
 
-        return redirect()->back()->with('success', Lang::get('lang.successfully_created_this_rating'));
+        return redirect()->back()->with('success', trans('lang.successfully_created_this_rating'));
     }
 
     /**
@@ -881,7 +880,7 @@ class SettingsController extends Controller
         $ratingrefs->where('rating_id', '=', $slug)->delete();
         Rating::whereId($slug)->delete();
 
-        return redirect()->back()->with('success', Lang::get('lang.rating_deleted_successfully'));
+        return redirect()->back()->with('success', trans('lang.rating_deleted_successfully'));
     }
 
     public function saveConditions()

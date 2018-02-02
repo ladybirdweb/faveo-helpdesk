@@ -23,7 +23,6 @@ use DateTime;
 use DB;
 use Hash;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-use Lang;
 use Socialite;
 
 /**
@@ -192,19 +191,19 @@ class AuthController extends Controller
             if ($settings->status == 1 || $settings->status == '1') {
                 if (count($sms) > 0) {
                     if ($sms->status == 1 || $sms->status == '1') {
-                        $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail_and_moble');
+                        $message12 = trans('lang.activate_your_account_click_on_Link_that_send_to_your_mail_and_moble');
                     } else {
-                        $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup');
+                        $message12 = trans('lang.activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup');
                     }
                 } else {
                     if ($request->input('email') !== '') {
-                        $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
+                        $message12 = trans('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
                     } else {
-                        $message12 = Lang::get('lang.account-created-contact-admin-as-we-were-not-able-to-send-opt');
+                        $message12 = trans('lang.account-created-contact-admin-as-we-were-not-able-to-send-opt');
                     }
                 }
             } else {
-                $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
+                $message12 = trans('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
             }
             if ($api == true) {
                 return ['message' => $message12, 'user' => $user->toArray()];
@@ -324,7 +323,7 @@ class AuthController extends Controller
                                 ->withErrors([
                                     'email'         => $this->getFailedLoginMessage(),
                                     'password'      => $this->getFailedLoginMessage(),
-                                ])->with(['error'   => Lang::get('lang.not-registered'),
+                                ])->with(['error'   => trans('lang.not-registered'),
                             'referer'               => $referer, ]);
             }
 
@@ -370,7 +369,7 @@ class AuthController extends Controller
                                     ->withErrors([
                                         'email'         => $this->getFailedLoginMessage(),
                                         'password'      => $this->getFailedLoginMessage(),
-                                    ])->with(['error'   => Lang::get('lang.this_account_is_currently_inactive'),
+                                    ])->with(['error'   => trans('lang.this_account_is_currently_inactive'),
                                 'referer'               => $referer, ]);
                 } else {
                     // try login
@@ -419,7 +418,7 @@ class AuthController extends Controller
                             ->withErrors([
                                 'email'         => $this->getFailedLoginMessage(),
                                 'password'      => $this->getFailedLoginMessage(),
-                            ])->with(['error'   => Lang::get('lang.invalid'),
+                            ])->with(['error'   => trans('lang.invalid'),
                         'referer'               => $referer, ]);
             // Increment login attempts
         } catch (\Exception $e) {
@@ -509,7 +508,7 @@ class AuthController extends Controller
      */
     protected function getFailedLoginMessage()
     {
-        return Lang::get('lang.this_field_do_not_match_our_records');
+        return trans('lang.this_field_do_not_match_our_records');
     }
 
     /**
@@ -541,7 +540,7 @@ class AuthController extends Controller
                         ->orWhere('user_name', '=', $request->input('email'))->first();
         $otp_length = strlen($request->input('otp'));
         if (!\Schema::hasTable('user_verification')) {
-            $message = Lang::get('lang.opt-can-not-be-verified');
+            $message = trans('lang.opt-can-not-be-verified');
         } else {
             $otp = Otp::select('otp', 'updated_at')->where('user_id', '=', $user->id)
                     ->first();
@@ -554,7 +553,7 @@ class AuthController extends Controller
                     $time2 = new DateTime($date1);
                     $interval = $time1->diff($time2);
                     if ($interval->i > 30 || $interval->h > 0) {
-                        $message = Lang::get('lang.otp-expired');
+                        $message = trans('lang.otp-expired');
                     } else {
                         if (Hash::check($request->input('otp'), $otp->otp)) {
                             Otp::where('user_id', '=', $user->id)
@@ -565,14 +564,14 @@ class AuthController extends Controller
 
                             return $this->postLogin($request);
                         } else {
-                            $message = Lang::get('lang.otp-not-matched');
+                            $message = trans('lang.otp-not-matched');
                         }
                     }
                 } else {
-                    $message = Lang::get('lang.otp-invalid');
+                    $message = trans('lang.otp-invalid');
                 }
             } else {
-                $message = Lang::get('lang.otp-not-matched');
+                $message = trans('lang.otp-not-matched');
             }
         }
 
@@ -587,7 +586,7 @@ class AuthController extends Controller
     public function resendOTP(OtpVerifyRequest $request)
     {
         if (!\Schema::hasTable('user_verification') || !\Schema::hasTable('sms')) {
-            $message = Lang::get('lang.opt-can-not-be-verified');
+            $message = trans('lang.opt-can-not-be-verified');
 
             return $message;
         } else {
@@ -597,7 +596,7 @@ class AuthController extends Controller
 
                 return 1;
             } else {
-                $message = Lang::get('lang.opt-can-not-be-verified');
+                $message = trans('lang.opt-can-not-be-verified');
 
                 return $message;
             }

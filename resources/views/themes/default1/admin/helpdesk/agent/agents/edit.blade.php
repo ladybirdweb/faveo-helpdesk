@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.staffs')}}</h1>
+<h1>{{trans('lang.staffs')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -36,7 +36,7 @@ class="active"
 <!-- <section class="content"> -->
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.edit_an_agent') !!}</h3>	
+        <h3 class="box-title">{!! trans('lang.edit_an_agent') !!}</h3>
     </div>
     <div class="box-body">
         @if(Session::has('errors'))
@@ -100,7 +100,7 @@ class="active"
             <!-- username -->
             <div class="col-xs-4 form-group {{ $errors->has('user_name') ? 'has-error' : '' }}">
 
-                {!! Form::label('user_name',Lang::get('lang.user_name')) !!} <span class="text-red"> *</span>
+                {!! Form::label('user_name',trans('lang.user_name')) !!} <span class="text-red"> *</span>
 
                 {!! Form::text('user_name',null,['class' => 'form-control']) !!}
 
@@ -109,7 +109,7 @@ class="active"
             <!-- firstname -->
             <div class="col-xs-4 form-group {{ $errors->has('first_name') ? 'has-error' : '' }}">
 
-                {!! Form::label('first_name',Lang::get('lang.first_name')) !!} <span class="text-red"> *</span>
+                {!! Form::label('first_name',trans('lang.first_name')) !!} <span class="text-red"> *</span>
 
                 {!! Form::text('first_name',null,['class' => 'form-control']) !!}
 
@@ -118,7 +118,7 @@ class="active"
             <!-- Lastname -->
             <div class="col-xs-4 form-group {{ $errors->has('last_name') ? 'has-error' : '' }}">
 
-                {!! Form::label('last_name',Lang::get('lang.last_name')) !!} <span class="text-red"> *</span>
+                {!! Form::label('last_name',trans('lang.last_name')) !!} <span class="text-red"> *</span>
 
                 {!! Form::text('last_name',null,['class' => 'form-control']) !!}
 
@@ -130,7 +130,7 @@ class="active"
             <!-- Email -->
             <div class="col-xs-4 form-group {{ $errors->has('email') ? 'has-error' : '' }}">
 
-                {!! Form::label('email',Lang::get('lang.email_address')) !!} <span class="text-red"> *</span>
+                {!! Form::label('email',trans('lang.email_address')) !!} <span class="text-red"> *</span>
 
                 {!! Form::email('email',null,['class' => 'form-control']) !!}
 
@@ -146,14 +146,14 @@ class="active"
             <!--country code-->
             <div class="col-xs-1 form-group {{ Session::has('country_code') ? 'has-error' : '' }}">
 
-                {!! Form::label('country_code',Lang::get('lang.country-code')) !!}
-                {!! Form::text('country_code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
+                {!! Form::label('country_code',trans('lang.country-code')) !!}
+                {!! Form::text('country_code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => trans('lang.enter-country-phone-code')]) !!}
 
             </div>
             <!-- phone -->
             <div class="col-xs-3 form-group {{ $errors->has('phone_number') ? 'has-error' : '' }}">
 
-                {!! Form::label('phone_number',Lang::get('lang.phone')) !!}
+                {!! Form::label('phone_number',trans('lang.phone')) !!}
 
                 {!! Form::text('phone_number',null,['class' => 'form-control']) !!}
 
@@ -162,7 +162,7 @@ class="active"
             <!-- Mobile -->
             <div class="col-xs-3 form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
 
-                {!! Form::label('mobile',Lang::get('lang.mobile_number')) !!}
+                {!! Form::label('mobile',trans('lang.mobile_number')) !!}
 
                 {!! Form::input('number', 'mobile',null,['class' => 'form-control']) !!}
 
@@ -172,7 +172,7 @@ class="active"
         <!-- Agent signature -->
         <div>
 
-            <h4>{{Lang::get('lang.agent_signature')}}</h4>
+            <h4>{{trans('lang.agent_signature')}}</h4>
 
         </div>
 
@@ -184,21 +184,21 @@ class="active"
 
 
         <div>
-            <h4>{{Lang::get('lang.account_status_setting')}}</h4>
+            <h4>{{trans('lang.account_status_setting')}}</h4>
         </div>
         <div class="row">
             <div class="col-xs-6">
                 <!-- acccount type -->
                 <div class="form-group {{ $errors->has('active') ? 'has-error' : '' }}">
 
-                    {!! Form::label('active',Lang::get('lang.status')) !!}
+                    {!! Form::label('active',trans('lang.status')) !!}
 
                     <div class="row">
                         <div class="col-xs-3">
-                            {!! Form::radio('active','1',true) !!} {{ Lang::get('lang.active') }}
+                            {!! Form::radio('active','1',true) !!} {{ trans('lang.active') }}
                         </div>
                         <div class="col-xs-3">
-                            {!! Form::radio('active','0',null) !!} {{Lang::get('lang.inactive')}}
+                            {!! Form::radio('active','0',null) !!} {{trans('lang.inactive')}}
                         </div>
                     </div>
 
@@ -206,14 +206,14 @@ class="active"
                 <!-- role -->
                 <div class="form-group {{ $errors->has('role') ? 'has-error' : '' }}">
 
-                    {!! Form::label('role',Lang::get('lang.role')) !!}
+                    {!! Form::label('role',trans('lang.role')) !!}
 
                     <div class="row">
                         <div class="col-xs-3">
-                            {!! Form::radio('role','admin',true) !!} {{Lang::get('lang.admin')}}
+                            {!! Form::radio('role','admin',true) !!} {{trans('lang.admin')}}
                         </div>
                         <div class="col-xs-3">
-                            {!! Form::radio('role','agent',null) !!} {{Lang::get('lang.agent')}}
+                            {!! Form::radio('role','agent',null) !!} {{trans('lang.agent')}}
                         </div>
                     </div>
                 </div>
@@ -224,7 +224,7 @@ class="active"
 
             {{-- <div> --}}
             {{-- <div class="row"> --}}
-            {{-- {!! Form::label('',Lang::get('lang.day_light_saving')) !!} --}}
+            {{-- {!! Form::label('',trans('lang.day_light_saving')) !!} --}}
             {{-- <div class="col-xs-2"> --}}
             {{-- {!! Form::checkbox('daylight_save',1,null,['class' => 'checkbox']) !!} --}}
             {{-- </div> --}}
@@ -234,7 +234,7 @@ class="active"
             <!-- limit access -->
             {{-- <div > --}}
             {{-- <div class="row"> --}}
-            {{-- {!! Form::label('limit_access',Lang::get('lang.limit_access')) !!} --}}
+            {{-- {!! Form::label('limit_access',trans('lang.limit_access')) !!} --}}
             {{-- <div class="col-xs-2"> --}}
             {{-- {!! Form::checkbox('limit_access',1,null,['class' => 'checkbox']) !!} --}}
             {{-- </div> --}}
@@ -244,7 +244,7 @@ class="active"
             <!-- directory listing -->
             {{-- <div> --}}
             {{-- <div class="row"> --}}
-            {{-- {!! Form::label('directory_listing',Lang::get('lang.directory_listing')) !!} --}}
+            {{-- {!! Form::label('directory_listing',trans('lang.directory_listing')) !!} --}}
             {{-- <div class="col-xs-2"> --}}
             {{-- {!! Form::checkbox('directory_listing',1,null,['class' => 'checkbox']) !!} --}}
             {{-- </div> --}}
@@ -254,7 +254,7 @@ class="active"
             <!-- vocation mode -->
             {{-- <div> --}}
             {{-- <div class="row"> --}}
-            {{-- {!! Form::label('vocation_mode',Lang::get('lang.vocation_mode')) !!} --}}
+            {{-- {!! Form::label('vocation_mode',trans('lang.vocation_mode')) !!} --}}
             {{-- <div class="col-xs-2"> --}}
             {{-- {!! Form::checkbox('vocation_mode',1,null,null,['class' => 'checkbox']) !!} --}}
             {{-- </div> --}}
@@ -265,29 +265,29 @@ class="active"
         <div class="row">
             <!-- assigned group -->
             <div class="col-xs-4 form-group {{ $errors->has('group') ? 'has-error' : '' }}">
-                {!! Form::label('assign_group', Lang::get('lang.assigned_group')) !!} <span class="text-red"> *</span>
+                {!! Form::label('assign_group', trans('lang.assigned_group')) !!} <span class="text-red"> *</span>
 
-                {!!Form::select('group',[''=>Lang::get('lang.select_a_group'), Lang::get('lang.groups')=>$groups->lists('name','id')->toArray()],$user->assign_group,['class' => 'form-control select']) !!}
+                {!!Form::select('group',[''=>trans('lang.select_a_group'), trans('lang.groups')=>$groups->lists('name','id')->toArray()],$user->assign_group,['class' => 'form-control select']) !!}
             </div>
 
             <!-- primary department -->
             <div class="col-xs-4 form-group {{ $errors->has('primary_department') ? 'has-error' : '' }}">
-                {!! Form::label('primary_dpt', Lang::get('lang.primary_department')) !!} <span class="text-red"> *</span>
+                {!! Form::label('primary_dpt', trans('lang.primary_department')) !!} <span class="text-red"> *</span>
 
-                {!!Form::select('primary_department', [''=>Lang::get('lang.select_a_department'), Lang::get('lang.departments')=>$departments->lists('name','id')->toArray()],$user->primary_dpt,['class' => 'form-control select']) !!}
+                {!!Form::select('primary_department', [''=>trans('lang.select_a_department'), trans('lang.departments')=>$departments->lists('name','id')->toArray()],$user->primary_dpt,['class' => 'form-control select']) !!}
             </div>
 
             <!-- agent timezone -->
             <div class="col-xs-4 form-group {{ $errors->has('agent_time_zone') ? 'has-error' : '' }}">
-                {!! Form::label('agent_tzone', Lang::get('lang.agent_time_zone')) !!} <span class="text-red"> *</span>
+                {!! Form::label('agent_tzone', trans('lang.agent_time_zone')) !!} <span class="text-red"> *</span>
 
-                {!!Form::select('agent_time_zone', [''=>Lang::get('lang.select_a_time_zone'), Lang::get('lang.time_zones')=>$timezones->lists('name','id')->toArray()],$user->agent_tzone,['class' => 'form-control select']) !!}
+                {!!Form::select('agent_time_zone', [''=>trans('lang.select_a_time_zone'), trans('lang.time_zones')=>$timezones->lists('name','id')->toArray()],$user->agent_tzone,['class' => 'form-control select']) !!}
             </div>
         </div>
 
         <!-- team -->
         <div class="{{ $errors->has('team') ? 'has-error' : '' }}">
-            {!! Form::label('agent_tzone',Lang::get('lang.assigned_team')) !!} <span class="text-red"> *</span>
+            {!! Form::label('agent_tzone',trans('lang.assigned_team')) !!} <span class="text-red"> *</span>
         </div>
         @while (list($key, $val) = each($teams))
         <div class="form-group ">
@@ -300,7 +300,7 @@ class="active"
         @endwhile
     </div>
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.update'),['class'=>'form-group btn btn-primary'])!!}
+        {!! Form::submit(trans('lang.update'),['class'=>'form-group btn btn-primary'])!!}
     </div>
 </div>
 {!!Form::close()!!}

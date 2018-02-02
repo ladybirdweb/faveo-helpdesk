@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.language') !!}</h1>
+<h1>{!! trans('lang.language') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -31,7 +31,7 @@ class="active"
 {!! Form::open(array('url'=>'language/add' , 'method' => 'post', 'files'=>true) )!!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.add-lang-package')}}</h3>
+        <h3 class="box-title">{{trans('lang.add-lang-package')}}</h3>
     </div>
     <div class="box-body">
         @if(Session::has('success'))
@@ -48,10 +48,10 @@ class="active"
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('fails')}}
             @if(Session::has('link'))
-            <a href="{{url(Session::get('link'))}}">{{Lang::get('lang.enable_lang')}}</a>
+            <a href="{{url(Session::get('link'))}}">{{trans('lang.enable_lang')}}</a>
             @endif
             @if(Session::has('link2'))
-            <a href="{{url(Session::get('link2'))}}" target="blank">{{Lang::get('lang.read-more')}}</a>
+            <a href="{{url(Session::get('link2'))}}" target="blank">{{trans('lang.read-more')}}</a>
             @endif
         </div>
         @endif
@@ -59,7 +59,7 @@ class="active"
         <?php //dd($errors); ?>
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <br/>
             @if($errors->first('language-name'))
@@ -76,25 +76,25 @@ class="active"
         <div class="row">
             <!-- username -->
             <div class="col-xs-4 form-group {{ $errors->has('language-name') ? 'has-error' : '' }}">
-                {!! Form::label('language-name',Lang::get('lang.language-name')) !!} <span class="text-red"> *</span>
+                {!! Form::label('language-name',trans('lang.language-name')) !!} <span class="text-red"> *</span>
                 {!! Form::text('language-name',null,['placeholder'=>'English','class' => 'form-control']) !!}
             </div>
             <div class="col-xs-4 form-group {{ $errors->has('iso-code') ? 'has-error' : '' }}">
-                {!! Form::label('iso-code',Lang::get('lang.iso-code')) !!} <span class="text-red"> *</span>
+                {!! Form::label('iso-code',trans('lang.iso-code')) !!} <span class="text-red"> *</span>
                 {!! Form::text('iso-code',null,['placeholder'=>'en','class' => 'form-control']) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-xs-4 form-group {{ $errors->has('File') ? 'has-error' : '' }}">
-                {!! Form::label('File',Lang::get('lang.file')) !!} <span class="text-red"> *</span>&nbsp
-                <div class="btn bg-olive btn-file" style="color:blue"> {!! Lang::get('lang.upload_file') !!}
+                {!! Form::label('File',trans('lang.file')) !!} <span class="text-red"> *</span>&nbsp
+                <div class="btn bg-olive btn-file" style="color:blue"> {!! trans('lang.upload_file') !!}
                     {!! Form::file('File') !!}
                 </div>
             </div>
         </div>
     </div>
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.submit'),['class'=>'form-group btn btn-primary'])!!}
+        {!! Form::submit(trans('lang.submit'),['class'=>'form-group btn btn-primary'])!!}
     </div>
 </div>
 @stop

@@ -40,7 +40,6 @@ use GeoIP;
 use Hash;
 use Illuminate\Http\Request;
 use Input;
-use Lang;
 use Redirect;
 
 /**
@@ -82,13 +81,13 @@ class UserController extends Controller
             /* get all values in Sys_user */
 
             $table = \ Datatable::table()
-            ->addColumn(Lang::get('lang.name'),
-                Lang::get('lang.email'),
-                Lang::get('lang.phone'),
-                Lang::get('lang.status'),
-                Lang::get('lang.last_login'),
-                Lang::get('lang.role'),
-                Lang::get('lang.action'))  // these are the column headings to be shown
+            ->addColumn(trans('lang.name'),
+                trans('lang.email'),
+                trans('lang.phone'),
+                trans('lang.status'),
+                trans('lang.last_login'),
+                trans('lang.role'),
+                trans('lang.action'))  // these are the column headings to be shown
                 ->noScript();
 
             return view('themes.default1.agent.helpdesk.user.index', compact('table'));
@@ -213,18 +212,18 @@ class UserController extends Controller
                         /* column actions */
                         ->addColumn('Actions', function ($model) {
                             if ($model->is_delete == 0) {
-                                return '<a href="'.route('user.edit', $model->id).'" class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp; <a href="'.route('user.show', $model->id).'" class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>';
+                                return '<a href="'.route('user.edit', $model->id).'" class="btn btn-warning btn-xs">'.trans('lang.edit').'</a>&nbsp; <a href="'.route('user.show', $model->id).'" class="btn btn-primary btn-xs">'.trans('lang.view').'</a>';
                             } else {
                                 if (Auth::user()->role == 'admin') {
                                     // @if(Auth::user()->role == 'admin')
 
-                                    return '<a href="'.route('user.show', $model->id).'" class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>';
+                                    return '<a href="'.route('user.show', $model->id).'" class="btn btn-primary btn-xs">'.trans('lang.view').'</a>';
                                 }
 
                                 if (Auth::user()->role == 'agent') {
                                     // @if(Auth::user()->role == 'admin')
                                     if ($model->role == 'user') {
-                                        return '<a href="'.route('user.show', $model->id).'" class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>';
+                                        return '<a href="'.route('user.show', $model->id).'" class="btn btn-primary btn-xs">'.trans('lang.view').'</a>';
                                     }
                                 }
                             }
@@ -242,7 +241,7 @@ class UserController extends Controller
         $users->ban = 0;
         $users->save();
 
-        return redirect('user')->with('success', Lang::get('lang.user_restore_successfully'));
+        return redirect('user')->with('success', trans('lang.user_restore_successfully'));
     }
 
     /**
@@ -301,11 +300,11 @@ class UserController extends Controller
 
         try {
             if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
-                return redirect()->back()->with(['fails' => Lang::get('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
+                return redirect()->back()->with(['fails' => trans('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
             } else {
                 $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
                 if (!count($code)) {
-                    return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
+                    return redirect()->back()->with(['fails' => trans('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
                 }
             }
             // save user credentails
@@ -323,7 +322,7 @@ class UserController extends Controller
                         $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => null, 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
                     } catch (Exception $e) {
                         // returns if try fails
-                        return redirect('user')->with('warning', Lang::get('lang.user_send_mail_error_on_user_creation'));
+                        return redirect('user')->with('warning', trans('lang.user_send_mail_error_on_user_creation'));
                     }
                 }
                 // returns for the success case
@@ -333,11 +332,11 @@ class UserController extends Controller
                     \Event::fire(new \App\Events\LoginEvent($request));
                 }
 
-                return redirect('user')->with('success', Lang::get('lang.User-Created-Successfully'));
+                return redirect('user')->with('success', trans('lang.User-Created-Successfully'));
             }
 //            $user->save();
             /* redirect to Index page with Success Message */
-            return redirect('user')->with('success', Lang::get('lang.User-Created-Successfully'));
+            return redirect('user')->with('success', trans('lang.User-Created-Successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
             return redirect('user')->with('fails', $e->getMessage());
@@ -392,7 +391,7 @@ class UserController extends Controller
             $this->PhpMailController->sendmail($from = $this->PhpMailController
                     ->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => null, 'scenario' => 'reset_new_password'], $template_variables = ['user' => $name, 'user_password' => $password]);
 
-            return redirect('user')->with('success', Lang::get('lang.password_change_successfully'));
+            return redirect('user')->with('success', trans('lang.password_change_successfully'));
         } catch (Exception $e) {
             return redirect('user')->with('fails', $e->getMessage());
         }
@@ -413,7 +412,7 @@ class UserController extends Controller
             $user->primary_dpt = $request->primary_department;
             $user->save();
 
-            return redirect('user')->with('success', Lang::get('lang.role_change_successfully'));
+            return redirect('user')->with('success', trans('lang.role_change_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
             return redirect('user')->with('fails', $e->getMessage());
@@ -435,7 +434,7 @@ class UserController extends Controller
             $user->primary_dpt = $request->primary_department;
             $user->save();
 
-            return redirect('user')->with('success', Lang::get('lang.role_change_successfully'));
+            return redirect('user')->with('success', trans('lang.role_change_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
             return redirect('user')->with('fails', $e->getMessage());
@@ -461,7 +460,7 @@ class UserController extends Controller
             $user->remember_token = null;
             $user->save();
 
-            return redirect('user')->with('success', Lang::get('lang.role_change_successfully'));
+            return redirect('user')->with('success', trans('lang.role_change_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
             return redirect('user')->with('fails', $e->getMessage());
@@ -488,7 +487,7 @@ class UserController extends Controller
             $users->ban = 1;
             $users->save();
 
-            return redirect('user')->with('success', Lang::get('lang.user_delete_successfully'));
+            return redirect('user')->with('success', trans('lang.user_delete_successfully'));
         }
         // }
 
@@ -499,7 +498,7 @@ class UserController extends Controller
                 $ticket = Tickets::where('assigned_to', '=', $id)->get();
                 if ($assign_to[0] == 'user') {
                     if ($users->id == $assign_to[1]) {
-                        return redirect('user')->with('warning', Lang::get('lang.select_another_agent'));
+                        return redirect('user')->with('warning', trans('lang.select_another_agent'));
                     }
                     // $user_detail = User::where('id', '=', $assign_to[1])->first();
                     // $assignee = $user_detail->first_name.' '.$user_detail->last_name;
@@ -546,7 +545,7 @@ class UserController extends Controller
                     $users->ban = 1;
                     $users->save();
 
-                    return redirect('user')->with('success', Lang::get('lang.agent_delete_successfully_and_ticket_assign_to_another_agent'));
+                    return redirect('user')->with('success', trans('lang.agent_delete_successfully_and_ticket_assign_to_another_agent'));
                 }
 
                 // if (User_org::where('user_id', '=', $id)) {
@@ -558,7 +557,7 @@ class UserController extends Controller
                 $users->ban = 1;
                 $users->save();
 
-                return redirect('user')->with('success', Lang::get('lang.agent_delete_successfully'));
+                return redirect('user')->with('success', trans('lang.agent_delete_successfully'));
             } elseif ($delete_all == 1) {
                 if ($delete_all) {
                     // dd('here');
@@ -582,7 +581,7 @@ class UserController extends Controller
                     $users->active = 0;
                     $users->save();
 
-                    return redirect('user')->with('success', Lang::get('lang.agent_delete_successfully'));
+                    return redirect('user')->with('success', trans('lang.agent_delete_successfully'));
                 } else {
                     // Assign_team_agent::where('agent_id', '=', $id)->delete();
                     // User_org::where('user_id', '=', $id)->delete();
@@ -591,7 +590,7 @@ class UserController extends Controller
                     $users->active = 0;
                     $users->save();
 
-                    return redirect('user')->with('success', Lang::get('lang.agent_delete_successfully'));
+                    return redirect('user')->with('success', trans('lang.agent_delete_successfully'));
                 }
             } else {
             }
@@ -617,7 +616,7 @@ class UserController extends Controller
             if (count($users) > 0) {
                 return view('themes.default1.agent.helpdesk.user.show', compact('users'));
             } else {
-                return redirect()->back()->with('fails', Lang::get('lang.user-not-found'));
+                return redirect()->back()->with('fails', trans('lang.user-not-found'));
             }
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -676,11 +675,11 @@ class UserController extends Controller
         /* Check whether function success or not */
         try {
             if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
-                return redirect()->back()->with(['fails' => Lang::get('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
+                return redirect()->back()->with(['fails' => trans('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
             } else {
                 $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
                 if (!count($code)) {
-                    return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
+                    return redirect()->back()->with(['fails' => trans('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
                 } else {
                     $users->country_code = $request->country_code;
                 }
@@ -694,7 +693,7 @@ class UserController extends Controller
                 $this->storeUserOrgRelation($id, $orgid);
             }
             /* redirect to Index page with Success Message */
-            return redirect('user')->with('success', Lang::get('lang.User-profile-Updated-Successfully'));
+            return redirect('user')->with('success', trans('lang.User-profile-Updated-Successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
             return redirect()->back()->with('fails', $e->getMessage());
@@ -753,11 +752,11 @@ class UserController extends Controller
             // geet authenticated user details
             $user = Auth::user();
             if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
-                return redirect()->back()->with(['fails' => Lang::get('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
+                return redirect()->back()->with(['fails' => trans('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
             } else {
                 $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
                 if (!count($code)) {
-                    return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
+                    return redirect()->back()->with(['fails' => trans('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
                 }
                 $user->country_code = $request->country_code;
             }
@@ -784,9 +783,9 @@ class UserController extends Controller
                 $user->mobile = null;
             }
             if ($user->save()) {
-                return Redirect::route('profile')->with('success', Lang::get('lang.Profile-Updated-sucessfully'));
+                return Redirect::route('profile')->with('success', trans('lang.Profile-Updated-sucessfully'));
             } else {
-                return Redirect::route('profile')->with('fails', Lang::get('lang.Profile-Updated-sucessfully'));
+                return Redirect::route('profile')->with('fails', trans('lang.Profile-Updated-sucessfully'));
             }
         } catch (Exception $e) {
             return Redirect::route('profile')->with('fails', $e->getMessage());
@@ -812,12 +811,12 @@ class UserController extends Controller
             try {
                 $user->save();
 
-                return redirect('profile-edit')->with('success1', Lang::get('lang.password_updated_sucessfully'));
+                return redirect('profile-edit')->with('success1', trans('lang.password_updated_sucessfully'));
             } catch (Exception $e) {
                 return redirect('profile-edit')->with('fails', $e->getMessage());
             }
         } else {
-            return redirect('profile-edit')->with('fails1', Lang::get('lang.password_was_not_updated_incorrect_old_password'));
+            return redirect('profile-edit')->with('fails1', trans('lang.password_was_not_updated_incorrect_old_password'));
         }
     }
 
@@ -886,7 +885,7 @@ class UserController extends Controller
         $user_org = User_org::where('org_id', '=', $id)->first();
         $user_org->delete();
 
-        return redirect()->back()->with('success1', Lang::get('lang.the_user_has_been_removed_from_this_organization'));
+        return redirect()->back()->with('success1', trans('lang.the_user_has_been_removed_from_this_organization'));
     }
 
     /**
@@ -1049,7 +1048,7 @@ class UserController extends Controller
                 $time2 = new DateTime($date1);
                 $interval = $time1->diff($time2);
                 if ($interval->i > 10 || $interval->h > 0) {
-                    $message = Lang::get('lang.otp-expired');
+                    $message = trans('lang.otp-expired');
 
                     return $message;
                 } else {
@@ -1061,18 +1060,18 @@ class UserController extends Controller
                         // $this->openTicketAfterVerification($user->id);
                         return 1;
                     } else {
-                        $message = Lang::get('lang.otp-not-matched');
+                        $message = trans('lang.otp-not-matched');
 
                         return $message;
                     }
                 }
             } else {
-                $message = Lang::get('lang.otp-invalid');
+                $message = trans('lang.otp-invalid');
 
                 return $message;
             }
         } else {
-            $message = Lang::get('lang.otp-not-matched');
+            $message = trans('lang.otp-not-matched');
 
             return $message;
         }

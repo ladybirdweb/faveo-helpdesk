@@ -27,7 +27,6 @@ use Form;
 use GeoIP;
 use Illuminate\Http\Request;
 use Input;
-use Lang;
 use Redirect;
 
 /**
@@ -203,7 +202,7 @@ class FormController extends Controller
                 $geoipcode = $code->where('iso', '=', $location->iso_code)->first();
                 if ($phonecode == null) {
                     $data = [
-                        'fails'              => Lang::get('lang.country-code-required-error'),
+                        'fails'              => trans('lang.country-code-required-error'),
                         'phonecode'          => $geoipcode->phonecode,
                         'country_code_error' => 1,
                     ];
@@ -213,7 +212,7 @@ class FormController extends Controller
                     $code = CountryCode::select('phonecode')->where('phonecode', '=', $phonecode)->get();
                     if (!count($code)) {
                         $data = [
-                            'fails'              => Lang::get('lang.incorrect-country-code-error'),
+                            'fails'              => trans('lang.incorrect-country-code-error'),
                             'phonecode'          => $geoipcode->phonecode,
                             'country_code_error' => 1,
                         ];
@@ -243,9 +242,9 @@ class FormController extends Controller
 //                    }
                 }
                 // dd($result);
-                return Redirect::back()->with('success', Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is').' '.$result[0].'. '.Lang::get('lang.Please-save-this-for-future-reference'));
+                return Redirect::back()->with('success', trans('lang.Ticket-has-been-created-successfully-your-ticket-number-is').' '.$result[0].'. '.trans('lang.Please-save-this-for-future-reference'));
             } else {
-                return Redirect::back()->withInput($request->except('password'))->with('fails', Lang::get('lang.failed-to-create-user-tcket-as-mobile-has-been-taken'));
+                return Redirect::back()->withInput($request->except('password'))->with('fails', trans('lang.failed-to-create-user-tcket-as-mobile-has-been-taken'));
             }
         } catch (\Exception $ex) {
             dd($ex);
@@ -294,9 +293,9 @@ class FormController extends Controller
 
                 $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response);
 
-                return \Redirect::back()->with('success1', Lang::get('lang.successfully_replied'));
+                return \Redirect::back()->with('success1', trans('lang.successfully_replied'));
             } else {
-                return \Redirect::back()->with('fails1', Lang::get('lang.please_fill_some_data'));
+                return \Redirect::back()->with('fails1', trans('lang.please_fill_some_data'));
             }
         } catch (Exception $e) {
             return \Redirect::back()->with('fails1', $e->getMessage());

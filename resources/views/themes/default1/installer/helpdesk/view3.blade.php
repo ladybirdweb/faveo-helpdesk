@@ -21,7 +21,7 @@ active
     <div class="wc-setup-content">
         <div class="woocommerce-message woocommerce-tracker">
             <div class="fail">
-                <span id="fail">{!! Lang::get('lang.fails') !!}! {{Cache::get('fails')}}</span><br/><br/>
+                <span id="fail">{!! trans('lang.fails') !!}! {{Cache::get('fails')}}</span><br/><br/>
             </div>
         </div>        
     </div>  

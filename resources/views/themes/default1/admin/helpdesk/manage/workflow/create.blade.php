@@ -17,15 +17,15 @@ class="active"
 
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.create_workflow') !!}</h1>
+<h1>{!! trans('lang.create_workflow') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
 @section('breadcrumbs')
 <ol class="breadcrumb">
-    <li><a href="{!! URL::route('setting') !!}"><i class="fa fa-dashboard"></i> {!! Lang::get('lang.home') !!}</a></li>
-    <li><a href="{!! URL::route('workflow') !!}">{!! Lang::get('lang.ticket_workflow') !!}</a></li>
-    <li class="active"><a href="{!! URL::route('workflow.create') !!}">{!! Lang::get('lang.create_workflow') !!}</a></li>
+    <li><a href="{!! URL::route('setting') !!}"><i class="fa fa-dashboard"></i> {!! trans('lang.home') !!}</a></li>
+    <li><a href="{!! URL::route('workflow') !!}">{!! trans('lang.ticket_workflow') !!}</a></li>
+    <li class="active"><a href="{!! URL::route('workflow.create') !!}">{!! trans('lang.create_workflow') !!}</a></li>
 </ol>
 @stop
 <!-- /breadcrumbs -->
@@ -48,7 +48,7 @@ class="active"
             @if(Session::has('fails'))
             <div class="alert alert-danger alert-dismissable">
                 <i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <b>{!! Lang::get('lang.alert') !!} !</b><br>
+                <b>{!! trans('lang.alert') !!} !</b><br>
                 <li class="error-message-padding">{!! Session::get('fails') !!}</li>
             </div>
             @endif
@@ -76,30 +76,30 @@ class="active"
             </div>
             @endif
             <div class="form-group {!! $errors->has('name') ? 'has-error' : '' !!}">
-                <label for="inputName" class="col-sm-2 control-label">{!! Lang::get('lang.name') !!} <span class="text-red"> *</span></label>
+                <label for="inputName" class="col-sm-2 control-label">{!! trans('lang.name') !!} <span class="text-red"> *</span></label>
                 <div class="col-sm-6">
-                    {!! Form::text('name',null,['class' => 'form-control', 'placeholder' => Lang::get('lang.name'), 'id' => 'name']) !!}
+                    {!! Form::text('name',null,['class' => 'form-control', 'placeholder' => trans('lang.name'), 'id' => 'name']) !!}
                 </div>
             </div>
             <div class="form-group {!! $errors->has('status') ? 'has-error' : '' !!}">
-                <label class="col-sm-2 control-label"> {!! Lang::get('lang.status') !!}</label>
+                <label class="col-sm-2 control-label"> {!! trans('lang.status') !!}</label>
                 <div class="col-sm-6">
-                    <input type="radio" id="inputEmail2" name="status" value="1" >&nbsp;&nbsp;<label class="control-label" for="inputEmail2">{!! Lang::get('lang.active') !!}</label>&nbsp;&nbsp;
-                    <input type="radio" id="inputEmail1" name="status" value="0" checked>&nbsp;&nbsp;<label class="control-label" for="inputEmail1">{!! Lang::get('lang.inactive') !!}</label>&nbsp;&nbsp;
+                    <input type="radio" id="inputEmail2" name="status" value="1" >&nbsp;&nbsp;<label class="control-label" for="inputEmail2">{!! trans('lang.active') !!}</label>&nbsp;&nbsp;
+                    <input type="radio" id="inputEmail1" name="status" value="0" checked>&nbsp;&nbsp;<label class="control-label" for="inputEmail1">{!! trans('lang.inactive') !!}</label>&nbsp;&nbsp;
                 </div>
             </div>
             <div class="form-group {!! $errors->has('execution_order') ? 'has-error' : '' !!}">
                 <div>
-                    <label for="Exceution" class="col-sm-2 control-label">{!! Lang::get('lang.execution_order') !!} <span class="text-red"> *</span></label>
+                    <label for="Exceution" class="col-sm-2 control-label">{!! trans('lang.execution_order') !!} <span class="text-red"> *</span></label>
                     <div class="col-sm-6">
-                        {!! Form::input('number', 'execution_order',null,['class' => 'form-control', 'placeholder' => Lang::get('lang.execution_order'), 'id' => 'execution_order', 'min' => '0']) !!}
+                        {!! Form::input('number', 'execution_order',null,['class' => 'form-control', 'placeholder' => trans('lang.execution_order'), 'id' => 'execution_order', 'min' => '0']) !!}
                     </div>
                 </div>
             </div>
             <div class="form-group {!! $errors->has('target_channel') ? 'has-error' : '' !!}">
-                <label class="col-sm-2 control-label">{!! Lang::get('lang.target_channel') !!} <span class="text-red"> *</span></label>
+                <label class="col-sm-2 control-label">{!! trans('lang.target_channel') !!} <span class="text-red"> *</span></label>
                 <div class="col-sm-6">
-                    {!! Form::select('target_channel', [''=> '-- '.Lang::get('lang.select_a_channel').' --', 'A-0' => 'Any', 'A-1' => 'Web Forms', 'A-4' => 'API Calls', 'A-2' => 'Emails'], null,['class' => 'form-control', 'id' => 'execution_order']) !!}
+                    {!! Form::select('target_channel', [''=> '-- '.trans('lang.select_a_channel').' --', 'A-0' => 'Any', 'A-1' => 'Web Forms', 'A-4' => 'API Calls', 'A-2' => 'Emails'], null,['class' => 'form-control', 'id' => 'execution_order']) !!}
                 </div>
             </div>
         </div>
@@ -108,11 +108,11 @@ class="active"
         <div class="col-xs-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#open" data-toggle="tab">{!! Lang::get('lang.workflow_rules') !!} <span class="text-red"> *</span></a>
+                    <li class="active"><a href="#open" data-toggle="tab">{!! trans('lang.workflow_rules') !!} <span class="text-red"> *</span></a>
                     </li>
-                    <li><a href="#close" data-toggle="tab">{!! Lang::get('lang.workflow_action') !!} <span class="text-red"> *</span></a>
+                    <li><a href="#close" data-toggle="tab">{!! trans('lang.workflow_action') !!} <span class="text-red"> *</span></a>
                     </li>
-                    <li><a href="#delect" data-toggle="tab">{!! Lang::get('lang.internal_notes') !!} </a>
+                    <li><a href="#delect" data-toggle="tab">{!! trans('lang.internal_notes') !!} </a>
                     </li>
                 </ul>
                 <div class="tab-content">
@@ -124,32 +124,32 @@ class="active"
                                     <table  class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <td>{!! Lang::get('lang.rules') !!} <span class="text-red"> *</span></td>
-                                                <td>{!! Lang::get('lang.condition') !!} <span class="text-red"> *</span></td>
-                                                <td>{!! Lang::get('lang.statement') !!} <span class="text-red"> *</span></td>
-                                                <td>{!! Lang::get('lang.action') !!}</td>
+                                                <td>{!! trans('lang.rules') !!} <span class="text-red"> *</span></td>
+                                                <td>{!! trans('lang.condition') !!} <span class="text-red"> *</span></td>
+                                                <td>{!! trans('lang.statement') !!} <span class="text-red"> *</span></td>
+                                                <td>{!! trans('lang.action') !!}</td>
                                             </tr>
                                         </thead>
                                         <tbody class="button1">
                                             <tr id="firstdata">
                                                 <td>
                                                     <select class="form-control" name="rule[0][a]" required>
-                                                        <option value="">-- {!! Lang::get('lang.select_one') !!} --</option>
-                                                        <option value="email">{!! Lang::get('lang.email') !!}</option>
-                                                        <option value="email_name">{!! Lang::get('lang.email_name') !!}</option>
-                                                        <option value="subject">{!! Lang::get('lang.subject') !!}</option>
-                                                        <option value="message">{!! Lang::get('lang.message') !!}/{!! Lang::get('lang.body') !!}</option>
+                                                        <option value="">-- {!! trans('lang.select_one') !!} --</option>
+                                                        <option value="email">{!! trans('lang.email') !!}</option>
+                                                        <option value="email_name">{!! trans('lang.email_name') !!}</option>
+                                                        <option value="subject">{!! trans('lang.subject') !!}</option>
+                                                        <option value="message">{!! trans('lang.message') !!}/{!! trans('lang.body') !!}</option>
                                                     </select>
                                                 </td>
                                                 <td class="col-md-3">
                                                     <select class="form-control" name="rule[0][b]" required>
-                                                        <option value="">-- {!! Lang::get('lang.select_one') !!} --</option>
-                                                        <option value="equal">{!! Lang::get('lang.equal_to') !!}</option>
-                                                        <option value="not_equal">{!! Lang::get('lang.not_equal_to') !!}</option>
-                                                        <option value="contains">{!! Lang::get('lang.contains') !!}</option>
-                                                        <option value="dn_contain">{!! Lang::get('lang.does_not_contain') !!}</option>
-                                                        <option value="starts">{!! Lang::get('lang.starts_with') !!}</option>
-                                                        <option value="ends">{!! Lang::get('lang.ends_with') !!}</option>
+                                                        <option value="">-- {!! trans('lang.select_one') !!} --</option>
+                                                        <option value="equal">{!! trans('lang.equal_to') !!}</option>
+                                                        <option value="not_equal">{!! trans('lang.not_equal_to') !!}</option>
+                                                        <option value="contains">{!! trans('lang.contains') !!}</option>
+                                                        <option value="dn_contain">{!! trans('lang.does_not_contain') !!}</option>
+                                                        <option value="starts">{!! trans('lang.starts_with') !!}</option>
+                                                        <option value="ends">{!! trans('lang.ends_with') !!}</option>
                                                         <!--                                                        <option value="match">Match Regular Expressions</option>
                                                                                                                 <option value="not_match">Does not match Regular Expression</option>-->
                                                     </select>
@@ -160,7 +160,7 @@ class="active"
                                                 <td style="text-align: center">
                                                     <div class="tools"> 
                                                         <span class="btnRemove1" data-toggle="modal" data-target="#">
-                                                            <a data-toggle="tooltip" data-placement="top" title="{!! Lang::get('lang.delete') !!}" onclick="document.getElementById('firstdata').innerHTML = ''">
+                                                            <a data-toggle="tooltip" data-placement="top" title="{!! trans('lang.delete') !!}" onclick="document.getElementById('firstdata').innerHTML = ''">
                                                                 <i class="fa fa-trash-o"></i>
                                                             </a>
                                                         </span> 
@@ -171,7 +171,7 @@ class="active"
                                     </table>
                                     <div class="row" style="padding: 10px 15px 0px">
                                         <div class="pull-right" >
-                                            <a class="btn btn-primary btnAdd1">{!! Lang::get('lang.add') !!}</a>
+                                            <a class="btn btn-primary btnAdd1">{!! trans('lang.add') !!}</a>
                                         </div>
                                     </div>
                                 </div>
@@ -188,25 +188,25 @@ class="active"
                                 <table  class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <td>{!! Lang::get('lang.condition') !!} <span class="text-red"> *</span></td>
-                                            <td>{!! Lang::get('lang.rules') !!} <span class="text-red"> *</span></td>
-                                            <td>{!! Lang::get('lang.action') !!}</td>
+                                            <td>{!! trans('lang.condition') !!} <span class="text-red"> *</span></td>
+                                            <td>{!! trans('lang.rules') !!} <span class="text-red"> *</span></td>
+                                            <td>{!! trans('lang.action') !!}</td>
                                         </tr>
                                     </thead>
                                     <tbody class="buttons">
                                         <tr id="firstdata1">
                                             <td>
                                                 <select class="form-control" onChange="selectdata(0)" id="selected0" name="action[0][a]" required>
-                                                    <option value="">-- {!! Lang::get('lang.select_an_action') !!} --</option>
+                                                    <option value="">-- {!! trans('lang.select_an_action') !!} --</option>
                                                     <optgroup label="Ticket">
-                                                        <option value="reject">{!! Lang::get('lang.reject_ticket') !!}</option>                        
-                                                        <option value="department">{!! Lang::get('lang.set_department') !!}</option>
-                                                        <option value="priority">{!! Lang::get('lang.set_priority') !!}</option>
-                                                        <option value="sla">{!! Lang::get('lang.set_sla_plan') !!}</option>
-                                                        <option value="team">{!! Lang::get('lang.assign_team') !!}</option>
-                                                        <option value="agent">{!! Lang::get('lang.assign_agent') !!}</option>
-                                                        <option value="helptopic">{!! Lang::get('lang.set_help_topic') !!}</option>
-                                                        <option value="status">{!! Lang::get('lang.set_ticket_status') !!}</option>
+                                                        <option value="reject">{!! trans('lang.reject_ticket') !!}</option>
+                                                        <option value="department">{!! trans('lang.set_department') !!}</option>
+                                                        <option value="priority">{!! trans('lang.set_priority') !!}</option>
+                                                        <option value="sla">{!! trans('lang.set_sla_plan') !!}</option>
+                                                        <option value="team">{!! trans('lang.assign_team') !!}</option>
+                                                        <option value="agent">{!! trans('lang.assign_agent') !!}</option>
+                                                        <option value="helptopic">{!! trans('lang.set_help_topic') !!}</option>
+                                                        <option value="status">{!! trans('lang.set_ticket_status') !!}</option>
                                                     </optgroup> 
                                                 </select>
                                             </td>
@@ -215,7 +215,7 @@ class="active"
                                             <td style="text-align: center">
                                                 <div class="tools"> 
                                                     <span class="btnRemove" data-toggle="modal" data-target="#">
-                                                        <a data-toggle="tooltip" data-placement="top" title="{!! Lang::get('lang.delete') !!}" onclick="document.getElementById('firstdata1').innerHTML = ''">
+                                                        <a data-toggle="tooltip" data-placement="top" title="{!! trans('lang.delete') !!}" onclick="document.getElementById('firstdata1').innerHTML = ''">
                                                             <i class="fa fa-trash-o"></i>
                                                         </a>
                                                     </span> 
@@ -226,7 +226,7 @@ class="active"
                                 </table>
                                 <div class="row" style="padding: 10px 15px 0px">
                                     <div class="pull-right">
-                                        <a class="btn btn-primary btnAdd">{!! Lang::get('lang.add') !!}</a>                                            
+                                        <a class="btn btn-primary btnAdd">{!! trans('lang.add') !!}</a>
                                     </div>
                                 </div>
                             </div>
@@ -245,7 +245,7 @@ class="active"
                 </div>
                 <!-- /.tab-content -->
                 <div class="box-footer">
-                    <input type="submit" class="btn btn-primary" value="{!! Lang::get('lang.submit') !!}">
+                    <input type="submit" class="btn btn-primary" value="{!! trans('lang.submit') !!}">
                 </div>
             </div>
             <!-- /.nav-tabs-custom -->
@@ -287,16 +287,16 @@ class="active"
             $('.buttons').append('<tr id="firstdata1">' +
                     '<td>' +
                     '<select class="form-control" onChange="selectdata(' + n + ')" name="action[' + n + '][a]" id="selected' + n + '" required>' +
-                    '<option value="">-- {!! Lang::get("lang.select_an_action") !!} --</option>' +
+                    '<option value="">-- {!! trans("lang.select_an_action") !!} --</option>' +
                     '<optgroup label="Ticket">' +
-                    '<option value="reject">{!! Lang::get("lang.reject_ticket") !!} </option>' +
-                    '<option value="department">{!! Lang::get("lang.set_department") !!} </option>' +
-                    '<option value="priority">{!! Lang::get("lang.set_priority") !!} </option>' +
-                    '<option value="sla">{!! Lang::get("lang.set_sla_plan") !!}  </option>' +
-                    '<option value="team">{!! Lang::get("lang.assign_team") !!} </option>' +
-                    '<option value="agent">{!! Lang::get("lang.assign_agent") !!} </option>' +
-                    '<option value="helptopic">{!! Lang::get("lang.set_help_topic") !!}  </option>' +
-                    '<option value="status">{!! Lang::get("lang.set_ticket_status") !!}  </option>' +
+                    '<option value="reject">{!! trans("lang.reject_ticket") !!} </option>' +
+                    '<option value="department">{!! trans("lang.set_department") !!} </option>' +
+                    '<option value="priority">{!! trans("lang.set_priority") !!} </option>' +
+                    '<option value="sla">{!! trans("lang.set_sla_plan") !!}  </option>' +
+                    '<option value="team">{!! trans("lang.assign_team") !!} </option>' +
+                    '<option value="agent">{!! trans("lang.assign_agent") !!} </option>' +
+                    '<option value="helptopic">{!! trans("lang.set_help_topic") !!}  </option>' +
+                    '<option value="status">{!! trans("lang.set_ticket_status") !!}  </option>' +
                     '</select>' +
                     '</td>' +
                     '<td id="fill' + n + '">' +
@@ -327,22 +327,22 @@ class="active"
             $('.button1').append('<tr>' +
                     '<td>' +
                     '<select class="form-control" name="rule[' + n + '][a]" required>' +
-                    '<option>-- {!! Lang::get("lang.select_one") !!} --</option>' +
-                    '<option value="email">{!! Lang::get("lang.email") !!}</option>' +
-                    '<option value="email_name">{!! Lang::get("lang.email_name") !!}</option>' +
-                    '<option value="subject">{!! Lang::get("lang.subject") !!}</option>' +
-                    '<option value="message">{!! Lang::get("lang.message") !!}/{!! Lang::get("lang.body") !!}</option>' +
+                    '<option>-- {!! trans("lang.select_one") !!} --</option>' +
+                    '<option value="email">{!! trans("lang.email") !!}</option>' +
+                    '<option value="email_name">{!! trans("lang.email_name") !!}</option>' +
+                    '<option value="subject">{!! trans("lang.subject") !!}</option>' +
+                    '<option value="message">{!! trans("lang.message") !!}/{!! trans("lang.body") !!}</option>' +
                     '</select>' +
                     '</td>' +
                     '<td class="col-md-3">' +
                     '<select class="form-control" name="rule[' + n + '][b]" required>' +
-                    '<option value="">-- {!! Lang::get("lang.select_one") !!} --</option>' +
-                    '<option value="equal">{!! Lang::get("lang.equal_to") !!}</option>' +
-                    '<option value="not_equal">{!! Lang::get("lang.not_equal_to") !!}</option>' +
-                    '<option value="contains">{!! Lang::get("lang.contains") !!}</option>' +
-                    '<option value="dn_contain">{!! Lang::get("lang.does_not_contain") !!}</option>' +
-                    '<option value="starts">{!! Lang::get("lang.starts_with") !!}</option>' +
-                    '<option value="ends">{!! Lang::get("lang.ends_with") !!}</option>' +
+                    '<option value="">-- {!! trans("lang.select_one") !!} --</option>' +
+                    '<option value="equal">{!! trans("lang.equal_to") !!}</option>' +
+                    '<option value="not_equal">{!! trans("lang.not_equal_to") !!}</option>' +
+                    '<option value="contains">{!! trans("lang.contains") !!}</option>' +
+                    '<option value="dn_contain">{!! trans("lang.does_not_contain") !!}</option>' +
+                    '<option value="starts">{!! trans("lang.starts_with") !!}</option>' +
+                    '<option value="ends">{!! trans("lang.ends_with") !!}</option>' +
                     '</select>' +
                     '</td>' +
                     '<td class="col-md-3"> <input class="form-control" type="text" name="rule[' + n + '][c]" required> </td>' +

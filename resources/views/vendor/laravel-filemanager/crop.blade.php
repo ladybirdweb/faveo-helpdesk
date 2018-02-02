@@ -9,8 +9,8 @@
 
             <div class="img-preview center-block"></div>
             <br>
-            <button class="btn btn-primary" onclick="performCrop()">{{ Lang::get('laravel-filemanager::lfm.btn-crop') }}</button>
-            <button class="btn btn-info" onclick="loadItems()">{{ Lang::get('laravel-filemanager::lfm.btn-cancel') }}</button>
+            <button class="btn btn-primary" onclick="performCrop()">{{ trans('laravel-filemanager::lfm.btn-crop') }}</button>
+            <button class="btn btn-info" onclick="loadItems()">{{ trans('laravel-filemanager::lfm.btn-cancel') }}</button>
             <form action="{{url('/laravel-filemanager/crop')}}" role='form' name='cropForm' id='cropForm' mathod='post'>
                 <input type="hidden" id="img" name="img" value="{{ $img }}">
                 <input type="hidden" id="working_dir" name="working_dir" value="{{ $working_dir }}">

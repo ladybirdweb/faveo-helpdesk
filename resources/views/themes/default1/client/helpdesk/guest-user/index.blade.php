@@ -16,8 +16,8 @@
 @section('breadcrumb')
     <div class="site-hero clearfix">
         <ol class="breadcrumb breadcrumb-custom">
-            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
-            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.home') !!}</a></li>
+            <li class="text">{!! trans('lang.you_are_here') !!}: </li>
+            <li><a href="{!! URL::route('/') !!}">{!! trans('lang.home') !!}</a></li>
         </ol>
     </div>
 @stop
@@ -25,7 +25,7 @@
 @if(!Session::has('error') && count($errors)>0)
     <div class="alert alert-danger alert-dismissable">
         <i class="fa fa-ban"></i>
-        <b>{!! Lang::get('lang.alert') !!} !</b>
+        <b>{!! trans('lang.alert') !!} !</b>
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <ul>
             @foreach ($errors->all() as $error)
@@ -41,7 +41,7 @@
         @else
             <span onclick="javascript: window.location.href='{{url('auth/register')}}';">
                 <a href="{{url('auth/register')}}" class="widgetrowitem defaultwidget" style="background-image: URL('lb-faveo/media/images/register.png');">
-                    <span class="widgetitemtitle">{!! Lang::get('lang.register') !!}</span>
+                    <span class="widgetitemtitle">{!! trans('lang.register') !!}</span>
                 </a>
             </span>
         @endif
@@ -52,7 +52,7 @@
                 @if($system->status == 1)
                     <span onclick="javascript: window.location.href='{!! URL::route('form') !!}';">
                         <a href="{!! URL::route('form') !!}" class="widgetrowitem defaultwidget" style="background-image: URL('lb-faveo/media/images/submitticket.png');">
-                            <span class="widgetitemtitle">{!! Lang::get('lang.submit_a_ticket') !!}</span>
+                            <span class="widgetitemtitle">{!! trans('lang.submit_a_ticket') !!}</span>
                         </a>
                     </span>
                 @endif
@@ -60,12 +60,12 @@
         @endif
             <span onclick="javascript: window.location.href='{{url('mytickets')}}';">
                 <a href="{{url('mytickets')}}" class="widgetrowitem defaultwidget" style="background-image: URL('lb-faveo/media/images/news.png');">
-                    <span class="widgetitemtitle">{!! Lang::get('lang.my_tickets') !!}</span>
+                    <span class="widgetitemtitle">{!! trans('lang.my_tickets') !!}</span>
                 </a>
             </span>
             <span onclick="javascript: window.location.href='{{url('/knowledgebase')}}';">
                 <a href="{{url('/knowledgebase')}}" class="widgetrowitem defaultwidget" style="background-image: URL('lb-faveo/media/images/knowledgebase.png');">
-                    <span class="widgetitemtitle">{!! Lang::get('lang.knowledge_base') !!}</span>
+                    <span class="widgetitemtitle">{!! trans('lang.knowledge_base') !!}</span>
                 </a>
             </span>
         </div>

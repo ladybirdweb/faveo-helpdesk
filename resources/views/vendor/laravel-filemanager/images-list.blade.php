@@ -3,11 +3,11 @@
     @if((sizeof($file_info) > 0) || (sizeof($directories) > 0))
         <table class="table table-condensed table-striped">
             <thead>
-                <th style='width:50%;'>{{ Lang::get('laravel-filemanager::lfm.title-item') }}</th>
-                <th>{{ Lang::get('laravel-filemanager::lfm.title-size') }}</th>
-                <th>{{ Lang::get('laravel-filemanager::lfm.title-type') }}</th>
-                <th>{{ Lang::get('laravel-filemanager::lfm.title-modified') }}</th>
-                <th>{{ Lang::get('laravel-filemanager::lfm.title-action') }}</th>
+                <th style='width:50%;'>{{ trans('laravel-filemanager::lfm.title-item') }}</th>
+                <th>{{ trans('laravel-filemanager::lfm.title-size') }}</th>
+                <th>{{ trans('laravel-filemanager::lfm.title-type') }}</th>
+                <th>{{ trans('laravel-filemanager::lfm.title-modified') }}</th>
+                <th>{{ trans('laravel-filemanager::lfm.title-action') }}</th>
             </thead>
             <tbody>
             @foreach($directories as $key => $dir_name)
@@ -19,7 +19,7 @@
                         </a>
                     </td>
                     <td></td>
-                    <td>{{ Lang::get('laravel-filemanager::lfm.type-folder') }}</td>
+                    <td>{{ trans('laravel-filemanager::lfm.type-folder') }}</td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -69,7 +69,7 @@
     @else
     <div class="row">
         <div class="col-md-12">
-            <p>{{ Lang::get('laravel-filemanager::lfm.message-empty') }}</p>
+            <p>{{ trans('laravel-filemanager::lfm.message-empty') }}</p>
         </div>
     </div>
     @endif

@@ -1,7 +1,7 @@
 @extends('themes.default1.client.layout.client')
 
 @section('title')
-{!! Lang::get('lang.submit_a_ticket') !!} -
+{!! trans('lang.submit_a_ticket') !!} -
 @stop
 
 @section('submit')
@@ -11,20 +11,20 @@ class = "active"
 @section('breadcrumb')
 <div class="site-hero clearfix">
     <ol class="breadcrumb breadcrumb-custom">
-        <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
-        <li><a href="{!! URL::route('form') !!}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
+        <li class="text">{!! trans('lang.you_are_here') !!}: </li>
+        <li><a href="{!! URL::route('form') !!}">{!! trans('lang.submit_a_ticket') !!}</a></li>
     </ol>
 </div>
 @stop
 <!-- /breadcrumbs -->
 @section('check')
 <div class="banner-wrapper  clearfix">
-    <h3 class="banner-title text-center text-info h4">{!! Lang::get('lang.have_a_ticket') !!}?</h3>
+    <h3 class="banner-title text-center text-info h4">{!! trans('lang.have_a_ticket') !!}?</h3>
     @if(Session::has('check'))
     @if (count($errors) > 0)
     <div class="alert alert-danger alert-dismissable">
         <i class="fa fa-ban"></i>
-        <b>{!! Lang::get('lang.alert') !!} !</b>
+        <b>{!! trans('lang.alert') !!} !</b>
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         @foreach ($errors->all() as $error)
         <li>{{ $error }}</li>
@@ -34,11 +34,11 @@ class = "active"
     @endif
     <div class="banner-content text-center">
         {!! Form::open(['url' => 'checkmyticket' , 'method' => 'POST'] )!!}
-        {!! Form::label('email',Lang::get('lang.email')) !!}<span class="text-red"> *</span>
+        {!! Form::label('email',trans('lang.email')) !!}<span class="text-red"> *</span>
         {!! Form::text('email_address',null,['class' => 'form-control']) !!}
-        {!! Form::label('ticket_number',Lang::get('lang.ticket_number')) !!}<span class="text-red"> *</span>
+        {!! Form::label('ticket_number',trans('lang.ticket_number')) !!}<span class="text-red"> *</span>
         {!! Form::text('ticket_number',null,['class' => 'form-control']) !!}
-        <br/><input type="submit" value="{!! Lang::get('lang.check_ticket_status') !!}" class="btn btn-info">
+        <br/><input type="submit" value="{!! trans('lang.check_ticket_status') !!}" class="btn btn-info">
         {!! Form::close() !!}
     </div>
 </div>  
@@ -60,7 +60,7 @@ class = "active"
     @if(!Session::has('error'))
     <div class="alert alert-danger alert-dismissable">
         <i class="fa fa-ban"></i>
-        <b>{!! Lang::get('lang.alert') !!} !</b>
+        <b>{!! trans('lang.alert') !!} !</b>
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <ul>
             @foreach ($errors->all() as $error)
@@ -87,7 +87,7 @@ class = "active"
     {!! Form::open(['action'=>'Client\helpdesk\FormController@postedForm','method'=>'post', 'enctype'=>'multipart/form-data']) !!}
     <div>
         <div class="content-header">
-            <h4>{!! Lang::get('lang.ticket') !!} </h4>
+            <h4>{!! trans('lang.ticket') !!} </h4>
         </div>
         <div class="row col-md-12">
             
@@ -97,7 +97,7 @@ class = "active"
                     
                 @else
                     <div class="col-md-12 form-group {{ $errors->has('Name') ? 'has-error' : '' }}">
-                        {!! Form::label('Name',Lang::get('lang.name')) !!}<span class="text-red"> *</span>
+                        {!! Form::label('Name',trans('lang.name')) !!}<span class="text-red"> *</span>
                         {!! Form::text('Name',null,['class' => 'form-control']) !!}
                     </div>
                 @endif
@@ -110,7 +110,7 @@ class = "active"
                     
                 @else
                     <div class="col-md-12 form-group {{ $errors->has('Email') ? 'has-error' : '' }}">
-                        {!! Form::label('Email',Lang::get('lang.email')) !!}
+                        {!! Form::label('Email',trans('lang.email')) !!}
                         @if($email_mandatory->status == 1 || $email_mandatory->status == '1')
                         <span class="text-red"> *</span>
                         @endif
@@ -124,22 +124,22 @@ class = "active"
                 @if(!Auth::user())
                     
             <div class="col-md-2 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
-                {!! Form::label('Code',Lang::get('lang.country-code')) !!}
+                {!! Form::label('Code',trans('lang.country-code')) !!}
                  @if($email_mandatory->status == 0 || $email_mandatory->status == '0')
                         <span class="text-red"> *</span>
                         @endif
 
-                {!! Form::text('Code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
+                {!! Form::text('Code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => trans('lang.enter-country-phone-code')]) !!}
             </div>
             <div class="col-md-5 form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
-                {!! Form::label('mobile',Lang::get('lang.mobile_number')) !!}
+                {!! Form::label('mobile',trans('lang.mobile_number')) !!}
                  @if($email_mandatory->status == 0 || $email_mandatory->status == '0')
                         <span class="text-red"> *</span>
                         @endif
                 {!! Form::text('mobile',null,['class' => 'form-control']) !!}
             </div>
             <div class="col-md-5 form-group {{ $errors->has('Phone') ? 'has-error' : '' }}">
-                {!! Form::label('Phone',Lang::get('lang.phone')) !!}
+                {!! Form::label('Phone',trans('lang.phone')) !!}
                 {!! Form::text('Phone',null,['class' => 'form-control']) !!}
             </div>
             @else 
@@ -149,7 +149,7 @@ class = "active"
  
            @endif
             <div class="col-md-12 form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
-                {!! Form::label('help_topic', Lang::get('lang.choose_a_help_topic')) !!} 
+                {!! Form::label('help_topic', trans('lang.choose_a_help_topic')) !!}
                 {!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}
                 <?php
                 $forms = App\Model\helpdesk\Form\Forms::get();
@@ -177,7 +177,7 @@ class = "active"
              <div class="col-md-12 form-group">
                 <div class="row">
                     <div class="col-md-1">
-                        <label>{!! Lang::get('lang.priority') !!}:</label>
+                        <label>{!! trans('lang.priority') !!}:</label>
                     </div>
                     <div class="col-md-12">
                         <?php $Priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('status','=',1)->get(); ?>
@@ -189,22 +189,22 @@ class = "active"
             @endif
             @endif
             <div class="col-md-12 form-group {{ $errors->has('Subject') ? 'has-error' : '' }}">
-                {!! Form::label('Subject',Lang::get('lang.subject')) !!}<span class="text-red"> *</span>
+                {!! Form::label('Subject',trans('lang.subject')) !!}<span class="text-red"> *</span>
                 {!! Form::text('Subject',null,['class' => 'form-control']) !!}
             </div>
             <div class="col-md-12 form-group {{ $errors->has('Details') ? 'has-error' : '' }}">
-                {!! Form::label('Details',Lang::get('lang.message')) !!}<span class="text-red"> *</span>
+                {!! Form::label('Details',trans('lang.message')) !!}<span class="text-red"> *</span>
                 {!! Form::textarea('Details',null,['class' => 'form-control']) !!}
             </div>
             <div class="col-md-12 form-group">
-                <div class="btn btn-default btn-file"><i class="fa fa-paperclip"> </i> {!! Lang::get('lang.attachment') !!}<input type="file" name="attachment[]" multiple/></div><br/>
-                {!! Lang::get('lang.max') !!}. 10MB
+                <div class="btn btn-default btn-file"><i class="fa fa-paperclip"> </i> {!! trans('lang.attachment') !!}<input type="file" name="attachment[]" multiple/></div><br/>
+                {!! trans('lang.max') !!}. 10MB
             </div>
             {{-- Event fire --}}
             <?php Event::fire(new App\Events\ClientTicketForm()); ?>
             <div class="col-md-12" id="response"> </div>
             <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>
-            <div class="col-md-12 form-group">{!! Form::submit(Lang::get('lang.Send'),['class'=>'form-group btn btn-info pull-left', 'onclick' => 'this.disabled=true;this.value="Sending, please wait...";this.form.submit();'])!!}</div>
+            <div class="col-md-12 form-group">{!! Form::submit(trans('lang.Send'),['class'=>'form-group btn btn-info pull-left', 'onclick' => 'this.disabled=true;this.value="Sending, please wait...";this.form.submit();'])!!}</div>
         </div>
         <div class="col-md-12" id="response"> </div>
         <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>

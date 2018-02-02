@@ -30,14 +30,14 @@
         <hr>
         <h4>Subject : {!! $thread->title !!}</h4><br/>
         <table> 
-            <tr><td><b>{!! Lang::get('lang.ticket_number') !!}:</b></td>        	<td>{{$thread->ticket_number}}</td></tr>
-            <tr><td><b>{!! Lang::get('lang.first_name') !!}:</b></td>        	<td>{{ucfirst($thread->first_name)}}</td></tr>
-            <tr><td><b>{!! Lang::get('lang.last_name') !!}:</b></td>        	<td>{{ucfirst($thread->last_name)}}</td></tr>
-            <tr><td><b>{!! Lang::get('lang.email') !!}:</b></td>        	<td>{{$thread->email}}</td></tr>
-            <tr><td><b>{!! Lang::get('lang.phone') !!}:</b></td>        	<td>{{$thread->phone}}</td></tr>
-            <tr><td><b>{!! Lang::get('lang.mobile') !!}:</b></td>        	<td>{{$thread->mobile}}</td></tr>
+            <tr><td><b>{!! trans('lang.ticket_number') !!}:</b></td>        	<td>{{$thread->ticket_number}}</td></tr>
+            <tr><td><b>{!! trans('lang.first_name') !!}:</b></td>        	<td>{{ucfirst($thread->first_name)}}</td></tr>
+            <tr><td><b>{!! trans('lang.last_name') !!}:</b></td>        	<td>{{ucfirst($thread->last_name)}}</td></tr>
+            <tr><td><b>{!! trans('lang.email') !!}:</b></td>        	<td>{{$thread->email}}</td></tr>
+            <tr><td><b>{!! trans('lang.phone') !!}:</b></td>        	<td>{{$thread->phone}}</td></tr>
+            <tr><td><b>{!! trans('lang.mobile') !!}:</b></td>        	<td>{{$thread->mobile}}</td></tr>
             @if($ticket->getAssignedTo())
-            <tr><td><b>{!! Lang::get('lang.assigned_to') !!}:</b></td>        	<td>{{$ticket->getAssignedTo()->first_name}} {{$ticket->getAssignedTo()->last_name}}</td></tr>
+            <tr><td><b>{!! trans('lang.assigned_to') !!}:</b></td>        	<td>{{$ticket->getAssignedTo()->first_name}} {{$ticket->getAssignedTo()->last_name}}</td></tr>
             @endif
         </table>
         <hr>

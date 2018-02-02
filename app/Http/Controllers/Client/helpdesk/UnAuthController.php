@@ -18,7 +18,6 @@ use App\User;
 use Hash;
 // classes
 use Illuminate\Http\Request;
-use Lang;
 
 /**
  * GuestController.
@@ -66,12 +65,12 @@ class UnAuthController extends Controller
             // get user details
             $user_details = User::where('email', '=', $email)->first();
             if ($user_details == null) {
-                return \Redirect::route('form')->with('fails', Lang::get('lang.sorry_that_email_is not_available_in_this_system'));
+                return \Redirect::route('form')->with('fails', trans('lang.sorry_that_email_is not_available_in_this_system'));
             }
             // get ticket details
             $ticket = Tickets::where('ticket_number', '=', $ticket_number)->first();
             if ($ticket == null) {
-                return \Redirect::route('form')->with('fails', Lang::get('lang.there_is_no_such_ticket_number'));
+                return \Redirect::route('form')->with('fails', trans('lang.there_is_no_such_ticket_number'));
             }
             if ($ticket->user_id == $user_details->id) {
                 if ($user_details->role == 'user') {
@@ -103,9 +102,9 @@ class UnAuthController extends Controller
                 }
 
                 return redirect()->back()
-                                ->with('success', Lang::get('lang.we_have_sent_you_a_link_by_email_please_click_on_that_link_to_view_ticket'));
+                                ->with('success', trans('lang.we_have_sent_you_a_link_by_email_please_click_on_that_link_to_view_ticket'));
             } else {
-                return \Redirect::route('form')->with('fails', Lang::get("lang.email_didn't_match_with_ticket_number"));
+                return \Redirect::route('form')->with('fails', trans("lang.email_didn't_match_with_ticket_number"));
             }
         } catch (\Exception $e) {
             return \Redirect::route('form')->with('fails', $e->getMessage());
@@ -148,13 +147,13 @@ class UnAuthController extends Controller
                 $time = $token_time->option_value;
                 $new_time = date_add($check_token->updated_at, date_interval_create_from_date_string($time.' Hours'));
                 if (date('Y-m-d H:i:s') > $new_time) {
-                    return redirect()->route('form')->with('fails', Lang::get('lang.sorry_your_ticket_token_has_expired_please_try_to_resend_the_ticket_link_request'));
+                    return redirect()->route('form')->with('fails', trans('lang.sorry_your_ticket_token_has_expired_please_try_to_resend_the_ticket_link_request'));
                 }
                 $tickets = Tickets::where('id', '=', $ticket_id)->first();
 
                 return view('themes.default1.client.helpdesk.unauth.showticket', compact('tickets', 'token'));
             } else {
-                return redirect()->route('form')->with('fails', Lang::get('lang.sorry_you_are_not_allowed_token_expired'));
+                return redirect()->route('form')->with('fails', trans('lang.sorry_you_are_not_allowed_token_expired'));
             }
         } catch (Exception $ex) {
             return redirect()->route('form')->with('fails', $e->getMessage());
@@ -193,7 +192,7 @@ class UnAuthController extends Controller
             }
         }
 
-        return redirect()->back()->with('Success', Lang::get('lang.thank_you_for_your_rating'));
+        return redirect()->back()->with('Success', trans('lang.thank_you_for_your_rating'));
     }
 
     /**
@@ -227,7 +226,7 @@ class UnAuthController extends Controller
             }
         }
 
-        return redirect()->back()->with('Success', Lang::get('lang.thank_you_for_your_rating'));
+        return redirect()->back()->with('Success', trans('lang.thank_you_for_your_rating'));
     }
 
     /**
@@ -278,7 +277,7 @@ class UnAuthController extends Controller
             return 0;
         }
 
-        return Lang::get('lang.your_ticket_has_been').' '.$ticket_status->state;
+        return trans('lang.your_ticket_has_been').' '.$ticket_status->state;
     }
 
     //Auto-close tickets

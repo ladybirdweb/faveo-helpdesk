@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.email_diagnostic')}}</h1>
+<h1>{{trans('lang.email_diagnostic')}}</h1>
 @stop
 <!-- /header -->
 <!-- content -->
@@ -26,7 +26,7 @@ class="active"
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h4 class="box-title">{{Lang::get('lang.send-mail-to-diagnos')}}</h4>	
+            <h4 class="box-title">{{trans('lang.send-mail-to-diagnos')}}</h4>
         </div>
         <div class="box-body">
             @if(Session::has('success'))
@@ -41,7 +41,7 @@ class="active"
             <div class="alert alert-danger alert-dismissable">
                 <i class="fa fa-ban"></i>
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <b>{!! Lang::get('lang.alert') !!} !</b><br/>
+                <b>{!! trans('lang.alert') !!} !</b><br/>
                 <li class="error-message-padding">{{Session::get('fails')}}</li>
             </div>
             @endif
@@ -49,7 +49,7 @@ class="active"
             <?php //dd($errors); ?>
             <div class="alert alert-danger alert-dismissable">
                 <i class="fa fa-ban"></i>
-                <b>{!! Lang::get('lang.alert') !!} !</b>
+                <b>{!! trans('lang.alert') !!} !</b>
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 <br/>
                 @if($errors->first('from'))
@@ -68,13 +68,13 @@ class="active"
             @endif
             <div class="row form-group no-padding {!! $errors->has('from') ? 'has-error' : '' !!}">
                 <div class="col-md-2">
-                    <label>{!! Lang::get('lang.from') !!} <span class="text-red">*</span> :</label>
+                    <label>{!! trans('lang.from') !!} <span class="text-red">*</span> :</label>
                 </div>
                 <div class="col-md-4">
                     {!! $errors->first('fetching_encryption', '<spam class="help-block">:message</spam>') !!}
                     <select name="from" class="form-control" id="from">
-                        <option value="">{!! Lang::get('lang.choose_an_email') !!}</option>
-                        <optgroup label="{!! Lang::get('lang.email') !!}">
+                        <option value="">{!! trans('lang.choose_an_email') !!}</option>
+                        <optgroup label="{!! trans('lang.email') !!}">
                             @foreach($emails as $email)
                             <?php
                             if ($email->email_address == $email->email_name) {
@@ -91,7 +91,7 @@ class="active"
             </div>
             <div class="row form-group no-padding {!! $errors->has('to') ? 'has-error' : '' !!}">
                 <div class="col-md-2">
-                    <label>{!! Lang::get('lang.to') !!} <span class="text-red">*</span> :</label>
+                    <label>{!! trans('lang.to') !!} <span class="text-red">*</span> :</label>
                 </div>
                 <div class="col-md-4">
                     {!! Form::text('to',null,['class' => 'form-control']) !!}
@@ -99,7 +99,7 @@ class="active"
             </div>
             <div class="row form-group no-padding {!! $errors->has('subject') ? 'has-error' : '' !!}">
                 <div class="col-md-2">
-                    <label>{!! Lang::get('lang.subject') !!} <span class="text-red">*</span> :</label>
+                    <label>{!! trans('lang.subject') !!} <span class="text-red">*</span> :</label>
                 </div>
                 <div class="col-md-8">
                     {!! Form::text('subject',null,['class' => 'form-control']) !!}
@@ -107,7 +107,7 @@ class="active"
             </div>
             <div class="row form-group no-padding {!! $errors->has('message') ? 'has-error' : '' !!}">
                 <div class="col-md-2">
-                    <label>{!! Lang::get('lang.message') !!} <span class="text-red">*</span> :</label>
+                    <label>{!! trans('lang.message') !!} <span class="text-red">*</span> :</label>
                 </div>
                 <div class="col-md-10">
                     <textarea name="message" id="message" class="form-control" style="height:200px;"></textarea>
@@ -118,7 +118,7 @@ class="active"
             <div class="row">
                 <div class="col-md-2"></div>
                 <div class="col-md-2">
-                    {!! Form::submit(Lang::get('lang.send'),['class'=>'form-group btn btn-primary'])!!}
+                    {!! Form::submit(trans('lang.send'),['class'=>'form-group btn btn-primary'])!!}
                 </div>            
             </div>
             

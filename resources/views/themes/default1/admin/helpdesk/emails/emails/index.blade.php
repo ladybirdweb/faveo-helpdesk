@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.emails')}}</h1>
+<h1>{{trans('lang.emails')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -32,7 +32,7 @@ class="active"
 <div class="col-md-12">
 <div class="box box-primary">
 <div class="box-header">
-	<h2 class="box-title">{!! Lang::get('lang.emails') !!}</h2><a href="{{route('emails.create')}}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> &nbsp;{{Lang::get('lang.create_email')}}</a></div>
+	<h2 class="box-title">{!! trans('lang.emails') !!}</h2><a href="{{route('emails.create')}}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> &nbsp;{{trans('lang.create_email')}}</a></div>
 
 <div class="box-body table-responsive">
 
@@ -67,12 +67,12 @@ class="active"
     		<!-- table -->
 				<table class="table table-bordered dataTable" style="overflow:hidden;">
 	<tr>
-							<th width="100px">{{Lang::get('lang.email')}}</th>
-							<th width="100px">{{Lang::get('lang.priority')}}</th>
-							<th width="100px">{{Lang::get('lang.department')}}</th>
-							<th width="100px">{{Lang::get('lang.created')}}</th>
-							<th width="100px">{{Lang::get('lang.last_updated')}}</th>
-							<th width="100px">{{Lang::get('lang.action')}}</th>
+							<th width="100px">{{trans('lang.email')}}</th>
+							<th width="100px">{{trans('lang.priority')}}</th>
+							<th width="100px">{{trans('lang.department')}}</th>
+							<th width="100px">{{trans('lang.created')}}</th>
+							<th width="100px">{{trans('lang.last_updated')}}</th>
+							<th width="100px">{{trans('lang.action')}}</th>
 						</tr>
 						@foreach($emails as $email)
 						<tr>

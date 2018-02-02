@@ -63,7 +63,7 @@ class="active"
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {!!Session::get('fails')!!}
         </div>
@@ -72,21 +72,21 @@ class="active"
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group {{ $errors->has('client_id') ? 'has-error' : '' }}">
-                    {!! Form::label('client_id',Lang::get('lang.client_id')) !!}
+                    {!! Form::label('client_id',trans('lang.client_id')) !!}
                     {!! $errors->first('client_id', '<spam class="help-block">:message</spam>') !!}
                     {!! Form::text('client_id',$social->getvalueByKey($provider,'client_id'),['class' => 'form-control']) !!}
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group {{ $errors->has('client_secret') ? 'has-error' : '' }}">
-                    {!! Form::label('client_secret',Lang::get('lang.client_secret')) !!}
+                    {!! Form::label('client_secret',trans('lang.client_secret')) !!}
                     {!! $errors->first('client_secret', '<spam class="help-block">:message</spam>') !!}
                     {!! Form::text('client_secret',$social->getvalueByKey($provider,'client_secret'),['class' => 'form-control']) !!}
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group {{ $errors->has('redirect') ? 'has-error' : '' }}">
-                    {!! Form::label('redirect',Lang::get('lang.redirect')) !!}
+                    {!! Form::label('redirect',trans('lang.redirect')) !!}
                     {!! $errors->first('redirect', '<spam class="help-block">:message</spam>') !!}
                     {!! Form::text('redirect',$social->getvalueByKey($provider,'redirect'),['class' => 'form-control']) !!}
                 </div>
@@ -95,7 +95,7 @@ class="active"
                 <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
                     <div class="row">
                         <div class="col-md-12">
-                            {!! Form::label('status',Lang::get('lang.status')) !!}
+                            {!! Form::label('status',trans('lang.status')) !!}
                             {!! $errors->first('status', '<spam class="help-block">:message</spam>') !!}
                             
                         </div>
@@ -116,7 +116,7 @@ class="active"
 
     </div>
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
+        {!! Form::submit(trans('lang.submit'),['class'=>'btn btn-primary'])!!}
     </div>
 </div>
 {!! Form::close() !!}

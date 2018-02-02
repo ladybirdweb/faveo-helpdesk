@@ -17,11 +17,11 @@
         <div class="banner-content">
         {!! Form::open(['url' => 'checkmyticket' , 'method' => 'POST'] )!!}
 	
-            {!! Form::label('email',Lang::get('lang.email')) !!}
+            {!! Form::label('email',trans('lang.email')) !!}
     		{!! $errors->first('email', '<spam class="help-block">:message</spam>') !!}
     		{!! Form::text('email',null,['class' => 'form-control']) !!}
                 
-            {!! Form::label('ticket_number',Lang::get('lang.ticket_number'),['style' => 'display: block']) !!}
+            {!! Form::label('ticket_number',trans('lang.ticket_number'),['style' => 'display: block']) !!}
     		{!! $errors->first('ticket_number', '<spam class="help-block">:message</spam>') !!}
     		{!! Form::text('ticket_number',null,['class' => 'form-control']) !!}
             <br/><input type="submit" value="Check Ticket Status" class="btn btn-info">
@@ -59,7 +59,7 @@
 {!! Form::open(['action'=>'Client\helpdesk\FormController@postedForm','method'=>'post']) !!}
 <div>
     <div class="content-header">
-        <h4>Ticket {!! Form::submit(Lang::get('lang.send'),['class'=>'form-group btn btn-info pull-right'])!!}</h4>
+        <h4>Ticket {!! Form::submit(trans('lang.send'),['class'=>'form-group btn btn-info pull-right'])!!}</h4>
     </div>
     <br/>
     <div>

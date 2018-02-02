@@ -13,7 +13,7 @@ class="active"
 @stop
 
 @section('PageHeader')
-<h1>{{Lang::get('lang.tickets')}}</h1>
+<h1>{{trans('lang.tickets')}}</h1>
 <style>
  .tooltip1 {
      position: relative;
@@ -54,7 +54,7 @@ if (Auth::user()->role == 'agent') {
 <!-- Main content -->
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title"> {!! Lang::get('lang.closed') !!} </h3> <small id="title_refresh">{!! $tickets !!}  {!! Lang::get('lang.tickets') !!}</small>
+        <h3 class="box-title"> {!! trans('lang.closed') !!} </h3> <small id="title_refresh">{!! $tickets !!}  {!! trans('lang.tickets') !!}</small>
     </div><!-- /.box-header -->
     <div class="box-body">
         @if(Session::has('success'))
@@ -67,7 +67,7 @@ if (Auth::user()->role == 'agent') {
         <!-- failure message -->
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!}! </b>
+            <i class="fa fa-ban"> </i> <b> {!! trans('lang.alert') !!}! </b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('fails')}}
         </div>
@@ -78,14 +78,14 @@ if (Auth::user()->role == 'agent') {
         <!-- Check all button -->
         <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
         {{-- <a class="btn btn-default btn-sm" id="click"><i class="fa fa-refresh"></i></a> --}}
-        <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" id="delete" value="{!! Lang::get('lang.delete') !!}">
-        <input type="submit" class="btn btn-default text-blue btn-sm" name="submit" id="close" value="{!! Lang::get('lang.open') !!}">
+        <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" id="delete" value="{!! trans('lang.delete') !!}">
+        <input type="submit" class="btn btn-default text-blue btn-sm" name="submit" id="close" value="{!! trans('lang.open') !!}">
         
         
         <!--</div>-->
         <p><p/>
         <div class="mailbox-messages"  id="refresh">
-            <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>{!! Lang::get('lang.loading') !!}...</b></p>
+            <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>{!! trans('lang.loading') !!}...</b></p>
             <!-- table -->
             {!!$table->render('vendor.Chumper.template')!!}
 
@@ -107,8 +107,8 @@ if (Auth::user()->role == 'agent') {
                 <div class="modal-body" id="custom-alert-body" >
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary pull-left yes" data-dismiss="modal">{{Lang::get('lang.ok')}}</button>
-                    <button type="button" class="btn btn-default no">{{Lang::get('lang.cancel')}}</button>
+                    <button type="button" class="btn btn-primary pull-left yes" data-dismiss="modal">{{trans('lang.ok')}}</button>
+                    <button type="button" class="btn btn-default no">{{trans('lang.cancel')}}</button>
                 </div>
             </div>
         </div>
@@ -164,22 +164,22 @@ if (Auth::user()->role == 'agent') {
 
         $('#delete').on('click', function() {
             option = 0;
-            $('#myModalLabel').html("{{Lang::get('lang.delete-tickets')}}");
+            $('#myModalLabel').html("{{trans('lang.delete-tickets')}}");
         });
 
         $('#close').on('click', function() {
             option = 1;
-            $('#myModalLabel').html("{{Lang::get('lang.open-tickets')}}");
+            $('#myModalLabel').html("{{trans('lang.open-tickets')}}");
         });
 
         $("#modalpopup").on('submit', function(e) {
             e.preventDefault();
-            var msg = "{{Lang::get('lang.confirm')}}";
+            var msg = "{{trans('lang.confirm')}}";
             var values = getValues();
             if (values == "") {
-                msg = "{{Lang::get('lang.select-ticket')}}";
-                $('.yes').html("{{Lang::get('lang.ok')}}");
-                $('#myModalLabel').html("{{Lang::get('lang.alert')}}");
+                msg = "{{trans('lang.select-ticket')}}";
+                $('.yes').html("{{trans('lang.ok')}}");
+                $('#myModalLabel').html("{{trans('lang.alert')}}");
             } else {
                 $('.yes').html("Yes");
             }

@@ -33,7 +33,7 @@ class="active"
 <div class="box box-primary">
     <div class="box-header">
         
-        <h2 class="box-title"style="margin-left:-10px">{{Lang::get('lang.create')}}</h2>{!! Form::submit(Lang::get('lang.save'),['class'=>'pull-right btn btn-primary'])!!}
+        <h2 class="box-title"style="margin-left:-10px">{{trans('lang.create')}}</h2>{!! Form::submit(trans('lang.save'),['class'=>'pull-right btn btn-primary'])!!}
     </div>
     <div class="box-body">
         
@@ -42,7 +42,7 @@ class="active"
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
-                        {!! Form::label('title',Lang::get('lang.title')) !!}
+                        {!! Form::label('title',trans('lang.title')) !!}
                         {!! $errors->first('title', '<spam class="help-block">:message</spam>') !!}
                         {!! Form::text('title',null,['class' => 'form-control']) !!}
                     </div>
@@ -50,7 +50,7 @@ class="active"
                 <!-- declare table head Label -->
                 <div class="col-md-6">
                     <div class="form-group {{ $errors->has('label') ? 'has-error' : '' }}">
-                        {!! Form::label('label',Lang::get('lang.label')) !!}
+                        {!! Form::label('label',trans('lang.label')) !!}
                         {!! $errors->first('label', '<spam class="help-block">:message</spam>') !!}
                         {!! Form::text('label',null,['class' => 'form-control']) !!}
                     </div>
@@ -58,7 +58,7 @@ class="active"
                 <!-- declare table head type -->
                 <div class="col-md-4">
                     <div class="form-group {{ $errors->has('type') ? 'has-error' : '' }}">
-                        {!! Form::label('type',Lang::get('lang.type')) !!}
+                        {!! Form::label('type',trans('lang.type')) !!}
                         {!! $errors->first('type', '<spam class="help-block">:message</spam>') !!}
                         {!!Form::select('type', [''=>'Select a Type','types'=>$type->lists('type','id')] ,null,['class' => 'form-control'] ) !!}
                     </div>
@@ -66,7 +66,7 @@ class="active"
                 <!-- declare table head Vissibility -->
                 <div class="col-md-4">
                     <div class="form-group {{ $errors->has('visibility') ? 'has-error' : '' }}">
-                        {!! Form::label('visibility',Lang::get('lang.visibility')) !!}
+                        {!! Form::label('visibility',trans('lang.visibility')) !!}
                         {!! $errors->first('visibility', '<spam class="help-block">:message</spam>') !!}
                         {!!Form::select('visibility', [''=>'Select a Visibility','visibilities' =>$visibility->lists('visibility','id')],null,['class' => 'form-control'] ) !!}
                     </div>
@@ -74,14 +74,14 @@ class="active"
                 <!-- declare table head variable -->
                 <div class="col-md-4">
                     <div class="form-group">
-                        {!! Form::label('variable',Lang::get('lang.variable')) !!}
+                        {!! Form::label('variable',trans('lang.variable')) !!}
                         {!! Form::text('variable',null,['class' => 'form-control']) !!}
                     </div>
                 </div>
                 <!-- instruction: textarea -->
                 <div class="col-md-6">
                     <div class="form-group">
-                        {!! Form::label('instruction',Lang::get('lang.instruction')) !!}
+                        {!! Form::label('instruction',trans('lang.instruction')) !!}
                         {!! Form::textarea('instruction',null,['class' => 'form-control','size' => '10x5']) !!}
                     </div>
                 </div>
@@ -91,7 +91,7 @@ class="active"
                 <!-- txt area -->
                 <div class="col-md-6">
                     <div class="form-group">
-                        {!! Form::label('internal_notes',Lang::get('lang.internal_notes')) !!}
+                        {!! Form::label('internal_notes',trans('lang.internal_notes')) !!}
                         {!! Form::textarea('internal_notes',null,['class' => 'form-control','size' => '10x5']) !!}
                     </div>
                 </div>
