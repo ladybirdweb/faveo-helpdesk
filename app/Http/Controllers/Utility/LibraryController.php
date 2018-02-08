@@ -15,9 +15,8 @@ class LibraryController extends Controller
             $app = Config::get('app.version');
             if ($app) {
                 return preg_replace('/[^0-9,.]/', '', $app);
-            } else {
-                return 0;
             }
+                return 0;
         } catch (Exception $ex) {
             return 0;
         }
@@ -30,12 +29,10 @@ class LibraryController extends Controller
             if ($database == true) {
                 if (Schema::hasColumn('settings_system', 'version')) {
                     return \DB::table('settings_system')->where('id', '=', '1')->first()->version;
-                } else {
-                    return 0;
                 }
-            } else {
                 return 0;
             }
+                return 0;
         } catch (Exception $ex) {
             return 0;
         }
