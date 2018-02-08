@@ -16,7 +16,7 @@ class LibraryController extends Controller
             if ($app) {
                 return preg_replace('/[^0-9,.]/', '', $app);
             }
-            return 0;
+                return 0;
         } catch (Exception $ex) {
             return 0;
         }
@@ -32,7 +32,7 @@ class LibraryController extends Controller
                 }
                 return 0;
             }
-            return 0;
+                return 0;
         } catch (Exception $ex) {
             return 0;
         }
