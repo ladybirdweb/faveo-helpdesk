@@ -17,7 +17,6 @@ class LibraryController extends Controller
                 return preg_replace('/[^0-9,.]/', '', $app);
             }
             return 0;
-            
         } catch (Exception $ex) {
             return 0;
         }
@@ -32,10 +31,8 @@ class LibraryController extends Controller
                     return \DB::table('settings_system')->where('id', '=', '1')->first()->version;
                 }
                 return 0;
-                
             }
             return 0;
-            
         } catch (Exception $ex) {
             return 0;
         }
