@@ -410,10 +410,10 @@ return [
       |  SLA plan Index Page
       |--------------------------------------
      */
-    'sla_plans'    => 'SLA Plans',
-    'create_SLA'   => 'Create a SLA',
-    'grace_period' => 'Grace Period',
-    'added_date'   => 'Added Date',
+    'sla_plans'    => 'SLA Pläne',
+    'create_SLA'   => 'Erstelle ein SLA',
+    'grace_period' => 'Schonfrist',
+    'added_date'   => 'Erstellungsdatum',
     /*
       |--------------------------------------
       |  SLA plan Create Page
@@ -449,31 +449,30 @@ return [
       |--------------------------------------
      */
     'title'                                 => 'Title',
-    'instruction'                           => 'Instruction',
-    'label'                                 => 'Label',
-    'visibility'                            => 'Visibility',
+    'instruction'                           => 'Anweisung',
+    'label'                                 => 'Beschriftung',
+    'visibility'                            => 'Sichtbarkeit',
     'variable'                              => 'Variable',
-    'create_form'                           => 'Create Form',
-    'forms'                                 => 'Forms',
-    'form_name'                             => 'Form Name',
-    'view_this_form'                        => 'View This Form',
-    'delete_from'                           => 'Delete Form',
-    'are_you_sure_you_want_to_delete'       => 'Are you sure you want to Delete',
-    'close'                                 => 'Close',
-    'instructions'                          => 'Instructions',
-    'instructions_on_creating_form'         => "Select field type you want to add to the form below and click on 'Type' dropdown. Don't forget to set field options if type is select,checkbox or radio..Separate each option by a coma. After you finish creating the form, you can save the form by clicking Save Form button",
-    'form_properties'                       => 'Form Properties',
-    'adding_fields'                         => 'Adding Fields',
-    'click_add_fields_button_to_add_fields' => "Click <b>'Add Fields'</b> button to add Fields",
-    'add_fields'                            => 'Add Fields',
-    'save_form'                             => 'Save Form',
-    'label'                                 => 'Label',
+    'create_form'                           => 'Formular erstellen',
+    'forms'                                 => 'Formulare',
+    'form_name'                             => 'Formularname',
+    'view_this_form'                        => 'Dieses Formular anzeigen',
+    'delete_from'                           => 'Formular löschen',
+    'are_you_sure_you_want_to_delete'       => 'Sind Sie sicher, dass Sie löschen möchten?',
+    'close'                                 => 'Schliessen',
+    'instructions'                          => 'Anweisungen',
+    'instructions_on_creating_form'         => 'Wählen Sie den Feldtyp aus, den Sie dem untenstehenden Formular hinzufügen möchten, und klicken Sie auf die Dropdown-Liste "Typ". Vergessen Sie nicht, Feldoptionen zu setzen, wenn Typ "Checkbox" oder "Radio" ausgewählt ist... Trennen Sie jede Option durch ein Koma. Nachdem Sie die Erstellung des Formulars abgeschlossen haben, können Sie das Formular speichern, indem Sie auf die Schaltfläche Formular speichern klicken.',
+    'form_properties'                       => 'Formulareigenschaften',
+    'adding_fields'                         => 'Hinzufügen von Feldern',
+    'click_add_fields_button_to_add_fields' => "Klicke <b>'Felder hinzufügen'</b> Schaltfläche zum Hinzufügen von Feldern",
+    'add_fields'                            => 'Felder hinzufügen',
+    'save_form'                             => 'Formular speichern',
     'name'                                  => 'Name',
-    'type'                                  => 'Type',
-    'values(selected_fields)'               => 'Values(Selected Fields)',
-    'required'                              => 'Required',
-    'Action'                                => 'Action',
-    'remove'                                => 'Remove',
+    'type'                                  => 'Typ',
+    'values(selected_fields)'               => 'Werte(Ausgewählte Felder)',
+    'required'                              => 'Erforderlich',
+    'Action'                                => 'Aktion',
+    'remove'                                => 'Entfernen',
     /*
       |----------------------------------------------------------------------------------------
       | Theme Pages [English(en)]
@@ -904,18 +903,18 @@ return [
       | customize your views to better match your application.
       |
      */
-    'home'                => 'Home',
-    'submit_a_ticket'     => 'Submit A Ticket',
-    'my_profile'          => 'My Profile',
-    'log_out'             => 'Logout',
-    'forgot_password'     => 'Forgot Password',
-    'create_account'      => 'Create Account',
-    'you_are_here'        => 'You are here',
+    'home'                => 'Startseite',
+    'submit_a_ticket'     => 'Ein Ticket einreichen',
+    'my_profile'          => 'Mein Profil',
+    'log_out'             => 'Abmelden',
+    'forgot_password'     => 'Passwort vergessen',
+    'create_account'      => 'Konto erstellen',
+    'you_are_here'        => 'Sie sind hier',
     'have_a_ticket'       => 'Have a Ticket',
-    'check_ticket_status' => 'Check Ticket status',
-    'choose_a_help_topic' => 'Choose a Help Topic',
-    'ticket_status'       => 'Ticket Status',
-    'post_comment'        => 'Post Comment',
+    'check_ticket_status' => 'Ticketstatus prüfen',
+    'choose_a_help_topic' => 'Wählen Sie ein Hilfethema aus',
+    'ticket_status'       => 'Ticket-Status',
+    'post_comment'        => 'Kommentar schreiben',
     'plugin'              => 'Plugin',
 
     /***************************************************
