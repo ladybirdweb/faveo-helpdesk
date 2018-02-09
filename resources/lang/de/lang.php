@@ -643,7 +643,7 @@ return [
     'inprogress'        => 'In Bearbeitung',
     'closed'            => 'Geschlossen',
     'Departments'       => 'Abteilungen',
-    'tools'             => 'Werkyeuge',
+    'tools'             => 'Werkzeuge',
     'canned'            => 'Vorformuliert',
     'knowledge_base'    => 'Wissensdatenbank',
     'loading'           => 'laden',
