@@ -161,12 +161,12 @@ return [
       |  Diagnostics Page
       |--------------------------------------
      */
-    'diagnostics' => 'Diagnostics',
-    'from'        => 'From',
-    'to'          => 'To',
-    'subject'     => 'Subject',
-    'message'     => 'Message',
-    'send'        => 'Send',
+    'diagnostics' => 'Fehlerdiagnose',
+    'from'        => 'Von',
+    'to'          => 'An',
+    'subject'     => 'Betreff',
+    'message'     => 'Nachricht',
+    'send'        => 'Senden',
     /*
       |----------------------------------------------------------------------------------------
       | Settings Pages [English(en)]
@@ -202,31 +202,31 @@ return [
     'system'                => 'System',
     'online'                => 'Online',
     'offline'               => 'Offline',
-    'name/title'            => 'Name/Title',
-    'pagesize'              => 'Page Size',
+    'name/title'            => 'Name/Titel',
+    'pagesize'              => 'Seitengröße',
     'url'                   => 'URL',
-    'default_department'    => 'Default Department',
+    'default_department'    => 'Standard-Abteilung',
     'loglevel'              => 'Log Level',
-    'purglog'               => 'Purge Logs',
-    'nameformat'            => 'Name Formatting',
-    'timeformat'            => 'Time Format',
-    'date'                  => 'Date',
-    'dateformat'            => 'Date Format',
-    'date_time'             => 'Date And Time Format',
-    'day_date_time'         => 'Day,Date And Time Format',
-    'timezone'              => 'Default Time Zone',
+    'purglog'               => 'Logs säubern',
+    'nameformat'            => 'Formatierung von Namen',
+    'timeformat'            => 'Zeitformat',
+    'date'                  => 'Datum',
+    'dateformat'            => 'Datumsformat',
+    'date_time'             => 'Datum- und Zeitformat',
+    'day_date_time'         => 'Tag- ,Datum- und Zeitformat',
+    'timezone'              => 'Standard Zeitzone',
     'api'                   => 'Api',
-    'api_key'               => 'Api Key',
-    'api_key_mandatory'     => 'Api key mandatory',
+    'api_key'               => 'Api Schlüssel',
+    'api_key_mandatory'     => 'Api Schlüssel zwingend',
     'api_configurations'    => 'Api Configurations',
-    'generate_key'          => 'Generate key',
+    'generate_key'          => 'Generiere einen Schlüssel',
     /*
       |--------------------------------------
       |   Email Settings Page
       |--------------------------------------
      */
     'email'                               => 'Email',
-    'default_template'                    => 'Default Template Set:',
+    'default_template'                    => 'Standard Email-Vorlage:',
     'default_system_email'                => 'Default System Email:',
     'default_alert_email'                 => 'Default Alert Email:',
     'admin_email'                         => 'Admins Email Address:',
@@ -685,10 +685,10 @@ return [
     'mobile'          => 'Mobile',
     'last_login'      => 'Last Login',
     'user_profile'    => 'User Profile',
-    'assign'          => 'Assign',
-    'open_tickets'    => 'Open Tickets',
-    'closed_tickets'  => 'Closed Tickets',
-    'deleted_tickets' => 'Deleted Tickets',
+    'assign'          => 'Zuweisen',
+    'open_tickets'    => 'Offene Tickets',
+    'closed_tickets'  => 'Geschlossene Tickets',
+    'deleted_tickets' => 'Gelöschte Tickets',
     /*
       |------------------------------------------------
       |Organization Page
@@ -958,11 +958,11 @@ return [
     'webhooks'                         => 'Webhooks',
     'enter_url_to_send_ticket_details' => 'Enter the URL to send the ticket details',
     'api'                              => 'API',
-    'api_key'                          => 'API key',
+    'api_key'                          => 'API Schlüssel',
     'api_key_mandatory'                => 'API key mandatory',
     'api_configurations'               => 'API configurations',
-    'generate_key'                     => 'Generate key',
-    'api_settings'                     => 'API settings',
+    'generate_key'                     => 'Generiere Schlüssel',
+    'api_settings'                     => 'API Einstellungen',
     /*
      * -----------------------------------------------------------------------------
      * Error log and debugging settings
@@ -1033,9 +1033,9 @@ return [
     'week'                => 'Week',
     'month'               => 'Month',
     'Currnet_In_Progress' => 'CURRENT IN PROGRESS',
-    'Total_Created'       => 'TOTAL CREATED',
-    'Total_Reopened'      => 'TOTAL REOPENED',
-    'Total_Closed'        => 'TOTAL CLOSED',
+    'Total_Created'       => 'Total erstellt',
+    'Total_Reopened'      => 'Total wiedereröffnet',
+    'Total_Closed'        => 'Total geschlossen',
     'tabular'             => 'Tabular',
     'reopened'            => 'Reopened',
     /* ---------------------------------------------------------------------------------------
@@ -1108,8 +1108,8 @@ return [
      'change_password'                                              => 'Change password',
      'role_change'                                                  => 'Role change',
      'password_generator'                                           => 'Password generator',
-     'depertment'                                                   => 'Depertment',
-     'duetoday'                                                     => 'Due today',
+     'depertment'                                                   => 'Abteilung',
+     'duetoday'                                                     => 'Heute fällig',
      'today-due_tickets'                                            => 'Today\'s due ticekts',
      'password_change_successfully'                                 => 'Password changed successfully',
      'role_change_successfully'                                     => 'Role changed successfully',
