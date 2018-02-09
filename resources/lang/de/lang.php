@@ -627,7 +627,7 @@ return [
       | customize your views to better match your application.
       |
      */
-    'agent_panel'       => 'Support-Assistent Konsole',
+    'agent_panel'       => 'Konsole für Support-Assistenten',
     'profile'           => 'Profil',
     'change_password'   => 'Ändere das Passwort',
     'sign_out'          => 'Abmelden',
@@ -791,10 +791,10 @@ return [
     'merge-error2'                                    => 'Please select ticket to merge.',
     'select-tickets-to merge'                         => 'select two or more tickets to merge.',
     'different-users'                                 => 'Ticktes from different users',
-    'clean-up'                                        => 'Clean up',
+    'clean-up'                                        => 'Aufräumen',
     'hard-delete-success-message'                     => 'Tickets have been deleted permanently.',
-    'overdue'                                         => 'Overdue',
-    'change_owner_for_ticket'                         => 'Change Owner for Ticket',
+    'overdue'                                         => 'überfällig',
+    'change_owner_for_ticket'                         => 'Ticket-Besitzer ändern',
 
     /*
       |------------------------------------------------
