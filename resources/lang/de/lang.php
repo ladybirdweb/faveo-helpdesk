@@ -472,7 +472,7 @@ return [
     'values(selected_fields)'               => 'Werte(Ausgewählte Felder)',
     'required'                              => 'Erforderlich',
     'Action'                                => 'Aktion',
-    'remove'                                => 'Entfernen',
+    'remove'                                => 'E ntfernen',
     /*
       |----------------------------------------------------------------------------------------
       | Theme Pages [English(en)]
@@ -526,9 +526,9 @@ return [
     'department'   => 'Department',
     'created'      => 'Created',
     'lastlogin'    => 'Last Login',
-    'createagent'  => 'Create An Agent',
+    'createagent'  => 'Erstelle einen Support-Assistenten',
     'delete'       => 'Delete',
-    'agents'       => 'Agents',
+    'agents'       => 'Support-Assistenten',
     'create'       => 'Create',
     'edit'         => 'Edit',
     'departments'  => 'Departments',
@@ -538,20 +538,20 @@ return [
       |  Staff Create Page
       |--------------------------------------
      */
-    'create_agent'           => 'Create Agent',
+    'create_agent'           => 'Erstelle einen Support-Assistenten',
     'first_name'             => 'First Name',
     'last_name'              => 'Last Name',
     'mobile_number'          => 'Mobile Number',
-    'agent_signature'        => 'Agent Signature',
+    'agent_signature'        => 'Support-Assistent Signatur',
     'account_status_setting' => 'Account Status & Setting',
     'account_type'           => 'Account Type',
     'admin'                  => 'Admin',
-    'agent'                  => 'Agent',
+    'agent'                  => 'Support-Assistent',
     'account_status'         => 'Account Status',
     'locked'                 => 'Locked',
     'assigned_group'         => 'Assigned Group',
     'primary_department'     => 'Primary Department',
-    'agent_time_zone'        => 'Agent Time Zone',
+    'agent_time_zone'        => 'Support-Assistent Time Zone',
     'day_light_saving'       => 'Day Light Saving',
     'limit_access'           => 'Limit Access',
     'directory_listing'      => 'Directory Listing',
@@ -627,29 +627,29 @@ return [
       | customize your views to better match your application.
       |
      */
-    'agent_panel'       => 'Agent Panel',
-    'profile'           => 'Profile',
-    'change_password'   => 'Change Password',
-    'sign_out'          => 'Sign Out',
-    'Tickets'           => 'TICKETS',
-    'inbox'             => 'Inbox',
-    'my_tickets'        => 'My Tickets',
-    'unassigned'        => 'Unassigned',
-    'trash'             => 'Trash',
-    'Updates'           => 'UPDATES',
-    'no_new_updates'    => 'No new Updates',
+    'agent_panel'       => 'Support-Assistent Konsole',
+    'profile'           => 'Profil',
+    'change_password'   => 'Ändere das Passwort',
+    'sign_out'          => 'Abmelden',
+    'Tickets'           => 'Tickets',
+    'inbox'             => 'Posteingang',
+    'my_tickets'        => 'Meine Tickets',
+    'unassigned'        => 'Nicht zugeordnet',
+    'trash'             => 'Papierkorb',
+    'Updates'           => 'Aktualisierungen',
+    'no_new_updates'    => 'Keine neuen Updates',
     'check_for_updates' => 'Check for Updates',
-    'open'              => 'Open',
-    'inprogress'        => 'Inprogress',
-    'closed'            => 'Closed',
-    'Departments'       => 'DEPARTMENTS',
-    'tools'             => 'Tools',
-    'canned'            => 'Canned',
-    'knowledge_base'    => 'Knowledge Base',
-    'loading'           => 'Loading',
-    'ratings'           => 'Ratings',
-    'please_rate'       => 'Please rate:',
-    'ticket_ratings'    => 'TICKET RATING',
+    'open'              => 'Offen',
+    'inprogress'        => 'In Bearbeitung',
+    'closed'            => 'Geschlossen',
+    'Departments'       => 'Abteilungen',
+    'tools'             => 'Werkyeuge',
+    'canned'            => 'Vorformuliert',
+    'knowledge_base'    => 'Wissensdatenbank',
+    'loading'           => 'laden',
+    'ratings'           => 'Bewertungen',
+    'please_rate'       => 'Bitte bewerten:',
+    'ticket_ratings'    => 'Ticket-Bewertung',
     /*
       |-----------------------------------------------
       |  Profile
@@ -665,12 +665,12 @@ return [
       |-----------------------------------------------
      */
     'dashboard'  => 'Dashboard',
-    'line_chart' => 'Line Chart',
-    'statistics' => 'Statistics',
-    'opened'     => 'Opened',
-    'resolved'   => 'Resolved',
-    'closed'     => 'Closed',
-    'deleted'    => 'Deleted',
+    'line_chart' => 'Liniendiagramm',
+    'statistics' => 'Statistik',
+    'opened'     => 'Geöffnet',
+    'resolved'   => 'Gelöst',
+    'closed'     => 'Geschlossen',
+    'deleted'    => 'Gelöscht',
     /*
       |------------------------------------------------
       |User Page
@@ -760,7 +760,7 @@ return [
     'max'                                             => 'Max',
     'add_cc'                                          => 'Add CC',
     'recepients'                                      => 'Recepients',
-    'select_a_canned_response'                        => 'Select a Canned Response',
+    'select_a_canned_response'                        => 'Wähle eine vorformulierte Antwort',
     'assign_to'                                       => 'Assign to',
     'detail'                                          => 'Detail',
     'user_details'                                    => 'User Details',
@@ -801,17 +801,17 @@ return [
       |Tools Page
       |------------------------------------------------
      */
-    'canned_response'        => 'Canned Response',
-    'create_canned_response' => 'Create Canned Response',
-    'surrender'              => 'Surrender',
-    'view'                   => 'View',
+    'canned_response'        => 'Vorvormulierte Antworten',
+    'create_canned_response' => 'Erstelle vorformulierte Antworten',
+    'surrender'              => 'Aufgeben',
+    'view'                   => 'Ansicht',
     /*
       |-----------------------------------------------
       | Main text
       |-----------------------------------------------
      */
     'copyright'           => 'Copyright',
-    'all_rights_reserved' => 'All right Reserved',
+    'all_rights_reserved' => 'Alle Rechte vorbehalten',
     'powered_by'          => 'Powered by',
     /*
       |------------------------------------------------
