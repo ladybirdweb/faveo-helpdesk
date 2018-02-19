@@ -74,6 +74,7 @@ function validate_php(&$results) {
 function php_config_value_to_bytes($val) {
     $val = trim($val);
     $last = strtolower($val{strlen($val) - 1});
+    $val = (int)$val;
     switch ($last) {
         // The 'G' modifier is available since PHP 5.1.0
         case 'g':
