@@ -125,7 +125,7 @@ class="active"
         </div>
 
         <?php
-        $user_orga_relation_id = "";
+        $user_orga_relation_id = [];
         $user_orga_relations = App\Model\helpdesk\Agent_panel\User_org::where('org_id', '=', $orgs->id)->get();
         foreach ($user_orga_relations as $user_orga_relation) {
             $user_orga_relation_id[] = $user_orga_relation->user_id;
