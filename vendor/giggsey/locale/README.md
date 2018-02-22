@@ -6,7 +6,7 @@ A library providing up to date [CLDR](http://cldr.unicode.org/). Primarily as a 
 
 ## Reasoning
 
-This was created because [libphonenumber-for-php](https://github.com/giggsey/libphonenumber-for-php) required the [intl](http://php.net/intl) extension to use the Geo Coder. The extension is not installed by default, and can be a hurdle for users. It also relies on the [CLDR](http://cldr.unicord.org) data provided by the Operating System, which is quite often out of date.
+This was created because [libphonenumber-for-php](https://github.com/giggsey/libphonenumber-for-php) required the [intl](http://php.net/intl) extension to use the Geo Coder. The extension is not installed by default, and can be a hurdle for users. It also relies on the [CLDR](http://cldr.unicode.org) data provided by the Operating System, which is quite often out of date.
 
 ## Generating data
 

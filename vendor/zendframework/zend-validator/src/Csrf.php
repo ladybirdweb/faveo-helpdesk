@@ -116,7 +116,11 @@ class Csrf extends AbstractValidator
      */
     public function isValid($value, $context = null)
     {
-        $this->setValue((string) $value);
+        if (! is_string($value)) {
+            return false;
+        }
+
+        $this->setValue($value);
 
         $tokenId = $this->getTokenIdFromHash($value);
         $hash = $this->getValidationToken($tokenId);

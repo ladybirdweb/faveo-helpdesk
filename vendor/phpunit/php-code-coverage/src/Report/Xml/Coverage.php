@@ -12,7 +12,7 @@ namespace SebastianBergmann\CodeCoverage\Report\Xml;
 
 use SebastianBergmann\CodeCoverage\RuntimeException;
 
-class Coverage
+final class Coverage
 {
     /**
      * @var \XMLWriter
@@ -29,17 +29,20 @@ class Coverage
      */
     private $finalized = false;
 
-    public function __construct(\DOMElement $context, $line)
+    public function __construct(\DOMElement $context, string $line)
     {
         $this->contextNode = $context;
 
         $this->writer = new \XMLWriter();
         $this->writer->openMemory();
-        $this->writer->startElementNs(null, $context->nodeName, 'http://schema.phpunit.de/coverage/1.0');
+        $this->writer->startElementNS(null, $context->nodeName, 'http://schema.phpunit.de/coverage/1.0');
         $this->writer->writeAttribute('nr', $line);
     }
 
-    public function addTest($test)
+    /**
+     * @throws RuntimeException
+     */
+    public function addTest(string $test): void
     {
         if ($this->finalized) {
             throw new RuntimeException('Coverage Report already finalized');
@@ -50,7 +53,7 @@ class Coverage
         $this->writer->endElement();
     }
 
-    public function finalize()
+    public function finalize(): void
     {
         $this->writer->endElement();
 

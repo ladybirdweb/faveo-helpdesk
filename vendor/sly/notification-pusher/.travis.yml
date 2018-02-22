@@ -4,6 +4,7 @@ php:
     - 5.6
     - 7.0
     - 7.1
+    - 7.2
 
 before_script:
     - composer self-update || true
@@ -21,5 +22,6 @@ notifications:
   email:
     recipients:
       - cedric@dugat.me
+      - seyferseed@gmail.com
     on_success: change
     on_failure: change

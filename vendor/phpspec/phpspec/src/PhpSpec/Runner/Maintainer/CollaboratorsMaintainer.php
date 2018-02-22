@@ -13,14 +13,12 @@
 
 namespace PhpSpec\Runner\Maintainer;
 
-use PhpSpec\CodeAnalysis\DisallowedScalarTypehintException;
+use PhpSpec\CodeAnalysis\DisallowedNonObjectTypehintException;
 use PhpSpec\Exception\Fracture\CollaboratorNotFoundException;
-use PhpSpec\Exception\Wrapper\CollaboratorException;
 use PhpSpec\Exception\Wrapper\InvalidCollaboratorTypeException;
 use PhpSpec\Loader\Node\ExampleNode;
-use PhpSpec\Loader\Transformer\InMemoryTypeHintIndex;
 use PhpSpec\Loader\Transformer\TypeHintIndex;
-use PhpSpec\SpecificationInterface;
+use PhpSpec\Specification;
 use PhpSpec\Runner\MatcherManager;
 use PhpSpec\Runner\CollaboratorManager;
 use PhpSpec\Wrapper\Collaborator;
@@ -29,7 +27,7 @@ use Prophecy\Exception\Doubler\ClassNotFoundException;
 use Prophecy\Prophet;
 use ReflectionException;
 
-class CollaboratorsMaintainer implements MaintainerInterface
+final class CollaboratorsMaintainer implements Maintainer
 {
     /**
      * @var string
@@ -53,10 +51,10 @@ class CollaboratorsMaintainer implements MaintainerInterface
      * @param Unwrapper $unwrapper
      * @param TypeHintIndex $typeHintIndex
      */
-    public function __construct(Unwrapper $unwrapper, TypeHintIndex $typeHintIndex = null)
+    public function __construct(Unwrapper $unwrapper, TypeHintIndex $typeHintIndex)
     {
         $this->unwrapper = $unwrapper;
-        $this->typeHintIndex = $typeHintIndex ? $typeHintIndex : new InMemoryTypeHintIndex();
+        $this->typeHintIndex = $typeHintIndex;
     }
 
     /**
@@ -64,20 +62,20 @@ class CollaboratorsMaintainer implements MaintainerInterface
      *
      * @return bool
      */
-    public function supports(ExampleNode $example)
+    public function supports(ExampleNode $example): bool
     {
         return true;
     }
 
     /**
      * @param ExampleNode            $example
-     * @param SpecificationInterface $context
+     * @param Specification $context
      * @param MatcherManager         $matchers
      * @param CollaboratorManager    $collaborators
      */
     public function prepare(
         ExampleNode $example,
-        SpecificationInterface $context,
+        Specification $context,
         MatcherManager $matchers,
         CollaboratorManager $collaborators
     ) {
@@ -94,13 +92,13 @@ class CollaboratorsMaintainer implements MaintainerInterface
 
     /**
      * @param ExampleNode            $example
-     * @param SpecificationInterface $context
+     * @param Specification $context
      * @param MatcherManager         $matchers
      * @param CollaboratorManager    $collaborators
      */
     public function teardown(
         ExampleNode $example,
-        SpecificationInterface $context,
+        Specification $context,
         MatcherManager $matchers,
         CollaboratorManager $collaborators
     ) {
@@ -110,7 +108,7 @@ class CollaboratorsMaintainer implements MaintainerInterface
     /**
      * @return int
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         return 50;
     }
@@ -122,16 +120,6 @@ class CollaboratorsMaintainer implements MaintainerInterface
      */
     private function generateCollaborators(CollaboratorManager $collaborators, \ReflectionFunctionAbstract $function, \ReflectionClass $classRefl)
     {
-        if ($comment = $function->getDocComment()) {
-            $comment = str_replace("\r\n", "\n", $comment);
-            foreach (explode("\n", trim($comment)) as $line) {
-                if (preg_match(self::$docex, $line, $match)) {
-                    $collaborator = $this->getOrCreateCollaborator($collaborators, $match[2]);
-                    $collaborator->beADoubleOf($match[1]);
-                }
-            }
-        }
-
         foreach ($function->getParameters() as $parameter) {
 
             $collaborator = $this->getOrCreateCollaborator($collaborators, $parameter->getName());
@@ -147,7 +135,7 @@ class CollaboratorsMaintainer implements MaintainerInterface
             catch (ClassNotFoundException $e) {
                 $this->throwCollaboratorNotFound($e, null, $e->getClassname());
             }
-            catch (DisallowedScalarTypehintException $e) {
+            catch (DisallowedNonObjectTypehintException $e) {
                 throw new InvalidCollaboratorTypeException($parameter, $function);
             }
         }
@@ -155,7 +143,7 @@ class CollaboratorsMaintainer implements MaintainerInterface
 
     private function isUnsupportedTypeHinting(\ReflectionParameter $parameter)
     {
-        return $parameter->isArray() || version_compare(PHP_VERSION, '5.4.0', '>') && $parameter->isCallable();
+        return $parameter->isArray() || $parameter->isCallable();
     }
 
     /**
@@ -164,7 +152,7 @@ class CollaboratorsMaintainer implements MaintainerInterface
      *
      * @return Collaborator
      */
-    private function getOrCreateCollaborator(CollaboratorManager $collaborators, $name)
+    private function getOrCreateCollaborator(CollaboratorManager $collaborators, string $name): Collaborator
     {
         if (!$collaborators->has($name)) {
             $collaborator = new Collaborator($this->prophet->prophesize());
@@ -175,12 +163,12 @@ class CollaboratorsMaintainer implements MaintainerInterface
     }
 
     /**
-     * @param Exception $e
-     * @param ReflectionParameter|null $parameter
+     * @param \Exception $e
+     * @param \ReflectionParameter|null $parameter
      * @param string $className
      * @throws CollaboratorNotFoundException
      */
-    private function throwCollaboratorNotFound($e, $parameter, $className = null)
+    private function throwCollaboratorNotFound(\Exception $e, \ReflectionParameter $parameter = null, string $className = null)
     {
         throw new CollaboratorNotFoundException(
             sprintf('Collaborator does not exist '),
@@ -196,7 +184,7 @@ class CollaboratorsMaintainer implements MaintainerInterface
      *
      * @return string
      */
-    private function getParameterTypeFromIndex(\ReflectionClass $classRefl, \ReflectionParameter $parameter)
+    private function getParameterTypeFromIndex(\ReflectionClass $classRefl, \ReflectionParameter $parameter): string
     {
         return $this->typeHintIndex->lookup(
             $classRefl->getName(),
@@ -208,13 +196,13 @@ class CollaboratorsMaintainer implements MaintainerInterface
     /**
      * @param \ReflectionParameter $parameter
      *
-     * @return string
+     * @return string|null
      */
-    private function getParameterTypeFromReflection(\ReflectionParameter $parameter)
+    private function getParameterTypeFromReflection(\ReflectionParameter $parameter): string
     {
         try {
             if (null === $class = $parameter->getClass()) {
-                return null;
+                return '';
             }
 
             return $class->getName();

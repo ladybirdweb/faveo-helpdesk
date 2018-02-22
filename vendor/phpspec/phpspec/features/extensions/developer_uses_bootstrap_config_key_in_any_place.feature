@@ -6,7 +6,7 @@ Feature: Developer uses bootstrap config key in any place
     Given the config file contains:
     """
     extensions:
-      - Example1\PhpSpec\LoadsConsoleIoExtension\Extension
+      Example1\PhpSpec\LoadsConsoleIoExtension\Extension: ~
 
     bootstrap: NotExisting.php
     """
@@ -16,12 +16,12 @@ Feature: Developer uses bootstrap config key in any place
 
     namespace Example1\PhpSpec\LoadsConsoleIoExtension;
 
-    use PhpSpec\Extension\ExtensionInterface as PhpSpecExtension;
+    use PhpSpec\Extension as PhpSpecExtension;
     use PhpSpec\ServiceContainer;
 
     class Extension implements PhpSpecExtension
     {
-        public function load(ServiceContainer $container)
+        public function load(ServiceContainer $container, array $params)
         {
             $container->get('console.io');
         }

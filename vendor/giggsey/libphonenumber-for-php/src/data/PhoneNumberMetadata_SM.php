@@ -147,7 +147,7 @@ return array (
   'id' => 'SM',
   'countryCode' => 378,
   'internationalPrefix' => '00',
-  'nationalPrefixForParsing' => '(?:0549)?([89]\\d{5})',
+  'nationalPrefixForParsing' => '([89]\\d{5})',
   'nationalPrefixTransformRule' => '0549$1',
   'sameMobileAndFixedLinePattern' => false,
   'numberFormat' => 
@@ -170,7 +170,8 @@ return array (
       'format' => '$1 $2',
       'leadingDigitsPatterns' => 
       array (
-        0 => '0',
+        0 => '054',
+        1 => '0549',
       ),
       'nationalPrefixFormattingRule' => '',
       'domesticCarrierCodeFormattingRule' => '',
@@ -209,7 +210,8 @@ return array (
       'format' => '($1) $2',
       'leadingDigitsPatterns' => 
       array (
-        0 => '0',
+        0 => '054',
+        1 => '0549',
       ),
       'nationalPrefixFormattingRule' => '',
       'domesticCarrierCodeFormattingRule' => '',

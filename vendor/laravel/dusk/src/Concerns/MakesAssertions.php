@@ -3,7 +3,9 @@
 namespace Laravel\Dusk\Concerns;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Assert as PHPUnit;
+use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 
 trait MakesAssertions
@@ -37,6 +39,31 @@ trait MakesAssertions
     }
 
     /**
+     * Assert that the current URL matches the given URL.
+     *
+     * @param  string  $url
+     * @return $this
+     */
+    public function assertUrlIs($url)
+    {
+        $pattern = str_replace('\*', '.*', preg_quote($url, '/'));
+
+        $segments = parse_url($this->driver->getCurrentURL());
+
+        $currentUrl = sprintf(
+            '%s://%s%s%s',
+            $segments['scheme'],
+            $segments['host'],
+            array_get($segments, 'port', '') ? ':'.$segments['port'] : '',
+            array_get($segments, 'path', '')
+        );
+
+        PHPUnit::assertRegExp('/^'.$pattern.'$/u', $currentUrl);
+
+        return $this;
+    }
+
+    /**
      * Assert that the current URL path matches the given pattern.
      *
      * @param  string  $path
@@ -48,7 +75,7 @@ trait MakesAssertions
 
         $pattern = str_replace('\*', '.*', $pattern);
 
-        PHPUnit::assertRegExp('/^'.$pattern.'/u', parse_url(
+        PHPUnit::assertRegExp('/^'.$pattern.'$/u', parse_url(
             $this->driver->getCurrentURL()
         )['path']);
 
@@ -81,6 +108,53 @@ trait MakesAssertions
         PHPUnit::assertNotEquals($path, parse_url(
             $this->driver->getCurrentURL()
         )['path']);
+
+        return $this;
+    }
+
+    /**
+     * Assert that the current URL fragment matches the given pattern.
+     *
+     * @param  string  $fragment
+     * @return $this
+     */
+    public function assertFragmentIs($fragment)
+    {
+        $pattern = preg_quote($fragment, '/');
+
+        PHPUnit::assertRegExp('/^'.str_replace('\*', '.*', $pattern).'$/u', (string) parse_url(
+            $this->driver->executeScript('return window.location.href;')
+        , PHP_URL_FRAGMENT));
+
+        return $this;
+    }
+
+    /**
+     * Assert that the current URL fragment begins with given fragment.
+     *
+     * @param  string  $fragment
+     * @return $this
+     */
+    public function assertFragmentBeginsWith($fragment)
+    {
+        PHPUnit::assertStringStartsWith($fragment, (string) parse_url(
+            $this->driver->executeScript('return window.location.href;'), PHP_URL_FRAGMENT
+        ));
+
+        return $this;
+    }
+
+    /**
+     * Assert that the current URL fragment does not match the given fragment.
+     *
+     * @param  string  $fragment
+     * @return $this
+     */
+    public function assertFragmentIsNot($fragment)
+    {
+        PHPUnit::assertNotEquals($fragment, (string) parse_url(
+            $this->driver->executeScript('return window.location.href;'), PHP_URL_FRAGMENT
+        ));
 
         return $this;
     }
@@ -149,7 +223,7 @@ trait MakesAssertions
      * Assert that the given query string parameter is present.
      *
      * @param  string  $name
-     * @return $this
+     * @return array
      */
     protected function assertHasQueryStringParameter($name)
     {
@@ -181,6 +255,22 @@ trait MakesAssertions
         PHPUnit::assertTrue(
             ! is_null($this->cookie($name)),
             "Did not find expected cookie [{$name}]."
+        );
+
+        return $this;
+    }
+
+    /**
+     * Assert that the given cookie is not present.
+     *
+     * @param  string  $name
+     * @return $this
+     */
+    public function assertCookieMissing($name)
+    {
+        PHPUnit::assertTrue(
+            is_null($this->cookie($name)),
+            "Found unexpected cookie [{$name}]."
         );
 
         return $this;
@@ -466,7 +556,7 @@ JS;
      * @param  string  $value
      * @return $this
      */
-    function assertRadioSelected($field, $value)
+    public function assertRadioSelected($field, $value)
     {
         $element = $this->resolver->resolveForRadioSelection($field, $value);
 
@@ -540,9 +630,14 @@ JS;
      */
     public function assertSelectHasOptions($field, array $values)
     {
+        $options = $this->resolver->resolveSelectOptions($field, $values);
+
+        $options = collect($options)->unique(function (RemoteWebElement $option) {
+            return $option->getAttribute('value');
+        })->all();
+
         PHPUnit::assertCount(
-            count($values),
-            $this->resolver->resolveSelectOptions($field, $values),
+            count($values), $options,
             "Expected options [".implode(',', $values)."] for selection field [{$field}] to be available."
         );
 
@@ -637,6 +732,24 @@ JS;
 
         return $this;
     }
+    
+    /**
+     * Assert that the element with the given selector is present in the DOM.
+     *
+     * @param  string  $selector
+     * @return $this
+     */
+    public function assertPresent($selector)
+    {
+        $fullSelector = $this->resolver->format($selector);
+
+        PHPUnit::assertTrue(
+            count($this->resolver->find($selector)) > 0,
+            "Element [{$fullSelector}] is not present."
+        );
+
+        return $this;
+    }
 
     /**
      * Assert that the element with the given selector is not on the page.
@@ -672,5 +785,79 @@ JS;
         );
 
         return $this;
+    }
+
+    /**
+     * Assert that the Vue component's attribute at the given key has the given value.
+     *
+     * @param  string  $key
+     * @param  string  $value
+     * @return $this
+     */
+    public function assertVue($key, $value, $componentSelector = null)
+    {
+        PHPUnit::assertEquals($value, $this->vueAttribute($componentSelector, $key));
+
+        return $this;
+    }
+
+    /**
+     * Assert that the Vue component's attribute at the given key
+     * does not have the given value.
+     *
+     * @param  string  $key
+     * @param  string  $value
+     * @return $this
+     */
+    public function assertVueIsNot($key, $value, $componentSelector = null)
+    {
+        PHPUnit::assertNotEquals($value, $this->vueAttribute($componentSelector, $key));
+
+        return $this;
+    }
+
+    /**
+     * Assert that the Vue component's attribute at the given key
+     * is an array that contains the given value.
+     *
+     * @param  string  $key
+     * @param  string  $value
+     * @return $this
+     */
+    public function assertVueContains($key, $value, $componentSelector = null)
+    {
+        PHPUnit::assertContains($value, $this->vueAttribute($componentSelector, $key));
+
+        return $this;
+    }
+
+    /**
+     * Assert that the Vue component's attribute at the given key
+     * is an array that contains the given value.
+     *
+     * @param  string  $key
+     * @param  string  $value
+     * @return $this
+     */
+    public function assertVueDoesNotContain($key, $value, $componentSelector = null)
+    {
+        PHPUnit::assertNotContains($value, $this->vueAttribute($componentSelector, $key));
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the value of the Vue component's attribute at the given key.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function vueAttribute($componentSelector, $key)
+    {
+        $fullSelector = $this->resolver->format($componentSelector);
+
+        return $this->driver->executeScript(
+            "return document.querySelector('" . $fullSelector . "').__vue__." . $key
+        );
     }
 }

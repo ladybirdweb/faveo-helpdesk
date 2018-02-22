@@ -2,13 +2,20 @@
 
 Standalone PHP library for easy devices message notifications push.
 
-[![Latest Stable Version](https://poser.pugx.org/sly/notification-pusher/v/stable.png)](https://packagist.org/packages/sly/notification-pusher)
-[![Total Downloads](https://poser.pugx.org/sly/notification-pusher/downloads.png)](https://packagist.org/packages/sly/notification-pusher)
+[![Latest Stable Version](https://img.shields.io/packagist/v/sly/notification-pusher.svg)](https://packagist.org/packages/sly/notification-pusher)
+[![License](https://img.shields.io/packagist/l/sly/notification-pusher.svg)](https://packagist.org/packages/sly/notification-pusher)
+[![Total Downloads](https://img.shields.io/packagist/dt/sly/notification-pusher.svg)](https://packagist.org/packages/sly/notification-pusher)
 [![Build Status](https://secure.travis-ci.org/Ph3nol/NotificationPusher.png)](http://travis-ci.org/Ph3nol/NotificationPusher)
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/4f6f80c4-281a-4903-bf4c-1eb264995dbd/big.png)](https://insight.sensiolabs.com/projects/4f6f80c4-281a-4903-bf4c-1eb264995dbd)
 
 **Feel free to contribute! Thanks.**
+
+## Contributors
+
+* [Cédric Dugat](https://github.com/Ph3nol) (Author / Lead developer)
+* [Oleg Abrazhaev](https://github.com/seyfer) (Lead developer)
+* [Community contributors](https://github.com/Ph3nol/NotificationPusher/graphs/contributors)
 
 ## Installation
 

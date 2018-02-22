@@ -13,27 +13,28 @@
 
 namespace PhpSpec\Formatter;
 
-use PhpSpec\Console\IO;
+use PhpSpec\Console\ConsoleIO;
 use PhpSpec\Event\ExampleEvent;
 use PhpSpec\Exception\Example\PendingException;
 use PhpSpec\Exception\Example\SkippingException;
-use PhpSpec\Formatter\Presenter\PresenterInterface;
+use PhpSpec\Formatter\Presenter\Presenter;
+use PhpSpec\IO\IO;
 use PhpSpec\Listener\StatisticsCollector;
 use PhpSpec\Message\CurrentExampleTracker;
 
-class ConsoleFormatter extends BasicFormatter implements FatalPresenter
+abstract class ConsoleFormatter extends BasicFormatter implements FatalPresenter
 {
     /**
-     * @var IO
+     * @var ConsoleIO
      */
     private $io;
 
     /**
-     * @param PresenterInterface  $presenter
-     * @param IO                  $io
+     * @param Presenter           $presenter
+     * @param ConsoleIO           $io
      * @param StatisticsCollector $stats
      */
-    public function __construct(PresenterInterface $presenter, IO $io, StatisticsCollector $stats)
+    public function __construct(Presenter $presenter, ConsoleIO $io, StatisticsCollector $stats)
     {
         parent::__construct($presenter, $io, $stats);
         $this->io = $io;
@@ -42,7 +43,7 @@ class ConsoleFormatter extends BasicFormatter implements FatalPresenter
     /**
      * @return IO
      */
-    protected function getIO()
+    protected function getIO(): IO
     {
         return $this->io;
     }
@@ -60,7 +61,7 @@ class ConsoleFormatter extends BasicFormatter implements FatalPresenter
             $this->printSpecificException($event, 'pending');
         } elseif ($exception instanceof SkippingException) {
             if ($this->io->isVerbose()) {
-                $this->printSpecificException($event, 'skipped ');
+                $this->printSpecificException($event, 'skipped');
             }
         } elseif (ExampleEvent::FAILED === $event->getResult()) {
             $this->printSpecificException($event, 'failed');
@@ -73,7 +74,7 @@ class ConsoleFormatter extends BasicFormatter implements FatalPresenter
      * @param ExampleEvent $event
      * @param string $type
      */
-    protected function printSpecificException(ExampleEvent $event, $type)
+    protected function printSpecificException(ExampleEvent $event, string $type)
     {
         $title = str_replace('\\', DIRECTORY_SEPARATOR, $event->getSpecification()->getTitle());
         $message = $this->getPresenter()->presentException($event->getException(), $this->io->isVerbose());
@@ -84,7 +85,7 @@ class ConsoleFormatter extends BasicFormatter implements FatalPresenter
 
         $this->io->writeln(sprintf(
             '<lineno>%4d</lineno>  <%s>- %s</%s>',
-            $event->getExample()->getFunctionReflection()->getStartLine(),
+            $event->getExample()->getLineNumber(),
             $type,
             $event->getExample()->getTitle(),
             $type
@@ -97,7 +98,7 @@ class ConsoleFormatter extends BasicFormatter implements FatalPresenter
     {
         if (
             (null !== $error && ($currentExample->getCurrentExample() || $error['type'] == E_ERROR)) ||
-            (is_null($currentExample->getCurrentExample()) && defined('HHVM_VERSION'))
+            (\is_null($currentExample->getCurrentExample()) && \defined('HHVM_VERSION'))
         ) {
             ini_set('display_errors', "stderr");
             $failedOpen = ($this->io->isDecorated()) ? '<failed>' : '';

@@ -12,25 +12,19 @@ namespace SebastianBergmann\CodeCoverage\Report\Xml;
 
 use SebastianBergmann\Environment\Runtime;
 
-class BuildInformation
+final class BuildInformation
 {
     /**
      * @var \DOMElement
      */
     private $contextNode;
 
-    /**
-     * @param \DOMElement $contextNode
-     */
     public function __construct(\DOMElement $contextNode)
     {
         $this->contextNode = $contextNode;
     }
 
-    /**
-     * @param Runtime $runtime
-     */
-    public function setRuntimeInformation(Runtime $runtime)
+    public function setRuntimeInformation(Runtime $runtime): void
     {
         $runtimeNode = $this->getNodeByName('runtime');
 
@@ -39,30 +33,30 @@ class BuildInformation
         $runtimeNode->setAttribute('url', $runtime->getVendorUrl());
 
         $driverNode = $this->getNodeByName('driver');
-        if ($runtime->isHHVM()) {
-            $driverNode->setAttribute('name', 'hhvm');
-            $driverNode->setAttribute('version', constant('HHVM_VERSION'));
-
-            return;
-        }
 
         if ($runtime->hasPHPDBGCodeCoverage()) {
             $driverNode->setAttribute('name', 'phpdbg');
-            $driverNode->setAttribute('version', constant('PHPDBG_VERSION'));
+            $driverNode->setAttribute('version', \constant('PHPDBG_VERSION'));
         }
 
         if ($runtime->hasXdebug()) {
             $driverNode->setAttribute('name', 'xdebug');
-            $driverNode->setAttribute('version', phpversion('xdebug'));
+            $driverNode->setAttribute('version', \phpversion('xdebug'));
         }
     }
 
-    /**
-     * @param $name
-     *
-     * @return \DOMElement
-     */
-    private function getNodeByName($name)
+    public function setBuildTime(\DateTime $date): void
+    {
+        $this->contextNode->setAttribute('time', $date->format('D M j G:i:s T Y'));
+    }
+
+    public function setGeneratorVersions(string $phpUnitVersion, string $coverageVersion): void
+    {
+        $this->contextNode->setAttribute('phpunit', $phpUnitVersion);
+        $this->contextNode->setAttribute('coverage', $coverageVersion);
+    }
+
+    private function getNodeByName(string $name): \DOMElement
     {
         $node = $this->contextNode->getElementsByTagNameNS(
             'http://schema.phpunit.de/coverage/1.0',
@@ -79,23 +73,5 @@ class BuildInformation
         }
 
         return $node;
-    }
-
-    /**
-     * @param \DateTime $date
-     */
-    public function setBuildTime(\DateTime $date)
-    {
-        $this->contextNode->setAttribute('time', $date->format('D M j G:i:s T Y'));
-    }
-
-    /**
-     * @param string $phpUnitVersion
-     * @param string $coverageVersion
-     */
-    public function setGeneratorVersions($phpUnitVersion, $coverageVersion)
-    {
-        $this->contextNode->setAttribute('phpunit', $phpUnitVersion);
-        $this->contextNode->setAttribute('coverage', $coverageVersion);
     }
 }

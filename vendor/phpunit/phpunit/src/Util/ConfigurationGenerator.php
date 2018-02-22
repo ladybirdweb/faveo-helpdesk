@@ -10,12 +10,12 @@
 
 namespace PHPUnit\Util;
 
-class ConfigurationGenerator
+final class ConfigurationGenerator
 {
     /**
      * @var string
      */
-    private $defaultTemplate = <<<EOT
+    private const TEMPLATE = <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/{phpunit_version}/phpunit.xsd"
@@ -25,7 +25,7 @@ class ConfigurationGenerator
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
          verbose="true">
-    <testsuite>
+    <testsuite name="default">
         <directory suffix="Test.php">{tests_directory}</directory>
     </testsuite>
 
@@ -38,15 +38,7 @@ class ConfigurationGenerator
 
 EOT;
 
-    /**
-     * @param string $phpunitVersion
-     * @param string $bootstrapScript
-     * @param string $testsDirectory
-     * @param string $srcDirectory
-     *
-     * @return string
-     */
-    public function generateDefaultConfiguration($phpunitVersion, $bootstrapScript, $testsDirectory, $srcDirectory)
+    public function generateDefaultConfiguration(string $phpunitVersion, string $bootstrapScript, string $testsDirectory, string $srcDirectory): string
     {
         return \str_replace(
             [
@@ -61,7 +53,7 @@ EOT;
                 $testsDirectory,
                 $srcDirectory
             ],
-            $this->defaultTemplate
+            self::TEMPLATE
         );
     }
 }

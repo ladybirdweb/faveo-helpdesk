@@ -14,17 +14,16 @@
 namespace PhpSpec\CodeGenerator\Generator;
 
 use PhpSpec\CodeGenerator\TemplateRenderer;
-use PhpSpec\Console\IO;
+use PhpSpec\Console\ConsoleIO;
 use PhpSpec\Exception\Generator\NamedMethodNotFoundException;
-use PhpSpec\Locator\ResourceInterface;
+use PhpSpec\Locator\Resource;
 use PhpSpec\CodeGenerator\Writer\CodeWriter;
 use PhpSpec\Util\Filesystem;
-use PhpSpec\CodeGenerator\Writer\TokenizedCodeWriter;
 
-class NamedConstructorGenerator implements GeneratorInterface
+final class NamedConstructorGenerator implements Generator
 {
     /**
-     * @var IO
+     * @var ConsoleIO
      */
     private $io;
 
@@ -43,36 +42,29 @@ class NamedConstructorGenerator implements GeneratorInterface
     private $codeWriter;
 
     /**
-     * @param IO $io
+     * @param ConsoleIO $io
      * @param TemplateRenderer $templates
      * @param Filesystem $filesystem
      * @param CodeWriter $codeWriter
      */
-    public function __construct(IO $io, TemplateRenderer $templates, Filesystem $filesystem = null, CodeWriter $codeWriter = null)
+    public function __construct(ConsoleIO $io, TemplateRenderer $templates, Filesystem $filesystem, CodeWriter $codeWriter)
     {
         $this->io         = $io;
         $this->templates  = $templates;
-        $this->filesystem = $filesystem ?: new Filesystem();
-        $this->codeWriter = $codeWriter ?: new TokenizedCodeWriter();
+        $this->filesystem = $filesystem;
+        $this->codeWriter = $codeWriter;
     }
 
-    /**
-     * @param ResourceInterface $resource
-     * @param string            $generation
-     * @param array             $data
-     *
-     * @return bool
-     */
-    public function supports(ResourceInterface $resource, $generation, array $data)
+    public function supports(Resource $resource, string $generation, array $data) : bool
     {
         return 'named_constructor' === $generation;
     }
 
     /**
-     * @param ResourceInterface $resource
+     * @param Resource $resource
      * @param array             $data
      */
-    public function generate(ResourceInterface $resource, array $data = array())
+    public function generate(Resource $resource, array $data = array())
     {
         $filepath   = $resource->getSrcFilename();
         $methodName = $data['name'];
@@ -94,21 +86,12 @@ class NamedConstructorGenerator implements GeneratorInterface
         ), 2);
     }
 
-    /**
-     * @return int
-     */
-    public function getPriority()
+    public function getPriority() : int
     {
         return 0;
     }
 
-    /**
-     * @param  ResourceInterface $resource
-     * @param  string            $methodName
-     * @param  array             $arguments
-     * @return string
-     */
-    private function getContent(ResourceInterface $resource, $methodName, $arguments)
+    private function getContent(Resource $resource, string $methodName, array $arguments) : string
     {
         $className = $resource->getName();
         $class = $resource->getSrcClassname();
@@ -128,12 +111,7 @@ class NamedConstructorGenerator implements GeneratorInterface
         return $template->getContent();
     }
 
-    /**
-     * @param string $code
-     * @param string $method
-     * @return string
-     */
-    private function appendMethodToCode($code, $method)
+    private function appendMethodToCode(string $code, string $method) : string
     {
         try {
             return $this->codeWriter->insertAfterMethod($code, '__construct', $method);

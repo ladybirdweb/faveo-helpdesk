@@ -12,17 +12,17 @@ namespace SebastianBergmann\CodeCoverage;
 
 use SebastianBergmann\Version as VersionId;
 
-class Version
+final class Version
 {
+    /**
+     * @var string
+     */
     private static $version;
 
-    /**
-     * @return string
-     */
-    public static function id()
+    public static function id(): string
     {
         if (self::$version === null) {
-            $version       = new VersionId('5.2.2', dirname(__DIR__));
+            $version       = new VersionId('6.0.1', \dirname(__DIR__));
             self::$version = $version->getVersion();
         }
 

@@ -18,7 +18,7 @@ class StringEndsWith extends Constraint
     /**
      * @var string
      */
-    protected $suffix;
+    private $suffix;
 
     /**
      * @param string $suffix
@@ -30,25 +30,25 @@ class StringEndsWith extends Constraint
     }
 
     /**
-     * Evaluates the constraint for parameter $other. Returns true if the
-     * constraint is met, false otherwise.
-     *
-     * @param mixed $other Value or object to evaluate.
-     *
-     * @return bool
-     */
-    protected function matches($other)
-    {
-        return \substr($other, 0 - \strlen($this->suffix)) == $this->suffix;
-    }
-
-    /**
      * Returns a string representation of the constraint.
      *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'ends with "' . $this->suffix . '"';
+    }
+
+    /**
+     * Evaluates the constraint for parameter $other. Returns true if the
+     * constraint is met, false otherwise.
+     *
+     * @param mixed $other value or object to evaluate
+     *
+     * @return bool
+     */
+    protected function matches($other): bool
+    {
+        return \substr($other, 0 - \strlen($this->suffix)) == $this->suffix;
     }
 }

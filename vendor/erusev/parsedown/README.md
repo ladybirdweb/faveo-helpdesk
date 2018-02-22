@@ -15,6 +15,7 @@ Better Markdown Parser in PHP
 ### Features
 
 * One File
+* No Dependencies
 * Super Fast
 * Extensible
 * [GitHub flavored](https://help.github.com/articles/github-flavored-markdown)
@@ -34,6 +35,10 @@ echo $Parsedown->text('Hello _Parsedown_!'); # prints: <p>Hello <em>Parsedown</e
 ```
 
 More examples in [the wiki](https://github.com/erusev/parsedown/wiki/) and in [this video tutorial](http://youtu.be/wYZBY8DEikI).
+
+### Security
+
+Parsedown does not sanitize the HTML that it generates. When you deal with untrusted content (ex: user commnets) you should also use a HTML sanitizer like [HTML Purifier](http://htmlpurifier.org/).
 
 ### Questions
 

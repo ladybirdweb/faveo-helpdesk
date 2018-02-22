@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Http\Header;
@@ -24,56 +22,56 @@ class SetCookie implements MultipleHeaderInterface
      *
      * @var string|null
      */
-    protected $name = null;
+    protected $name;
 
     /**
      * Cookie value
      *
      * @var string|null
      */
-    protected $value = null;
+    protected $value;
 
     /**
      * Version
      *
      * @var int|null
      */
-    protected $version = null;
+    protected $version;
 
     /**
      * Max Age
      *
      * @var int|null
      */
-    protected $maxAge = null;
+    protected $maxAge;
 
     /**
      * Cookie expiry date
      *
      * @var int|null
      */
-    protected $expires = null;
+    protected $expires;
 
     /**
      * Cookie domain
      *
      * @var string|null
      */
-    protected $domain = null;
+    protected $domain;
 
     /**
      * Cookie path
      *
      * @var string|null
      */
-    protected $path = null;
+    protected $path;
 
     /**
      * Whether the cookie is secure or not
      *
      * @var bool|null
      */
-    protected $secure = null;
+    protected $secure;
 
     /**
      * If the value need to be quoted or not
@@ -85,7 +83,7 @@ class SetCookie implements MultipleHeaderInterface
     /**
      * @var bool|null
      */
-    protected $httponly = null;
+    protected $httponly;
 
     /**
      * @static
@@ -101,7 +99,7 @@ class SetCookie implements MultipleHeaderInterface
         if ($setCookieProcessor === null) {
             $setCookieClass = get_called_class();
             $setCookieProcessor = function ($headerLine) use ($setCookieClass) {
-                $header = new $setCookieClass;
+                $header = new $setCookieClass();
                 $keyValuePairs = preg_split('#;\s*#', $headerLine);
 
                 foreach ($keyValuePairs as $keyValue) {
@@ -141,7 +139,7 @@ class SetCookie implements MultipleHeaderInterface
                             $header->setVersion((int) $headerValue);
                             break;
                         case 'maxage':
-                            $header->setMaxAge((int) $headerValue);
+                            $header->setMaxAge($headerValue);
                             break;
                         default:
                             // Intentionally omitted
@@ -156,7 +154,7 @@ class SetCookie implements MultipleHeaderInterface
         HeaderValue::assertValid($value);
 
         // some sites return set-cookie::value, this is to get rid of the second :
-        $name = (strtolower($name) == 'set-cookie:') ? 'set-cookie' : $name;
+        $name = strtolower($name) == 'set-cookie:' ? 'set-cookie' : $name;
 
         // check to ensure proper header type for this factory
         if (strtolower($name) !== 'set-cookie') {
@@ -235,7 +233,7 @@ class SetCookie implements MultipleHeaderInterface
 
         $value = urlencode($this->getValue());
         if ($this->hasQuoteFieldValue()) {
-            $value = '"'. $value . '"';
+            $value = '"' . $value . '"';
         }
 
         $fieldValue = $this->getName() . '=' . $value;
@@ -344,15 +342,15 @@ class SetCookie implements MultipleHeaderInterface
      * Set Max-Age
      *
      * @param int $maxAge
-     * @throws Exception\InvalidArgumentException
      * @return SetCookie
      */
     public function setMaxAge($maxAge)
     {
-        if ($maxAge !== null && (! is_int($maxAge) || ($maxAge < 0))) {
-            throw new Exception\InvalidArgumentException('Invalid Max-Age number specified');
+        if ($maxAge === null || ! is_numeric($maxAge)) {
+            return $this;
         }
-        $this->maxAge = $maxAge;
+
+        $this->maxAge = max(0, (int) $maxAge);
         return $this;
     }
 
@@ -634,8 +632,8 @@ class SetCookie implements MultipleHeaderInterface
         $cookieDomain = strtolower($cookieDomain);
         $host = strtolower($host);
         // Check for either exact match or suffix match
-        return ($cookieDomain == $host ||
-                preg_match('/' . preg_quote($cookieDomain) . '$/', $host));
+        return $cookieDomain == $host
+            || preg_match('/' . preg_quote($cookieDomain) . '$/', $host);
     }
 
     /**

@@ -19,12 +19,21 @@ class LogicalXor extends Constraint
     /**
      * @var Constraint[]
      */
-    protected $constraints = [];
+    private $constraints = [];
+
+    public static function fromConstraints(Constraint ...$constraints): self
+    {
+        $constraint = new self;
+
+        $constraint->constraints = \array_values($constraints);
+
+        return $constraint;
+    }
 
     /**
      * @param Constraint[] $constraints
      */
-    public function setConstraints(array $constraints)
+    public function setConstraints(array $constraints): void
     {
         $this->constraints = [];
 
@@ -49,25 +58,27 @@ class LogicalXor extends Constraint
      * a boolean value instead: true in case of success, false in case of a
      * failure.
      *
-     * @param mixed  $other        Value or object to evaluate.
+     * @param mixed  $other        value or object to evaluate
      * @param string $description  Additional information about the test
      * @param bool   $returnResult Whether to return a result or throw an exception
      *
-     * @return mixed
-     *
      * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Exception
+     *
+     * @return mixed
      */
     public function evaluate($other, $description = '', $returnResult = false)
     {
         $success    = true;
         $lastResult = null;
-        $constraint = null;
 
         foreach ($this->constraints as $constraint) {
             $result = $constraint->evaluate($other, $description, true);
 
             if ($result === $lastResult) {
                 $success = false;
+
                 break;
             }
 
@@ -88,7 +99,7 @@ class LogicalXor extends Constraint
      *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         $text = '';
 
@@ -108,7 +119,7 @@ class LogicalXor extends Constraint
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         $count = 0;
 

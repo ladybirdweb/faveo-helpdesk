@@ -2,6 +2,61 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.7.0 - 2017-10-13
+
+### Added
+
+- [#110](https://github.com/zendframework/zend-http/pull/110) Adds status
+  codes 226, 308, 444, 499, 510, 599 with their corresponding constants and
+  reason phrases.
+
+### Changed
+
+- [#120](https://github.com/zendframework/zend-http/pull/120) Changes handling
+  of Cookie Max-Age parameter to conform to specification
+  [rfc6265#section-5.2.2](https://tools.ietf.org/html/rfc6265#section-5.2.2).
+  Specifically, non-numeric values are ignored and negative numbers are changed
+  to 0.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- [#115](https://github.com/zendframework/zend-http/pull/115) dropped php 5.5
+  support
+
+### Fixed
+
+- [#130](https://github.com/zendframework/zend-http/pull/130) Fixed cURL
+  adapter not resetting headers from previous request when used with output
+  stream.
+
+## 2.6.0 - 2017-01-31
+
+### Added
+- [#99](https://github.com/zendframework/zend-http/pull/99) added
+  TimeoutException for cURL adapter.
+- [#98](https://github.com/zendframework/zend-http/pull/98) added connection
+  timeout (`connecttimeout`) for cURL and Socket adapters.
+- [#97](https://github.com/zendframework/zend-http/pull/97) added support to
+  `sslcafile` and `sslcapath` to cURL adapter.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#120](https://github.com/zendframework/zend-http/pull/120) Fixed cURL
+  adapter not resetting headers from previous request when used with output
+  stream.
+
 ## 2.6.0 - 2017-01-31
 
 ### Added

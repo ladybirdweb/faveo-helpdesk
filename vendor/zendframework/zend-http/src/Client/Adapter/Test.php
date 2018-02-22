@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Http\Client\Adapter;
@@ -132,12 +130,12 @@ class Test implements AdapterInterface
         if ($uri->getQuery()) {
             $path .= '?' . $uri->getQuery();
         }
-        $request = "{$method} {$path} HTTP/{$httpVer}\r\n";
+        $request = $method . ' ' . $path . ' HTTP/' . $httpVer . "\r\n";
         foreach ($headers as $k => $v) {
             if (is_string($k)) {
-                $v = ucfirst($k) . ": $v";
+                $v = ucfirst($k) . ': ' . $v;
             }
-            $request .= "$v\r\n";
+            $request .= $v . "\r\n";
         }
 
         // Add the request body

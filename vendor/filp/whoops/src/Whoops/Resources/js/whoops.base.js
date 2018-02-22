@@ -1,17 +1,4 @@
 Zepto(function($) {
-
-  // a jQuery.getScript() equivalent to asyncronously load javascript files
-  // credits to http://stackoverflow.com/a/8812950/1597388
-  var getScript = function(src, func) {
-    var script = document.createElement('script');
-    script.async = 'async';
-    script.src = src;
-    if (func) {
-      script.onload = func;
-    }
-    document.getElementsByTagName('head')[0].appendChild( script );
-  };
-
   var $leftPanel      = $('.left-panel');
   var $frameContainer = $('.frames-container');
   var $appFramesTab   = $('#application-frames-tab');
@@ -29,11 +16,6 @@ Zepto(function($) {
   });
   $header.on('mouseleave', function () {
     $header.removeClass('header-expand');
-  });
-
-  // load prettify asyncronously to speed up page rendering
-  getScript('//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.js', function () {
-    renderCurrentCodeblock();
   });
 
   /*
@@ -68,6 +50,13 @@ Zepto(function($) {
     var activeLineNumber = +($activeLine.find('.frame-line').text());
     var $lines           = $activeFrame.find('.linenums li');
     var firstLine        = +($lines.first().val());
+
+    // We show more code than needed, purely for proper syntax highlighting
+    // Let’s hide a big chunk of that code and then scroll the remaining block
+    $activeFrame.find('.code-block').first().css({
+      maxHeight: 345,
+      overflow: 'hidden',
+    });
 
     var $offset = $($lines[activeLineNumber - firstLine - 10]);
     if ($offset.length > 0) {
@@ -185,6 +174,9 @@ Zepto(function($) {
       }
     }
   });
+
+  // Render late enough for highlightCurrentLine to be ready
+  renderCurrentCodeblock();
 
   // Avoid to quit the page with some protocol (e.g. IntelliJ Platform REST API)
   $ajaxEditors.on('click', function(e){

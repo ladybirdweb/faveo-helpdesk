@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Router;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\ViewErrorBag;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\RedirectResponse;
 use Whoops\Handler\PrettyPageHandler;
@@ -198,9 +199,9 @@ class Handler implements ExceptionHandlerContract
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         } elseif ($e instanceof AuthorizationException) {
-            $e = new AccessDeniedHttpException($e->getMessage());
+            $e = new AccessDeniedHttpException($e->getMessage(), $e);
         } elseif ($e instanceof TokenMismatchException) {
-            $e = new HttpException(419, $e->getMessage());
+            $e = new HttpException(419, $e->getMessage(), $e);
         }
 
         return $e;
@@ -216,7 +217,7 @@ class Handler implements ExceptionHandlerContract
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         return $request->expectsJson()
-                    ? response()->json(['message' => 'Unauthenticated.'], 401)
+                    ? response()->json(['message' => $exception->getMessage()], 401)
                     : redirect()->guest(route('login'));
     }
 
@@ -371,6 +372,10 @@ class Handler implements ExceptionHandlerContract
                 }
             }
 
+            if (config('app.editor', false)) {
+                $handler->setEditor(config('app.editor'));
+            }
+
             $handler->setApplicationPaths(
                 array_flip(Arr::except(
                     array_flip($files->directories(base_path())), [base_path('vendor')]
@@ -396,7 +401,9 @@ class Handler implements ExceptionHandlerContract
         })->push(__DIR__.'/views')->all());
 
         if (view()->exists($view = "errors::{$status}")) {
-            return response()->view($view, ['exception' => $e], $status, $e->getHeaders());
+            return response()->view($view, [
+                'exception' => $e, 'errors' => new ViewErrorBag,
+            ], $status, $e->getHeaders());
         }
 
         return $this->convertExceptionToResponse($e);

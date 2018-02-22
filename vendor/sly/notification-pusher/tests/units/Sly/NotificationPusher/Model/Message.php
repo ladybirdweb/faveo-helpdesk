@@ -20,7 +20,9 @@ class Message extends Units\Test
             ->array($object->getOptions())->isEmpty()
         ;
 
-        $this->if($object = new TestedModel('Test', ['param' => 'test']))
+        $this->if($object = new TestedModel('Test', [
+                'param' => 'test',
+            ]))
             ->string($object->getText())->isEqualTo('Test')
             ->when($object->setText('Test 2'))
             ->string($object->getText())->isEqualTo('Test 2')

@@ -7,9 +7,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Framework\MockObject\Matcher;
 
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\Constraint\IsEqual;
+use PHPUnit\Framework\MockObject\Invocation as BaseInvocation;
 use PHPUnit\Util\InvalidArgumentHelper;
 
 /**
@@ -19,22 +21,24 @@ use PHPUnit\Util\InvalidArgumentHelper;
  * the defined constraint $constraint. If the constraint is met it will return
  * true in matches().
  */
-class PHPUnit_Framework_MockObject_Matcher_MethodName extends PHPUnit_Framework_MockObject_Matcher_StatelessInvocation
+class MethodName extends StatelessInvocation
 {
     /**
      * @var Constraint
      */
-    protected $constraint;
+    private $constraint;
 
     /**
      * @param  Constraint|string
+     * @param mixed $constraint
      *
      * @throws Constraint
+     * @throws \PHPUnit\Framework\Exception
      */
     public function __construct($constraint)
     {
         if (!$constraint instanceof Constraint) {
-            if (!is_string($constraint)) {
+            if (!\is_string($constraint)) {
                 throw InvalidArgumentHelper::factory(1, 'string');
             }
 
@@ -53,18 +57,18 @@ class PHPUnit_Framework_MockObject_Matcher_MethodName extends PHPUnit_Framework_
     /**
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'method name ' . $this->constraint->toString();
     }
 
     /**
-     * @param PHPUnit_Framework_MockObject_Invocation $invocation
+     * @param BaseInvocation $invocation
      *
      * @return bool
      */
-    public function matches(PHPUnit_Framework_MockObject_Invocation $invocation)
+    public function matches(BaseInvocation $invocation)
     {
-        return $this->constraint->evaluate($invocation->methodName, '', true);
+        return $this->constraint->evaluate($invocation->getMethodName(), '', true);
     }
 }

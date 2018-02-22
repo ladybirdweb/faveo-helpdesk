@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Http;
@@ -26,7 +24,7 @@ class Headers implements Countable, Iterator
     /**
      * @var PluginClassLocator
      */
-    protected $pluginClassLoader = null;
+    protected $pluginClassLoader;
 
     /**
      * @var array key names for $headers array
@@ -81,7 +79,7 @@ class Headers implements Countable, Iterator
                 }
                 $current = [
                     'name' => $matches['name'],
-                    'line' => trim($line)
+                    'line' => trim($line),
                 ];
 
                 continue;

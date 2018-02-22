@@ -23,12 +23,27 @@
         "mockery/mockery": "^0.9.4"
     },
     "autoload": {
-        "psr-0": {
-            "Chumper\\Zipper": "src/"
+        "psr-4": {
+            "Chumper\\Zipper\\": "src/Chumper/Zipper"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Chumper\\Zipper\\": "tests/"
         }
     },
     "config": {
         "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Chumper\\Zipper\\ZipperServiceProvider"
+            ],
+            "aliases": {
+                "Zipper": "Chumper\\Zipper\\Zipper"
+            }
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

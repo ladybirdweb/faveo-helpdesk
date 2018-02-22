@@ -231,9 +231,10 @@ final class DriverManager
      *
      * @param array $params The list of parameters.
      *
-     * @param array A modified list of parameters with info from a database
-     *              URL extracted into indidivual parameter parts.
+     * @return array A modified list of parameters with info from a database
+     *               URL extracted into indidivual parameter parts.
      *
+     * @throws DBALException
      */
     private static function parseDatabaseUrl(array $params)
     {
@@ -257,6 +258,8 @@ final class DriverManager
         if ($url === false) {
             throw new DBALException('Malformed parameter "url".');
         }
+
+        $url = array_map('rawurldecode', $url);
 
         // If we have a connection URL, we have to unset the default PDO instance connection parameter (if any)
         // as we cannot merge connection details from the URL into the PDO instance (URL takes precedence).

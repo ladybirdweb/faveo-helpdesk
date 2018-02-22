@@ -23,12 +23,12 @@ class StringContains extends Constraint
     /**
      * @var string
      */
-    protected $string;
+    private $string;
 
     /**
      * @var bool
      */
-    protected $ignoreCase;
+    private $ignoreCase;
 
     /**
      * @param string $string
@@ -43,28 +43,11 @@ class StringContains extends Constraint
     }
 
     /**
-     * Evaluates the constraint for parameter $other. Returns true if the
-     * constraint is met, false otherwise.
-     *
-     * @param mixed $other Value or object to evaluate.
-     *
-     * @return bool
-     */
-    protected function matches($other)
-    {
-        if ($this->ignoreCase) {
-            return \mb_stripos($other, $this->string) !== false;
-        }
-
-        return \mb_strpos($other, $this->string) !== false;
-    }
-
-    /**
      * Returns a string representation of the constraint.
      *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         if ($this->ignoreCase) {
             $string = \mb_strtolower($this->string);
@@ -76,5 +59,26 @@ class StringContains extends Constraint
             'contains "%s"',
             $string
         );
+    }
+
+    /**
+     * Evaluates the constraint for parameter $other. Returns true if the
+     * constraint is met, false otherwise.
+     *
+     * @param mixed $other value or object to evaluate
+     *
+     * @return bool
+     */
+    protected function matches($other): bool
+    {
+        if ('' === $this->string) {
+            return true;
+        }
+
+        if ($this->ignoreCase) {
+            return \mb_stripos($other, $this->string) !== false;
+        }
+
+        return \mb_strpos($other, $this->string) !== false;
     }
 }

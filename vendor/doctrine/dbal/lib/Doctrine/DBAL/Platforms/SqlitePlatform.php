@@ -21,12 +21,12 @@ namespace Doctrine\DBAL\Platforms;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Schema\Column;
-use Doctrine\DBAL\Schema\TableDiff;
-use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint;
-use Doctrine\DBAL\Schema\Index;
-use Doctrine\DBAL\Schema\Identifier;
 use Doctrine\DBAL\Schema\Constraint;
+use Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use Doctrine\DBAL\Schema\Identifier;
+use Doctrine\DBAL\Schema\Index;
+use Doctrine\DBAL\Schema\Table;
+use Doctrine\DBAL\Schema\TableDiff;
 
 /**
  * The SqlitePlatform class describes the specifics and dialects of the SQLite
@@ -498,6 +498,14 @@ class SqlitePlatform extends AbstractPlatform
     /**
      * {@inheritDoc}
      */
+    public function supportsInlineColumnComments()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getName()
     {
         return 'sqlite';
@@ -574,6 +582,14 @@ class SqlitePlatform extends AbstractPlatform
     /**
      * {@inheritDoc}
      */
+    public function getInlineColumnCommentSQL($comment)
+    {
+        return '--' . str_replace("\n", "\n--", $comment) . "\n";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function initializeDoctrineTypeMappings()
     {
         $this->doctrineTypeMapping = array(
@@ -617,7 +633,7 @@ class SqlitePlatform extends AbstractPlatform
      */
     protected function getReservedKeywordsClass()
     {
-        return 'Doctrine\DBAL\Platforms\Keywords\SQLiteKeywords';
+        return Keywords\SQLiteKeywords::class;
     }
 
     /**

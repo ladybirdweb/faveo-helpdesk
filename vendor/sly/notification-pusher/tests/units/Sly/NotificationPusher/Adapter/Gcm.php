@@ -129,17 +129,48 @@ class Gcm extends Units\Test
     public function testGetServiceMessageFromOrigin()
     {
         $this->if($this->mockGenerator()->orphanize('__construct'))
-            ->and($this->mockClass('\Sly\NotificationPusher\Adapter\Gcm', '\Mock'))
+            ->and($this->mockClass(\Sly\NotificationPusher\Adapter\Gcm::class, '\Mock'))
             ->and($object = new \Mock\Gcm())
 
             ->and($this->mockGenerator()->orphanize('__construct'))
-            ->and($this->mockClass('\Sly\NotificationPusher\Model\Message', '\Mock'))
+            ->and($this->mockClass(\Sly\NotificationPusher\Model\Message::class, '\Mock'))
             ->and($message = new \Mock\Message())
+            ->and($message->getMockController()->getOptions = [
+                                            'param' => 'test',
+                                            'notificationData' => ['some' => 'foobar']
+                                       ])
             ->and($message->getMockController()->getText = 'Test')
 
-            ->object($object->getServiceMessageFromOrigin([self::GCM_TOKEN_EXAMPLE], $message))
-                ->isInstanceOf('\ZendService\Google\Gcm\Message')
-        ;
+            ->object($originalMessage = $object->getServiceMessageFromOrigin([self::GCM_TOKEN_EXAMPLE], $message))
+                ->isInstanceOf(\ZendService\Google\Gcm\Message::class)
+                ->array($originalMessage->getData())
+                    ->notHasKey('notificationData')
+                ->array($originalMessage->getNotification())
+                    ->hasKey('some')
+                    ->contains('foobar');
+    }
+
+    public function testGcmMessageUse()
+    {
+        $this->if($this->mockGenerator()->orphanize('__construct'))
+             ->and($this->mockClass(\Sly\NotificationPusher\Adapter\Gcm::class, '\Mock'))
+             ->and($object = new \Mock\Gcm())
+
+             ->and($this->mockGenerator()->orphanize('__construct'))
+             ->and($this->mockClass(\Sly\NotificationPusher\Model\GcmMessage::class, '\Mock'))
+             ->and($message = new \Mock\GcmMessage())
+            ->and($message->getMockController()->getNotificationData = [
+                'some' => 'foobar'
+            ])
+            ->and($message->getMockController()->getText = 'Test')
+
+            ->object($originalMessage = $object->getServiceMessageFromOrigin([self::GCM_TOKEN_EXAMPLE], $message))
+                ->isInstanceOf(\ZendService\Google\Gcm\Message::class)
+                ->array($originalMessage->getData())
+                    ->notHasKey('notificationData')
+                ->array($originalMessage->getNotification())
+                    ->hasKey('some')
+                    ->contains('foobar');
     }
 
     public function testPush()

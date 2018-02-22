@@ -19,7 +19,7 @@ use Symfony\Component\EventDispatcher\Event;
 /**
  * Class SuiteEvent holds information about the suite event
  */
-class SuiteEvent extends Event implements EventInterface
+class SuiteEvent extends Event implements PhpSpecEvent
 {
     /**
      * @var Suite
@@ -46,7 +46,7 @@ class SuiteEvent extends Event implements EventInterface
      * @param float   $time
      * @param integer $result
      */
-    public function __construct(Suite $suite, $time = null, $result = null)
+    public function __construct(Suite $suite, float $time = 0.0, int $result = 0)
     {
         $this->suite  = $suite;
         $this->time   = $time;
@@ -56,7 +56,7 @@ class SuiteEvent extends Event implements EventInterface
     /**
      * @return Suite
      */
-    public function getSuite()
+    public function getSuite(): Suite
     {
         return $this->suite;
     }
@@ -64,7 +64,7 @@ class SuiteEvent extends Event implements EventInterface
     /**
      * @return float
      */
-    public function getTime()
+    public function getTime(): float
     {
         return $this->time;
     }
@@ -72,7 +72,7 @@ class SuiteEvent extends Event implements EventInterface
     /**
      * @return integer
      */
-    public function getResult()
+    public function getResult(): int
     {
         return $this->result;
     }
@@ -80,7 +80,7 @@ class SuiteEvent extends Event implements EventInterface
     /**
      * @return bool
      */
-    public function isWorthRerunning()
+    public function isWorthRerunning(): bool
     {
         return $this->worthRerunning;
     }

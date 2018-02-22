@@ -9,7 +9,7 @@
       <line num="7" type="stmt" count="1"/>
       <line num="9" type="stmt" count="1"/>
       <line num="10" type="stmt" count="0"/>
-      <line num="11" type="method" name="anonymous function" complexity="1" crap="1" count="1"/>
+      <line num="11" type="method" name="anonymousFunction:11#41" complexity="1" crap="1" count="1"/>
       <line num="12" type="stmt" count="1"/>
       <line num="13" type="stmt" count="1"/>
       <line num="14" type="stmt" count="1"/>

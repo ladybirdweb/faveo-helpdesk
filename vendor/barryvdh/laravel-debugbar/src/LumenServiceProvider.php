@@ -14,7 +14,7 @@ class LumenServiceProvider extends ServiceProvider
      */
     protected function getRouter()
     {
-        return $this->app;
+        return $this->app->router;
     }
 
     /**
@@ -35,14 +35,6 @@ class LumenServiceProvider extends ServiceProvider
     protected function registerMiddleware($middleware)
     {
         $this->app->middleware([$middleware]);
-    }
-
-    /**
-     * Check the App Debug status
-     */
-    protected function checkAppDebug()
-    {
-        return env('APP_DEBUG');
     }
 
     /**

@@ -2,7 +2,6 @@
 namespace Aws\S3;
 
 use Aws\CommandInterface;
-use Aws\S3\Exception\S3Exception;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -139,9 +138,9 @@ class S3EndpointMiddleware
             && self::isRequestHostStyleCompatible($command, $request)
         ) {
             return self::HOST_STYLE;
-        } else {
-            return self::PATH_STYLE;
         }
+
+        return self::PATH_STYLE;
     }
 
     private function canAccelerate(CommandInterface $command)

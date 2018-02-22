@@ -45,7 +45,7 @@ class Regex extends AbstractValidator
     /**
      * Sets validator options
      *
-     * @param  string|Traversable $pattern
+     * @param  string|array|Traversable $pattern
      * @throws Exception\InvalidArgumentException On missing 'pattern' parameter
      */
     public function __construct($pattern)

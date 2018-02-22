@@ -16,8 +16,15 @@ class JsonMatchesErrorMessageProviderTest extends TestCase
 {
     /**
      * @dataProvider translateTypeToPrefixDataprovider
+     *
+     * @param mixed $expected
+     * @param mixed $type
+     *
+     * @throws \Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testTranslateTypeToPrefix($expected, $type)
+    public function testTranslateTypeToPrefix($expected, $type): void
     {
         $this->assertEquals(
             $expected,
@@ -27,8 +34,16 @@ class JsonMatchesErrorMessageProviderTest extends TestCase
 
     /**
      * @dataProvider determineJsonErrorDataprovider
+     *
+     * @param mixed $expected
+     * @param mixed $error
+     * @param mixed $prefix
+     *
+     * @throws \Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testDetermineJsonError($expected, $error, $prefix)
+    public function testDetermineJsonError($expected, $error, $prefix): void
     {
         $this->assertEquals(
             $expected,

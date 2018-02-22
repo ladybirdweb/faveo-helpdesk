@@ -10,7 +10,6 @@
 namespace PHPUnit\Framework\Constraint;
 
 use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Util\InvalidArgumentHelper;
 use SebastianBergmann;
 
 /**
@@ -27,32 +26,32 @@ class IsEqual extends Constraint
     /**
      * @var mixed
      */
-    protected $value;
+    private $value;
 
     /**
      * @var float
      */
-    protected $delta = 0.0;
+    private $delta = 0.0;
 
     /**
      * @var int
      */
-    protected $maxDepth = 10;
+    private $maxDepth = 10;
 
     /**
      * @var bool
      */
-    protected $canonicalize = false;
+    private $canonicalize = false;
 
     /**
      * @var bool
      */
-    protected $ignoreCase = false;
+    private $ignoreCase = false;
 
     /**
      * @var SebastianBergmann\Comparator\ComparisonFailure
      */
-    protected $lastFailure;
+    private $lastFailure;
 
     /**
      * @param mixed $value
@@ -60,28 +59,10 @@ class IsEqual extends Constraint
      * @param int   $maxDepth
      * @param bool  $canonicalize
      * @param bool  $ignoreCase
-     *
-     * @throws \PHPUnit\Framework\Exception
      */
-    public function __construct($value, $delta = 0.0, $maxDepth = 10, $canonicalize = false, $ignoreCase = false)
+    public function __construct($value, float $delta = 0.0, int $maxDepth = 10, bool $canonicalize = false, bool $ignoreCase = false)
     {
         parent::__construct();
-
-        if (!\is_numeric($delta)) {
-            throw InvalidArgumentHelper::factory(2, 'numeric');
-        }
-
-        if (!\is_int($maxDepth)) {
-            throw InvalidArgumentHelper::factory(3, 'integer');
-        }
-
-        if (!\is_bool($canonicalize)) {
-            throw InvalidArgumentHelper::factory(4, 'boolean');
-        }
-
-        if (!\is_bool($ignoreCase)) {
-            throw InvalidArgumentHelper::factory(5, 'boolean');
-        }
 
         $this->value        = $value;
         $this->delta        = $delta;
@@ -100,13 +81,13 @@ class IsEqual extends Constraint
      * a boolean value instead: true in case of success, false in case of a
      * failure.
      *
-     * @param mixed  $other        Value or object to evaluate.
+     * @param mixed  $other        value or object to evaluate
      * @param string $description  Additional information about the test
      * @param bool   $returnResult Whether to return a result or throw an exception
      *
-     * @return mixed
-     *
      * @throws ExpectationFailedException
+     *
+     * @return mixed
      */
     public function evaluate($other, $description = '', $returnResult = false)
     {
@@ -149,9 +130,12 @@ class IsEqual extends Constraint
     /**
      * Returns a string representation of the constraint.
      *
+     * @throws SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Exception
+     *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         $delta = '';
 
@@ -161,7 +145,7 @@ class IsEqual extends Constraint
             }
 
             return \sprintf(
-                'is equal to <string:%s>',
+                'is equal to "%s"',
                 $this->value
             );
         }

@@ -3714,7 +3714,7 @@ class TicketController extends Controller
                 }
                 $ticket->closed = 1;
                 $ticket->closed_at = date('Y-m-d H:i:s');
-                //$sla                       = new \App\Http\Controllers\SLA\ApplySla();
+            //$sla                       = new \App\Http\Controllers\SLA\ApplySla();
                 //$ticket->resolution_time   = $this->ticketOpenTime($ticket_id);
                 //$ticket->is_resolution_sla = $this->isSla($ticket->duedate);
             } elseif ($status->id == '5') {

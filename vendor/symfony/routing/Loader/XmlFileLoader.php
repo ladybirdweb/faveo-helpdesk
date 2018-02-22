@@ -36,8 +36,8 @@ class XmlFileLoader extends FileLoader
      *
      * @return RouteCollection A RouteCollection instance
      *
-     * @throws \InvalidArgumentException When the file cannot be loaded or when the XML cannot be
-     *                                   parsed because it does not validate against the scheme.
+     * @throws \InvalidArgumentException when the file cannot be loaded or when the XML cannot be
+     *                                   parsed because it does not validate against the scheme
      */
     public function load($file, $type = null)
     {
@@ -227,6 +227,16 @@ class XmlFileLoader extends FileLoader
                 default:
                     throw new \InvalidArgumentException(sprintf('Unknown tag "%s" used in file "%s". Expected "default", "requirement", "option" or "condition".', $n->localName, $path));
             }
+        }
+
+        if ($controller = $node->getAttribute('controller')) {
+            if (isset($defaults['_controller'])) {
+                $name = $node->hasAttribute('id') ? sprintf('"%s"', $node->getAttribute('id')) : sprintf('the "%s" tag', $node->tagName);
+
+                throw new \InvalidArgumentException(sprintf('The routing file "%s" must not specify both the "controller" attribute and the defaults key "_controller" for %s.', $path, $name));
+            }
+
+            $defaults['_controller'] = $controller;
         }
 
         return array($defaults, $requirements, $options, $condition);

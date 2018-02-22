@@ -13,19 +13,19 @@
 
 namespace PhpSpec\Process\Prerequisites;
 
-use PhpSpec\Process\Context\ExecutionContextInterface;
+use PhpSpec\Process\Context\ExecutionContext;
 
-final class SuitePrerequisites implements SuitePrerequisitesInterface
+final class SuitePrerequisites implements PrerequisiteTester
 {
     /**
-     * @var ExecutionContextInterface
+     * @var ExecutionContext
      */
     private $executionContext;
 
     /**
-     * @param ExecutionContextInterface $executionContext
+     * @param ExecutionContext $executionContext
      */
-    public function __construct(ExecutionContextInterface $executionContext)
+    public function __construct(ExecutionContext $executionContext)
     {
         $this->executionContext = $executionContext;
     }
@@ -46,9 +46,9 @@ final class SuitePrerequisites implements SuitePrerequisitesInterface
         if ($undefinedTypes) {
             throw new PrerequisiteFailedException(sprintf(
                 "The type%s %s %s generated but could not be loaded. Do you need to configure an autoloader?\n",
-                count($undefinedTypes) > 1 ? 's' : '',
+                \count($undefinedTypes) > 1 ? 's' : '',
                 join(', ', $undefinedTypes),
-                count($undefinedTypes) > 1 ? 'were' : 'was'
+                \count($undefinedTypes) > 1 ? 'were' : 'was'
             ));
         }
     }

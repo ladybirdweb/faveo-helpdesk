@@ -8,38 +8,39 @@
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\MockObject\Generator;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers PHPUnit_Framework_MockObject_Generator
+ * @covers \PHPUnit\Framework\MockObject\Generator
  *
- * @uses PHPUnit_Framework_MockObject_InvocationMocker
- * @uses PHPUnit_Framework_MockObject_Builder_InvocationMocker
- * @uses PHPUnit_Framework_MockObject_Invocation_Object
- * @uses PHPUnit_Framework_MockObject_Invocation_Static
- * @uses PHPUnit_Framework_MockObject_Matcher
- * @uses PHPUnit_Framework_MockObject_Matcher_InvokedRecorder
- * @uses PHPUnit_Framework_MockObject_Matcher_MethodName
- * @uses PHPUnit_Framework_MockObject_Stub_Return
- * @uses PHPUnit_Framework_MockObject_Matcher_InvokedCount
+ * @uses \PHPUnit\Framework\MockObject\InvocationMocker
+ * @uses \PHPUnit\Framework\MockObject\Builder\InvocationMocker
+ * @uses \PHPUnit\Framework\MockObject\Invocation\ObjectInvocation
+ * @uses \PHPUnit\Framework\MockObject\Invocation\StaticInvocation
+ * @uses \PHPUnit\Framework\MockObject\Matcher
+ * @uses \PHPUnit\Framework\MockObject\Matcher\InvokedRecorder
+ * @uses \PHPUnit\Framework\MockObject\Matcher\MethodName
+ * @uses \PHPUnit\Framework\MockObject\Stub\ReturnStub
+ * @uses \PHPUnit\Framework\MockObject\Matcher\InvokedCount
  */
-class Framework_MockObject_GeneratorTest extends TestCase
+class GeneratorTest extends TestCase
 {
     /**
-     * @var PHPUnit_Framework_MockObject_Generator
+     * @var Generator
      */
     private $generator;
 
     protected function setUp()
     {
-        $this->generator = new PHPUnit_Framework_MockObject_Generator;
+        $this->generator = new Generator;
     }
 
-    /**
-     * @expectedException PHPUnit_Framework_MockObject_RuntimeException
-     */
     public function testGetMockFailsWhenInvalidFunctionNameIsPassedInAsAFunctionToMock()
     {
+        $this->expectException(\PHPUnit\Framework\MockObject\RuntimeException::class);
+
         $this->generator->getMock(stdClass::class, [0]);
     }
 
@@ -50,12 +51,11 @@ class Framework_MockObject_GeneratorTest extends TestCase
         $this->assertTrue(method_exists($mock, 'testFunction'));
     }
 
-    /**
-     * @expectedException PHPUnit_Framework_MockObject_RuntimeException
-     * @expectedExceptionMessage duplicates: "foo, bar, foo" (duplicate: "foo")
-     */
     public function testGetMockGeneratorFails()
     {
+        $this->expectException(\PHPUnit\Framework\MockObject\RuntimeException::class);
+        $this->expectExceptionMessage('duplicates: "foo, bar, foo" (duplicate: "foo")');
+
         $this->generator->getMock(stdClass::class, ['foo', 'bar', 'foo']);
     }
 
@@ -114,18 +114,18 @@ class Framework_MockObject_GeneratorTest extends TestCase
 
     /**
      * @dataProvider getMockForAbstractClassExpectsInvalidArgumentExceptionDataprovider
-     * @expectedException PHPUnit\Framework\Exception
      */
     public function testGetMockForAbstractClassExpectingInvalidArgumentException($className, $mockClassName)
     {
+        $this->expectException(PHPUnit\Framework\Exception::class);
+
         $this->generator->getMockForAbstractClass($className, [], $mockClassName);
     }
 
-    /**
-     * @expectedException PHPUnit_Framework_MockObject_RuntimeException
-     */
     public function testGetMockForAbstractClassAbstractClassDoesNotExist()
     {
+        $this->expectException(\PHPUnit\Framework\MockObject\RuntimeException::class);
+
         $this->generator->getMockForAbstractClass('Tux');
     }
 
@@ -169,11 +169,10 @@ class Framework_MockObject_GeneratorTest extends TestCase
         $this->assertInstanceOf('SingletonClass', $mock);
     }
 
-    /**
-     * @expectedException PHPUnit_Framework_MockObject_RuntimeException
-     */
     public function testExceptionIsRaisedForMutuallyExclusiveOptions()
     {
+        $this->expectException(\PHPUnit\Framework\MockObject\RuntimeException::class);
+
         $this->generator->getMock(stdClass::class, [], [], '', false, true, true, true, true);
     }
 
@@ -186,7 +185,7 @@ class Framework_MockObject_GeneratorTest extends TestCase
 
         $this->assertInstanceOf(AnInterfaceWithReturnType::class, $stub);
         $this->assertInstanceOf(AnInterface::class, $stub);
-        $this->assertInstanceOf(PHPUnit_Framework_MockObject_MockObject::class, $stub);
+        $this->assertInstanceOf(MockObject::class, $stub);
     }
 
     public function testCanConfigureMethodsForDoubleOfNonExistentClass()
