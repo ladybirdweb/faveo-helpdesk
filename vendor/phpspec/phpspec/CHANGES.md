@@ -1,7 +1,103 @@
+4.3.0 / 2017-12-22
+==================
+
+* Add support for .yaml file extension in config file (@unfunco)
+* [fixed] src folder is created when does not exist and using PSR-4 (@unfunco)
+
+4.2.5 / 2017-12-06
+==================
+
+* [fixed] Undefined exception when giving wrong args to Trigger matcher (@greg0ire)
+
+3.4.3 / 2017-12-06
+==================
+
+* [fixed] Undefined exception when giving wrong args to Trigger matcher (@greg0ire)
+
+4.2.4 / 2017-11-24
+==================
+
+* [fixed] Errors from incorrect type hint when collaborator method not found (@greg0ire)
+
+4.2.3 / 2017-11-24
+==================
+
+* [fixed] Allow installation with Symfony 4 (@sroze, @gnugat)
+
+4.2.2 / 2017-11-17
+==================
+
+* [fixed] Missing autocomplete for shouldIterateLike matchers (@pamil)
+* [fixed] Regression where config files called .dist or . prefix were not picked up (@jakzal)
+
+4.2.1 / 2017-11-10
+==================
+
+* [fixed] Properly handle empty config file (@ciaranmcnulty)
+* [fixed] Non-existent folders broke composer detection (@greg0ire)
+
+4.2.0 / 2017-10-28
+==================
+
+* Detect autoloader from composer to automatically define spec locations, reducing need for suites with PSR-4 (@greg0ire)
+* Describe command without class now shows prompt with autocompleting input (@fullpipe)
+
+4.1.0 / 2017-10-18
+==================
+
+* New `shouldIterateLike`/`shouldYieldLike` matcher (@sroze)
+* Checks class name is not a reserved word when creating spec (@avant1)
+
+4.0.4 / 2017-09-13
+==================
+
+* Allow installation on PHP 7.2 (@ciaranmcnulty)
+* [performance] Improved speed when invoking native functions (@bendavies)
+
+4.0.3 / 2017-08-26
+==================
+
+* [fixed] TypeError thrown when calling `ExampleEvent::getTime()` on event constructed w/ nullable `$time` (@oxkhar)
+* [fixed] TypeError thrown when presenting diff in verbose mode (@avant1)
+
+4.0.2 / 2017-08-05
+==================
+
+* [fixed] Illegible text when using a white terminal background (@MarcelloDuarte)
+
+3.4.2 / 2017-08-05
+==================
+
+* [fixed] Illegible text when using a white terminal background (@MarcelloDuarte)
+
+4.0.1 / 2017-07-04
+==================
+
+* [fixed] type error when handling errors (@nightlinus)
+
+4.0.0 / 2017-07-29
+==================
+
+* Dropped support for PHP versions less than 7.0 (@ciaranmcnulty)
+* Added scalar types and return types (@Sam-Burns, @ciaranmcnulty)
+* [fixed] parameters after extensions ignored in config file (@borNfreee)
+
+3.4.1 / 2017-07-29
+==================
+
+* [fixed] parameters after extensions ignored in config file (@borNfreee)
+
 2.5.8 / 2017-07-29
 ==================
 
 * [fixed] parameters after extensions ignored in config file (@borNfreee)
+
+3.4.0 / 2017-05-12
+==================
+
+* [fixed] constructor no longer generated multuple tiles (@CarlosV2)
+* [fixed] warning when src_path is empty (@vitorf7)
+* Support methods with reserved names on PHP 7 (@avant1)
 
 2.5.7 / 2017-05-12
 ==================
@@ -9,21 +105,58 @@
 * [fixed] constructor no longer generated multuple tiles (@CarlosV2)
 * [fixed] warning when src_path is empty (@vitorf7)
 
+3.3.0 / 2017-04-27
+==================
+
+* Support sebastian/exporter 3.0 (@remicollet)
+* Support `.phpspec.yml` as a filename (@shrikeh)
+
 2.5.6 / 2017-04-27
 ==================
 
 * Support sebastian/exporter 2.0 and 3.0 (@mattsches and @remicollet)
+
+3.2.3 / 2016-01-29
+==================
+
+* IDE support for shouldYield/shouldStartYielding (@pamil)
+
+3.2.2 / 2016-12-04
+==================
+
+* Support sebastian/exporter 2.0 providing PHPUnit 5.7 compatibility (@mattsches)
 
 2.5.5 / 2016-12-04
 ==================
 
 * [fixed] PHP 5.3 support was broken (@unfunco)
 
+3.2.1 / 2016-12-02
+==================
+
+* [fixed] Prevent deprecation warning in Symfony 3.2.0 (@veewee)
+
 2.5.4 / 2016-12-02
 ==================
 
 * [fixed] Prevent deprecation warning in Symfony 3.2.0 (@veewee)
 * [performance] Reduced size of Phar (@unfunco)
+
+3.2.0 / 2016-11-27
+==================
+
+* New `shouldTrigger` matcher for specifying a warning is triggered (@Taluu)
+* New `shouldIterateAs` matcher for specifying how a class is iterated (@pamil)
+* New `shouldBeApproximately` matcher for comparing floats (@brainrepo)
+* [fixed] No longer suggests an outdated version of Nyan formatters (@unfunco)
+* [performance] Reduced size of Phar (@unfunco)
+
+3.1.1 / 2016-09-26
+==================
+
+* [fixed] Accidental linebreaks in spec name are not allowed (@randompixel)
+* [fixed] Throwable can be passed as instance to shouldThrow (@jameshalsall)
+* [performance] Phar version now has an optimised autoloader
 
 2.5.3 / 2016-09-26
 ==================
@@ -32,16 +165,43 @@
 * [fixed] Throwable can be passed as instance to shouldThrow (@jameshalsall)
 * [performance] Phar version now has an optimised autoloader
 
+3.1.0 / 2017-09-17
+======================
+
+* Many errors are now caught and handled without ending suite execution (@ciaranmcnulty)
+* Validates that matchers specified in config are valid matchers (@avant1)
+* Shows Error message even when Exception was expected (@harrisonbro)
+* Disallows doubling of PHP 7.1's `iterable` type (@avant1)
+* [fixed] Exceptions are properly highlighted in error messages (@ciaranmcnulty)
+
 2.5.2 / 2016-09-04
 ==================
 
 * [fixed] Exceptions are properly highlighted in error messages (@ciaranmcnulty)
 
+3.0.0 / 2016-07-16
+==================
+
+* Default template now uses `::class` (@ciaranmcnulty)
+* No longer declare variables/constants in global scope (@ciaranmcnulty)
+* Ability to register matchers quickly via the config file (@gquemener)
+* [fixed] Describing a class providing a namespace with leading backslash (@mheki)
+* [fixed] Bug where rerun test suite was uncoloured (@ciaranmcnulty)
+* [fixed] Bug in DotFormatter when number of rows is multiple of column width (@bendavies)
+* [BC break] Removed support for @param for creating doubles (@Sam-Burns)
+* [BC break] Bumped dependency versions (see migration guide) (@ciaranmcnulty)
+* [BC break] Removed various code branches for support of older dependencies (@ciaranmcnulty)
+* [BC break] Made classes final or abstract in simple cases (@ciaranmcnulty)
+* [BC break] Removed `*Interface` from all interfaces (@shanethehat)
+* [BC break] Removed deprecated code / optional interfaces (@mheki)
+* [BC break] Changed extension config format so parameters are scoped to extensions (@docteurklein)
+* [BC break] New Extension and ServiceContainer interfaces (@ciaranmcnulty)
+
 2.5.1 / 2016-07-16
 ==================
 
 * [fixed] Describing a class providing a namespace with leading backslash (@mheki)
-* [fixed] bug where rerun test suite was uncoloured (@ciaranmcnulty)
+* [fixed] Bug where rerun test suite was uncoloured (@ciaranmcnulty)
 * [fixed] Bug in DotFormatter when number of rows is multiple of column width (@bendavies)
 
 2.5.0 / 2016-03-20

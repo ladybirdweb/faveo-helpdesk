@@ -33,7 +33,7 @@ class RegisterControllerArgumentLocatorsPass implements CompilerPassInterface
     private $resolverServiceId;
     private $controllerTag;
 
-    public function __construct($resolverServiceId = 'argument_resolver.service', $controllerTag = 'controller.service_arguments')
+    public function __construct(string $resolverServiceId = 'argument_resolver.service', string $controllerTag = 'controller.service_arguments')
     {
         $this->resolverServiceId = $resolverServiceId;
         $this->controllerTag = $controllerTag;
@@ -53,11 +53,13 @@ class RegisterControllerArgumentLocatorsPass implements CompilerPassInterface
             $def->setPublic(true);
             $class = $def->getClass();
             $autowire = $def->isAutowired();
+            $bindings = $def->getBindings();
 
             // resolve service class, taking parent definitions into account
-            while (!$class && $def instanceof ChildDefinition) {
+            while ($def instanceof ChildDefinition) {
                 $def = $container->findDefinition($def->getParent());
-                $class = $def->getClass();
+                $class = $class ?: $def->getClass();
+                $bindings = $def->getBindings();
             }
             $class = $parameterBag->resolveValue($class);
 
@@ -129,6 +131,19 @@ class RegisterControllerArgumentLocatorsPass implements CompilerPassInterface
                         } elseif ($p->allowsNull() && !$p->isOptional()) {
                             $invalidBehavior = ContainerInterface::NULL_ON_INVALID_REFERENCE;
                         }
+                    } elseif (isset($bindings[$bindingName = '$'.$p->name]) || isset($bindings[$bindingName = $type])) {
+                        $binding = $bindings[$bindingName];
+
+                        list($bindingValue, $bindingId) = $binding->getValues();
+
+                        if (!$bindingValue instanceof Reference) {
+                            continue;
+                        }
+
+                        $binding->setValues(array($bindingValue, $bindingId, true));
+                        $args[$p->name] = $bindingValue;
+
+                        continue;
                     } elseif (!$type || !$autowire) {
                         continue;
                     }

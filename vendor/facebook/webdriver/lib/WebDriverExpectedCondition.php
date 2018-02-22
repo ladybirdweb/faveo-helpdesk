@@ -194,6 +194,35 @@ class WebDriverExpectedCondition
     }
 
     /**
+     * An expectation for checking than at least one element in an array of elements is present on the
+     * DOM of a page and visible.
+     * Visibility means that the element is not only displayed but also has a height and width that is greater than 0.
+     *
+     * @param WebDriverBy $by The located used to find the element.
+     * @return WebDriverExpectedCondition<WebDriverElement> Condition returns the elements that are located and visible.
+     */
+    public static function visibilityOfAnyElementLocated(WebDriverBy $by)
+    {
+        return new static(
+            function (WebDriver $driver) use ($by) {
+                $elements = $driver->findElements($by);
+                $visibleElements = [];
+
+                foreach ($elements as $element) {
+                    try {
+                        if ($element->isDisplayed()) {
+                            $visibleElements[] = $element;
+                        }
+                    } catch (StateElementReferenceException $e) {
+                    }
+                }
+
+                return count($visibleElements) > 0 ? $visibleElements : null;
+            }
+        );
+    }
+
+    /**
      * An expectation for checking that an element, known to be present on the DOM of a page, is visible.
      * Visibility means that the element is not only displayed but also has a height and width that is greater than 0.
      *
@@ -453,7 +482,7 @@ class WebDriverExpectedCondition
      * @return WebDriverExpectedCondition<mixed> Condition returns the return value of the getApply() of the given
      * condition.
      */
-    public static function refreshed(WebDriverExpectedCondition $condition)
+    public static function refreshed(self $condition)
     {
         return new static(
             function (WebDriver $driver) use ($condition) {
@@ -558,7 +587,7 @@ class WebDriverExpectedCondition
      * @param WebDriverExpectedCondition $condition The condition to be negated.
      * @return mixed The negation of the result of the given condition.
      */
-    public static function not(WebDriverExpectedCondition $condition)
+    public static function not(self $condition)
     {
         return new static(
             function (WebDriver $driver) use ($condition) {

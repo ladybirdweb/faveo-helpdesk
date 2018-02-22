@@ -13,22 +13,22 @@
 
 namespace PhpSpec\Process\ReRunner;
 
-use PhpSpec\Process\Context\ExecutionContextInterface;
+use PhpSpec\Process\Context\ExecutionContext;
 use Symfony\Component\Process\PhpExecutableFinder;
 
-class WindowsPassthruReRunner extends PhpExecutableReRunner
+final class WindowsPassthruReRunner extends PhpExecutableReRunner
 {
     /**
-     * @var ExecutionContextInterface
+     * @var ExecutionContext
      */
     private $executionContext;
 
     /**
      * @param PhpExecutableFinder $phpExecutableFinder
-     * @param ExecutionContextInterface $executionContext
+     * @param ExecutionContext $executionContext
      * @return static
      */
-    public static function withExecutionContext(PhpExecutableFinder $phpExecutableFinder, ExecutionContextInterface $executionContext)
+    public static function withExecutionContext(PhpExecutableFinder $phpExecutableFinder, ExecutionContext $executionContext)
     {
         $reRunner = new static($phpExecutableFinder);
         $reRunner->executionContext = $executionContext;
@@ -39,7 +39,7 @@ class WindowsPassthruReRunner extends PhpExecutableReRunner
     /**
      * @return boolean
      */
-    public function isSupported()
+    public function isSupported(): bool
     {
         return (php_sapi_name() == 'cli')
             && $this->getExecutablePath()

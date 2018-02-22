@@ -2,6 +2,9 @@
 
 ## Getting started
 
+**NOTE** If you want even easier start, please check our facades
+* [Facades](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/facades.md)
+
 First, we are going to discover this library entities:
 
 * Models (messages, pushes, devices)

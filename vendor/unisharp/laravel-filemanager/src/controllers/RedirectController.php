@@ -1,12 +1,13 @@
-<?php namespace Unisharp\Laravelfilemanager\controllers;
+<?php
 
+namespace Unisharp\Laravelfilemanager\controllers;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Http\Request;
 
 /**
- * Class RedirectController
- * @package Unisharp\Laravelfilemanager\controllers
+ * Class RedirectController.
  */
 class RedirectController extends LfmController
 {
@@ -14,16 +15,15 @@ class RedirectController extends LfmController
 
     public function __construct()
     {
-        $delimiter = config('lfm.prefix') . '/';
-        $url = request()->url();
-        // dd($delimiter);
+        $delimiter = config('lfm.url_prefix', config('lfm.prefix')). '/';
+        $url = urldecode(request()->url());
         $external_path = substr($url, strpos($url, $delimiter) + strlen($delimiter));
 
         $this->file_path = base_path(config('lfm.base_directory', 'public') . '/' . $external_path);
     }
 
     /**
-     * Get image from custom directory by route
+     * Get image from custom directory by route.
      *
      * @param string $image_path
      * @return string
@@ -34,7 +34,7 @@ class RedirectController extends LfmController
     }
 
     /**
-     * Get file from custom directory by route
+     * Get file from custom directory by route.
      *
      * @param string $file_name
      * @return string
@@ -50,7 +50,7 @@ class RedirectController extends LfmController
     {
         $file_path = $this->file_path;
 
-        if (!File::exists($file_path)) {
+        if (! File::exists($file_path)) {
             abort(404);
         }
 
@@ -58,7 +58,7 @@ class RedirectController extends LfmController
         $type = parent::getFileType($file_path);
 
         $response = Response::make($file);
-        $response->header("Content-Type", $type);
+        $response->header('Content-Type', $type);
 
         return $response;
     }

@@ -69,6 +69,10 @@ class Diff_SequenceMatcher
 
 	private $options = array();
 
+    private $matchingBlocks = null;
+    private $opCodes = null;
+    private $fullBCount = null;
+
 	private $defaultOptions = array(
 		'ignoreNewLines' => false,
 		'ignoreWhitespace' => false,
@@ -217,7 +221,7 @@ class Diff_SequenceMatcher
 	 */
 	private function isBJunk($b)
 	{
-		if(isset($this->juncDict[$b])) {
+		if(isset($this->junkDict[$b])) {
 			return true;
 		}
 
@@ -258,7 +262,7 @@ class Diff_SequenceMatcher
 		for($i = $alo; $i < $ahi; ++$i) {
 			$newJ2Len = array();
 			$jDict = $this->arrayGetDefault($this->b2j, $a[$i], $nothing);
-			foreach($jDict as $jKey => $j) {
+			foreach($jDict as $j) {
 				if($j < $blo) {
 					continue;
 				}
@@ -291,7 +295,7 @@ class Diff_SequenceMatcher
 		}
 
 		while($bestI > $alo && $bestJ > $blo && $this->isBJunk($b[$bestJ - 1]) &&
-			!$this->isLineDifferent($bestI - 1, $bestJ - 1)) {
+			!$this->linesAreDifferent($bestI - 1, $bestJ - 1)) {
 				--$bestI;
 				--$bestJ;
 				++$bestSize;

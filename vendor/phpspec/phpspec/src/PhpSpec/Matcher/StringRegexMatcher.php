@@ -13,20 +13,20 @@
 
 namespace PhpSpec\Matcher;
 
-use PhpSpec\Formatter\Presenter\PresenterInterface;
+use PhpSpec\Formatter\Presenter\Presenter;
 use PhpSpec\Exception\Example\FailureException;
 
-class StringRegexMatcher extends BasicMatcher
+final class StringRegexMatcher extends BasicMatcher
 {
     /**
-     * @var PresenterInterface
+     * @var Presenter
      */
     private $presenter;
 
     /**
-     * @param PresenterInterface $presenter
+     * @param Presenter $presenter
      */
-    public function __construct(PresenterInterface $presenter)
+    public function __construct(Presenter $presenter)
     {
         $this->presenter = $presenter;
     }
@@ -38,11 +38,11 @@ class StringRegexMatcher extends BasicMatcher
      *
      * @return bool
      */
-    public function supports($name, $subject, array $arguments)
+    public function supports(string $name, $subject, array $arguments): bool
     {
         return 'match' === $name
-            && is_string($subject)
-            && 1 == count($arguments)
+            && \is_string($subject)
+            && 1 == \count($arguments)
         ;
     }
 
@@ -52,7 +52,7 @@ class StringRegexMatcher extends BasicMatcher
      *
      * @return bool
      */
-    protected function matches($subject, array $arguments)
+    protected function matches($subject, array $arguments): bool
     {
         return (Boolean) preg_match($arguments[0], $subject);
     }
@@ -64,7 +64,7 @@ class StringRegexMatcher extends BasicMatcher
      *
      * @return FailureException
      */
-    protected function getFailureException($name, $subject, array $arguments)
+    protected function getFailureException(string $name, $subject, array $arguments): FailureException
     {
         return new FailureException(sprintf(
             'Expected %s to match %s regex, but it does not.',
@@ -80,7 +80,7 @@ class StringRegexMatcher extends BasicMatcher
      *
      * @return FailureException
      */
-    protected function getNegativeFailureException($name, $subject, array $arguments)
+    protected function getNegativeFailureException(string $name, $subject, array $arguments): FailureException
     {
         return new FailureException(sprintf(
             'Expected %s not to match %s regex, but it does.',

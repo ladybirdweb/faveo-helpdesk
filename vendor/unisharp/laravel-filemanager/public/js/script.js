@@ -15,6 +15,10 @@ $(document).ready(function () {
         );
       }
     });
+
+    $(window).on('dragenter', function(){
+      $('#uploadModal').modal('show');
+    });
 });
 
 // ======================
@@ -58,6 +62,7 @@ $('#upload-btn').click(function () {
     success: function (data, statusText, xhr, $form) {
       resetUploadForm();
       refreshFoldersAndItems(data);
+      displaySuccessMessage(data);
     },
     error: function (jqXHR, textStatus, errorThrown) {
       displayErrorResponse(jqXHR);
@@ -156,6 +161,18 @@ function displayErrorResponse(jqXHR) {
   notify('<div style="max-height:50vh;overflow: scroll;">' + jqXHR.responseText + '</div>');
 }
 
+function displaySuccessMessage(data){
+  if(data == 'OK'){
+    var success = $('<div>').addClass('alert alert-success')
+      .append($('<i>').addClass('fa fa-check'))
+      .append(' File Uploaded Successfully.');
+    $('#alerts').append(success);
+    setTimeout(function () {
+      success.remove();
+    }, 2000);
+  }
+}
+
 var refreshFoldersAndItems = function (data) {
   loadFolders();
   if (data != 'OK') {
@@ -178,6 +195,7 @@ function loadFolders() {
 }
 
 function loadItems() {
+  $('#lfm-loader').show();
   performLfmRequest('jsonitems', {show_list: show_list, sort_type: sort_type}, 'html')
     .done(function (data) {
       var response = JSON.parse(data);
@@ -192,6 +210,9 @@ function loadItems() {
         $('#to-previous').removeClass('hide');
       }
       setOpenFolders();
+    })
+    .always(function(){
+      $('#lfm-loader').hide();
     });
 }
 
@@ -320,8 +341,8 @@ function useFile(file_url) {
       window.close();
     }
   } else {
-    // No WYSIWYG editor found, use custom method.
-    window.opener.SetUrl(url, file_path);
+    // No editor found, open/download file using browser's default method
+    window.open(url);
   }
 }
 //end useFile
@@ -334,7 +355,7 @@ function defaultParameters() {
 }
 
 function notImp() {
-  bootbox.alert('Not yet implemented!');;
+  notify('Not yet implemented!');
 }
 
 function notify(message) {
@@ -342,7 +363,6 @@ function notify(message) {
 }
 
 function fileView(file_url, timestamp) {
-  var rnd = makeRandom();
   bootbox.dialog({
     title: lang['title-view'],
     message: $('<img>')
@@ -352,14 +372,4 @@ function fileView(file_url, timestamp) {
     onEscape: true,
     backdrop: true
   });
-}
-
-function makeRandom() {
-  var text = '';
-  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-  for (var i = 0; i < 20; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return text;
 }

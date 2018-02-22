@@ -23,7 +23,7 @@ class RegularExpression extends Constraint
     /**
      * @var string
      */
-    protected $pattern;
+    private $pattern;
 
     /**
      * @param string $pattern
@@ -31,20 +31,8 @@ class RegularExpression extends Constraint
     public function __construct($pattern)
     {
         parent::__construct();
-        $this->pattern = $pattern;
-    }
 
-    /**
-     * Evaluates the constraint for parameter $other. Returns true if the
-     * constraint is met, false otherwise.
-     *
-     * @param mixed $other Value or object to evaluate.
-     *
-     * @return bool
-     */
-    protected function matches($other)
-    {
-        return \preg_match($this->pattern, $other) > 0;
+        $this->pattern = $pattern;
     }
 
     /**
@@ -52,11 +40,24 @@ class RegularExpression extends Constraint
      *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return \sprintf(
             'matches PCRE pattern "%s"',
             $this->pattern
         );
+    }
+
+    /**
+     * Evaluates the constraint for parameter $other. Returns true if the
+     * constraint is met, false otherwise.
+     *
+     * @param mixed $other value or object to evaluate
+     *
+     * @return bool
+     */
+    protected function matches($other): bool
+    {
+        return \preg_match($this->pattern, $other) > 0;
     }
 }

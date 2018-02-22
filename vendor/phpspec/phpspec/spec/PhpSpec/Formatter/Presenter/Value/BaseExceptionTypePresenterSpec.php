@@ -2,6 +2,7 @@
 
 namespace spec\PhpSpec\Formatter\Presenter\Value;
 
+use PhpSpec\Exception\ErrorException;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -21,5 +22,11 @@ class BaseExceptionTypePresenterSpec extends ObjectBehavior
     {
         $this->present(new \Exception('foo'))
             ->shouldReturn('[exc:Exception("foo")]');
+    }
+
+    function it_should_present_an_error_as_a_string()
+    {
+        $this->present(new ErrorException(new \Error('foo')))
+            ->shouldReturn('[err:Error("foo")]');
     }
 }

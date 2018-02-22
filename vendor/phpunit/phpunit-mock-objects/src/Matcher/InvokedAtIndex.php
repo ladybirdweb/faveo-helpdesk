@@ -7,8 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Framework\MockObject\Matcher;
 
 use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\MockObject\Invocation as BaseInvocation;
 
 /**
  * Invocation matcher which checks if a method was invoked at a certain index.
@@ -20,17 +22,17 @@ use PHPUnit\Framework\ExpectationFailedException;
  *
  * If the index is never reached it will throw an exception in index.
  */
-class PHPUnit_Framework_MockObject_Matcher_InvokedAtIndex implements PHPUnit_Framework_MockObject_Matcher_Invocation
+class InvokedAtIndex implements Invocation
 {
     /**
      * @var int
      */
-    protected $sequenceIndex;
+    private $sequenceIndex;
 
     /**
      * @var int
      */
-    protected $currentIndex = -1;
+    private $currentIndex = -1;
 
     /**
      * @param int $sequenceIndex
@@ -43,17 +45,17 @@ class PHPUnit_Framework_MockObject_Matcher_InvokedAtIndex implements PHPUnit_Fra
     /**
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'invoked at sequence index ' . $this->sequenceIndex;
     }
 
     /**
-     * @param PHPUnit_Framework_MockObject_Invocation $invocation
+     * @param BaseInvocation $invocation
      *
      * @return bool
      */
-    public function matches(PHPUnit_Framework_MockObject_Invocation $invocation)
+    public function matches(BaseInvocation $invocation)
     {
         $this->currentIndex++;
 
@@ -61,9 +63,9 @@ class PHPUnit_Framework_MockObject_Matcher_InvokedAtIndex implements PHPUnit_Fra
     }
 
     /**
-     * @param PHPUnit_Framework_MockObject_Invocation $invocation
+     * @param BaseInvocation $invocation
      */
-    public function invoked(PHPUnit_Framework_MockObject_Invocation $invocation)
+    public function invoked(BaseInvocation $invocation)
     {
     }
 
@@ -77,7 +79,7 @@ class PHPUnit_Framework_MockObject_Matcher_InvokedAtIndex implements PHPUnit_Fra
     {
         if ($this->currentIndex < $this->sequenceIndex) {
             throw new ExpectationFailedException(
-                sprintf(
+                \sprintf(
                     'The expected invocation at index %s was never reached.',
                     $this->sequenceIndex
                 )

@@ -27,12 +27,6 @@ class ArrayInput extends Input
 {
     private $parameters;
 
-    /**
-     * Constructor.
-     *
-     * @param array                $parameters An array of parameters
-     * @param InputDefinition|null $definition A InputDefinition instance
-     */
     public function __construct(array $parameters, InputDefinition $definition = null)
     {
         $this->parameters = $parameters;
@@ -66,7 +60,7 @@ class ArrayInput extends Input
                 $v = $k;
             }
 
-            if ($onlyParams && $v === '--') {
+            if ($onlyParams && '--' === $v) {
                 return false;
             }
 
@@ -86,7 +80,7 @@ class ArrayInput extends Input
         $values = (array) $values;
 
         foreach ($this->parameters as $k => $v) {
-            if ($onlyParams && ($k === '--' || (is_int($k) && $v === '--'))) {
+            if ($onlyParams && ('--' === $k || (is_int($k) && '--' === $v))) {
                 return false;
             }
 
@@ -133,7 +127,7 @@ class ArrayInput extends Input
     protected function parse()
     {
         foreach ($this->parameters as $key => $value) {
-            if ($key === '--') {
+            if ('--' === $key) {
                 return;
             }
             if (0 === strpos($key, '--')) {

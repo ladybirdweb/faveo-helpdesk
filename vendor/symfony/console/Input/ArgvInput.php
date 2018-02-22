@@ -44,8 +44,6 @@ class ArgvInput extends Input
     private $parsed;
 
     /**
-     * Constructor.
-     *
      * @param array|null           $argv       An array of parameters from the CLI (in the argv format)
      * @param InputDefinition|null $definition A InputDefinition instance
      */
@@ -148,11 +146,6 @@ class ArgvInput extends Input
 
         if (false !== $pos = strpos($name, '=')) {
             if (0 === strlen($value = substr($name, $pos + 1))) {
-                // if no value after "=" then substr() returns "" since php7 only, false before
-                // see http://php.net/manual/fr/migration70.incompatible.php#119151
-                if (\PHP_VERSION_ID < 70000 && false === $value) {
-                    $value = '';
-                }
                 array_unshift($this->parsed, $value);
             }
             $this->addLongOption(substr($name, 0, $pos), $value);
@@ -280,7 +273,7 @@ class ArgvInput extends Input
         $values = (array) $values;
 
         foreach ($this->tokens as $token) {
-            if ($onlyParams && $token === '--') {
+            if ($onlyParams && '--' === $token) {
                 return false;
             }
             foreach ($values as $value) {
@@ -303,7 +296,7 @@ class ArgvInput extends Input
 
         while (0 < count($tokens)) {
             $token = array_shift($tokens);
-            if ($onlyParams && $token === '--') {
+            if ($onlyParams && '--' === $token) {
                 return false;
             }
 
@@ -333,7 +326,7 @@ class ArgvInput extends Input
                 return $match[1].$this->escapeToken($match[2]);
             }
 
-            if ($token && $token[0] !== '-') {
+            if ($token && '-' !== $token[0]) {
                 return $this->escapeToken($token);
             }
 

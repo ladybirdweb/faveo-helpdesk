@@ -110,7 +110,7 @@ class RouteListCommand extends Command
             'method' => implode('|', $route->methods()),
             'uri'    => $route->uri(),
             'name'   => $route->getName(),
-            'action' => $route->getActionName(),
+            'action' => ltrim($route->getActionName(), '\\'),
             'middleware' => $this->getMiddleware($route),
         ]);
     }
@@ -163,7 +163,7 @@ class RouteListCommand extends Command
     {
         if (($this->option('name') && ! Str::contains($route['name'], $this->option('name'))) ||
              $this->option('path') && ! Str::contains($route['uri'], $this->option('path')) ||
-             $this->option('method') && ! Str::contains($route['method'], $this->option('method'))) {
+             $this->option('method') && ! Str::contains($route['method'], strtoupper($this->option('method')))) {
             return;
         }
 

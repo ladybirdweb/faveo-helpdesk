@@ -24,7 +24,8 @@ use Doctrine\DBAL\Schema\Sequence;
 /**
  * Platform to ensure compatibility of Doctrine with Microsoft SQL Server 2012 version.
  *
- * Differences to SQL Server 2008 and before are that sequences are introduced.
+ * Differences to SQL Server 2008 and before are that sequences are introduced,
+ * and support for the new OFFSET... FETCH syntax for result pagination has been added.
  *
  * @author Steve Müller <st.mueller@dzh-online.de>
  */
@@ -100,7 +101,7 @@ class SQLServer2012Platform extends SQLServer2008Platform
      */
     protected function getReservedKeywordsClass()
     {
-        return 'Doctrine\DBAL\Platforms\Keywords\SQLServer2012Keywords';
+        return Keywords\SQLServer2012Keywords::class;
     }
 
     /**
@@ -115,18 +116,17 @@ class SQLServer2012Platform extends SQLServer2008Platform
         // Queries using OFFSET... FETCH MUST have an ORDER BY clause
         // Find the position of the last instance of ORDER BY and ensure it is not within a parenthetical statement
         // but can be in a newline
-        $matches      = array();
-        $matchesCount = preg_match_all("/[\\s]+order by /i", $query, $matches, PREG_OFFSET_CAPTURE);
-        $orderByPos   = false;
-
+        $matches = array();
+        $matchesCount = preg_match_all("/[\\s]+order\\s+by\\s/im", $query, $matches, PREG_OFFSET_CAPTURE);
+        $orderByPos = false;
         if ($matchesCount > 0) {
             $orderByPos = $matches[0][($matchesCount - 1)][1];
         }
-        
+
         if ($orderByPos === false
             || substr_count($query, "(", $orderByPos) - substr_count($query, ")", $orderByPos)
         ) {
-            if (stripos($query, 'SELECT DISTINCT') === 0) {
+            if (preg_match('/^SELECT\s+DISTINCT/im', $query)) {
                 // SQL Server won't let us order by a non-selected column in a DISTINCT query,
                 // so we have to do this madness. This says, order by the first column in the
                 // result. SQL Server's docs say that a nonordered query's result order is non-

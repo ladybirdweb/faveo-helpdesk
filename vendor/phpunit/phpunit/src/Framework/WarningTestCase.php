@@ -49,17 +49,9 @@ class WarningTestCase extends TestCase
     }
 
     /**
-     * @throws Exception
-     */
-    protected function runTest()
-    {
-        throw new Warning($this->message);
-    }
-
-    /**
      * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
@@ -69,8 +61,16 @@ class WarningTestCase extends TestCase
      *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'Warning';
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function runTest(): void
+    {
+        throw new Warning($this->message);
     }
 }

@@ -47,14 +47,14 @@ class Printer
                 if (\strpos($out, 'socket://') === 0) {
                     $out = \explode(':', \str_replace('socket://', '', $out));
 
-                    if (\count($out) != 2) {
+                    if (\count($out) !== 2) {
                         throw new Exception;
                     }
 
                     $this->out = \fsockopen($out[0], $out[1]);
                 } else {
-                    if (\strpos($out, 'php://') === false && !\is_dir(\dirname($out))) {
-                        \mkdir(\dirname($out), 0777, true);
+                    if (\strpos($out, 'php://') === false && !@\mkdir(\dirname($out), 0777, true) && !\is_dir(\dirname($out))) {
+                        throw new \RuntimeException(\sprintf('Directory "%s" was not created', \dirname($out)));
                     }
 
                     $this->out = \fopen($out, 'wt');
@@ -70,7 +70,7 @@ class Printer
     /**
      * Flush buffer and close output if it's not to a PHP stream
      */
-    public function flush()
+    public function flush(): void
     {
         if ($this->out && \strncmp($this->outTarget, 'php://', 6) !== 0) {
             \fclose($this->out);
@@ -84,7 +84,7 @@ class Printer
      * since the flush() function may close the file being written to, rendering
      * the current object no longer usable.
      */
-    public function incrementalFlush()
+    public function incrementalFlush(): void
     {
         if ($this->out) {
             \fflush($this->out);
@@ -96,7 +96,7 @@ class Printer
     /**
      * @param string $buffer
      */
-    public function write($buffer)
+    public function write(string $buffer): void
     {
         if ($this->out) {
             \fwrite($this->out, $buffer);
@@ -105,7 +105,7 @@ class Printer
                 $this->incrementalFlush();
             }
         } else {
-            if (PHP_SAPI != 'cli' && PHP_SAPI != 'phpdbg') {
+            if (PHP_SAPI !== 'cli' && PHP_SAPI !== 'phpdbg') {
                 $buffer = \htmlspecialchars($buffer, ENT_SUBSTITUTE);
             }
 
@@ -122,7 +122,7 @@ class Printer
      *
      * @return bool
      */
-    public function getAutoFlush()
+    public function getAutoFlush(): bool
     {
         return $this->autoFlush;
     }
@@ -135,12 +135,8 @@ class Printer
      *
      * @param bool $autoFlush
      */
-    public function setAutoFlush($autoFlush)
+    public function setAutoFlush(bool $autoFlush): void
     {
-        if (\is_bool($autoFlush)) {
-            $this->autoFlush = $autoFlush;
-        } else {
-            throw InvalidArgumentHelper::factory(1, 'boolean');
-        }
+        $this->autoFlush = $autoFlush;
     }
 }

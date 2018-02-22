@@ -26,7 +26,6 @@ return array(
     'Doctrine\\Common\\Collections\\' => array($vendorDir . '/doctrine/collections/lib'),
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
     'Davibennun\\LaravelPushNotification' => array($vendorDir . '/davibennun/laravel-push-notification/src'),
-    'Chumper\\Zipper' => array($vendorDir . '/chumper/zipper/src'),
     'Chumper\\Datatable' => array($vendorDir . '/chumper/datatable/src'),
     'Bugsnag_' => array($vendorDir . '/bugsnag/bugsnag/src'),
     'Bugsnag\\BugsnagLaravel\\' => array($vendorDir . '/bugsnag/bugsnag-laravel/src'),

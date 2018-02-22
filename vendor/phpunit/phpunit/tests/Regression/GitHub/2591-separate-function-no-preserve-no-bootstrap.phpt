@@ -5,6 +5,8 @@ Expected result is to have an error, because of no classes loaded.
 <?php
 if (extension_loaded('xdebug')) {
     print 'skip: xdebug loaded';
+} elseif (version_compare(PHP_VERSION, '7.3.0-dev', '>=')) {
+    print 'skip: PHP < 7.3 required';
 }
 --FILE--
 <?php
@@ -27,11 +29,9 @@ There were 2 errors:
 
 1) Issue2591_SeparateFunctionNoPreserveTest::testChangedGlobalString
 PHPUnit\Framework\Exception: PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found %s
-Fatal error: Class 'PHPUnit\Framework\TestCase' not found %s
 
 2) Issue2591_SeparateFunctionNoPreserveTest::testGlobalString
 PHPUnit\Framework\Exception: PHP Fatal error:  Class 'PHPUnit\Framework\TestCase' not found %s
-Fatal error: Class 'PHPUnit\Framework\TestCase' not found %s
 
 ERRORS!
 Tests: 2, Assertions: 0, Errors: 2.

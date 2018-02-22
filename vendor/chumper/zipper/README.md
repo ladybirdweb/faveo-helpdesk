@@ -1,10 +1,10 @@
-#Zipper
+# Zipper
 
 [![Build Status](https://travis-ci.org/Chumper/Zipper.png)](https://travis-ci.org/Chumper/Zipper)
 
 This is a simple Wrapper around the ZipArchive methods with some handy functions.
 
-##Installation
+## Installation
 
 1. Add this package to the list of required packages, inside `composer.json`
   * for Laravel 5: `"chumper/zipper": "1.0.x"`
@@ -18,14 +18,14 @@ This is a simple Wrapper around the ZipArchive methods with some handy functions
 
 You can now access Zipper with the `Zipper` alias.
 
-##Simple example
+## Simple example
 ```php
 $files = glob('public/files/*');
 Zipper::make('public/test.zip')->add($files)->close();
 ```
 - by default the package will create the `test.zip` in the project route folder but in the example above we changed it to `project_route/public/`.
 
-##Another example
+## Another example
 ```php
 $zipper = new \Chumper\Zipper\Zipper;
 
@@ -55,30 +55,30 @@ You can easily chain most functions, except `getFileContent`, `getStatus`, `clos
 The main reason I wrote this little package is the `extractTo` method since it allows you to be very flexible when extracting zips. So you can for example implement an update method which will just override the changed files.
 
 
-#Functions
+# Functions
 
-##make($pathToFile)
+## make($pathToFile)
 
 `Create` or `Open` a zip archive; if the file does not exists it will create a new one.
 It will return the Zipper instance so you can chain easily.
 
 
-##add($files/folder)
+## add($files/folder)
 
 You can add and array of Files, or a Folder which all the files in that folder will then be added, so from the first example we could instead do something like `$files = 'public/files/';`.
 
 
-##addString($filename, $content)
+## addString($filename, $content)
 
 add a single file to the zip by specifying a name and content as strings.
 
 
-##remove($file/s)
+## remove($file/s)
 
 removes a single file or an array of files from the zip.
 
 
-##folder($folder)
+## folder($folder)
 
 Specify a folder to 'add files to' or 'remove files from' from the zip, example
 
@@ -86,7 +86,7 @@ Specify a folder to 'add files to' or 'remove files from' from the zip, example
 	Zipper::make('test.zip')->folder('test')->remove('composer.json');
 
 
-##listFiles($regexFilter = null)
+## listFiles($regexFilter = null)
 
 Lists all files within archive (if no filter pattern is provided). Use `$regexFilter` parameter to filter files. See [Pattern Syntax](http://php.net/manual/en/reference.pcre.pattern.syntax.php) for regular expression syntax 
 
@@ -101,31 +101,31 @@ $notLogFiles = Zipper::make('test.zip')->listFiles('/^(?!.*\.log).*$/i');
 ```
 
 
-##home()
+## home()
 
 Resets the folder pointer.
 
-##zip($fileName)
+## zip($fileName)
 
 Uses the ZipRepository for file handling.
 
 
-##getFileContent($filePath)
+## getFileContent($filePath)
 
 get the content of a file in the zip. This will return the content or false.
 
 
-##getStatus()
+## getStatus()
 
 get the opening status of the zip as integer.
 
 
-##close()
+## close()
 
 closes the zip and writes all changes.
 
 
-##extractTo($path)
+## extractTo($path)
 
 Extracts the content of the zip archive to the specified location, for example
 
@@ -181,7 +181,7 @@ test.zip
     |- fileInSubFolder.log
 ```
 
-##extractMatchingRegex($path, $regex)
+## extractMatchingRegex($path, $regex)
 
 Extracts the content of the zip archive matching regular expression to the specified location. See [Pattern Syntax](http://php.net/manual/en/reference.pcre.pattern.syntax.php) for regular expression syntax.
 
@@ -195,7 +195,7 @@ Example: extract all files **except** those ending with `test.php` from `src` fo
 Zipper::make('test.zip')->folder->('src')->extractMatchingRegex($path, '/^(?!.*test\.php).*$/i'); 
 ```
 
-#Development
+# Development
 
 Maybe it is a good idea to add other compression functions like rar, phar or bzip2 etc...
 Everything is setup for that, if you want just fork and develop further.

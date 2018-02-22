@@ -17,22 +17,22 @@ namespace PHPUnit\Framework\Constraint;
  */
 class IsType extends Constraint
 {
-    const TYPE_ARRAY    = 'array';
-    const TYPE_BOOL     = 'bool';
-    const TYPE_FLOAT    = 'float';
-    const TYPE_INT      = 'int';
-    const TYPE_NULL     = 'null';
-    const TYPE_NUMERIC  = 'numeric';
-    const TYPE_OBJECT   = 'object';
-    const TYPE_RESOURCE = 'resource';
-    const TYPE_STRING   = 'string';
-    const TYPE_SCALAR   = 'scalar';
-    const TYPE_CALLABLE = 'callable';
+    public const TYPE_ARRAY    = 'array';
+    public const TYPE_BOOL     = 'bool';
+    public const TYPE_FLOAT    = 'float';
+    public const TYPE_INT      = 'int';
+    public const TYPE_NULL     = 'null';
+    public const TYPE_NUMERIC  = 'numeric';
+    public const TYPE_OBJECT   = 'object';
+    public const TYPE_RESOURCE = 'resource';
+    public const TYPE_STRING   = 'string';
+    public const TYPE_SCALAR   = 'scalar';
+    public const TYPE_CALLABLE = 'callable';
 
     /**
      * @var array
      */
-    protected $types = [
+    private $types = [
         'array'    => true,
         'boolean'  => true,
         'bool'     => true,
@@ -53,7 +53,7 @@ class IsType extends Constraint
     /**
      * @var string
      */
-    protected $type;
+    private $type;
 
     /**
      * @param string $type
@@ -78,14 +78,27 @@ class IsType extends Constraint
     }
 
     /**
+     * Returns a string representation of the constraint.
+     *
+     * @return string
+     */
+    public function toString(): string
+    {
+        return \sprintf(
+            'is of type "%s"',
+            $this->type
+        );
+    }
+
+    /**
      * Evaluates the constraint for parameter $other. Returns true if the
      * constraint is met, false otherwise.
      *
-     * @param mixed $other Value or object to evaluate.
+     * @param mixed $other value or object to evaluate
      *
      * @return bool
      */
-    protected function matches($other)
+    protected function matches($other): bool
     {
         switch ($this->type) {
             case 'numeric':
@@ -125,18 +138,5 @@ class IsType extends Constraint
             case 'callable':
                 return \is_callable($other);
         }
-    }
-
-    /**
-     * Returns a string representation of the constraint.
-     *
-     * @return string
-     */
-    public function toString()
-    {
-        return \sprintf(
-            'is of type "%s"',
-            $this->type
-        );
     }
 }

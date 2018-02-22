@@ -39,9 +39,9 @@ use Doctrine\DBAL\Connection;
  *
  * CREATE sequences (
  *   sequence_name VARCHAR(255) NOT NULL,
- *   sequence_value INT NOT NULL DEFAULT '1',
- *   sequence_increment_by INT NOT NULL DEFAULT '1',
- *   PRIMARY KEY (table_name)
+ *   sequence_value INT NOT NULL DEFAULT 1,
+ *   sequence_increment_by INT NOT NULL DEFAULT 1,
+ *   PRIMARY KEY (sequence_name)
  * );
  *
  * Technically this generator works as follows:
@@ -156,7 +156,7 @@ class TableGenerator
             $this->conn->commit();
 
         } catch (\Exception $e) {
-            $this->conn->rollback();
+            $this->conn->rollBack();
             throw new \Doctrine\DBAL\DBALException("Error occurred while generating ID with TableGenerator, aborted generation: " . $e->getMessage(), 0, $e);
         }
 

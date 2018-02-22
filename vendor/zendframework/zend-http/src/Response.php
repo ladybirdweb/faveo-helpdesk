@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Http;
@@ -35,6 +33,7 @@ class Response extends AbstractMessage implements ResponseInterface
     const STATUS_CODE_206 = 206;
     const STATUS_CODE_207 = 207;
     const STATUS_CODE_208 = 208;
+    const STATUS_CODE_226 = 226;
     const STATUS_CODE_300 = 300;
     const STATUS_CODE_301 = 301;
     const STATUS_CODE_302 = 302;
@@ -43,6 +42,7 @@ class Response extends AbstractMessage implements ResponseInterface
     const STATUS_CODE_305 = 305;
     const STATUS_CODE_306 = 306;
     const STATUS_CODE_307 = 307;
+    const STATUS_CODE_308 = 308;
     const STATUS_CODE_400 = 400;
     const STATUS_CODE_401 = 401;
     const STATUS_CODE_402 = 402;
@@ -71,6 +71,8 @@ class Response extends AbstractMessage implements ResponseInterface
     const STATUS_CODE_429 = 429;
     const STATUS_CODE_431 = 431;
     const STATUS_CODE_451 = 451;
+    const STATUS_CODE_444 = 444;
+    const STATUS_CODE_499 = 499;
     const STATUS_CODE_500 = 500;
     const STATUS_CODE_501 = 501;
     const STATUS_CODE_502 = 502;
@@ -80,7 +82,9 @@ class Response extends AbstractMessage implements ResponseInterface
     const STATUS_CODE_506 = 506;
     const STATUS_CODE_507 = 507;
     const STATUS_CODE_508 = 508;
+    const STATUS_CODE_510 = 510;
     const STATUS_CODE_511 = 511;
+    const STATUS_CODE_599 = 599;
     /**#@-*/
 
     /**
@@ -101,6 +105,7 @@ class Response extends AbstractMessage implements ResponseInterface
         206 => 'Partial Content',
         207 => 'Multi-status',
         208 => 'Already Reported',
+        226 => 'IM Used',
         // REDIRECTION CODES
         300 => 'Multiple Choices',
         301 => 'Moved Permanently',
@@ -110,6 +115,7 @@ class Response extends AbstractMessage implements ResponseInterface
         305 => 'Use Proxy',
         306 => 'Switch Proxy', // Deprecated
         307 => 'Temporary Redirect',
+        308 => 'Permanent Redirect',
         // CLIENT ERROR
         400 => 'Bad Request',
         401 => 'Unauthorized',
@@ -138,7 +144,9 @@ class Response extends AbstractMessage implements ResponseInterface
         428 => 'Precondition Required',
         429 => 'Too Many Requests',
         431 => 'Request Header Fields Too Large',
+        444 => 'Connection Closed Without Response',
         451 => 'Unavailable For Legal Reasons',
+        499 => 'Client Closed Request',
         // SERVER ERROR
         500 => 'Internal Server Error',
         501 => 'Not Implemented',
@@ -149,7 +157,9 @@ class Response extends AbstractMessage implements ResponseInterface
         506 => 'Variant Also Negotiates',
         507 => 'Insufficient Storage',
         508 => 'Loop Detected',
+        510 => 'Not Extended',
         511 => 'Network Authentication Required',
+        599 => 'Network Connect Timeout Error',
     ];
 
     /**
@@ -160,7 +170,7 @@ class Response extends AbstractMessage implements ResponseInterface
     /**
      * @var string|null Null means it will be looked up from the $reasonPhrase list above
      */
-    protected $reasonPhrase = null;
+    protected $reasonPhrase;
 
     /**
      * Populate object from string
@@ -192,7 +202,7 @@ class Response extends AbstractMessage implements ResponseInterface
         $response->setStatusCode($matches['status']);
         $response->setReasonPhrase((isset($matches['reason']) ? $matches['reason'] : ''));
 
-        if (count($lines) === 0) {
+        if (empty($lines)) {
             return $response;
         }
 
@@ -322,7 +332,7 @@ class Response extends AbstractMessage implements ResponseInterface
      */
     public function getReasonPhrase()
     {
-        if (null == $this->reasonPhrase and isset($this->recommendedReasonPhrases[$this->statusCode])) {
+        if (null == $this->reasonPhrase && isset($this->recommendedReasonPhrases[$this->statusCode])) {
             $this->reasonPhrase = $this->recommendedReasonPhrases[$this->statusCode];
         }
         return $this->reasonPhrase;

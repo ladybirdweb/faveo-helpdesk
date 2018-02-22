@@ -13,20 +13,20 @@
 
 namespace PhpSpec\Matcher;
 
-use PhpSpec\Formatter\Presenter\PresenterInterface;
+use PhpSpec\Formatter\Presenter\Presenter;
 use PhpSpec\Exception\Example\FailureException;
 
-class StringStartMatcher extends BasicMatcher
+final class StringStartMatcher extends BasicMatcher
 {
     /**
-     * @var PresenterInterface
+     * @var Presenter
      */
     private $presenter;
 
     /**
-     * @param PresenterInterface $presenter
+     * @param Presenter $presenter
      */
-    public function __construct(PresenterInterface $presenter)
+    public function __construct(Presenter $presenter)
     {
         $this->presenter = $presenter;
     }
@@ -38,11 +38,11 @@ class StringStartMatcher extends BasicMatcher
      *
      * @return bool
      */
-    public function supports($name, $subject, array $arguments)
+    public function supports(string $name, $subject, array $arguments): bool
     {
         return 'startWith' === $name
-            && is_string($subject)
-            && 1 == count($arguments)
+            && \is_string($subject)
+            && 1 == \count($arguments)
         ;
     }
 
@@ -52,7 +52,7 @@ class StringStartMatcher extends BasicMatcher
      *
      * @return bool
      */
-    protected function matches($subject, array $arguments)
+    protected function matches($subject, array $arguments): bool
     {
         return 0 === strpos($subject, $arguments[0]);
     }
@@ -64,7 +64,7 @@ class StringStartMatcher extends BasicMatcher
      *
      * @return FailureException
      */
-    protected function getFailureException($name, $subject, array $arguments)
+    protected function getFailureException(string $name, $subject, array $arguments): FailureException
     {
         return new FailureException(sprintf(
             'Expected %s to start with %s, but it does not.',
@@ -80,7 +80,7 @@ class StringStartMatcher extends BasicMatcher
      *
      * @return FailureException
      */
-    protected function getNegativeFailureException($name, $subject, array $arguments)
+    protected function getNegativeFailureException(string $name, $subject, array $arguments): FailureException
     {
         return new FailureException(sprintf(
             'Expected %s not to start with %s, but it does.',

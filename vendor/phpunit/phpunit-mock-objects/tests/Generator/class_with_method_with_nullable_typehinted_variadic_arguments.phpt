@@ -1,9 +1,5 @@
 --TEST--
-PHPUnit_Framework_MockObject_Generator::generate('ClassWithMethodWithVariadicArguments', array(), 'MockFoo', true, true)
---SKIPIF--
-<?php
-if (!version_compare(PHP_VERSION, '7.1', '>=')) print 'skip: PHP >= 7.1 required';
-?>
+\PHPUnit\Framework\MockObject\Generator::generate('ClassWithMethodWithVariadicArguments', [], 'MockFoo', true, true)
 --FILE--
 <?php
 class ClassWithMethodWithNullableTypehintedVariadicArguments
@@ -15,11 +11,11 @@ class ClassWithMethodWithNullableTypehintedVariadicArguments
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-$generator = new PHPUnit_Framework_MockObject_Generator;
+$generator = new \PHPUnit\Framework\MockObject\Generator;
 
 $mock = $generator->generate(
     'ClassWithMethodWithNullableTypehintedVariadicArguments',
-    array(),
+    [],
     'MockFoo',
     true,
     true
@@ -27,8 +23,8 @@ $mock = $generator->generate(
 
 print $mock['code'];
 ?>
---EXPECTF--
-class MockFoo extends ClassWithMethodWithNullableTypehintedVariadicArguments implements PHPUnit_Framework_MockObject_MockObject
+--EXPECT--
+class MockFoo extends ClassWithMethodWithNullableTypehintedVariadicArguments implements PHPUnit\Framework\MockObject\MockObject
 {
     private $__phpunit_invocationMocker;
     private $__phpunit_originalObject;
@@ -41,7 +37,7 @@ class MockFoo extends ClassWithMethodWithNullableTypehintedVariadicArguments imp
 
     public function methodWithNullableTypehintedVariadicArguments($a, ?string ...$parameters)
     {
-        $arguments = array($a);
+        $arguments = [$a];
         $count     = func_num_args();
 
         if ($count > 1) {
@@ -53,7 +49,7 @@ class MockFoo extends ClassWithMethodWithNullableTypehintedVariadicArguments imp
         }
 
         $result = $this->__phpunit_getInvocationMocker()->invoke(
-            new PHPUnit_Framework_MockObject_Invocation_Object(
+            new \PHPUnit\Framework\MockObject\Invocation\ObjectInvocation(
                 'ClassWithMethodWithNullableTypehintedVariadicArguments', 'methodWithNullableTypehintedVariadicArguments', $arguments, '', $this, true
             )
         );
@@ -61,16 +57,17 @@ class MockFoo extends ClassWithMethodWithNullableTypehintedVariadicArguments imp
         return $result;
     }
 
-    public function expects(PHPUnit_Framework_MockObject_Matcher_Invocation $matcher)
+    public function expects(\PHPUnit\Framework\MockObject\Matcher\Invocation $matcher)
     {
         return $this->__phpunit_getInvocationMocker()->expects($matcher);
     }
 
     public function method()
     {
-        $any = new PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount;
+        $any     = new \PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
         $expects = $this->expects($any);
-        return call_user_func_array(array($expects, 'method'), func_get_args());
+
+        return call_user_func_array([$expects, 'method'], func_get_args());
     }
 
     public function __phpunit_setOriginalObject($originalObject)
@@ -81,7 +78,7 @@ class MockFoo extends ClassWithMethodWithNullableTypehintedVariadicArguments imp
     public function __phpunit_getInvocationMocker()
     {
         if ($this->__phpunit_invocationMocker === null) {
-            $this->__phpunit_invocationMocker = new PHPUnit_Framework_MockObject_InvocationMocker($this->__phpunit_configurable);
+            $this->__phpunit_invocationMocker = new \PHPUnit\Framework\MockObject\InvocationMocker($this->__phpunit_configurable);
         }
 
         return $this->__phpunit_invocationMocker;

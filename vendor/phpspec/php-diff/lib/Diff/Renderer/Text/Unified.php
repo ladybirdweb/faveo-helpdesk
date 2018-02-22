@@ -65,19 +65,19 @@ class Diff_Renderer_Text_Unified extends Diff_Renderer_Abstract
 				$i2 = -1;
 			}
 
-			$diff .= '@@ -'.($i1 + 1).','.($i2 - $i1).' +'.($j1 + 1).','.($j2 - $j1)." @@\n";
+			$diff .= '@@ -'.($i1 + 1).','.($i2 - $i1).' +'.($j1 + 1).','.($j2 - $j1)." @@".PHP_EOL;
 			foreach($group as $code) {
 				list($tag, $i1, $i2, $j1, $j2) = $code;
 				if($tag == 'equal') {
-					$diff .= ' '.implode("\n ", $this->diff->GetA($i1, $i2))."\n";
+					$diff .= ' '.implode(PHP_EOL." ", $this->diff->GetA($i1, $i2)).PHP_EOL;
 				}
 				else {
 					if($tag == 'replace' || $tag == 'delete') {
-						$diff .= '-'.implode("\n-", $this->diff->GetA($i1, $i2))."\n";
+						$diff .= '-'.implode(PHP_EOL."-", $this->diff->GetA($i1, $i2)).PHP_EOL;
 					}
 
 					if($tag == 'replace' || $tag == 'insert') {
-						$diff .= '+'.implode("\n+", $this->diff->GetB($j1, $j2))."\n";
+						$diff .= '+'.implode(PHP_EOL."+", $this->diff->GetB($j1, $j2)).PHP_EOL;
 					}
 				}
 			}

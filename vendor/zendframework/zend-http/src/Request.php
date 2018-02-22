@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Http;
@@ -50,22 +48,22 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * @var string|HttpUri
      */
-    protected $uri = null;
+    protected $uri;
 
     /**
      * @var ParametersInterface
      */
-    protected $queryParams = null;
+    protected $queryParams;
 
     /**
      * @var ParametersInterface
      */
-    protected $postParams = null;
+    protected $postParams;
 
     /**
      * @var ParametersInterface
      */
-    protected $fileParams = null;
+    protected $fileParams;
 
     /**
      * A factory that produces a Request object from a well-formed Http Request string
@@ -97,7 +95,7 @@ class Request extends AbstractMessage implements RequestInterface
                     self::METHOD_DELETE,
                     self::METHOD_TRACE,
                     self::METHOD_CONNECT,
-                    self::METHOD_PATCH
+                    self::METHOD_PATCH,
                 ]
             );
 
@@ -123,7 +121,7 @@ class Request extends AbstractMessage implements RequestInterface
             $request->setVersion($matches['version']);
         }
 
-        if (count($lines) == 0) {
+        if (empty($lines)) {
             return $request;
         }
 
@@ -143,7 +141,6 @@ class Request extends AbstractMessage implements RequestInterface
                 $headers[] = $nextLine;
                 continue;
             }
-
 
             if (empty($rawBody)
                 && preg_match('/^[a-z0-9!#$%&\'*+.^_`|~-]+:$/i', $nextLine)
@@ -543,7 +540,7 @@ class Request extends AbstractMessage implements RequestInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getAllowCustomMethods()
     {
@@ -551,7 +548,7 @@ class Request extends AbstractMessage implements RequestInterface
     }
 
     /**
-     * @param boolean $strictMethods
+     * @param bool $strictMethods
      */
     public function setAllowCustomMethods($strictMethods)
     {

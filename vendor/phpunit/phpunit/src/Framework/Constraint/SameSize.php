@@ -12,12 +12,7 @@ namespace PHPUnit\Framework\Constraint;
 class SameSize extends Count
 {
     /**
-     * @var int
-     */
-    protected $expectedCount;
-
-    /**
-     * @param \Countable|\Traversable|array $expected
+     * @param array|\Countable|\Traversable $expected
      */
     public function __construct($expected)
     {

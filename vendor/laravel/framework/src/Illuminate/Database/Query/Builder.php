@@ -178,7 +178,7 @@ class Builder
      */
     public $operators = [
         '=', '<', '>', '<=', '>=', '<>', '!=', '<=>',
-        'like', 'like binary', 'not like', 'between', 'ilike',
+        'like', 'like binary', 'not like', 'ilike',
         '&', '|', '^', '<<', '>>',
         'rlike', 'regexp', 'not regexp',
         '~', '~*', '!~', '!~*', 'similar to',
@@ -480,7 +480,7 @@ class Builder
      * Add a basic where clause to the query.
      *
      * @param  string|array|\Closure  $column
-     * @param  string|null  $operator
+     * @param  mixed   $operator
      * @param  mixed   $value
      * @param  string  $boolean
      * @return $this
@@ -993,12 +993,16 @@ class Builder
      *
      * @param  string  $column
      * @param  string   $operator
-     * @param  int   $value
+     * @param  mixed   $value
      * @param  string   $boolean
      * @return \Illuminate\Database\Query\Builder|static
      */
-    public function whereTime($column, $operator, $value, $boolean = 'and')
+    public function whereTime($column, $operator, $value = null, $boolean = 'and')
     {
+        list($value, $operator) = $this->prepareValueAndOperator(
+            $value, $operator, func_num_args() == 2
+        );
+
         return $this->addDateBasedWhere('Time', $column, $operator, $value, $boolean);
     }
 
@@ -1007,10 +1011,10 @@ class Builder
      *
      * @param  string  $column
      * @param  string   $operator
-     * @param  int   $value
+     * @param  mixed   $value
      * @return \Illuminate\Database\Query\Builder|static
      */
-    public function orWhereTime($column, $operator, $value)
+    public function orWhereTime($column, $operator, $value = null)
     {
         return $this->whereTime($column, $operator, $value, 'or');
     }
@@ -1075,7 +1079,7 @@ class Builder
      * @param  string  $type
      * @param  string  $column
      * @param  string  $operator
-     * @param  int  $value
+     * @param  mixed  $value
      * @param  string  $boolean
      * @return $this
      */
@@ -1083,7 +1087,9 @@ class Builder
     {
         $this->wheres[] = compact('column', 'type', 'boolean', 'operator', 'value');
 
-        $this->addBinding($value, 'where');
+        if (! $value instanceof Expression) {
+            $this->addBinding($value, 'where');
+        }
 
         return $this;
     }
@@ -1222,7 +1228,7 @@ class Builder
      * @param  bool  $not
      * @return $this
      */
-    public function addWhereExistsQuery(Builder $query, $boolean = 'and', $not = false)
+    public function addWhereExistsQuery(self $query, $boolean = 'and', $not = false)
     {
         $type = $not ? 'NotExists' : 'Exists';
 
@@ -1231,6 +1237,43 @@ class Builder
         $this->addBinding($query->getBindings(), 'where');
 
         return $this;
+    }
+
+    /**
+     * Adds a where condition using row values.
+     *
+     * @param  array   $columns
+     * @param  string  $operator
+     * @param  array   $values
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereRowValues($columns, $operator, $values, $boolean = 'and')
+    {
+        if (count($columns) != count($values)) {
+            throw new InvalidArgumentException('The number of columns must match the number of values');
+        }
+
+        $type = 'RowValues';
+
+        $this->wheres[] = compact('type', 'columns', 'operator', 'values', 'boolean');
+
+        $this->addBinding($values);
+
+        return $this;
+    }
+
+    /**
+     * Adds a or where condition using row values.
+     *
+     * @param  array   $columns
+     * @param  string  $operator
+     * @param  array   $values
+     * @return $this
+     */
+    public function orWhereRowValues($columns, $operator, $values)
+    {
+        return $this->whereRowValues($columns, $operator, $values, 'or');
     }
 
     /**
@@ -1771,9 +1814,9 @@ class Builder
             return 0;
         } elseif (is_object($results[0])) {
             return (int) $results[0]->aggregate;
-        } else {
-            return (int) array_change_key_case((array) $results[0])['aggregate'];
         }
+
+        return (int) array_change_key_case((array) $results[0])['aggregate'];
     }
 
     /**
@@ -1942,6 +1985,16 @@ class Builder
         }
 
         return false;
+    }
+
+    /**
+     * Determine if no rows exist for the current query.
+     *
+     * @return bool
+     */
+    public function doesntExist()
+    {
+        return ! $this->exists();
     }
 
     /**
@@ -2224,7 +2277,9 @@ class Builder
         }
 
         return $this->connection->delete(
-            $this->grammar->compileDelete($this), $this->getBindings()
+            $this->grammar->compileDelete($this), $this->cleanBindings(
+                $this->grammar->prepareBindingsForDelete($this->bindings)
+            )
         );
     }
 
@@ -2341,7 +2396,7 @@ class Builder
      * @param  \Illuminate\Database\Query\Builder  $query
      * @return $this
      */
-    public function mergeBindings(Builder $query)
+    public function mergeBindings(self $query)
     {
         $this->bindings = array_merge_recursive($this->bindings, $query->bindings);
 
@@ -2452,8 +2507,8 @@ class Builder
             return $this->dynamicWhere($method, $parameters);
         }
 
-        $className = static::class;
+        $class = static::class;
 
-        throw new BadMethodCallException("Call to undefined method {$className}::{$method}()");
+        throw new BadMethodCallException("Method {$class}::{$method} does not exist.");
     }
 }

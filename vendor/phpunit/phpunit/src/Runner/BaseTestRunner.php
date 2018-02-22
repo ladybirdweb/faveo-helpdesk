@@ -11,8 +11,8 @@ namespace PHPUnit\Runner;
 
 use File_Iterator_Facade;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\TestSuite;
 use PHPUnit\Framework\Test;
+use PHPUnit\Framework\TestSuite;
 use ReflectionClass;
 use ReflectionException;
 
@@ -21,21 +21,21 @@ use ReflectionException;
  */
 abstract class BaseTestRunner
 {
-    const STATUS_PASSED     = 0;
-    const STATUS_SKIPPED    = 1;
-    const STATUS_INCOMPLETE = 2;
-    const STATUS_FAILURE    = 3;
-    const STATUS_ERROR      = 4;
-    const STATUS_RISKY      = 5;
-    const STATUS_WARNING    = 6;
-    const SUITE_METHODNAME  = 'suite';
+    public const STATUS_PASSED     = 0;
+    public const STATUS_SKIPPED    = 1;
+    public const STATUS_INCOMPLETE = 2;
+    public const STATUS_FAILURE    = 3;
+    public const STATUS_ERROR      = 4;
+    public const STATUS_RISKY      = 5;
+    public const STATUS_WARNING    = 6;
+    public const SUITE_METHODNAME  = 'suite';
 
     /**
      * Returns the loader to be used.
      *
      * @return TestSuiteLoader
      */
-    public function getLoader()
+    public function getLoader(): TestSuiteLoader
     {
         return new StandardTestSuiteLoader;
     }
@@ -49,9 +49,11 @@ abstract class BaseTestRunner
      * @param string $suiteClassFile
      * @param mixed  $suffixes
      *
-     * @return Test|null
+     * @throws Exception
+     *
+     * @return null|Test
      */
-    public function getTest($suiteClassName, $suiteClassFile = '', $suffixes = '')
+    public function getTest($suiteClassName, $suiteClassFile = '', $suffixes = ''): ?Test
     {
         if (\is_dir($suiteClassName) &&
             !\is_file($suiteClassName . '.php') && empty($suiteClassFile)) {
@@ -75,7 +77,7 @@ abstract class BaseTestRunner
         } catch (Exception $e) {
             $this->runFailed($e->getMessage());
 
-            return;
+            return null;
         }
 
         try {
@@ -86,7 +88,7 @@ abstract class BaseTestRunner
                     'suite() method must be static.'
                 );
 
-                return;
+                return null;
             }
 
             try {
@@ -99,7 +101,7 @@ abstract class BaseTestRunner
                     )
                 );
 
-                return;
+                return null;
             }
         } catch (ReflectionException $e) {
             try {
@@ -123,7 +125,7 @@ abstract class BaseTestRunner
      *
      * @return ReflectionClass
      */
-    protected function loadSuiteClass($suiteClassName, $suiteClassFile = '')
+    protected function loadSuiteClass($suiteClassName, $suiteClassFile = ''): ReflectionClass
     {
         $loader = $this->getLoader();
 
@@ -133,7 +135,7 @@ abstract class BaseTestRunner
     /**
      * Clears the status message.
      */
-    protected function clearStatus()
+    protected function clearStatus(): void
     {
     }
 

@@ -16,12 +16,12 @@ namespace PHPUnit\Framework\Constraint;
 class GreaterThan extends Constraint
 {
     /**
-     * @var int|float
+     * @var float|int
      */
-    protected $value;
+    private $value;
 
     /**
-     * @param int|float $value
+     * @param float|int $value
      */
     public function __construct($value)
     {
@@ -31,25 +31,28 @@ class GreaterThan extends Constraint
     }
 
     /**
-     * Evaluates the constraint for parameter $other. Returns true if the
-     * constraint is met, false otherwise.
-     *
-     * @param mixed $other Value or object to evaluate.
-     *
-     * @return bool
-     */
-    protected function matches($other)
-    {
-        return $this->value < $other;
-    }
-
-    /**
      * Returns a string representation of the constraint.
+     *
+     * @throws \Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'is greater than ' . $this->exporter->export($this->value);
+    }
+
+    /**
+     * Evaluates the constraint for parameter $other. Returns true if the
+     * constraint is met, false otherwise.
+     *
+     * @param mixed $other value or object to evaluate
+     *
+     * @return bool
+     */
+    protected function matches($other): bool
+    {
+        return $this->value < $other;
     }
 }

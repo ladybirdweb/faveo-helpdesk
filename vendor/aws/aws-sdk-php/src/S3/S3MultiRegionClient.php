@@ -1,7 +1,6 @@
 <?php
 namespace Aws\S3;
 
-use Aws\Api\Parser\PayloadParserTrait;
 use Aws\CacheInterface;
 use Aws\CommandInterface;
 use Aws\LruArrayCache;
@@ -29,6 +28,8 @@ use GuzzleHttp\Promise;
  * @method \GuzzleHttp\Promise\Promise deleteBucketAnalyticsConfigurationAsync(array $args = [])
  * @method \Aws\Result deleteBucketCors(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteBucketCorsAsync(array $args = [])
+ * @method \Aws\Result deleteBucketEncryption(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteBucketEncryptionAsync(array $args = [])
  * @method \Aws\Result deleteBucketInventoryConfiguration(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteBucketInventoryConfigurationAsync(array $args = [])
  * @method \Aws\Result deleteBucketLifecycle(array $args = [])
@@ -57,6 +58,8 @@ use GuzzleHttp\Promise;
  * @method \GuzzleHttp\Promise\Promise getBucketAnalyticsConfigurationAsync(array $args = [])
  * @method \Aws\Result getBucketCors(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getBucketCorsAsync(array $args = [])
+ * @method \Aws\Result getBucketEncryption(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getBucketEncryptionAsync(array $args = [])
  * @method \Aws\Result getBucketInventoryConfiguration(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getBucketInventoryConfigurationAsync(array $args = [])
  * @method \Aws\Result getBucketLifecycle(array $args = [])
@@ -123,6 +126,8 @@ use GuzzleHttp\Promise;
  * @method \GuzzleHttp\Promise\Promise putBucketAnalyticsConfigurationAsync(array $args = [])
  * @method \Aws\Result putBucketCors(array $args = [])
  * @method \GuzzleHttp\Promise\Promise putBucketCorsAsync(array $args = [])
+ * @method \Aws\Result putBucketEncryption(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise putBucketEncryptionAsync(array $args = [])
  * @method \Aws\Result putBucketInventoryConfiguration(array $args = [])
  * @method \GuzzleHttp\Promise\Promise putBucketInventoryConfigurationAsync(array $args = [])
  * @method \Aws\Result putBucketLifecycle(array $args = [])

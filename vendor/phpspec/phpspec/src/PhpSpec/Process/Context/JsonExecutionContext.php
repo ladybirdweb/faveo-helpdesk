@@ -13,7 +13,7 @@
 
 namespace PhpSpec\Process\Context;
 
-final class JsonExecutionContext implements ExecutionContextInterface
+final class JsonExecutionContext implements ExecutionContext
 {
     const ENV_NAME = 'PHPSPEC_EXECUTION_CONTEXT';
     /**
@@ -26,7 +26,7 @@ final class JsonExecutionContext implements ExecutionContextInterface
      *
      * @return JsonExecutionContext
      */
-    public static function fromEnv($env)
+    public static function fromEnv(array $env): JsonExecutionContext
     {
         $executionContext = new JsonExecutionContext();
 
@@ -44,7 +44,7 @@ final class JsonExecutionContext implements ExecutionContextInterface
     /**
      * @param string $generatedType
      */
-    public function addGeneratedType($generatedType)
+    public function addGeneratedType(string $generatedType)
     {
         $this->generatedTypes[] = $generatedType;
     }
@@ -52,15 +52,15 @@ final class JsonExecutionContext implements ExecutionContextInterface
     /**
      * @return array
      */
-    public function getGeneratedTypes()
+    public function getGeneratedTypes(): array
     {
         return $this->generatedTypes;
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function asEnv()
+    public function asEnv(): array
     {
         return array(
             self::ENV_NAME => json_encode(

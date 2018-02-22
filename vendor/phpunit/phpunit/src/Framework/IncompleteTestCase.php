@@ -56,17 +56,9 @@ class IncompleteTestCase extends TestCase
     }
 
     /**
-     * @throws Exception
-     */
-    protected function runTest()
-    {
-        $this->markTestIncomplete($this->message);
-    }
-
-    /**
      * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
@@ -74,10 +66,21 @@ class IncompleteTestCase extends TestCase
     /**
      * Returns a string representation of the test case.
      *
+     * @throws \Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return $this->getName();
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function runTest(): void
+    {
+        $this->markTestIncomplete($this->message);
     }
 }

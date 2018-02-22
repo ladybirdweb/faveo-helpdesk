@@ -2,12 +2,11 @@
 namespace Aws\ElasticLoadBalancingV2;
 
 use Aws\AwsClient;
-use Aws\Command;
-use Aws\CommandInterface;
-use Psr\Http\Message\RequestInterface;
 
 /**
  * This client is used to interact with the **Elastic Load Balancing** service.
+ * @method \Aws\Result addListenerCertificates(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise addListenerCertificatesAsync(array $args = [])
  * @method \Aws\Result addTags(array $args = [])
  * @method \GuzzleHttp\Promise\Promise addTagsAsync(array $args = [])
  * @method \Aws\Result createListener(array $args = [])
@@ -30,6 +29,8 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise deregisterTargetsAsync(array $args = [])
  * @method \Aws\Result describeAccountLimits(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeAccountLimitsAsync(array $args = [])
+ * @method \Aws\Result describeListenerCertificates(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise describeListenerCertificatesAsync(array $args = [])
  * @method \Aws\Result describeListeners(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeListenersAsync(array $args = [])
  * @method \Aws\Result describeLoadBalancerAttributes(array $args = [])
@@ -60,6 +61,8 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise modifyTargetGroupAttributesAsync(array $args = [])
  * @method \Aws\Result registerTargets(array $args = [])
  * @method \GuzzleHttp\Promise\Promise registerTargetsAsync(array $args = [])
+ * @method \Aws\Result removeListenerCertificates(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise removeListenerCertificatesAsync(array $args = [])
  * @method \Aws\Result removeTags(array $args = [])
  * @method \GuzzleHttp\Promise\Promise removeTagsAsync(array $args = [])
  * @method \Aws\Result setIpAddressType(array $args = [])

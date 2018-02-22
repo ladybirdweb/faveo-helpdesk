@@ -71,6 +71,16 @@ class Description
     }
 
     /**
+     * Returns the tags for this DocBlock.
+     *
+     * @return Tag[]
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
      * Renders this description as a string where the provided formatter will format the tags in the expected string
      * format.
      *
@@ -88,6 +98,7 @@ class Description
         foreach ($this->tags as $tag) {
             $tags[] = '{' . $formatter->format($tag) . '}';
         }
+
         return vsprintf($this->bodyTemplate, $tags);
     }
 

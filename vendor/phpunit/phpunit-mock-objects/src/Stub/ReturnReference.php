@@ -7,14 +7,39 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Framework\MockObject\Stub;
+
+use PHPUnit\Framework\MockObject\Invocation;
+use PHPUnit\Framework\MockObject\Stub;
+use SebastianBergmann\Exporter\Exporter;
 
 /**
  * Stubs a method by returning a user-defined reference to a value.
  */
-class PHPUnit_Framework_MockObject_Stub_ReturnReference extends PHPUnit_Framework_MockObject_Stub_Return
+class ReturnReference implements Stub
 {
-    public function __construct(&$value)
+    /**
+     * @var mixed
+     */
+    private $reference;
+
+    public function __construct(&$reference)
     {
-        $this->value = &$value;
+        $this->reference = &$reference;
+    }
+
+    public function invoke(Invocation $invocation)
+    {
+        return $this->reference;
+    }
+
+    public function toString(): string
+    {
+        $exporter = new Exporter;
+
+        return \sprintf(
+            'return user-specified reference %s',
+            $exporter->export($this->reference)
+        );
     }
 }

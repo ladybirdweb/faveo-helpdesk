@@ -16,7 +16,7 @@ class ExceptionMessageRegularExpression extends Constraint
     /**
      * @var string
      */
-    protected $expectedMessageRegExp;
+    private $expectedMessageRegExp;
 
     /**
      * @param string $expected
@@ -24,7 +24,16 @@ class ExceptionMessageRegularExpression extends Constraint
     public function __construct($expected)
     {
         parent::__construct();
+
         $this->expectedMessageRegExp = $expected;
+    }
+
+    /**
+     * @return string
+     */
+    public function toString(): string
+    {
+        return 'exception message matches ';
     }
 
     /**
@@ -33,19 +42,22 @@ class ExceptionMessageRegularExpression extends Constraint
      *
      * @param \PHPUnit\Framework\Exception $other
      *
+     * @throws \Exception
+     * @throws \PHPUnit\Framework\Exception
+     *
      * @return bool
      */
-    protected function matches($other)
+    protected function matches($other): bool
     {
         $match = RegularExpressionUtil::safeMatch($this->expectedMessageRegExp, $other->getMessage());
 
-        if (false === $match) {
+        if ($match === false) {
             throw new \PHPUnit\Framework\Exception(
                 "Invalid expected exception message regex given: '{$this->expectedMessageRegExp}'"
             );
         }
 
-        return 1 === $match;
+        return $match === 1;
     }
 
     /**
@@ -54,24 +66,16 @@ class ExceptionMessageRegularExpression extends Constraint
      * The beginning of failure messages is "Failed asserting that" in most
      * cases. This method should return the second part of that sentence.
      *
-     * @param mixed $other Evaluated value or object.
+     * @param mixed $other evaluated value or object
      *
      * @return string
      */
-    protected function failureDescription($other)
+    protected function failureDescription($other): string
     {
         return \sprintf(
             "exception message '%s' matches '%s'",
             $other->getMessage(),
             $this->expectedMessageRegExp
         );
-    }
-
-    /**
-     * @return string
-     */
-    public function toString()
-    {
-        return 'exception message matches ';
     }
 }

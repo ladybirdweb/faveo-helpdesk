@@ -55,9 +55,9 @@ trait HasEvents
     {
         return array_merge(
             [
-                'retrieved', 'creating', 'created', 'updating',
-                'updated', 'deleting', 'deleted', 'saving',
-                'saved', 'restoring', 'restored',
+                'retrieved', 'creating', 'created', 'updating', 'updated',
+                'saving', 'saved', 'restoring', 'restored',
+                'deleting', 'deleted', 'forceDeleted',
             ],
             $this->observables
         );
@@ -300,6 +300,10 @@ trait HasEvents
 
         foreach ($instance->getObservableEvents() as $event) {
             static::$dispatcher->forget("eloquent.{$event}: ".static::class);
+        }
+
+        foreach (array_values($instance->dispatchesEvents) as $event) {
+            static::$dispatcher->forget($event);
         }
     }
 
