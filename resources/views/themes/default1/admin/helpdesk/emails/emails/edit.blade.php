@@ -175,7 +175,7 @@ class="active"
             </div>
             <div class="col-xs-2 form-group">
                 <br>
-                <input type="checkbox" name="imap_validate" id="imap_validate">&nbsp; {!! Lang::get('lang.validate_certificates_from_tls_or_ssl_server') !!}
+                {!! Form::checkbox('imap_validate', null, ($emails->mailbox_protocol === 'validate-cert'), array('id' => 'imap_validate')) !!}&nbsp;{!! Lang::get('lang.validate_certificates_from_tls_or_ssl_server') !!}
             </div>
         </div>
     </div>
@@ -232,7 +232,7 @@ class="active"
             </div>
             <div class="col-xs-2 form-group">
                 <br>
-                <input type="checkbox" name="smtp_validate" id="smtp_validate">&nbsp; {!! Lang::get('lang.validate_certificates_from_tls_or_ssl_server') !!}
+                {!! Form::checkbox('smtp_validate', null, ($emails->smtp_validate === 'on'), array('id' => 'smtp_validate')) !!}&nbsp;{!! Lang::get('lang.validate_certificates_from_tls_or_ssl_server') !!}
             </div>
         </div>
         <div id="response"></div>

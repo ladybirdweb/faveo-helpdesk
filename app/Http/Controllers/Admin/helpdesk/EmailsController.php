@@ -185,6 +185,8 @@ class EmailsController extends Controller
 
         if ($request->smtp_validate == 'on') {
             $email->smtp_validate = $request->smtp_validate;
+        } else {
+            $email->smtp_validate = '';
         }
 
         if ($request->input('password')) {
@@ -208,6 +210,8 @@ class EmailsController extends Controller
         $email->fetching_encryption = $request->input('fetching_encryption');
         if (!$request->input('imap_validate')) {
             $email->mailbox_protocol = 'novalidate-cert';
+        }else {
+            $email->mailbox_protocol = 'validate-cert';
         }
         $email->department = $this->departmentValue($request->input('department'));
         // fetching priority value
