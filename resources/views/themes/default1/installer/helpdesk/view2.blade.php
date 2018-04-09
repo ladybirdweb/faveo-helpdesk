@@ -179,7 +179,9 @@ function validate_zend_compatibility_mode(&$results) {
 function validate_extensions(&$results) {
     $ok = true;
 
-    $required_extensions = array('openssl', 'tokenizer', 'pdo', 'fileinfo', 'curl', 'zip', 'mbstring', 'xml');
+    $required_extensions = ['curl', 'ctype', 'imap', 'mbstring',
+       'mcrypt', 'openssl', 'tokenizer', 'zip', 'pdo', 'mysqli', 'bcmath',
+       'iconv', 'xml', 'json'];
 
     foreach ($required_extensions as $required_extension) {
         if (extension_loaded($required_extension)) {

@@ -7,7 +7,6 @@ $extensions = [
     'imap',
     'mbstring',
     'mcrypt',
-    'mysql',
     'openssl',
     'tokenizer',
     'zip',
@@ -15,7 +14,7 @@ $extensions = [
     'mysqli',
     'bcmath',
     'iconv',
-    'XML-DOM', //for HTML email processing
+    'XML', //for HTML email processing
     'json',
     //'ioncube_loader_dar_5.6',
 ];
