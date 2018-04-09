@@ -65,10 +65,10 @@ $extensions = [
                 echo '</tr>';
             }
             echo '<tr>';
-            if (phpversion() >= 5.6) {
+            if (phpversion() >= 7.1) {
                 echo "<td>PHP Version</td>  <td style='color:green'>".phpversion().'</td>';
             } else {
-                echo "<td>PHP Version</td>  <td style='color:red'>".phpversion().'<p>Please upgrade PHP Version to 5.6+ </p></td>';
+                echo "<td>PHP Version</td>  <td style='color:red'>".phpversion().'<p>Please upgrade PHP Version to 7.1+ </p></td>';
             }
             echo '</tr>';
             echo '<tr>';
