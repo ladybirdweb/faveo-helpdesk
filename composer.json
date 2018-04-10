@@ -60,6 +60,13 @@
             "tests/TestCase.php"
         ]
     },
+    "extra": {
+        "laravel": {
+            "dont-discover": [
+                "laravel/dusk"
+            ]
+        }
+    },
     "scripts": {
         "post-install-cmd": [
             "php artisan clear-compiled"
