@@ -19,7 +19,10 @@
 
 namespace Doctrine\DBAL\Driver;
 
+use Doctrine\DBAL\ParameterType;
 use PDO;
+use function count;
+use function func_get_args;
 
 /**
  * PDO implementation of the Connection interface.
@@ -110,7 +113,7 @@ class PDOConnection extends PDO implements Connection, ServerInfoAwareConnection
     /**
      * {@inheritdoc}
      */
-    public function quote($input, $type = \PDO::PARAM_STR)
+    public function quote($input, $type = ParameterType::STRING)
     {
         return parent::quote($input, $type);
     }

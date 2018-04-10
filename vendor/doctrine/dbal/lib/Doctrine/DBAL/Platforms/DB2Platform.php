@@ -26,6 +26,14 @@ use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\TableDiff;
 use Doctrine\DBAL\Types\Type;
+use function array_merge;
+use function count;
+use function current;
+use function explode;
+use function implode;
+use function sprintf;
+use function strpos;
+use function strtoupper;
 
 class DB2Platform extends AbstractPlatform
 {
@@ -59,7 +67,7 @@ class DB2Platform extends AbstractPlatform
      */
     public function initializeDoctrineTypeMappings()
     {
-        $this->doctrineTypeMapping = array(
+        $this->doctrineTypeMapping = [
             'smallint'      => 'smallint',
             'bigint'        => 'bigint',
             'integer'       => 'integer',
@@ -75,7 +83,7 @@ class DB2Platform extends AbstractPlatform
             'double'        => 'float',
             'real'          => 'float',
             'timestamp'     => 'datetime',
-        );
+        ];
     }
 
     /**
@@ -193,14 +201,14 @@ class DB2Platform extends AbstractPlatform
     protected function getDateArithmeticIntervalExpression($date, $operator, $interval, $unit)
     {
         switch ($unit) {
-            case self::DATE_INTERVAL_UNIT_WEEK:
+            case DateIntervalUnit::WEEK:
                 $interval *= 7;
-                $unit = self::DATE_INTERVAL_UNIT_DAY;
+                $unit      = DateIntervalUnit::DAY;
                 break;
 
-            case self::DATE_INTERVAL_UNIT_QUARTER:
+            case DateIntervalUnit::QUARTER:
                 $interval *= 3;
-                $unit = self::DATE_INTERVAL_UNIT_MONTH;
+                $unit      = DateIntervalUnit::MONTH;
                 break;
         }
 
@@ -477,13 +485,13 @@ class DB2Platform extends AbstractPlatform
     /**
      * {@inheritDoc}
      */
-    protected function _getCreateTableSQL($tableName, array $columns, array $options = array())
+    protected function _getCreateTableSQL($tableName, array $columns, array $options = [])
     {
-        $indexes = array();
+        $indexes = [];
         if (isset($options['indexes'])) {
             $indexes = $options['indexes'];
         }
-        $options['indexes'] = array();
+        $options['indexes'] = [];
 
         $sqls = parent::_getCreateTableSQL($tableName, $columns, $options);
 
@@ -498,11 +506,11 @@ class DB2Platform extends AbstractPlatform
      */
     public function getAlterTableSQL(TableDiff $diff)
     {
-        $sql = array();
-        $columnSql = array();
-        $commentsSQL = array();
+        $sql = [];
+        $columnSql = [];
+        $commentsSQL = [];
 
-        $queryParts = array();
+        $queryParts = [];
         foreach ($diff->addedColumns as $column) {
             if ($this->onSchemaAlterTableAddColumn($column, $diff, $columnSql)) {
                 continue;
@@ -571,7 +579,7 @@ class DB2Platform extends AbstractPlatform
                 ' TO ' . $column->getQuotedName($this);
         }
 
-        $tableSql = array();
+        $tableSql = [];
 
         if ( ! $this->onSchemaAlterTable($diff, $tableSql)) {
             if (count($queryParts) > 0) {
@@ -644,10 +652,10 @@ class DB2Platform extends AbstractPlatform
         $alterClause = 'ALTER COLUMN ' . $columnDiff->column->getQuotedName($this);
 
         if ($column['columnDefinition']) {
-            return array($alterClause . ' ' . $column['columnDefinition']);
+            return [$alterClause . ' ' . $column['columnDefinition']];
         }
 
-        $clauses = array();
+        $clauses = [];
 
         if ($columnDiff->hasChanged('type') ||
             $columnDiff->hasChanged('length') ||
@@ -682,7 +690,7 @@ class DB2Platform extends AbstractPlatform
      */
     protected function getPreAlterTableIndexForeignKeySQL(TableDiff $diff)
     {
-        $sql = array();
+        $sql = [];
         $table = $diff->getName($this)->getQuotedName($this);
 
         foreach ($diff->removedIndexes as $remKey => $remIndex) {
@@ -698,8 +706,7 @@ class DB2Platform extends AbstractPlatform
 
                     $sql[] = $this->getCreateIndexSQL($addIndex, $table);
 
-                    unset($diff->removedIndexes[$remKey]);
-                    unset($diff->addedIndexes[$addKey]);
+                    unset($diff->removedIndexes[$remKey], $diff->addedIndexes[$addKey]);
 
                     break;
                 }
@@ -721,7 +728,7 @@ class DB2Platform extends AbstractPlatform
             $oldIndexName = $schema . '.' . $oldIndexName;
         }
 
-        return array('RENAME INDEX ' . $oldIndexName . ' TO ' . $index->getQuotedName($this));
+        return ['RENAME INDEX ' . $oldIndexName . ' TO ' . $index->getQuotedName($this)];
     }
 
     /**
@@ -771,7 +778,7 @@ class DB2Platform extends AbstractPlatform
      */
     protected function doModifyLimitQuery($query, $limit, $offset = null)
     {
-        $where = array();
+        $where = [];
 
         if ($offset > 0) {
             $where[] = sprintf('db22.DC_ROWNUM >= %d', $offset + 1);

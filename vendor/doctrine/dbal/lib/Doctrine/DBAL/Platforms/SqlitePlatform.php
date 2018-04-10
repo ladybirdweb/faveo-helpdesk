@@ -27,6 +27,19 @@ use Doctrine\DBAL\Schema\Identifier;
 use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\TableDiff;
+use Doctrine\DBAL\TransactionIsolationLevel;
+use Doctrine\DBAL\Types;
+use function array_merge;
+use function array_unique;
+use function array_values;
+use function implode;
+use function is_numeric;
+use function sprintf;
+use function sqrt;
+use function str_replace;
+use function strlen;
+use function strpos;
+use function strtolower;
 
 /**
  * The SqlitePlatform class describes the specifics and dialects of the SQLite
@@ -78,16 +91,16 @@ class SqlitePlatform extends AbstractPlatform
     /**
      * {@inheritDoc}
      */
-    public function getTrimExpression($str, $pos = self::TRIM_UNSPECIFIED, $char = false)
+    public function getTrimExpression($str, $pos = TrimMode::UNSPECIFIED, $char = false)
     {
         $trimChar = ($char != false) ? (', ' . $char) : '';
 
         switch ($pos) {
-            case self::TRIM_LEADING:
+            case TrimMode::LEADING:
                 $trimFn = 'LTRIM';
                 break;
 
-            case self::TRIM_TRAILING:
+            case TrimMode::TRAILING:
                 $trimFn = 'RTRIM';
                 break;
 
@@ -130,22 +143,26 @@ class SqlitePlatform extends AbstractPlatform
     protected function getDateArithmeticIntervalExpression($date, $operator, $interval, $unit)
     {
         switch ($unit) {
-            case self::DATE_INTERVAL_UNIT_SECOND:
-            case self::DATE_INTERVAL_UNIT_MINUTE:
-            case self::DATE_INTERVAL_UNIT_HOUR:
+            case DateIntervalUnit::SECOND:
+            case DateIntervalUnit::MINUTE:
+            case DateIntervalUnit::HOUR:
                 return "DATETIME(" . $date . ",'" . $operator . $interval . " " . $unit . "')";
 
             default:
                 switch ($unit) {
-                    case self::DATE_INTERVAL_UNIT_WEEK:
+                    case DateIntervalUnit::WEEK:
                         $interval *= 7;
-                        $unit = self::DATE_INTERVAL_UNIT_DAY;
+                        $unit      = DateIntervalUnit::DAY;
                         break;
 
-                    case self::DATE_INTERVAL_UNIT_QUARTER:
+                    case DateIntervalUnit::QUARTER:
                         $interval *= 3;
-                        $unit = self::DATE_INTERVAL_UNIT_MONTH;
+                        $unit      = DateIntervalUnit::MONTH;
                         break;
+                }
+
+                if (! is_numeric($interval)) {
+                    $interval = "' || " . $interval . " || '";
                 }
 
                 return "DATE(" . $date . ",'" . $operator . $interval . " " . $unit . "')";
@@ -166,11 +183,11 @@ class SqlitePlatform extends AbstractPlatform
     protected function _getTransactionIsolationLevelSQL($level)
     {
         switch ($level) {
-            case \Doctrine\DBAL\Connection::TRANSACTION_READ_UNCOMMITTED:
+            case TransactionIsolationLevel::READ_UNCOMMITTED:
                 return 0;
-            case \Doctrine\DBAL\Connection::TRANSACTION_READ_COMMITTED:
-            case \Doctrine\DBAL\Connection::TRANSACTION_REPEATABLE_READ:
-            case \Doctrine\DBAL\Connection::TRANSACTION_SERIALIZABLE:
+            case TransactionIsolationLevel::READ_COMMITTED:
+            case TransactionIsolationLevel::REPEATABLE_READ:
+            case TransactionIsolationLevel::SERIALIZABLE:
                 return 1;
             default:
                 return parent::_getTransactionIsolationLevelSQL($level);
@@ -315,7 +332,7 @@ class SqlitePlatform extends AbstractPlatform
     /**
      * {@inheritDoc}
      */
-    protected function _getCreateTableSQL($name, array $columns, array $options = array())
+    protected function _getCreateTableSQL($name, array $columns, array $options = [])
     {
         $name = str_replace('.', '__', $name);
         $queryFields = $this->getColumnDeclarationListSQL($columns);
@@ -525,11 +542,11 @@ class SqlitePlatform extends AbstractPlatform
     /**
      * User-defined function for Sqlite that is used with PDO::sqliteCreateFunction().
      *
-     * @param integer|float $value
+     * @param int|float $value
      *
      * @return float
      */
-    static public function udfSqrt($value)
+    public static function udfSqrt($value)
     {
         return sqrt($value);
     }
@@ -537,24 +554,24 @@ class SqlitePlatform extends AbstractPlatform
     /**
      * User-defined function for Sqlite that implements MOD(a, b).
      *
-     * @param integer $a
-     * @param integer $b
+     * @param int $a
+     * @param int $b
      *
-     * @return integer
+     * @return int
      */
-    static public function udfMod($a, $b)
+    public static function udfMod($a, $b)
     {
         return ($a % $b);
     }
 
     /**
-     * @param string  $str
-     * @param string  $substr
-     * @param integer $offset
+     * @param string $str
+     * @param string $substr
+     * @param int    $offset
      *
-     * @return integer
+     * @return int
      */
-    static public function udfLocate($str, $substr, $offset = 0)
+    public static function udfLocate($str, $substr, $offset = 0)
     {
         // SQL's LOCATE function works on 1-based positions, while PHP's strpos works on 0-based positions.
         // So we have to make them compatible if an offset is given.
@@ -592,7 +609,7 @@ class SqlitePlatform extends AbstractPlatform
      */
     protected function initializeDoctrineTypeMappings()
     {
-        $this->doctrineTypeMapping = array(
+        $this->doctrineTypeMapping = [
             'boolean'          => 'boolean',
             'tinyint'          => 'boolean',
             'smallint'         => 'smallint',
@@ -625,7 +642,7 @@ class SqlitePlatform extends AbstractPlatform
             'decimal'          => 'decimal',
             'numeric'          => 'decimal',
             'blob'             => 'blob',
-        );
+        ];
     }
 
     /**
@@ -645,7 +662,7 @@ class SqlitePlatform extends AbstractPlatform
             throw new DBALException('Sqlite platform requires for alter table the table diff with reference to original table schema');
         }
 
-        $sql = array();
+        $sql = [];
         foreach ($diff->fromTable->getIndexes() as $index) {
             if ( ! $index->isPrimary()) {
                 $sql[] = $this->getDropIndexSQL($index, $diff->name);
@@ -664,7 +681,7 @@ class SqlitePlatform extends AbstractPlatform
             throw new DBALException('Sqlite platform requires for alter table the table diff with reference to original table schema');
         }
 
-        $sql = array();
+        $sql = [];
         $tableName = $diff->newName ? $diff->getNewName(): $diff->getName($this);
         foreach ($this->getIndexesInAlteredTable($diff) as $index) {
             if ($index->isPrimary()) {
@@ -799,10 +816,10 @@ class SqlitePlatform extends AbstractPlatform
 
         $table = clone $fromTable;
 
-        $columns = array();
-        $oldColumnNames = array();
-        $newColumnNames = array();
-        $columnSql = array();
+        $columns = [];
+        $oldColumnNames = [];
+        $newColumnNames = [];
+        $columnSql = [];
 
         foreach ($table->getColumns() as $columnName => $column) {
             $columnName = strtolower($columnName);
@@ -817,9 +834,11 @@ class SqlitePlatform extends AbstractPlatform
 
             $columnName = strtolower($columnName);
             if (isset($columns[$columnName])) {
-                unset($columns[$columnName]);
-                unset($oldColumnNames[$columnName]);
-                unset($newColumnNames[$columnName]);
+                unset(
+                    $columns[$columnName],
+                    $oldColumnNames[$columnName],
+                    $newColumnNames[$columnName]
+                );
             }
         }
 
@@ -864,8 +883,8 @@ class SqlitePlatform extends AbstractPlatform
             $columns[strtolower($columnName)] = $column;
         }
 
-        $sql = array();
-        $tableSql = array();
+        $sql = [];
+        $tableSql = [];
         if ( ! $this->onSchemaAlterTable($diff, $tableSql)) {
             $dataTable = new Table('__temp__'.$table->getName());
 
@@ -904,7 +923,7 @@ class SqlitePlatform extends AbstractPlatform
             if ( ! $columnDiff->fromColumn instanceof Column ||
                 ! $columnDiff->column instanceof Column ||
                 ! $columnDiff->column->getAutoincrement() ||
-                ! (string) $columnDiff->column->getType() === 'Integer'
+                ! $columnDiff->column->getType() instanceof Types\IntegerType
             ) {
                 continue;
             }
@@ -915,9 +934,9 @@ class SqlitePlatform extends AbstractPlatform
                 continue;
             }
 
-            $fromColumnType = (string) $columnDiff->fromColumn->getType();
+            $fromColumnType = $columnDiff->fromColumn->getType();
 
-            if ($fromColumnType === 'SmallInt' || $fromColumnType === 'BigInt') {
+            if ($fromColumnType instanceof Types\SmallIntType || $fromColumnType instanceof Types\BigIntType) {
                 unset($diff->changedColumns[$oldColumnName]);
             }
         }
@@ -932,27 +951,27 @@ class SqlitePlatform extends AbstractPlatform
 
         $table = new Table($diff->name);
 
-        $sql = array();
-        $tableSql = array();
-        $columnSql = array();
+        $sql = [];
+        $tableSql = [];
+        $columnSql = [];
 
         foreach ($diff->addedColumns as $column) {
             if ($this->onSchemaAlterTableAddColumn($column, $diff, $columnSql)) {
                 continue;
             }
 
-            $field = array_merge(array('unique' => null, 'autoincrement' => null, 'default' => null), $column->toArray());
-            $type = (string) $field['type'];
+            $field = array_merge(['unique' => null, 'autoincrement' => null, 'default' => null], $column->toArray());
+            $type = $field['type'];
             switch (true) {
                 case isset($field['columnDefinition']) || $field['autoincrement'] || $field['unique']:
-                case $type == 'DateTime' && $field['default'] == $this->getCurrentTimestampSQL():
-                case $type == 'Date' && $field['default'] == $this->getCurrentDateSQL():
-                case $type == 'Time' && $field['default'] == $this->getCurrentTimeSQL():
+                case $type instanceof Types\DateTimeType && $field['default'] == $this->getCurrentTimestampSQL():
+                case $type instanceof Types\DateType && $field['default'] == $this->getCurrentDateSQL():
+                case $type instanceof Types\TimeType && $field['default'] == $this->getCurrentTimeSQL():
                     return false;
             }
 
             $field['name'] = $column->getQuotedName($this);
-            if (strtolower($field['type']) == 'string' && $field['length'] === null) {
+            if ($type instanceof Types\StringType && $field['length'] === null) {
                 $field['length'] = 255;
             }
 
@@ -976,7 +995,7 @@ class SqlitePlatform extends AbstractPlatform
      */
     private function getColumnNamesInAlteredTable(TableDiff $diff)
     {
-        $columns = array();
+        $columns = [];
 
         foreach ($diff->fromTable->getColumns() as $columnName => $column) {
             $columns[strtolower($columnName)] = $column->getName();
@@ -1026,7 +1045,7 @@ class SqlitePlatform extends AbstractPlatform
             }
 
             $changed = false;
-            $indexColumns = array();
+            $indexColumns = [];
             foreach ($index->getColumns() as $columnName) {
                 $normalizedColumnName = strtolower($columnName);
                 if ( ! isset($columnNames[$normalizedColumnName])) {
@@ -1076,7 +1095,7 @@ class SqlitePlatform extends AbstractPlatform
 
         foreach ($foreignKeys as $key => $constraint) {
             $changed = false;
-            $localColumns = array();
+            $localColumns = [];
             foreach ($constraint->getLocalColumns() as $columnName) {
                 $normalizedColumnName = strtolower($columnName);
                 if ( ! isset($columnNames[$normalizedColumnName])) {
@@ -1121,11 +1140,11 @@ class SqlitePlatform extends AbstractPlatform
      */
     private function getPrimaryIndexInAlteredTable(TableDiff $diff)
     {
-        $primaryIndex = array();
+        $primaryIndex = [];
 
         foreach ($this->getIndexesInAlteredTable($diff) as $index) {
             if ($index->isPrimary()) {
-                $primaryIndex = array($index->getName() => $index);
+                $primaryIndex = [$index->getName() => $index];
             }
         }
 

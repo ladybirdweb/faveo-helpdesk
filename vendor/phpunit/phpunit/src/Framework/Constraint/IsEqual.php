@@ -16,7 +16,7 @@ use SebastianBergmann;
  * Constraint that checks if one value is equal to another.
  *
  * Equality is checked with PHP's == operator, the operator is explained in
- * detail at {@url http://www.php.net/manual/en/types.comparisons.php}.
+ * detail at {@url https://php.net/manual/en/types.comparisons.php}.
  * Two values are equal if they have the same value disregarding type.
  *
  * The expected value is passed in the constructor.
@@ -53,13 +53,6 @@ class IsEqual extends Constraint
      */
     private $lastFailure;
 
-    /**
-     * @param mixed $value
-     * @param float $delta
-     * @param int   $maxDepth
-     * @param bool  $canonicalize
-     * @param bool  $ignoreCase
-     */
     public function __construct($value, float $delta = 0.0, int $maxDepth = 10, bool $canonicalize = false, bool $ignoreCase = false)
     {
         parent::__construct();
@@ -131,9 +124,6 @@ class IsEqual extends Constraint
      * Returns a string representation of the constraint.
      *
      * @throws SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Exception
-     *
-     * @return string
      */
     public function toString(): string
     {

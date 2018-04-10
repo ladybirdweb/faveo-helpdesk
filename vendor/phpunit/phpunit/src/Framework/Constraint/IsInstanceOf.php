@@ -25,10 +25,7 @@ class IsInstanceOf extends Constraint
      */
     private $className;
 
-    /**
-     * @param string $className
-     */
-    public function __construct($className)
+    public function __construct(string $className)
     {
         parent::__construct();
 
@@ -37,8 +34,6 @@ class IsInstanceOf extends Constraint
 
     /**
      * Returns a string representation of the constraint.
-     *
-     * @return string
      */
     public function toString(): string
     {
@@ -54,8 +49,6 @@ class IsInstanceOf extends Constraint
      * constraint is met, false otherwise.
      *
      * @param mixed $other value or object to evaluate
-     *
-     * @return bool
      */
     protected function matches($other): bool
     {
@@ -70,10 +63,7 @@ class IsInstanceOf extends Constraint
      *
      * @param mixed $other evaluated value or object
      *
-     * @throws \Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     *
-     * @return string
      */
     protected function failureDescription($other): string
     {
@@ -85,10 +75,11 @@ class IsInstanceOf extends Constraint
         );
     }
 
-    private function getType()
+    private function getType(): string
     {
         try {
             $reflection = new ReflectionClass($this->className);
+
             if ($reflection->isInterface()) {
                 return 'interface';
             }

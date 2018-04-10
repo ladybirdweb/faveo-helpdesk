@@ -20,6 +20,9 @@
 namespace Doctrine\DBAL\Driver\PDOSqlsrv;
 
 use Doctrine\DBAL\Driver\PDOConnection;
+use Doctrine\DBAL\ParameterType;
+use function strpos;
+use function substr;
 
 /**
  * Sqlsrv Connection implementation.
@@ -55,7 +58,7 @@ class Connection extends PDOConnection implements \Doctrine\DBAL\Driver\Connecti
     /**
      * {@inheritDoc}
      */
-    public function quote($value, $type=\PDO::PARAM_STR)
+    public function quote($value, $type = ParameterType::STRING)
     {
         $val = parent::quote($value, $type);
 

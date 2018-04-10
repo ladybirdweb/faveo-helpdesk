@@ -28,6 +28,8 @@ use Doctrine\DBAL\Platforms\SQLAnywhere16Platform;
 use Doctrine\DBAL\Platforms\SQLAnywherePlatform;
 use Doctrine\DBAL\Schema\SQLAnywhereSchemaManager;
 use Doctrine\DBAL\VersionAwarePlatformDriver;
+use function preg_match;
+use function version_compare;
 
 /**
  * Abstract base implementation of the {@link Doctrine\DBAL\Driver} interface for SAP Sybase SQL Anywhere based drivers.
@@ -100,9 +102,9 @@ abstract class AbstractSQLAnywhereDriver implements Driver, ExceptionConverterDr
         }
 
         $majorVersion = $versionParts['major'];
-        $minorVersion = isset($versionParts['minor']) ? $versionParts['minor'] : 0;
-        $patchVersion = isset($versionParts['patch']) ? $versionParts['patch'] : 0;
-        $buildVersion = isset($versionParts['build']) ? $versionParts['build'] : 0;
+        $minorVersion = $versionParts['minor'] ?? 0;
+        $patchVersion = $versionParts['patch'] ?? 0;
+        $buildVersion = $versionParts['build'] ?? 0;
         $version      = $majorVersion . '.' . $minorVersion . '.' . $patchVersion . '.' . $buildVersion;
 
         switch(true) {
@@ -124,11 +126,7 @@ abstract class AbstractSQLAnywhereDriver implements Driver, ExceptionConverterDr
     {
         $params = $conn->getParams();
 
-        if (isset($params['dbname'])) {
-            return $params['dbname'];
-        }
-
-        return $conn->query('SELECT DB_NAME()')->fetchColumn();
+        return $params['dbname'] ?? $conn->query('SELECT DB_NAME()')->fetchColumn();
     }
 
     /**

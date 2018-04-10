@@ -21,6 +21,9 @@ namespace Doctrine\DBAL\Driver\SQLAnywhere;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\AbstractSQLAnywhereDriver;
+use function array_keys;
+use function array_map;
+use function implode;
 
 /**
  * A Doctrine DBAL driver for the SAP Sybase SQL Anywhere PHP extension.
@@ -41,15 +44,15 @@ class Driver extends AbstractSQLAnywhereDriver
         try {
             return new SQLAnywhereConnection(
                 $this->buildDsn(
-                    isset($params['host']) ? $params['host'] : null,
-                    isset($params['port']) ? $params['port'] : null,
-                    isset($params['server']) ? $params['server'] : null,
-                    isset($params['dbname']) ? $params['dbname'] : null,
+                    $params['host'] ?? null,
+                    $params['port'] ?? null,
+                    $params['server'] ?? null,
+                    $params['dbname'] ?? null,
                     $username,
                     $password,
                     $driverOptions
                 ),
-                isset($params['persistent']) ? $params['persistent'] : false
+                $params['persistent'] ?? false
             );
         } catch (SQLAnywhereException $e) {
             throw DBALException::driverException($this, $e);
@@ -67,15 +70,15 @@ class Driver extends AbstractSQLAnywhereDriver
     /**
      * Build the connection string for given connection parameters and driver options.
      *
-     * @param string  $host          Host address to connect to.
-     * @param integer $port          Port to use for the connection (default to SQL Anywhere standard port 2638).
-     * @param string  $server        Database server name on the host to connect to.
-     *                               SQL Anywhere allows multiple database server instances on the same host,
-     *                               therefore specifying the server instance name to use is mandatory.
-     * @param string  $dbname        Name of the database on the server instance to connect to.
-     * @param string  $username      User name to use for connection authentication.
-     * @param string  $password      Password to use for connection authentication.
-     * @param array   $driverOptions Additional parameters to use for the connection.
+     * @param string $host          Host address to connect to.
+     * @param int    $port          Port to use for the connection (default to SQL Anywhere standard port 2638).
+     * @param string $server        Database server name on the host to connect to.
+     *                              SQL Anywhere allows multiple database server instances on the same host,
+     *                              therefore specifying the server instance name to use is mandatory.
+     * @param string $dbname        Name of the database on the server instance to connect to.
+     * @param string $username      User name to use for connection authentication.
+     * @param string $password      Password to use for connection authentication.
+     * @param array  $driverOptions Additional parameters to use for the connection.
      *
      * @return string
      */

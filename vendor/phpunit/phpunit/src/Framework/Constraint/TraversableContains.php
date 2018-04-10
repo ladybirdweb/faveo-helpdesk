@@ -34,8 +34,6 @@ class TraversableContains extends Constraint
 
     /**
      * @param mixed $value
-     * @param bool  $checkForObjectIdentity
-     * @param bool  $checkForNonObjectIdentity
      *
      * @throws \PHPUnit\Framework\Exception
      */
@@ -51,10 +49,7 @@ class TraversableContains extends Constraint
     /**
      * Returns a string representation of the constraint.
      *
-     * @throws \Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     *
-     * @return string
      */
     public function toString(): string
     {
@@ -70,8 +65,6 @@ class TraversableContains extends Constraint
      * constraint is met, false otherwise.
      *
      * @param mixed $other value or object to evaluate
-     *
-     * @return bool
      */
     protected function matches($other): bool
     {
@@ -112,10 +105,7 @@ class TraversableContains extends Constraint
      *
      * @param mixed $other evaluated value or object
      *
-     * @throws \Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     *
-     * @return string
      */
     protected function failureDescription($other): string
     {

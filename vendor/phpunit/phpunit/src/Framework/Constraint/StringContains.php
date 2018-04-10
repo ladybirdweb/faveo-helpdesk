@@ -30,11 +30,7 @@ class StringContains extends Constraint
      */
     private $ignoreCase;
 
-    /**
-     * @param string $string
-     * @param bool   $ignoreCase
-     */
-    public function __construct($string, $ignoreCase = false)
+    public function __construct(string $string, bool $ignoreCase = false)
     {
         parent::__construct();
 
@@ -44,8 +40,6 @@ class StringContains extends Constraint
 
     /**
      * Returns a string representation of the constraint.
-     *
-     * @return string
      */
     public function toString(): string
     {
@@ -66,8 +60,6 @@ class StringContains extends Constraint
      * constraint is met, false otherwise.
      *
      * @param mixed $other value or object to evaluate
-     *
-     * @return bool
      */
     protected function matches($other): bool
     {

@@ -9,6 +9,7 @@ use BadMethodCallException;
 use Illuminate\Support\Str;
 use Illuminate\Support\MessageBag;
 use Illuminate\Contracts\View\Engine;
+use Illuminate\Support\Traits\Macroable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\Support\MessageProvider;
@@ -16,6 +17,10 @@ use Illuminate\Contracts\View\View as ViewContract;
 
 class View implements ArrayAccess, ViewContract
 {
+    use Macroable {
+        __call as macroCall;
+    }
+
     /**
      * The view factory instance.
      *
@@ -395,10 +400,14 @@ class View implements ArrayAccess, ViewContract
      */
     public function __call($method, $parameters)
     {
-        if (! Str::startsWith($method, 'with')) {
-            $class = static::class;
+        if (static::hasMacro($method)) {
+            return $this->macroCall($method, $parameters);
+        }
 
-            throw new BadMethodCallException("Method {$class}::{$method} does not exist.");
+        if (! Str::startsWith($method, 'with')) {
+            throw new BadMethodCallException(sprintf(
+                'Method %s::%s does not exist.', static::class, $method
+            ));
         }
 
         return $this->with(Str::camel(substr($method, 4)), $parameters[0]);

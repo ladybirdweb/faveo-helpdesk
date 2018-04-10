@@ -19,18 +19,21 @@
 
 namespace Doctrine\DBAL\Tools\Console\Command;
 
-use Symfony\Component\Console\Input\InputOption;
+use Doctrine\DBAL\Platforms\Keywords\ReservedKeywordsValidator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Doctrine\DBAL\Platforms\Keywords\ReservedKeywordsValidator;
+use function array_keys;
+use function count;
+use function implode;
 
 class ReservedWordsCommand extends Command
 {
     /**
      * @var array
      */
-    private $keywordListClasses = array(
+    private $keywordListClasses = [
         'mysql'         => 'Doctrine\DBAL\Platforms\Keywords\MySQLKeywords',
         'mysql57'       => 'Doctrine\DBAL\Platforms\Keywords\MySQL57Keywords',
         'sqlserver'     => 'Doctrine\DBAL\Platforms\Keywords\SQLServerKeywords',
@@ -47,7 +50,7 @@ class ReservedWordsCommand extends Command
         'sqlanywhere11' => 'Doctrine\DBAL\Platforms\Keywords\SQLAnywhere11Keywords',
         'sqlanywhere12' => 'Doctrine\DBAL\Platforms\Keywords\SQLAnywhere12Keywords',
         'sqlanywhere16' => 'Doctrine\DBAL\Platforms\Keywords\SQLAnywhere16Keywords',
-    );
+    ];
 
     /**
      * If you want to add or replace a keywords list use this command.
@@ -120,7 +123,7 @@ EOT
 
         $keywordLists = (array) $input->getOption('list');
         if ( ! $keywordLists) {
-            $keywordLists = array(
+            $keywordLists = [
                 'mysql',
                 'mysql57',
                 'pgsql',
@@ -135,7 +138,7 @@ EOT
                 'sqlanywhere11',
                 'sqlanywhere12',
                 'sqlanywhere16',
-            );
+            ];
         }
 
         $keywords = [];
@@ -168,5 +171,7 @@ EOT
 
             return 1;
         }
+
+        return 0;
     }
 }

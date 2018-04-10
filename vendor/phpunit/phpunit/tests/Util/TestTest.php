@@ -115,7 +115,6 @@ class TestTest extends TestCase
      * @param mixed $result
      *
      * @throws Warning
-     * @throws \Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -332,13 +331,13 @@ class TestTest extends TestCase
      *
      * @throws Exception
      * @throws Warning
-     * @throws \Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testGetRequirementsWithVersionConstraints($test, array $result): void
     {
         $requirements = Test::getRequirements(\RequirementsTest::class, $test);
+
         foreach ($result as $type => $expected_requirement) {
             $this->assertArrayHasKey(
                 "{$type}_constraint",
@@ -514,7 +513,6 @@ class TestTest extends TestCase
      * @param mixed $result
      *
      * @throws Warning
-     * @throws \Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -790,7 +788,6 @@ class TestTest extends TestCase
      * @param mixed $lines
      *
      * @throws CodeCoverageException
-     * @throws \Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */

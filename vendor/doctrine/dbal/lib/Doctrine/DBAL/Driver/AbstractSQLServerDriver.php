@@ -27,6 +27,8 @@ use Doctrine\DBAL\Platforms\SQLServer2012Platform;
 use Doctrine\DBAL\Platforms\SQLServerPlatform;
 use Doctrine\DBAL\Schema\SQLServerSchemaManager;
 use Doctrine\DBAL\VersionAwarePlatformDriver;
+use function preg_match;
+use function version_compare;
 
 /**
  * Abstract base implementation of the {@link Doctrine\DBAL\Driver} interface for Microsoft SQL Server based drivers.
@@ -54,9 +56,9 @@ abstract class AbstractSQLServerDriver implements Driver, VersionAwarePlatformDr
         }
 
         $majorVersion = $versionParts['major'];
-        $minorVersion = isset($versionParts['minor']) ? $versionParts['minor'] : 0;
-        $patchVersion = isset($versionParts['patch']) ? $versionParts['patch'] : 0;
-        $buildVersion = isset($versionParts['build']) ? $versionParts['build'] : 0;
+        $minorVersion = $versionParts['minor'] ?? 0;
+        $patchVersion = $versionParts['patch'] ?? 0;
+        $buildVersion = $versionParts['build'] ?? 0;
         $version      = $majorVersion . '.' . $minorVersion . '.' . $patchVersion . '.' . $buildVersion;
 
         switch(true) {
@@ -78,11 +80,7 @@ abstract class AbstractSQLServerDriver implements Driver, VersionAwarePlatformDr
     {
         $params = $conn->getParams();
 
-        if (isset($params['dbname'])) {
-            return $params['dbname'];
-        }
-
-        return $conn->query('SELECT DB_NAME()')->fetchColumn();
+        return $params['dbname'] ?? $conn->query('SELECT DB_NAME()')->fetchColumn();
     }
 
     /**

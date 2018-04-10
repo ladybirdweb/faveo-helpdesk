@@ -172,6 +172,13 @@ class CronExpressionTest extends TestCase
             array('* * * * 5#2', strtotime('2011-07-01 00:00:00'), '2011-07-08 00:00:00', false),
             array('* * * * 5#1', strtotime('2011-07-01 00:00:00'), '2011-07-01 00:00:00', true),
             array('* * * * 3#4', strtotime('2011-07-01 00:00:00'), '2011-07-27 00:00:00', false),
+
+            // Issue #7, documented example failed
+            ['3-59/15 6-12 */15 1 2-5', strtotime('2017-01-08 00:00:00'), '2017-01-31 06:03:00', false],
+
+            // https://github.com/laravel/framework/commit/07d160ac3cc9764d5b429734ffce4fa311385403
+            ['* * * * MON-FRI', strtotime('2017-01-08 00:00:00'), strtotime('2017-01-09 00:00:00'), false],
+            ['* * * * TUE', strtotime('2017-01-08 00:00:00'), strtotime('2017-01-10 00:00:00'), false],
         );
     }
 
@@ -197,9 +204,17 @@ class CronExpressionTest extends TestCase
         } elseif (is_int($relativeTime)) {
             $relativeTime = date('Y-m-d H:i:s', $relativeTime);
         }
+
+        if (is_string($nextRun)) {
+            $nextRunDate = new DateTime($nextRun);
+        } elseif (is_int($nextRun)) {
+            $nextRunDate = new DateTime();
+            $nextRunDate->setTimestamp($nextRun);
+        }
         $this->assertSame($isDue, $cron->isDue($relativeTime));
         $next = $cron->getNextRunDate($relativeTime, 0, true);
-        $this->assertEquals(new DateTime($nextRun), $next);
+
+        $this->assertEquals($nextRunDate, $next);
     }
 
     /**
@@ -217,28 +232,49 @@ class CronExpressionTest extends TestCase
     /**
      * @covers \Cron\CronExpression::isDue
      */
-    public function testIsDueHandlesDifferentTimezones()
+    public function testIsDueHandlesDifferentDefaultTimezones()
+    {
+        $originalTimezone = date_default_timezone_get();
+        $cron = CronExpression::factory('0 15 * * 3'); //Wednesday at 15:00
+        $date = '2014-01-01 15:00'; //Wednesday
+
+        date_default_timezone_set('UTC');
+        $this->assertTrue($cron->isDue(new DateTime($date), 'UTC'));
+        $this->assertFalse($cron->isDue(new DateTime($date), 'Europe/Amsterdam'));
+        $this->assertFalse($cron->isDue(new DateTime($date), 'Asia/Tokyo'));
+
+        date_default_timezone_set('Europe/Amsterdam');
+        $this->assertFalse($cron->isDue(new DateTime($date), 'UTC'));
+        $this->assertTrue($cron->isDue(new DateTime($date), 'Europe/Amsterdam'));
+        $this->assertFalse($cron->isDue(new DateTime($date), 'Asia/Tokyo'));
+
+        date_default_timezone_set('Asia/Tokyo');
+        $this->assertFalse($cron->isDue(new DateTime($date), 'UTC'));
+        $this->assertFalse($cron->isDue(new DateTime($date), 'Europe/Amsterdam'));
+        $this->assertTrue($cron->isDue(new DateTime($date), 'Asia/Tokyo'));
+
+        date_default_timezone_set($originalTimezone);
+    }
+
+    /**
+     * @covers \Cron\CronExpression::isDue
+     */
+    public function testIsDueHandlesDifferentSuppliedTimezones()
     {
         $cron = CronExpression::factory('0 15 * * 3'); //Wednesday at 15:00
         $date = '2014-01-01 15:00'; //Wednesday
-        $utc = new DateTimeZone('UTC');
-        $amsterdam =  new DateTimeZone('Europe/Amsterdam');
-        $tokyo = new DateTimeZone('Asia/Tokyo');
 
-        date_default_timezone_set('UTC');
-        $this->assertTrue($cron->isDue(new DateTime($date, $utc)));
-        $this->assertFalse($cron->isDue(new DateTime($date, $amsterdam)));
-        $this->assertFalse($cron->isDue(new DateTime($date, $tokyo)));
+        $this->assertTrue($cron->isDue(new DateTime($date, new DateTimeZone('UTC')), 'UTC'));
+        $this->assertFalse($cron->isDue(new DateTime($date, new DateTimeZone('UTC')), 'Europe/Amsterdam'));
+        $this->assertFalse($cron->isDue(new DateTime($date, new DateTimeZone('UTC')), 'Asia/Tokyo'));
 
-        date_default_timezone_set('Europe/Amsterdam');
-        $this->assertFalse($cron->isDue(new DateTime($date, $utc)));
-        $this->assertTrue($cron->isDue(new DateTime($date, $amsterdam)));
-        $this->assertFalse($cron->isDue(new DateTime($date, $tokyo)));
+        $this->assertFalse($cron->isDue(new DateTime($date, new DateTimeZone('Europe/Amsterdam')), 'UTC'));
+        $this->assertTrue($cron->isDue(new DateTime($date, new DateTimeZone('Europe/Amsterdam')), 'Europe/Amsterdam'));
+        $this->assertFalse($cron->isDue(new DateTime($date, new DateTimeZone('Europe/Amsterdam')), 'Asia/Tokyo'));
 
-        date_default_timezone_set('Asia/Tokyo');
-        $this->assertFalse($cron->isDue(new DateTime($date, $utc)));
-        $this->assertFalse($cron->isDue(new DateTime($date, $amsterdam)));
-        $this->assertTrue($cron->isDue(new DateTime($date, $tokyo)));
+        $this->assertFalse($cron->isDue(new DateTime($date, new DateTimeZone('Asia/Tokyo')), 'UTC'));
+        $this->assertFalse($cron->isDue(new DateTime($date, new DateTimeZone('Asia/Tokyo')), 'Europe/Amsterdam'));
+        $this->assertTrue($cron->isDue(new DateTime($date, new DateTimeZone('Asia/Tokyo')), 'Asia/Tokyo'));
     }
 
    /**
@@ -261,7 +297,35 @@ class CronExpressionTest extends TestCase
         $this->assertFalse($cron->isDue(new DateTime($date, $amsterdam), 'Asia/Tokyo'));
         $this->assertTrue($cron->isDue(new DateTime($date, $tokyo), 'Asia/Tokyo'));
     }
-    
+
+    /**
+     * @covers Cron\CronExpression::isDue
+     */
+    public function testRecognisesTimezonesAsPartOfDateTime()
+    {
+        $cron = CronExpression::factory("0 7 * * *");
+        $tzCron = "America/New_York";
+        $tzServer = new \DateTimeZone("Europe/London");
+
+        $dtCurrent = \DateTime::createFromFormat("!Y-m-d H:i:s", "2017-10-17 10:00:00", $tzServer);
+        $dtPrev = $cron->getPreviousRunDate($dtCurrent, 0, true, $tzCron);
+        $this->assertEquals('1508151600 : 2017-10-16T07:00:00-04:00 : America/New_York', $dtPrev->format("U \: c \: e"));
+
+        $dtCurrent = \DateTimeImmutable::createFromFormat("!Y-m-d H:i:s", "2017-10-17 10:00:00", $tzServer);
+        $dtPrev = $cron->getPreviousRunDate($dtCurrent, 0, true, $tzCron);
+        $this->assertEquals('1508151600 : 2017-10-16T07:00:00-04:00 : America/New_York', $dtPrev->format("U \: c \: e"));
+
+        $dtCurrent = \DateTimeImmutable::createFromFormat("!Y-m-d H:i:s", "2017-10-17 10:00:00", $tzServer);
+        $dtPrev = $cron->getPreviousRunDate($dtCurrent->format("c"), 0, true, $tzCron);
+        $this->assertEquals('1508151600 : 2017-10-16T07:00:00-04:00 : America/New_York', $dtPrev->format("U \: c \: e"));
+
+        $dtCurrent = \DateTimeImmutable::createFromFormat("!Y-m-d H:i:s", "2017-10-17 10:00:00", $tzServer);
+        $dtPrev = $cron->getPreviousRunDate($dtCurrent->format("\@U"), 0, true, $tzCron);
+        $this->assertEquals('1508151600 : 2017-10-16T07:00:00-04:00 : America/New_York', $dtPrev->format("U \: c \: e"));
+
+    }
+
+
     /**
      * @covers \Cron\CronExpression::getPreviousRunDate
      */
@@ -440,5 +504,8 @@ class CronExpressionTest extends TestCase
 
         // Issue #125, this is just all sorts of wrong
         $this->assertFalse(CronExpression::isValidExpression('990 14 * * mon-fri0345345'));
+
+        // see https://github.com/dragonmantank/cron-expression/issues/5
+        $this->assertTrue(CronExpression::isValidExpression('2,17,35,47 5-7,11-13 * * *'));
     }
 }

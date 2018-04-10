@@ -241,6 +241,10 @@ class Builder
      */
     public function orWhere($column, $operator = null, $value = null)
     {
+        list($value, $operator) = $this->query->prepareValueAndOperator(
+            $value, $operator, func_num_args() == 2
+        );
+
         return $this->where($column, $operator, $value, 'or');
     }
 
@@ -1304,9 +1308,9 @@ class Builder
         }
 
         if (! isset(static::$macros[$method])) {
-            $class = static::class;
-
-            throw new BadMethodCallException("Method {$class}::{$method} does not exist.");
+            throw new BadMethodCallException(sprintf(
+                'Method %s::%s does not exist.', static::class, $method
+            ));
         }
 
         if (static::$macros[$method] instanceof Closure) {

@@ -61,7 +61,6 @@ class TraversableContainsOnly extends Constraint
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -88,8 +87,6 @@ class TraversableContainsOnly extends Constraint
 
     /**
      * Returns a string representation of the constraint.
-     *
-     * @return string
      */
     public function toString(): string
     {
