@@ -3,3 +3,5 @@
 *.less linguist-vendored
 *.js linguist-vendored
 *.html linguist-vendored
+vendor/* linguist-vendored
+tests/ export-ignore
