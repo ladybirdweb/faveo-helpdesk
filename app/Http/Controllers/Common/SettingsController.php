@@ -585,7 +585,12 @@ class SettingsController extends Controller
         $plug = $plugs->where('name', $slug)->first();
         if (!$plug) {
             $app = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'app.php';
-            $str = "\n'App\\Plugins\\$slug"."\\ServiceProvider',";
+            /*verify if the server is installed on windows or linux */
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') { 
+                $str = "\r'App\\Plugins\\$slug"."\\ServiceProvider',";
+            } else {
+                $str = "\n'App\\Plugins\\$slug"."\\ServiceProvider',";
+            }
             $line_i_am_looking_for = 190;
             $lines = file($app, FILE_IGNORE_NEW_LINES);
             $lines[$line_i_am_looking_for] = $str;
@@ -599,7 +604,11 @@ class SettingsController extends Controller
             $plug->status = 1;
 
             $app = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'app.php';
-            $str = "\n'App\\Plugins\\$slug"."\\ServiceProvider',";
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') { 
+                $str = "\r'App\\Plugins\\$slug"."\\ServiceProvider',";
+            }else {
+                $str = "\n'App\\Plugins\\$slug"."\\ServiceProvider',";
+            }
             $line_i_am_looking_for = 190;
             $lines = file($app, FILE_IGNORE_NEW_LINES);
             $lines[$line_i_am_looking_for] = $str;
