@@ -55,8 +55,6 @@ use PDF;
  */
 class TicketController extends Controller
 {
-    protected $ticket_policy;
-
     /**
      * Create a new controller instance.
      *
@@ -67,7 +65,6 @@ class TicketController extends Controller
         $this->PhpMailController = new PhpMailController();
         $this->NotificationController = new Notify();
         $this->middleware('auth');
-        $this->ticket_policy = new \App\Policies\TicketPolicy();
     }
 
     /**
@@ -96,9 +93,8 @@ class TicketController extends Controller
     public function getTicketsView()
     {
         $table = $this->getTableFormat();
-        $ticket_policy = $this->ticket_policy;
 
-        return view('themes.default1.agent.helpdesk.ticket.tickets', compact('table', 'ticket_policy'));
+        return view('themes.default1.agent.helpdesk.ticket.tickets', compact('table'));
     }
 
     /**
@@ -228,10 +224,6 @@ class TicketController extends Controller
      */
     public function newticket(CountryCode $code)
     {
-        if (!$this->ticket_policy->create()) {
-            return redirect('dashboard')->with('fails', Lang::get('lang.permission-denied'));
-        }
-
         return view('themes.default1.agent.helpdesk.ticket.new');
     }
 
@@ -245,14 +237,6 @@ class TicketController extends Controller
     public function post_newticket(CreateTicketRequest $request, CountryCode $code, $api
     = true)
     {
-        if (!$this->ticket_policy->create()) {
-            if ($api) {
-                return response()->json(['message' => Lang::get('lang.permission_denied')], 403);
-            }
-
-            return redirect('dashboard')->with('fails', Lang::get('lang.permission_denied'));
-        }
-
         try {
             $email = null;
             $fullname = null;
@@ -766,11 +750,6 @@ class TicketController extends Controller
      */
     public function ticketEditPost($ticket_id, Ticket_Thread $thread, Tickets $tickets, Request $request)
     {
-        if (!$this->ticket_policy->edit()) {
-            $response = ['message' => Lang::get('lang.permission_denied')];
-
-            return response()->json(compact('response'), 403);
-        }
         $this->validate($request, [
             'subject'         => 'required',
             'help_topic'      => 'required',
@@ -1797,13 +1776,6 @@ class TicketController extends Controller
      */
     public function close($id, Tickets $ticket, $api = true)
     {
-        if (!$this->ticket_policy->close()) {
-            if ($api) {
-                return response()->json(['message' => 'permission denied'], 403);
-            }
-
-            return redirect('dashboard')->with('fails', 'Permission denied');
-        }
         $ticket = Tickets::where('id', '=', $id)->first();
         if (Auth::user()->role == 'user') {
             $ticket_status = $ticket->where('id', '=', $id)->where('user_id', '=', Auth::user()->id)->first();
@@ -1870,13 +1842,6 @@ class TicketController extends Controller
      */
     public function resolve($id, Tickets $ticket, $api = true)
     {
-        if (!$this->ticket_policy->close()) {
-            if ($api) {
-                return response()->json(['message' => 'permission denied'], 403);
-            }
-
-            return redirect('dashboard')->with('fails', 'Permission denied');
-        }
         if (Auth::user()->role == 'user') {
             $ticket_status = $ticket->where('id', '=', $id)->where('user_id', '=', Auth::user()->id)->first();
         } else {
@@ -1963,13 +1928,6 @@ class TicketController extends Controller
      */
     public function delete($id, Tickets $ticket, $api = true)
     {
-        if (!$this->ticket_policy->delete()) {
-            if ($api) {
-                return response()->json(['message' => 'permission denied'], 403);
-            }
-
-            return redirect('dashboard')->with('fails', 'Permission denied');
-        }
         $ticket_delete = $ticket->where('id', '=', $id)->first();
         if ($ticket_delete->status == 5) {
             $ticket_delete->delete();
@@ -2023,13 +1981,6 @@ class TicketController extends Controller
      */
     public function ban($id, Tickets $ticket, $api = true)
     {
-        if (!$this->ticket_policy->ban()) {
-            if ($api) {
-                return response()->json(['message' => 'permission denied'], 403);
-            }
-
-            return redirect('dashboard')->with('fails', 'Permission denied');
-        }
         $ticket_ban = $ticket->where('id', '=', $id)->first();
         $ban_email = $ticket_ban->user_id;
         $user = User::where('id', '=', $ban_email)->first();
@@ -2049,13 +2000,6 @@ class TicketController extends Controller
      */
     public function assign($id, $api = true)
     {
-        if (!$this->ticket_policy->assign()) {
-            if ($api) {
-                return response()->json(['message' => 'permission denied'], 403);
-            }
-
-            return redirect('dashboard')->with('fails', 'Permission denied');
-        }
         $ticket_array = [];
         if (strpos($id, ',') !== false) {
             $ticket_array = explode(',', $id);
@@ -3628,13 +3572,6 @@ class TicketController extends Controller
 
     public function ticketChangeDepartment(Request $request)
     {
-        if (!$this->ticket_policy->transfer()) {
-            if ($api) {
-                return response()->json(['message' => 'permission denied'], 403);
-            }
-
-            return redirect('dashboard')->with('fails', 'Permission denied');
-        }
         $match_dept_name = Department::where('name', '=', $request->tkt_dept_transfer)->select('id')->first();
         if (!$match_dept_name) {
             return redirect()->back()->with('fails', Lang::get('lang.this_deparment_not_exists'));
@@ -3703,30 +3640,12 @@ class TicketController extends Controller
             $ticket->send = false;
             $ticket->status = $status->id;
             if ($status->id == '3') {
-                if (!$this->ticket_policy->close()) {
-                    if ($api) {
-                        $message = [Lang::get('lang.permission_denied')];
-
-                        return response()->json(compact('message'), 403);
-                    }
-
-                    return redirect('dashboard')->with('fails', Lang::get('lang.permission_denied'));
-                }
                 $ticket->closed = 1;
                 $ticket->closed_at = date('Y-m-d H:i:s');
             //$sla                       = new \App\Http\Controllers\SLA\ApplySla();
                 //$ticket->resolution_time   = $this->ticketOpenTime($ticket_id);
                 //$ticket->is_resolution_sla = $this->isSla($ticket->duedate);
             } elseif ($status->id == '5') {
-                if (!$this->ticket_policy->delete()) {
-                    if ($api) {
-                        $message = [Lang::get('lang.permission_denied')];
-
-                        return response()->json(compact('message'), 403);
-                    }
-
-                    return redirect('dashboard')->with('fails', Lang::get('lang.permission_denied'));
-                }
                 $ticket->is_deleted = 1;
             } elseif ($old_status->id == '3') {
                 $ticket->reopened = $ticket->reopened + 1;

@@ -33,18 +33,14 @@ var filterClick = 0;
                         t_id = $('.selectval').map(function () {
                             return $(this).val();
                         }).get();
-                        @if ($ticket_policy -> assign())
                         showAssign(t_id);
-                        @endif
                         // alert(checkboxValues);
                     } else {
                     //Check all checkboxes
                         $("input[type='checkbox']", ".mailbox-messages").iCheck("check");
                         // alert('Hallo');
                         t_id = [];
-                        @if ($ticket_policy -> assign())
                         showAssign(t_id);
-                        @endif
                     }
                     $(this).data("clicks", !clicks);
                 });
@@ -163,9 +159,7 @@ var filterClick = 0;
                     t_id.splice(index, 1);
                     // alert(t_id);
                 }
-                @if ($ticket_policy -> assign())
                     showAssign(t_id);
-                @endif
             }
 
             function showAssign(t_id) {
