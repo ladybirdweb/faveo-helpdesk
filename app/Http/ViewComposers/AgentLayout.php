@@ -63,7 +63,6 @@ class AgentLayout
             'overdues'          => $this->overdues(),
             'due_today'         => $this->getDueToday(),
             'is_mail_conigured' => $this->getEmailConfig(),
-            'ticket_policy'     => new \App\Policies\TicketPolicy(),
         ]);
     }
 

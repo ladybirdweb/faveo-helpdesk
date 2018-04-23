@@ -307,9 +307,7 @@
                                     <li id="bar" @yield('answered')><a href="{{ url('/tickets?last-response-by[]=Agent')}}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
                                     <li id="bar" @yield('assigned')><a href="{{ url('/tickets?assigned[]=1')}}" id="load-unassigned">{!! Lang::get('lang.assigned') !!}</a></li>
                                     <li id="bar" @yield('closed')><a href="{{ url('/tickets?show=closed')}}" >{!! Lang::get('lang.closed') !!}</a></li>
-<?php if ($ticket_policy->create()) { ?>
-                                        <li id="bar" @yield('newticket')><a href="{{ url('/newticket')}}" >{!! Lang::get('lang.create_ticket') !!}</a></li>
-                                    <?php } ?>
+                                    <li id="bar" @yield('newticket')><a href="{{ url('/newticket')}}" >{!! Lang::get('lang.create_ticket') !!}</a></li>
                                 </ul>
                             </div>
                             <div class="tabs-pane @yield('tools-bar')" id="tabD">
