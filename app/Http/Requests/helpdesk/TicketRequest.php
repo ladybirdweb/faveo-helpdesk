@@ -28,61 +28,46 @@ class TicketRequest extends Request
      */
     public function rules()
     {
-        $panel = 'agent';
-        $rules = $this->check($panel);
-
-        return $rules;
+        $error = '';
+        try {
+            $size = $this->size();
+            if ($size > 800 || $size == 0) {
+                throw new \Exception('File size exceeded', 422);
+            }
+        } catch (\Exception $ex) {
+            dd($ex);
+            $error = $this->error($ex);
+        }
+//        return [
+//            'attachment' => 'not_in:'.$error,
+//        ];
     }
 
-    public function messages()
+    public function size()
     {
-        $panel = 'agent';
-        $message = \App\Model\Custom\Required::
-                where('form', 'ticket')
-                ->select("$panel as panel", 'field', 'label')
-                ->where(function ($query) use ($panel) {
-                    return $query->whereNotNull($panel)
-                            ->where($panel, '!=', '');
-                })
-                ->get()
-                ->transform(function ($value) {
-                    $panel = $value->panel;
-                    if (str_contains($panel, ':')) {
-                        $explode = explode(':', $panel);
-                        $panel = $explode[0];
-                    }
-                    $request["$value->field.$panel"] = "$value->label is required";
+        $files = $this->file('attachment');
+        if (!$files) {
+            throw new \Exception('exceeded', 422);
+        }
+        $size = 0;
+        if (count($files) > 0) {
+            foreach ($files as $file) {
+                $size += $file->getSize();
+            }
+        }
 
-                    return $request;
-                })
-                ->collapse()
-                ->toArray();
-
-        return $message;
+        return $size;
     }
 
-    public function check($panel)
+    public function error($e)
     {
-        $required = \App\Model\Custom\Required::
-                where('form', 'ticket')
-                ->select("$panel as panel", 'field', 'option')
-                ->where(function ($query) use ($panel) {
-                    return $query->whereNotNull($panel)
-                            ->where($panel, '!=', '');
-                })
-                ->get()
-                ->transform(function ($value) {
-                    $option = $value->option;
-                    if ($option) {
-                        $option = ','.$value->option;
-                    }
-                    $request[$value->field] = $value->panel.$option;
+        if ($this->ajax() || $this->wantsJson()) {
+            $message = $e->getMessage();
+            if (is_object($message)) {
+                $message = $message->toArray();
+            }
 
-                    return $request;
-                })
-                ->collapse()
-                ->toArray();
-        //dd($required);
-        return $required;
+            return $message;
+        }
     }
 }

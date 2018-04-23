@@ -41,7 +41,7 @@ class AgentRequest extends Request
             'email'      => 'required|unique:users',
             'active'     => 'required',
             // 'account_status' => 'required',
-            //'group'               => 'required',
+            'group'               => 'required',
             'primary_department'  => 'required',
             'agent_time_zone'     => 'required',
             // 'phone_number' => 'phone:IN',

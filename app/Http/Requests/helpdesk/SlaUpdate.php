@@ -29,8 +29,8 @@ class SlaUpdate extends Request
     public function rules()
     {
         return [
-            'name'              => 'required|max:50',
-            'grace_period_time' => 'required',
+            'name'         => 'required|max:50',
+            'grace_period' => 'required',
         ];
     }
 }

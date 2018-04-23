@@ -3,6 +3,7 @@
 namespace App\Http\Requests\helpdesk;
 
 use App\Http\Requests\Request;
+use App\Model\helpdesk\Settings\CommonSettings;
 
 /**
  * CreateTicketRequest.
@@ -23,7 +24,11 @@ class CreateTicketRequest extends Request
 
     public function wantsJson()
     {
-        return true;
+        if (in_array('api', $this->segments())) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -33,35 +38,85 @@ class CreateTicketRequest extends Request
      */
     public function rules()
     {
-        $panel = 'agent';
-        $rules = $this->check($panel);
+        $check = $this->check(new CommonSettings());
+        if ($check != 0) {
+            return $check;
+        }
 
-        return $rules;
+        return [
+            'email'       => 'required|email|max:60',
+            'first_name'  => 'required|min:3|max:40',
+            'helptopic'   => 'required',
+            // 'dept' => 'required',
+            'sla'      => 'required',
+            'subject'  => 'required|min:5',
+            'body'     => 'required|min:10',
+            'priority' => 'required',
+        ];
     }
 
-    public function check($panel)
+    /**
+     *@category Funcion to set rule if send opt is enabled
+     *
+     *@param object $settings (instance of Model common settings)
+     *
+     *@author manish.verma@ladybirdweb.com
+     *
+     *@return array|int
+     */
+    public function check($settings)
     {
-        $required = \App\Model\Custom\Required::
-                 where('form', 'ticket')
-                ->select("$panel as panel", 'field', 'option')
-                ->where(function ($query) use ($panel) {
-                    return $query->whereNotNull($panel)
-                            ->where($panel, '!=', '');
-                })
-                ->get()
-                ->transform(function ($value) {
-                    $option = $value->option;
-                    if ($option) {
-                        $option = ','.$value->option;
-                    }
-                    $request[$value->field] = $value->panel.$option;
+        $settings = $settings->select('status')->where('option_name', '=', 'send_otp')->first();
+        $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
+        // dd($settings->status, $email_mandatory->status);
+        if (($settings->status == '1' || $settings->status == 1) && ($email_mandatory->status == '1' || $email_mandatory->status == 1)) {
+            return [
+                'email'       => 'required|email|max:60',
+                'first_name'  => 'required|min:3|max:40',
+                'helptopic'   => 'required',
+                // 'dept' => 'required',
+                'sla'      => 'required',
+                'subject'  => 'required|min:5',
+                'body'     => 'required|min:10',
+                'priority' => 'required',
+                'code'     => 'required',
+                'mobile'   => 'required',
+            ];
+        } elseif (($settings->status == '0' || $settings->status == 0) && ($email_mandatory->status == '1' || $email_mandatory->status == 1)) {
+            return 0;
+        } elseif (($settings->status == '0' || $settings->status == 0) && ($email_mandatory->status == '0' || $email_mandatory->status == 0)) {
+            $rule = $this->onlyMobleRequired();
 
-                    return $request;
-                })
-                ->collapse()
-                ->toArray();
+            return $rule;
+        } elseif (($settings->status == '1' || $settings->status == 1) && ($email_mandatory->status == '0' || $email_mandatory->status == 0)) {
+            $rule = $this->onlyMobleRequired();
 
-        //dd($required);
-        return $required;
+            return $rule;
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     *@category function to make only moble required rule
+     *
+     *@param null
+     *
+     *@return array
+     */
+    public function onlyMobleRequired()
+    {
+        return [
+                'email'       => 'email|max:60',
+                'first_name'  => 'required|min:3|max:40',
+                'helptopic'   => 'required',
+                // 'dept' => 'required',
+                'sla'      => 'required',
+                'subject'  => 'required|min:5',
+                'body'     => 'required|min:10',
+                'priority' => 'required',
+                'code'     => 'required',
+                'mobile'   => 'required',
+            ];
     }
 }
