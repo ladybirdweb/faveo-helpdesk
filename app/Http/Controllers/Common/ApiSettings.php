@@ -51,6 +51,7 @@ class ApiSettings extends Controller
         $this->validate($request, [
             'ticket_detail' => 'url',
         ]);
+
         try {
             // dd($request->input());
             DB::table('settings_system')
