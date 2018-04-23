@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="fbApp">
+<html>
     <head>
         <meta charset="UTF-8">
         <title>Faveo | HELP DESK</title>
@@ -13,7 +13,7 @@
         <!-- Ionicons -->
         <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet" type="text/css" >
         <!-- Theme style -->
-       <link href="{{asset("lb-faveo/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" id="adminLTR"/>
+        <link href="{{asset("lb-faveo/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" />
         <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
         <link href="{{asset("lb-faveo/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- iCheck -->
@@ -47,7 +47,7 @@
         <![endif]-->
         @yield('HeadInclude')
     </head>
-    <body class="skin-yellow fixed" ng-controller="MainCtrl">
+    <body class="skin-yellow fixed">
         <?php
         $replacetop = 0;
         $replacetop = \Event::fire('service.desk.admin.topbar.replace', array());
@@ -89,25 +89,72 @@
                             @endif
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
-                            @if($auth_user_role == 'admin')
                             <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
-
-                            @endif
-
                             @include('themes.default1.update.notification')
-                            <!-- START NOTIFICATION --> 
-                            @include('themes.default1.inapp-notification.notification')
-                            
-                            <!-- END NOTIFICATION -->
-                        <li class="dropdown">
-                            <?php $src = Lang::getLocale().'.png'; ?>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><img src="{{asset("lb-faveo/flags/$src")}}"></img> &nbsp;<span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                @foreach($langs as $key => $value)
-                                            <?php $src = $key.".png"; ?>
-                                            <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}"></img>&nbsp;{{$value}}</a></li>
-                                @endforeach       
-                            </ul>
+                            <!-- User Account: style can be found in dropdown.less -->
+                            <ul class="nav navbar-nav navbar-right">
+                            <!-- User Account: style can be found in dropdown.less -->
+                            <li class="dropdown notifications-menu" id="myDropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
+                                    <i class="fa fa-bell-o"></i>
+                                    <span class="label label-danger" id="count">{!! $notifications->count() !!}</span>
+                                </a>
+                                <ul class="dropdown-menu" style="width:500px">
+
+                                    <div id="alert11" class="alert alert-success alert-dismissable" style="display:none;">
+                                        <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                                        <div id="message-success1"></div>
+                                    </div>
+
+                                    <li id="refreshNote">
+
+                                    <li class="header">You have {!! $notifications->count() !!} notifications. <a class="pull-right" id="read-all" href="#">Mark all as read.</a></li>
+
+                                    <ul class="menu">
+
+                                        @if($notifications->count())
+                                        @foreach($notifications->orderBy('created_at', 'desc')->get()->take(10) as $notification)
+
+                                        @if($notification->notification->type->type == 'registration')
+                                        @if($notification->is_read == 1)
+                                        <li class="task" style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
+                                                    {!! $notification->notification->type->message !!}
+                                                </a></span>
+                                        </li>
+                                        @else
+                                        <li style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
+                                                    {!! $notification->notification->type->message !!}
+                                                </a></span>
+                                        </li>
+                                        @endif
+                                        @else
+                                        @if($notification->is_read == 1)
+                                        <li  class="task" style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
+                                                    {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
+                                                </a></span>
+                                        </li>
+                                        @elseif($notification->notification->model)
+                                        <li style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
+                                                    {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
+                                                </a></span>
+                                        </li>
+                                        @endif
+                                        @endif
+                                        @endforeach
+                                        @endif
+                                    </ul>
+                            </li>
+                            <li class="footer no-border"><div class="col-md-5"></div><div class="col-md-2">
+                                    <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="display: none;" id="notification-loader">
+                                </div><div class="col-md-5"></div></li>
+                            <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
+                            </li>
+                        </ul>
                         </li>
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -194,7 +241,7 @@
                             </a>
                             <ul class="treeview-menu">
                                 <li @yield('emails')><a href="{{ url('emails') }}"><i class="fa fa-envelope"></i>{!! Lang::get('lang.emails') !!}</a></li>
-                                <li @yield('ban')><a href="{{ url('banlist') }}"><i class="fa fa-ban"></i>{!! Lang::get('lang.ban_pluck') !!}</a></li>
+                                <li @yield('ban')><a href="{{ url('banlist') }}"><i class="fa fa-ban"></i>{!! Lang::get('lang.ban_lists') !!}</a></li>
                                 <li @yield('template')><a href="{{ url('template-sets') }}"><i class="fa fa-mail-forward"></i>{!! Lang::get('lang.templates') !!}</a></li>
                                 <li @yield('email')><a href="{{url('getemail')}}"><i class="fa fa-at"></i>{!! Lang::get('lang.email-settings') !!}</a></li>
                                 <li @yield('queue')><a href="{{ url('queue') }}"><i class="fa fa-upload"></i>{!! Lang::get('lang.queues') !!}</a></li>
@@ -216,7 +263,7 @@
                             <ul class="treeview-menu">
                                 <li @yield('help')><a href="{{url('helptopic')}}"><i class="fa fa-file-text-o"></i>{!! Lang::get('lang.help_topics') !!}</a></li>
                                 <li @yield('sla')><a href="{{url('sla')}}"><i class="fa fa-clock-o"></i>{!! Lang::get('lang.sla_plans') !!}</a></li>
-                                <li @yield('forms')><a href="{{url('forms/create')}}"><i class="fa fa-file-text"></i>{!! Lang::get('lang.forms') !!}</a></li>
+                                <li @yield('forms')><a href="{{url('forms')}}"><i class="fa fa-file-text"></i>{!! Lang::get('lang.forms') !!}</a></li>
                                 <li @yield('workflow')><a href="{{url('workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.workflow') !!}</a></li>
                                 <li @yield('priority')><a href="{{url('ticket/priority')}}"><i class="fa fa-asterisk"></i>{!! Lang::get('lang.priority') !!}</a></li>
                                 <li @yield('url')><a href="{{url('url/settings')}}"><i class="fa fa-server"></i>{!! Lang::get('lang.url') !!}</a></li>
@@ -229,7 +276,7 @@
                             <ul class="treeview-menu">
                                 <li @yield('tickets')><a href="{{url('getticket')}}"><i class="fa fa-file-text"></i>{!! Lang::get('lang.ticket') !!}</a></li>
                                 <li @yield('auto-response')><a href="{{url('getresponder')}}"><i class="fa fa-reply-all"></i>{!! Lang::get('lang.auto_response') !!}</a></li>
-                                <li @yield('alert')><a href="{{url('alert')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.alert_notices') !!}</a></li>
+                                <li @yield('alert')><a href="{{url('getalert')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.alert_notices') !!}</a></li>
                                 <li @yield('status')><a href="{{url('setting-status')}}"><i class="fa fa-plus-square-o"></i>{!! Lang::get('lang.status') !!}</a></li>
                                 <li @yield('ratings')><a href="{{url('getratings')}}"><i class="fa fa-star"></i>{!! Lang::get('lang.ratings') !!}</a></li>
                                 <li @yield('close-workflow')><a href="{{url('close-workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.close-workflow') !!}</a></li>
@@ -396,184 +443,20 @@
     <script src="{{asset("lb-faveo/js/tabby.js")}}"></script>
     <!-- CK Editor -->
     <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
-    <script src="{{asset("lb-faveo/js/angular/angular.min.js")}}" type="text/javascript"></script>
-    <script src="{{asset("lb-faveo/js/angular/ng-scrollable.min.js")}}" type="text/javascript"></script>
-    <script src="{{asset("lb-faveo/js/angular/angular-moment.min.js")}}" type="text/javascript"></script>
-        <script src="{{asset("lb-faveo/js/angular/angular-translate.js")}}" type="text/javascript"></script>
-    <script src="{{asset('lb-faveo/js/form/ui-bootstrap-tpls.js')}}"></script>
-    <script src="{{asset('lb-faveo/js/form/main.js')}}"></script>
-    <script src="{{asset('lb-faveo/js/form/handleCtrl.js')}}"></script>
-    <script src="{{asset('lb-faveo/js/form/nodeCtrl.js')}}"></script>
-    <script src="{{asset('lb-faveo/js/form/nodesCtrl.js')}}"></script>
-    <script src="{{asset('lb-faveo/js/form/treeCtrl.js')}}"></script>
-    <script src="{{asset('lb-faveo/js/form/uiTree.js')}}"></script>
-    <script src="{{asset('lb-faveo/js/form/uiTreeHandle.js')}}"></script>
-    <script src="{{asset('lb-faveo/js/form/uiTreeNode.js')}}"></script>
-    <script src="{{asset('lb-faveo/js/form/uiTreeNodes.js')}}"></script>
-    <script src="{{asset('lb-faveo/js/form/helper.js')}}"></script>
-    <script>
-    var app = angular.module('fbApp', ['angularMoment','ui.tree','ui.bootstrap','pascalprecht.translate']).directive('whenScrolled', function() {
-    return function(scope, elm, attr) {
-        var raw = elm[0];
-        console.log(raw);
-        elm.bind('scroll', function() {
 
-            if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
-                scope.$apply(attr.whenScrolled);
-            }
-        });
-    };
-});
-app.constant("CSRF_TOKEN", '{{ csrf_token() }}');
-app.directive('mediaLibScrolled', function() {
-    return function(scope, elm, attr) {
-        var raw = elm[0];
-        console.log(raw);
-        elm.bind('scroll', function() {
-
-            if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
-                scope.$apply(attr.mediaLibScrolled);
-            }
-        });
-    };
-});
-app.config(['$translateProvider', function($translateProvider){
-   $translateProvider.translations('en', {
-        "Requester"     : "Requester",
-        "Subject"       : "Subject",
-        "Type"          : "Type",
-        "Status"        : "Status",
-        "Priority"      : "Priority",
-        "Help Topic"    : "Help Topic",
-        "Assigned"      : "Assigned",
-        "Description"   : "Description",
-        "Company"       : "Company"
-    });
-    $translateProvider.translations('ar', {
-
-        "Requester"     : "الطالب",
-        "Subject"       : "موضوع",
-        "Type"          : "اكتب",
-        "Status"        : "الحالة",
-        "Priority"      : "أفضلية",
-        "Help Topic"    : "موضوع المساعدة",
-        "Assigned"      : "تعيين",
-        "Description"   : "وصف",
-        "Company"       : "شركة"
-    });
-    if('{{Lang::getLocale()}}'=='ar'){
-       $translateProvider.preferredLanguage('ar');
-    }
-    else{
-         $translateProvider.preferredLanguage('en');
-    }
-}])
-
-    </script>
     @yield('FooterInclude')
-    @stack('scripts')
 </body>
 <script>
     $(function() {
       
         
-//        $('input[type="checkbox"]').iCheck({
-//            checkboxClass: 'icheckbox_flat-blue'
-//        });
-//        $('input[type="radio"]').iCheck({
-//            radioClass: 'iradio_flat-blue'
-//        });
+        $('input[type="checkbox"]').iCheck({
+            checkboxClass: 'icheckbox_flat-blue'
+        });
+        $('input[type="radio"]').iCheck({
+            radioClass: 'iradio_flat-blue'
+        });
     
     });        
 </script>
-<script type="text/javascript">
-                function changeLang(lang) {
-                    location.href = "swtich-language/"+lang;
-                }
-            </script>
-    <script type="text/javascript">
-                        $(function () {
-                        if ('{{Lang::getLocale()}}' == 'ar'){
-
-                        // $('#cssRTL').removeAttr('disabled');
-                        //   $('#bootRTL').removeAttr('disabled');
-                        $('#adminLTR').attr('disabled', 'disabled');
-                                var adminRtl = document.createElement('link');
-                                adminRtl.id = 'id-rtl';
-                                adminRtl.rel = 'stylesheet';
-                                adminRtl.href = '{{asset("lb-faveo/rtl/css/AdminLTE.css")}}';
-                                document.head.appendChild(adminRtl);
-                                var cssRtl = document.createElement('link');
-                                cssRtl.id = 'id-csstrtl';
-                                cssRtl.rel = 'stylesheet';
-                                cssRtl.href = '{{asset("lb-faveo/rtl/css/rtl.css")}}';
-                                document.head.appendChild(cssRtl);
-                                var bootRtl = document.createElement('link');
-                                bootRtl.id = 'id-bootrtl';
-                                bootRtl.rel = 'stylesheet';
-                                bootRtl.href = '{{asset("lb-faveo/rtl/css/bootstrap-rtl.min.css")}}';
-                                document.head.appendChild(bootRtl);
-                                $('#adminLTR').remove();
-                                $('.container').attr('dir', 'RTL');
-                                $('.formbilder').attr('dir', 'RTL');
-                                $('.content-area').attr('dir', 'RTL');
-                                // agentpanel
-                                $('.content').attr('dir', 'RTL');
-                                $('.info').attr('dir', 'RTL');
-                                $('.table').attr('dir', 'RTL');
-                                $('.box-primary').attr('dir', 'RTL');
-                                // box-header with-borderclass="box box-primary"
-                                $('.dataTables_paginate').find('.row').attr('dir', 'RTL');
-                                // dataTables_paginate paging_full_numbers
-                                $('.sidebar-menu').attr('dir', 'RTL');
-                                $('.sidebar-menu').find('.pull-right').removeClass("pull-right");
-                                $('.sidebar-menu').find('.label').addClass("pull-left");
-                                $('.content').find('.btn').removeClass("pull-right");
-                                $('.content').find('.btn').addClass("pull-left");
-                                $('.tabs-horizontal').removeClass("navbar-left");
-                                $('.tabs-horizontal').addClass("navbar-right");
-                                $('#right-menu').removeClass("navbar-right");
-                                $('#right-menu').addClass("navbar-left");
-                                $('.navbar-nav').find('li').css("float", "right");
-                                $('#rtl1').css('display', 'none');
-                                $('#ltr1').css('display', 'block');
-                                $('#rtl2').css('display', 'none');
-                                $('#ltr2').css('display', 'block');
-                                $('#rtl3').css('display', 'none');
-                                $('#ltr3').css('display', 'block');
-                                $('#rtl4').css('display', 'none');
-                                $('#ltr4').css('display', 'block');
-                                $('.box-header').find('.pull-right').addClass("pull-left");
-                                $('.box-header').find('.pull-right').removeClass("pull-right");
-                                $('.btn').removeClass("pull-left");
-                                $('.iframe').attr('dir', 'RTL');
-                                $('.box-footer').find('a').removeClass("pull-right");
-                                $('.box-footer').find('a').addClass("pull-left");
-                                $('.box-footer').find('div').removeClass("pull-right");
-                                $('.box-footer').find('div').addClass("pull-left");
-                                // $('.col-md-3').css('float','right');
-                                $('.user-footer').css('float', 'none');
-                                $('.user-header').css('float', 'none');
-                                $('.sidebar-toggle').css('width', '60px');
-                                $('.dropdown-menu').css('right', 'inherit');
-                                $('.dropdown-menu').css('left', '0');
-// chart-data
-                                // label
-
-                                $('.box-header').find('.btn-primary').find('.pull-right').removeClass("pull-right");
-                                $('.box-header').find('.btn-primary').addClass("pull-left");
-                                $('.main-footer').find('.pull-right').removeClass("pull-right");
-                                $('.main-footer').find('.hidden-xs').addClass("pull-left");
-                                setTimeout(function(){
-                                $('#cke_details').addClass("cke_rtl");
-                                        $(".cke_wysiwyg_frame").contents().find("body").attr('dir', 'RTL');
-                                }, 3000);
-                                $('iframe').contents().find("body").attr('dir', 'RTL');
-                                /*$('#wys-form').remove();
-                                 $('#mobile-RTL').css('display','block');
-                                 $('#mobile-normal').css('display','none');
-                                 $('#form-foot1').css('display','block');
-                                 $('.list-inline').attr('dir','RTL');*/
-                        };
-                        });</script>
 </html>

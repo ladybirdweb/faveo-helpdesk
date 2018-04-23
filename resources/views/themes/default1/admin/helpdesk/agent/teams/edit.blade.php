@@ -60,7 +60,7 @@ class="active"
             <!-- team lead -->
             <div class="col-xs-6 form-group {{ $errors->has('team_lead') ? 'has-error' : '' }}">
                 {!! Form::label('team_lead',Lang::get('lang.team_lead')) !!}
-                {!! Form::select('team_lead',[''=>Lang::get('lang.select_a_team_lead'), Lang::get('lang.members')=>$user->pluck('full_name','id')->toArray()],null,['class' => 'form-control']) !!}	
+                {!! Form::select('team_lead',[''=>Lang::get('lang.select_a_team_lead'), Lang::get('lang.members')=>$user->lists('full_name','id')->toArray()],null,['class' => 'form-control']) !!}	
             </div>
         </div>
         <!-- status -->

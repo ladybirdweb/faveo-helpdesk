@@ -82,19 +82,12 @@ class="active"
                     {!! Form::text('name',$systems->name,['class' => 'form-control']) !!}
                 </div>
             </div>
-            <?php
-            if(!$systems->url){
-                $url = url('/');
-            }else{
-                $url= $systems->url;
-            }
-            ?>
              <!-- Helpdesk URL:      text   Required -->
              <div class="col-md-4">
                 <div class="form-group {{ $errors->has('url') ? 'has-error' : '' }}">
                     {!! Form::label('url',Lang::get('lang.url')) !!}
                     {!! $errors->first('url', '<spam class="help-block">:message</spam>') !!}
-                    {!! Form::text('url',$url,['class' => 'form-control']) !!}
+                    {!! Form::text('url',$systems->url,['class' => 'form-control']) !!}
                 </div>
             </div>
             <!-- Default Time Zone: Drop down: timezones table : Required -->
@@ -102,7 +95,7 @@ class="active"
                 <div class="form-group {{ $errors->has('time_zone') ? 'has-error' : '' }}">
                     {!! Form::label('time_zone',Lang::get('lang.timezone')) !!}
                     {!! $errors->first('time_zone', '<spam class="help-block">:message</spam>') !!}
-                    {!!Form::select('time_zone',['Time Zones'=>$timezones],null,['class'=>'form-control']) !!}
+                    {!!Form::select('time_zone',['Time Zones'=>$timezones->lists('name','id')->toArray()],null,['class'=>'form-control']) !!}
                 </div>
             </div>
         </div>
@@ -112,7 +105,7 @@ class="active"
                 <div class="form-group {{ $errors->has('date_time_format') ? 'has-error' : '' }}">
                     {!! Form::label('date_time_format',Lang::get('lang.date_time')) !!}
                     {!! $errors->first('date_time_format', '<spam class="help-block">:message</spam>') !!}
-                    {!! Form::select('date_time_format',['Date Time Formats'=>$formats],null,['class' => 'form-control']) !!}
+                    {!! Form::select('date_time_format',['Date Time Formats'=>$date_time->lists('format','id')->toArray()],null,['class' => 'form-control']) !!}
                 </div>
             </div>
            
@@ -179,25 +172,6 @@ class="active"
                         </div>
                         <div class="col-xs-6">
                             <input type="radio" name="email_mandatory" value="0" @if($email_mandatory->status == '0')checked="true" @endif>&nbsp;{{Lang::get('lang.no')}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-4">
-                <div class="form-group">
-                    {!! Form::label('verify',Lang::get('lang.verification_channel')) !!}
-                    <?php
-                    $email = in_array('email', $verify_decode);
-                    $mobile = in_array('mobile', $verify_decode);
-                    ?>
-                    <!-- <a href="#" data-toggle="tooltip" title="{!! Lang::get('lang.otp_usage_info') !!}"><i class="fa fa-question-circle" style="padding: 0px;"></i></a> -->
-                    <div class="row">
-                        <div class="col-xs-5">
-                            {!! Form::checkbox('verify[]','email',$email) !!}&nbsp;{{Lang::get('lang.email')}}
-                        </div>
-                        <div class="col-xs-6">
-                             {!! Form::checkbox('verify[]','mobile',$mobile) !!}&nbsp;{{Lang::get('lang.mobile')}}
                         </div>
                     </div>
                 </div>

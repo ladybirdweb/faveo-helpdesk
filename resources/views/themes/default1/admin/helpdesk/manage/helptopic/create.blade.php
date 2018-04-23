@@ -100,21 +100,21 @@ class="active"
                     <div class="col-md-6">
                         <div class="form-group {{ $errors->has('parent_topic') ? 'has-error' : '' }}">
                             {!! Form::label('parent_topic',Lang::get('lang.parent_topic')) !!}
-                            {!!Form::select('parent_topic', [''=>Lang::get('lang.select_a_parent_topic'),Lang::get('lang.help_topic')=>$topics->pluck('topic','topic')->toArray()],1,['class' => 'form-control']) !!}
+                            {!!Form::select('parent_topic', [''=>Lang::get('lang.select_a_parent_topic'),Lang::get('lang.help_topic')=>$topics->lists('topic','topic')->toArray()],1,['class' => 'form-control']) !!}
                         </div>
                     </div>
                     <!-- Custom Form: Drop down: value from form table -->
                     <div class="col-md-6">
                         <div class="form-group {{ $errors->has('custom_form') ? 'has-error' : '' }}">
                             {!! Form::label('custom_form',Lang::get('lang.Custom_form')) !!}
-                            {!!Form::select('custom_form', [''=>Lang::get('lang.select_a_form'),Lang::get('lang.custom_form')=>$forms->pluck('formname','id')->toArray()],1,['class' => 'form-control']) !!}
+                            {!!Form::select('custom_form', [''=>Lang::get('lang.select_a_form'),Lang::get('lang.custom_form')=>$forms->lists('formname','id')->toArray()],1,['class' => 'form-control']) !!}
                         </div>
                     </div>
                     <!-- Department:	Drop down: value Department form table -->
                     <div class="col-md-6">
                         <div class="form-group {{ $errors->has('department') ? 'has-error' : '' }}">
                             {!! Form::label('department',Lang::get('lang.department')) !!}
-                            {!!Form::select('department', [''=>Lang::get('lang.select_a_department'),Lang::get('lang.departments')=>$departments->pluck('name','id')->toArray()],1,['class' => 'form-control']) !!}
+                            {!!Form::select('department', [''=>Lang::get('lang.select_a_department'),Lang::get('lang.departments')=>$departments->lists('name','id')->toArray()],1,['class' => 'form-control']) !!}
                         </div>
                     </div>
                 </div>
@@ -123,21 +123,21 @@ class="active"
                     <div class="col-md-4">
                         <div class="form-group {{ $errors->has('priority') ? 'has-error' : '' }}">
                             {!! Form::label('priority',Lang::get('lang.priority')) !!} <span class="text-red"> *</span>
-                            {!!Form::select('priority', [''=>Lang::get('lang.select_a_priority'),Lang::get('lang.priorities')=>$priority->pluck('priority_desc','priority_id')->toArray()],null,['class' => 'form-control']) !!}
+                            {!!Form::select('priority', [''=>Lang::get('lang.select_a_priority'),Lang::get('lang.priorities')=>$priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control']) !!}
                         </div>
                     </div>
                     <!-- SLA Plan:	 Drop down: value SLA Plan  table-->
                     <div class="col-md-4">
                         <div class="form-group {{ $errors->has('sla_plan') ? 'has-error' : '' }}">
                             {!! Form::label('sla_plan',Lang::get('lang.SLA_plan')) !!}
-                            {!!Form::select('sla_plan', [''=>Lang::get('lang.select_a_sla_plan'),Lang::get('lang.sla_plans')=>$slas->pluck('name','id')->toArray()],1,['class' => 'form-control']) !!}
+                            {!!Form::select('sla_plan', [''=>Lang::get('lang.select_a_sla_plan'),Lang::get('lang.sla_plans')=>$slas->lists('name','id')->toArray()],1,['class' => 'form-control']) !!}
                         </div>
                     </div>
                     <!-- Auto-assign To:	Drop Down: value  from Agent table   -->
                     <div class="col-md-4">
                         <div class="form-group {{ $errors->has('auto_assign') ? 'has-error' : '' }}">
                             {!! Form::label('auto_assign',Lang::get('lang.auto_assign')) !!}
-                            {!!Form::select('auto_assign', [''=>Lang::get('lang.select_an_agent'),Lang::get('lang.agents')=>$agents->pluck('full_name','id')->toArray()],null,['class' => 'form-control']) !!}
+                            {!!Form::select('auto_assign', [''=>Lang::get('lang.select_an_agent'),Lang::get('lang.agents')=>$agents->lists('full_name','id')->toArray()],null,['class' => 'form-control']) !!}
                         </div>
                     </div>
                 </div>

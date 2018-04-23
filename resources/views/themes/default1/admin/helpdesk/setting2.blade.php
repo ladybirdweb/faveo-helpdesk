@@ -111,7 +111,7 @@
                                                         <i class="fa fa-ban fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.ban_pluck') !!}</center>
+                                                <center class="box-title" >{!! Lang::get('lang.ban_lists') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->

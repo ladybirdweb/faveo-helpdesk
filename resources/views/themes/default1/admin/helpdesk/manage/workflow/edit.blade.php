@@ -31,8 +31,8 @@ class="active"
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-<form class="form-horizontal" action="{!! URL::route('workflow.update', $id) !!}" method="POST" id="Form">
-{{ csrf_field() }}
+<form class="form-horizontal" action="{!! URL::route('workflow.update', $id) !!}" method="POST">
+    {{ csrf_field() }}
     <div class="box">
         <!-- /.box-header -->
         <div class="box-body">
@@ -104,12 +104,33 @@ class="active"
                     </div>
                 </div>
             </div>
-            <?php $source = \App\Model\helpdesk\Ticket\Ticket_source::pluck('value','id')->toArray()+['any'=>'Any']; 
-            ?>
             <div class="form-group {!! $errors->has('target_channel') ? 'has-error' : '' !!}">
-                <label class="col-sm-2 control-label">{!! Lang::get('lang.target_channel') !!} <span class="text-red"> *</span></label>
+                <label class="col-sm-2 control-label">{!! Lang::get('target_channel') !!}</label>
                 <div class="col-sm-6">
-                    {!! Form::select('target_channel',$source, $workflow->target,['class' => 'form-control', 'id' => 'execution_order']) !!}
+                    <select class="form-control" name="target_channel" required>
+                        <option value=""> -- {!! Lang::get('lang.select_a_channel') !!} -- </option>
+                        <option value="A-0" <?php
+                        if ($workflow->target == "A-0") {
+                            echo "selected='selected'";
+                        }
+                        ?> >Any</option>
+                        <option value="A-1" <?php
+                        if ($workflow->target == "A-1") {
+                            echo "selected='selected'";
+                        }
+                        ?> >Web Forms</option>
+                        <option value="A-4" <?php
+                        if ($workflow->target == "A-4") {
+                            echo "selected='selected'";
+                        }
+                        ?> >API Calls</option>
+                        <option value="A-2" <?php
+                        if ($workflow->target == "A-2") {
+                            echo "selected='selected'";
+                        }
+                        ?> >Emails</option>
+
+                    </select>
                 </div>
             </div>
 
@@ -154,26 +175,21 @@ class="active"
                                                             echo "selected='selected'";
                                                         }
                                                         ?> >{!! Lang::get('lang.email') !!}</option>
-                                                        <option value="name" <?php
-                                                        if ($workflow_rule->matching_scenario == 'name') {
+                                                        <option value="email_name" <?php
+                                                        if ($workflow_rule->matching_scenario == 'email_name') {
                                                             echo "selected='selected'";
                                                         }
-                                                        ?> >{!! Lang::get('lang.name') !!}</option>
+                                                        ?> >{!! Lang::get('lang.email_name') !!}</option>
                                                         <option value="subject" <?php
                                                         if ($workflow_rule->matching_scenario == 'subject') {
                                                             echo "selected='selected'";
                                                         }
                                                         ?>>{!! Lang::get('lang.subject') !!}</option>
-                                                        <option value="body"  <?php
-                                                        if ($workflow_rule->matching_scenario == 'body') {
+                                                        <option value="message"  <?php
+                                                        if ($workflow_rule->matching_scenario == 'message') {
                                                             echo "selected='selected'";
                                                         }
                                                         ?> >{!! Lang::get('lang.message') !!}/{!! Lang::get('lang.body') !!}</option>
-                                                        <option value="organization"  <?php
-                                                        if ($workflow_rule->matching_scenario == 'organization') {
-                                                            echo "selected='selected'";
-                                                        }
-                                                        ?> >{!! Lang::get('lang.organization') !!}</option>
                                                     </select>
                                                 </td>
                                                 <td class="col-md-3">
@@ -280,7 +296,11 @@ class="active"
                                                             echo "selected='selected'";
                                                         }
                                                         ?> >{!! Lang::get('lang.set_department') !!}</option>
-                                                        
+                                                        <option value="priority" <?php
+                                                        if ($workflow_action->condition == 'priority') {
+                                                            echo "selected='selected'";
+                                                        }
+                                                        ?> >{!! Lang::get('lang.set_priority') !!}</option>
                                                         <option value="sla" <?php
                                                         if ($workflow_action->condition == 'sla') {
                                                             echo "selected='selected'";
@@ -326,8 +346,21 @@ class="active"
                                                     }
                                                     $var .= "</select>";
                                                     echo $var;
-                                                }  elseif ($workflow_action->condition == 'sla') {
-                                                    $sla_plans = \App\Model\helpdesk\Manage\Sla\Sla_plan::where('status', '=', 1)->get();
+                                                } elseif ($workflow_action->condition == 'priority') {
+                                                    $priorities = App\Model\helpdesk\Ticket\Ticket_Priority::all();
+                                                    $var = "<select name='action[" . $i . "][b]' class='form-control' required>";
+                                                    foreach ($priorities as $priority) {
+                                                        if ($workflow_action->action == $priority->priority_id) {
+                                                            $priority1 = "selected";
+                                                        } else {
+                                                            $priority1 = "";
+                                                        }
+                                                        $var .= "<option value='" . $priority->priority_id . "' " . $priority1 . ">" . $priority->priority_desc . "</option>";
+                                                    }
+                                                    $var .= "</select>";
+                                                    echo $var;
+                                                } elseif ($workflow_action->condition == 'sla') {
+                                                    $sla_plans = App\Model\helpdesk\Manage\Sla_plan::where('status', '=', 1)->get();
                                                     $var = "<select name='action[" . $i . "][b]' class='form-control' required>";
                                                     foreach ($sla_plans as $sla_plan) {
                                                         if ($workflow_action->action == $sla_plan->id) {
@@ -335,7 +368,7 @@ class="active"
                                                         } else {
                                                             $sla = "";
                                                         }
-                                                        $var .= "<option value='" . $sla_plan->id . "' " . $sla . ">" . $sla_plan->name . "</option>";
+                                                        $var .= "<option value='" . $sla_plan->id . "' " . $sla . ">" . $sla_plan->grace_period . "</option>";
                                                     }
                                                     $var .= "</select>";
                                                     echo $var;
@@ -429,9 +462,7 @@ class="active"
                 </div>
                 <!-- /.tab-content -->
                 <div class="box-footer">
-                     <!--  <input type="submit" class="btn btn-primary" value="{!! Lang::get('lang.update') !!}">-->
-                     <!-- {!!Form::button('<i class="fa fa-refresh" aria-hidden="true">&nbsp;&nbsp;</i>'.Lang::get('lang.update'),['type' => 'submit', 'class' =>'btn btn-primary'])!!}-->
-                      <button type="submit" class="btn btn-primary" id="submit" data-loading-text="<i class='fa fa-refresh fa-spin fa-1x fa-fw'>&nbsp;</i> Updating..."><i class="fa fa-refresh">&nbsp;&nbsp;</i>{!!Lang::get('lang.update')!!}</button>    
+                    <input type="submit" class="btn btn-primary" value="{!! Lang::get('lang.submit') !!}">
                 </div>
             </div>
             <!-- /.nav-tabs-custom -->
@@ -477,6 +508,7 @@ class="active"
             '<optgroup label="Ticket">' +
             '<option value="reject">{!! Lang::get("lang.reject_ticket") !!}</option>' +
             '<option value="department">{!! Lang::get("lang.set_department") !!}</option>' +
+            '<option value="priority">{!! Lang::get("lang.set_priority") !!}</option>' +
             '<option value="sla">{!! Lang::get("lang.set_sla_plan") !!}</option>' +
             '<option value="team">{!! Lang::get("lang.assign_team") !!}</option>' +
             '<option value="agent">{!! Lang::get("lang.assign_agent") !!} </option>' +
@@ -513,10 +545,9 @@ class="active"
             '<select class="form-control" name="rule[' + n + '][a]" required>' +
             '<option>-- {!! Lang::get("lang.select_one") !!} --</option>' +
             '<option value="email">{!! Lang::get("lang.email") !!}</option>' +
-            '<option value="name">{!! Lang::get("lang.name") !!}</option>' +
+            '<option value="email_name">{!! Lang::get("lang.email_name") !!}</option>' +
             '<option value="subject">{!! Lang::get("lang.subject") !!}</option>' +
-            '<option value="body">{!! Lang::get("lang.message") !!}/{!! Lang::get("lang.body") !!}</option>' +
-            '<option value="organization">{!! Lang::get("lang.organization") !!}</option>' +
+            '<option value="message">{!! Lang::get("lang.message") !!}/{!! Lang::get("lang.body") !!}</option>' +
             '</select>' +
             '</td>' +
             '<td class="col-md-3">' +

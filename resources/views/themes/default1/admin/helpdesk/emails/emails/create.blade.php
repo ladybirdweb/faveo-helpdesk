@@ -73,19 +73,19 @@ class="active"
                 <div class="col-xs-4 form-group {!! $errors->has('department') ? 'has-error' : ''!!}" id="department_error">
                     {!! Form::label('department',Lang::get('lang.department')) !!}
                     {!! $errors->first('department', '<spam class="help-block">:message</spam>') !!}
-                    {!!Form::select('department', [''=>'--System Default--','departments'=>$departments->pluck('name','id')->toArray()],null,['class' => 'form-control select', 'id' => 'department' ]) !!}
+                    {!!Form::select('department', [''=>'--System Default--','departments'=>$departments->lists('name','id')->toArray()],null,['class' => 'form-control select', 'id' => 'department' ]) !!}
                 </div>
                 <!-- Priority -->
                 <div class="col-xs-4 form-group {!! $errors->has('priority') ? 'has-error' : ''!!}" id="priority_error">
                     {!! Form::label('priority',Lang::get('lang.priority')) !!}
                     {!! $errors->first('priority', '<spam class="help-block">:message</spam>') !!}
-                    {!!Form::select('priority', [''=>'--System Default--','Priorities'=>$priority->pluck('priority_desc','priority_id')->toArray()],null,['class' => 'form-control select', 'id' => 'priority']) !!}
+                    {!!Form::select('priority', [''=>'--System Default--','Priorities'=>$priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control select', 'id' => 'priority']) !!}
                 </div>
                 <!-- Help topic -->
                 <div class="col-xs-4 form-group {!! $errors->has('help_topic') ? 'has-error' : ''!!}" id="help_topic_error">
                     {!! Form::label('help_topic',Lang::get('lang.help_topic')) !!}
                     {!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}
-                    {!!Form::select('help_topic', [''=>'--System Default--','Help Topics'=>$helps->pluck('topic','id')->toArray()],null,['class' => 'form-control select', 'id' => 'help_topic']) !!}
+                    {!!Form::select('help_topic', [''=>'--System Default--','Help Topics'=>$helps->lists('topic','id')->toArray()],null,['class' => 'form-control select', 'id' => 'help_topic']) !!}
                 </div>
                 <!-- status -->
                 <div class="col-xs-2 form-group">

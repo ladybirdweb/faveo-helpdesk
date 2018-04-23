@@ -62,7 +62,7 @@ class="active"
                 <!-- Email Address with Link to Edit page along Id -->
                 <td><a href="{{route('banlist.edit',$ban->id)}}">{!! $ban->email !!}</a></td>
                 <!-- Last Updated -->
-                <td> {!! faveoDate($ban->updated_at) !!} </td>
+                <td> {!! UTC::usertimezone($ban->updated_at) !!} </td>
                 <!-- Deleting Fields -->
                 <td>
                     <a href="{{route('banlist.edit',$ban->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a> <a href="{{route('banlist.delete',$ban->id)}}" class="btn btn-danger btn-xs btn-flat"><i class="fa fa-trash" style="color:black;"> </i> {!! Lang::get('lang.delete') !!}</a>

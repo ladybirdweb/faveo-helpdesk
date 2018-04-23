@@ -32,7 +32,7 @@ class="active"
 <!-- content -->
 @section('content')
 <form class="form-horizontal" action="{!! URL::route('workflow.store') !!}" method="POST" id="form">
-{{ csrf_field() }}
+    {{ csrf_field() }}
     <div class="box">
         <!-- /.box-header -->
         <div class="box-body">
@@ -78,7 +78,7 @@ class="active"
             <div class="form-group {!! $errors->has('name') ? 'has-error' : '' !!}">
                 <label for="inputName" class="col-sm-2 control-label">{!! Lang::get('lang.name') !!} <span class="text-red"> *</span></label>
                 <div class="col-sm-6">
-                    {!! Form::text('name',null,['class' => 'form-control required', 'placeholder' => Lang::get('lang.name'), 'id' => 'name']) !!}
+                    {!! Form::text('name',null,['class' => 'form-control', 'placeholder' => Lang::get('lang.name'), 'id' => 'name']) !!}
                 </div>
             </div>
             <div class="form-group {!! $errors->has('status') ? 'has-error' : '' !!}">
@@ -92,16 +92,14 @@ class="active"
                 <div>
                     <label for="Exceution" class="col-sm-2 control-label">{!! Lang::get('lang.execution_order') !!} <span class="text-red"> *</span></label>
                     <div class="col-sm-6">
-                        {!! Form::input('number', 'execution_order',null,['class' => 'form-control required', 'placeholder' => Lang::get('lang.execution_order'), 'id' => 'execution_order', 'min' => '0']) !!}
+                        {!! Form::input('number', 'execution_order',null,['class' => 'form-control', 'placeholder' => Lang::get('lang.execution_order'), 'id' => 'execution_order', 'min' => '0']) !!}
                     </div>
                 </div>
             </div>
-            <?php $source = \App\Model\helpdesk\Ticket\Ticket_source::pluck('value','id')->toArray()+['any'=>'Any']; 
-            ?>
             <div class="form-group {!! $errors->has('target_channel') ? 'has-error' : '' !!}">
                 <label class="col-sm-2 control-label">{!! Lang::get('lang.target_channel') !!} <span class="text-red"> *</span></label>
                 <div class="col-sm-6">
-                    {!! Form::select('target_channel',$source, null,['class' => 'form-control required', 'id' => 'execution_order']) !!}
+                    {!! Form::select('target_channel', [''=> '-- '.Lang::get('lang.select_a_channel').' --', 'A-0' => 'Any', 'A-1' => 'Web Forms', 'A-4' => 'API Calls', 'A-2' => 'Emails'], null,['class' => 'form-control', 'id' => 'execution_order']) !!}
                 </div>
             </div>
         </div>
@@ -135,18 +133,16 @@ class="active"
                                         <tbody class="button1">
                                             <tr id="firstdata">
                                                 <td>
-                                                    <select class="form-control required" name="rule[0][a]">
+                                                    <select class="form-control" name="rule[0][a]" required>
                                                         <option value="">-- {!! Lang::get('lang.select_one') !!} --</option>
                                                         <option value="email">{!! Lang::get('lang.email') !!}</option>
-                                                        <option value="name">{!! Lang::get('lang.name') !!}</option>
+                                                        <option value="email_name">{!! Lang::get('lang.email_name') !!}</option>
                                                         <option value="subject">{!! Lang::get('lang.subject') !!}</option>
-                                                        <option value="body">{!! Lang::get('lang.message') !!}/{!! Lang::get('lang.body') !!}</option>
-                                                        <option value="organization">{!! Lang::get('lang.organization') !!}</option>
-                                                        
+                                                        <option value="message">{!! Lang::get('lang.message') !!}/{!! Lang::get('lang.body') !!}</option>
                                                     </select>
                                                 </td>
                                                 <td class="col-md-3">
-                                                    <select class="form-control required" name="rule[0][b]">
+                                                    <select class="form-control" name="rule[0][b]" required>
                                                         <option value="">-- {!! Lang::get('lang.select_one') !!} --</option>
                                                         <option value="equal">{!! Lang::get('lang.equal_to') !!}</option>
                                                         <option value="not_equal">{!! Lang::get('lang.not_equal_to') !!}</option>
@@ -159,7 +155,7 @@ class="active"
                                                     </select>
                                                 </td>
                                                 <td class="col-md-3">
-                                                    <input class="form-control required" type="text" name="rule[0][c]">
+                                                    <input class="form-control" type="text" name="rule[0][c]" required>
                                                 </td>
                                                 <td style="text-align: center">
                                                     <div class="tools"> 
@@ -200,12 +196,12 @@ class="active"
                                     <tbody class="buttons">
                                         <tr id="firstdata1">
                                             <td>
-                                                <select class="form-control required" onChange="selectdata(0)" id="selected0" name="action[0][a]">
+                                                <select class="form-control" onChange="selectdata(0)" id="selected0" name="action[0][a]" required>
                                                     <option value="">-- {!! Lang::get('lang.select_an_action') !!} --</option>
                                                     <optgroup label="Ticket">
                                                         <option value="reject">{!! Lang::get('lang.reject_ticket') !!}</option>                        
                                                         <option value="department">{!! Lang::get('lang.set_department') !!}</option>
-                                                        {{--<option value="priority">{!! Lang::get('lang.set_priority') !!}</option>--}}
+                                                        <option value="priority">{!! Lang::get('lang.set_priority') !!}</option>
                                                         <option value="sla">{!! Lang::get('lang.set_sla_plan') !!}</option>
                                                         <option value="team">{!! Lang::get('lang.assign_team') !!}</option>
                                                         <option value="agent">{!! Lang::get('lang.assign_agent') !!}</option>
@@ -249,8 +245,7 @@ class="active"
                 </div>
                 <!-- /.tab-content -->
                 <div class="box-footer">
-                    <button type="submit" id="submit" class="btn btn-primary" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'>&nbsp;</i> {!! Lang::get('lang.saving') !!}"><i class="fa fa-floppy-o">&nbsp;&nbsp;</i>{!!Lang::get('lang.save')!!}</button>
-                
+                    <input type="submit" class="btn btn-primary" value="{!! Lang::get('lang.submit') !!}">
                 </div>
             </div>
             <!-- /.nav-tabs-custom -->
@@ -296,6 +291,7 @@ class="active"
                     '<optgroup label="Ticket">' +
                     '<option value="reject">{!! Lang::get("lang.reject_ticket") !!} </option>' +
                     '<option value="department">{!! Lang::get("lang.set_department") !!} </option>' +
+                    '<option value="priority">{!! Lang::get("lang.set_priority") !!} </option>' +
                     '<option value="sla">{!! Lang::get("lang.set_sla_plan") !!}  </option>' +
                     '<option value="team">{!! Lang::get("lang.assign_team") !!} </option>' +
                     '<option value="agent">{!! Lang::get("lang.assign_agent") !!} </option>' +
@@ -333,10 +329,9 @@ class="active"
                     '<select class="form-control" name="rule[' + n + '][a]" required>' +
                     '<option>-- {!! Lang::get("lang.select_one") !!} --</option>' +
                     '<option value="email">{!! Lang::get("lang.email") !!}</option>' +
-                    '<option value="name">{!! Lang::get("lang.name") !!}</option>' +
+                    '<option value="email_name">{!! Lang::get("lang.email_name") !!}</option>' +
                     '<option value="subject">{!! Lang::get("lang.subject") !!}</option>' +
-                    '<option value="body">{!! Lang::get("lang.message") !!}/{!! Lang::get("lang.body") !!}</option>' +
-                    '<option value="organization">{!! Lang::get("lang.organization") !!}</option>' +
+                    '<option value="message">{!! Lang::get("lang.message") !!}/{!! Lang::get("lang.body") !!}</option>' +
                     '</select>' +
                     '</td>' +
                     '<td class="col-md-3">' +
@@ -379,39 +374,5 @@ class="active"
         });
     }
 </script>
-<!-- for submit button loader-->
-<script>
-    $(function(){
-    $('#submit').attr('disabled','disabled');
-    $('#form').on('input',function(){
-        $('#submit').removeAttr('disabled');
-    });
-    $('#form').on('change',':input',function(){
-        $('#submit').removeAttr('disabled');
-    });
-    });
-    $('#form').submit(function (e) {
-        var $this = $('#submit');
-        var required_inputs = $('.required');
-        for(var i = 0; i < required_inputs.length; i++){
-            if ($(required_inputs[i]).val() == '' || $(required_inputs[i]).val() == null) {
-                if($(required_inputs[i]).attr('name') == 'name' ||
-                    $(required_inputs[i]).attr('name') == 'execution_order' ||
-                    $(required_inputs[i]).attr('name') == 'target_channel' ||
-                    $(required_inputs[i]).attr('name').indexOf('rule') !== -1) {
-                    $('a[href="#open"]').trigger( "click" );
-                } else {
-                    $('a[href="#close"]').trigger( "click" );
-                }
-                $(required_inputs[i]).parent().addClass('has-error');
-                e.preventDefault();
-                throw new Error('this is not an error this is just to abort javascript');
-            }
-        }
 
-        $this.button('loading');
-        $('#Edit').modal('show');
-    });
-   
-</script>
 @stop

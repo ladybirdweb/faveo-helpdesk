@@ -68,7 +68,7 @@
 		<div class="col-md-6 form-group">
 
                         {!! Form::label('timezone',Lang::get('lang.timezone')) !!}
-                        {!!Form::select('timezone',$time->pluck('location','name') ,null,['class' => 'form-control select']) !!}
+                        {!!Form::select('timezone',$time->lists('location','name') ,null,['class' => 'form-control select']) !!}
 
                     </div>
 
