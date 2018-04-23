@@ -51,7 +51,6 @@ class ApiSettings extends Controller
         $this->validate($request, [
             'ticket_detail' => 'url',
         ]);
-
         try {
             // dd($request->input());
             DB::table('settings_system')
@@ -91,8 +90,6 @@ class ApiSettings extends Controller
                     ->toJson();
             $this->postHook($data);
         } catch (Exception $ex) {
-            dd($ex);
-
             throw new Exception($ex->getMessage());
         }
     }
@@ -107,8 +104,6 @@ class ApiSettings extends Controller
                 }
             }
         } catch (Exception $ex) {
-            dd($ex);
-
             throw new Exception($ex->getMessage());
         }
     }
