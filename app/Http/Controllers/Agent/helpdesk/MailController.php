@@ -42,6 +42,7 @@ class MailController extends Controller
      */
     public function readmails(Emails $emails, Email $settings_email, System $system, Ticket $ticket)
     {
+        //dd($emails);
         if ($settings_email->first()->email_fetching == 1) {
             if ($settings_email->first()->all_emails == 1) {
                 $email = $emails->get();
@@ -213,25 +214,10 @@ class MailController extends Controller
         $collaborators = $this->collaburators($message, $email);
         $attachments = $message->getAttachments();
         //dd(['body' => $body, 'subject' => $subject, 'address' => $address, 'cc' => $collaborator, 'attachments' => $attachments]);
-        $message_id = '';
-        $reference_id = '';
-        $uid = '';
-        if ($message->getOverview()) {
-            if (property_exists($message->getOverview(), 'message_id')) {
-                $message_id = $message->getOverview()->message_id;
-            }
-            if (property_exists($message->getOverview(), 'references')) {
-                $reference_id = $message->getOverview()->references;
-            }
-            if (property_exists($message->getOverview(), 'uid')) {
-                $uid = $message->getOverview()->uid;
-            }
-        }
-        $email_content = ['message_id' => $message_id, 'uid' => $uid, 'reference_id' => $reference_id];
-        $this->workflow($address, $subject, $body, $collaborators, $attachments, $email, $email_content);
+        $this->workflow($address, $subject, $body, $collaborators, $attachments, $email);
     }
 
-    public function workflow($address, $subject, $body, $collaborator, $attachments, $email, $email_content = [])
+    public function workflow($address, $subject, $body, $collaborator, $attachments, $email)
     {
         $fromaddress = checkArray('address', $address[0]);
         $fromname = checkArray('name', $address[0]);
@@ -247,7 +233,10 @@ class MailController extends Controller
         $team_assign = null;
         $ticket_status = null;
         $auto_response = $email->auto_response;
-        $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone = '', $phonecode = '', $mobile_number = '', $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data = [], $auto_response, $attachments, [], $email_content);
+        $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone = '', $phonecode = '', $mobile_number = '', $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data = [], $auto_response);
+        if ($result[1] == true) {
+            $this->updateThread($result[0], $body, $attachments);
+        }
     }
 
     public function updateThread($ticket_number, $body, $attachments)
