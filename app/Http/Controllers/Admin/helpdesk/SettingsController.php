@@ -530,6 +530,7 @@ class SettingsController extends Controller
                     'value' => $value,
                 ]);
             }
+
             return redirect('alert')->with('success', Lang::get('lang.alert_&_notices_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
