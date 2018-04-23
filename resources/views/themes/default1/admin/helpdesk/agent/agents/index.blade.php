@@ -98,7 +98,7 @@ class="active"
                     ?>
                 <td>{{ $group->name }}</td>
                 <td>{{ $department->name }}</td>
-                <td>{{ UTC::usertimezone($use->created_at) }}</td>
+                <td>{{ faveoDate($use->created_at) }}</td>
                 {{-- <td>{{$use->Lastlogin_at}}</td> --}}
                 <td>
                     {!! Form::open(['route'=>['agents.destroy', $use->id],'method'=>'DELETE']) !!}

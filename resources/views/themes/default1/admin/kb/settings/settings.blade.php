@@ -83,7 +83,7 @@
                     </div>
                     <div class="col-md-3 form-group">
                         {!! Form::label('timezone',Lang::get('lang.timezone')) !!}
-                        {!!Form::select('timezone',$time->lists('location','location') ,null,['class' => 'form-control select']) !!}
+                        {!!Form::select('timezone',$time->pluck('location','location') ,null,['class' => 'form-control select']) !!}
                     </div>
                      </div>
                   </div><!-- /.tab-pane -->

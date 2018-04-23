@@ -99,9 +99,9 @@ $default_sla = $default_sla->sla;
 		<!-- To show the sla's Time Period -->
 		<td>{!! $sla->grace_period !!}</td>
 		<!-- Created Date -->
-		<td>{!! UTC::usertimezone($sla->created_at) !!}</td>
+		<td>{!! faveoDate($sla->created_at) !!}</td>
 		<!-- Last Updated -->
-		<td> {!! UTC::usertimezone($sla->updated_at) !!} </td>
+		<td> {!! faveoDate($sla->updated_at) !!} </td>
 		<!-- Deleting Fields -->
 		<td>
 			{!! Form::open(['route'=>['sla.destroy', $sla->id],'method'=>'DELETE']) !!}
