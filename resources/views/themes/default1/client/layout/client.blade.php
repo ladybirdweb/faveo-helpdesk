@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="clientApp">
+<html>
     <head>
         <meta charset="UTF-8">
         <?php
@@ -69,7 +69,6 @@
                         <nav class="navbar navbar-default site-navigation" role="navigation">
                             <ul class="nav navbar-nav navbar-menu">
                                 <li @yield('home')><a href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
-                                
                                 @if($system->first()->status == 1)
                                 <li @yield('submit')><a href="{{URL::route('form')}}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
                                 @endif
@@ -167,7 +166,6 @@
                                         <div class="form-group has-feedback @if(isset($errors)) {!! $errors->has('password') ? 'has-error' : '' !!} @endif">
                                             {!! Form::password('password',['placeholder'=>Lang::get('lang.password'),'class' => 'form-control']) !!}
                                             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                                            <?php \Event::fire('auth.login.form'); ?>
                                             <a href="{{url('password/email')}}" style="font-size: .8em" class="pull-left">{!! Lang::get('lang.forgot_password') !!}</a>
                                         </div>
                                         <div class="form-group pull-left">
@@ -196,17 +194,6 @@
                                 </div>
                             </div><!-- #login-form -->
                             @endif
-                            <ul class="nav navbar-nav navbar-menu">
-                            <?php $src = Lang::getLocale().'.png'; ?>
-                                <li><a href="#"><img src="{{asset("lb-faveo/flags/$src")}}"></img></a>
-                                    <ul class="dropdown-menu">
-                                        @foreach($langs as $key => $value)
-                                            <?php $src = $key.".png"; ?>
-                                            <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}"></img>&nbsp;{{$value}}</a></li>
-                                        @endforeach
-                                    </ul>
-                                </li>
-                                </ul>
                         </nav><!-- #site-navigation -->
                     </div><!-- #navbar -->
                     <div id="header-search" class="site-search clearfix" style="padding-bottom:5px"><!-- #header-search -->
@@ -460,81 +447,6 @@ $(function () {
     });
 });
             </script>
-            <script type="text/javascript">
-                function changeLang(lang) {
-                    location.href = "swtich-language/"+lang;
-                }
-            </script>
-                        <script src="{{asset("lb-faveo/js/angular/angular.min.js")}}" type="text/javascript"></script>
-        <script src="{{asset("lb-faveo/js/angular/ng-scrollable.min.js")}}" type="text/javascript"></script>
-                 <script src="{{asset("lb-faveo/js/angular/angular-recaptcha.min.js")}}" type="text/javascript"></script>
-        <script src="{{asset("lb-faveo/js/angular/angular-moment.min.js")}}" type="text/javascript"></script>
-<script src="{{asset('lb-faveo/js/angular/ng-flow-standalone.js')}}"></script>
-<script src="{{asset('lb-faveo/js/angular/fusty-flow.js')}}"></script>
-<script src="{{asset('lb-faveo/js/angular/fusty-flow-factory.js')}}"></script>
-<script src="{{asset('lb-faveo/js/angular/ng-file-upload.js')}}"></script>
-<script src="{{asset('lb-faveo/js/angular/ng-file-upload-shim.min.js')}}"></script>
- 
-<script src="{{asset('lb-faveo/js/angular/angular-translate.js')}}" type="text/javascript"></script>
-
-<script>
-var app=angular.module('clientApp',['ngFileUpload','pascalprecht.translate','vcRecaptcha']);
-app.config(['$translateProvider', function($translateProvider){
-    $translateProvider.translations('en', {
-        "Requester"     : "Requester",
-        "Subject"       : "Subject",
-        "Type"          : "Type",
-        "Status"        : "Status",
-        "Priority"      : "Priority",
-        "Help Topic"    : "Help Topic",
-        "Assigned"      : "Assigned",
-        "Description"   : "Description",
-        "Company"       : "Company"
-    });
-    $translateProvider.translations('ar', {
-
-        "Requester"     : "الطالب",
-        "Subject"       : "موضوع",
-        "Type"          : "اكتب",
-        "Status"        : "الحالة",
-        "Priority"      : "أفضلية",
-        "Help Topic"    : "موضوع المساعدة",
-        "Assigned"      : "تعيين",
-        "Description"   : "وصف",
-        "Company"       : "شركة"
-    });
-    if('{{Lang::getLocale()}}'=='ar'){
-       $translateProvider.preferredLanguage('ar');
-    }
-    else{
-         $translateProvider.preferredLanguage('en');
-    }
-}]);
-$(function () {
-       if('{{Lang::getLocale()}}'=='ar'){
-        // $('.container').attr('dir','RTL');
-// site-logo text-center
-      // 
-      $('#navbar').css('margin-right','200px');
-      $('.pull-right').toggleClass("pull-left");
-          $('.content-area').attr('dir','rtl');
-         $('.hfeed').find('.text-center').addClass("pull-right");
-
-         $('.nav-tabs li,.form-border,.navbar-nav li,.navbar-nav,.col-md-1,.col-md-2,.col-md-3.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-10,.col-md-11,.col-md-12,.col-xs-6').css('float','right');
-
-setTimeout(function(){
-    
-                
-       
-         $('#rtl').css('direction','rtl');
-         $('.input-group').find('.form-control').css('float','inherit');
-         $('.col-sm-1,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-10,.col-sm-11,.col-sm-12').css('float','none');
-     },1000);
-}
-})
-
-            </script>
-      @stack('scripts')
           
     </body>
 </html>
