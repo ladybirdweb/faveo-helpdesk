@@ -59,7 +59,7 @@ class="active"
 @section('content')
 <!-- success message -->
 <div id="alert-success" class="alert alert-success alert-dismissable" style="display:none;">
-    <i class="fa fa-check-circle"> </i> <b>  <span id="get-success" class="success-msg"></span></b>
+    <i class="fa fa-check-circle"> </i> <b>  <span id="get-success"></span></b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 </div>
 <!-- INfo message -->
@@ -67,7 +67,6 @@ class="active"
     <i class="fa fa-ban"> </i> <b>  <span id="get-danger"></span></b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 </div>
-
 @if(Session::has('success1'))
 <div id="success-alert" class="alert alert-success alert-dismissable">
     <i class="fa  fa-check-circle"> </i>
@@ -176,157 +175,17 @@ class="active"
 
                 </a>
             </div>
-             <input type="hidden" name="current_user_id" value="{{$users->id}}" id="current_user">
-            @if($policy->emailVerification())
+
             <div class="box-footer">
-                <b>{{Lang::get('lang.email_verify')}}</b>
-                <a class="pull-right" >
-                    <div class="btn-group {{$users->active == '0' ? 'locked_active unlocked_inactive' : 'locked_inactive unlocked_active'}}" id="toggle_event_editing" style="margin-top:-8px">
-                         <button type="button"  class="btn {{$users->active == '1' ? 'btn-sm btn-info' : 'btn-sm btn-default'}}">{{Lang::get('lang.yes')}}</button>
-                        <button type="button"  class="btn {{$users->active == '0' ? 'btn-sm btn-info' : 'btn-sm btn-default'}}">{{Lang::get('lang.no')}}</button>
-                    </div>
-
-
-                </a>
-            </div> 
-            @endif
-            
-            @if($policy->mobileVerification())
-            <div class="box-footer">
-                <b>{{Lang::get('lang.mobile_verify')}}</b>
-                <a class="pull-right" >
-
-
-                    <div class="btn-group {{$users->mobile_verify == '0' ? 'locked_active_mobile unlocked_inactive_mobile' : 'locked_inactive_mobile unlocked_active_mobile'}}" id="toggle_event_editing_mobile" style="margin-top:-8px">
-                         <button type="button"  class="btn {{$users->mobile_verify == '1' ? 'btn-sm btn-info' : 'btn-sm btn-default'}}">{{Lang::get('lang.yes')}}</button>
-                        <button type="button"  class="btn {{$users->mobile_verify == '0' ? 'btn-sm btn-info' : 'btn-sm btn-default'}}">{{Lang::get('lang.no')}}</button>
-                    </div>
-
-
-                </a>
-            </div> 
-            @endif
-            
-            @if($policy->ban())
-            <div class="box-footer">
-                <b>{{Lang::get('lang.ban')}}</b>
-                <div class="pull-right">
-
-
-                    <div class="btn-group {{$users->ban == '0' ? 'locked_active_ban unlocked_inactive_ban' : 'locked_inactive_ban unlocked_active_ban'}}" id="toggle_event_editing_ban" style="margin-top:-8px">
-                         <button type="button"  class="btn {{$users->ban == '1' ? 'btn-sm btn-info' : 'btn-sm btn-default'}}">{{Lang::get('lang.yes')}}</button>
-                         <button type="button"  class="btn  {{$users->ban == '0' ? 'btn-sm btn-info' : 'btn-sm btn-default'}}" >{{Lang::get('lang.no')}}</button>
-                    </div>
-
-                    <!-- @if($users->active == '1')
+                <b>{{Lang::get('lang.status')}}</b>
+                <a class="pull-right">
+                    @if($users->active == '1')
                     <span style="color:green;"> <span class="glyphicon glyphicon-ok-circle"></span>  <span class="glyphicon glyphicon-user"></span></span>
                     @else
                     <span style="color:red;"><span class="glyphicon glyphicon-ban-circle"></span><span class="glyphicon glyphicon-user"></span></span>
-                    @endif -->
-                </div>
-            </div> 
-            @endif
-            
-
-            <script>
-                $('#toggle_event_editing').click(function() {
-                    var settings_status = 1;
-                    var settings_status = 0;
-                    if ($(this).hasClass('locked_inactive')) {
-                        settings_status = 0
-                    }
-                    if ($(this).hasClass('locked_active')) {
-                        settings_status = 1;
-                    }
-                    // user_status
-                    var user_id = $('#current_user').val()
-                    // alert(user_id);
-
-                    /* reverse locking status */
-                    $('#toggle_event_editing button').eq(0).toggleClass('btn-info btn-default');
-                    $('#toggle_event_editing button').eq(1).toggleClass('btn-default btn-info');
-                    $('#toggle_event_editing').toggleClass('locked_active unlocked_inactive');
-                    $('#toggle_event_editing').toggleClass('locked_inactive unlocked_active');
-                    $.ajax({
-                        type: 'post',
-                        url: '{{route("settings.user.status")}}',
-                        data: {settings_status: settings_status, user_id: user_id},
-                        success: function(result) {
-                            $('.success-msg').html(result);
-                            $('.alert-success').css('display', 'block');
-                            setInterval(function() {
-                                $('.alert-success').fadeOut(3000, function() {
-                                });
-                            }, 500);
-                        }
-                    });
-                });
-            </script>
-
-            <script>
-                $('#toggle_event_editing_ban').click(function() {
-                    var settings_ban = 1;
-                    var settings_ban = 0;
-                    if ($(this).hasClass('locked_inactive_ban')) {
-                        settings_ban = 0
-                    }
-                    if ($(this).hasClass('locked_active_ban')) {
-                        settings_ban = 1;
-                    }
-                    var user_id = $('#current_user').val()
-                    /* reverse locking status */
-                    $('#toggle_event_editing_ban button').eq(0).toggleClass('btn-info btn-default');
-                    $('#toggle_event_editing_ban button').eq(1).toggleClass('btn-default btn-info');
-                    $('#toggle_event_editing_ban').toggleClass('locked_active_ban unlocked_inactive_ban');
-                    $('#toggle_event_editing_ban').toggleClass('locked_inactive_ban unlocked_active_ban');
-                    $.ajax({
-                        type: 'post',
-                        url: '{{route("settings.user.ban")}}',
-                        data: {settings_ban: settings_ban, user_id: user_id},
-                        success: function(result) {
-                            $('.success-msg').html(result);
-                            $('.alert-success').css('display', 'block');
-                            setInterval(function() {
-                                $('.alert-success').fadeOut(3000, function() {
-                                });
-                            }, 500);
-                        }
-                    });
-                });
-            </script>
-            
-            <script>
-                $('#toggle_event_editing_mobile').click(function() {
-                    var settings_ban = 1;
-                    var settings_ban = 0;
-                    if ($(this).hasClass('locked_inactive_mobile')) {
-                        settings_ban = 0
-                    }
-                    if ($(this).hasClass('locked_active_mobile')) {
-                        settings_ban = 1;
-                    }
-                    var user_id = $('#current_user').val()
-                    /* reverse locking status */
-                    $('#toggle_event_editing_mobile button').eq(0).toggleClass('btn-info btn-default');
-                    $('#toggle_event_editing_mobile button').eq(1).toggleClass('btn-default btn-info');
-                    $('#toggle_event_editing_mobile').toggleClass('locked_active_mobile unlocked_inactive_mobile');
-                    $('#toggle_event_editing_mobile').toggleClass('locked_inactive_mobile unlocked_active_mobile');
-                    $.ajax({
-                        type: 'post',
-                        url: '{{route("settings.user.mobile")}}',
-                        data: {settings_ban: settings_ban, user_id: user_id},
-                        success: function(result) {
-                            $('.success-msg').html(result);
-                            $('.alert-success').css('display', 'block');
-                            setInterval(function() {
-                                $('.alert-success').fadeOut(3000, function() {
-                                });
-                            }, 500);
-                        }
-                    });
-                });
-            </script>
-                      
+                    @endif
+                </a>
+            </div>            
             @if($users->country_code)
             <div class="box-footer">
                 <b>{{Lang::get('lang.country_code')}}</b>
@@ -489,15 +348,18 @@ class="active"
                     <div class="modal-body">
 
                         <?php
-                       
+                        $groups = App\Model\helpdesk\Agent\Groups::all(array('id', 'name'));
                         $departments = App\Model\helpdesk\Agent\Department::all(array('id', 'name'));
                         ?>
 
-                        
+                        <!-- <div class="col-xs-4 form-group {{ $errors->has('group') ? 'has-error' : '' }}"> -->
+                        {!! Form::label('assign_group',Lang::get('lang.assigned_group')) !!} <span class="text-red"> *</span>
+                        {!!Form::select('group',[Lang::get('lang.groups')=>$groups->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                        <!-- </div> -->
                         <!-- primary dept -->
                         <!-- <div class="col-xs-4 form-group {{ $errors->has('primary_department') ? 'has-error' : '' }}"> -->
                         {!! Form::label('primary_dpt',Lang::get('lang.primary_department')) !!} <span class="text-red"> *</span>
-                        {!! Form::select('primary_department', [Lang::get('lang.departments')=>$departments->pluck('name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                        {!! Form::select('primary_department', [Lang::get('lang.departments')=>$departments->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
                         <!-- </div> -->
 
                     </div>
@@ -555,15 +417,18 @@ class="active"
                     <div class="modal-body">
 
                         <?php
-                        
+                        $groups = App\Model\helpdesk\Agent\Groups::all(array('id', 'name'));
                         $departments = App\Model\helpdesk\Agent\Department::all(array('id', 'name'));
                         ?>
 
-                        
+                        <!-- <div class="col-xs-4 form-group {{ $errors->has('group') ? 'has-error' : '' }}"> -->
+                        {!! Form::label('assign_group',Lang::get('lang.assigned_group')) !!} <span class="text-red"> *</span>
+                        {!!Form::select('group',[Lang::get('lang.groups')=>$groups->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                        <!-- </div> -->
                         <!-- primary dept -->
                         <!-- <div class="col-xs-4 form-group {{ $errors->has('primary_department') ? 'has-error' : '' }}"> -->
                         {!! Form::label('primary_dpt',Lang::get('lang.primary_department')) !!} <span class="text-red"> *</span>
-                        {!! Form::select('primary_department', [Lang::get('lang.departments')=>$departments->pluck('name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                        {!! Form::select('primary_department', [Lang::get('lang.departments')=>$departments->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
                         <!-- </div> -->
 
                     </div>
@@ -812,13 +677,12 @@ $(document).ready(function(){
                                         {{Session::get('fails')}}
                                     </div>
                                     @endif
-                                    {!! Form::open(['id'=>'modalpopup', 'route'=>'select_all','method'=>'post']) !!}
+                                    {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
                                         <div class="mailbox-controls">
                                             <!-- Check all button -->
                                             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
-                                            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}" id="delete" onclick="appendValue(id)">
-                                            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}"  id="close" onclick="appendValue('close')">
-                                            <input type="submit" class="btn btn-default text-blue btn-sm" name="submit" value="{!! Lang::get('lang.open') !!}" id="open" onclick="appendValue(id)" style="display: none;">
+                                            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}">
+                                            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
                                             <div class="pull-right">
                                             </div>
                                             <!--</div>-->
@@ -856,6 +720,7 @@ $(document).ready(function(){
          @endif
           @if($users->is_delete != '1')
         
+        <div class="row">
             <div class="col-md-12">
                 <link type="text/css" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet">
                 <div class="box box-info">
@@ -1027,32 +892,9 @@ $(document).ready(function(){
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-
-    <!-- Modal -->   
-<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: none; padding-right: 15px;background-color: rgba(0, 0, 0, 0.7);">
-    <div class="modal-dialog" role="document">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title" id="myModalLabel"></h4>
-                </div>
-                <div class="modal-body" id="custom-alert-body" >
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary pull-left yes" data-dismiss="modal">{{Lang::get('lang.ok')}}</button>
-                    <button type="button" class="btn btn-default no">{{Lang::get('lang.cancel')}}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
     <script type="text/javascript">
         jQuery(document).ready(function($) {
             // create org
-            var option = null;
             $('#form').on('submit', function() {
                 $.ajax({
                     type: "POST",
@@ -1088,68 +930,6 @@ $(document).ready(function(){
                 })
                 return false;
             });
-
-            $('#delete').on('click', function () {
-                option = 0;
-                $('#myModalLabel').html("{{Lang::get('lang.delete-tickets')}}");
-            });
-
-            $('#close').on('click', function () {
-                option = 1;
-                $('#myModalLabel').html("{{Lang::get('lang.close-tickets')}}");
-            });
-
-            $('#open').on('click', function () {
-                option = 2;
-                $('#myModalLabel').html("{{Lang::get('lang.open-tickets')}}");
-            });
-
-            $("#modalpopup").on('submit', function (e) {
-                e.preventDefault();
-                var msg = "{{Lang::get('lang.confirm')}}";
-                var values = getValues();
-                if (values == "") {
-                    msg = "{{Lang::get('lang.select-ticket')}}";
-                    $('.yes').html("{{Lang::get('lang.ok')}}");
-                    $('#myModalLabel').html("{{Lang::get('lang.alert')}}");
-                } else {
-                    $('.yes').html("Yes");
-                }
-                $('#custom-alert-body').html(msg);
-                $("#myModal").css("display", "block");
-            });
-
-            $(".closemodal, .no").click(function () {
-                $("#myModal").css("display", "none");
-            });
-
-            $(".closemodal, .no").click(function () {
-                $("#myModal").css("display", "none");
-            });
-
-            $('.yes').click(function () {
-                var values = getValues();
-                if (values == "") {
-                    $("#myModal").css("display", "none");
-                } else {
-                    $("#myModal").css("display", "none");
-                    $("#modalpopup").unbind('submit');
-                    if (option == 0) {
-                        $('#delete').click();
-                    } else if (option == 1) {
-                        $('#close').click();
-                    } else {
-                        $('#open').click();
-                    }
-                }
-            });
-
-            function getValues() {
-                var values = $('.selectval:checked').map(function () {
-                    return $(this).val();
-                }).get();
-                return values;
-            }
         });
     </script>
     <!-- Organisation Assign Modal -->
@@ -1715,6 +1495,21 @@ $(document).ready(function(){
                 // using the done promise callback
                 // stop the form from submitting the normal way and refreshing the page
                 event.preventDefault();
+            });
+        });
+
+        jQuery(document).ready(function() {
+            // Close a ticket
+            $('#close').on('click', function(e) {
+                $.ajax({
+                    type: "GET",
+                    url: "agen",
+                    beforeSend: function() {
+                    },
+                    success: function(response) {
+                    }
+                })
+                return false;
             });
         });
     </script>

@@ -1,7 +1,7 @@
-<!DOCTYPE html>                 
-<html ng-app="fbApp">
+<!DOCTYPE html>
+<html>
     <head>
-        <meta charset="UTF-8">
+        <meta charset="UTF-8" ng-app="myApp">
         <title>Faveo | HELP DESK</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <meta name="_token" content="{!! csrf_token() !!}"/>
@@ -13,8 +13,8 @@
         <link href="{{asset("lb-faveo/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Ionicons -->
         <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet"  type="text/css" />
-        <!-- Theme style --> 
-        <link href="{{asset("lb-faveo/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" id="adminLTR"/> 
+        <!-- Theme style -->
+        <link href="{{asset("lb-faveo/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" />
         <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
         <link href="{{asset("lb-faveo/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- iCheck -->
@@ -56,21 +56,8 @@
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
 
         @yield('HeadInclude')
-        <style type="text/css">
-            #bar {
-                border-right: 1px solid rgba(204, 204, 204, 0.41);
-            }
-            #bar a{
-                color: #FFF;
-            }
-            #bar a:hover, #bar a:focus{
-                background-color: #357CA5;
-            }
-
-        </style>
     </head>
-    <?php $segment = ""; ?>
-    <body class="skin-blue fixed" ng-controller="MainCtrl">
+    <body class="skin-blue fixed">
         <div class="wrapper">
             <header class="main-header">
                 <a href="http://www.faveohelpdesk.com" class="logo"><img src="{{ asset('lb-faveo/media/images/logo.png')}}" width="100px;"></a>
@@ -123,21 +110,68 @@
 
                             @endif
                             @include('themes.default1.update.notification')
-                            <!-- START NOTIFICATION --> 
-                            @include('themes.default1.inapp-notification.notification')
-                            
-                            <!-- END NOTIFICATION --> 
                             <!-- User Account: style can be found in dropdown.less -->
-                            
-                        <li class="dropdown">
-                            <?php $src = Lang::getLocale().'.png'; ?>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><img src="{{asset("lb-faveo/flags/$src")}}"></img> &nbsp;<span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                @foreach($langs as $key => $value)
-                                            <?php $src = $key.".png"; ?>
-                                            <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}"></img>&nbsp;{{$value}}</a></li>
-                                @endforeach       
-                            </ul>
+                            <li class="dropdown notifications-menu" id="myDropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
+                                    <i class="fa fa-bell-o"></i>
+                                    <span class="label label-danger" id="count">{!! $notifications->count() !!}</span>
+                                </a>
+                                <ul class="dropdown-menu" style="width:500px">
+
+                                    <div id="alert11" class="alert alert-success alert-dismissable" style="display:none;">
+                                        <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                                        <div id="message-success1"></div>
+                                    </div>
+
+                                    <li id="refreshNote">
+
+                                    <li class="header">You have {!! $notifications->count() !!} notifications. <a class="pull-right" id="read-all" href="#">Mark all as read.</a></li>
+
+                                    <ul class="menu">
+
+                                        @if($notifications->count())
+                                        @foreach($notifications->orderBy('created_at', 'desc')->get()->take(10) as $notification)
+
+                                        @if($notification->notification->type->type == 'registration')
+                                        @if($notification->is_read == 1)
+                                        <li class="task" style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
+                                                    {!! $notification->notification->type->message !!}
+                                                </a></span>
+                                        </li>
+                                        @else
+                                        <li style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
+                                                    {!! $notification->notification->type->message !!}
+                                                </a></span>
+                                        </li>
+                                        @endif
+                                        @else
+                                        @if($notification->is_read == 1)
+                                        <li  class="task" style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
+                                                    {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
+                                                </a></span>
+                                        </li>
+                                        @elseif($notification->notification->model)
+                                        <li style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
+                                                    {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
+                                                </a></span>
+                                        </li>
+                                        @endif
+                                        @endif
+                                        @endforeach
+                                        @endif
+                                    </ul>
+                            </li>
+                            <li class="footer no-border"><div class="col-md-5"></div><div class="col-md-2">
+                                    <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="display: none;" id="notification-loader">
+                                </div><div class="col-md-5"></div></li>
+                            <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
+                            </li>
+                        </ul>
                         </li>
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
@@ -173,7 +207,7 @@
                         </ul>
 
                     </div>
-                    
+
                 </nav>
             </header>
             <!-- Left side column. contains the logo and sidebar -->
@@ -210,31 +244,31 @@
                         <li class="header">{!! Lang::get('lang.Tickets') !!}</li>
                         
                         <li @yield('inbox')>
-                             <a href="{{ url('/tickets')}}" id="load-inbox">
+                             <a href="{{ url('/ticket/inbox')}}" id="load-inbox">
                                 <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green">{{$tickets -> count()}}</small>                                            
                             </a>
                         </li>
                         <li @yield('myticket')>
-                             <a href="{{ url('/tickets?show=mytickets')}}" id="load-myticket">
+                             <a href="{{url('ticket/myticket')}}" id="load-myticket">
                                 <i class="fa fa-user"></i> <span>{!! Lang::get('lang.my_tickets') !!} </span>
                                 <small class="label pull-right bg-green">{{$myticket -> count()}}</small>
                             </a>
                         </li>
                         <li @yield('unassigned')>
-                             <a href="{{ url('/tickets?assigned[]=0')}}" id="load-unassigned">
+                             <a href="{{url('unassigned')}}" id="load-unassigned">
                                 <i class="fa fa-th"></i> <span>{!! Lang::get('lang.unassigned') !!}</span>
                                 <small class="label pull-right bg-green">{{$unassigned -> count()}}</small>
                             </a>
                         </li>
                         <li @yield('overdue')>
-                             <a href="{{url('/tickets?show=overdue')}}" id="load-unassigned">
+                             <a href="{{url('ticket/overdue')}}" id="load-unassigned">
                                 <i class="fa fa-calendar-times-o"></i> <span>{!! Lang::get('lang.overdue') !!}</span>
                                 <small class="label pull-right bg-green">{{$overdues->count()}}</small>
                             </a>
                         </li>
                        
                         <li @yield('trash')>
-                             <a href="{{ url('/tickets?show=trash')}}">
+                             <a href="{{url('trash')}}">
                                 <i class="fa fa-trash-o"></i> <span>{!! Lang::get('lang.trash') !!}</span>
                                 <small class="label pull-right bg-green">{{$deleted -> count()}}</small>
                             </a>
@@ -248,6 +282,7 @@
             ?>
                             <?php
                                 $segments = \Request::segments();
+                                $segment = "";
                                 foreach($segments as $seg){
                                     $segment.="/".$seg;
                                 }
@@ -275,7 +310,7 @@
                             
                         </li>
                         @endforeach
-                        @else
+
 
 <?php \Event::fire('service.desk.agent.sidebar', array()); ?>
                         @endif
@@ -283,12 +318,15 @@
                 </section>
                 <!-- /.sidebar -->
             </aside>
-
+<?php
+$agent_group = $auth_user_assign_group;
+$group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first();
+?>
             <!-- Right side column. Contains the navbar and content of the page -->
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
-                
-                    <div class="tab-content" style="background-color: #80B5D3; position: fixed; width:100% ;padding: 0 0px 0 0px; z-index:999">                    <div class="collapse navbar-collapse" id="navbar-collapse">
+                <div class="tab-content" style="background-color: white;padding: 0 0px 0 20px">
+                    <div class="collapse navbar-collapse" id="navbar-collapse">
                         <div class="tabs-content">
                             @if($replacetop==0)
                             <div class="tabs-pane @yield('dashboard-bar')"  id="tabA">
@@ -304,10 +342,13 @@
                             </div>
                             <div class="tabs-pane @yield('ticket-bar')" id="tabC">
                                 <ul class="nav navbar-nav">
-                                    <li id="bar" @yield('answered')><a href="{{ url('/tickets?last-response-by[]=Agent')}}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
-                                    <li id="bar" @yield('assigned')><a href="{{ url('/tickets?assigned[]=1')}}" id="load-unassigned">{!! Lang::get('lang.assigned') !!}</a></li>
-                                    <li id="bar" @yield('closed')><a href="{{ url('/tickets?show=closed')}}" >{!! Lang::get('lang.closed') !!}</a></li>
-                                    <li id="bar" @yield('newticket')><a href="{{ url('/newticket')}}" >{!! Lang::get('lang.create_ticket') !!}</a></li>
+                                    <li id="bar" @yield('open')><a href="{{ url('/ticket/open')}}" id="load-open">{!! Lang::get('lang.open') !!}</a></li>
+                                    <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered')}}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
+                                    <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned')}}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
+                                    <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed')}}" >{!! Lang::get('lang.closed') !!}</a></li>
+<?php if ($group->can_create_ticket == 1) { ?>
+                                        <li id="bar" @yield('newticket')><a href="{{ url('/newticket')}}" >{!! Lang::get('lang.create_ticket') !!}</a></li>
+                                    <?php } ?>
                                 </ul>
                             </div>
                             <div class="tabs-pane @yield('tools-bar')" id="tabD">
@@ -327,33 +368,12 @@
                         </div>
                     </div>
                 </div>
-                @if ($segment == '/dashboard')
-                <!-- do nothing-->
-                @else
-                <br/><br/>
-                @endif
                 <section class="content-header">
                     @yield('PageHeader')
                     {!! Breadcrumbs::renderIfExists() !!}
                 </section>
                 <!-- Main content -->
                 <section class="content">
-                @if (!$is_mail_conigured)
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="callout callout-warning lead">
-                                <h4><i class="fa fa-exclamation-triangle"></i>&nbsp;{{Lang::get('Alert')}}</h4>
-                                <p style="font-size:0.8em">
-                                @if (\Auth::user()->role == 'admin')
-                                    {{Lang::get('lang.system-outgoing-incoming-mail-not-configured')}}&nbsp;<a href="{{URL::route('emails.create')}}">{{Lang::get('lang.confihure-the-mail-now')}}</a>
-                                @else
-                                    {{Lang::get('lang.system-mail-not-configured-agent-message')}}
-                                @endif
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                @endif
                     @yield('content')
                 </section><!-- /.content -->
             </div>
@@ -501,13 +521,6 @@
             }
             }
         </script>
-        
-        <script src="{{asset("lb-faveo/js/angular/angular.min.js")}}" type="text/javascript"></script>
-        <script src="{{asset("lb-faveo/js/angular/ng-scrollable.min.js")}}" type="text/javascript"></script>
-        <script src="{{asset("lb-faveo/js/angular/angular-moment.min.js")}}" type="text/javascript"></script>
-        <script src="{{asset("lb-faveo/js/angular/angular-recaptcha.min.js")}}" type="text/javascript"></script>
-        <script src="{{asset("lb-faveo/js/angular/angular-translate.js")}}" type="text/javascript"></script>
-
         <script>
     $(function() {
       
@@ -521,176 +534,8 @@
     
     });        
 </script>
-<script src="{{asset('lb-faveo/js/angular/ng-flow-standalone.js')}}"></script>
-<script src="{{asset('lb-faveo/js/angular/fusty-flow.js')}}"></script>
-<script src="{{asset('lb-faveo/js/angular/fusty-flow-factory.js')}}"></script>
-<script src="{{asset('lb-faveo/js/angular/ng-file-upload.js')}}"></script>
-<script src="{{asset('lb-faveo/js/angular/ng-file-upload-shim.min.js')}}"></script>
-<script>
- var app = angular.module('fbApp', ['vcRecaptcha','angularMoment','flow','ngFileUpload','pascalprecht.translate']).directive('whenScrolled', function() {
-    return function(scope, elm, attr) {
-        var raw = elm[0];
-        console.log(raw);
-        elm.bind('scroll', function() {
-
-            if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
-                scope.$apply(attr.whenScrolled);
-            }
-        });
-    };
-});
-app.constant("CSRF_TOKEN", '{{ csrf_token() }}');
-app.directive('mediaLibScrolled', function() {
-    return function(scope, elm, attr) {
-        var raw = elm[0];
-        console.log(raw);
-        elm.bind('scroll', function() {
-
-            if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
-                scope.$apply(attr.mediaLibScrolled);
-            }
-        });
-    };
-});
-app.config(['flowFactoryProvider', function (flowFactoryProvider) {
-    
-    flowFactoryProvider.on('fileSuccess', function (file,message) {
-      console.log(file,message);
-        $('#mytabs a[href="#menu1"]').tab('show');
-        $("#progressHide").hide();
-        $("#progressHide").find('.transfer-box').remove();
-    });
-   
-    flowFactoryProvider.factory = fustyFlowFactory;
-  }]);
-app.config(['$translateProvider', function($translateProvider){
-    $translateProvider.translations('en', {
-        "Requester"     : "Requester",
-        "Subject"       : "Subject",
-        "Type"          : "Type",
-        "Status"        : "Status",
-        "Priority"      : "Priority",
-        "Help Topic"    : "Help Topic",
-        "Assigned"      : "Assigned",
-        "Description"   : "Description",
-        "Company"       : "Company"
-    });
-    $translateProvider.translations('ar', {
-
-        "Requester"     : "الطالب",
-        "Subject"       : "موضوع",
-        "Type"          : "اكتب",
-        "Status"        : "الحالة",
-        "Priority"      : "أفضلية",
-        "Help Topic"    : "موضوع المساعدة",
-        "Assigned"      : "تعيين",
-        "Description"   : "وصف",
-        "Company"       : "شركة"
-    });
-    if('{{Lang::getLocale()}}'=='ar'){
-       $translateProvider.preferredLanguage('ar');
-    }
-    else{
-         $translateProvider.preferredLanguage('en');
-    }
-}]);
-</script>
-<script type="text/javascript">
-                function changeLang(lang) {
-                    location.href = "swtich-language/"+lang;
-                }
-            </script>
-<script type="text/javascript">
- $(function () {
-       if('{{Lang::getLocale()}}'=='ar'){
-    var adminRtl = document.createElement('link');
-    adminRtl.id = 'id-rtl';
-    adminRtl.rel = 'stylesheet';
-    adminRtl.href = '{{asset("lb-faveo/rtl/css/AdminLTE.css")}}';
-    document.head.appendChild(adminRtl);
-
-     var cssRtl = document.createElement('link');
-    cssRtl.id = 'id-csstrtl';
-    cssRtl.rel = 'stylesheet';
-    cssRtl.href = '{{asset("lb-faveo/rtl/css/rtl.css")}}';
-    document.head.appendChild(cssRtl);
-
-     var bootRtl = document.createElement('link');
-    bootRtl.id = 'id-bootrtl';
-    bootRtl.rel = 'stylesheet';
-    bootRtl.href = '{{asset("lb-faveo/rtl/css/bootstrap-rtl.min.css")}}';
-    document.head.appendChild(bootRtl);
-
-
-        
-          $('#adminLTR').remove();
-        $('.container').attr('dir','RTL');
-        $('.formbilder').attr('dir','RTL');
-        $('.content-area').attr('dir','RTL');
-        // agentpanel
-        $('.content').attr('dir','RTL');
-        $('.info').attr('dir','RTL');
-        $('.table').attr('dir','RTL');
-        $('.box-primary').attr('dir','RTL');
-        // box-header with-borderclass="box box-primary"
-        $('.dataTables_paginate').find('.row').attr('dir','RTL');
-        // dataTables_paginate paging_full_numbers
-        $('.sidebar-menu').attr('dir','RTL');
-        $('.sidebar-menu').find('.pull-right').removeClass("pull-right");
-        $('.sidebar-menu').find('.label').addClass("pull-left");
-        $('.content').find('.btn').removeClass("pull-right");
-        $('.content').find('.btn').addClass("pull-left");
-        $('.tabs-horizontal').removeClass("navbar-left");
-        $('.tabs-horizontal').addClass("navbar-right");
-        $('#right-menu').removeClass("navbar-right");
-        $('#right-menu').addClass("navbar-left");
-        $('.navbar-nav').find('li').css("float","right");
-        $('#rtl1').css('display','none');
-        $('#ltr1').css('display','block');
-        $('#rtl2').css('display','none');
-        $('#ltr2').css('display','block');
-        $('#rtl3').css('display','none');
-        $('#ltr3').css('display','block');  
-        $('#rtl4').css('display','none');
-        $('#ltr4').css('display','block');  
-        $('.box-header').find('.pull-right').addClass("pull-left");
-       $('.box-header').find('.pull-right').removeClass("pull-right");
-         $('.btn').removeClass("pull-left");
-        $('.iframe').attr('dir','RTL');
-         $('.box-footer').find('a').removeClass("pull-right");
-         $('.box-footer').find('a').addClass("pull-left");
-         $('.box-footer').find('div').removeClass("pull-right");
-         $('.box-footer').find('div').addClass("pull-left");
-         $('.col-md-3').css('float','right');
-         $('.user-footer').css('float','none');
-         $('.user-header').css('float','none');
-         $('.sidebar-toggle').css('width','60px');
-         $('.dropdown-menu').css('right','inherit');
-         $('.dropdown-menu').css('left','0');
-// chart-data
-        // label
-          $('.box-header').find('.btn-primary').find('.pull-right').removeClass("pull-right");
-        $('.box-header').find('.btn-primary').addClass("pull-left");
-        $('.main-footer').find('.pull-right').removeClass("pull-right");
-        $('.main-footer').find('.hidden-xs').addClass("pull-left");
-        
-        setTimeout(function(){  
-        $('#cke_details').addClass( "cke_rtl" );
-        $(".cke_wysiwyg_frame").contents().find("body").attr('dir','RTL');
-
-        }, 3000);
-        $('iframe').contents().find("body").attr('dir','RTL');
-        /*$('#wys-form').remove();
-        $('#mobile-RTL').css('display','block');
-        $('#mobile-normal').css('display','none');
-        $('#form-foot1').css('display','block');
-        $('.list-inline').attr('dir','RTL');*/
-       };
-    });
-</script>
 <?php Event::fire('show.calendar.script', array()); ?>
 <?php Event::fire('load-calendar-scripts', array()); ?>
         @yield('FooterInclude')
-         @stack('scripts')
     </body>
 </html>

@@ -78,8 +78,8 @@ if (Auth::user()->role == 'agent') {
         <!-- Check all button -->
         <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
         {{-- <a class="btn btn-default btn-sm" id="click"><i class="fa fa-refresh"></i></a> --}}
-        <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" id="delete" value="{!! Lang::get('lang.delete') !!}" onclick="appendValue(id)">
-        <input type="submit" class="btn btn-default text-blue btn-sm" name="submit" id="open" value="{!! Lang::get('lang.open') !!}" onclick="appendValue(id)">
+        <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" id="delete" value="{!! Lang::get('lang.delete') !!}">
+        <input type="submit" class="btn btn-default text-blue btn-sm" name="submit" id="close" value="{!! Lang::get('lang.open') !!}">
         
         
         <!--</div>-->
@@ -167,7 +167,7 @@ if (Auth::user()->role == 'agent') {
             $('#myModalLabel').html("{{Lang::get('lang.delete-tickets')}}");
         });
 
-        $('#open').on('click', function() {
+        $('#close').on('click', function() {
             option = 1;
             $('#myModalLabel').html("{{Lang::get('lang.open-tickets')}}");
         });
@@ -205,7 +205,7 @@ if (Auth::user()->role == 'agent') {
                     $('#delete').click();
                 } else {
                     //alert('close');
-                    $('#open').click();
+                    $('#close').click();
                 }
             }
         });

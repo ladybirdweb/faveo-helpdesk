@@ -141,9 +141,9 @@ class="active"
                         </div>
                         <?php
                         $format = App\Model\helpdesk\Settings\System::where('id', '1')->first()->date_time_format;
-                        //$format = \App\Model\helpdesk\Utility\Date_time_format::where('id', $format)->first()->format;
+                        $format = \App\Model\helpdesk\Utility\Date_time_format::where('id', $format)->first()->format;
                         $tz = App\Model\helpdesk\Settings\System::where('id', '1')->first()->time_zone;
-                        //$tz = App\Model\helpdesk\Utility\Timezones::where('id', $tz)->first()->name;
+                        $tz = App\Model\helpdesk\Utility\Timezones::where('id', $tz)->first()->name;
                         date_default_timezone_set($tz);
                         $date = date($format);
                         $dateparse = date_parse_from_format('Y-m-d H:i:s', $article->publish_time);
