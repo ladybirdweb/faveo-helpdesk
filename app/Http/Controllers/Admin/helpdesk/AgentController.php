@@ -83,7 +83,7 @@ class AgentController extends Controller
             // get all the timezones
             $timezones = $timezone->get();
             // get all the groups
-            $groups = '';
+            $groups = $group->where('group_status', '=', 1)->get();
             // get all department
             $departments = $department->get();
             // list all the teams in a single variable
@@ -111,9 +111,6 @@ class AgentController extends Controller
      */
     public function store(User $user, AgentRequest $request)
     {
-        $user_name = strtolower($request->get('user_name'));
-        $permission = $request->input('permission');
-        $request->merge(['user_name' => $user_name]);
         if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
             return redirect()->back()->with(['fails2' => Lang::get('lang.country-code-required-error'), 'country_code' => 1])->withInput();
         } else {
@@ -123,10 +120,7 @@ class AgentController extends Controller
             }
         }
         // fixing the user role to agent
-        $user->fill($request->except(['permission', 'primary_department', 'agent_time_zone', 'mobile']))->save();
-        if (count($permission) > 0) {
-            $user->permision()->create(['permision' => $permission]);
-        }
+        $user->fill($request->except(['group', 'primary_department', 'agent_time_zone', 'mobile']))->save();
         if ($request->get('mobile')) {
             $user->mobile = $request->get('mobile');
         } else {
@@ -195,7 +189,7 @@ class AgentController extends Controller
             $team = $team->where('status', '=', 1)->get();
             $teams1 = $team->pluck('name', 'id');
             $timezones = $timezone->get();
-            $groups = ''; //$group->where('group_status', '=', 1)->get();
+            $groups = $group->where('group_status', '=', 1)->get();
             $departments = $department->get();
             $table = $team_assign_agent->where('agent_id', $id)->first();
             $teams = $team->pluck('id', 'name')->toArray();
@@ -219,9 +213,6 @@ class AgentController extends Controller
      */
     public function update($id, User $user, AgentUpdate $request, Assign_team_agent $team_assign_agent)
     {
-        $permission = $request->input('permission');
-        $user_name = strtolower($request->get('user_name'));
-        $request->merge(['user_name' => $user_name]);
         if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
             return redirect()->back()->with(['fails2' => Lang::get('lang.country-code-required-error'), 'country_code' => 1])->withInput();
         } else {
@@ -255,7 +246,6 @@ class AgentController extends Controller
             $user->primary_dpt = $request->primary_department;
             $user->agent_tzone = $request->agent_time_zone;
             $user->save();
-            $user->permision()->updateOrCreate(['user_id'=>$user->id], ['permision'=>json_encode($permission)]);
 
             return redirect('agents')->with('success', Lang::get('lang.agent_updated_sucessfully'));
         } catch (Exception $e) {
@@ -281,12 +271,10 @@ class AgentController extends Controller
         $team_assign_agent = $team_assign_agent->where('agent_id', $id);
         $team_assign_agent->delete();
         $user = $user->whereId($id)->first();
-
         try {
             $error = Lang::get('lang.this_staff_is_related_to_some_tickets');
             $user->id;
             $user->delete();
-
             throw new \Exception($error);
             return redirect('agents')->with('success', Lang::get('lang.agent_deleted_sucessfully'));
         } catch (\Exception $e) {

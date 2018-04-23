@@ -106,7 +106,6 @@ class FormController extends Controller
 
                 return view('themes.default1.admin.helpdesk.manage.form.preview', compact('form', 'fields'));
             }
-
             throw new Exception("Sorry we can't find your request");
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
@@ -120,16 +119,38 @@ class FormController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'formname' => 'required|unique:custom_forms,formname',
+            'label.*'  => 'required',
+            'name.*'   => 'required',
+            'type.*'   => 'required',
+        ]);
         try {
-            $array = $request->all();
-            $collection = collect($array);
-            $json = $collection->toJson();
-            \DB::table('forms')->truncate();
-            \DB::table('forms')->insert(['form' => 'ticket', 'json' => $json]);
+            $forms = new Forms();
+            $require = Input::get('required');
 
-            return response()->json('success');
-        } catch (\Exception $ex) {
-            return response()->json($ex->getMessage(), 500);
+            $forms->formname = Input::get('formname');
+            $forms->save();
+            $count = count(Input::get('name'));
+            $fields = [];
+            for ($i = 0; $i <= $count; $i++) {
+                if (!empty(Input::get('name')[$i])) {
+                    $name = str_slug(Input::get('name')[$i], '_');
+                    $field = Fields::create([
+                                'forms_id' => $forms->id,
+                                'label'    => Input::get('label')[$i],
+                                'name'     => $name,
+                                'type'     => Input::get('type')[$i],
+                                'required' => $require[$i],
+                    ]);
+                    $field_id = $field->id;
+                    $this->createValues($field_id, Input::get('value')[$i], null, $name);
+                }
+            }
+
+            return Redirect::back()->with('success', Lang::get('lang.successfully_created_form'));
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
         }
     }
 
@@ -172,7 +193,6 @@ class FormController extends Controller
                 //dd($fields);
                 return view('themes.default1.admin.helpdesk.manage.form.edit', compact('form', 'fields', 'select_forms'));
             }
-
             throw new Exception("Sorry we can't find your request");
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
@@ -191,7 +211,6 @@ class FormController extends Controller
                 //dd($fields);
                 return view('themes.default1.admin.helpdesk.manage.form.add-child', compact('form', 'fields', 'select_forms'));
             }
-
             throw new Exception("Sorry we can't find your request");
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
@@ -206,7 +225,6 @@ class FormController extends Controller
             'name.*'   => 'required',
             'type.*'   => 'required',
         ]);
-
         try {
             if (!$request->input('formname')) {
                 throw new Exception(Lang::get('lang.please_fill_form_name'));
@@ -371,7 +389,6 @@ class FormController extends Controller
     public function addChild($fieldid, Request $request)
     {
         $ids = $request->except('_token');
-
         try {
             foreach ($ids as $valueid => $formid) {
                 $field_value = new \App\Model\helpdesk\Form\FieldValue();

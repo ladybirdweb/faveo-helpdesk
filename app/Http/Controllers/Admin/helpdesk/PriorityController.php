@@ -46,7 +46,7 @@ class PriorityController extends Controller
         $user_status = CommonSettings::where('option_name', '=', 'user_priority')->first();
         // dd( $user_status);
 
-        return view('themes.default1.admin.helpdesk.manage.ticket_priority.index', compact('user_status'));
+       return view('themes.default1.admin.helpdesk.manage.ticket_priority.index', compact('user_status'));
     }
 
     /**
@@ -172,7 +172,7 @@ class PriorityController extends Controller
     public function destroy($priority_id)
     {
         $default_priority = Ticket_Priority::where('is_default', '>', '0')->first();
-        // dd($default_priority->is_default);
+// dd($default_priority->is_default);
         $topic = DB::table('help_topic')->where('priority', '=', $priority_id)->update(['priority' => $default_priority->is_default]);
         // if ($topic > 0) {
         //     if ($topic > 1) {

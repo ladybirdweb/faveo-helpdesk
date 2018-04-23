@@ -150,8 +150,8 @@ class SettingsController2 extends Controller
     public function createStatuses(\App\Model\helpdesk\Ticket\Ticket_Status $statuss)
     {
         //        try {
-        /* fetch the values of company from company table */
-        $statuss->name = Input::get('name');
+            /* fetch the values of company from company table */
+                    $statuss->name = Input::get('name');
         $statuss->icon_class = Input::get('icon_class');
         $statuss->email_user = Input::get('email_user');
         $statuss->sort = Input::get('sort');
@@ -164,7 +164,7 @@ class SettingsController2 extends Controller
         $statuss->sort = Input::get('sort');
         $statuss->save();
         /* Direct to Company Settings Page */
-        return redirect()->back()->with('success', 'Status has been created!');
+            return redirect()->back()->with('success', 'Status has been created!');
 //        } catch (Exception $ex) {
 //            return redirect()->back()->with('fails', $ex->errorInfo[2]);
 //        }
@@ -175,9 +175,9 @@ class SettingsController2 extends Controller
         try {
             if ($id > 5) {
                 /* fetch the values of company from company table */
-                \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->delete();
-                /* Direct to Company Settings Page */
-                return redirect()->back()->with('success', 'Status has been deleted');
+             \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->delete();
+            /* Direct to Company Settings Page */
+            return redirect()->back()->with('success', 'Status has been deleted');
             } else {
                 return redirect()->back()->with('failed', 'You cannot delete this status');
             }
@@ -446,12 +446,12 @@ class SettingsController2 extends Controller
     public function getSchedular(Email $email, Template $template, Emails $email1)
     {
         // try {
-        /* fetch the values of email from Email table */
-        $emails = $email->whereId('1')->first();
-        /* Fetch the values from Template table */
-        $templates = $template->get();
-        /* Fetch the values from Emails table */
-        $emails1 = $email1->get();
+             /* fetch the values of email from Email table */
+            $emails = $email->whereId('1')->first();
+            /* Fetch the values from Template table */
+            $templates = $template->get();
+            /* Fetch the values from Emails table */
+            $emails1 = $email1->get();
 
         return view('themes.default1.admin.helpdesk.settings.crone', compact('emails', 'templates', 'emails1'));
         // } catch {
@@ -503,7 +503,7 @@ class SettingsController2 extends Controller
     // 	try {
     // 		/* fetch the values of access from access table */
     // 		$accesses = $access->whereId('1')->first();
-    //	// 		 Direct to Access Settings Page
+//	// 		 Direct to Access Settings Page
     // 		return view('themes.default1.admin.helpdesk.settings.access', compact('accesses'));
     // 	} catch (Exception $e) {
     // 		return view('404');

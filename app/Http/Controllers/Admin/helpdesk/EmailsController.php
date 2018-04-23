@@ -251,13 +251,7 @@ class EmailsController extends Controller
 
         $this->emailService($driver, $service_request);
         $this->setMailConfig($driver, $username, $name, $password, $enc, $host, $port);
-        $transport = \Swift_SmtpTransport::newInstance($host, $port, $enc)
-                ->setStreamOptions(['ssl' => [
-                'allow_self_signed' => true,
-                'verify_peer'       => false,
-                'verify_peer_name'  => false,
-            ],
-        ]);
+        $transport = \Swift_SmtpTransport::newInstance($host, $port, $enc);
         $transport->setUsername($username);
         $transport->setPassword($password);
         $mailer = \Swift_Mailer::newInstance($transport);
@@ -434,7 +428,6 @@ class EmailsController extends Controller
                 return redirect('emails')->with('fails', Lang::get('lang.you_cannot_delete_system_default_email'));
             }
         }
-
         try {
             // fetching the database instance of the current email
             $emails = $email->whereId($id)->first();

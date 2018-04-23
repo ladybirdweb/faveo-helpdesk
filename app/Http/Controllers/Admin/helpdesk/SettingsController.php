@@ -166,17 +166,8 @@ class SettingsController extends Controller
             $email_mandatory = $common_settings->select('status')
                     ->where('option_name', '=', 'email_mandatory')
                     ->first();
-            $formats = $date_time->pluck('format', 'format')->merge(['custom'=>'Custom', 'human-read'=>'Human readable'])->toArray();
-
-            $common = new CommonSettings();
-            $verify = $common->getOptionValue('verify', 'verify');
-            $verify_decode = ['email'=>'', 'mobile'=>''];
-            if ($verify->count() > 0) {
-                $verify_decode = json_decode($verify->option_value, true);
-            }
-
             /* Direct to System Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp', 'email_mandatory', 'formats', 'verify_decode'));
+            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp', 'email_mandatory'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -222,10 +213,6 @@ class SettingsController extends Controller
                 $sett = CommonSettings::firstOrCreate(['option_name'=>'itil']);
                 $sett->status = $itil;
                 $sett->save();
-            }
-            if ($request->filled('verify')) {
-                $json = json_encode($request->input('verify'));
-                CommonSettings::updateOrCreate(['option_name' => 'verify'], ['option_value'=>$json, 'optional_field'=>'verify']);
             }
             /* redirect to Index page with Success Message */
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
@@ -376,7 +363,7 @@ class SettingsController extends Controller
         $workflow = $workflow->whereId('1')->first();
         $cron_path = base_path('artisan');
         $command = ":- <pre>***** php $cron_path schedule:run >> /dev/null 2>&1</pre>";
-        $shared = ':- <pre>'.PHP_BINDIR."/php -q  $cron_path schedule:run >> /dev/null 2>&1</pre>";
+        $shared = ":- <pre>/usr/bin/php-cli -q  $cron_path schedule:run >> /dev/null 2>&1</pre>";
         $warn = '';
         $condition = new \App\Model\MailJob\Condition();
         $job = $condition->checkActiveJob();
@@ -543,7 +530,6 @@ class SettingsController extends Controller
                     'value' => $value,
                 ]);
             }
-
             return redirect('alert')->with('success', Lang::get('lang.alert_&_notices_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
