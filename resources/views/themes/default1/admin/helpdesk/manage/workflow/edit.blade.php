@@ -327,7 +327,7 @@ class="active"
                                                     $var .= "</select>";
                                                     echo $var;
                                                 }  elseif ($workflow_action->condition == 'sla') {
-                                                    $sla_plans = \App\Model\helpdesk\Manage\Sla\Sla_plan::where('status', '=', 1)->get();
+                                                    $sla_plans = \App\Model\helpdesk\Manage\Sla_plan::where('status', '=', 1)->get();
                                                     $var = "<select name='action[" . $i . "][b]' class='form-control' required>";
                                                     foreach ($sla_plans as $sla_plan) {
                                                         if ($workflow_action->action == $sla_plan->id) {
