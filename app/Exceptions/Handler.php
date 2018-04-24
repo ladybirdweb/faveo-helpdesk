@@ -6,22 +6,20 @@ namespace App\Exceptions;
 use Bugsnag;
 //use Illuminate\Validation\ValidationException;
 use Bugsnag\BugsnagLaravel\BugsnagExceptionHandler as ExceptionHandler;
+use Config;
 use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
 // use Symfony\Component\HttpKernel\Exception\HttpException;
 // use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Validation\ValidationException as foundation;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Session\TokenMismatchException;
-use Config;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
-
     /**
      * A list of the exception types that should not be reported.
      *
@@ -64,19 +62,23 @@ class Handler extends ExceptionHandler
                 }); //set bugsnag reporting as true
             }
         }
+
         return parent::report($e);
     }
+
     /**
      * Convert a validation exception into a JSON response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Validation\ValidationException  $exception
+     * @param \Illuminate\Http\Request                   $request
+     * @param \Illuminate\Validation\ValidationException $exception
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     protected function invalidJson($request, ValidationException $exception)
     {
         return response()->json($exception->errors(), $exception->status);
     }
+
     /**
      * Render an exception into an HTTP response.
      *
@@ -97,13 +99,16 @@ class Handler extends ExceptionHandler
             case $e instanceof TokenMismatchException:
                 if ($request->ajax() || $request->wantsJson()) {
                     $result = ['fails' => \Lang::get('lang.session-expired')];
+
                     return response()->json(compact('result'), 402);
                 }
+
                 return redirect()->back()->with('fails', \Lang::get('lang.session-expired'));
             default:
                 return $this->common($request, $e);
         }
     }
+
     /**
      * Function to render 500 error page.
      *
@@ -116,17 +121,16 @@ class Handler extends ExceptionHandler
     {
         if (config('app.debug') == true) {
             return parent::render($request, $e);
-        }
-        elseif ($e instanceof foundation) {
+        } elseif ($e instanceof foundation) {
             return parent::render($request, $e);
-        }
-        elseif ($e instanceof \Illuminate\Validation\ValidationException) {
+        } elseif ($e instanceof \Illuminate\Validation\ValidationException) {
             return parent::render($request, $e);
         }
 
         return response()->view('errors.500');
         //return redirect()->route('error500', []);
     }
+
     /**
      * Function to render 404 error page.
      *
@@ -137,7 +141,6 @@ class Handler extends ExceptionHandler
      */
     public function render404($request, $e)
     {
-
         $seg = $request->segments();
         if (in_array('api', $seg)) {
             return response()->json(['status' => '404']);
@@ -146,12 +149,15 @@ class Handler extends ExceptionHandler
             if ($e->getStatusCode() == '404') {
                 return redirect()->route('error404', []);
             }
+
             return parent::render($request, $e);
         }
+
         return redirect()->route('error404', []);
     }
+
     /**
-     * Function to render database connection failed
+     * Function to render database connection failed.
      *
      * @param type $request
      * @param type $e
@@ -160,7 +166,6 @@ class Handler extends ExceptionHandler
      */
     public function renderDB($request, $e)
     {
-
         $seg = $request->segments();
         if (in_array('api', $seg)) {
             return response()->json(['status' => '404']);
@@ -168,8 +173,10 @@ class Handler extends ExceptionHandler
         if (config('app.debug') == true) {
             return parent::render($request, $e);
         }
+
         return redirect()->route('error404', []);
     }
+
     /**
      * Common finction to render both types of codes.
      *
@@ -188,8 +195,7 @@ class Handler extends ExceptionHandler
             case $e instanceof PDOException:
                 if (strpos('1045', $e->getMessage()) == true) {
                     return $this->renderDB($request, $e);
-                }
-                else {
+                } else {
                     return $this->render500($request, $e);
                 }
 //            case $e instanceof ErrorException:
@@ -201,20 +207,24 @@ class Handler extends ExceptionHandler
             case $e instanceof TokenMismatchException:
                 if ($request->ajax() || $request->wantsJson()) {
                     $result = ['fails' => \Lang::get('lang.session-expired')];
+
                     return response()->json(compact('result'), 402);
                 }
+
                 return redirect()->back()->with('fails', \Lang::get('lang.session-expired'));
             case $e instanceof AuthorizationException:
                 return redirect('/')->with('fails', \Lang::get('lang.access-denied'));
             case $e instanceof MethodNotAllowedHttpException:
                 if (stripos($request->url(), 'api')) {
                     $result = ['error' => \Lang::get('lang.methon_not_allowed')];
+
                     return response()->json(compact('result'), 405);
                 }
                 $this->render500($request, $e);
             default:
                 return $this->render500($request, $e);
         }
+
         return parent::render($request, $e);
     }
 }
