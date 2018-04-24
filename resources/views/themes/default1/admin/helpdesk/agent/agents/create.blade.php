@@ -183,20 +183,20 @@ class="active"
             <!-- assigned group -->
             <div class="col-xs-4 form-group {{ $errors->has('group') ? 'has-error' : '' }}">
                 {!! Form::label('assign_group',Lang::get('lang.assigned_group')) !!} <span class="text-red"> *</span>
-                {!!Form::select('group',[''=>Lang::get('lang.select_a_group'),Lang::get('lang.groups')=>$groups->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                {!!Form::select('group',[''=>Lang::get('lang.select_a_group'),Lang::get('lang.groups')=>$groups->pluck('name','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
 
            <!-- primary department -->
             <div class="col-xs-4 form-group {{ $errors->has('primary_department') ? 'has-error' : '' }}">
                 {!! Form::label('primary_dpt', Lang::get('lang.primary_department')) !!} <span class="text-red"> *</span>
 
-                {!!Form::select('primary_department', [''=>Lang::get('lang.select_a_department'), Lang::get('lang.departments')=>$departments->lists('name','id')->toArray()],'',['class' => 'form-control select']) !!}
+                {!!Form::select('primary_department', [''=>Lang::get('lang.select_a_department'), Lang::get('lang.departments')=>$departments->pluck('name','id')->toArray()],'',['class' => 'form-control select']) !!}
             </div>
 
             <!-- timezone -->
             <div class="col-xs-4 form-group {{ $errors->has('agent_time_zone') ? 'has-error' : '' }}">
                 {!! Form::label('agent_tzone',Lang::get('lang.agent_time_zone')) !!} <span class="text-red"> *</span>
-                {!! Form::select('agent_time_zone', [''=>Lang::get('lang.select_a_time_zone'),Lang::get('lang.time_zones')=>$timezones->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                {!! Form::select('agent_time_zone', [''=>Lang::get('lang.select_a_time_zone'),Lang::get('lang.time_zones')=>$timezones->pluck('name','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
         </div>
         <!-- Assign team -->
