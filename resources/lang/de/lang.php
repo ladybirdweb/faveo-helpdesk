@@ -960,7 +960,6 @@ return [
     'reply_content_is_a_required_field'                                  => 'Antwortinhalt ist ein benötigtes Feld',
     'internal_content_is_a_required_field'                               => 'Interner Inhalt ist ein benötigtes Feld',
 
-
     /*
       |-----------------------------------------------
       |  Profile
