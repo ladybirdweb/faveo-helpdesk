@@ -25,10 +25,7 @@ class RegularExpression extends Constraint
      */
     private $pattern;
 
-    /**
-     * @param string $pattern
-     */
-    public function __construct($pattern)
+    public function __construct(string $pattern)
     {
         parent::__construct();
 
@@ -37,8 +34,6 @@ class RegularExpression extends Constraint
 
     /**
      * Returns a string representation of the constraint.
-     *
-     * @return string
      */
     public function toString(): string
     {
@@ -53,8 +48,6 @@ class RegularExpression extends Constraint
      * constraint is met, false otherwise.
      *
      * @param mixed $other value or object to evaluate
-     *
-     * @return bool
      */
     protected function matches($other): bool
     {

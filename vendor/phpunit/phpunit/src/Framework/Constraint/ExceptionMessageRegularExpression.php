@@ -18,19 +18,13 @@ class ExceptionMessageRegularExpression extends Constraint
      */
     private $expectedMessageRegExp;
 
-    /**
-     * @param string $expected
-     */
-    public function __construct($expected)
+    public function __construct(string $expected)
     {
         parent::__construct();
 
         $this->expectedMessageRegExp = $expected;
     }
 
-    /**
-     * @return string
-     */
     public function toString(): string
     {
         return 'exception message matches ';
@@ -44,8 +38,6 @@ class ExceptionMessageRegularExpression extends Constraint
      *
      * @throws \Exception
      * @throws \PHPUnit\Framework\Exception
-     *
-     * @return bool
      */
     protected function matches($other): bool
     {
@@ -67,8 +59,6 @@ class ExceptionMessageRegularExpression extends Constraint
      * cases. This method should return the second part of that sentence.
      *
      * @param mixed $other evaluated value or object
-     *
-     * @return string
      */
     protected function failureDescription($other): string
     {

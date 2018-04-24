@@ -53,8 +53,8 @@ class TestResult {
      <?php
 
 function validate_php(&$results) {
-    if (version_compare(PHP_VERSION, '7.0') == -1) {
-        $results[] = new TestResult('PHP version required in order to run Faveo HELPDESK is PHP 7.0. Your PHP version: ' . PHP_VERSION, STATUS_ERROR);
+    if (version_compare(PHP_VERSION, '7.1.3') == -1) {
+        $results[] = new TestResult('PHP version required in order to run Faveo HELPDESK is PHP 7.1.3 or greater. Your PHP version: ' . PHP_VERSION, STATUS_ERROR);
         return false;
     } else {
         $results[] = new TestResult('Your PHP version is ' . PHP_VERSION, STATUS_OK);
@@ -74,6 +74,7 @@ function validate_php(&$results) {
 function php_config_value_to_bytes($val) {
     $val = trim($val);
     $last = strtolower($val{strlen($val) - 1});
+    $val = (integer)$val;
     switch ($last) {
         // The 'G' modifier is available since PHP 5.1.0
         case 'g':
@@ -178,7 +179,9 @@ function validate_zend_compatibility_mode(&$results) {
 function validate_extensions(&$results) {
     $ok = true;
 
-    $required_extensions = array('openssl', 'tokenizer', 'pdo', 'fileinfo', 'curl', 'zip', 'mbstring', 'xml');
+    $required_extensions = ['curl', 'ctype', 'imap', 'mbstring',
+       'mcrypt', 'openssl', 'tokenizer', 'zip', 'pdo', 'mysqli', 'bcmath',
+       'iconv', 'xml', 'json'];
 
     foreach ($required_extensions as $required_extension) {
         if (extension_loaded($required_extension)) {

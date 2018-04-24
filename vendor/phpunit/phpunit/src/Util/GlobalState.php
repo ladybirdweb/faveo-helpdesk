@@ -33,8 +33,6 @@ final class GlobalState
 
     /**
      * @param string[] $files
-     *
-     * @return string
      */
     public static function processIncludedFilesAsString(array $files): string
     {
@@ -153,11 +151,6 @@ final class GlobalState
         return 'unserialize(' . \var_export(\serialize($variable), true) . ')';
     }
 
-    /**
-     * @param array $array
-     *
-     * @return bool
-     */
     private static function arrayOnlyContainsScalars(array $array): bool
     {
         $result = true;

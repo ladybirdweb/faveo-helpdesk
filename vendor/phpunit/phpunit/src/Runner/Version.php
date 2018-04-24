@@ -22,8 +22,6 @@ class Version
 
     /**
      * Returns the current version of PHPUnit.
-     *
-     * @return string
      */
     public static function id(): string
     {
@@ -32,16 +30,13 @@ class Version
         }
 
         if (self::$version === null) {
-            $version       = new VersionId('7.0.1', \dirname(__DIR__, 2));
+            $version       = new VersionId('7.1.2', \dirname(__DIR__, 2));
             self::$version = $version->getVersion();
         }
 
         return self::$version;
     }
 
-    /**
-     * @return string
-     */
     public static function series(): string
     {
         if (\strpos(self::id(), '-')) {
@@ -53,17 +48,11 @@ class Version
         return \implode('.', \array_slice(\explode('.', $version), 0, 2));
     }
 
-    /**
-     * @return string
-     */
     public static function getVersionString(): string
     {
         return 'PHPUnit ' . self::id() . ' by Sebastian Bergmann and contributors.';
     }
 
-    /**
-     * @return string
-     */
     public static function getReleaseChannel(): string
     {
         if (\strpos(self::$pharVersion, '-') !== false) {

@@ -24,14 +24,9 @@ class DefaultPhpProcess extends AbstractPhpProcess
     /**
      * Runs a single job (PHP code) using a separate PHP process.
      *
-     * @param string $job
-     * @param array  $settings
-     *
      * @throws Exception
-     *
-     * @return array<string, string>
      */
-    public function runJob($job, array $settings = []): array
+    public function runJob(string $job, array $settings = []): array
     {
         if ($this->useTemporaryFile() || $this->stdin) {
             if (!($this->tempFile = \tempnam(\sys_get_temp_dir(), 'PHPUnit')) ||
@@ -49,8 +44,6 @@ class DefaultPhpProcess extends AbstractPhpProcess
 
     /**
      * Returns an array of file handles to be used in place of pipes
-     *
-     * @return array
      */
     protected function getHandles(): array
     {
@@ -60,14 +53,9 @@ class DefaultPhpProcess extends AbstractPhpProcess
     /**
      * Handles creating the child process and returning the STDOUT and STDERR
      *
-     * @param string $job
-     * @param array  $settings
-     *
      * @throws Exception
-     *
-     * @return array<string, string>
      */
-    protected function runProcess($job, $settings): array
+    protected function runProcess(string $job, array $settings): array
     {
         $handles = $this->getHandles();
 
@@ -126,6 +114,7 @@ class DefaultPhpProcess extends AbstractPhpProcess
                 if ($n === false) {
                     break;
                 }
+
                 if ($n === 0) {
                     \proc_terminate($process, 9);
 
@@ -136,6 +125,7 @@ class DefaultPhpProcess extends AbstractPhpProcess
                         )
                     );
                 }
+
                 if ($n > 0) {
                     foreach ($r as $pipe) {
                         $pipeOffset = 0;
@@ -209,11 +199,7 @@ class DefaultPhpProcess extends AbstractPhpProcess
         return ['stdout' => $stdout, 'stderr' => $stderr];
     }
 
-    /**
-     * @param resource $pipe
-     * @param string   $job
-     */
-    protected function process($pipe, $job): void
+    protected function process($pipe, string $job): void
     {
         \fwrite($pipe, $job);
     }

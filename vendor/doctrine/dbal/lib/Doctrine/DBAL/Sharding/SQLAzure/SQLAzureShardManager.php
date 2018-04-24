@@ -19,10 +19,13 @@
 
 namespace Doctrine\DBAL\Sharding\SQLAzure;
 
-use Doctrine\DBAL\Sharding\ShardManager;
-use Doctrine\DBAL\Sharding\ShardingException;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Sharding\ShardingException;
+use Doctrine\DBAL\Sharding\ShardManager;
 use Doctrine\DBAL\Types\Type;
+use function is_bool;
+use function is_scalar;
+use function sprintf;
 
 /**
  * Sharding using the SQL Azure Federations support.
@@ -37,7 +40,7 @@ class SQLAzureShardManager implements ShardManager
     private $federationName;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $filteringEnabled;
 
@@ -57,7 +60,7 @@ class SQLAzureShardManager implements ShardManager
     private $conn;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $currentDistributionValue;
 
@@ -86,7 +89,7 @@ class SQLAzureShardManager implements ShardManager
         $this->federationName = $params['sharding']['federationName'];
         $this->distributionKey = $params['sharding']['distributionKey'];
         $this->distributionType = $params['sharding']['distributionType'];
-        $this->filteringEnabled = (isset($params['sharding']['filteringEnabled'])) ? (bool) $params['sharding']['filteringEnabled'] : false;
+        $this->filteringEnabled = (bool) ($params['sharding']['filteringEnabled'] ?? false);
     }
 
     /**
@@ -122,7 +125,7 @@ class SQLAzureShardManager implements ShardManager
     /**
      * Sets Enabled/Disable filtering on the fly.
      *
-     * @param boolean $flag
+     * @param bool $flag
      *
      * @return void
      */

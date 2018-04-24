@@ -12,12 +12,12 @@ namespace PHPUnit\Framework\Constraint;
 class ExceptionCode extends Constraint
 {
     /**
-     * @var int
+     * @var int|string
      */
     private $expectedCode;
 
     /**
-     * @param int $expected
+     * @param int|string $expected
      */
     public function __construct($expected)
     {
@@ -26,9 +26,6 @@ class ExceptionCode extends Constraint
         $this->expectedCode = $expected;
     }
 
-    /**
-     * @return string
-     */
     public function toString(): string
     {
         return 'exception code is ';
@@ -39,8 +36,6 @@ class ExceptionCode extends Constraint
      * constraint is met, false otherwise.
      *
      * @param \Throwable $other
-     *
-     * @return bool
      */
     protected function matches($other): bool
     {
@@ -55,10 +50,7 @@ class ExceptionCode extends Constraint
      *
      * @param mixed $other evaluated value or object
      *
-     * @throws \Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     *
-     * @return string
      */
     protected function failureDescription($other): string
     {

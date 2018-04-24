@@ -12,10 +12,9 @@
 
 return array (
   9370 => 'AWCC',
-  93711 => 'AWCC',
-  93728 => 'Roshan',
-  93729 => 'Roshan',
-  93730 => 'Etisalat',
+  9371 => 'AWCC',
+  9372 => 'Roshan',
+  9373 => 'Etisalat',
   93744 => 'Afghan Telecom',
   93747 => 'Afghan Telecom',
   93748 => 'Afghan Telecom',

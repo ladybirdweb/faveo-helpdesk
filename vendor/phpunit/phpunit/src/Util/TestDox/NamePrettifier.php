@@ -22,10 +22,6 @@ final class NamePrettifier
 
     /**
      * Prettifies the name of a test class.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     public function prettifyTestClass(string $name): string
     {
@@ -35,7 +31,9 @@ final class NamePrettifier
             $title = \substr($title, 0, \strripos($title, 'Test'));
         }
 
-        if (\strpos($name, 'Test') === 0) {
+        if (\strpos($name, 'Tests') === 0) {
+            $title = \substr($title, \strlen('Tests'));
+        } elseif (\strpos($name, 'Test') === 0) {
             $title = \substr($title, \strlen('Test'));
         }
 
@@ -48,10 +46,6 @@ final class NamePrettifier
 
     /**
      * Prettifies the name of a test method.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     public function prettifyTestMethod(string $name): string
     {

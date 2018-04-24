@@ -19,6 +19,9 @@
 
 namespace Doctrine\DBAL\Platforms\Keywords;
 
+use function array_diff;
+use function array_merge;
+
 /**
  * SAP Sybase SQL Anywhere 12 reserved keywords list.
  *
@@ -44,21 +47,21 @@ class SQLAnywhere12Keywords extends SQLAnywhere11Keywords
         return array_merge(
             array_diff(
                 parent::getKeywords(),
-                array(
+                [
                     'INDEX_LPAREN',
                     'SYNTAX_ERROR',
                     'WITH_CUBE',
                     'WITH_LPAREN',
                     'WITH_ROLLUP'
-                )
+                ]
             ),
-            array(
+            [
                 'DATETIMEOFFSET',
                 'LIMIT',
                 'OPENXML',
                 'SPATIAL',
                 'TREAT'
-            )
+            ]
         );
     }
 }

@@ -20,23 +20,24 @@
 namespace Doctrine\DBAL\Cache;
 
 use Doctrine\Common\Cache\Cache;
+use function hash;
+use function serialize;
+use function sha1;
 
 /**
  * Query Cache Profile handles the data relevant for query caching.
  *
  * It is a value object, setter methods return NEW instances.
- *
- * @author Benjamin Eberlei <kontakt@beberlei.de>
  */
 class QueryCacheProfile
 {
     /**
-     * @var \Doctrine\Common\Cache\Cache|null
+     * @var Cache|null
      */
     private $resultCacheDriver;
 
     /**
-     * @var integer
+     * @var int
      */
     private $lifetime = 0;
 
@@ -46,19 +47,18 @@ class QueryCacheProfile
     private $cacheKey;
 
     /**
-     * @param integer                           $lifetime
-     * @param string|null                       $cacheKey
-     * @param \Doctrine\Common\Cache\Cache|null $resultCache
+     * @param int         $lifetime
+     * @param string|null $cacheKey
      */
-    public function __construct($lifetime = 0, $cacheKey = null, Cache $resultCache = null)
+    public function __construct($lifetime = 0, $cacheKey = null, ?Cache $resultCache = null)
     {
-        $this->lifetime = $lifetime;
-        $this->cacheKey = $cacheKey;
+        $this->lifetime          = $lifetime;
+        $this->cacheKey          = $cacheKey;
         $this->resultCacheDriver = $resultCache;
     }
 
     /**
-     * @return \Doctrine\Common\Cache\Cache|null
+     * @return Cache|null
      */
     public function getResultCacheDriver()
     {
@@ -66,7 +66,7 @@ class QueryCacheProfile
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getLifetime()
     {
@@ -76,7 +76,7 @@ class QueryCacheProfile
     /**
      * @return string
      *
-     * @throws \Doctrine\DBAL\Cache\CacheException
+     * @throws CacheException
      */
     public function getCacheKey()
     {
@@ -102,7 +102,7 @@ class QueryCacheProfile
         $realCacheKey = 'query=' . $query .
             '&params=' . serialize($params) .
             '&types=' . serialize($types) .
-            '&connectionParams=' . serialize($connectionParams);
+            '&connectionParams=' . hash('sha256', serialize($connectionParams));
 
         // should the key be automatically generated using the inputs or is the cache key set?
         if ($this->cacheKey === null) {
@@ -111,11 +111,10 @@ class QueryCacheProfile
             $cacheKey = $this->cacheKey;
         }
 
-        return array($cacheKey, $realCacheKey);
+        return [$cacheKey, $realCacheKey];
     }
 
     /**
-     * @param \Doctrine\Common\Cache\Cache $cache
      *
      * @return \Doctrine\DBAL\Cache\QueryCacheProfile
      */
@@ -135,7 +134,7 @@ class QueryCacheProfile
     }
 
     /**
-     * @param integer $lifetime
+     * @param int $lifetime
      *
      * @return \Doctrine\DBAL\Cache\QueryCacheProfile
      */

@@ -17,13 +17,6 @@ use PHPUnit\Framework\Exception;
  */
 final class InvalidArgumentHelper
 {
-    /**
-     * @param int    $argument
-     * @param string $type
-     * @param mixed  $value
-     *
-     * @return Exception
-     */
     public static function factory(int $argument, string $type, $value = null): Exception
     {
         $stack = \debug_backtrace();

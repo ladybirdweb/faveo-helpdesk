@@ -22,6 +22,20 @@ namespace Doctrine\DBAL\Driver\Mysqli;
 use Doctrine\DBAL\Driver\Connection as Connection;
 use Doctrine\DBAL\Driver\PingableConnection;
 use Doctrine\DBAL\Driver\ServerInfoAwareConnection;
+use Doctrine\DBAL\ParameterType;
+use function defined;
+use function floor;
+use function func_get_args;
+use function in_array;
+use function ini_get;
+use function mysqli_errno;
+use function mysqli_error;
+use function mysqli_init;
+use function mysqli_options;
+use function restore_error_handler;
+use function set_error_handler;
+use function sprintf;
+use function stripos;
 
 /**
  * @author Kim Hemsø Rasmussen <kimhemsoe@gmail.com>
@@ -49,17 +63,17 @@ class MysqliConnection implements Connection, PingableConnection, ServerInfoAwar
      */
     public function __construct(array $params, $username, $password, array $driverOptions = [])
     {
-        $port = isset($params['port']) ? $params['port'] : ini_get('mysqli.default_port');
+        $port = $params['port'] ?? ini_get('mysqli.default_port');
 
         // Fallback to default MySQL port if not given.
         if ( ! $port) {
             $port = 3306;
         }
 
-        $socket = isset($params['unix_socket']) ? $params['unix_socket'] : ini_get('mysqli.default_socket');
-        $dbname = isset($params['dbname']) ? $params['dbname'] : null;
+        $socket = $params['unix_socket'] ?? ini_get('mysqli.default_socket');
+        $dbname = $params['dbname'] ?? null;
 
-        $flags = isset($driverOptions[static::OPTION_FLAGS]) ? $driverOptions[static::OPTION_FLAGS] : null;
+        $flags = $driverOptions[static::OPTION_FLAGS] ?? null;
 
         $this->_conn = mysqli_init();
 
@@ -94,9 +108,18 @@ class MysqliConnection implements Connection, PingableConnection, ServerInfoAwar
 
     /**
      * {@inheritdoc}
+     *
+     * The server version detection includes a special case for MariaDB
+     * to support '5.5.5-' prefixed versions introduced in Maria 10+
+     * @link https://jira.mariadb.org/browse/MDEV-4088
      */
     public function getServerVersion()
     {
+        $serverInfos = $this->_conn->get_server_info();
+        if (false !== stripos($serverInfos, 'mariadb')) {
+            return $serverInfos;
+        }
+
         $majorVersion = floor($this->_conn->server_version / 10000);
         $minorVersion = floor(($this->_conn->server_version - $majorVersion * 10000) / 100);
         $patchVersion = floor($this->_conn->server_version - $majorVersion * 10000 - $minorVersion * 100);
@@ -136,7 +159,7 @@ class MysqliConnection implements Connection, PingableConnection, ServerInfoAwar
     /**
      * {@inheritdoc}
      */
-    public function quote($input, $type=\PDO::PARAM_STR)
+    public function quote($input, $type = ParameterType::STRING)
     {
         return "'". $this->_conn->escape_string($input) ."'";
     }

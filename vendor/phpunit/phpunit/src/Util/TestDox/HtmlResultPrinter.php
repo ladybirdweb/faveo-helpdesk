@@ -86,8 +86,6 @@ EOT;
 
     /**
      * Handler for 'start class' event.
-     *
-     * @param string $name
      */
     protected function startClass(string $name): void
     {
@@ -103,8 +101,7 @@ EOT;
     /**
      * Handler for 'on test' event.
      *
-     * @param string $name
-     * @param bool   $success
+     * @param mixed $name
      */
     protected function onTest($name, bool $success = true): void
     {
@@ -120,8 +117,6 @@ EOT;
 
     /**
      * Handler for 'end class' event.
-     *
-     * @param string $name
      */
     protected function endClass(string $name): void
     {

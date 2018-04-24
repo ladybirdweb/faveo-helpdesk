@@ -19,6 +19,17 @@ class AssertTest extends TestCase
      */
     private $filesDirectory;
 
+    /**
+     * @return array<string, string[]>
+     */
+    public static function validInvalidJsonDataprovider()
+    {
+        return [
+            'error syntax in expected JSON' => ['{"Mascott"::}', '{"Mascott" : "Tux"}'],
+            'error UTF-8 in actual JSON'    => ['{"Mascott" : "Tux"}', '{"Mascott" : :}'],
+        ];
+    }
+
     protected function setUp(): void
     {
         $this->filesDirectory = \dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
@@ -223,7 +234,6 @@ class AssertTest extends TestCase
      *
      * @throws Exception
      * @throws ExpectationFailedException
-     * @throws \Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testAssertArraySubsetRaisesExceptionForInvalidArguments($partial, $subject): void
@@ -539,7 +549,6 @@ class AssertTest extends TestCase
      * @param mixed $ignoreCase
      *
      * @throws ExpectationFailedException
-     * @throws \Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testAssertEqualsSucceeds($a, $b, $delta = 0.0, $canonicalize = false, $ignoreCase = false): void
@@ -557,7 +566,6 @@ class AssertTest extends TestCase
      * @param mixed $ignoreCase
      *
      * @throws ExpectationFailedException
-     * @throws \Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testAssertEqualsFails($a, $b, $delta = 0.0, $canonicalize = false, $ignoreCase = false): void
@@ -577,7 +585,6 @@ class AssertTest extends TestCase
      * @param mixed $ignoreCase
      *
      * @throws ExpectationFailedException
-     * @throws \Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testAssertNotEqualsSucceeds($a, $b, $delta = 0.0, $canonicalize = false, $ignoreCase = false): void
@@ -595,7 +602,6 @@ class AssertTest extends TestCase
      * @param mixed $ignoreCase
      *
      * @throws ExpectationFailedException
-     * @throws \Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testAssertNotEqualsFails($a, $b, $delta = 0.0, $canonicalize = false, $ignoreCase = false): void
@@ -612,7 +618,6 @@ class AssertTest extends TestCase
      * @param mixed $b
      *
      * @throws ExpectationFailedException
-     * @throws \Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testAssertSameSucceeds($a, $b): void
@@ -627,7 +632,6 @@ class AssertTest extends TestCase
      * @param mixed $b
      *
      * @throws ExpectationFailedException
-     * @throws \Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testAssertSameFails($a, $b): void
@@ -644,7 +648,6 @@ class AssertTest extends TestCase
      * @param mixed $b
      *
      * @throws ExpectationFailedException
-     * @throws \Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testAssertNotSameSucceeds($a, $b): void
@@ -659,7 +662,6 @@ class AssertTest extends TestCase
      * @param mixed $b
      *
      * @throws ExpectationFailedException
-     * @throws \Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testAssertNotSameFails($a, $b): void
@@ -2368,7 +2370,6 @@ XML;
      * @param mixed $actual
      *
      * @throws ExpectationFailedException
-     * @throws \Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testAssertJsonStringEqualsJsonStringErrorRaised($expected, $actual): void
@@ -2394,7 +2395,6 @@ XML;
      * @param mixed $actual
      *
      * @throws ExpectationFailedException
-     * @throws \Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testAssertJsonStringNotEqualsJsonStringErrorRaised($expected, $actual): void
@@ -2566,17 +2566,6 @@ XML;
         $this->expectException(AssertionFailedError::class);
 
         $this->assertStringNotMatchesFormatFile($this->filesDirectory . 'expectedFileFormat.txt', "FOO\n");
-    }
-
-    /**
-     * @return array<string, string[]>
-     */
-    public static function validInvalidJsonDataprovider()
-    {
-        return [
-            'error syntax in expected JSON' => ['{"Mascott"::}', '{"Mascott" : "Tux"}'],
-            'error UTF-8 in actual JSON'    => ['{"Mascott" : "Tux"}', '{"Mascott" : :}'],
-        ];
     }
 
     protected function sameValues()

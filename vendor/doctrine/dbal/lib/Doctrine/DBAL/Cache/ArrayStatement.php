@@ -20,7 +20,11 @@
 namespace Doctrine\DBAL\Cache;
 
 use Doctrine\DBAL\Driver\ResultStatement;
-use PDO;
+use Doctrine\DBAL\FetchMode;
+use function array_merge;
+use function array_values;
+use function count;
+use function reset;
 
 class ArrayStatement implements \IteratorAggregate, ResultStatement
 {
@@ -30,19 +34,19 @@ class ArrayStatement implements \IteratorAggregate, ResultStatement
     private $data;
 
     /**
-     * @var integer
+     * @var int
      */
     private $columnCount = 0;
 
     /**
-     * @var integer
+     * @var int
      */
     private $num = 0;
 
     /**
-     * @var integer
+     * @var int
      */
-    private $defaultFetchMode = PDO::FETCH_BOTH;
+    private $defaultFetchMode = FetchMode::MIXED;
 
     /**
      * @param array $data
@@ -100,23 +104,30 @@ class ArrayStatement implements \IteratorAggregate, ResultStatement
      */
     public function fetch($fetchMode = null, $cursorOrientation = \PDO::FETCH_ORI_NEXT, $cursorOffset = 0)
     {
-        if (isset($this->data[$this->num])) {
-            $row = $this->data[$this->num++];
-            $fetchMode = $fetchMode ?: $this->defaultFetchMode;
-            if ($fetchMode === PDO::FETCH_ASSOC) {
-                return $row;
-            } elseif ($fetchMode === PDO::FETCH_NUM) {
-                return array_values($row);
-            } elseif ($fetchMode === PDO::FETCH_BOTH) {
-                return array_merge($row, array_values($row));
-            } elseif ($fetchMode === PDO::FETCH_COLUMN) {
-                return reset($row);
-            } else {
-                throw new \InvalidArgumentException("Invalid fetch-style given for fetching result.");
-            }
+        if (! isset($this->data[$this->num])) {
+            return false;
         }
 
-        return false;
+        $row       = $this->data[$this->num++];
+        $fetchMode = $fetchMode ?: $this->defaultFetchMode;
+
+        if ($fetchMode === FetchMode::ASSOCIATIVE) {
+            return $row;
+        }
+
+        if ($fetchMode === FetchMode::NUMERIC) {
+            return array_values($row);
+        }
+
+        if ($fetchMode === FetchMode::MIXED) {
+            return array_merge($row, array_values($row));
+        }
+
+        if ($fetchMode === FetchMode::COLUMN) {
+            return reset($row);
+        }
+
+        throw new \InvalidArgumentException('Invalid fetch-style given for fetching result.');
     }
 
     /**
@@ -124,7 +135,7 @@ class ArrayStatement implements \IteratorAggregate, ResultStatement
      */
     public function fetchAll($fetchMode = null, $fetchArgument = null, $ctorArgs = null)
     {
-        $rows = array();
+        $rows = [];
         while ($row = $this->fetch($fetchMode)) {
             $rows[] = $row;
         }
@@ -137,12 +148,9 @@ class ArrayStatement implements \IteratorAggregate, ResultStatement
      */
     public function fetchColumn($columnIndex = 0)
     {
-        $row = $this->fetch(PDO::FETCH_NUM);
-        if (!isset($row[$columnIndex])) {
-            // TODO: verify this is correct behavior
-            return false;
-        }
+        $row = $this->fetch(FetchMode::NUMERIC);
 
-        return $row[$columnIndex];
+        // TODO: verify that return false is the correct behavior
+        return $row[$columnIndex] ?? false;
     }
 }

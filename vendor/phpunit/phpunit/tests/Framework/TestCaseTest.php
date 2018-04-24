@@ -15,9 +15,8 @@ use PHPUnit\Runner\BaseTestRunner;
 
 class TestCaseTest extends TestCase
 {
+    protected static $testStatic      = 0;
     protected $backupGlobalsBlacklist = ['i', 'singleton'];
-
-    protected static $testStatic = 0;
 
     public static function setUpBeforeClass(): void
     {
@@ -720,6 +719,12 @@ class TestCaseTest extends TestCase
 
         $this->assertInternalType('array', $test->myTestData);
         $this->assertSame($data, $test->myTestData);
+    }
+
+    public function testGettingNullTestResultObject()
+    {
+        $test = new \Success();
+        $this->assertNull($test->getTestResultObject());
     }
 
     /**

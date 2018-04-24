@@ -31,11 +31,11 @@
         "phar-io/manifest": "^1.0.1",
         "phar-io/version": "^1.0",
         "phpspec/prophecy": "^1.7",
-        "phpunit/php-code-coverage": "^6.0",
+        "phpunit/php-code-coverage": "^6.0.1",
         "phpunit/php-file-iterator": "^1.4.3",
         "phpunit/php-text-template": "^1.2.1",
         "phpunit/php-timer": "^2.0",
-        "phpunit/phpunit-mock-objects": "^6.0",
+        "phpunit/phpunit-mock-objects": "^6.1",
         "sebastian/comparator": "^2.1",
         "sebastian/diff": "^3.0",
         "sebastian/environment": "^3.1",
@@ -80,7 +80,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "7.0-dev"
+            "dev-master": "7.1-dev"
         }
     }
 }

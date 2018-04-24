@@ -67,7 +67,6 @@ class LogicalAnd extends Constraint
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -94,8 +93,6 @@ class LogicalAnd extends Constraint
 
     /**
      * Returns a string representation of the constraint.
-     *
-     * @return string
      */
     public function toString(): string
     {
@@ -114,8 +111,6 @@ class LogicalAnd extends Constraint
 
     /**
      * Counts the number of constraint elements.
-     *
-     * @return int
      */
     public function count(): int
     {

@@ -11,12 +11,7 @@ namespace PHPUnit\Runner\Filter;
 
 class ExcludeGroupFilterIterator extends GroupFilterIterator
 {
-    /**
-     * @param string $hash
-     *
-     * @return bool
-     */
-    protected function doAccept($hash): bool
+    protected function doAccept(string $hash): bool
     {
         return !\in_array($hash, $this->groupTests);
     }
