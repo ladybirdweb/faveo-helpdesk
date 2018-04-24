@@ -115,7 +115,7 @@ class AgentLayout
         $ticket = $this->tickets()->where('assigned_to', '=', null)
                     ->where('status', '=', '1')->select('id');
         if ($this->auth->role == 'agent') {
-            $ticket = $ticket->where('dept_id', '=', $this->auth->primary_dpt)
+            $ticket = $ticket->where('dept_id', '=', $this->auth->primary_dpt);
         }
         return $ticket->select('id');
     }
