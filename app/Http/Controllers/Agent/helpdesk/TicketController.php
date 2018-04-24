@@ -2463,24 +2463,24 @@ class TicketController extends Controller
      *
      * @return type
      */
-    public function select_all()
+    public function select_all(Request $request)
     {
         if (Input::has('select_all')) {
             $selectall = Input::get('select_all');
-            $value = Input::get('submit');
+            $value = $request->input('submit');
             foreach ($selectall as $delete) {
                 $ticket = Tickets::whereId($delete)->first();
-                if ($value == 'Delete') {
+                if ($value == Lang::get('lang.delete')) {
                     $this->delete($delete, new Tickets());
-                } elseif ($value == 'Close') {
+                } elseif ($value == Lang::get('lang.close')) {
                     $this->close($delete, new Tickets());
-                } elseif ($value == 'Open') {
+                } elseif ($value == Lang::get('lang.open')) {
                     $this->open($delete, new Tickets());
-                } elseif ($value == 'Delete forever') {
+                } elseif ($value == Lang::get('lang.clean-up')) {
                     $notification = Notification::select('id')->where('model_id', '=', $ticket->id)->get();
                     foreach ($notification as $id) {
                         $user_notification = UserNotification::where(
-                                        'notification_id', '=', $id->id);
+                                 'notification_id', '=', $id->id);
                         $user_notification->delete();
                     }
                     $notification = Notification::select('id')->where('model_id', '=', $ticket->id);
@@ -2498,7 +2498,7 @@ class TicketController extends Controller
                             // echo "<br>";
                         }
                         $thread = Ticket_Thread::find($th_id->id);
-//                        dd($thread);
+                        //                        dd($thread);
                         $thread->delete();
                     }
                     $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket->id)->get();
@@ -2515,11 +2515,11 @@ class TicketController extends Controller
                     \Event::fire('ticket-permanent-delete', [$data]);
                 }
             }
-            if ($value == 'Delete') {
+            if ($value == Lang::get('lang.delete')) {
                 return redirect()->back()->with('success', lang::get('lang.moved_to_trash'));
-            } elseif ($value == 'Close') {
+            } elseif ($value == Lang::get('lang.close')) {
                 return redirect()->back()->with('success', Lang::get('lang.tickets_have_been_closed'));
-            } elseif ($value == 'Open') {
+            } elseif ($value == Lang::get('lang.open')) {
                 return redirect()->back()->with('success', Lang::get('lang.tickets_have_been_opened'));
             } else {
                 return redirect()->back()->with('success', Lang::get('lang.hard-delete-success-message'));

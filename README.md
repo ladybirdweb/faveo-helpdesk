@@ -1,5 +1,6 @@
 Faveo Helpdesk Community
 ========
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/22f5064f54df40b3991bbb50abefd64f)](https://www.codacy.com/app/ladybirdweb/faveo-helpdesk?utm_source=github.com&utm_medium=referral&utm_content=ladybirdweb/faveo-helpdesk&utm_campaign=badger)
 <br><img src="https://travis-ci.org/ladybirdweb/faveo-helpdesk.svg?branch=master">&nbsp;<img src="https://img.shields.io/badge/License-OSL-blue.svg">&nbsp;<a href="https://gitter.im/ladybirdweb/faveo-helpdesk" target="_blank"><img src="https://badges.gitter.im/ladybirdweb/faveo-helpdesk.svg"></a>&nbsp;<a href="https://styleci.io/repos/34716238"><img src="https://styleci.io/repos/34716238/shield" alt="StyleCI" height="19px"></a>&nbsp;<a href="http://squizlabs.github.io/PHP_CodeSniffer/analysis/ladybirdweb/faveo-helpdesk/index.html" target="_blank"><img src="http://squizlabs.github.io/PHP_CodeSniffer/analysis/ladybirdweb/faveo-helpdesk/grade.svg" height="20px"></a>&nbsp;<a href="https://scrutinizer-ci.com/g/ladybirdweb/faveo-helpdesk/?branch=master" target="_blank"><img src="https://scrutinizer-ci.com/g/mverma16/faveo-helpdesk/badges/quality-score.png?b=master" height="20px"></a></br>
 
 Faveo Helpdesk provides Businesses with an automated Helpdesk system to manage customer support. 
@@ -18,7 +19,7 @@ Flavors of Faveo
 
 Faveo Documentation
 --------------------------
-  * <a href="http://www.ladybirdweb.com/support/knowledgebase" target="_blank">Faveo user Manual</a>
+  * <a href="https://faveohelpdesk.com/user-manual" target="_blank">Faveo user Manual</a>
   * <a href="https://docs.google.com/document/d/1-ZQ9pueqBNPSD-FZ24sLO_2fgoifKLorN_ocCEYZ1hM/" target="_blank">Faveo API Documentation</a>
   * <a href="https://docs.google.com/document/d/1pXpsQKcTyX5x6H4xA8unYxd5Duw2k94xt7wevTdoF_E/" target="_blank">Faveo Event List</a>
   * <a href="https://docs.google.com/document/d/1PGcpB19Vr42rM_DrCzC3snujzEL8N9Ocy0yewfPNWqU/" target="_blank">Faveo Plugin creation guide</a>

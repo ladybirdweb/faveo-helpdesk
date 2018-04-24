@@ -926,6 +926,7 @@ return [
     'ratings'                                                                                => 'Ratings',
     'please_rate'                                                                            => 'Please rate:',
     'ticket_ratings'                                                                         => 'TICKET RATING',
+
     /*
       |-----------------------------------------------
       |  Ticket

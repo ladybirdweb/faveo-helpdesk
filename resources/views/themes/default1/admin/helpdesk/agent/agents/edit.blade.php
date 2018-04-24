@@ -204,7 +204,9 @@ class="active"
 
                 </div>
                 <!-- role -->
-                <div class="form-group {{ $errors->has('role') ? 'has-error' : '' }}">
+            </div>
+            <div class="col-xs-6">
+            <div class="form-group {{ $errors->has('role') ? 'has-error' : '' }}">
 
                     {!! Form::label('role',Lang::get('lang.role')) !!}
 
