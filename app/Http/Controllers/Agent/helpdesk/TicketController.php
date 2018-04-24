@@ -2519,72 +2519,71 @@ class TicketController extends Controller
      *
      * @return type
      */
-     public function select_all(Request $request)
-         {
-
-             if (Input::has('select_all')) {
-                 $selectall = Input::get('select_all');
-                 $value = $request->input('submit');
-                 foreach ($selectall as $delete) {
-                     $ticket = Tickets::whereId($delete)->first();
-                     if ($value == Lang::get('lang.delete')) {
-                         $this->delete($delete, new Tickets());
-                     } elseif ($value == Lang::get('lang.close')) {
-                         $this->close($delete, new Tickets());
-                     } elseif ($value == Lang::get('lang.open')) {
-                         $this->open($delete, new Tickets());
-                     } elseif ($value == Lang::get('lang.clean-up')) {
-                         $notification = Notification::select('id')->where('model_id', '=', $ticket->id)->get();
-                         foreach ($notification as $id) {
-                             $user_notification = UserNotification::where(
+    public function select_all(Request $request)
+    {
+        if (Input::has('select_all')) {
+            $selectall = Input::get('select_all');
+            $value = $request->input('submit');
+            foreach ($selectall as $delete) {
+                $ticket = Tickets::whereId($delete)->first();
+                if ($value == Lang::get('lang.delete')) {
+                    $this->delete($delete, new Tickets());
+                } elseif ($value == Lang::get('lang.close')) {
+                    $this->close($delete, new Tickets());
+                } elseif ($value == Lang::get('lang.open')) {
+                    $this->open($delete, new Tickets());
+                } elseif ($value == Lang::get('lang.clean-up')) {
+                    $notification = Notification::select('id')->where('model_id', '=', $ticket->id)->get();
+                    foreach ($notification as $id) {
+                        $user_notification = UserNotification::where(
                                  'notification_id', '=', $id->id);
-                             $user_notification->delete();
-                         }
-                         $notification = Notification::select('id')->where('model_id', '=', $ticket->id);
-                         $notification->delete();
-                         $thread = Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
-                         foreach ($thread as $th_id) {
-                             // echo $th_id->id." ";
-                             $attachment = Ticket_attachments::where('thread_id', '=', $th_id->id)->get();
-                             if (count($attachment)) {
-                                 foreach ($attachment as $a_id) {
-                                     // echo $a_id->id . ' ';
-                                     $attachment = Ticket_attachments::find($a_id->id);
-                                     $attachment->delete();
-                                 }
-                                 // echo "<br>";
-                             }
-                             $thread = Ticket_Thread::find($th_id->id);
-     //                        dd($thread);
-                             $thread->delete();
-                         }
-                         $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket->id)->get();
-                         if (count($collaborators)) {
-                             foreach ($collaborators as $collab_id) {
-                                 // echo $collab_id->id;
-                                 $collab = Ticket_Collaborator::find($collab_id->id);
-                                 $collab->delete();
-                             }
-                         }
-                         $tickets = Tickets::find($ticket->id);
-                         $tickets->delete();
-                         $data = ['id' => $ticket->id];
-                         \Event::fire('ticket-permanent-delete', [$data]);
-                     }
-                 }
-                 if ($value == Lang::get('lang.delete')) {
-                     return redirect()->back()->with('success', lang::get('lang.moved_to_trash'));
-                 } elseif ($value == Lang::get('lang.close')) {
-                     return redirect()->back()->with('success', Lang::get('lang.tickets_have_been_closed'));
-                 } elseif ($value == Lang::get('lang.open')) {
-                     return redirect()->back()->with('success', Lang::get('lang.tickets_have_been_opened'));
-                 } else {
-                     return redirect()->back()->with('success', Lang::get('lang.hard-delete-success-message'));
-                 }
-             }
+                        $user_notification->delete();
+                    }
+                    $notification = Notification::select('id')->where('model_id', '=', $ticket->id);
+                    $notification->delete();
+                    $thread = Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
+                    foreach ($thread as $th_id) {
+                        // echo $th_id->id." ";
+                        $attachment = Ticket_attachments::where('thread_id', '=', $th_id->id)->get();
+                        if (count($attachment)) {
+                            foreach ($attachment as $a_id) {
+                                // echo $a_id->id . ' ';
+                                $attachment = Ticket_attachments::find($a_id->id);
+                                $attachment->delete();
+                            }
+                            // echo "<br>";
+                        }
+                        $thread = Ticket_Thread::find($th_id->id);
+                        //                        dd($thread);
+                        $thread->delete();
+                    }
+                    $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket->id)->get();
+                    if (count($collaborators)) {
+                        foreach ($collaborators as $collab_id) {
+                            // echo $collab_id->id;
+                            $collab = Ticket_Collaborator::find($collab_id->id);
+                            $collab->delete();
+                        }
+                    }
+                    $tickets = Tickets::find($ticket->id);
+                    $tickets->delete();
+                    $data = ['id' => $ticket->id];
+                    \Event::fire('ticket-permanent-delete', [$data]);
+                }
+            }
+            if ($value == Lang::get('lang.delete')) {
+                return redirect()->back()->with('success', lang::get('lang.moved_to_trash'));
+            } elseif ($value == Lang::get('lang.close')) {
+                return redirect()->back()->with('success', Lang::get('lang.tickets_have_been_closed'));
+            } elseif ($value == Lang::get('lang.open')) {
+                return redirect()->back()->with('success', Lang::get('lang.tickets_have_been_opened'));
+            } else {
+                return redirect()->back()->with('success', Lang::get('lang.hard-delete-success-message'));
+            }
+        }
 
-             return redirect()->back()->with('fails', 'None Selected!');
-         }
+        return redirect()->back()->with('fails', 'None Selected!');
+    }
 
     /**
      * user time zone.
