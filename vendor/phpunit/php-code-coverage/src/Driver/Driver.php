@@ -20,33 +20,29 @@ interface Driver
      *
      * @see http://xdebug.org/docs/code_coverage
      */
-    const LINE_EXECUTED = 1;
+    public const LINE_EXECUTED = 1;
 
     /**
      * @var int
      *
      * @see http://xdebug.org/docs/code_coverage
      */
-    const LINE_NOT_EXECUTED = -1;
+    public const LINE_NOT_EXECUTED = -1;
 
     /**
      * @var int
      *
      * @see http://xdebug.org/docs/code_coverage
      */
-    const LINE_NOT_EXECUTABLE = -2;
+    public const LINE_NOT_EXECUTABLE = -2;
 
     /**
      * Start collection of code coverage information.
-     *
-     * @param bool $determineUnusedAndDead
      */
-    public function start($determineUnusedAndDead = true);
+    public function start(bool $determineUnusedAndDead = true): void;
 
     /**
      * Stop collection of code coverage information.
-     *
-     * @return array
      */
-    public function stop();
+    public function stop(): array;
 }

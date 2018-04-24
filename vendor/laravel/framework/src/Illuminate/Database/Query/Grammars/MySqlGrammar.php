@@ -2,12 +2,20 @@
 
 namespace Illuminate\Database\Query\Grammars;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JsonExpression;
 
 class MySqlGrammar extends Grammar
 {
+    /**
+     * The grammar specific operators.
+     *
+     * @var array
+     */
+    protected $operators = ['sounds like'];
+
     /**
      * The components that make up a select clause.
      *
@@ -52,9 +60,9 @@ class MySqlGrammar extends Grammar
      */
     protected function compileUnion(array $union)
     {
-        $conjuction = $union['all'] ? ' union all ' : ' union ';
+        $conjunction = $union['all'] ? ' union all ' : ' union ';
 
-        return $conjuction.'('.$union['query']->toSql().')';
+        return $conjunction.'('.$union['query']->toSql().')';
     }
 
     /**
@@ -144,9 +152,9 @@ class MySqlGrammar extends Grammar
         return collect($values)->map(function ($value, $key) {
             if ($this->isJsonSelector($key)) {
                 return $this->compileJsonUpdateColumn($key, new JsonExpression($value));
-            } else {
-                return $this->wrap($key).' = '.$this->parameter($value);
             }
+
+            return $this->wrap($key).' = '.$this->parameter($value);
         })->implode(', ');
     }
 
@@ -163,7 +171,7 @@ class MySqlGrammar extends Grammar
 
         $field = $this->wrapValue(array_shift($path));
 
-        $accessor = '"$.'.implode('.', $path).'"';
+        $accessor = "'$.\"".implode('"."', $path)."\"'";
 
         return "{$field} = json_set({$field}, {$accessor}, {$value->getValue()})";
     }
@@ -202,6 +210,21 @@ class MySqlGrammar extends Grammar
         return isset($query->joins)
                     ? $this->compileDeleteWithJoins($query, $table, $where)
                     : $this->compileDeleteWithoutJoins($query, $table, $where);
+    }
+
+    /**
+     * Prepare the bindings for a delete statement.
+     *
+     * @param  array  $bindings
+     * @return array
+     */
+    public function prepareBindingsForDelete(array $bindings)
+    {
+        $cleanBindings = Arr::except($bindings, ['join', 'select']);
+
+        return array_values(
+            array_merge($bindings['join'], Arr::flatten($cleanBindings))
+        );
     }
 
     /**

@@ -10,16 +10,14 @@
 namespace PHPUnit\Framework;
 
 /**
- * Thrown when an there is a warning.
+ * Thrown when there is a warning.
  */
 class Warning extends Exception implements SelfDescribing
 {
     /**
      * Wrapper for getMessage() which is declared as final.
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return $this->getMessage();
     }

@@ -2,38 +2,38 @@
 
 namespace spec\PhpSpec\CodeGenerator\Generator;
 
-use PhpSpec\CodeGenerator\Generator\GeneratorInterface;
-use PhpSpec\Console\IO;
+use PhpSpec\CodeGenerator\Generator\Generator;
+use PhpSpec\Console\ConsoleIO;
 use PhpSpec\ObjectBehavior;
-use PhpSpec\Locator\ResourceInterface;
+use PhpSpec\Locator\Resource;
 
 class ConfirmingGeneratorSpec extends ObjectBehavior
 {
-    function let(IO $io, GeneratorInterface $generator)
+    function let(ConsoleIO $io, Generator $generator)
     {
         $this->beConstructedWith($io, 'Question for {CLASSNAME}', $generator);
     }
 
     function it_is_a_Generator()
     {
-        $this->shouldHaveType('PhpSpec\CodeGenerator\Generator\GeneratorInterface');
+        $this->shouldHaveType('PhpSpec\CodeGenerator\Generator\Generator');
     }
 
-    function it_supports_the_same_generator_as_its_parent(GeneratorInterface $generator, ResourceInterface $resource)
+    function it_supports_the_same_generator_as_its_parent(Generator $generator, Resource $resource)
     {
         $generator->supports($resource, 'generation', array())->willReturn(true);
 
         $this->supports($resource, 'generation', array())->shouldReturn(true);
     }
 
-    function it_has_the_same_priority_as_its_parent(GeneratorInterface $generator)
+    function it_has_the_same_priority_as_its_parent(Generator $generator)
     {
         $generator->getPriority()->willReturn(1324);
 
         $this->getPriority()->shouldReturn(1324);
     }
 
-    function it_does_not_call_the_parent_generate_method_if_the_user_answers_no(GeneratorInterface $generator, ResourceInterface $resource, IO $io)
+    function it_does_not_call_the_parent_generate_method_if_the_user_answers_no(Generator $generator, Resource $resource, ConsoleIO $io)
     {
         $resource->getSrcClassname()->willReturn('Namespace/Classname');
 
@@ -44,7 +44,7 @@ class ConfirmingGeneratorSpec extends ObjectBehavior
         $generator->generate($resource, array())->shouldNotHaveBeenCalled();
     }
 
-    function it_calls_the_parent_generate_method_if_the_user_answers_yes(GeneratorInterface $generator, ResourceInterface $resource, IO $io)
+    function it_calls_the_parent_generate_method_if_the_user_answers_yes(Generator $generator, Resource $resource, ConsoleIO $io)
     {
         $resource->getSrcClassname()->willReturn('Namespace/Classname');
 

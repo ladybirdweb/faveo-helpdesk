@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\DataCollector\DumpDataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\VarDumper\Cloner\Data;
+use Symfony\Component\VarDumper\Dumper\CliDumper;
 
 /**
  * @author Nicolas Grekas <p@tchwork.com>
@@ -35,7 +36,7 @@ class DumpDataCollectorTest extends TestCase
         $this->assertSame(1, $collector->getDumpsCount());
 
         $dump = $collector->getDumps('html');
-        $this->assertTrue(isset($dump[0]['data']));
+        $this->assertArrayHasKey('data', $dump[0]);
         $dump[0]['data'] = preg_replace('/^.*?<pre/', '<pre', $dump[0]['data']);
         $dump[0]['data'] = preg_replace('/sf-dump-\d+/', 'sf-dump', $dump[0]['data']);
 
@@ -111,5 +112,25 @@ EOTXT;
         ob_start();
         $collector->__destruct();
         $this->assertSame("DumpDataCollectorTest.php on line {$line}:\n456\n", ob_get_clean());
+    }
+
+    public function testFlushNothingWhenDataDumperIsProvided()
+    {
+        $data = new Data(array(array(456)));
+        $dumper = new CliDumper('php://output');
+        $collector = new DumpDataCollector(null, null, null, null, $dumper);
+
+        ob_start();
+        $collector->dump($data);
+        $line = __LINE__ - 1;
+        if (\PHP_VERSION_ID >= 50400) {
+            $this->assertSame("DumpDataCollectorTest.php on line {$line}:\n456\n", ob_get_clean());
+        } else {
+            $this->assertSame("\"DumpDataCollectorTest.php on line {$line}:\"\n456\n", ob_get_clean());
+        }
+
+        ob_start();
+        $collector->__destruct();
+        $this->assertEmpty(ob_get_clean());
     }
 }

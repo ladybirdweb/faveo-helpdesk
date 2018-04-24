@@ -14,8 +14,6 @@ use Aws\RetryMiddleware;
 use Aws\ResultInterface;
 use Aws\CommandInterface;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Promise;
-use GuzzleHttp\Psr7;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -37,6 +35,8 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise deleteBucketAnalyticsConfigurationAsync(array $args = [])
  * @method \Aws\Result deleteBucketCors(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteBucketCorsAsync(array $args = [])
+ * @method \Aws\Result deleteBucketEncryption(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteBucketEncryptionAsync(array $args = [])
  * @method \Aws\Result deleteBucketInventoryConfiguration(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteBucketInventoryConfigurationAsync(array $args = [])
  * @method \Aws\Result deleteBucketLifecycle(array $args = [])
@@ -65,6 +65,8 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise getBucketAnalyticsConfigurationAsync(array $args = [])
  * @method \Aws\Result getBucketCors(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getBucketCorsAsync(array $args = [])
+ * @method \Aws\Result getBucketEncryption(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getBucketEncryptionAsync(array $args = [])
  * @method \Aws\Result getBucketInventoryConfiguration(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getBucketInventoryConfigurationAsync(array $args = [])
  * @method \Aws\Result getBucketLifecycle(array $args = [])
@@ -131,6 +133,8 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise putBucketAnalyticsConfigurationAsync(array $args = [])
  * @method \Aws\Result putBucketCors(array $args = [])
  * @method \GuzzleHttp\Promise\Promise putBucketCorsAsync(array $args = [])
+ * @method \Aws\Result putBucketEncryption(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise putBucketEncryptionAsync(array $args = [])
  * @method \Aws\Result putBucketInventoryConfiguration(array $args = [])
  * @method \GuzzleHttp\Promise\Promise putBucketInventoryConfigurationAsync(array $args = [])
  * @method \Aws\Result putBucketLifecycle(array $args = [])
@@ -494,24 +498,28 @@ class S3Client extends AwsClient implements S3ClientInterface
 
             if ($decider($retries, $command, $request, $result, $error)) {
                 return true;
-            } elseif ($error instanceof AwsException
+            }
+
+            if ($error instanceof AwsException
                 && $retries < $maxRetries
             ) {
-                if (
-                    $error->getResponse()
+                if ($error->getResponse()
                     && $error->getResponse()->getStatusCode() >= 400
                 ) {
                     return strpos(
-                        $error->getResponse()->getBody(),
-                        'Your socket connection to the server'
-                    ) !== false;
-                } elseif ($error->getPrevious() instanceof RequestException) {
+                            $error->getResponse()->getBody(),
+                            'Your socket connection to the server'
+                        ) !== false;
+                }
+
+                if ($error->getPrevious() instanceof RequestException) {
                     // All commands except CompleteMultipartUpload are
                     // idempotent and may be retried without worry if a
                     // networking error has occurred.
                     return $command->getName() !== 'CompleteMultipartUpload';
                 }
             }
+
             return false;
         };
 

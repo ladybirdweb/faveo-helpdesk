@@ -10,7 +10,6 @@ use Aws\Result;
 use Aws\ResultInterface;
 use GuzzleHttp\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7;
 use InvalidArgumentException as IAE;
 use Psr\Http\Message\RequestInterface;
 
@@ -25,13 +24,14 @@ abstract class AbstractUploadManager implements Promise\PromisorInterface
 
     /** @var array Default values for base multipart configuration */
     private static $defaultConfig = [
-        'part_size'       => null,
-        'state'           => null,
-        'concurrency'     => self::DEFAULT_CONCURRENCY,
-        'before_initiate' => null,
-        'before_upload'   => null,
-        'before_complete' => null,
-        'exception_class' => 'Aws\Exception\MultipartUploadException',
+        'part_size'           => null,
+        'state'               => null,
+        'concurrency'         => self::DEFAULT_CONCURRENCY,
+        'prepare_data_source' => null,
+        'before_initiate'     => null,
+        'before_upload'       => null,
+        'before_complete'     => null,
+        'exception_class'     => 'Aws\Exception\MultipartUploadException',
     ];
 
     /** @var Client Client used for the upload. */
@@ -100,7 +100,14 @@ abstract class AbstractUploadManager implements Promise\PromisorInterface
                 throw new \LogicException('This multipart upload has already '
                     . 'been completed or aborted.'
                 );
-            } elseif (!$this->state->isInitiated()) {
+            }
+
+            if (!$this->state->isInitiated()) {
+                // Execute the prepare callback.
+                if (is_callable($this->config["prepare_data_source"])) {
+                    $this->config["prepare_data_source"]();
+                }
+
                 $result = (yield $this->execCommand('initiate', $this->getInitiateParams()));
                 $this->state->setUploadId(
                     $this->info['id']['upload_id'],
@@ -231,7 +238,7 @@ abstract class AbstractUploadManager implements Promise\PromisorInterface
      *
      * @return PromiseInterface
      */
-    private function execCommand($operation, array $params)
+    protected function execCommand($operation, array $params)
     {
         // Create the command.
         $command = $this->client->getCommand(
@@ -261,7 +268,7 @@ abstract class AbstractUploadManager implements Promise\PromisorInterface
      *
      * @return callable
      */
-    private function getResultHandler(&$errors = [])
+    protected function getResultHandler(&$errors = [])
     {
         return function (callable $handler) use (&$errors) {
             return function (

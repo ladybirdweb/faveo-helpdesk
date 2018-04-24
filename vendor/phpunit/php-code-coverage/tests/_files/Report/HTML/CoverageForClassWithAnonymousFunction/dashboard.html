@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <title>Dashboard for %s</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href=".css/bootstrap.min.css" rel="stylesheet">
-  <link href=".css/nv.d3.min.css" rel="stylesheet">
-  <link href=".css/style.css" rel="stylesheet">
+  <link href=".css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href=".css/nv.d3.min.css" rel="stylesheet" type="text/css">
+  <link href=".css/style.css" rel="stylesheet" type="text/css">
   <!--[if lt IE 9]>
   <script src=".js/html5shiv.min.js"></script>
   <script src=".js/respond.min.js"></script>
@@ -251,7 +251,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Method Complexity');
 
     d3.select('#methodComplexity svg')
-      .datum(getComplexityData([[66.666666666667,1,"<a href=\"source_with_class_and_anonymous_function.php.html#5\">CoveredClassWithAnonymousFunctionInStaticMethod::runAnonymous<\/a>"],[100,1,"<a href=\"source_with_class_and_anonymous_function.php.html#11\">CoveredClassWithAnonymousFunctionInStaticMethod::anonymous function<\/a>"]], 'Method Complexity'))
+      .datum(getComplexityData([[66.666666666667,1,"<a href=\"source_with_class_and_anonymous_function.php.html#5\">CoveredClassWithAnonymousFunctionInStaticMethod::runAnonymous<\/a>"],[100,1,"<a href=\"source_with_class_and_anonymous_function.php.html#11\">CoveredClassWithAnonymousFunctionInStaticMethod::anonymousFunction:11#41<\/a>"]], 'Method Complexity'))
       .transition()
       .duration(500)
       .call(chart);

@@ -2,32 +2,38 @@
 
 namespace spec\PhpSpec\Listener;
 
+use PhpSpec\Locator\Resource;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-use PhpSpec\Console\IO;
-use PhpSpec\Locator\ResourceManager;
+use PhpSpec\Console\ConsoleIO;
 use PhpSpec\CodeGenerator\GeneratorManager;
 use PhpSpec\Event\ExampleEvent;
 use PhpSpec\Event\SuiteEvent;
 use PhpSpec\Exception\Fracture\MethodNotFoundException;
-use PhpSpec\Util\NameCheckerInterface;
+use PhpSpec\Locator\ResourceManager;
+use PhpSpec\Util\NameChecker;
 
 class MethodNotFoundListenerSpec extends ObjectBehavior
 {
     function let(
-        IO $io,
+        ConsoleIO $io,
         ResourceManager $resourceManager,
+        Resource $resource,
         GeneratorManager $generatorManager,
         SuiteEvent $suiteEvent,
         ExampleEvent $exampleEvent,
-        NameCheckerInterface $nameChecker
+        NameChecker $nameChecker
     ) {
         $io->writeln(Argument::any())->willReturn();
-        $io->askConfirmation(Argument::any())->willReturn();
+        $io->askConfirmation(Argument::any())->willReturn(false);
 
         $this->beConstructedWith($io, $resourceManager, $generatorManager, $nameChecker);
         $io->isCodeGenerationEnabled()->willReturn(true);
+
+        $nameChecker->isNameValid(Argument::any())->willReturn(false);
+
+        $resourceManager->createResource(Argument::cetera())->willReturn($resource);
     }
 
     function it_does_not_prompt_for_method_generation_if_no_exception_was_thrown($exampleEvent, $suiteEvent, $io)
@@ -52,22 +58,26 @@ class MethodNotFoundListenerSpec extends ObjectBehavior
         $exampleEvent,
         $suiteEvent,
         $io,
-        NameCheckerInterface $nameChecker
+        NameChecker $nameChecker
     ) {
         $exception = new MethodNotFoundException('Error', new \stdClass(), 'bar');
 
         $exampleEvent->getException()->willReturn($exception);
         $nameChecker->isNameValid('bar')->willReturn(true);
 
+        $io->askConfirmation(Argument::any())->shouldBeCalled()->willReturn(false);
+
         $this->afterExample($exampleEvent);
         $this->afterSuite($suiteEvent);
-
-        $io->askConfirmation(Argument::any())->shouldHaveBeenCalled();
     }
 
     function it_does_not_prompt_for_method_generation_if_input_is_not_interactive($exampleEvent, $suiteEvent, $io, MethodNotFoundException $exception)
     {
         $exampleEvent->getException()->willReturn($exception);
+        $exception->getMethodName()->willReturn('someMethod');
+        $exception->getSubject()->willReturn(new \stdClass);
+        $exception->getArguments()->willReturn([]);
+
         $io->isCodeGenerationEnabled()->willReturn(false);
 
         $this->afterExample($exampleEvent);
@@ -79,8 +89,8 @@ class MethodNotFoundListenerSpec extends ObjectBehavior
     function it_warns_when_method_name_is_reserved(
         $exampleEvent,
         $suiteEvent,
-        IO $io,
-        NameCheckerInterface $nameChecker
+        ConsoleIO $io,
+        NameChecker $nameChecker
     ) {
         $this->callAfterExample($exampleEvent, $nameChecker, 'throw', false);
 
@@ -92,8 +102,8 @@ class MethodNotFoundListenerSpec extends ObjectBehavior
     function it_prompts_and_warns_when_one_method_name_is_correct_but_other_reserved(
         $exampleEvent,
         SuiteEvent $suiteEvent,
-        IO $io,
-        NameCheckerInterface $nameChecker
+        ConsoleIO $io,
+        NameChecker $nameChecker
     ) {
         $this->callAfterExample($exampleEvent, $nameChecker, 'throw', false);
         $this->callAfterExample($exampleEvent, $nameChecker, 'foo');

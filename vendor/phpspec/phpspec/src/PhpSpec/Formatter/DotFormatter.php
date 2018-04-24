@@ -16,7 +16,7 @@ namespace PhpSpec\Formatter;
 use PhpSpec\Event\SuiteEvent;
 use PhpSpec\Event\ExampleEvent;
 
-class DotFormatter extends ConsoleFormatter
+final class DotFormatter extends ConsoleFormatter
 {
     /**
      * @var int
@@ -28,7 +28,7 @@ class DotFormatter extends ConsoleFormatter
      */
     public function beforeSuite(SuiteEvent $event)
     {
-        $this->examplesCount = count($event->getSuite());
+        $this->examplesCount = \count($event->getSuite());
     }
 
     /**
@@ -70,7 +70,7 @@ class DotFormatter extends ConsoleFormatter
         }
 
         if ($lastRow || $endOfRow) {
-            $length = strlen((string) $this->examplesCount);
+            $length = \strlen((string) $this->examplesCount);
             $format = sprintf(' %%%dd / %%%dd', $length, $length);
 
             $io->write(sprintf($format, $eventsCount, $this->examplesCount));
@@ -142,7 +142,7 @@ class DotFormatter extends ConsoleFormatter
             $counts[] = sprintf('<%s>%d %s</%s>', $type, $count, $type, $type);
         }
 
-        if (count($counts)) {
+        if (\count($counts)) {
             $this->getIO()->write(sprintf("(%s)", implode(', ', $counts)));
         }
     }

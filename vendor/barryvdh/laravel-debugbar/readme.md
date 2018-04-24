@@ -3,7 +3,9 @@
 [![Latest Stable Version](https://poser.pugx.org/barryvdh/laravel-debugbar/version.png)](https://packagist.org/packages/barryvdh/laravel-debugbar)
 [![Total Downloads](https://poser.pugx.org/barryvdh/laravel-debugbar/d/total.png)](https://packagist.org/packages/barryvdh/laravel-debugbar)
 
-### For Laravel 4, please use the [1.8 branch](https://github.com/barryvdh/laravel-debugbar/tree/1.8)!
+### Note for v3: Debugbar is now enabled by requiring the package, but still needs APP_DEBUG=true by default!
+
+### For Laravel < 5.5, please use the [2.4 branch](https://github.com/barryvdh/laravel-debugbar/tree/2.4)!
 
 This is a package to integrate [PHP Debug Bar](http://phpdebugbar.com/) with Laravel 5.
 It includes a ServiceProvider to register the debugbar and attach it to the output. You can publish assets and configure it through Laravel.
@@ -25,6 +27,7 @@ This package includes some custom collectors:
  - LogsCollector: Show the latest log entries from the storage logs. (disabled by default)
  - FilesCollector: Show the files that are included/required by PHP. (disabled by default)
  - ConfigCollector: Display the values from the config files. (disabled by default)
+ - CacheCollector: Display all cache events. (disabled by default)
 
 Bootstraps the following collectors for Laravel:
  - LogCollector: Show all Log messages
@@ -41,17 +44,21 @@ It also provides a Facade interface for easy logging Messages, Exceptions and Ti
 
 ## Installation
 
-Require this package with composer:
+Require this package with composer. It is recommended to only require the package for development.
 
 ```shell
-composer require barryvdh/laravel-debugbar
+composer require barryvdh/laravel-debugbar --dev
 ```
 
-After updating composer, add the ServiceProvider to the providers array in config/app.php
+Laravel 5.5 uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.
+
+The Debugbar will be enabled when `APP_DEBUG` is `true`.
 
 > If you use a catch-all/fallback route, make sure you load the Debugbar ServiceProvider before your own App ServiceProviders.
 
-### Laravel 5.x:
+### Laravel 5.5+:
+
+If you don't use auto-discovery, add the ServiceProvider to the providers array in config/app.php
 
 ```php
 Barryvdh\Debugbar\ServiceProvider::class,
@@ -63,7 +70,7 @@ If you want to use the facade to log messages, add this to your facades in app.p
 'Debugbar' => Barryvdh\Debugbar\Facade::class,
 ```
 
-The profiler is enabled by default, if you have app.debug=true. You can override that in the config (`debugbar.enabled`). See more options in `config/debugbar.php`
+The profiler is enabled by default, if you have APP_DEBUG=true. You can override that in the config (`debugbar.enabled`) or by setting `DEBUGBAR_ENABLED` in your `.env`. See more options in `config/debugbar.php`
 You can also set in your config if you want to include/exclude the vendor files also (FontAwesome, Highlight.js and jQuery). If you already use them in your site, set it to false.
 You can also only display the js or css vendors, by setting it to 'js' or 'css'. (Highlight.js requires both css + js, so set to `true` for syntax highlighting)
 

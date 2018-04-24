@@ -1,10 +1,12 @@
 <?php
 
+namespace Chumper\Zipper;
+
 use Chumper\Zipper\Repositories\RepositoryInterface;
 
 class ArrayArchive implements RepositoryInterface
 {
-    private $entries = array();
+    private $entries = [];
 
     /**
      * Construct with a given path
@@ -13,7 +15,7 @@ class ArrayArchive implements RepositoryInterface
      * @param bool $new
      * @param $archiveImplementation
      */
-    function __construct($filePath, $new = false, $archiveImplementation = null)
+    public function __construct($filePath, $new = false, $archiveImplementation = null)
     {
     }
 
@@ -22,7 +24,6 @@ class ArrayArchive implements RepositoryInterface
      *
      * @param $pathToFile
      * @param $pathInArchive
-     * @return void
      */
     public function addFile($pathToFile, $pathInArchive)
     {
@@ -34,7 +35,6 @@ class ArrayArchive implements RepositoryInterface
      *
      * @param $name
      * @param $content
-     * @return void
      */
     public function addFromString($name, $content)
     {
@@ -45,7 +45,6 @@ class ArrayArchive implements RepositoryInterface
      * Remove a file permanently from the Archive
      *
      * @param $pathInArchive
-     * @return void
      */
     public function removeFile($pathInArchive)
     {
@@ -56,6 +55,7 @@ class ArrayArchive implements RepositoryInterface
      * Get the content of a file
      *
      * @param $pathInArchive
+     *
      * @return string
      */
     public function getFileContent($pathInArchive)
@@ -67,6 +67,7 @@ class ArrayArchive implements RepositoryInterface
      * Get the stream of a file
      *
      * @param $pathInArchive
+     *
      * @return mixed
      */
     public function getFileStream($pathInArchive)
@@ -79,23 +80,22 @@ class ArrayArchive implements RepositoryInterface
      * Will provide the filename for every item
      *
      * @param $callback
-     * @return void
      */
     public function each($callback)
     {
         foreach ($this->entries as $entry) {
-            call_user_func_array($callback, array(
+            call_user_func_array($callback, [
                 'file' => $entry,
-            ));
+            ]);
         }
-
     }
 
     /**
      * Checks whether the file is in the archive
      *
      * @param $fileInArchive
-     * @return boolean
+     *
+     * @return bool
      */
     public function fileExists($fileInArchive)
     {
@@ -109,12 +109,11 @@ class ArrayArchive implements RepositoryInterface
      */
     public function getStatus()
     {
-        return "OK";
+        return 'OK';
     }
 
     /**
      * Closes the archive and saves it
-     * @return void
      */
     public function close()
     {
@@ -124,20 +123,19 @@ class ArrayArchive implements RepositoryInterface
      * Add an empty directory
      *
      * @param $dirName
-     * @return void
      */
-    public function addEmptyDir($dirName){
-        # CODE...
+    public function addEmptyDir($dirName)
+    {
+        // CODE...
     }
 
     /**
      * Sets the password to be used for decompressing
      *
      * @param $password
-     * @return void
      */
     public function usePassword($password)
     {
-        # CODE...
+        // CODE...
     }
 }

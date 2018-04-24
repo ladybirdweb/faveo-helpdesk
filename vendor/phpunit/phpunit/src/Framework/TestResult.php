@@ -13,20 +13,19 @@ namespace PHPUnit\Framework;
 use AssertionError;
 use Countable;
 use Error;
-use PHP_Invoker;
-use PHP_Invoker_TimeoutException;
-use PHP_Timer;
-use PHPUnit_Framework_MockObject_Exception;
+use PHPUnit\Framework\MockObject\Exception as MockObjectException;
 use PHPUnit\Util\Blacklist;
-use PHPUnit\Util\InvalidArgumentHelper;
+use PHPUnit\Util\ErrorHandler;
 use PHPUnit\Util\Printer;
-use ReflectionClass;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
-use SebastianBergmann\CodeCoverage\Exception as OriginalCodeCoverageException;
 use SebastianBergmann\CodeCoverage\CoveredCodeNotExecutedException as OriginalCoveredCodeNotExecutedException;
+use SebastianBergmann\CodeCoverage\Exception as OriginalCodeCoverageException;
 use SebastianBergmann\CodeCoverage\MissingCoversAnnotationException as OriginalMissingCoversAnnotationException;
 use SebastianBergmann\CodeCoverage\UnintentionallyCoveredCodeException;
+use SebastianBergmann\Invoker\Invoker;
+use SebastianBergmann\Invoker\TimeoutException;
 use SebastianBergmann\ResourceOperations\ResourceOperations;
+use SebastianBergmann\Timer\Timer;
 use Throwable;
 
 /**
@@ -188,20 +187,16 @@ class TestResult implements Countable
 
     /**
      * Registers a TestListener.
-     *
-     * @param TestListener $listener
      */
-    public function addListener(TestListener $listener)
+    public function addListener(TestListener $listener): void
     {
         $this->listeners[] = $listener;
     }
 
     /**
      * Unregisters a TestListener.
-     *
-     * @param TestListener $listener
      */
-    public function removeListener(TestListener $listener)
+    public function removeListener(TestListener $listener): void
     {
         foreach ($this->listeners as $key => $_listener) {
             if ($listener === $_listener) {
@@ -213,7 +208,7 @@ class TestResult implements Countable
     /**
      * Flushes all flushable TestListeners.
      */
-    public function flushListeners()
+    public function flushListeners(): void
     {
         foreach ($this->listeners as $listener) {
             if ($listener instanceof Printer) {
@@ -224,12 +219,8 @@ class TestResult implements Countable
 
     /**
      * Adds an error to the list of errors.
-     *
-     * @param Test      $test
-     * @param Throwable $t
-     * @param float     $time
      */
-    public function addError(Test $test, Throwable $t, $time)
+    public function addError(Test $test, Throwable $t, float $time): void
     {
         if ($t instanceof RiskyTest) {
             $this->risky[] = new TestFailure($test, $t);
@@ -281,12 +272,8 @@ class TestResult implements Countable
     /**
      * Adds a warning to the list of warnings.
      * The passed in exception caused the warning.
-     *
-     * @param Test    $test
-     * @param Warning $e
-     * @param float   $time
      */
-    public function addWarning(Test $test, Warning $e, $time)
+    public function addWarning(Test $test, Warning $e, float $time): void
     {
         if ($this->stopOnWarning) {
             $this->stop();
@@ -304,12 +291,8 @@ class TestResult implements Countable
     /**
      * Adds a failure to the list of failures.
      * The passed in exception caused the failure.
-     *
-     * @param Test                 $test
-     * @param AssertionFailedError $e
-     * @param float                $time
      */
-    public function addFailure(Test $test, AssertionFailedError $e, $time)
+    public function addFailure(Test $test, AssertionFailedError $e, float $time): void
     {
         if ($e instanceof RiskyTest || $e instanceof OutputError) {
             $this->risky[] = new TestFailure($test, $e);
@@ -354,11 +337,9 @@ class TestResult implements Countable
     }
 
     /**
-     * Informs the result that a testsuite will be started.
-     *
-     * @param TestSuite $suite
+     * Informs the result that a test suite will be started.
      */
-    public function startTestSuite(TestSuite $suite)
+    public function startTestSuite(TestSuite $suite): void
     {
         if ($this->topTestSuite === null) {
             $this->topTestSuite = $suite;
@@ -370,11 +351,9 @@ class TestResult implements Countable
     }
 
     /**
-     * Informs the result that a testsuite was completed.
-     *
-     * @param TestSuite $suite
+     * Informs the result that a test suite was completed.
      */
-    public function endTestSuite(TestSuite $suite)
+    public function endTestSuite(TestSuite $suite): void
     {
         foreach ($this->listeners as $listener) {
             $listener->endTestSuite($suite);
@@ -383,10 +362,8 @@ class TestResult implements Countable
 
     /**
      * Informs the result that a test will be started.
-     *
-     * @param Test $test
      */
-    public function startTest(Test $test)
+    public function startTest(Test $test): void
     {
         $this->lastTestFailed = false;
         $this->runTests += \count($test);
@@ -399,10 +376,9 @@ class TestResult implements Countable
     /**
      * Informs the result that a test was completed.
      *
-     * @param Test  $test
-     * @param float $time
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function endTest(Test $test, $time)
+    public function endTest(Test $test, float $time): void
     {
         foreach ($this->listeners as $listener) {
             $listener->endTest($test, $time);
@@ -426,180 +402,144 @@ class TestResult implements Countable
 
     /**
      * Returns true if no risky test occurred.
-     *
-     * @return bool
      */
-    public function allHarmless()
+    public function allHarmless(): bool
     {
         return $this->riskyCount() == 0;
     }
 
     /**
      * Gets the number of risky tests.
-     *
-     * @return int
      */
-    public function riskyCount()
+    public function riskyCount(): int
     {
         return \count($this->risky);
     }
 
     /**
      * Returns true if no incomplete test occurred.
-     *
-     * @return bool
      */
-    public function allCompletelyImplemented()
+    public function allCompletelyImplemented(): bool
     {
         return $this->notImplementedCount() == 0;
     }
 
     /**
      * Gets the number of incomplete tests.
-     *
-     * @return int
      */
-    public function notImplementedCount()
+    public function notImplementedCount(): int
     {
         return \count($this->notImplemented);
     }
 
     /**
      * Returns an Enumeration for the risky tests.
-     *
-     * @return array
      */
-    public function risky()
+    public function risky(): array
     {
         return $this->risky;
     }
 
     /**
      * Returns an Enumeration for the incomplete tests.
-     *
-     * @return array
      */
-    public function notImplemented()
+    public function notImplemented(): array
     {
         return $this->notImplemented;
     }
 
     /**
      * Returns true if no test has been skipped.
-     *
-     * @return bool
      */
-    public function noneSkipped()
+    public function noneSkipped(): bool
     {
         return $this->skippedCount() == 0;
     }
 
     /**
      * Gets the number of skipped tests.
-     *
-     * @return int
      */
-    public function skippedCount()
+    public function skippedCount(): int
     {
         return \count($this->skipped);
     }
 
     /**
      * Returns an Enumeration for the skipped tests.
-     *
-     * @return array
      */
-    public function skipped()
+    public function skipped(): array
     {
         return $this->skipped;
     }
 
     /**
      * Gets the number of detected errors.
-     *
-     * @return int
      */
-    public function errorCount()
+    public function errorCount(): int
     {
         return \count($this->errors);
     }
 
     /**
      * Returns an Enumeration for the errors.
-     *
-     * @return array
      */
-    public function errors()
+    public function errors(): array
     {
         return $this->errors;
     }
 
     /**
      * Gets the number of detected failures.
-     *
-     * @return int
      */
-    public function failureCount()
+    public function failureCount(): int
     {
         return \count($this->failures);
     }
 
     /**
      * Returns an Enumeration for the failures.
-     *
-     * @return array
      */
-    public function failures()
+    public function failures(): array
     {
         return $this->failures;
     }
 
     /**
      * Gets the number of detected warnings.
-     *
-     * @return int
      */
-    public function warningCount()
+    public function warningCount(): int
     {
         return \count($this->warnings);
     }
 
     /**
      * Returns an Enumeration for the warnings.
-     *
-     * @return array
      */
-    public function warnings()
+    public function warnings(): array
     {
         return $this->warnings;
     }
 
     /**
      * Returns the names of the tests that have passed.
-     *
-     * @return array
      */
-    public function passed()
+    public function passed(): array
     {
         return $this->passed;
     }
 
     /**
      * Returns the (top) test suite.
-     *
-     * @return TestSuite
      */
-    public function topTestSuite()
+    public function topTestSuite(): TestSuite
     {
         return $this->topTestSuite;
     }
 
     /**
      * Returns whether code coverage information should be collected.
-     *
-     * @return bool If code coverage should be collected
      */
-    public function getCollectCodeCoverageInformation()
+    public function getCollectCodeCoverageInformation(): bool
     {
         return $this->codeCoverage !== null;
     }
@@ -607,9 +547,16 @@ class TestResult implements Countable
     /**
      * Runs a TestCase.
      *
-     * @param Test $test
+     * @throws CodeCoverageException
+     * @throws OriginalCoveredCodeNotExecutedException
+     * @throws OriginalMissingCoversAnnotationException
+     * @throws UnintentionallyCoveredCodeException
+     * @throws \ReflectionException
+     * @throws \SebastianBergmann\CodeCoverage\InvalidArgumentException
+     * @throws \SebastianBergmann\CodeCoverage\RuntimeException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function run(Test $test)
+    public function run(Test $test): void
     {
         Assert::resetCount();
 
@@ -640,7 +587,7 @@ class TestResult implements Countable
 
         if ($this->convertErrorsToExceptions) {
             $oldErrorHandler = \set_error_handler(
-                [\PHPUnit\Util\ErrorHandler::class, 'handleError'],
+                [ErrorHandler::class, 'handleError'],
                 E_ALL | E_STRICT
             );
 
@@ -668,33 +615,36 @@ class TestResult implements Countable
             \xdebug_start_function_monitor(ResourceOperations::getFunctions());
         }
 
-        PHP_Timer::start();
+        Timer::start();
 
         try {
             if (!$test instanceof WarningTestCase &&
                 $test->getSize() != \PHPUnit\Util\Test::UNKNOWN &&
                 $this->enforceTimeLimit &&
-                \extension_loaded('pcntl') && \class_exists('PHP_Invoker')) {
+                \extension_loaded('pcntl') && \class_exists(Invoker::class)) {
                 switch ($test->getSize()) {
                     case \PHPUnit\Util\Test::SMALL:
                         $_timeout = $this->timeoutForSmallTests;
+
                         break;
 
                     case \PHPUnit\Util\Test::MEDIUM:
                         $_timeout = $this->timeoutForMediumTests;
+
                         break;
 
                     case \PHPUnit\Util\Test::LARGE:
                         $_timeout = $this->timeoutForLargeTests;
+
                         break;
                 }
 
-                $invoker = new PHP_Invoker;
+                $invoker = new Invoker;
                 $invoker->invoke([$test, 'runBare'], [], $_timeout);
             } else {
                 $test->runBare();
             }
-        } catch (PHP_Invoker_TimeoutException $e) {
+        } catch (TimeoutException $e) {
             $this->addFailure(
                 $test,
                 new RiskyTestError(
@@ -704,7 +654,7 @@ class TestResult implements Countable
             );
 
             $risky = true;
-        } catch (PHPUnit_Framework_MockObject_Exception $e) {
+        } catch (MockObjectException $e) {
             $e = new Warning(
                 $e->getMessage()
             );
@@ -743,7 +693,7 @@ class TestResult implements Countable
             $error = true;
         }
 
-        $time = PHP_Timer::stop();
+        $time = Timer::stop();
         $test->addToAssertionCount(Assert::getCount());
 
         if ($monitorFunctions) {
@@ -894,20 +844,16 @@ class TestResult implements Countable
 
     /**
      * Gets the number of run tests.
-     *
-     * @return int
      */
-    public function count()
+    public function count(): int
     {
         return $this->runTests;
     }
 
     /**
      * Checks whether the test run should stop.
-     *
-     * @return bool
      */
-    public function shouldStop()
+    public function shouldStop(): bool
     {
         return $this->stop;
     }
@@ -915,393 +861,191 @@ class TestResult implements Countable
     /**
      * Marks that the test run should stop.
      */
-    public function stop()
+    public function stop(): void
     {
         $this->stop = true;
     }
 
     /**
      * Returns the code coverage object.
-     *
-     * @return CodeCoverage
      */
-    public function getCodeCoverage()
+    public function getCodeCoverage(): ?CodeCoverage
     {
         return $this->codeCoverage;
     }
 
     /**
      * Sets the code coverage object.
-     *
-     * @param CodeCoverage $codeCoverage
      */
-    public function setCodeCoverage(CodeCoverage $codeCoverage)
+    public function setCodeCoverage(CodeCoverage $codeCoverage): void
     {
         $this->codeCoverage = $codeCoverage;
     }
 
     /**
      * Enables or disables the error-to-exception conversion.
-     *
-     * @param bool $flag
-     *
-     * @throws Exception
      */
-    public function convertErrorsToExceptions($flag)
+    public function convertErrorsToExceptions(bool $flag): void
     {
-        if (!\is_bool($flag)) {
-            throw InvalidArgumentHelper::factory(1, 'boolean');
-        }
-
         $this->convertErrorsToExceptions = $flag;
     }
 
     /**
      * Returns the error-to-exception conversion setting.
-     *
-     * @return bool
      */
-    public function getConvertErrorsToExceptions()
+    public function getConvertErrorsToExceptions(): bool
     {
         return $this->convertErrorsToExceptions;
     }
 
     /**
      * Enables or disables the stopping when an error occurs.
-     *
-     * @param bool $flag
-     *
-     * @throws Exception
      */
-    public function stopOnError($flag)
+    public function stopOnError(bool $flag): void
     {
-        if (!\is_bool($flag)) {
-            throw InvalidArgumentHelper::factory(1, 'boolean');
-        }
-
         $this->stopOnError = $flag;
     }
 
     /**
      * Enables or disables the stopping when a failure occurs.
-     *
-     * @param bool $flag
-     *
-     * @throws Exception
      */
-    public function stopOnFailure($flag)
+    public function stopOnFailure(bool $flag): void
     {
-        if (!\is_bool($flag)) {
-            throw InvalidArgumentHelper::factory(1, 'boolean');
-        }
-
         $this->stopOnFailure = $flag;
     }
 
     /**
      * Enables or disables the stopping when a warning occurs.
-     *
-     * @param bool $flag
-     *
-     * @throws Exception
      */
-    public function stopOnWarning($flag)
+    public function stopOnWarning(bool $flag): void
     {
-        if (!\is_bool($flag)) {
-            throw InvalidArgumentHelper::factory(1, 'boolean');
-        }
-
         $this->stopOnWarning = $flag;
     }
 
-    /**
-     * @param bool $flag
-     *
-     * @throws Exception
-     */
-    public function beStrictAboutTestsThatDoNotTestAnything($flag)
+    public function beStrictAboutTestsThatDoNotTestAnything(bool $flag): void
     {
-        if (!\is_bool($flag)) {
-            throw InvalidArgumentHelper::factory(1, 'boolean');
-        }
-
         $this->beStrictAboutTestsThatDoNotTestAnything = $flag;
     }
 
-    /**
-     * @return bool
-     */
-    public function isStrictAboutTestsThatDoNotTestAnything()
+    public function isStrictAboutTestsThatDoNotTestAnything(): bool
     {
         return $this->beStrictAboutTestsThatDoNotTestAnything;
     }
 
-    /**
-     * @param bool $flag
-     *
-     * @throws Exception
-     */
-    public function beStrictAboutOutputDuringTests($flag)
+    public function beStrictAboutOutputDuringTests(bool $flag): void
     {
-        if (!\is_bool($flag)) {
-            throw InvalidArgumentHelper::factory(1, 'boolean');
-        }
-
         $this->beStrictAboutOutputDuringTests = $flag;
     }
 
-    /**
-     * @return bool
-     */
-    public function isStrictAboutOutputDuringTests()
+    public function isStrictAboutOutputDuringTests(): bool
     {
         return $this->beStrictAboutOutputDuringTests;
     }
 
-    /**
-     * @param bool $flag
-     *
-     * @throws Exception
-     */
-    public function beStrictAboutResourceUsageDuringSmallTests($flag)
+    public function beStrictAboutResourceUsageDuringSmallTests(bool $flag): void
     {
-        if (!\is_bool($flag)) {
-            throw InvalidArgumentHelper::factory(1, 'boolean');
-        }
-
         $this->beStrictAboutResourceUsageDuringSmallTests = $flag;
     }
 
-    /**
-     * @return bool
-     */
-    public function isStrictAboutResourceUsageDuringSmallTests()
+    public function isStrictAboutResourceUsageDuringSmallTests(): bool
     {
         return $this->beStrictAboutResourceUsageDuringSmallTests;
     }
 
-    /**
-     * @param bool $flag
-     *
-     * @throws Exception
-     */
-    public function enforceTimeLimit($flag)
+    public function enforceTimeLimit(bool $flag): void
     {
-        if (!\is_bool($flag)) {
-            throw InvalidArgumentHelper::factory(1, 'boolean');
-        }
-
         $this->enforceTimeLimit = $flag;
     }
 
-    /**
-     * @return bool
-     */
-    public function enforcesTimeLimit()
+    public function enforcesTimeLimit(): bool
     {
         return $this->enforceTimeLimit;
     }
 
-    /**
-     * @param bool $flag
-     *
-     * @throws Exception
-     */
-    public function beStrictAboutTodoAnnotatedTests($flag)
+    public function beStrictAboutTodoAnnotatedTests(bool $flag): void
     {
-        if (!\is_bool($flag)) {
-            throw InvalidArgumentHelper::factory(1, 'boolean');
-        }
-
         $this->beStrictAboutTodoAnnotatedTests = $flag;
     }
 
-    /**
-     * @return bool
-     */
-    public function isStrictAboutTodoAnnotatedTests()
+    public function isStrictAboutTodoAnnotatedTests(): bool
     {
         return $this->beStrictAboutTodoAnnotatedTests;
     }
 
     /**
      * Enables or disables the stopping for risky tests.
-     *
-     * @param bool $flag
-     *
-     * @throws Exception
      */
-    public function stopOnRisky($flag)
+    public function stopOnRisky(bool $flag): void
     {
-        if (!\is_bool($flag)) {
-            throw InvalidArgumentHelper::factory(1, 'boolean');
-        }
-
         $this->stopOnRisky = $flag;
     }
 
     /**
      * Enables or disables the stopping for incomplete tests.
-     *
-     * @param bool $flag
-     *
-     * @throws Exception
      */
-    public function stopOnIncomplete($flag)
+    public function stopOnIncomplete(bool $flag): void
     {
-        if (!\is_bool($flag)) {
-            throw InvalidArgumentHelper::factory(1, 'boolean');
-        }
-
         $this->stopOnIncomplete = $flag;
     }
 
     /**
      * Enables or disables the stopping for skipped tests.
-     *
-     * @param bool $flag
-     *
-     * @throws Exception
      */
-    public function stopOnSkipped($flag)
+    public function stopOnSkipped(bool $flag): void
     {
-        if (!\is_bool($flag)) {
-            throw InvalidArgumentHelper::factory(1, 'boolean');
-        }
-
         $this->stopOnSkipped = $flag;
     }
 
     /**
      * Returns the time spent running the tests.
-     *
-     * @return float
      */
-    public function time()
+    public function time(): float
     {
         return $this->time;
     }
 
     /**
      * Returns whether the entire test was successful or not.
-     *
-     * @return bool
      */
-    public function wasSuccessful()
+    public function wasSuccessful(): bool
     {
         return empty($this->errors) && empty($this->failures) && empty($this->warnings);
     }
 
     /**
      * Sets the timeout for small tests.
-     *
-     * @param int $timeout
-     *
-     * @throws Exception
      */
-    public function setTimeoutForSmallTests($timeout)
+    public function setTimeoutForSmallTests(int $timeout): void
     {
-        if (!\is_int($timeout)) {
-            throw InvalidArgumentHelper::factory(1, 'integer');
-        }
-
         $this->timeoutForSmallTests = $timeout;
     }
 
     /**
      * Sets the timeout for medium tests.
-     *
-     * @param int $timeout
-     *
-     * @throws Exception
      */
-    public function setTimeoutForMediumTests($timeout)
+    public function setTimeoutForMediumTests(int $timeout): void
     {
-        if (!\is_int($timeout)) {
-            throw InvalidArgumentHelper::factory(1, 'integer');
-        }
-
         $this->timeoutForMediumTests = $timeout;
     }
 
     /**
      * Sets the timeout for large tests.
-     *
-     * @param int $timeout
-     *
-     * @throws Exception
      */
-    public function setTimeoutForLargeTests($timeout)
+    public function setTimeoutForLargeTests(int $timeout): void
     {
-        if (!\is_int($timeout)) {
-            throw InvalidArgumentHelper::factory(1, 'integer');
-        }
-
         $this->timeoutForLargeTests = $timeout;
     }
 
     /**
      * Returns the set timeout for large tests.
-     *
-     * @return int
      */
-    public function getTimeoutForLargeTests()
+    public function getTimeoutForLargeTests(): int
     {
         return $this->timeoutForLargeTests;
     }
 
-    /**
-     * @param bool $flag
-     */
-    public function setRegisterMockObjectsFromTestArgumentsRecursively($flag)
+    public function setRegisterMockObjectsFromTestArgumentsRecursively(bool $flag): void
     {
-        if (!\is_bool($flag)) {
-            throw InvalidArgumentHelper::factory(1, 'boolean');
-        }
-
         $this->registerMockObjectsFromTestArgumentsRecursively = $flag;
-    }
-
-    /**
-     * Returns the class hierarchy for a given class.
-     *
-     * @param string $className
-     * @param bool   $asReflectionObjects
-     *
-     * @return array
-     */
-    protected function getHierarchy($className, $asReflectionObjects = false)
-    {
-        if ($asReflectionObjects) {
-            $classes = [new ReflectionClass($className)];
-        } else {
-            $classes = [$className];
-        }
-
-        $done = false;
-
-        while (!$done) {
-            if ($asReflectionObjects) {
-                $class = new ReflectionClass(
-                    $classes[\count($classes) - 1]->getName()
-                );
-            } else {
-                $class = new ReflectionClass($classes[\count($classes) - 1]);
-            }
-
-            $parent = $class->getParentClass();
-
-            if ($parent !== false) {
-                if ($asReflectionObjects) {
-                    $classes[] = $parent;
-                } else {
-                    $classes[] = $parent->getName();
-                }
-            } else {
-                $done = true;
-            }
-        }
-
-        return $classes;
     }
 }

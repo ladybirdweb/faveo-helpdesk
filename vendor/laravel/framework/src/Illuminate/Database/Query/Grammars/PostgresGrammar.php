@@ -15,9 +15,9 @@ class PostgresGrammar extends Grammar
      */
     protected $operators = [
         '=', '<', '>', '<=', '>=', '<>', '!=',
-        'like', 'not like', 'between', 'ilike',
-        '&', '|', '#', '<<', '>>',
-        '@>', '<@', '?', '?|', '?&', '||', '-', '-', '#-',
+        'like', 'not like', 'ilike',
+        '&', '|', '#', '<<', '>>', '>>=', '=<<',
+        '&&', '@>', '<@', '?', '?|', '?&', '||', '-', '-', '#-',
     ];
 
     /**
@@ -32,6 +32,20 @@ class PostgresGrammar extends Grammar
         $value = $this->parameter($where['value']);
 
         return $this->wrap($where['column']).'::date '.$where['operator'].' '.$value;
+    }
+
+    /**
+     * Compile a "where time" clause.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $where
+     * @return string
+     */
+    protected function whereTime(Builder $query, $where)
+    {
+        $value = $this->parameter($where['value']);
+
+        return $this->wrap($where['column']).'::time '.$where['operator'].' '.$value;
     }
 
     /**
@@ -246,7 +260,6 @@ class PostgresGrammar extends Grammar
      *
      * @param  \Illuminate\Database\Query\Builder  $query
      * @param  string  $table
-     * @param  array  $where
      * @return string
      */
     protected function compileDeleteWithJoins($query, $table)

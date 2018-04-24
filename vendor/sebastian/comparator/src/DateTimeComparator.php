@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Comparator package.
+ * This file is part of sebastian/comparator.
  *
  * (c) Sebastian Bergmann <sebastian@phpunit.de>
  *
@@ -43,13 +43,22 @@ class DateTimeComparator extends ObjectComparator
      */
     public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false, array &$processed = [])
     {
-        $delta = new \DateInterval(sprintf('PT%sS', abs($delta)));
+        /** @var \DateTimeInterface $expected */
+        /** @var \DateTimeInterface $actual */
+        $delta = new \DateInterval(\sprintf('PT%dS', \abs($delta)));
 
-        $expectedLower = clone $expected;
-        $expectedUpper = clone $expected;
+        $actualClone = (clone $actual)
+            ->setTimezone(new \DateTimeZone('UTC'));
 
-        if ($actual < $expectedLower->sub($delta) ||
-            $actual > $expectedUpper->add($delta)) {
+        $expectedLower = (clone $expected)
+            ->setTimezone(new \DateTimeZone('UTC'))
+            ->sub($delta);
+
+        $expectedUpper = (clone $expected)
+            ->setTimezone(new \DateTimeZone('UTC'))
+            ->add($delta);
+
+        if ($actualClone < $expectedLower || $actualClone > $expectedUpper) {
             throw new ComparisonFailure(
                 $expected,
                 $actual,

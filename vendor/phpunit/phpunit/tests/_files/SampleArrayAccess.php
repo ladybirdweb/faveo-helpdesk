@@ -3,7 +3,7 @@
  * Sample class that implements ArrayAccess copied from
  * http://www.php.net/manual/en/class.arrayaccess.php
  * with some minor changes
- * This class required for PHPUnit_Framework_Constraint_ArrayHasKey testing
+ * This class required for \PHPUnit\Framework\Constraint\ArrayHasKey testing
  */
 class SampleArrayAccess implements ArrayAccess
 {
@@ -31,6 +31,6 @@ class SampleArrayAccess implements ArrayAccess
     }
     public function offsetGet($offset)
     {
-        return isset($this->container[$offset]) ? $this->container[$offset] : null;
+        return $this->container[$offset] ?? null;
     }
 }

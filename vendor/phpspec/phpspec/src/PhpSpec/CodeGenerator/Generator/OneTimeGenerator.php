@@ -13,12 +13,12 @@
 
 namespace PhpSpec\CodeGenerator\Generator;
 
-use PhpSpec\Locator\ResourceInterface;
+use PhpSpec\Locator\Resource;
 
-final class OneTimeGenerator implements GeneratorInterface
+final class OneTimeGenerator implements Generator
 {
     /**
-     * @var GeneratorInterface
+     * @var Generator
      */
     private $generator;
 
@@ -28,17 +28,14 @@ final class OneTimeGenerator implements GeneratorInterface
     private $alreadyGenerated = array();
 
     /**
-     * @param GeneratorInterface $generator
+     * @param Generator $generator
      */
-    public function __construct(GeneratorInterface $generator)
+    public function __construct(Generator $generator)
     {
         $this->generator = $generator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supports(ResourceInterface $resource, $generation, array $data)
+    public function supports(Resource $resource, string $generation, array $data) : bool
     {
         return $this->generator->supports($resource, $generation, $data);
     }
@@ -46,10 +43,10 @@ final class OneTimeGenerator implements GeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generate(ResourceInterface $resource, array $data)
+    public function generate(Resource $resource, array $data)
     {
         $classname = $resource->getSrcClassname();
-        if (in_array($classname, $this->alreadyGenerated)) {
+        if (\in_array($classname, $this->alreadyGenerated)) {
             return;
         }
 
@@ -57,10 +54,7 @@ final class OneTimeGenerator implements GeneratorInterface
         $this->alreadyGenerated[] = $classname;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getPriority()
+    public function getPriority() : int
     {
         return $this->generator->getPriority();
     }

@@ -3,12 +3,12 @@ use PHPUnit\Framework\TestCase;
 
 class TemplateMethodsTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         print __METHOD__ . "\n";
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         print __METHOD__ . "\n";
     }
@@ -35,17 +35,17 @@ class TemplateMethodsTest extends TestCase
         print __METHOD__ . "\n";
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         print __METHOD__ . "\n";
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         print __METHOD__ . "\n";
     }
 
-    protected function onNotSuccessfulTest(Exception $t)
+    protected function onNotSuccessfulTest(Throwable $t)
     {
         print __METHOD__ . "\n";
         throw $t;

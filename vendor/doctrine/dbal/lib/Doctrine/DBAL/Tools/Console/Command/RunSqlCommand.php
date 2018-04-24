@@ -24,6 +24,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use function is_numeric;
+use function ob_get_clean;
+use function ob_start;
+use function stripos;
 
 /**
  * Task for executing arbitrary SQL that can come from a file or directly from
@@ -46,10 +50,11 @@ class RunSqlCommand extends Command
         $this
         ->setName('dbal:run-sql')
         ->setDescription('Executes arbitrary SQL directly from the command line.')
-        ->setDefinition(array(
+        ->setDefinition([
             new InputArgument('sql', InputArgument::REQUIRED, 'The SQL statement to execute.'),
-            new InputOption('depth', null, InputOption::VALUE_REQUIRED, 'Dumping depth of result set.', 7)
-        ))
+            new InputOption('depth', null, InputOption::VALUE_REQUIRED, 'Dumping depth of result set.', 7),
+            new InputOption('force-fetch', null, InputOption::VALUE_NONE, 'Forces fetching the result.'),
+        ])
         ->setHelp(<<<EOT
 Executes arbitrary SQL directly from the command line.
 EOT
@@ -73,7 +78,7 @@ EOT
             throw new \LogicException("Option 'depth' must contains an integer value");
         }
 
-        if (stripos($sql, 'select') === 0) {
+        if (stripos($sql, 'select') === 0 || $input->getOption('force-fetch')) {
             $resultSet = $conn->fetchAll($sql);
         } else {
             $resultSet = $conn->executeUpdate($sql);

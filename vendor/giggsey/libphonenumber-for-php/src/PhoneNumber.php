@@ -282,7 +282,7 @@ class PhoneNumber implements \Serializable
     }
 
     /**
-     * Returns the country code of this phone number.
+     * Returns the national number of this phone number.
      *
      * @return string|null The national number, or null if not set.
      */
@@ -597,6 +597,8 @@ class PhoneNumber implements \Serializable
             $this->preferredDomesticCarrierCode
         ) = $data;
 
-        $this->hasNumberOfLeadingZeros = true;
+        if ($this->numberOfLeadingZeros > 1) {
+            $this->hasNumberOfLeadingZeros = true;
+        }
     }
 }

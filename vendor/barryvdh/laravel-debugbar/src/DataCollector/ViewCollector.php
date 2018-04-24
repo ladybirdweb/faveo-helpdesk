@@ -2,9 +2,10 @@
 
 namespace Barryvdh\Debugbar\DataCollector;
 
+use Barryvdh\Debugbar\DataFormatter\SimpleFormatter;
 use DebugBar\Bridge\Twig\TwigCollector;
 use Illuminate\View\View;
-use Symfony\Component\HttpKernel\DataCollector\Util\ValueExporter;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
 
 class ViewCollector extends TwigCollector
 {
@@ -18,10 +19,10 @@ class ViewCollector extends TwigCollector
      */
     public function __construct($collectData = true)
     {
+        $this->setDataFormatter(new SimpleFormatter());
         $this->collect_data = $collectData;
         $this->name = 'views';
         $this->templates = [];
-        $this->exporter = new ValueExporter();
     }
 
     public function getName()
@@ -75,17 +76,23 @@ class ViewCollector extends TwigCollector
         } else {
             $data = [];
             foreach ($view->getData() as $key => $value) {
-                $data[$key] = $this->exporter->exportValue($value);
+                $data[$key] = $this->getDataFormatter()->formatVar($value);
             }
             $params = $data;
         }
 
-        $this->templates[] = [
+        $template = [
             'name' => $path ? sprintf('%s (%s)', $name, $path) : $name,
             'param_count' => count($params),
             'params' => $params,
             'type' => $type,
         ];
+
+        if ( $this->getXdebugLink($path)) {
+            $template['xdebug_link'] = $this->getXdebugLink($path);
+        }
+
+        $this->templates[] = $template;
     }
 
     public function collect()

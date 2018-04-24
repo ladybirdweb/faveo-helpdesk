@@ -10,11 +10,9 @@
 
 namespace PHPUnit\Framework\Constraint;
 
-use PHPUnit\Framework\TestCase;
-
-class CountTest extends TestCase
+class CountTest extends ConstraintTestCase
 {
-    public function testCount()
+    public function testCount(): void
     {
         $countConstraint = new Count(3);
         $this->assertTrue($countConstraint->evaluate([1, 2, 3], '', true));
@@ -32,7 +30,7 @@ class CountTest extends TestCase
         $this->assertTrue($countConstraint->evaluate($ia2, '', true));
     }
 
-    public function testCountDoesNotChangeIteratorKey()
+    public function testCountDoesNotChangeIteratorKey(): void
     {
         $countConstraint = new Count(2);
 
@@ -99,7 +97,7 @@ class CountTest extends TestCase
         $this->assertFalse($it->valid());
     }
 
-    public function testCountGeneratorsDoNotRewind()
+    public function testCountGeneratorsDoNotRewind(): void
     {
         $generatorMaker = new \TestGeneratorMaker;
 
@@ -131,7 +129,7 @@ class CountTest extends TestCase
         $this->assertEquals(null, $generator->current());
     }
 
-    public function testCountTraversable()
+    public function testCountTraversable(): void
     {
         $countConstraint = new Count(5);
 

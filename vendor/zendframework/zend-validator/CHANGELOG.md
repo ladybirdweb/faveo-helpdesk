@@ -2,6 +2,47 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.10.2 - 2018-02-01
+
+### Added
+
+- [#202](https://github.com/zendframework/zend-validator/pull/202) adds the
+  ability to use custom constant types in extensions of
+  `Zend\Validator\CreditCard`, fixing an issue where users were unable to add
+  new brands as they are created.
+
+- [#203](https://github.com/zendframework/zend-validator/pull/203) adds support
+  for the new Russian bank card "Mir".
+
+- [#204](https://github.com/zendframework/zend-validator/pull/204) adds support
+  to the IBAN validator for performing SEPA validation against Croatia and San
+  Marino.
+
+- [#209](https://github.com/zendframework/zend-validator/pull/209) adds
+  documentation for the `Explode` validator.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#195](https://github.com/zendframework/zend-validator/pull/195) adds
+  missing `GpsPoint` validator entries to the `ValidatorPluginManager`, ensuring
+  they may be retrieved from it correctly.
+
+- [#212](https://github.com/zendframework/zend-validator/pull/212) updates the
+  `CSRF` validator to automatically mark any non-string values as invalid,
+  preventing errors such as array to string conversion.
+
 ## 2.10.1 - 2017-08-22
 
 ### Added

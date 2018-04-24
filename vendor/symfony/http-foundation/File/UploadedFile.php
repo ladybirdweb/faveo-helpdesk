@@ -24,41 +24,10 @@ use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
  */
 class UploadedFile extends File
 {
-    /**
-     * Whether the test mode is activated.
-     *
-     * Local files are used in test mode hence the code should not enforce HTTP uploads.
-     *
-     * @var bool
-     */
     private $test = false;
-
-    /**
-     * The original name of the uploaded file.
-     *
-     * @var string
-     */
     private $originalName;
-
-    /**
-     * The mime type provided by the uploader.
-     *
-     * @var string
-     */
     private $mimeType;
-
-    /**
-     * The file size provided by the uploader.
-     *
-     * @var int|null
-     */
     private $size;
-
-    /**
-     * The UPLOAD_ERR_XXX constant provided by the uploader.
-     *
-     * @var int
-     */
     private $error;
 
     /**
@@ -76,22 +45,23 @@ class UploadedFile extends File
      * Calling any other method on an non-valid instance will cause an unpredictable result.
      *
      * @param string      $path         The full temporary path to the file
-     * @param string      $originalName The original file name
+     * @param string      $originalName The original file name of the uploaded file
      * @param string|null $mimeType     The type of the file as provided by PHP; null defaults to application/octet-stream
-     * @param int|null    $size         The file size
+     * @param int|null    $size         The file size provided by the uploader
      * @param int|null    $error        The error constant of the upload (one of PHP's UPLOAD_ERR_XXX constants); null defaults to UPLOAD_ERR_OK
      * @param bool        $test         Whether the test mode is active
+     *                                  Local files are used in test mode hence the code should not enforce HTTP uploads
      *
      * @throws FileException         If file_uploads is disabled
      * @throws FileNotFoundException If the file does not exist
      */
-    public function __construct($path, $originalName, $mimeType = null, $size = null, $error = null, $test = false)
+    public function __construct(string $path, string $originalName, string $mimeType = null, int $size = null, int $error = null, bool $test = false)
     {
         $this->originalName = $this->getName($originalName);
         $this->mimeType = $mimeType ?: 'application/octet-stream';
         $this->size = $size;
         $this->error = $error ?: UPLOAD_ERR_OK;
-        $this->test = (bool) $test;
+        $this->test = $test;
 
         parent::__construct($path, UPLOAD_ERR_OK === $this->error);
     }
@@ -198,7 +168,7 @@ class UploadedFile extends File
      */
     public function isValid()
     {
-        $isOk = $this->error === UPLOAD_ERR_OK;
+        $isOk = UPLOAD_ERR_OK === $this->error;
 
         return $this->test ? $isOk : $isOk && is_uploaded_file($this->getPathname());
     }
@@ -259,8 +229,11 @@ class UploadedFile extends File
 
         switch (substr($iniMax, -1)) {
             case 't': $max *= 1024;
+            // no break
             case 'g': $max *= 1024;
+            // no break
             case 'm': $max *= 1024;
+            // no break
             case 'k': $max *= 1024;
         }
 
@@ -285,7 +258,7 @@ class UploadedFile extends File
         );
 
         $errorCode = $this->error;
-        $maxFilesize = $errorCode === UPLOAD_ERR_INI_SIZE ? self::getMaxFilesize() / 1024 : 0;
+        $maxFilesize = UPLOAD_ERR_INI_SIZE === $errorCode ? self::getMaxFilesize() / 1024 : 0;
         $message = isset($errors[$errorCode]) ? $errors[$errorCode] : 'The file "%s" was not uploaded due to an unknown error.';
 
         return sprintf($message, $this->getClientOriginalName(), $maxFilesize);

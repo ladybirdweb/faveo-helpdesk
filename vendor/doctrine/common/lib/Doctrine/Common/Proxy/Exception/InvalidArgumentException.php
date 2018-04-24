@@ -89,4 +89,34 @@ class InvalidArgumentException extends BaseInvalidArgumentException implements P
 
         return new self(sprintf('Invalid \$notFoundCallback given: must be a callable, "%s" given', $type));
     }
+
+    /**
+     * @param string $className
+     *
+     * @return self
+     */
+    public static function classMustNotBeAbstract($className)
+    {
+        return new self(sprintf('Unable to create a proxy for an abstract class "%s".', $className));
+    }
+
+    /**
+     * @param string $className
+     *
+     * @return self
+     */
+    public static function classMustNotBeFinal($className)
+    {
+        return new self(sprintf('Unable to create a proxy for a final class "%s".', $className));
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return self
+     */
+    public static function invalidAutoGenerateMode($value): self
+    {
+        return new self(sprintf('Invalid auto generate mode "%s" given.', $value));
+    }
 }

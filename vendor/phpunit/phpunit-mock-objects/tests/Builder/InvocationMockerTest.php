@@ -10,7 +10,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class Framework_MockObject_Builder_InvocationMockerTest extends TestCase
+class InvocationMockerTest extends TestCase
 {
     public function testWillReturnWithOneValue()
     {
@@ -65,7 +65,7 @@ class Framework_MockObject_Builder_InvocationMockerTest extends TestCase
              ->method('foo')
              ->willReturnReference($value);
 
-        $this->assertSame(null, $mock->foo());
+        $this->assertNull($mock->foo());
         $value = 'foo';
         $this->assertSame('foo', $mock->foo());
         $value = 'bar';

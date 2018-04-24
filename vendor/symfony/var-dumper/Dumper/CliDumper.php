@@ -12,6 +12,7 @@
 namespace Symfony\Component\VarDumper\Dumper;
 
 use Symfony\Component\VarDumper\Cloner\Cursor;
+use Symfony\Component\VarDumper\Cloner\Stub;
 
 /**
  * CliDumper dumps variables for command line output.
@@ -51,10 +52,13 @@ class CliDumper extends AbstractDumper
         "\033" => '\e',
     );
 
+    protected $collapseNextHash = false;
+    protected $expandNextHash = false;
+
     /**
      * {@inheritdoc}
      */
-    public function __construct($output = null, $charset = null, $flags = 0)
+    public function __construct($output = null, string $charset = null, int $flags = 0)
     {
         parent::__construct($output, $charset, $flags);
 
@@ -253,6 +257,11 @@ class CliDumper extends AbstractDumper
     {
         $this->dumpKey($cursor);
 
+        if ($this->collapseNextHash) {
+            $cursor->skipChildren = true;
+            $this->collapseNextHash = $hasChild = false;
+        }
+
         $class = $this->utf8Encode($class);
         if (Cursor::HASH_OBJECT === $type) {
             $prefix = $class && 'stdClass' !== $class ? $this->style('note', $class).' {' : '{';
@@ -328,6 +337,7 @@ class CliDumper extends AbstractDumper
                         break;
                     }
                     $style = 'index';
+                    // no break
                 case Cursor::HASH_ASSOC:
                     if (is_int($key)) {
                         $this->line .= $this->style($style, $key).' => ';
@@ -338,7 +348,7 @@ class CliDumper extends AbstractDumper
 
                 case Cursor::HASH_RESOURCE:
                     $key = "\0~\0".$key;
-                    // No break;
+                    // no break
                 case Cursor::HASH_OBJECT:
                     if (!isset($key[0]) || "\0" !== $key[0]) {
                         $this->line .= '+'.$bin.$this->style('public', $key).': ';
@@ -368,7 +378,15 @@ class CliDumper extends AbstractDumper
                                 break;
                         }
 
-                        $this->line .= $bin.$this->style($style, $key[1], $attr).': ';
+                        if (isset($attr['collapse'])) {
+                            if ($attr['collapse']) {
+                                $this->collapseNextHash = true;
+                            } else {
+                                $this->expandNextHash = true;
+                            }
+                        }
+
+                        $this->line .= $bin.$this->style($style, $key[1], $attr).(isset($attr['separator']) ? $attr['separator'] : ': ');
                     } else {
                         // This case should not happen
                         $this->line .= '-'.$bin.'"'.$this->style('private', $key, array('class' => '')).'": ';
@@ -395,6 +413,21 @@ class CliDumper extends AbstractDumper
     {
         if (null === $this->colors) {
             $this->colors = $this->supportsColors();
+        }
+
+        if (isset($attr['ellipsis'], $attr['ellipsis-type'])) {
+            $prefix = substr($value, 0, -$attr['ellipsis']);
+            if ('cli' === PHP_SAPI && 'path' === $attr['ellipsis-type'] && isset($_SERVER[$pwd = '\\' === DIRECTORY_SEPARATOR ? 'CD' : 'PWD']) && 0 === strpos($prefix, $_SERVER[$pwd])) {
+                $prefix = '.'.substr($prefix, strlen($_SERVER[$pwd]));
+            }
+            if (!empty($attr['ellipsis-tail'])) {
+                $prefix .= substr($value, -$attr['ellipsis'], $attr['ellipsis-tail']);
+                $value = substr($value, -$attr['ellipsis'] + $attr['ellipsis-tail']);
+            } else {
+                $value = substr($value, -$attr['ellipsis']);
+            }
+
+            return $this->style('default', $prefix).$this->style($style, $value);
         }
 
         $style = $this->styles[$style];
@@ -464,7 +497,8 @@ class CliDumper extends AbstractDumper
 
         if ('\\' === DIRECTORY_SEPARATOR) {
             static::$defaultColors = @(
-                '10.0.10586' === PHP_WINDOWS_VERSION_MAJOR.'.'.PHP_WINDOWS_VERSION_MINOR.'.'.PHP_WINDOWS_VERSION_BUILD
+                function_exists('sapi_windows_vt100_support') && sapi_windows_vt100_support($this->outputStream)
+                || '10.0.10586' === PHP_WINDOWS_VERSION_MAJOR.'.'.PHP_WINDOWS_VERSION_MINOR.'.'.PHP_WINDOWS_VERSION_BUILD
                 || false !== getenv('ANSICON')
                 || 'ON' === getenv('ConEmuANSI')
                 || 'xterm' === getenv('TERM')
@@ -493,10 +527,12 @@ class CliDumper extends AbstractDumper
 
     protected function endValue(Cursor $cursor)
     {
-        if (self::DUMP_TRAILING_COMMA & $this->flags && 0 < $cursor->depth) {
-            $this->line .= ',';
-        } elseif (self::DUMP_COMMA_SEPARATOR & $this->flags && 1 < $cursor->hashLength - $cursor->hashIndex) {
-            $this->line .= ',';
+        if (Stub::ARRAY_INDEXED === $cursor->hashType || Stub::ARRAY_ASSOC === $cursor->hashType) {
+            if (self::DUMP_TRAILING_COMMA & $this->flags && 0 < $cursor->depth) {
+                $this->line .= ',';
+            } elseif (self::DUMP_COMMA_SEPARATOR & $this->flags && 1 < $cursor->hashLength - $cursor->hashIndex) {
+                $this->line .= ',';
+            }
         }
 
         $this->dumpLine($cursor->depth, true);

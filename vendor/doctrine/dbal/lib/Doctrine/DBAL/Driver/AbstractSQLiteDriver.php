@@ -23,6 +23,7 @@ use Doctrine\DBAL\Driver;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
 use Doctrine\DBAL\Schema\SqliteSchemaManager;
+use function strpos;
 
 /**
  * Abstract base implementation of the {@link Doctrine\DBAL\Driver} interface for SQLite based drivers.
@@ -40,6 +41,10 @@ abstract class AbstractSQLiteDriver implements Driver, ExceptionConverterDriver
      */
     public function convertException($message, DriverException $exception)
     {
+        if (strpos($exception->getMessage(), 'database is locked') !== false) {
+            return new Exception\LockWaitTimeoutException($message, $exception);
+        }
+
         if (strpos($exception->getMessage(), 'must be unique') !== false ||
             strpos($exception->getMessage(), 'is not unique') !== false ||
             strpos($exception->getMessage(), 'are not unique') !== false ||
@@ -92,7 +97,7 @@ abstract class AbstractSQLiteDriver implements Driver, ExceptionConverterDriver
     {
         $params = $conn->getParams();
 
-        return isset($params['path']) ? $params['path'] : null;
+        return $params['path'] ?? null;
     }
 
     /**

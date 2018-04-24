@@ -316,7 +316,7 @@ abstract class HasOneOrMany extends Relation
      */
     public function update(array $attributes)
     {
-        if ($this->related->usesTimestamps()) {
+        if ($this->related->usesTimestamps() && ! is_null($this->relatedUpdatedAt())) {
             $attributes[$this->relatedUpdatedAt()] = $this->related->freshTimestampString();
         }
 
@@ -396,7 +396,7 @@ abstract class HasOneOrMany extends Relation
      */
     public function getQualifiedParentKeyName()
     {
-        return $this->parent->getTable().'.'.$this->localKey;
+        return $this->parent->qualifyColumn($this->localKey);
     }
 
     /**

@@ -17,6 +17,7 @@ pages:
             - "Db\\RecordExists and Db\\NoRecordExists": validators/db.md
             - Digits: validators/digits.md
             - EmailAddress: validators/email-address.md
+            - Explode: validators/explode.md
             - GreaterThan: validators/greater-than.md
             - Hex: validators/hex.md
             - Hostname: validators/hostname.md

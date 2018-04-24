@@ -1,6 +1,21 @@
 # ramsey/uuid Changelog
 
+## 3.7.3
+
+_Released: 2018-01-19_
+
+  * In rare cases, when using `glob()` to find `/sys/class/net/*/address` files on Linux, `glob()` encountered errors, returning `false` instead of an empty array, causing `array_map()` to emit warnings since its second parameter was not an array; this release gracefully handles cases where `glob()` returns `false` [#203](https://github.com/ramsey/uuid/issues/203)
+  * Fixed an off-by-one error in `DefaultTimeGenerator` and switching to `random_int()` from `mt_rand()` for better random numbers [#206](https://github.com/ramsey/uuid/pull/206)
+
+## 3.7.2
+
+_Released: 2018-01-13_
+
+  * On Linux, first check sysfs to determine node identifier; this provides a reliable way to identify the node on Docker images, etc. [#185](https://github.com/ramsey/uuid/pull/185)
+
 ## 3.7.1
+
+_Released: 2017-09-22_
 
   * Use `random_bytes()` when generating random nodes
   * Set the multicast bit for random nodes, according to RFC 4122, §4.5, [#170](https://github.com/ramsey/uuid/pull/170), [#171](https://github.com/ramsey/uuid/pull/171), [#182](https://github.com/ramsey/uuid/pull/182)

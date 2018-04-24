@@ -9,54 +9,39 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
-use PHPUnit\Util\InvalidArgumentHelper;
-
 /**
  * Constraint that evaluates against a specified closure.
  */
 class Callback extends Constraint
 {
+    /**
+     * @var callable
+     */
     private $callback;
 
-    /**
-     * @param callable $callback
-     *
-     * @throws \PHPUnit\Framework\Exception
-     */
-    public function __construct($callback)
+    public function __construct(callable $callback)
     {
-        if (!\is_callable($callback)) {
-            throw InvalidArgumentHelper::factory(
-                1,
-                'callable'
-            );
-        }
-
         parent::__construct();
 
         $this->callback = $callback;
     }
 
     /**
-     * Evaluates the constraint for parameter $value. Returns true if the
-     * constraint is met, false otherwise.
-     *
-     * @param mixed $other Value or object to evaluate.
-     *
-     * @return bool
+     * Returns a string representation of the constraint.
      */
-    protected function matches($other)
+    public function toString(): string
     {
-        return \call_user_func($this->callback, $other);
+        return 'is accepted by specified callback';
     }
 
     /**
-     * Returns a string representation of the constraint.
+     * Evaluates the constraint for parameter $value. Returns true if the
+     * constraint is met, false otherwise.
      *
-     * @return string
+     * @param mixed $other value or object to evaluate
      */
-    public function toString()
+    protected function matches($other): bool
     {
-        return 'is accepted by specified callback';
+        return \call_user_func($this->callback, $other);
     }
 }

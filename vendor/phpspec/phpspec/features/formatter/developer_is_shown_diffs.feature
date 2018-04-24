@@ -396,7 +396,7 @@ Feature: Developer is shown diffs
       """
             method call:
               - methodTwo("value")
-            on Double\Diffs\DiffExample7\ClassBeingMocked\P14 was not expected, expected calls were:
+            on Double\Diffs\DiffExample7\ClassBeingMocked\P13 was not expected, expected calls were:
               - methodOne(exact("value"))
       """
 
@@ -460,7 +460,7 @@ Feature: Developer is shown diffs
       """
             method call:
               - methodTwo("another value")
-            on Double\Diffs\DiffExample8\ClassBeingMocked\P15 was not expected, expected calls were:
+            on Double\Diffs\DiffExample8\ClassBeingMocked\P14 was not expected, expected calls were:
               - methodTwo(exact("value"))
               - methodOne(exact("another value"))
       """
@@ -563,4 +563,44 @@ Feature: Developer is shown diffs
             +    0 => "Vestibulum vehicula nisl at ex maximus, nec lobortis orci luctus.
             +            Integer euismod in nunc nec lobortis",
                ]
+      """
+
+  Scenario: Integer diff in verbose mode
+    Given the spec file "spec/Diffs/DiffExample11/CalculatorSpec.php" contains:
+      """
+      <?php
+
+      namespace spec\Diffs\DiffExample11;
+
+      use PhpSpec\ObjectBehavior;
+      use Prophecy\Argument;
+
+      class CalculatorSpec extends ObjectBehavior
+      {
+          function it_is_equal()
+          {
+              $this->calculate()->shouldReturn(2);
+          }
+      }
+
+      """
+    And the class file "src/Diffs/DiffExample11/Calculator.php" contains:
+      """
+      <?php
+
+      namespace Diffs\DiffExample11;
+
+      class Calculator
+      {
+          public function calculate()
+          {
+              return 1;
+          }
+      }
+
+      """
+    When I run phpspec with the "verbose" option
+    Then I should see:
+      """
+        expected [integer:2], but got [integer:1]
       """

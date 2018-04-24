@@ -16,18 +16,19 @@ use Illuminate\Foundation\Console\AppNameCommand;
 use Illuminate\Foundation\Console\JobMakeCommand;
 use Illuminate\Database\Console\Seeds\SeedCommand;
 use Illuminate\Foundation\Console\MailMakeCommand;
-use Illuminate\Foundation\Console\OptimizeCommand;
 use Illuminate\Foundation\Console\RuleMakeCommand;
 use Illuminate\Foundation\Console\TestMakeCommand;
 use Illuminate\Foundation\Console\EventMakeCommand;
 use Illuminate\Foundation\Console\ModelMakeCommand;
 use Illuminate\Foundation\Console\RouteListCommand;
+use Illuminate\Foundation\Console\ViewCacheCommand;
 use Illuminate\Foundation\Console\ViewClearCommand;
 use Illuminate\Session\Console\SessionTableCommand;
 use Illuminate\Foundation\Console\PolicyMakeCommand;
 use Illuminate\Foundation\Console\RouteCacheCommand;
 use Illuminate\Foundation\Console\RouteClearCommand;
 use Illuminate\Console\Scheduling\ScheduleRunCommand;
+use Illuminate\Foundation\Console\ChannelMakeCommand;
 use Illuminate\Foundation\Console\ConfigCacheCommand;
 use Illuminate\Foundation\Console\ConfigClearCommand;
 use Illuminate\Foundation\Console\ConsoleMakeCommand;
@@ -99,7 +100,6 @@ class ArtisanServiceProvider extends ServiceProvider
         'MigrateReset' => 'command.migrate.reset',
         'MigrateRollback' => 'command.migrate.rollback',
         'MigrateStatus' => 'command.migrate.status',
-        'Optimize' => 'command.optimize',
         'PackageDiscover' => 'command.package.discover',
         'Preset' => 'command.preset',
         'QueueFailed' => 'command.queue.failed',
@@ -117,6 +117,7 @@ class ArtisanServiceProvider extends ServiceProvider
         'ScheduleRun' => ScheduleRunCommand::class,
         'StorageLink' => 'command.storage.link',
         'Up' => 'command.up',
+        'ViewCache' => 'command.view.cache',
         'ViewClear' => 'command.view.clear',
     ];
 
@@ -129,6 +130,7 @@ class ArtisanServiceProvider extends ServiceProvider
         'AppName' => 'command.app.name',
         'AuthMake' => 'command.auth.make',
         'CacheTable' => 'command.cache.table',
+        'ChannelMake' => 'command.channel.make',
         'ConsoleMake' => 'command.console.make',
         'ControllerMake' => 'command.controller.make',
         'EventGenerate' => 'command.event.generate',
@@ -241,6 +243,18 @@ class ArtisanServiceProvider extends ServiceProvider
     {
         $this->app->singleton('command.cache.table', function ($app) {
             return new CacheTableCommand($app['files'], $app['composer']);
+        });
+    }
+
+    /**
+     * Register the command.
+     *
+     * @return void
+     */
+    protected function registerChannelMakeCommand()
+    {
+        $this->app->singleton('command.channel.make', function ($app) {
+            return new ChannelMakeCommand($app['files']);
         });
     }
 
@@ -580,18 +594,6 @@ class ArtisanServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function registerOptimizeCommand()
-    {
-        $this->app->singleton('command.optimize', function ($app) {
-            return new OptimizeCommand($app['composer']);
-        });
-    }
-
-    /**
-     * Register the command.
-     *
-     * @return void
-     */
     protected function registerPackageDiscoverCommand()
     {
         $this->app->singleton('command.package.discover', function ($app) {
@@ -916,6 +918,18 @@ class ArtisanServiceProvider extends ServiceProvider
     {
         $this->app->singleton('command.vendor.publish', function ($app) {
             return new VendorPublishCommand($app['files']);
+        });
+    }
+
+    /**
+     * Register the command.
+     *
+     * @return void
+     */
+    protected function registerViewCacheCommand()
+    {
+        $this->app->singleton('command.view.cache', function ($app) {
+            return new ViewCacheCommand;
         });
     }
 

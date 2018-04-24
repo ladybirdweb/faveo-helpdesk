@@ -1,6 +1,37 @@
 CHANGELOG
 =========
 
+4.0.0
+-----
+
+ * the `Request::setTrustedHeaderName()` and `Request::getTrustedHeaderName()`
+   methods have been removed
+ * the `Request::HEADER_CLIENT_IP` constant has been removed, use
+   `Request::HEADER_X_FORWARDED_FOR` instead
+ * the `Request::HEADER_CLIENT_HOST` constant has been removed, use
+   `Request::HEADER_X_FORWARDED_HOST` instead
+ * the `Request::HEADER_CLIENT_PROTO` constant has been removed, use
+   `Request::HEADER_X_FORWARDED_PROTO` instead
+ * the `Request::HEADER_CLIENT_PORT` constant has been removed, use
+   `Request::HEADER_X_FORWARDED_PORT` instead
+ * checking for cacheable HTTP methods using the `Request::isMethodSafe()`
+   method (by not passing `false` as its argument) is not supported anymore and
+   throws a `\BadMethodCallException`
+ * the `WriteCheckSessionHandler`, `NativeSessionHandler` and `NativeProxy` classes have been removed
+ * setting session save handlers that do not implement `\SessionHandlerInterface` in 
+   `NativeSessionStorage::setSaveHandler()` is not supported anymore and throws a 
+   `\TypeError`
+
+3.4.0
+-----
+
+ * implemented PHP 7.0's `SessionUpdateTimestampHandlerInterface` with a new
+   `AbstractSessionHandler` base class and a new `StrictSessionHandler` wrapper
+ * deprecated the `WriteCheckSessionHandler`, `NativeSessionHandler` and `NativeProxy` classes
+ * deprecated setting session save handlers that do not implement `\SessionHandlerInterface` in `NativeSessionStorage::setSaveHandler()`
+ * deprecated using `MongoDbSessionHandler` with the legacy mongo extension; use it with the mongodb/mongodb package and ext-mongodb instead
+ * deprecated `MemcacheSessionHandler`; use `MemcachedSessionHandler` instead
+
 3.3.0
 -----
 

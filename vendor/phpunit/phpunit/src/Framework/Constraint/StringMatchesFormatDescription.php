@@ -20,31 +20,43 @@ class StringMatchesFormatDescription extends RegularExpression
     /**
      * @var string
      */
-    protected $string;
+    private $string;
 
-    /**
-     * @param string $string
-     */
-    public function __construct($string)
+    public function __construct(string $string)
     {
-        parent::__construct($string);
-
-        $this->pattern = $this->createPatternFromFormat(
-            \preg_replace('/\r\n/', "\n", $string)
+        parent::__construct(
+            $this->createPatternFromFormat(
+                $this->convertNewlines($string)
+            )
         );
 
         $this->string = $string;
     }
 
-    protected function failureDescription($other)
+    /**
+     * Evaluates the constraint for parameter $other. Returns true if the
+     * constraint is met, false otherwise.
+     *
+     * @param mixed $other value or object to evaluate
+     *
+     * @return bool
+     */
+    protected function matches($other): bool
+    {
+        return parent::matches(
+            $this->convertNewlines($other)
+        );
+    }
+
+    protected function failureDescription($other): string
     {
         return 'string matches format description';
     }
 
-    protected function additionalFailureDescription($other)
+    protected function additionalFailureDescription($other): string
     {
-        $from = \preg_split('(\r\n|\r|\n)', $this->string);
-        $to   = \preg_split('(\r\n|\r|\n)', $other);
+        $from = \explode("\n", $this->string);
+        $to   = \explode("\n", $this->convertNewlines($other));
 
         foreach ($from as $index => $line) {
             if (isset($to[$index]) && $line !== $to[$index]) {
@@ -64,24 +76,24 @@ class StringMatchesFormatDescription extends RegularExpression
         return $differ->diff($this->string, $other);
     }
 
-    protected function createPatternFromFormat($string)
+    private function createPatternFromFormat(string $string): string
     {
-        $string = \str_replace(
+        $string = \preg_replace(
             [
-                '%e',
-                '%s',
-                '%S',
-                '%a',
-                '%A',
-                '%w',
-                '%i',
-                '%d',
-                '%x',
-                '%f',
-                '%c'
+                '/(?<!%)%e/',
+                '/(?<!%)%s/',
+                '/(?<!%)%S/',
+                '/(?<!%)%a/',
+                '/(?<!%)%A/',
+                '/(?<!%)%w/',
+                '/(?<!%)%i/',
+                '/(?<!%)%d/',
+                '/(?<!%)%x/',
+                '/(?<!%)%f/',
+                '/(?<!%)%c/'
             ],
             [
-                '\\' . DIRECTORY_SEPARATOR,
+                \str_replace('\\', '\\\\', '\\' . DIRECTORY_SEPARATOR),
                 '[^\r\n]+',
                 '[^\r\n]*',
                 '.+',
@@ -96,6 +108,13 @@ class StringMatchesFormatDescription extends RegularExpression
             \preg_quote($string, '/')
         );
 
+        $string = \str_replace('%%', '%', $string);
+
         return '/^' . $string . '$/s';
+    }
+
+    private function convertNewlines($text): string
+    {
+        return \preg_replace('/\r\n/', "\n", $text);
     }
 }

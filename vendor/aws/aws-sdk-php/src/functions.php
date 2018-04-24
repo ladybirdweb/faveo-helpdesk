@@ -265,11 +265,13 @@ function default_http_handler()
     $version = (string) ClientInterface::VERSION;
     if ($version[0] === '5') {
         return new \Aws\Handler\GuzzleV5\GuzzleHandler();
-    } elseif ($version[0] === '6') {
-        return new \Aws\Handler\GuzzleV6\GuzzleHandler();
-    } else {
-        throw new \RuntimeException('Unknown Guzzle version: ' . $version);
     }
+
+    if ($version[0] === '6') {
+        return new \Aws\Handler\GuzzleV6\GuzzleHandler();
+    }
+
+    throw new \RuntimeException('Unknown Guzzle version: ' . $version);
 }
 
 /**
@@ -341,11 +343,13 @@ function manifest($service = null)
     $service = strtolower($service);
     if (isset($manifest[$service])) {
         return $manifest[$service] + ['endpoint' => $service];
-    } elseif (isset($aliases[$service])) {
-        return manifest($aliases[$service]);
-    } else {
-        throw new \InvalidArgumentException(
-            "The service \"{$service}\" is not provided by the AWS SDK for PHP."
-        );
     }
+
+    if (isset($aliases[$service])) {
+        return manifest($aliases[$service]);
+    }
+
+    throw new \InvalidArgumentException(
+        "The service \"{$service}\" is not provided by the AWS SDK for PHP."
+    );
 }

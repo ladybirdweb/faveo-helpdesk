@@ -31,6 +31,8 @@ class TraceMiddleware
         '/AWS [A-Z0-9]{20}:.+/' => 'AWS AKI[KEY]:[SIGNATURE]',
         // STS Presigned URLs
         '/X-Amz-Security-Token=[^&]+/i' => 'X-Amz-Security-Token=[TOKEN]',
+        // Crypto *Stream Keys
+        '/\["key.{27,36}Stream.{9}\]=>\s+.{7}\d{2}\) "\X{16,64}"/U' => '["key":[CONTENT KEY]]',
     ];
 
     /**
@@ -222,7 +224,9 @@ class TraceMiddleware
     {
         if ($a === $b) {
             return;
-        } elseif (is_array($a)) {
+        }
+
+        if (is_array($a)) {
             $b = (array) $b;
             $keys = array_unique(array_merge(array_keys($a), array_keys($b)));
             foreach ($keys as $k) {
@@ -247,7 +251,9 @@ class TraceMiddleware
     {
         if (is_scalar($value)) {
             return (string) $value;
-        } elseif ($value instanceof \Exception) {
+        }
+
+        if ($value instanceof \Exception) {
             $value = $this->exceptionArray($value);
         }
 

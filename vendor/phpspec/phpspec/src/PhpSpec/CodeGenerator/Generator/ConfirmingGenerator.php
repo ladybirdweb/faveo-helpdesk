@@ -13,10 +13,10 @@
 
 namespace PhpSpec\CodeGenerator\Generator;
 
-use PhpSpec\Console\IO;
-use PhpSpec\Locator\ResourceInterface;
+use PhpSpec\IO\IO;
+use PhpSpec\Locator\Resource;
 
-final class ConfirmingGenerator implements GeneratorInterface
+final class ConfirmingGenerator implements Generator
 {
     /**
      * @var IO
@@ -29,26 +29,18 @@ final class ConfirmingGenerator implements GeneratorInterface
     private $message;
 
     /**
-     * @var GeneratorInterface
+     * @var Generator
      */
     private $generator;
 
-    /**
-     * @param IO                 $io
-     * @param string             $message
-     * @param GeneratorInterface $generator
-     */
-    public function __construct(IO $io, $message, GeneratorInterface $generator)
+    public function __construct(IO $io, string $message, Generator $generator)
     {
         $this->io = $io;
         $this->message = $message;
         $this->generator = $generator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supports(ResourceInterface $resource, $generation, array $data)
+    public function supports(Resource $resource, string $generation, array $data) : bool
     {
         return $this->generator->supports($resource, $generation, $data);
     }
@@ -56,27 +48,19 @@ final class ConfirmingGenerator implements GeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generate(ResourceInterface $resource, array $data)
+    public function generate(Resource $resource, array $data)
     {
         if ($this->io->askConfirmation($this->composeMessage($resource))) {
             $this->generator->generate($resource, $data);
         }
     }
 
-    /**
-     * @param ResourceInterface $resource
-     *
-     * @return string
-     */
-    private function composeMessage(ResourceInterface $resource)
+    private function composeMessage(Resource $resource) : string
     {
         return str_replace('{CLASSNAME}', $resource->getSrcClassname(), $this->message);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getPriority()
+    public function getPriority() : int
     {
         return $this->generator->getPriority();
     }

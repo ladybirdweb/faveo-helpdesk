@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Http;
@@ -35,19 +33,16 @@ class Cookies extends Headers
 {
     /**
      * Return cookie(s) as a Zend\Http\Cookie object
-     *
      */
     const COOKIE_OBJECT = 0;
 
     /**
      * Return cookie(s) as a string (suitable for sending in an HTTP request)
-     *
      */
     const COOKIE_STRING_ARRAY = 1;
 
     /**
      * Return all cookies as one long string (suitable for sending in an HTTP request)
-     *
      */
     const COOKIE_STRING_CONCAT = 2;
 
@@ -66,7 +61,7 @@ class Cookies extends Headers
     /**
      * @var \Zend\Http\Headers
      */
-    protected $headers = null;
+    protected $headers;
 
     /**
      * @var array
@@ -169,7 +164,7 @@ class Cookies extends Headers
         if (is_string($uri)) {
             $uri = Uri\UriFactory::factory($uri, 'http');
         } elseif (! $uri instanceof Uri\Uri) {
-            throw new Exception\InvalidArgumentException("Invalid URI string or object passed");
+            throw new Exception\InvalidArgumentException('Invalid URI string or object passed');
         }
 
         $host = $uri->getHost();
@@ -237,7 +232,10 @@ class Cookies extends Headers
                     return $cookie->__toString();
 
                 default:
-                    throw new Exception\InvalidArgumentException("Invalid value passed for \$retAs: {$retAs}");
+                    throw new Exception\InvalidArgumentException(sprintf(
+                        'Invalid value passed for $retAs: %s',
+                        $retAs
+                    ));
             }
         }
 

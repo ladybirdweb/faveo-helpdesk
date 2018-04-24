@@ -20,6 +20,11 @@
 namespace Doctrine\DBAL\Query\Expression;
 
 use Doctrine\DBAL\Connection;
+use function func_get_arg;
+use function func_get_args;
+use function func_num_args;
+use function implode;
+use function sprintf;
 
 /**
  * ExpressionBuilder class is responsible to dynamically create SQL query parts.
@@ -254,9 +259,10 @@ class ExpressionBuilder
      *
      * @return string
      */
-    public function like($x, $y)
+    public function like($x, $y/*, ?string $escapeChar = null */)
     {
-        return $this->comparison($x, 'LIKE', $y);
+        return $this->comparison($x, 'LIKE', $y) .
+            (func_num_args() >= 3 ? sprintf(' ESCAPE %s', func_get_arg(2)) : '');
     }
 
     /**
@@ -267,9 +273,10 @@ class ExpressionBuilder
      *
      * @return string
      */
-    public function notLike($x, $y)
+    public function notLike($x, $y/*, ?string $escapeChar = null */)
     {
-        return $this->comparison($x, 'NOT LIKE', $y);
+        return $this->comparison($x, 'NOT LIKE', $y) .
+            (func_num_args() >= 3 ? sprintf(' ESCAPE %s', func_get_arg(2)) : '');
     }
 
     /**

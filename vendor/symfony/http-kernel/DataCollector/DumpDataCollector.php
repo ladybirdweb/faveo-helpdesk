@@ -39,7 +39,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
     private $dumper;
     private $dumperIsInjected;
 
-    public function __construct(Stopwatch $stopwatch = null, $fileLinkFormat = null, $charset = null, RequestStack $requestStack = null, DataDumperInterface $dumper = null)
+    public function __construct(Stopwatch $stopwatch = null, $fileLinkFormat = null, string $charset = null, RequestStack $requestStack = null, DataDumperInterface $dumper = null)
     {
         $this->stopwatch = $stopwatch;
         $this->fileLinkFormat = $fileLinkFormat ?: ini_get('xdebug.file_link_format') ?: get_cfg_var('xdebug.file_link_format');
@@ -67,7 +67,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
         if ($this->stopwatch) {
             $this->stopwatch->start('dump');
         }
-        if ($this->isCollected) {
+        if ($this->isCollected && !$this->dumper) {
             $this->isCollected = false;
         }
 
@@ -164,6 +164,18 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
         }
     }
 
+    public function reset()
+    {
+        if ($this->stopwatch) {
+            $this->stopwatch->reset();
+        }
+        $this->data = array();
+        $this->dataCount = 0;
+        $this->isCollected = false;
+        $this->clonesCount = 0;
+        $this->clonesIndex = 0;
+    }
+
     public function serialize()
     {
         if ($this->clonesCount !== $this->clonesIndex) {
@@ -238,7 +250,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
                 --$i;
             }
 
-            if ('cli' !== PHP_SAPI && stripos($h[$i], 'html')) {
+            if (!\in_array(PHP_SAPI, array('cli', 'phpdbg'), true) && stripos($h[$i], 'html')) {
                 $this->dumper = new HtmlDumper('php://output', $this->charset);
                 $this->dumper->setDisplayOptions(array('fileLinkFormat' => $this->fileLinkFormat));
             } else {

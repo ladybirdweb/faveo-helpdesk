@@ -9,9 +9,26 @@
 A PHP library for parsing, formatting, storing and validating international phone numbers. This library is based on Google's [libphonenumber](https://github.com/googlei18n/libphonenumber).
 
 
+
+ - [Installation](#installation)
+ - [Documentation](#documentation)
+ - [Online Demo](#online-demo)
+ - [Highlights of functionality](#highlights-of-functionality)
+   - [Versioning](#versioning)
+   - [Quick Examples](#quick-examples)
+     - [Geocoder](#geocoder)
+     - [ShortNumberInfo](#shortnumberinfo)
+     - [Mapping Phone Numbers to carrier](#mapping-phone-numbers-to-carrier)
+     - [Mapping Phone Numbers to TimeZones](#mapping-phone-numbers-to-timezones)
+ - [FAQ](#faq)
+   - [Problems with Invalid Numbers?](#problems-with-invalid-numbers)
+ - [Generating data](#generating-data)
+ - [Integration with frameworks](#integration-with-frameworks)
+
+
 ## Installation
 
-PHP versions 5.3 up to PHP 7.1 are currently supported. HHVM is also supported.
+PHP versions 5.3 up to PHP 7.2 are currently supported. HHVM is also supported.
 
 The PECL [mbstring](http://php.net/mbstring) extension is required.
 
@@ -140,7 +157,6 @@ echo $geocoder->getDescriptionForNumber($swissNumberProto, "de_DE");
 // Outputs "Zurigo"
 echo $geocoder->getDescriptionForNumber($swissNumberProto, "it_IT");
 
-
 // Outputs "Mountain View, CA"
 echo $geocoder->getDescriptionForNumber($usNumberProto, "en_US");
 
@@ -187,7 +203,6 @@ var_dump($shortNumberInfo->connectsToEmergencyNumber("911123", "US"));
 ### Mapping Phone Numbers to carrier
 
 ```php
-
 $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
 $swissNumberProto = $phoneUtil->parse("798765432", "CH");
 
@@ -199,14 +214,12 @@ echo $carrierMapper->getNameForNumber($swissNumberProto, "en");
 ### Mapping Phone Numbers to TimeZones
 
 ```php
-
 $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
 $swissNumberProto = $phoneUtil->parse("798765432", "CH");
 
 $timeZoneMapper = \libphonenumber\PhoneNumberToTimeZonesMapper::getInstance();
 // returns array("Europe/Zurich")
 $timeZones = $timeZoneMapper->getTimeZonesForNumber($swissNumberProto);
-
 ```
 
 ## FAQ
@@ -235,9 +248,11 @@ This compile process clones the [libphonenumber](https://github.com/googlei18n/l
 
 Other packages exist that integrate libphonenumber-for-php into frameworks.
 
- - Symfony: [PhoneNumberBundle](https://github.com/misd-service-development/phone-number-bundle)
- - Laravel: [Laravel Phone](https://github.com/Propaganistas/Laravel-Phone)
- - Yii2: [PhoneInput](https://github.com/Borales/yii2-phone-input)
- - Kohana: [PhoneNumber](https://github.com/softmediadev/kohana-phonenumber)
+| Framework | Packages      |
+| --------- |:-------------:|
+|Symfony|[PhoneNumberBundle](https://github.com/misd-service-development/phone-number-bundle)|
+|Laravel|[Laravel Phone](https://github.com/Propaganistas/Laravel-Phone)|
+|Yii2|[PhoneInput](https://github.com/Borales/yii2-phone-input)|
+|Kohana|[PhoneNumber](https://github.com/softmediadev/kohana-phonenumber)|
 
 These packages are supplied by third parties, and their quality can not be guaranteed.

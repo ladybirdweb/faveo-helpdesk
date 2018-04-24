@@ -168,9 +168,15 @@ class RouteRegistrar
         }
 
         if (in_array($method, $this->allowedAttributes)) {
+            if ($method == 'middleware') {
+                return $this->attribute($method, is_array($parameters[0]) ? $parameters[0] : $parameters);
+            }
+
             return $this->attribute($method, $parameters[0]);
         }
 
-        throw new BadMethodCallException("Method [{$method}] does not exist.");
+        throw new BadMethodCallException(sprintf(
+            'Method %s::%s does not exist.', static::class, $method
+        ));
     }
 }

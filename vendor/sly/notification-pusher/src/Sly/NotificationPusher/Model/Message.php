@@ -21,7 +21,7 @@ class Message extends BaseOptionedModel implements MessageInterface
     /**
      * @var string
      */
-    private $text;
+    protected $text;
 
     /**
      * Constructor.

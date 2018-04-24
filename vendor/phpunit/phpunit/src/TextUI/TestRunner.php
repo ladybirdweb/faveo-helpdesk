@@ -14,18 +14,23 @@ use PHPUnit\Framework\Error\Deprecated;
 use PHPUnit\Framework\Error\Notice;
 use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\TestSuite;
-use PHPUnit\Framework\TestResult;
-use PHPUnit\Framework\TestListener;
 use PHPUnit\Framework\Test;
+use PHPUnit\Framework\TestListener;
+use PHPUnit\Framework\TestResult;
+use PHPUnit\Framework\TestSuite;
+use PHPUnit\Runner\AfterLastTestHook;
 use PHPUnit\Runner\BaseTestRunner;
-use PHPUnit\Runner\Filter\Factory;
-use PHPUnit\Runner\Version;
-use PHPUnit\Runner\TestSuiteLoader;
-use PHPUnit\Runner\StandardTestSuiteLoader;
-use PHPUnit\Runner\Filter\NameFilterIterator;
+use PHPUnit\Runner\BeforeFirstTestHook;
 use PHPUnit\Runner\Filter\ExcludeGroupFilterIterator;
+use PHPUnit\Runner\Filter\Factory;
 use PHPUnit\Runner\Filter\IncludeGroupFilterIterator;
+use PHPUnit\Runner\Filter\NameFilterIterator;
+use PHPUnit\Runner\Hook;
+use PHPUnit\Runner\StandardTestSuiteLoader;
+use PHPUnit\Runner\TestHook;
+use PHPUnit\Runner\TestListenerAdapter;
+use PHPUnit\Runner\TestSuiteLoader;
+use PHPUnit\Runner\Version;
 use PHPUnit\Util\Configuration;
 use PHPUnit\Util\Log\JUnit;
 use PHPUnit\Util\Log\TeamCity;
@@ -52,9 +57,14 @@ use SebastianBergmann\Environment\Runtime;
  */
 class TestRunner extends BaseTestRunner
 {
-    const SUCCESS_EXIT   = 0;
-    const FAILURE_EXIT   = 1;
-    const EXCEPTION_EXIT = 2;
+    public const SUCCESS_EXIT   = 0;
+    public const FAILURE_EXIT   = 1;
+    public const EXCEPTION_EXIT = 2;
+
+    /**
+     * @var bool
+     */
+    protected static $versionStringPrinted = false;
 
     /**
      * @var CodeCoverageFilter
@@ -72,11 +82,6 @@ class TestRunner extends BaseTestRunner
     protected $printer;
 
     /**
-     * @var bool
-     */
-    protected static $versionStringPrinted = false;
-
-    /**
      * @var Runtime
      */
     private $runtime;
@@ -87,9 +92,39 @@ class TestRunner extends BaseTestRunner
     private $messagePrinted = false;
 
     /**
-     * @param TestSuiteLoader    $loader
-     * @param CodeCoverageFilter $filter
+     * @var Hook[]
      */
+    private $extensions = [];
+
+    /**
+     * @param ReflectionClass|Test $test
+     * @param array                $arguments
+     * @param bool                 $exit
+     *
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
+     * @throws Exception
+     * @throws \ReflectionException
+     */
+    public static function run($test, array $arguments = [], $exit = true): TestResult
+    {
+        if ($test instanceof ReflectionClass) {
+            $test = new TestSuite($test);
+        }
+
+        if ($test instanceof Test) {
+            $aTestRunner = new self;
+
+            return $aTestRunner->doRun(
+                $test,
+                $arguments,
+                $exit
+            );
+        }
+
+        throw new Exception('No test case or test suite found.');
+    }
+
     public function __construct(TestSuiteLoader $loader = null, CodeCoverageFilter $filter = null)
     {
         if ($filter === null) {
@@ -102,85 +137,12 @@ class TestRunner extends BaseTestRunner
     }
 
     /**
-     * @param Test|ReflectionClass $test
-     * @param array                $arguments
-     *
-     * @return TestResult
-     *
      * @throws Exception
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     * @throws \ReflectionException
      */
-    public static function run($test, array $arguments = [])
-    {
-        if ($test instanceof ReflectionClass) {
-            $test = new TestSuite($test);
-        }
-
-        if ($test instanceof Test) {
-            $aTestRunner = new self;
-
-            return $aTestRunner->doRun(
-                $test,
-                $arguments
-            );
-        }
-
-        throw new Exception('No test case or test suite found.');
-    }
-
-    /**
-     * @return TestResult
-     */
-    protected function createTestResult()
-    {
-        return new TestResult;
-    }
-
-    /**
-     * @param TestSuite $suite
-     * @param array     $arguments
-     */
-    private function processSuiteFilters(TestSuite $suite, array $arguments)
-    {
-        if (!$arguments['filter'] &&
-            empty($arguments['groups']) &&
-            empty($arguments['excludeGroups'])) {
-            return;
-        }
-
-        $filterFactory = new Factory;
-
-        if (!empty($arguments['excludeGroups'])) {
-            $filterFactory->addFilter(
-                new ReflectionClass(ExcludeGroupFilterIterator::class),
-                $arguments['excludeGroups']
-            );
-        }
-
-        if (!empty($arguments['groups'])) {
-            $filterFactory->addFilter(
-                new ReflectionClass(IncludeGroupFilterIterator::class),
-                $arguments['groups']
-            );
-        }
-
-        if ($arguments['filter']) {
-            $filterFactory->addFilter(
-                new ReflectionClass(NameFilterIterator::class),
-                $arguments['filter']
-            );
-        }
-
-        $suite->injectFilter($filterFactory);
-    }
-
-    /**
-     * @param Test  $suite
-     * @param array $arguments
-     * @param bool  $exit
-     *
-     * @return TestResult
-     */
-    public function doRun(Test $suite, array $arguments = [], $exit = true)
+    public function doRun(Test $suite, array $arguments = [], bool $exit = true): TestResult
     {
         if (isset($arguments['configuration'])) {
             $GLOBALS['__PHPUNIT_CONFIGURATION_FILE'] = $arguments['configuration'];
@@ -203,7 +165,7 @@ class TestRunner extends BaseTestRunner
         }
 
         if ($arguments['beStrictAboutChangesToGlobalState'] === true) {
-            $suite->setbeStrictAboutChangesToGlobalState(true);
+            $suite->setBeStrictAboutChangesToGlobalState(true);
         }
 
         if (\is_int($arguments['repeat']) && $arguments['repeat'] > 0) {
@@ -218,6 +180,23 @@ class TestRunner extends BaseTestRunner
         }
 
         $result = $this->createTestResult();
+
+        $listener       = new TestListenerAdapter;
+        $listenerNeeded = false;
+
+        foreach ($this->extensions as $extension) {
+            if ($extension instanceof TestHook) {
+                $listener->add($extension);
+
+                $listenerNeeded = true;
+            }
+        }
+
+        if ($listenerNeeded) {
+            $result->addListener($listener);
+        }
+
+        unset($listener, $listenerNeeded);
 
         if (!$arguments['convertErrorsToExceptions']) {
             $result->convertErrorsToExceptions(false);
@@ -454,20 +433,23 @@ class TestRunner extends BaseTestRunner
                 $codeCoverage->setDisableIgnoredLines(true);
             }
 
+            $whitelistFromConfigurationFile = false;
+            $whitelistFromOption            = false;
+
             if (isset($arguments['whitelist'])) {
                 $this->codeCoverageFilter->addDirectoryToWhitelist($arguments['whitelist']);
+
+                $whitelistFromOption = true;
             }
 
             if (isset($arguments['configuration'])) {
                 $filterConfiguration = $arguments['configuration']->getFilterConfiguration();
 
-                if (empty($filterConfiguration['whitelist'])) {
-                    $this->writeMessage('Error', 'No whitelist is configured, no code coverage will be generated.');
+                if (!empty($filterConfiguration['whitelist'])) {
+                    $whitelistFromConfigurationFile = true;
+                }
 
-                    $codeCoverageReports = 0;
-
-                    unset($codeCoverage);
-                } else {
+                if (!empty($filterConfiguration['whitelist'])) {
                     $codeCoverage->setAddUncoveredFilesFromWhitelist(
                         $filterConfiguration['whitelist']['addUncoveredFilesFromWhitelist']
                     );
@@ -503,7 +485,11 @@ class TestRunner extends BaseTestRunner
             }
 
             if (isset($codeCoverage) && !$this->codeCoverageFilter->hasWhitelist()) {
-                $this->writeMessage('Error', 'Incorrect whitelist config, no code coverage will be generated.');
+                if (!$whitelistFromConfigurationFile && !$whitelistFromOption) {
+                    $this->writeMessage('Error', 'No whitelist is configured, no code coverage will be generated.');
+                } else {
+                    $this->writeMessage('Error', 'Incorrect whitelist config, no code coverage will be generated.');
+                }
 
                 $codeCoverageReports = 0;
 
@@ -534,9 +520,20 @@ class TestRunner extends BaseTestRunner
             $suite->setRunTestInSeparateProcess($arguments['processIsolation']);
         }
 
+        foreach ($this->extensions as $extension) {
+            if ($extension instanceof BeforeFirstTestHook) {
+                $extension->executeBeforeFirstTest();
+            }
+        }
+
         $suite->run($result);
 
-        unset($suite);
+        foreach ($this->extensions as $extension) {
+            if ($extension instanceof AfterLastTestHook) {
+                $extension->executeAfterLastTest();
+            }
+        }
+
         $result->flushListeners();
 
         if ($this->printer instanceof ResultPrinter) {
@@ -689,30 +686,40 @@ class TestRunner extends BaseTestRunner
         return $result;
     }
 
-    /**
-     * @param ResultPrinter $resultPrinter
-     */
-    public function setPrinter(ResultPrinter $resultPrinter)
+    public function setPrinter(ResultPrinter $resultPrinter): void
     {
         $this->printer = $resultPrinter;
     }
 
     /**
-     * Override to define how to handle a failed loading of
-     * a test suite.
-     *
-     * @param string $message
+     * Returns the loader to be used.
      */
-    protected function runFailed($message)
+    public function getLoader(): TestSuiteLoader
     {
-        $this->write($message . PHP_EOL);
-        exit(self::FAILURE_EXIT);
+        if ($this->loader === null) {
+            $this->loader = new StandardTestSuiteLoader;
+        }
+
+        return $this->loader;
+    }
+
+    protected function createTestResult(): TestResult
+    {
+        return new TestResult;
     }
 
     /**
-     * @param string $buffer
+     * Override to define how to handle a failed loading of
+     * a test suite.
      */
-    protected function write($buffer)
+    protected function runFailed(string $message): void
+    {
+        $this->write($message . PHP_EOL);
+
+        exit(self::FAILURE_EXIT);
+    }
+
+    protected function write(string $buffer): void
     {
         if (PHP_SAPI != 'cli' && PHP_SAPI != 'phpdbg') {
             $buffer = \htmlspecialchars($buffer);
@@ -726,23 +733,9 @@ class TestRunner extends BaseTestRunner
     }
 
     /**
-     * Returns the loader to be used.
-     *
-     * @return TestSuiteLoader
+     * @throws Exception
      */
-    public function getLoader()
-    {
-        if ($this->loader === null) {
-            $this->loader = new StandardTestSuiteLoader;
-        }
-
-        return $this->loader;
-    }
-
-    /**
-     * @param array $arguments
-     */
-    protected function handleConfiguration(array &$arguments)
+    protected function handleConfiguration(array &$arguments): void
     {
         if (isset($arguments['configuration']) &&
             !$arguments['configuration'] instanceof Configuration) {
@@ -910,6 +903,34 @@ class TestRunner extends BaseTestRunner
 
             if (!empty($groupConfiguration['exclude']) && !isset($arguments['excludeGroups'])) {
                 $arguments['excludeGroups'] = \array_diff($groupConfiguration['exclude'], $groupCliArgs);
+            }
+
+            foreach ($arguments['configuration']->getExtensionConfiguration() as $extension) {
+                if (!\class_exists($extension['class'], false) && $extension['file'] !== '') {
+                    require_once $extension['file'];
+                }
+
+                if (!\class_exists($extension['class'])) {
+                    throw new Exception(
+                        \sprintf(
+                            'Class "%s" does not exist',
+                            $extension['class']
+                        )
+                    );
+                }
+
+                $extensionClass = new ReflectionClass($extension['class']);
+
+                if (!$extensionClass->implementsInterface(Hook::class)) {
+                    throw new Exception(
+                        \sprintf(
+                            'Class "%s" does not implement a PHPUnit\Runner\Hook interface',
+                            $extension['class']
+                        )
+                    );
+                }
+
+                $this->extensions[] = $extensionClass->newInstance();
             }
 
             foreach ($arguments['configuration']->getListenerConfiguration() as $listener) {
@@ -1083,10 +1104,44 @@ class TestRunner extends BaseTestRunner
     }
 
     /**
-     * @param string $type
-     * @param string $message
+     * @throws \ReflectionException
+     * @throws \InvalidArgumentException
      */
-    private function writeMessage($type, $message)
+    private function processSuiteFilters(TestSuite $suite, array $arguments): void
+    {
+        if (!$arguments['filter'] &&
+            empty($arguments['groups']) &&
+            empty($arguments['excludeGroups'])) {
+            return;
+        }
+
+        $filterFactory = new Factory;
+
+        if (!empty($arguments['excludeGroups'])) {
+            $filterFactory->addFilter(
+                new ReflectionClass(ExcludeGroupFilterIterator::class),
+                $arguments['excludeGroups']
+            );
+        }
+
+        if (!empty($arguments['groups'])) {
+            $filterFactory->addFilter(
+                new ReflectionClass(IncludeGroupFilterIterator::class),
+                $arguments['groups']
+            );
+        }
+
+        if ($arguments['filter']) {
+            $filterFactory->addFilter(
+                new ReflectionClass(NameFilterIterator::class),
+                $arguments['filter']
+            );
+        }
+
+        $suite->injectFilter($filterFactory);
+    }
+
+    private function writeMessage(string $type, string $message): void
     {
         if (!$this->messagePrinted) {
             $this->write("\n");

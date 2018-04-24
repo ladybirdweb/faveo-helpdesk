@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Http\PhpEnvironment;
@@ -47,14 +45,14 @@ class Request extends HttpRequest
      *
      * @var ParametersInterface
      */
-    protected $serverParams = null;
+    protected $serverParams;
 
     /**
      * PHP environment params ($_ENV)
      *
      * @var ParametersInterface
      */
-    protected $envParams = null;
+    protected $envParams;
 
     /**
      * Construct
@@ -484,7 +482,6 @@ class Request extends HttpRequest
      *
      * Uses a variety of criteria in order to detect the base URL of the request
      * (i.e., anything additional to the document root).
-     *
      *
      * @return string
      */

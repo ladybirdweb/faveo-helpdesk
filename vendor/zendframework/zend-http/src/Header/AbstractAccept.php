@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Http\Header;
@@ -39,7 +37,6 @@ use stdClass;
 abstract class AbstractAccept implements HeaderInterface
 {
     /**
-     *
      * @var stdClass[]
      */
     protected $fieldValueParts = [];
@@ -139,14 +136,14 @@ abstract class AbstractAccept implements HeaderInterface
         $subtype = '*';
 
         return (object) [
-                            'typeString' => trim($fieldValuePart),
-                            'type'       => $type,
-                            'subtype'    => $subtype,
-                            'subtypeRaw' => $subtypeWhole,
-                            'format'     => $format,
-                            'priority'   => isset($params['q']) ? $params['q'] : 1,
-                            'params'     => $params,
-                            'raw'        => trim($raw)
+            'typeString' => trim($fieldValuePart),
+            'type'       => $type,
+            'subtype'    => $subtype,
+            'subtypeRaw' => $subtypeWhole,
+            'format'     => $format,
+            'priority'   => isset($params['q']) ? $params['q'] : 1,
+            'params'     => $params,
+            'raw'        => trim($raw),
         ];
     }
 
@@ -219,8 +216,7 @@ abstract class AbstractAccept implements HeaderInterface
      */
     protected function assembleAcceptParam(&$value, $key)
     {
-        $separators = ['(', ')', '<', '>', '@', ',', ';', ':',
-                            '/', '[', ']', '?', '=', '{', '}',  ' ',  "\t"];
+        $separators = ['(', ')', '<', '>', '@', ',', ';', ':', '/', '[', ']', '?', '=', '{', '}', ' ', "\t"];
 
         $escaped = preg_replace_callback(
             '/[[:cntrl:]"\\\\]/', // escape cntrl, ", \
@@ -315,8 +311,8 @@ abstract class AbstractAccept implements HeaderInterface
                 }
 
                 if ($left->type == $right->type) {
-                    if (($left->subtype == $right->subtype || ($right->subtype == '*' || $left->subtype == '*')) &&
-                        ($left->format == $right->format || $right->format == '*' || $left->format == '*')
+                    if (($left->subtype == $right->subtype || ($right->subtype == '*' || $left->subtype == '*'))
+                        && ($left->format == $right->format || $right->format == '*' || $left->format == '*')
                     ) {
                         if ($this->matchAcceptParams($left, $right)) {
                             $left->setMatchedAgainst($right);
@@ -349,10 +345,9 @@ abstract class AbstractAccept implements HeaderInterface
                         $pieces
                     );
 
-                    if (count($pieces) == 3 &&
-                        (version_compare($pieces[1], $match1->params[$key], '<=')  xor
-                         version_compare($pieces[2], $match1->params[$key], '>=')
-                        )
+                    if (count($pieces) == 3
+                        && (version_compare($pieces[1], $match1->params[$key], '<=')
+                            xor version_compare($pieces[2], $match1->params[$key], '>='))
                     ) {
                         return false;
                     }
@@ -412,7 +407,7 @@ abstract class AbstractAccept implements HeaderInterface
     protected function sortFieldValueParts()
     {
         $sort = function ($a, $b) {
- // If A has higher precedence than B, return -1.
+            // If A has higher precedence than B, return -1.
             if ($a->priority > $b->priority) {
                 return -1;
             } elseif ($a->priority < $b->priority) {
@@ -435,7 +430,7 @@ abstract class AbstractAccept implements HeaderInterface
                 return 1;
             }
 
-            //@todo count number of dots in case of type==application in subtype
+            // @todo count number of dots in case of type==application in subtype
 
             // So far they're still the same. Longest string length may be more specific
             if (strlen($a->raw) == strlen($b->raw)) {

@@ -12,18 +12,24 @@ namespace PHPUnit\Framework\Constraint;
 class ExceptionMessage extends Constraint
 {
     /**
-     * @var int
+     * @var string
      */
-    protected $expectedMessage;
+    private $expectedMessage;
 
-    /**
-     * @param string $expected
-     */
-    public function __construct($expected)
+    public function __construct(string $expected)
     {
         parent::__construct();
 
         $this->expectedMessage = $expected;
+    }
+
+    public function toString(): string
+    {
+        if ($this->expectedMessage === '') {
+            return 'exception message is empty';
+        }
+
+        return 'exception message contains ';
     }
 
     /**
@@ -31,11 +37,13 @@ class ExceptionMessage extends Constraint
      * constraint is met, false otherwise.
      *
      * @param \Throwable $other
-     *
-     * @return bool
      */
-    protected function matches($other)
+    protected function matches($other): bool
     {
+        if ($this->expectedMessage === '') {
+            return $other->getMessage() === '';
+        }
+
         return \strpos($other->getMessage(), $this->expectedMessage) !== false;
     }
 
@@ -45,24 +53,21 @@ class ExceptionMessage extends Constraint
      * The beginning of failure messages is "Failed asserting that" in most
      * cases. This method should return the second part of that sentence.
      *
-     * @param mixed $other Evaluated value or object.
-     *
-     * @return string
+     * @param mixed $other evaluated value or object
      */
-    protected function failureDescription($other)
+    protected function failureDescription($other): string
     {
+        if ($this->expectedMessage === '') {
+            return \sprintf(
+                "exception message is empty but is '%s'",
+                $other->getMessage()
+            );
+        }
+
         return \sprintf(
             "exception message '%s' contains '%s'",
             $other->getMessage(),
             $this->expectedMessage
         );
-    }
-
-    /**
-     * @return string
-     */
-    public function toString()
-    {
-        return 'exception message contains ';
     }
 }

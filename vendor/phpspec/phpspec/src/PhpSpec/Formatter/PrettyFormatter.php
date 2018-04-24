@@ -17,7 +17,7 @@ use PhpSpec\Event\SuiteEvent;
 use PhpSpec\Event\SpecificationEvent;
 use PhpSpec\Event\ExampleEvent;
 
-class PrettyFormatter extends ConsoleFormatter
+final class PrettyFormatter extends ConsoleFormatter
 {
     public function beforeSpecification(SpecificationEvent $event)
     {
@@ -66,7 +66,7 @@ class PrettyFormatter extends ConsoleFormatter
             'broken' => $this->getStatisticsCollector()->getBrokenEvents(),
             'skipped' => $this->getStatisticsCollector()->getSkippedEvents(),
         ) as $status => $events) {
-            if (!count($events)) {
+            if (!\count($events)) {
                 continue;
             }
 
@@ -91,7 +91,7 @@ class PrettyFormatter extends ConsoleFormatter
         }
 
         $io->write(sprintf("%d examples ", $this->getStatisticsCollector()->getEventsCount()));
-        if (count($counts)) {
+        if (\count($counts)) {
             $io->write(sprintf("(%s)", implode(', ', $counts)));
         }
 

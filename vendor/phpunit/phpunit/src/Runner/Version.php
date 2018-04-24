@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -22,27 +22,22 @@ class Version
 
     /**
      * Returns the current version of PHPUnit.
-     *
-     * @return string
      */
-    public static function id()
+    public static function id(): string
     {
         if (self::$pharVersion !== null) {
             return self::$pharVersion;
         }
 
         if (self::$version === null) {
-            $version       = new VersionId('6.3.1', \dirname(\dirname(__DIR__)));
+            $version       = new VersionId('7.1.2', \dirname(__DIR__, 2));
             self::$version = $version->getVersion();
         }
 
         return self::$version;
     }
 
-    /**
-     * @return string
-     */
-    public static function series()
+    public static function series(): string
     {
         if (\strpos(self::id(), '-')) {
             $version = \explode('-', self::id())[0];
@@ -53,18 +48,12 @@ class Version
         return \implode('.', \array_slice(\explode('.', $version), 0, 2));
     }
 
-    /**
-     * @return string
-     */
-    public static function getVersionString()
+    public static function getVersionString(): string
     {
         return 'PHPUnit ' . self::id() . ' by Sebastian Bergmann and contributors.';
     }
 
-    /**
-     * @return string
-     */
-    public static function getReleaseChannel()
+    public static function getReleaseChannel(): string
     {
         if (\strpos(self::$pharVersion, '-') !== false) {
             return '-nightly';

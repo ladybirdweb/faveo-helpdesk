@@ -3,8 +3,8 @@
 namespace Illuminate\Console;
 
 use Closure;
+use Illuminate\Support\ProcessUtils;
 use Illuminate\Contracts\Events\Dispatcher;
-use Symfony\Component\Process\ProcessUtils;
 use Illuminate\Contracts\Container\Container;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -163,18 +163,22 @@ class Application extends SymfonyApplication implements ApplicationContract
      *
      * @param  string  $command
      * @param  array  $parameters
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $outputBuffer
+     * @param  \Symfony\Component\Console\Output\OutputInterface|null  $outputBuffer
      * @return int
      */
     public function call($command, array $parameters = [], $outputBuffer = null)
     {
-        $parameters = collect($parameters)->prepend($command);
+        if (is_subclass_of($command, SymfonyCommand::class)) {
+            $command = $this->laravel->make($command)->getName();
+        }
+
+        array_unshift($parameters, $command);
 
         $this->lastOutput = $outputBuffer ?: new BufferedOutput;
 
         $this->setCatchExceptions(false);
 
-        $result = $this->run(new ArrayInput($parameters->toArray()), $this->lastOutput);
+        $result = $this->run(new ArrayInput($parameters), $this->lastOutput);
 
         $this->setCatchExceptions(true);
 
@@ -188,7 +192,9 @@ class Application extends SymfonyApplication implements ApplicationContract
      */
     public function output()
     {
-        return $this->lastOutput ? $this->lastOutput->fetch() : '';
+        return $this->lastOutput && method_exists($this->lastOutput, 'fetch')
+                        ? $this->lastOutput->fetch()
+                        : '';
     }
 
     /**

@@ -36,8 +36,8 @@ class XmlFileLoader extends FileLoader
      *
      * @return RouteCollection A RouteCollection instance
      *
-     * @throws \InvalidArgumentException When the file cannot be loaded or when the XML cannot be
-     *                                   parsed because it does not validate against the scheme.
+     * @throws \InvalidArgumentException when the file cannot be loaded or when the XML cannot be
+     *                                   parsed because it does not validate against the scheme
      */
     public function load($file, $type = null)
     {
@@ -146,26 +146,33 @@ class XmlFileLoader extends FileLoader
 
         $this->setCurrentDir(dirname($path));
 
-        $subCollection = $this->import($resource, ('' !== $type ? $type : null), false, $file);
-        /* @var $subCollection RouteCollection */
-        $subCollection->addPrefix($prefix);
-        if (null !== $host) {
-            $subCollection->setHost($host);
-        }
-        if (null !== $condition) {
-            $subCollection->setCondition($condition);
-        }
-        if (null !== $schemes) {
-            $subCollection->setSchemes($schemes);
-        }
-        if (null !== $methods) {
-            $subCollection->setMethods($methods);
-        }
-        $subCollection->addDefaults($defaults);
-        $subCollection->addRequirements($requirements);
-        $subCollection->addOptions($options);
+        $imported = $this->import($resource, ('' !== $type ? $type : null), false, $file);
 
-        $collection->addCollection($subCollection);
+        if (!is_array($imported)) {
+            $imported = array($imported);
+        }
+
+        foreach ($imported as $subCollection) {
+            /* @var $subCollection RouteCollection */
+            $subCollection->addPrefix($prefix);
+            if (null !== $host) {
+                $subCollection->setHost($host);
+            }
+            if (null !== $condition) {
+                $subCollection->setCondition($condition);
+            }
+            if (null !== $schemes) {
+                $subCollection->setSchemes($schemes);
+            }
+            if (null !== $methods) {
+                $subCollection->setMethods($methods);
+            }
+            $subCollection->addDefaults($defaults);
+            $subCollection->addRequirements($requirements);
+            $subCollection->addOptions($options);
+
+            $collection->addCollection($subCollection);
+        }
     }
 
     /**
@@ -227,6 +234,16 @@ class XmlFileLoader extends FileLoader
                 default:
                     throw new \InvalidArgumentException(sprintf('Unknown tag "%s" used in file "%s". Expected "default", "requirement", "option" or "condition".', $n->localName, $path));
             }
+        }
+
+        if ($controller = $node->getAttribute('controller')) {
+            if (isset($defaults['_controller'])) {
+                $name = $node->hasAttribute('id') ? sprintf('"%s"', $node->getAttribute('id')) : sprintf('the "%s" tag', $node->tagName);
+
+                throw new \InvalidArgumentException(sprintf('The routing file "%s" must not specify both the "controller" attribute and the defaults key "_controller" for %s.', $path, $name));
+            }
+
+            $defaults['_controller'] = $controller;
         }
 
         return array($defaults, $requirements, $options, $condition);

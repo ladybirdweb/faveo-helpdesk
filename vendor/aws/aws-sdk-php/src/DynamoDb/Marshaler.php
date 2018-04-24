@@ -259,7 +259,8 @@ class Marshaler
      */
     public function unmarshalValue(array $value, $mapAsObject = false)
     {
-        list($type, $value) = each($value);
+        $type = key($value);
+        $value = $value[$type];
         switch ($type) {
             case 'S':
             case 'BOOL':
@@ -269,10 +270,10 @@ class Marshaler
             case 'N':
                 if ($this->options['wrap_numbers']) {
                     return new NumberValue($value);
-                } else {
-                    // Use type coercion to unmarshal numbers to int/float.
-                    return $value + 0;
                 }
+
+                // Use type coercion to unmarshal numbers to int/float.
+                return $value + 0;
             case 'M':
                 if ($mapAsObject) {
                     $data = new \stdClass;
@@ -312,7 +313,9 @@ class Marshaler
     {
         if ($this->options['ignore_invalid']) {
             return null;
-        } elseif ($this->options['nullify_invalid']) {
+        }
+
+        if ($this->options['nullify_invalid']) {
             return ['NULL' => true];
         }
 

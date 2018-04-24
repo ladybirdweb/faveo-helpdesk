@@ -26,12 +26,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class XliffLintCommand extends Command
 {
+    protected static $defaultName = 'lint:xliff';
+
     private $format;
     private $displayCorrectFiles;
     private $directoryIteratorProvider;
     private $isReadableProvider;
 
-    public function __construct($name = null, $directoryIteratorProvider = null, $isReadableProvider = null)
+    public function __construct(string $name = null, callable $directoryIteratorProvider = null, callable $isReadableProvider = null)
     {
         parent::__construct($name);
 
@@ -45,7 +47,6 @@ class XliffLintCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('lint:xliff')
             ->setDescription('Lints a XLIFF file and outputs encountered errors')
             ->addArgument('filename', null, 'A file or a directory or STDIN')
             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'The output format', 'txt')

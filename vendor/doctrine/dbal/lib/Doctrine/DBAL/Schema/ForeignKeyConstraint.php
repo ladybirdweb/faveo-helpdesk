@@ -20,6 +20,14 @@
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use function array_combine;
+use function array_keys;
+use function array_map;
+use function end;
+use function explode;
+use function in_array;
+use function strtolower;
+use function strtoupper;
 
 /**
  * An abstraction class for a foreign key constraint.
@@ -75,7 +83,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
      * @param string|null  $name               Name of the foreign key constraint.
      * @param array        $options            Options associated with the foreign key constraint.
      */
-    public function __construct(array $localColumnNames, $foreignTableName, array $foreignColumnNames, $name = null, array $options = array())
+    public function __construct(array $localColumnNames, $foreignTableName, array $foreignColumnNames, $name = null, array $options = [])
     {
         $this->_setName($name);
         $identifierConstructorCallback = function ($column) {
@@ -83,7 +91,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
         };
         $this->_localColumnNames = $localColumnNames
             ? array_combine($localColumnNames, array_map($identifierConstructorCallback, $localColumnNames))
-            : array();
+            : [];
 
         if ($foreignTableName instanceof Table) {
             $this->_foreignTableName = $foreignTableName;
@@ -93,7 +101,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
 
         $this->_foreignColumnNames = $foreignColumnNames
             ? array_combine($foreignColumnNames, array_map($identifierConstructorCallback, $foreignColumnNames))
-            : array();
+            : [];
         $this->_options = $options;
     }
 
@@ -154,7 +162,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
      */
     public function getQuotedLocalColumns(AbstractPlatform $platform)
     {
-        $columns = array();
+        $columns = [];
 
         foreach ($this->_localColumnNames as $column) {
             $columns[] = $column->getQuotedName($platform);
@@ -170,7 +178,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
      */
     public function getUnquotedLocalColumns()
     {
-        return array_map(array($this, 'trimQuotes'), $this->getLocalColumns());
+        return array_map([$this, 'trimQuotes'], $this->getLocalColumns());
     }
 
     /**
@@ -180,7 +188,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
      */
     public function getUnquotedForeignColumns()
     {
-        return array_map(array($this, 'trimQuotes'), $this->getForeignColumns());
+        return array_map([$this, 'trimQuotes'], $this->getForeignColumns());
     }
 
     /**
@@ -277,7 +285,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
      */
     public function getQuotedForeignColumns(AbstractPlatform $platform)
     {
-        $columns = array();
+        $columns = [];
 
         foreach ($this->_foreignColumnNames as $column) {
             $columns[] = $column->getQuotedName($platform);
@@ -292,7 +300,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
      *
      * @param string $name Name of the option to check.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasOption($name)
     {
@@ -356,7 +364,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
         if (isset($this->_options[$event])) {
             $onEvent = strtoupper($this->_options[$event]);
 
-            if ( ! in_array($onEvent, array('NO ACTION', 'RESTRICT'))) {
+            if ( ! in_array($onEvent, ['NO ACTION', 'RESTRICT'])) {
                 return $onEvent;
             }
         }
@@ -372,7 +380,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
      *
      * @param Index $index The index to be checked against.
      *
-     * @return boolean
+     * @return bool
      */
     public function intersectsIndexColumns(Index $index)
     {

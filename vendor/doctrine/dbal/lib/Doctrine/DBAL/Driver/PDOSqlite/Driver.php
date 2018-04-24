@@ -23,6 +23,7 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\AbstractSQLiteDriver;
 use Doctrine\DBAL\Driver\PDOConnection;
 use PDOException;
+use function array_merge;
 
 /**
  * The PDO Sqlite driver.
@@ -34,16 +35,16 @@ class Driver extends AbstractSQLiteDriver
     /**
      * @var array
      */
-    protected $_userDefinedFunctions = array(
-        'sqrt' => array('callback' => array('Doctrine\DBAL\Platforms\SqlitePlatform', 'udfSqrt'), 'numArgs' => 1),
-        'mod'  => array('callback' => array('Doctrine\DBAL\Platforms\SqlitePlatform', 'udfMod'), 'numArgs' => 2),
-        'locate'  => array('callback' => array('Doctrine\DBAL\Platforms\SqlitePlatform', 'udfLocate'), 'numArgs' => -1),
-    );
+    protected $_userDefinedFunctions = [
+        'sqrt' => ['callback' => ['Doctrine\DBAL\Platforms\SqlitePlatform', 'udfSqrt'], 'numArgs' => 1],
+        'mod'  => ['callback' => ['Doctrine\DBAL\Platforms\SqlitePlatform', 'udfMod'], 'numArgs' => 2],
+        'locate'  => ['callback' => ['Doctrine\DBAL\Platforms\SqlitePlatform', 'udfLocate'], 'numArgs' => -1],
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function connect(array $params, $username = null, $password = null, array $driverOptions = array())
+    public function connect(array $params, $username = null, $password = null, array $driverOptions = [])
     {
         if (isset($driverOptions['userDefinedFunctions'])) {
             $this->_userDefinedFunctions = array_merge(

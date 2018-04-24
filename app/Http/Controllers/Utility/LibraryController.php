@@ -15,9 +15,9 @@ class LibraryController extends Controller
             $app = Config::get('app.version');
             if ($app) {
                 return preg_replace('/[^0-9,.]/', '', $app);
-            } else {
-                return 0;
             }
+
+            return 0;
         } catch (Exception $ex) {
             return 0;
         }
@@ -33,9 +33,9 @@ class LibraryController extends Controller
                 } else {
                     return 0;
                 }
-            } else {
-                return 0;
             }
+
+            return 0;
         } catch (Exception $ex) {
             return 0;
         }
@@ -92,7 +92,7 @@ class LibraryController extends Controller
                 return $plaintext;
             }
         } catch (Exception $ex) {
-            dd($ex);
+            //dd($ex);
         }
     }
 

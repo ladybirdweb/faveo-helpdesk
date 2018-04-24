@@ -104,10 +104,13 @@ abstract class AbstractCloner implements ClonerInterface
         'SplPriorityQueue' => array('Symfony\Component\VarDumper\Caster\SplCaster', 'castHeap'),
         'OuterIterator' => array('Symfony\Component\VarDumper\Caster\SplCaster', 'castOuterIterator'),
 
-        'MongoCursorInterface' => array('Symfony\Component\VarDumper\Caster\MongoCaster', 'castCursor'),
-
         'Redis' => array('Symfony\Component\VarDumper\Caster\RedisCaster', 'castRedis'),
         'RedisArray' => array('Symfony\Component\VarDumper\Caster\RedisCaster', 'castRedisArray'),
+
+        'DateTimeInterface' => array('Symfony\Component\VarDumper\Caster\DateCaster', 'castDateTime'),
+        'DateInterval' => array('Symfony\Component\VarDumper\Caster\DateCaster', 'castInterval'),
+        'DateTimeZone' => array('Symfony\Component\VarDumper\Caster\DateCaster', 'castTimeZone'),
+        'DatePeriod' => array('Symfony\Component\VarDumper\Caster\DateCaster', 'castPeriod'),
 
         ':curl' => array('Symfony\Component\VarDumper\Caster\ResourceCaster', 'castCurl'),
         ':dba' => array('Symfony\Component\VarDumper\Caster\ResourceCaster', 'castDba'),
@@ -127,7 +130,7 @@ abstract class AbstractCloner implements ClonerInterface
 
     protected $maxItems = 2500;
     protected $maxString = -1;
-    protected $useExt;
+    protected $minDepth = 1;
 
     private $casters = array();
     private $prevErrorHandler;
@@ -145,7 +148,6 @@ abstract class AbstractCloner implements ClonerInterface
             $casters = static::$defaultCasters;
         }
         $this->addCasters($casters);
-        $this->useExt = extension_loaded('symfony_debug');
     }
 
     /**
@@ -166,7 +168,7 @@ abstract class AbstractCloner implements ClonerInterface
     }
 
     /**
-     * Sets the maximum number of items to clone past the first level in nested structures.
+     * Sets the maximum number of items to clone past the minimum depth in nested structures.
      *
      * @param int $maxItems
      */
@@ -186,6 +188,17 @@ abstract class AbstractCloner implements ClonerInterface
     }
 
     /**
+     * Sets the minimum tree depth where we are guaranteed to clone all the items.  After this
+     * depth is reached, only setMaxItems items will be cloned.
+     *
+     * @param int $minDepth
+     */
+    public function setMinDepth($minDepth)
+    {
+        $this->minDepth = (int) $minDepth;
+    }
+
+    /**
      * Clones a PHP variable.
      *
      * @param mixed $var    Any PHP variable
@@ -195,7 +208,7 @@ abstract class AbstractCloner implements ClonerInterface
      */
     public function cloneVar($var, $filter = 0)
     {
-        $this->prevErrorHandler = set_error_handler(function ($type, $msg, $file, $line, $context) {
+        $this->prevErrorHandler = set_error_handler(function ($type, $msg, $file, $line, $context = array()) {
             if (E_RECOVERABLE_ERROR === $type || E_USER_ERROR === $type) {
                 // Cloner never dies
                 throw new \ErrorException($msg, 0, $type, $file, $line);

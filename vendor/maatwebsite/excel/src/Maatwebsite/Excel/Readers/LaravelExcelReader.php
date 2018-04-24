@@ -246,6 +246,13 @@ class LaravelExcelReader
      */
     protected $dispatcher;
 
+	/**
+	 * The line containing the header title, by default
+	 *
+	 * @var int
+	 */
+	protected $headerRow;
+
     /**
      * Construct new reader
      *
@@ -371,6 +378,15 @@ class LaravelExcelReader
         $this->selectedSheets = $sheets;
     }
 
+	/**
+	 * Define a different header row than the global config
+	 * @param int $number
+	 */
+    public function setHeaderRow($number)
+    {
+    	$this->headerRow = $number;
+    }
+
     /**
      * Check if sheets were selected
      *
@@ -395,7 +411,7 @@ class LaravelExcelReader
             return true;
         }
 
-        return in_array($index, $selectedSheets) ? true : false;
+        return in_array($index, $selectedSheets);
     }
 
     /**
@@ -669,8 +685,8 @@ class LaravelExcelReader
         for ($startRow = 0; $startRow < $totalRows; $startRow += $chunkSize) {
 
             // Set start index
-            $startIndex = ($startRow == 0) ? $startRow : $startRow - 1;
-            $chunkSize  = ($startRow == 0) ? $size + 1 : $size;
+            $startIndex = ($startRow == 0 || !$this->hasHeading()) ? $startRow : $startRow - 1;
+            $chunkSize  = ($startRow == 0 && $this->hasHeading()) ? $size + 1 : $size;
 
             $job = new ChunkedReadJob(
                 $this->file,
@@ -849,7 +865,7 @@ class LaravelExcelReader
     protected function _setFile($file, $noBasePath = false)
     {
         // check if we have a correct path
-        if (!$noBasePath && !realpath($file)) {
+        if (!is_file($file) && !$noBasePath && !realpath($file)) {
             $file = base_path($file);
         }
 
@@ -1016,7 +1032,7 @@ class LaravelExcelReader
      *
      * @param  boolean $boolean
      *
-     * @return LaraveExcelReader
+     * @return LaravelExcelReader
      */
     public function ignoreEmpty($boolean = true)
     {
@@ -1302,6 +1318,15 @@ class LaravelExcelReader
     public function getFileName()
     {
         return pathinfo($this->file, PATHINFO_FILENAME);
+    }
+
+	/**
+	 * Get the row containing the header
+	 * @return int
+	 */
+    public function getHeaderRow()
+    {
+    	return $this->headerRow ?: config('excel.import.startRow', 1);
     }
 
     /**

@@ -122,7 +122,7 @@ class Arr
     }
 
     /**
-     * Get all of the given array except for a specified array of items.
+     * Get all of the given array except for a specified array of keys.
      *
      * @param  array  $array
      * @param  array|string  $keys
@@ -206,17 +206,21 @@ class Arr
      */
     public static function flatten($array, $depth = INF)
     {
-        return array_reduce($array, function ($result, $item) use ($depth) {
+        $result = [];
+
+        foreach ($array as $item) {
             $item = $item instanceof Collection ? $item->all() : $item;
 
             if (! is_array($item)) {
-                return array_merge($result, [$item]);
+                $result[] = $item;
             } elseif ($depth === 1) {
-                return array_merge($result, array_values($item));
+                $result = array_merge($result, array_values($item));
             } else {
-                return array_merge($result, static::flatten($item, $depth - 1));
+                $result = array_merge($result, static::flatten($item, $depth - 1));
             }
-        }, []);
+        }
+
+        return $result;
     }
 
     /**
@@ -537,11 +541,20 @@ class Arr
      * Shuffle the given array and return the result.
      *
      * @param  array  $array
+     * @param  int|null  $seed
      * @return array
      */
-    public static function shuffle($array)
+    public static function shuffle($array, $seed = null)
     {
-        shuffle($array);
+        if (is_null($seed)) {
+            shuffle($array);
+        } else {
+            srand($seed);
+
+            usort($array, function () {
+                return rand(-1, 1);
+            });
+        }
 
         return $array;
     }
@@ -594,13 +607,17 @@ class Arr
     }
 
     /**
-     * If the given value is not an array, wrap it in one.
+     * If the given value is not an array and not null, wrap it in one.
      *
      * @param  mixed  $value
      * @return array
      */
     public static function wrap($value)
     {
+        if (is_null($value)) {
+            return [];
+        }
+
         return ! is_array($value) ? [$value] : $value;
     }
 }

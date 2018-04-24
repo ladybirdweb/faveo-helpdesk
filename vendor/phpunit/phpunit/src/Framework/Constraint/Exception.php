@@ -17,26 +17,33 @@ class Exception extends Constraint
     /**
      * @var string
      */
-    protected $className;
+    private $className;
 
-    /**
-     * @param string $className
-     */
-    public function __construct($className)
+    public function __construct(string $className)
     {
         parent::__construct();
+
         $this->className = $className;
+    }
+
+    /**
+     * Returns a string representation of the constraint.
+     */
+    public function toString(): string
+    {
+        return \sprintf(
+            'exception of type "%s"',
+            $this->className
+        );
     }
 
     /**
      * Evaluates the constraint for parameter $other. Returns true if the
      * constraint is met, false otherwise.
      *
-     * @param mixed $other Value or object to evaluate.
-     *
-     * @return bool
+     * @param mixed $other value or object to evaluate
      */
-    protected function matches($other)
+    protected function matches($other): bool
     {
         return $other instanceof $this->className;
     }
@@ -47,14 +54,13 @@ class Exception extends Constraint
      * The beginning of failure messages is "Failed asserting that" in most
      * cases. This method should return the second part of that sentence.
      *
-     * @param mixed $other Evaluated value or object.
-     *
-     * @return string
+     * @param mixed $other evaluated value or object
      */
-    protected function failureDescription($other)
+    protected function failureDescription($other): string
     {
         if ($other !== null) {
             $message = '';
+
             if ($other instanceof Throwable) {
                 $message = '. Message was: "' . $other->getMessage() . '" at'
                     . "\n" . Filter::getFilteredStacktrace($other);
@@ -70,19 +76,6 @@ class Exception extends Constraint
 
         return \sprintf(
             'exception of type "%s" is thrown',
-            $this->className
-        );
-    }
-
-    /**
-     * Returns a string representation of the constraint.
-     *
-     * @return string
-     */
-    public function toString()
-    {
-        return \sprintf(
-            'exception of type "%s"',
             $this->className
         );
     }

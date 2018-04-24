@@ -17,7 +17,7 @@ namespace Sly\NotificationPusher\Collection;
  * @uses \IteratorAggregate
  * @author Cédric Dugat <cedric@dugat.me>
  */
-abstract class AbstractCollection implements \IteratorAggregate
+abstract class AbstractCollection implements \IteratorAggregate, \Countable
 {
     /**
      * @var \ArrayIterator
@@ -26,7 +26,7 @@ abstract class AbstractCollection implements \IteratorAggregate
 
     /**
      * @inheritdoc
-     * @return mixed
+     * @return \ArrayIterator|\SeekableIterator
      */
     abstract public function getIterator();
 
@@ -49,7 +49,7 @@ abstract class AbstractCollection implements \IteratorAggregate
      */
     public function count()
     {
-        return count($this->getIterator());
+        return $this->getIterator()->count();
     }
 
     /**

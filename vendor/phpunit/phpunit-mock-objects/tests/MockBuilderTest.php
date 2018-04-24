@@ -9,14 +9,15 @@
  */
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockBuilder;
 
-class Framework_MockBuilderTest extends TestCase
+class MockBuilderTest extends TestCase
 {
     public function testMockBuilderRequiresClassName()
     {
         $mock = $this->getMockBuilder(Mockable::class)->getMock();
 
-        $this->assertTrue($mock instanceof Mockable);
+        $this->assertInstanceOf(Mockable::class, $mock);
     }
 
     public function testByDefaultMocksAllMethods()
@@ -70,7 +71,7 @@ class Framework_MockBuilderTest extends TestCase
                      ->setMockClassName('ACustomClassName')
                      ->getMock();
 
-        $this->assertTrue($mock instanceof ACustomClassName);
+        $this->assertInstanceOf(ACustomClassName::class, $mock);
     }
 
     public function testConstructorArgumentsCanBeSpecified()
@@ -123,6 +124,6 @@ class Framework_MockBuilderTest extends TestCase
                      ->disableOriginalClone()
                      ->disableAutoload();
 
-        $this->assertTrue($spec instanceof PHPUnit_Framework_MockObject_MockBuilder);
+        $this->assertInstanceOf(MockBuilder::class, $spec);
     }
 }

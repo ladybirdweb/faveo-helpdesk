@@ -13,8 +13,10 @@ namespace Symfony\Component\HttpKernel\Tests\EventListener;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\EventListener\SessionListener;
@@ -65,13 +67,41 @@ class TestSessionListenerTest extends TestCase
     {
         $this->sessionHasBeenStarted();
 
-        $params = session_get_cookie_params();
-        session_set_cookie_params(0, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+        @ini_set('session.cookie_lifetime', 0);
 
         $response = $this->filterResponse(new Request(), HttpKernelInterface::MASTER_REQUEST);
         $cookies = $response->headers->getCookies();
 
         $this->assertEquals(0, reset($cookies)->getExpiresTime());
+    }
+
+    /**
+     * @requires function \Symfony\Component\HttpFoundation\Session\Session::isEmpty
+     */
+    public function testEmptySessionDoesNotSendCookie()
+    {
+        $this->sessionHasBeenStarted();
+        $this->sessionIsEmpty();
+
+        $response = $this->filterResponse(new Request(), HttpKernelInterface::MASTER_REQUEST);
+
+        $this->assertSame(array(), $response->headers->getCookies());
+    }
+
+    public function testEmptySessionWithNewSessionIdDoesSendCookie()
+    {
+        $this->sessionHasBeenStarted();
+        $this->sessionIsEmpty();
+        $this->fixSessionId('456');
+
+        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $request = Request::create('/', 'GET', array(), array(new Cookie('MOCKSESSID', '123')));
+        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $this->listener->onKernelRequest($event);
+
+        $response = $this->filterResponse(new Request(), HttpKernelInterface::MASTER_REQUEST);
+
+        $this->assertNotEmpty($response->headers->getCookies());
     }
 
     public function testUnstartedSessionIsNotSave()
@@ -129,6 +159,20 @@ class TestSessionListenerTest extends TestCase
         $this->session->expects($this->once())
             ->method('isStarted')
             ->will($this->returnValue(false));
+    }
+
+    private function sessionIsEmpty()
+    {
+        $this->session->expects($this->once())
+            ->method('isEmpty')
+            ->will($this->returnValue(true));
+    }
+
+    private function fixSessionId($sessionId)
+    {
+        $this->session->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue($sessionId));
     }
 
     private function getSession()

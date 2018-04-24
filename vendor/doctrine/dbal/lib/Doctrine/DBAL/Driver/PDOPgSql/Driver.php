@@ -24,6 +24,7 @@ use Doctrine\DBAL\Driver\PDOConnection;
 use Doctrine\DBAL\DBALException;
 use PDOException;
 use PDO;
+use function defined;
 
 /**
  * Driver that connects through pdo_pgsql.
@@ -35,7 +36,7 @@ class Driver extends AbstractPostgreSQLDriver
     /**
      * {@inheritdoc}
      */
-    public function connect(array $params, $username = null, $password = null, array $driverOptions = array())
+    public function connect(array $params, $username = null, $password = null, array $driverOptions = [])
     {
         try {
             $pdo = new PDOConnection(
@@ -79,24 +80,46 @@ class Driver extends AbstractPostgreSQLDriver
         $dsn = 'pgsql:';
 
         if (isset($params['host']) && $params['host'] != '') {
-            $dsn .= 'host=' . $params['host'] . ' ';
+            $dsn .= 'host=' . $params['host'] . ';';
         }
 
         if (isset($params['port']) && $params['port'] != '') {
-            $dsn .= 'port=' . $params['port'] . ' ';
+            $dsn .= 'port=' . $params['port'] . ';';
         }
 
         if (isset($params['dbname'])) {
-            $dsn .= 'dbname=' . $params['dbname'] . ' ';
+            $dsn .= 'dbname=' . $params['dbname'] . ';';
+        } elseif (isset($params['default_dbname'])) {
+            $dsn .= 'dbname=' . $params['default_dbname'] . ';';
         } else {
             // Used for temporary connections to allow operations like dropping the database currently connected to.
             // Connecting without an explicit database does not work, therefore "postgres" database is used
-            // as it is certainly present in every server setup. 
-            $dsn .= 'dbname=postgres' . ' ';
+            // as it is mostly present in every server setup.
+            $dsn .= 'dbname=postgres' . ';';
         }
 
         if (isset($params['sslmode'])) {
-            $dsn .= 'sslmode=' . $params['sslmode'] . ' ';
+            $dsn .= 'sslmode=' . $params['sslmode'] . ';';
+        }
+
+        if (isset($params['sslrootcert'])) {
+            $dsn .= 'sslrootcert=' . $params['sslrootcert'] . ';';
+        }
+
+        if (isset($params['sslcert'])) {
+            $dsn .= 'sslcert=' . $params['sslcert'] . ';';
+        }
+
+        if (isset($params['sslkey'])) {
+            $dsn .= 'sslkey=' . $params['sslkey'] . ';';
+        }
+
+        if (isset($params['sslcrl'])) {
+            $dsn .= 'sslcrl=' . $params['sslcrl'] . ';';
+        }
+
+        if (isset($params['application_name'])) {
+            $dsn .= 'application_name=' . $params['application_name'] . ';';
         }
 
         return $dsn;

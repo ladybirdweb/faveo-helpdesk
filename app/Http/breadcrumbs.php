@@ -448,6 +448,9 @@ Breadcrumbs::register('client.profile', function ($breadcrumbs) {
 Breadcrumbs::register('ticket2', function ($breadcrumbs) {
     $breadcrumbs->push('My Tickets', route('ticket2'));
 });
+Breadcrumbs::register('myorganizationtickets', function ($breadcrumbs) {
+    $breadcrumbs->push('My Organization Tickets', route('myorganizationtickets'));
+});
 
 Breadcrumbs::register('client-verify-number', function ($breadcrumbs) {
     $breadcrumbs->push('Profile', route('client-verify-number'));

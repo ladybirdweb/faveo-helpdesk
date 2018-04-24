@@ -46,19 +46,25 @@ class="active"
     <div class="box-body">
         <div class="row">
             <!-- email address -->
-            <div class="col-xs-4 form-group {{ $errors->has('email_address') ? 'has-error' : '' }}" id="email_address_error">
+            <div class="col-xs-6 form-group {{ $errors->has('email_address') ? 'has-error' : '' }}" id="email_address_error">
                 {!! Form::label('email_address',Lang::get('lang.email_address')) !!} <span class="text-red"> *</span>
                 {!! $errors->first('email_address', '<spam class="help-block">:message</spam>') !!}
                 {!! Form::text('email_address',null,['class' => 'form-control']) !!}
             </div>
+            <!-- user name -->
+            <div class="col-xs-6 form-group {{ $errors->has('user_name') ? 'has-error' : '' }}" id="user_name_error">
+                {!! Form::label('user_name',Lang::get('lang.user_name')) !!} <span class="text-red"> *</span>
+                {!! $errors->first('user_name', '<spam class="help-block">:message</spam>') !!}
+                {!! Form::text('user_name',null,['class' => 'form-control']) !!}
+            </div>
             <!-- Email name -->
-            <div class="col-xs-4 form-group {!! $errors->has('email_name') ? 'has-error' : ''!!}" id="email_name_error">
+            <div class="col-xs-6 form-group {!! $errors->has('email_name') ? 'has-error' : ''!!}" id="email_name_error">
                 {!! Form::label('email_name',Lang::get('lang.from_name')) !!} <span class="text-red"> *</span>
                 {!! $errors->first('email_name', '<spam class="help-block">:message</spam>') !!}
                 {!! Form::text('email_name',null,['class' => 'form-control', 'id' => 'email_name']) !!}
             </div>
             <!-- password -->
-            <div class="col-xs-4 form-group {!! $errors->has('password') ? 'has-error' : ''!!}" id="password_error">
+            <div class="col-xs-6 form-group {!! $errors->has('password') ? 'has-error' : ''!!}" id="password_error">
                 {!! Form::label('password',Lang::get('lang.password')) !!} <span class="text-red"> *</span>
                 {!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
                 <input type="password" name="password" class="form-control" id="password" value={!! $emails->password !!} >
@@ -169,7 +175,7 @@ class="active"
             </div>
             <div class="col-xs-2 form-group">
                 <br>
-                <input type="checkbox" name="imap_validate" id="imap_validate">&nbsp; {!! Lang::get('lang.validate_certificates_from_tls_or_ssl_server') !!}
+                {!! Form::checkbox('imap_validate', null, ($emails->mailbox_protocol === 'validate-cert'), array('id' => 'imap_validate')) !!}&nbsp;{!! Lang::get('lang.validate_certificates_from_tls_or_ssl_server') !!}
             </div>
         </div>
     </div>
@@ -226,7 +232,7 @@ class="active"
             </div>
             <div class="col-xs-2 form-group">
                 <br>
-                <input type="checkbox" name="smtp_validate" id="smtp_validate">&nbsp; {!! Lang::get('lang.validate_certificates_from_tls_or_ssl_server') !!}
+                {!! Form::checkbox('smtp_validate', null, ($emails->smtp_validate === 'on'), array('id' => 'smtp_validate')) !!}&nbsp;{!! Lang::get('lang.validate_certificates_from_tls_or_ssl_server') !!}
             </div>
         </div>
         <div id="response"></div>

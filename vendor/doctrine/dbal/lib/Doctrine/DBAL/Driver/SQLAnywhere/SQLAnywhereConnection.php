@@ -21,6 +21,22 @@ namespace Doctrine\DBAL\Driver\SQLAnywhere;
 
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\Driver\ServerInfoAwareConnection;
+use Doctrine\DBAL\ParameterType;
+use function func_get_args;
+use function is_float;
+use function is_int;
+use function is_resource;
+use function sasql_affected_rows;
+use function sasql_commit;
+use function sasql_connect;
+use function sasql_error;
+use function sasql_errorcode;
+use function sasql_escape_string;
+use function sasql_insert_id;
+use function sasql_pconnect;
+use function sasql_real_query;
+use function sasql_rollback;
+use function sasql_set_option;
 
 /**
  * SAP Sybase SQL Anywhere implementation of the Connection interface.
@@ -41,8 +57,8 @@ class SQLAnywhereConnection implements Connection, ServerInfoAwareConnection
      *
      * Connects to database with given connection string.
      *
-     * @param string  $dsn        The connection string.
-     * @param boolean $persistent Whether or not to establish a persistent connection.
+     * @param string $dsn        The connection string.
+     * @param bool   $persistent Whether or not to establish a persistent connection.
      *
      * @throws SQLAnywhereException
      */
@@ -121,11 +137,11 @@ class SQLAnywhereConnection implements Connection, ServerInfoAwareConnection
      */
     public function exec($statement)
     {
-        $stmt = $this->prepare($statement);
+        if (false === sasql_real_query($this->connection, $statement)) {
+            throw SQLAnywhereException::fromSQLAnywhereError($this->connection);
+        }
 
-        $stmt->execute();
-
-        return $stmt->rowCount();
+        return sasql_affected_rows($this->connection);
     }
 
     /**
@@ -172,7 +188,7 @@ class SQLAnywhereConnection implements Connection, ServerInfoAwareConnection
     /**
      * {@inheritdoc}
      */
-    public function quote($input, $type = \PDO::PARAM_STR)
+    public function quote($input, $type = ParameterType::STRING)
     {
         if (is_int($input) || is_float($input)) {
             return $input;
@@ -210,7 +226,7 @@ class SQLAnywhereConnection implements Connection, ServerInfoAwareConnection
      *
      * @throws SQLAnywhereException
      *
-     * @return boolean Whether or not ending transactional mode succeeded.
+     * @return bool Whether or not ending transactional mode succeeded.
      */
     private function endTransaction()
     {

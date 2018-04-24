@@ -16,18 +16,18 @@ namespace PhpSpec\Wrapper\Subject\Expectation;
 use PhpSpec\Event\ExpectationEvent;
 use PhpSpec\Exception\Example\FailureException;
 use PhpSpec\Loader\Node\ExampleNode;
-use PhpSpec\Matcher\MatcherInterface;
+use PhpSpec\Matcher\Matcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Exception;
 
-class DispatcherDecorator extends Decorator implements ExpectationInterface
+final class DispatcherDecorator extends Decorator implements Expectation
 {
     /**
      * @var EventDispatcherInterface
      */
     private $dispatcher;
     /**
-     * @var MatcherInterface
+     * @var Matcher
      */
     private $matcher;
     /**
@@ -36,15 +36,15 @@ class DispatcherDecorator extends Decorator implements ExpectationInterface
     private $example;
 
     /**
-     * @param ExpectationInterface     $expectation
+     * @param Expectation     $expectation
      * @param EventDispatcherInterface $dispatcher
-     * @param MatcherInterface         $matcher
+     * @param Matcher         $matcher
      * @param ExampleNode              $example
      */
     public function __construct(
-        ExpectationInterface $expectation,
+        Expectation $expectation,
         EventDispatcherInterface $dispatcher,
-        MatcherInterface $matcher,
+        Matcher $matcher,
         ExampleNode $example
     ) {
         $this->setExpectation($expectation);
@@ -57,13 +57,13 @@ class DispatcherDecorator extends Decorator implements ExpectationInterface
      * @param  string  $alias
      * @param  mixed   $subject
      * @param  array   $arguments
-     * @return boolean
+     * @return mixed
      *
      * @throws \Exception
      * @throws \PhpSpec\Exception\Example\FailureException
      * @throws \Exception
      */
-    public function match($alias, $subject, array $arguments = array())
+    public function match(string $alias, $subject, array $arguments = array())
     {
         $this->dispatcher->dispatch(
             'beforeExpectation',

@@ -14,4 +14,8 @@ PHPUnit\TextUI\Command::main();
 PHPUnit %s by Sebastian Bergmann and contributors.
 
 DummyFoo
- [x] Foo equals foo
+ ✔ Foo equals foo
+
+Time: %s, Memory: %s
+
+OK (1 test, 1 assertion)

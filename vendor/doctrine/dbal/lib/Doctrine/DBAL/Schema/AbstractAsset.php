@@ -20,6 +20,16 @@
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use function array_map;
+use function crc32;
+use function dechex;
+use function explode;
+use function implode;
+use function str_replace;
+use function strpos;
+use function strtolower;
+use function strtoupper;
+use function substr;
 
 /**
  * The abstract asset allows to reset the name of all assets without publishing this to the public userland.
@@ -46,7 +56,7 @@ abstract class AbstractAsset
     protected $_namespace = null;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $_quoted = false;
 
@@ -76,7 +86,7 @@ abstract class AbstractAsset
      *
      * @param string $defaultNamespaceName
      *
-     * @return boolean
+     * @return bool
      */
     public function isInDefaultNamespace($defaultNamespaceName)
     {
@@ -139,7 +149,7 @@ abstract class AbstractAsset
     /**
      * Checks if this asset's name is quoted.
      *
-     * @return boolean
+     * @return bool
      */
     public function isQuoted()
     {
@@ -151,7 +161,7 @@ abstract class AbstractAsset
      *
      * @param string $identifier
      *
-     * @return boolean
+     * @return bool
      */
     protected function isIdentifierQuoted($identifier)
     {
@@ -167,7 +177,7 @@ abstract class AbstractAsset
      */
     protected function trimQuotes($identifier)
     {
-        return str_replace(array('`', '"', '[', ']'), '', $identifier);
+        return str_replace(['`', '"', '[', ']'], '', $identifier);
     }
 
     /**
@@ -210,9 +220,9 @@ abstract class AbstractAsset
      * however building idents automatically for foreign keys, composite keys or such can easily create
      * very long names.
      *
-     * @param array   $columnNames
-     * @param string  $prefix
-     * @param integer $maxSize
+     * @param array  $columnNames
+     * @param string $prefix
+     * @param int    $maxSize
      *
      * @return string
      */

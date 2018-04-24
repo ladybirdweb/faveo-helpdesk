@@ -41,6 +41,10 @@ class InstallCommand extends Command
             mkdir(base_path('tests/Browser/Pages'), 0755, true);
         }
 
+        if (! is_dir(base_path('tests/Browser/Components'))) {
+            mkdir(base_path('tests/Browser/Components'), 0755, true);
+        }
+
         if (! is_dir(base_path('tests/Browser/screenshots'))) {
             $this->createScreenshotsDirectory();
         }
@@ -49,14 +53,14 @@ class InstallCommand extends Command
             $this->createConsoleDirectory();
         }
 
-        $subs = [
+        $stubs = [
             'ExampleTest.stub' => base_path('tests/Browser/ExampleTest.php'),
             'HomePage.stub' => base_path('tests/Browser/Pages/HomePage.php'),
             'DuskTestCase.stub' => base_path('tests/DuskTestCase.php'),
             'Page.stub' => base_path('tests/Browser/Pages/Page.php'),
         ];
 
-        foreach ($subs as $stub => $file) {
+        foreach ($stubs as $stub => $file) {
             if (! is_file($file)) {
                 copy(__DIR__.'/../../stubs/'.$stub, $file);
             }

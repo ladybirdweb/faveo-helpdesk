@@ -65,7 +65,7 @@ class BroadcastManager implements FactoryContract
         $attributes = $attributes ?: ['middleware' => ['web']];
 
         $this->app['router']->group($attributes, function ($router) {
-            $router->post('/broadcasting/auth', BroadcastController::class.'@authenticate');
+            $router->post('/broadcasting/auth', '\\'.BroadcastController::class.'@authenticate');
         });
     }
 
@@ -140,7 +140,7 @@ class BroadcastManager implements FactoryContract
     /**
      * Get a driver instance.
      *
-     * @param  string  $name
+     * @param  string|null  $name
      * @return mixed
      */
     public function driver($name = null)
