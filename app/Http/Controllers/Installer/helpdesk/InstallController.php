@@ -5,17 +5,14 @@ namespace App\Http\Controllers\Installer\helpdesk;
 // controllers
 use App\Http\Controllers\Controller;
 // requests
-use App\Http\Requests\helpdesk\DatabaseRequest;
 use App\Http\Requests\helpdesk\InstallerRequest;
 use App\Model\helpdesk\Settings\System;
 // models
-use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\User;
 use Artisan;
 // classes
 use Cache;
-use Crypt;
 use Config;
 use DB;
 use Exception;
@@ -25,9 +22,8 @@ use Illuminate\Http\Request;
 use Input;
 use Redirect;
 use Session;
-use View;
-use Illuminate\Database\Schema\Blueprint;
 use UnAuth;
+use View;
 
 /**
  * |=======================================================================
@@ -71,6 +67,7 @@ class InstallController extends Controller
         $accept = (Input::has('accept1')) ? true : false;
         if ($accept == 'accept') {
             Cache::forever('step1', 'step1');
+
             return Redirect::route('prerequisites');
         } else {
             return Redirect::route('licence')->with('fails', 'Failed! first accept the licence agreeement');
@@ -180,6 +177,7 @@ class InstallController extends Controller
             Cache::forget('dummy_data_installation');
             Cache::forever('dummy_data_installation', true);
         }
+
         return Redirect::route('database');
     }
 
@@ -299,6 +297,7 @@ class InstallController extends Controller
         // checking if the user have been created
         if ($user) {
             Cache::forever('step6', 'step6');
+
             return Redirect::route('final');
         }
     }
@@ -314,16 +313,19 @@ class InstallController extends Controller
         // checking if the installation have been completed or not
         if (Cache::get('step6') == 'step6') {
             $language = Cache::get('language');
+
             try {
                 \Cache::flush();
                 \Cache::forever('language', $language);
                 $this->updateInstalEnv();
+
                 return View::make('themes/default1/installer/helpdesk/view6');
             } catch (Exception $e) {
                 return Redirect::route('account')->with('fails', $e->getMessage());
             }
         } else {
             $this->updateInstalEnv();
+
             return redirect('/auth/login');
         }
     }
@@ -338,6 +340,7 @@ class InstallController extends Controller
     {
         try {
             $this->updateInstalEnv();
+
             return redirect('/auth/login');
         } catch (Exception $e) {
             return redirect('/auth/login')->with('fails', $e->getMessage());
@@ -346,7 +349,7 @@ class InstallController extends Controller
 
     public function changeFilePermission()
     {
-        $path1 = base_path() . DIRECTORY_SEPARATOR . '.env';
+        $path1 = base_path().DIRECTORY_SEPARATOR.'.env';
         if (chmod($path1, 0644)) {
             $f1 = substr(sprintf('%o', fileperms($path1)), -3);
             if ($f1 >= '644') {
@@ -406,11 +409,13 @@ class InstallController extends Controller
             $this->env($default, $host, $port, $database, $dbusername, $dbpassword);
         } catch (Exception $ex) {
             $result = ['error' => $ex->getMessage()];
+
             return response()->json(compact('result'), 500);
         }
         if ($api) {
             $url = url('preinstall/check');
             $result = ['success' => 'Environment configuration file has been created successfully', 'next' => 'Running pre migration test', 'api' => $url];
+
             return response()->json(compact('result'));
         }
     }
@@ -433,7 +438,7 @@ class InstallController extends Controller
         $ENV['MAIL_PASSWORD'] = 'null';
         $ENV['CACHE_DRIVER'] = 'file';
         $ENV['SESSION_DRIVER'] = 'file';
-        $ENV['SESSION_COOKIE_NAME'] = 'faveo_'.  rand(0, 10000);
+        $ENV['SESSION_COOKIE_NAME'] = 'faveo_'.rand(0, 10000);
         $ENV['QUEUE_DRIVER'] = 'sync';
 
         $ENV['FCM_SERVER_KEY'] = 'AIzaSyCyx5OFnsRFUmDLTMbPV50ZMDUGSG-bLw4';
@@ -444,18 +449,18 @@ class InstallController extends Controller
         foreach ($ENV as $key => $val) {
             $config .= "{$key}={$val}\n";
         }
-        if (is_file(base_path() . DIRECTORY_SEPARATOR . '.env')) {
-            unlink(base_path() . DIRECTORY_SEPARATOR . '.env');
+        if (is_file(base_path().DIRECTORY_SEPARATOR.'.env')) {
+            unlink(base_path().DIRECTORY_SEPARATOR.'.env');
         }
-        if (!is_file(base_path() . DIRECTORY_SEPARATOR . 'example.env')) {
-            fopen(base_path() . DIRECTORY_SEPARATOR . 'example.env', "w");
+        if (!is_file(base_path().DIRECTORY_SEPARATOR.'example.env')) {
+            fopen(base_path().DIRECTORY_SEPARATOR.'example.env', 'w');
         }
 
         // Write environment file
-        $fp = fopen(base_path() . DIRECTORY_SEPARATOR . 'example.env', 'w');
+        $fp = fopen(base_path().DIRECTORY_SEPARATOR.'example.env', 'w');
         fwrite($fp, $config);
         fclose($fp);
-        rename(base_path() . DIRECTORY_SEPARATOR . 'example.env', base_path() . DIRECTORY_SEPARATOR . '.env');
+        rename(base_path().DIRECTORY_SEPARATOR.'example.env', base_path().DIRECTORY_SEPARATOR.'.env');
     }
 
     public function checkPreInstall()
@@ -475,12 +480,14 @@ class InstallController extends Controller
 
         $url = url('migrate');
         $result = ['success' => 'Pre migration has been tested successfully', 'next' => 'Migrating tables in database', 'api' => $url];
+
         return response()->json(compact('result'));
     }
 
     public function migrate()
     {
         $db_install_method = '';
+
         try {
             $tableNames = \Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
             if (count($tableNames) === 0) {
@@ -496,11 +503,13 @@ class InstallController extends Controller
         } catch (Exception $ex) {
             $this->rollBackMigration();
             $result = ['error' => $ex->getMessage()];
+
             return response()->json(compact('result'), 500);
         }
-        $url = ($db_install_method == 'migrate') ? url('seed'): '';
+        $url = ($db_install_method == 'migrate') ? url('seed') : '';
         $message = ($db_install_method == 'migrate') ? 'Tables have been migrated successfully in database.' : 'Database has been setup successfully.';
         $result = ['success' => $message, 'next' => 'Seeding pre configurations data', 'api' => $url];
+
         return response()->json(compact('result'));
     }
 
@@ -510,6 +519,7 @@ class InstallController extends Controller
             Artisan::call('migrate:reset', ['--force' => true]);
         } catch (Exception $ex) {
             $result = ['error' => $ex->getMessage()];
+
             return response()->json(compact('result'), 500);
         }
     }
@@ -518,7 +528,7 @@ class InstallController extends Controller
     {
         try {
             if ($request->input('dummy-data') == 'on') {
-                $path = base_path() . '/DB/dummy-data.sql';
+                $path = base_path().'/DB/dummy-data.sql';
                 DB::unprepared(DB::raw(file_get_contents($path)));
             } else {
                 \Schema::disableForeignKeyConstraints();
@@ -535,9 +545,11 @@ class InstallController extends Controller
             //$this->updateInstalEnv();
         } catch (Exception $ex) {
             $result = ['error' => $ex->getMessage()];
+
             return response()->json(compact('result'), 500);
         }
         $result = ['success' => 'Database has been setup successfully.'];
+
         return response()->json(compact('result'));
     }
 
@@ -545,12 +557,12 @@ class InstallController extends Controller
     {
         Artisan::call('jwt:generate');
 
-        $env = base_path() . DIRECTORY_SEPARATOR . '.env';
+        $env = base_path().DIRECTORY_SEPARATOR.'.env';
         if (is_file($env)) {
-            $txt = "DB_INSTALL=1";
-            $txt1 = "APP_ENV=development";
-            file_put_contents($env, $txt . PHP_EOL, FILE_APPEND | LOCK_EX);
-            file_put_contents($env, $txt1 . PHP_EOL, FILE_APPEND | LOCK_EX);
+            $txt = 'DB_INSTALL=1';
+            $txt1 = 'APP_ENV=development';
+            file_put_contents($env, $txt.PHP_EOL, FILE_APPEND | LOCK_EX);
+            file_put_contents($env, $txt1.PHP_EOL, FILE_APPEND | LOCK_EX);
         } else {
             throw new Exception('.env not found');
         }
