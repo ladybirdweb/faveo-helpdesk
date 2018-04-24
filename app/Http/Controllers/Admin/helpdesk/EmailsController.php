@@ -210,7 +210,7 @@ class EmailsController extends Controller
         $email->fetching_encryption = $request->input('fetching_encryption');
         if (!$request->input('imap_validate')) {
             $email->mailbox_protocol = 'novalidate-cert';
-        }else {
+        } else {
             $email->mailbox_protocol = 'validate-cert';
         }
         $email->department = $this->departmentValue($request->input('department'));
