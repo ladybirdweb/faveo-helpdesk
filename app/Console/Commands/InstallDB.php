@@ -2,11 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\Installer\helpdesk\InstallController;
 use Illuminate\Console\Command;
+use App\Http\Controllers\Installer\helpdesk\InstallController;
+use DB;
 
-class InstallDB extends Command
-{
+class InstallDB extends Command {
+
     /**
      * The name and signature of the console command.
      *
@@ -27,8 +28,7 @@ class InstallDB extends Command
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->install = new InstallController();
         parent::__construct();
     }
@@ -38,27 +38,32 @@ class InstallDB extends Command
      *
      * @return mixed
      */
-    public function handle()
-    {
+    public function handle() {
         try {
             if ($this->confirm('Do you want to migrate tables now?')) {
-                $env = base_path().DIRECTORY_SEPARATOR.'.env';
+                $env = base_path() . DIRECTORY_SEPARATOR . '.env';
                 if (!is_file($env)) {
                     throw new \Exception("Please run 'php artisan install:faveo'");
                 }
+                $dummy_confirm = $this->confirm('Would you like to install dummy data in database to test before going live?');
                 $this->call('key:generate', ['--force' => true]);
-                $this->call('install:migrate');
-                $this->call('install:seed');
+                if (!$dummy_confirm) {
+                    $this->call('install:migrate');
+                    $this->call('install:seed');
+                } else {
+                    $path = base_path().'/DB/dummy-data.sql';
+                    DB::unprepared(file_get_contents($path));
+                }
                 $headers = ['user_name', 'email', 'password'];
                 $data = [
                     [
                         'user_name' => 'demo_admin',
-                        'email'     => '',
-                        'password'  => 'password',
+                        'email' => '',
+                        'password' => 'demopass'
                     ],
                 ];
                 $this->table($headers, $data);
-                $this->warn('Please change the password immediately');
+                $this->warn('Please update your email and change the password immediately');
                 $this->install->updateInstalEnv();
                 $this->updateAppUrl();
             }
@@ -67,16 +72,16 @@ class InstallDB extends Command
         }
     }
 
-    public function updateAppUrl()
-    {
+    public function updateAppUrl() {
         $url = $this->ask('Enter your app url (with http/https and www/non www)');
         if (str_finish($url, '/')) {
-            $url = rtrim($url, '/ ');
+            $url = rtrim($url, "/ ");
         }
         $systems = new \App\Model\helpdesk\Settings\System();
-        $system = $systems->updateOrCreate(['id'=>1], [
-            'url'=> $url,
-        ]);
+        $system = $systems->first();
+        $system->url = $url;
+        $system->save();
         $this->info('Thank you! Faveo has been installed successfully');
     }
+
 }

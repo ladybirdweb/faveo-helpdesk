@@ -29,6 +29,7 @@ $host = Session::get('host');
 $username = Session::get('username');
 $password = Session::get('password');
 $databasename = Session::get('databasename');
+$dummy_install = Session::get('dummy_data_installation');
 $port = Session::get('port');
 define('DB_HOST', $host); // Address of your MySQL server (usually localhost)
 define('DB_USER', $username); // Username that is used to connect to the server
@@ -62,7 +63,12 @@ if (DB_HOST && DB_USER && DB_NAME) {
     // error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
     error_reporting(0);
     if ($default == 'mysql') {
-        if ($connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME)) {
+    	if(DB_PORT != '' && is_numeric(DB_PORT)) {
+    		$connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
+    	} else {
+    		$connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    	}
+        if ($connection) {
             $results[] = new TestResult('Connected to database as ' . DB_USER . '@' . DB_HOST . DB_PORT, STATUS_OK);
             if (mysqli_select_db($connection, DB_NAME)) {
                 $results[] = new TestResult('Database "' . DB_NAME . '" selected', STATUS_OK);
@@ -76,30 +82,19 @@ if (DB_HOST && DB_USER && DB_NAME) {
                         $results[] = new TestResult('Database is empty');
                         $mysqli_ok = true;
                     } else {
-                        $db = new \App\Database\DbConnect([
-                            'driver'   => $default,
-                            'database' => DB_NAME,
-                            'username' => DB_USER,
-                            'password' => DB_PASS,
-                            'host'=>DB_HOST,
-                        ]);
-                        //dd($db);
-                        $db->dropTables();
-                        $results[] = new TestResult('Database is empty');
-                        $mysqli_ok = true;
-//                        $results[] = new TestResult('Faveo installation requires an empty database, your database already has tables and data in it.', STATUS_ERROR);
-//                        $mysqli_ok = false;
+                        $results[] = new TestResult('Faveo installation requires an empty database, your database already has tables and data in it.', STATUS_ERROR);
+                        $mysqli_ok = false;
                     }
                 } else {
                     $results[] = new TestResult('Your MySQL version is ' . $mysqli_version . '. We recommend upgrading to at least MySQL5!', STATUS_ERROR);
                     $mysqli_ok = false;
                 } // if
             } else {
-                $results[] = new TestResult('Failed to select database. ' . mysqli_error(), STATUS_ERROR);
+                $results[] = new TestResult('Failed to select database. ' . mysqli_connect_error(), STATUS_ERROR);
                 $mysqli_ok = false;
             } // if
         } else {
-            $results[] = new TestResult('Failed to connect to database. ' . mysqli_error(), STATUS_ERROR);
+            $results[] = new TestResult('Failed to connect to database. ' . mysqli_connect_error(), STATUS_ERROR);
             $mysqli_ok = false;
         } // if
     }
@@ -156,6 +151,8 @@ if (DB_HOST && DB_USER && DB_NAME) {
         <input type="hidden" name="password" value="{!! $password !!}"/>
         <!-- <b>Port</b><br> -->
         <input type="hidden" name="port" value="{!! $port !!}"/>
+        <!-- Dummy data installation -->
+        <input type="hidden" name="dummy_install" value="{!! $dummy_install !!}"/>
 
         <input type="submit" style="display:none;">
 
@@ -204,12 +201,12 @@ if (DB_HOST && DB_USER && DB_NAME) {
                     var next = data.next;
                     var api = data.api;
                     $('#submitme').attr('disabled','disabled');
-                    $('#wait').append('<ol><li>'+message+'</li><li>'+next+'...</li></ol>');
+                    $('#wait').append('<ul><li>'+message+'</li><li class="seco">'+next+'...</li></ul>');
                     callApi(api);
                 },
                 error: function(response){
                     var data=response.responseJSON.result;
-                    $('#wait').append('<ol><li style="color:red">'+data.error+'</li></ol>');
+                    $('#wait').append('<ul><li style="color:red">'+data.error+'</li></ul>');
                     $('#loader').hide();
                     $('#next').find('#submitme').hide();
                     $('#retry').append('<input type="button" id="submitm" class="button-primary button button-large button-next" value="Retry" onclick="reload()">');
@@ -231,16 +228,14 @@ if (DB_HOST && DB_USER && DB_NAME) {
                     var message = data.success;
                     var next = data.next;
                     var api = data.api;
-                    $('#wait').find('ol').remove();
-                    $('#wait').append('<ol><li>'+message+'</li><li id="seco">'+next+'...</li></ol>');
-                    if (message == 'installed') {
+                    $("#wait").find('.seco').remove();
+                    $('#wait ul').append('<li>'+message+'</li><li class="seco">'+next+'...</li>');
+                    if (message == 'Database has been setup successfully.') {
                         $('#loader').hide();
                         $('#next').find('#submitme').show();
                         $('#submitme').removeAttr('disabled');
-                        $('#seco').hide();
+                        $('.seco').hide();
                     } else {
-                        //show message
-                        //show next
                         callApi(api);
                     }
                 },
@@ -275,12 +270,12 @@ if (DB_HOST && DB_USER && DB_NAME) {
                     var next = data.next;
                     var api = data.api;
                     $('#submitme').attr('disabled','disabled');
-                    $('#wait').append('<ol><li>'+message+'</li><li>'+next+'...</li></ol>');
+                    $('#wait').append('<ul><li>'+message+'</li><li class="seco">'+next+'...</li></ul>');
                     callApi(api);
                 },
                 error: function(response){
                     var data=response.responseJSON.result;
-                    $('#wait').append('<ol><li style="color:red">'+data.error+'</li></ol>');
+                    $('#wait').append('<ul><li style="color:red">'+data.error+'</li></ul>');
                     $('#loader').hide();
                     $('#next').find('#submitme').hide();
                     $('#retry').append('<input type="button" id="submitm" class="button-primary button button-large button-next" value="Retry" onclick="reload()">');
