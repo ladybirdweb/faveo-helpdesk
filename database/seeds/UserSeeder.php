@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
                     'email'      => null,
                     'user_name'  => 'demo_admin',
                     'password'   => $password,
-                    //'assign_group' => 1,
+                    'assign_group' => 1,
                     'primary_dpt' => 1,
                     'active'      => 1,
                     'role'        => 'admin',

@@ -63,6 +63,7 @@ class AgentLayout
             'overdues'          => $this->overdues(),
             'due_today'         => $this->getDueToday(),
             'is_mail_conigured' => $this->getEmailConfig(),
+            'group'             => $this->group()
         ]);
     }
 
@@ -235,5 +236,11 @@ class AgentLayout
         }
 
         return false;
+    }
+
+    protected function group()
+    {
+        $agent_group = Auth::user()->assign_group;
+        return \App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where('group_status', '=', '1')->first();
     }
 }

@@ -145,7 +145,7 @@ active
                             </label>
                         </td>
                         <td>
-                            <input type="password" name="confirm_password" style="margin-left: 195px" required="true">
+                            <input type="password" name="confirmpassword" style="margin-left: 195px" required="true">
                         </td>
                         <td>
                             <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Confirmtitle}}" data-content="@{{Confirmcontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
@@ -348,7 +348,7 @@ active
             @if($errors->has('firstname'))
                 addErrorClass('firstname');
             @endif
-            @if($errors->has('Lastname'))
+            @if($errors->has('lastname'))
                 addErrorClass('Lastname');
             @endif
             @if($errors->has('email'))
