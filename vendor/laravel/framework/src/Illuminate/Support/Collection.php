@@ -16,6 +16,29 @@ use Illuminate\Support\Traits\Macroable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @property-read HigherOrderCollectionProxy $average
+ * @property-read HigherOrderCollectionProxy $avg
+ * @property-read HigherOrderCollectionProxy $contains
+ * @property-read HigherOrderCollectionProxy $each
+ * @property-read HigherOrderCollectionProxy $every
+ * @property-read HigherOrderCollectionProxy $filter
+ * @property-read HigherOrderCollectionProxy $first
+ * @property-read HigherOrderCollectionProxy $flatMap
+ * @property-read HigherOrderCollectionProxy $groupBy
+ * @property-read HigherOrderCollectionProxy $keyBy
+ * @property-read HigherOrderCollectionProxy $map
+ * @property-read HigherOrderCollectionProxy $max
+ * @property-read HigherOrderCollectionProxy $min
+ * @property-read HigherOrderCollectionProxy $partition
+ * @property-read HigherOrderCollectionProxy $reject
+ * @property-read HigherOrderCollectionProxy $sortBy
+ * @property-read HigherOrderCollectionProxy $sortByDesc
+ * @property-read HigherOrderCollectionProxy $sum
+ * @property-read HigherOrderCollectionProxy $unique
+ *
+ * Class Collection
+ */
 class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate, Jsonable, JsonSerializable
 {
     use Macroable;
@@ -272,8 +295,6 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
      */
     public function dd(...$args)
     {
-        http_response_code(500);
-
         call_user_func_array([$this, 'dump'], $args);
 
         die(1);
@@ -1223,7 +1244,7 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
     /**
      * Push all of the given items onto the collection.
      *
-     * @param  \Traversable  $source
+     * @param  \Traversable|array  $source
      * @return $this
      */
     public function concat($source)

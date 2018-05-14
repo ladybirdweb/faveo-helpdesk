@@ -1,32 +1,48 @@
 {
     "name": "zendframework/zendservice-google-gcm",
     "description": "OOP wrapper for Google Cloud Messaging",
-    "type": "library",
+    "license": "BSD-3-Clause",
     "keywords": [
-        "zf2",
+        "zf",
+        "zendframework",
         "gcm",
         "push",
         "notification",
         "google"
     ],
-    "homepage": "https://github.com/zendframework/zendservice-google-gcm",
-    "license": "BSD-3-Clause",
-    "autoload": {
-        "psr-4": {
-            "ZendService\\Google\\": "library/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "ZendServiceTest\\Google\\": "tests/"
-        }
+    "support": {
+        "issues": "https://github.com/zendframework/ZendService_Google_Gcm/issues",
+        "source": "https://github.com/zendframework/ZendService_Google_Gcm",
+        "rss": "https://github.com/zendframework/ZendService_Google_Gcm/releases.atom",
+        "chat": "https://zendframework-slack.herokuapp.com",
+        "forum": "https://discourse.zendframework.com/c/questions/components"
     },
     "require": {
-        "php": "^5.5 || ^7.0",
+        "php": "^5.6 || ^7.0",
         "zendframework/zend-http": "^2.0",
         "zendframework/zend-json": "^2.0"
     },
     "require-dev": {
-        "phpunit/PHPUnit": "^4.8"
+        "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.5",
+        "zendframework/zend-coding-standard": "~1.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ZendService\\Google\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendServiceTest\\Google\\": "test/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.1.x-dev",
+            "dev-develop": "2.2.x-dev"
+        }
     }
 }

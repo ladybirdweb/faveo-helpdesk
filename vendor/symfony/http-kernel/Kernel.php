@@ -63,11 +63,11 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
     private $requestStackSize = 0;
     private $resetServices = false;
 
-    const VERSION = '4.0.8';
-    const VERSION_ID = 40008;
+    const VERSION = '4.0.9';
+    const VERSION_ID = 40009;
     const MAJOR_VERSION = 4;
     const MINOR_VERSION = 0;
-    const RELEASE_VERSION = 8;
+    const RELEASE_VERSION = 9;
     const EXTRA_VERSION = '';
 
     const END_OF_MAINTENANCE = '07/2018';
@@ -540,9 +540,11 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
             // Because concurrent requests might still be using them,
             // old container files are not removed immediately,
             // but on a next dump of the container.
+            static $legacyContainers = array();
             $oldContainerDir = dirname($oldContainer->getFileName());
-            foreach (glob(dirname($oldContainerDir).'/*.legacy') as $legacyContainer) {
-                if ($oldContainerDir.'.legacy' !== $legacyContainer && @unlink($legacyContainer)) {
+            $legacyContainers[$oldContainerDir.'.legacy'] = true;
+            foreach (glob(dirname($oldContainerDir).DIRECTORY_SEPARATOR.'*.legacy') as $legacyContainer) {
+                if (!isset($legacyContainers[$legacyContainer]) && @unlink($legacyContainer)) {
                     (new Filesystem())->remove(substr($legacyContainer, 0, -7));
                 }
             }

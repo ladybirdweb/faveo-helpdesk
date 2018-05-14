@@ -7,8 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'thomaswelton\\GravatarLib\\' => array($vendorDir . '/thomaswelton/gravatarlib'),
-    'ZendService\\Apple\\Exception\\' => array($vendorDir . '/zendframework/zendservice-apple-apns/library'),
-    'ZendService\\Apple\\Apns\\' => array($vendorDir . '/zendframework/zendservice-apple-apns/library'),
     'Sly' => array($vendorDir . '/sly/notification-pusher/src'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
     'PhpSpec' => array($vendorDir . '/phpspec/phpspec/src'),

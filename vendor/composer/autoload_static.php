@@ -46,6 +46,7 @@ class ComposerStaticInit7774f3a91ad280621dc3b00b5d0dd4a5
             'Zend\\Http\\' => 10,
             'Zend\\Escaper\\' => 13,
             'ZendService\\Google\\' => 19,
+            'ZendService\\Apple\\' => 18,
         ),
         'Y' => 
         array (
@@ -229,7 +230,11 @@ class ComposerStaticInit7774f3a91ad280621dc3b00b5d0dd4a5
         ),
         'ZendService\\Google\\' => 
         array (
-            0 => __DIR__ . '/..' . '/zendframework/zendservice-google-gcm/library',
+            0 => __DIR__ . '/..' . '/zendframework/zendservice-google-gcm/src',
+        ),
+        'ZendService\\Apple\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zendservice-apple-apns/src',
         ),
         'Yajra\\Datatables\\' => 
         array (
@@ -557,17 +562,6 @@ class ComposerStaticInit7774f3a91ad280621dc3b00b5d0dd4a5
                 0 => __DIR__ . '/..' . '/thomaswelton/gravatarlib',
             ),
         ),
-        'Z' => 
-        array (
-            'ZendService\\Apple\\Exception\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/zendframework/zendservice-apple-apns/library',
-            ),
-            'ZendService\\Apple\\Apns\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/zendframework/zendservice-apple-apns/library',
-            ),
-        ),
         'S' => 
         array (
             'Sly' => 
@@ -677,7 +671,6 @@ class ComposerStaticInit7774f3a91ad280621dc3b00b5d0dd4a5
     public static $classMap = array (
         'Absolute_Positioner' => __DIR__ . '/..' . '/dompdf/dompdf/include/absolute_positioner.cls.php',
         'Abstract_Renderer' => __DIR__ . '/..' . '/dompdf/dompdf/include/abstract_renderer.cls.php',
-        'AddCategory' => __DIR__ . '/../..' . '/database/migrations/2017_10_05_051721_add_category.php',
         'AddForeignKeysToCannedResponseTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140454_add_foreign_keys_to_canned_response_table.php',
         'AddForeignKeysToDepartmentTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140454_add_foreign_keys_to_department_table.php',
         'AddForeignKeysToEmailsTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140454_add_foreign_keys_to_emails_table.php',
@@ -697,12 +690,9 @@ class ComposerStaticInit7774f3a91ad280621dc3b00b5d0dd4a5
         'AddForeignKeysToUserAssignOrganizationTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140454_add_foreign_keys_to_user_assign_organization_table.php',
         'AddForeignKeysToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140454_add_foreign_keys_to_users_table.php',
         'AddMobileVerification' => __DIR__ . '/../..' . '/database/migrations/2017_07_04_135305_add_mobile_verification.php',
-        'AddNodesToDepartmentsTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_07_110839_add_nodes_to_departments_table.php',
-        'AddNodesToHelptopicTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_07_110924_add_nodes_to_helptopic_table.php',
         'Adobe_Font_Metrics' => __DIR__ . '/..' . '/phenx/php-font-lib/classes/Adobe_Font_Metrics.php',
         'AlertSeeder' => __DIR__ . '/../..' . '/database/seeds/AlertSeeder.php',
         'AlterTicketSourceTable' => __DIR__ . '/../..' . '/database/migrations/2016_08_16_104539_alter_ticket_source_table.php',
-        'AlterTicketsTable' => __DIR__ . '/../..' . '/database/migrations/2017_11_11_073611_alter_tickets_table.php',
         'Attribute_Translator' => __DIR__ . '/..' . '/dompdf/dompdf/include/attribute_translator.cls.php',
         'Block_Frame_Decorator' => __DIR__ . '/..' . '/dompdf/dompdf/include/block_frame_decorator.cls.php',
         'Block_Frame_Reflower' => __DIR__ . '/..' . '/dompdf/dompdf/include/block_frame_reflower.cls.php',
@@ -755,7 +745,6 @@ class ComposerStaticInit7774f3a91ad280621dc3b00b5d0dd4a5
         'CreateQueueServicesTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_26_095020_create_queue_services_table.php',
         'CreateRatingRefTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_02_081020_create_rating_ref_table.php',
         'CreateRatingsTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_02_080005_create_ratings_table.php',
-        'CreateRequiredsTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_20_115612_create_requireds_table.php',
         'CreateSettingsAlertNoticeTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_settings_alert_notice_table.php',
         'CreateSettingsAutoResponseTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_settings_auto_response_table.php',
         'CreateSettingsCompanyTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_settings_company_table.php',
@@ -766,7 +755,6 @@ class ComposerStaticInit7774f3a91ad280621dc3b00b5d0dd4a5
         'CreateSettingsTicketTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_settings_ticket_table.php',
         'CreateSlaPlanTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_sla_plan_table.php',
         'CreateSocialMediaTable' => __DIR__ . '/../..' . '/database/migrations/2016_08_08_095744_create_social_media_table.php',
-        'CreateSystemPortalTable' => __DIR__ . '/../..' . '/database/migrations/2017_11_11_093019_create_system_portal_table.php',
         'CreateTeamAssignAgentTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_team_assign_agent_table.php',
         'CreateTeamsTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_teams_table.php',
         'CreateTemplateSetsTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_02_094409_create_template_sets_table.php',
@@ -781,7 +769,6 @@ class ComposerStaticInit7774f3a91ad280621dc3b00b5d0dd4a5
         'CreateTicketStatusTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_ticket_status_table.php',
         'CreateTicketThreadTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_ticket_thread_table.php',
         'CreateTicketTokenTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_02_095357_create_ticket_token_table.php',
-        'CreateTicketTypeTable' => __DIR__ . '/../..' . '/database/migrations/2017_10_07_173423_create_ticket_type_table.php',
         'CreateTicketsTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_tickets_table.php',
         'CreateTimeFormatTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_time_format_table.php',
         'CreateTimezoneTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_timezone_table.php',
@@ -795,7 +782,6 @@ class ComposerStaticInit7774f3a91ad280621dc3b00b5d0dd4a5
         'CreateWorkflowCloseTable' => __DIR__ . '/../..' . '/database/migrations/2016_05_19_055008_create_workflow_close_table.php',
         'CreateWorkflowNameTable' => __DIR__ . '/../..' . '/database/migrations/2016_04_18_115852_create_workflow_name_table.php',
         'CreateWorkflowRuleTable' => __DIR__ . '/../..' . '/database/migrations/2016_04_18_115900_create_workflow_rule_table.php',
-        'CustomFormSeeder' => __DIR__ . '/../..' . '/database/seeds/CustomFormSeeder.php',
         'DOMPDF' => __DIR__ . '/..' . '/dompdf/dompdf/include/dompdf.cls.php',
         'DOMPDF_Exception' => __DIR__ . '/..' . '/dompdf/dompdf/include/dompdf_exception.cls.php',
         'DOMPDF_Image_Exception' => __DIR__ . '/..' . '/dompdf/dompdf/include/dompdf_image_exception.cls.php',
@@ -1260,7 +1246,6 @@ class ComposerStaticInit7774f3a91ad280621dc3b00b5d0dd4a5
         'Page_Cache' => __DIR__ . '/..' . '/dompdf/dompdf/include/page_cache.cls.php',
         'Page_Frame_Decorator' => __DIR__ . '/..' . '/dompdf/dompdf/include/page_frame_decorator.cls.php',
         'Page_Frame_Reflower' => __DIR__ . '/..' . '/dompdf/dompdf/include/page_frame_reflower.cls.php',
-        'PermisionUpdate' => __DIR__ . '/../..' . '/database/migrations/2017_06_16_113453_permision_update.php',
         'PharIo\\Manifest\\Application' => __DIR__ . '/..' . '/phar-io/manifest/src/values/Application.php',
         'PharIo\\Manifest\\ApplicationName' => __DIR__ . '/..' . '/phar-io/manifest/src/values/ApplicationName.php',
         'PharIo\\Manifest\\Author' => __DIR__ . '/..' . '/phar-io/manifest/src/values/Author.php',
@@ -1327,7 +1312,6 @@ class ComposerStaticInit7774f3a91ad280621dc3b00b5d0dd4a5
         'PharIo\\Version\\VersionConstraintParser' => __DIR__ . '/..' . '/phar-io/version/src/VersionConstraintParser.php',
         'PharIo\\Version\\VersionConstraintValue' => __DIR__ . '/..' . '/phar-io/version/src/VersionConstraintValue.php',
         'PharIo\\Version\\VersionNumber' => __DIR__ . '/..' . '/phar-io/version/src/VersionNumber.php',
-        'PortalSeeder' => __DIR__ . '/../..' . '/database/seeds/PortalSeeder.php',
         'Positioner' => __DIR__ . '/..' . '/dompdf/dompdf/include/positioner.cls.php',
         'Renderer' => __DIR__ . '/..' . '/dompdf/dompdf/include/renderer.cls.php',
         'SebastianBergmann\\CodeCoverage\\CodeCoverage' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/CodeCoverage.php',
@@ -1441,7 +1425,6 @@ class ComposerStaticInit7774f3a91ad280621dc3b00b5d0dd4a5
         'Table_Row_Group_Frame_Reflower' => __DIR__ . '/..' . '/dompdf/dompdf/include/table_row_group_frame_reflower.cls.php',
         'Table_Row_Group_Renderer' => __DIR__ . '/..' . '/dompdf/dompdf/include/table_row_group_renderer.cls.php',
         'Table_Row_Positioner' => __DIR__ . '/..' . '/dompdf/dompdf/include/table_row_positioner.cls.php',
-        'TemplateSeeder' => __DIR__ . '/../..' . '/database/seeds/TemplateSeeder.php',
         'TestCase' => __DIR__ . '/../..' . '/tests/TestCase.php',
         'Text_Frame_Decorator' => __DIR__ . '/..' . '/dompdf/dompdf/include/text_frame_decorator.cls.php',
         'Text_Frame_Reflower' => __DIR__ . '/..' . '/dompdf/dompdf/include/text_frame_reflower.cls.php',
@@ -1455,15 +1438,11 @@ class ComposerStaticInit7774f3a91ad280621dc3b00b5d0dd4a5
         'TheSeer\\Tokenizer\\TokenCollectionException' => __DIR__ . '/..' . '/theseer/tokenizer/src/TokenCollectionException.php',
         'TheSeer\\Tokenizer\\Tokenizer' => __DIR__ . '/..' . '/theseer/tokenizer/src/Tokenizer.php',
         'TheSeer\\Tokenizer\\XMLSerializer' => __DIR__ . '/..' . '/theseer/tokenizer/src/XMLSerializer.php',
-        'TicketStatusSeeder' => __DIR__ . '/../..' . '/database/seeds/TicketStatusSeeder.php',
-        'TickettypeSeeder' => __DIR__ . '/../..' . '/database/seeds/TickettypeSeeder.php',
-        'UpdateCustomForm' => __DIR__ . '/../..' . '/database/migrations/2017_05_05_082718_update_custom_form.php',
         'UpdateJob' => __DIR__ . '/../..' . '/database/migrations/2017_03_24_095825_update_job.php',
         'UpdateNotification' => __DIR__ . '/../..' . '/database/migrations/2017_02_01_110129_update-notification.php',
         'UpdateNotificationTable' => __DIR__ . '/../..' . '/database/migrations/2017_02_07_104802_update_notification_table.php',
         'UpdateSettingsSystem' => __DIR__ . '/../..' . '/database/migrations/2017_03_10_044624_update_settings_system.php',
         'UpdateTicketThread' => __DIR__ . '/../..' . '/database/migrations/2017_02_02_073016_update_ticket_thread.php',
-        'UpdateUser' => __DIR__ . '/../..' . '/database/migrations/2017_11_11_054306_update_user.php',
         'UpdateUsersTable2212017' => __DIR__ . '/../..' . '/database/migrations/2017_02_22_084059_update_users_table_22_1_2017.php',
         'UserSeeder' => __DIR__ . '/../..' . '/database/seeds/UserSeeder.php',
         'Version1079table' => __DIR__ . '/../..' . '/database/migrations/2016_06_28_141613_version1079table.php',

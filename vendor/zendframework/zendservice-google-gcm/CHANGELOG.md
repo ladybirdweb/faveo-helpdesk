@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.1.0 - 2018-05-08
+
+### Added
+
+- [#35](https://github.com/zendframework/ZendService_Google_Gcm/pull/35) adds support for PHP 7.1 and 7.2.
+
+- [#13](https://github.com/zendframework/ZendService_Google_Gcm/pull/13) adds constants mapping to common GCM error codes as `ZendService\Gcm\Response::ERROR_*`.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- [#35](https://github.com/zendframework/ZendService_Google_Gcm/pull/35) removes support for PHP 5.5.
+
+- [#35](https://github.com/zendframework/ZendService_Google_Gcm/pull/35) removes support for HHVM.
+
+### Fixed
+
+- [#18](https://github.com/zendframework/ZendService_Google_Gcm/pull/18) adds a `Content-Length` header with the message length prior to sending
+  messages to GCM; this fixes 411 errors previously observed.
+
 ## 2.0.0 - 2017-01-17
 
 ### Added

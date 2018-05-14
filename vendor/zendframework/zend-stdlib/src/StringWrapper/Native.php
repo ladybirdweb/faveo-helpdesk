@@ -16,7 +16,7 @@ class Native extends AbstractStringWrapper
 {
     /**
      * The character encoding working on
-     * (overwritten to change defaut encoding)
+     * (overwritten to change default encoding)
      *
      * @var string
      */

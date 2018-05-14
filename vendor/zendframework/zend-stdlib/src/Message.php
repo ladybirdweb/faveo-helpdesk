@@ -19,7 +19,7 @@ class Message implements MessageInterface
     protected $metadata = [];
 
     /**
-     * @var string
+     * @var mixed
      */
     protected $content = '';
 

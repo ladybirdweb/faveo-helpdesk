@@ -4,10 +4,10 @@
   <timestamp>%s</timestamp>
   <stats>
     <name>Method Crap Stats</name>
-    <methodCount>2</methodCount>
+    <methodCount>1</methodCount>
     <crapMethodCount>0</crapMethodCount>
     <crapLoad>0</crapLoad>
-    <totalCrap>2.04</totalCrap>
+    <totalCrap>1</totalCrap>
     <crapMethodPercent>0</crapMethodPercent>
   </stats>
   <methods>
@@ -17,20 +17,9 @@
       <methodName>runAnonymous</methodName>
       <methodSignature>runAnonymous()</methodSignature>
       <fullMethod>runAnonymous()</fullMethod>
-      <crap>1.04</crap>
-      <complexity>1</complexity>
-      <coverage>66.67</coverage>
-      <crapLoad>0</crapLoad>
-    </method>
-    <method>
-      <package>global</package>
-      <className>CoveredClassWithAnonymousFunctionInStaticMethod</className>
-      <methodName>anonymousFunction:11#41</methodName>
-      <methodSignature>anonymousFunction (&amp;$val, $key)</methodSignature>
-      <fullMethod>anonymousFunction (&amp;$val, $key)</fullMethod>
       <crap>1</crap>
       <complexity>1</complexity>
-      <coverage>100</coverage>
+      <coverage>87.5</coverage>
       <crapLoad>0</crapLoad>
     </method>
   </methods>

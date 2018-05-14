@@ -17,7 +17,7 @@ trait MakesAssertions
      */
     public function assertTitle($title)
     {
-        PHPUnit::assertEquals($title, $this->driver->getTitle());
+        PHPUnit::assertEquals($title, $this->driver->getTitle(), "Expected title [{$title}] does not equal actual title [{$this->driver->getTitle()}].");
 
         return $this;
     }
@@ -58,7 +58,7 @@ trait MakesAssertions
             array_get($segments, 'path', '')
         );
 
-        PHPUnit::assertRegExp('/^'.$pattern.'$/u', $currentUrl);
+        PHPUnit::assertRegExp('/^'.$pattern.'$/u', $currentUrl, "Actual URL [{$currentUrl}] does not equal expected URL [{$pattern}].");
 
         return $this;
     }
@@ -75,9 +75,9 @@ trait MakesAssertions
 
         $pattern = str_replace('\*', '.*', $pattern);
 
-        PHPUnit::assertRegExp('/^'.$pattern.'$/u', parse_url(
-            $this->driver->getCurrentURL()
-        )['path']);
+        $actualPath = parse_url($this->driver->getCurrentURL())['path'];
+
+        PHPUnit::assertRegExp('/^'.$pattern.'$/u', $actualPath, "Actual path [{$actualPath}] does not equal expected path [{$pattern}].");
 
         return $this;
     }
@@ -90,9 +90,9 @@ trait MakesAssertions
      */
     public function assertPathBeginsWith($path)
     {
-        PHPUnit::assertStringStartsWith($path, parse_url(
-            $this->driver->getCurrentURL()
-        )['path']);
+        $actualPath = parse_url($this->driver->getCurrentURL())['path'];
+
+        PHPUnit::assertStringStartsWith($path, $actualPath, "Actual path [{$actualPath}] does not begin with expected path [{$path}].");
 
         return $this;
     }
@@ -105,9 +105,9 @@ trait MakesAssertions
      */
     public function assertPathIsNot($path)
     {
-        PHPUnit::assertNotEquals($path, parse_url(
-            $this->driver->getCurrentURL()
-        )['path']);
+        $actualPath = parse_url($this->driver->getCurrentURL())['path'];
+
+        PHPUnit::assertNotEquals($path, $actualPath, "Path [{$path}] should not equal the actual value.");
 
         return $this;
     }
@@ -122,9 +122,9 @@ trait MakesAssertions
     {
         $pattern = preg_quote($fragment, '/');
 
-        PHPUnit::assertRegExp('/^'.str_replace('\*', '.*', $pattern).'$/u', (string) parse_url(
-            $this->driver->executeScript('return window.location.href;')
-        , PHP_URL_FRAGMENT));
+        $actualFragment = (string) parse_url($this->driver->executeScript('return window.location.href;'), PHP_URL_FRAGMENT);
+
+        PHPUnit::assertRegExp('/^'.str_replace('\*', '.*', $pattern).'$/u', $actualFragment, "Actual fragment [{$actualFragment}] does not equal expected fragment [{$pattern}].");
 
         return $this;
     }
@@ -137,9 +137,9 @@ trait MakesAssertions
      */
     public function assertFragmentBeginsWith($fragment)
     {
-        PHPUnit::assertStringStartsWith($fragment, (string) parse_url(
-            $this->driver->executeScript('return window.location.href;'), PHP_URL_FRAGMENT
-        ));
+        $actualFragment = (string) parse_url($this->driver->executeScript('return window.location.href;'), PHP_URL_FRAGMENT);
+
+        PHPUnit::assertStringStartsWith($fragment, $actualFragment, "Actual fragment [$actualFragment] does not begin with expected fragment [$fragment].");
 
         return $this;
     }
@@ -152,9 +152,9 @@ trait MakesAssertions
      */
     public function assertFragmentIsNot($fragment)
     {
-        PHPUnit::assertNotEquals($fragment, (string) parse_url(
-            $this->driver->executeScript('return window.location.href;'), PHP_URL_FRAGMENT
-        ));
+        $actualFragment = (string) parse_url($this->driver->executeScript('return window.location.href;'), PHP_URL_FRAGMENT);
+
+        PHPUnit::assertNotEquals($fragment, $actualFragment, "Fragment [{$fragment}] should not equal the actual value.");
 
         return $this;
     }
@@ -477,7 +477,7 @@ JS;
      */
     public function assertInputValue($field, $value)
     {
-        PHPUnit::assertEquals($value, $this->inputValue($field));
+        PHPUnit::assertEquals($value, $this->inputValue($field), "Expected value [{$value}] for the [{$field}] input does not equal the actual value [{$this->inputValue($field)}].");
 
         return $this;
     }
@@ -491,7 +491,7 @@ JS;
      */
     public function assertInputValueIsNot($field, $value)
     {
-        PHPUnit::assertNotEquals($value, $this->inputValue($field));
+        PHPUnit::assertNotEquals($value, $this->inputValue($field), "Value [{$value}] for the [{$field}] input should not equal the actual value.");
 
         return $this;
     }
@@ -732,7 +732,7 @@ JS;
 
         return $this;
     }
-    
+
     /**
      * Assert that the element with the given selector is present in the DOM.
      *
@@ -744,7 +744,7 @@ JS;
         $fullSelector = $this->resolver->format($selector);
 
         PHPUnit::assertTrue(
-            count($this->resolver->find($selector)) > 0,
+            ! is_null($this->resolver->find($selector)),
             "Element [{$fullSelector}] is not present."
         );
 
@@ -782,6 +782,74 @@ JS;
     {
         PHPUnit::assertEquals(
             $message, $this->driver->switchTo()->alert()->getText()
+        );
+
+        return $this;
+    }
+
+    /**
+     * Assert that the given field is enabled.
+     *
+     * @param  string  $field
+     * @return $this
+     */
+    public function assertEnabled($field) {
+        $element = $this->resolver->resolveForField($field);
+
+        PHPUnit::assertTrue(
+            $element->isEnabled(),
+            "Expected element [{$field}] to be enabled, but it wasn't."
+        );
+
+        return $this;
+    }
+
+    /**
+     * Assert that the given field is disabled.
+     *
+     * @param  string  $field
+     * @return $this
+     */
+    public function assertDisabled($field) {
+        $element = $this->resolver->resolveForField($field);
+
+        PHPUnit::assertFalse(
+            $element->isEnabled(),
+            "Expected element [{$field}] to be disabled, but it wasn't."
+        );
+
+        return $this;
+    }
+
+    /**
+     * Assert that the given field is focused.
+     *
+     * @param  string  $field
+     * @return $this
+     */
+    public function assertFocused($field) {
+        $element = $this->resolver->resolveForField($field);
+
+        PHPUnit::assertTrue(
+            $this->driver->switchTo()->activeElement()->equals($element),
+            "Expected element [{$field}] to be focused, but it wasn't."
+        );
+
+        return $this;
+    }
+
+    /**
+     * Assert that the given field is not focused.
+     *
+     * @param  string  $field
+     * @return $this
+     */
+    public function assertNotFocused($field) {
+        $element = $this->resolver->resolveForField($field);
+
+        PHPUnit::assertFalse(
+            $this->driver->switchTo()->activeElement()->equals($element),
+            "Expected element [{$field}] not to be focused, but it was."
         );
 
         return $this;

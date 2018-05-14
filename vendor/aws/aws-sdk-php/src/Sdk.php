@@ -140,6 +140,8 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionImportExport(array $args = [])
  * @method \Aws\Inspector\InspectorClient createInspector(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionInspector(array $args = [])
+ * @method \Aws\IoTAnalytics\IoTAnalyticsClient createIoTAnalytics(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionIoTAnalytics(array $args = [])
  * @method \Aws\IoTJobsDataPlane\IoTJobsDataPlaneClient createIoTJobsDataPlane(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionIoTJobsDataPlane(array $args = [])
  * @method \Aws\Iot\IotClient createIot(array $args = [])
@@ -275,7 +277,7 @@ namespace Aws;
  */
 class Sdk
 {
-    const VERSION = '3.54.3';
+    const VERSION = '3.55.12';
 
     /** @var array Arguments for creating clients */
     private $args;
