@@ -20,7 +20,7 @@ Flavors of Faveo
   
 Faveo Documentation
 --------------------------
-  * <a href="http://www.ladybirdweb.com/support/knowledgebase" target="_blank">Faveo user Manual</a>
+  * <a href="https://www.support.ladybirdweb.com/knowledgebase" target="_blank">Faveo user Manual</a>
   * <a href="https://docs.google.com/document/d/1-ZQ9pueqBNPSD-FZ24sLO_2fgoifKLorN_ocCEYZ1hM/" target="_blank">Faveo API Documentation</a>
   * <a href="https://docs.google.com/document/d/1pXpsQKcTyX5x6H4xA8unYxd5Duw2k94xt7wevTdoF_E/" target="_blank">Faveo Event List</a>
   * <a href="https://docs.google.com/document/d/1PGcpB19Vr42rM_DrCzC3snujzEL8N9Ocy0yewfPNWqU/" target="_blank">Faveo Plugin creation guide</a>
