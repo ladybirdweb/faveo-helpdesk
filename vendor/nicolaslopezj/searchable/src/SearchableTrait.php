@@ -1,7 +1,6 @@
 <?php namespace Nicolaslopezj\Searchable;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -42,7 +41,7 @@ trait SearchableTrait
         $query->select($this->getTable() . '.*');
         $this->makeJoins($query);
 
-        if ( ! $search)
+       if ($search === false)
         {
             return $q;
         }
@@ -51,7 +50,7 @@ trait SearchableTrait
         preg_match_all('/(?:")((?:\\\\.|[^\\\\"])*)(?:")|(\S+)/', $search, $matches);
         $words = $matches[1];
         for ($i = 2; $i < count($matches); $i++) {
-          $words = array_filter($words) + $matches[$i];
+            $words = array_filter($words) + $matches[$i];
         }
 
         $selects = [];
@@ -76,7 +75,9 @@ trait SearchableTrait
 
             foreach ($queries as $select)
             {
-                $selects[] = $select;
+                if (!empty($select)) {
+                    $selects[] = $select;
+                }
             }
         }
 
@@ -87,15 +88,11 @@ trait SearchableTrait
             $threshold = $relevance_count / 4;
         }
 
-        $this->filterQueryWithRelevance($query, $selects, $threshold);
+        if (!empty($selects)) {
+            $this->filterQueryWithRelevance($query, $selects, $threshold);
+        }
 
         $this->makeGroupBy($query);
-
-        $clone_bindings = $query->getBindings();
-        $query->setBindings([]);
-
-        $this->addBindingsToQuery($query, $this->search_bindings);
-        $this->addBindingsToQuery($query, $clone_bindings);
 
         if(is_callable($restriction)) {
             $query = $restriction($query);
@@ -181,7 +178,7 @@ trait SearchableTrait
             $query->leftJoin($table, function ($join) use ($keys) {
                 $join->on($keys[0], '=', $keys[1]);
                 if (array_key_exists(2, $keys) && array_key_exists(3, $keys)) {
-                    $join->where($keys[2], '=', $keys[3]);
+                    $join->whereRaw($keys[2] . ' = "' . $keys[3] . '"');
                 }
             });
         }
@@ -227,8 +224,9 @@ trait SearchableTrait
      */
     protected function addSelectsToQuery(Builder $query, array $selects)
     {
-        $selects = new Expression('max(' . implode(' + ', $selects) . ') as relevance');
-        $query->addSelect($selects);
+        if (!empty($selects)) {
+            $query->selectRaw('max(' . implode(' + ', $selects) . ') as relevance', $this->search_bindings);
+        }
     }
 
     /**
@@ -317,22 +315,6 @@ trait SearchableTrait
     }
 
     /**
-     * Adds the bindings to the query.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array $bindings
-     */
-    protected function addBindingsToQuery(Builder $query, array $bindings) {
-        $count = $this->getDatabaseDriver() != 'mysql' ? 2 : 1;
-        for ($i = 0; $i < $count; $i++) {
-            foreach($bindings as $binding) {
-                $type = $i == 1 ? 'select' : 'having';
-                $query->addBinding($binding, $type);
-            }
-        }
-    }
-
-    /**
      * Merge our cloned query builder with the original one.
      *
      * @param \Illuminate\Database\Eloquent\Builder $clone
@@ -346,11 +328,15 @@ trait SearchableTrait
             $original->from(DB::connection($this->connection)->raw("({$clone->toSql()}) as `{$tableName}`"));
         }
 
-        $original->setBindings(
-            array_merge_recursive(
-                $clone->getBindings(),
-                $original->getBindings()
-            )
+        // First create a new array merging bindings
+        $mergedBindings = array_merge_recursive(
+            $clone->getBindings(),
+            $original->getBindings()
         );
+
+        // Then apply bindings WITHOUT global scopes which are already included. If not, there is a strange behaviour
+        // with some scope's bindings remaning
+        $original->withoutGlobalScopes()->setBindings($mergedBindings);
     }
 }
+

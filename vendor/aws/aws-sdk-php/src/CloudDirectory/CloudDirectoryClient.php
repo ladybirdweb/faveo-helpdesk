@@ -61,6 +61,8 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise getDirectoryAsync(array $args = [])
  * @method \Aws\Result getFacet(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getFacetAsync(array $args = [])
+ * @method \Aws\Result getLinkAttributes(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getLinkAttributesAsync(array $args = [])
  * @method \Aws\Result getObjectAttributes(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getObjectAttributesAsync(array $args = [])
  * @method \Aws\Result getObjectInformation(array $args = [])
@@ -121,6 +123,8 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise untagResourceAsync(array $args = [])
  * @method \Aws\Result updateFacet(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateFacetAsync(array $args = [])
+ * @method \Aws\Result updateLinkAttributes(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise updateLinkAttributesAsync(array $args = [])
  * @method \Aws\Result updateObjectAttributes(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateObjectAttributesAsync(array $args = [])
  * @method \Aws\Result updateSchema(array $args = [])
@@ -131,5 +135,7 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise upgradeAppliedSchemaAsync(array $args = [])
  * @method \Aws\Result upgradePublishedSchema(array $args = [])
  * @method \GuzzleHttp\Promise\Promise upgradePublishedSchemaAsync(array $args = [])
+ * @method \Aws\Result listManagedSchemaArns(array $args = []) (supported in versions 2017-01-11)
+ * @method \GuzzleHttp\Promise\Promise listManagedSchemaArnsAsync(array $args = []) (supported in versions 2017-01-11)
  */
 class CloudDirectoryClient extends AwsClient {}

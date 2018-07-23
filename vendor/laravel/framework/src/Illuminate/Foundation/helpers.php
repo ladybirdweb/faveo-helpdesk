@@ -372,7 +372,7 @@ if (! function_exists('decrypt')) {
      * Decrypt the given value.
      *
      * @param  string  $value
-     * @return string
+     * @return mixed
      */
     function decrypt($value)
     {
@@ -779,7 +779,7 @@ if (! function_exists('response')) {
     /**
      * Return a new response from the application.
      *
-     * @param  string  $content
+     * @param  string|array  $content
      * @param  int     $status
      * @param  array   $headers
      * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Contracts\Routing\ResponseFactory

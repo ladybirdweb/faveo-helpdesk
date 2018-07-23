@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\TextUI;
 
 use PHPUnit\Framework\AssertionFailedError;
@@ -31,14 +30,22 @@ use SebastianBergmann\Timer\Timer;
 class ResultPrinter extends Printer implements TestListener
 {
     public const EVENT_TEST_START      = 0;
+
     public const EVENT_TEST_END        = 1;
+
     public const EVENT_TESTSUITE_START = 2;
+
     public const EVENT_TESTSUITE_END   = 3;
 
     public const COLOR_NEVER   = 'never';
+
     public const COLOR_AUTO    = 'auto';
+
     public const COLOR_ALWAYS  = 'always';
+
     public const COLOR_DEFAULT = self::COLOR_NEVER;
+
+    private const AVAILABLE_COLORS = [self::COLOR_NEVER, self::COLOR_AUTO, self::COLOR_ALWAYS];
 
     /**
      * @var array
@@ -131,12 +138,9 @@ class ResultPrinter extends Printer implements TestListener
     /**
      * Constructor.
      *
-     * @param mixed      $out
-     * @param bool       $verbose
      * @param string     $colors
-     * @param bool       $debug
      * @param int|string $numberOfColumns
-     * @param bool       $reverse
+     * @param null|mixed $out
      *
      * @throws Exception
      */
@@ -144,12 +148,10 @@ class ResultPrinter extends Printer implements TestListener
     {
         parent::__construct($out);
 
-        $availableColors = [self::COLOR_NEVER, self::COLOR_AUTO, self::COLOR_ALWAYS];
-
-        if (!\in_array($colors, $availableColors)) {
+        if (!\in_array($colors, self::AVAILABLE_COLORS, true)) {
             throw InvalidArgumentHelper::factory(
                 3,
-                \vsprintf('value from "%s", "%s" or "%s"', $availableColors)
+                \vsprintf('value from "%s", "%s" or "%s"', self::AVAILABLE_COLORS)
             );
         }
 
@@ -190,11 +192,6 @@ class ResultPrinter extends Printer implements TestListener
         }
 
         $this->printFooter($result);
-    }
-
-    public function printWaitPrompt(): void
-    {
-        $this->write("\n<RETURN> to continue\n");
     }
 
     /**
@@ -311,10 +308,8 @@ class ResultPrinter extends Printer implements TestListener
 
         $this->lastTestFailed = false;
 
-        if ($test instanceof TestCase) {
-            if (!$test->hasExpectationOnOutput()) {
-                $this->write($test->getActualOutput());
-            }
+        if ($test instanceof TestCase && !$test->hasExpectationOnOutput()) {
+            $this->write($test->getActualOutput());
         }
     }
 

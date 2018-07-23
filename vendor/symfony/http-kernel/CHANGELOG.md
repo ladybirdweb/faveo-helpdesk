@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+4.1.0
+-----
+
+ * added orphaned events support to `EventDataCollector`
+ * `ExceptionListener` now logs exceptions at priority `0` (previously logged at `-128`)
+ * Deprecated `service:action` syntax with a single colon to reference controllers. Use `service::method` instead.
+ * Added the ability to profile individual argument value resolvers via the
+   `Symfony\Component\HttpKernel\Controller\ArgumentResolver\TraceableValueResolver`
+
 4.0.0
 -----
 

@@ -4,29 +4,19 @@ PHPUnit is a programmer-oriented testing framework for PHP. It is an instance of
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/phpunit/phpunit.svg?style=flat-square)](https://packagist.org/packages/phpunit/phpunit)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.1-8892BF.svg?style=flat-square)](https://php.net/)
-[![Build Status](https://img.shields.io/travis/sebastianbergmann/phpunit/7.1.svg?style=flat-square)](https://phpunit.de/build-status.html)
+[![Build Status](https://img.shields.io/travis/sebastianbergmann/7.2/master.svg?style=flat-square)](https://phpunit.de/build-status.html)
 
 ## Installation
 
-We distribute a [PHP Archive (PHAR)](https://php.net/phar) that has all required (as well as some optional) dependencies of PHPUnit bundled in a single file:
+We distribute a [PHP Archive (PHAR)](https://php.net/phar) that has all required (as well as some optional) dependencies of PHPUnit 7.2 bundled in a single file:
 
 ```bash
-$ wget https://phar.phpunit.de/phpunit.phar
+$ wget https://phar.phpunit.de/phpunit-7.2.phar
 
-$ chmod +x phpunit.phar
-
-$ mv phpunit.phar /usr/local/bin/phpunit
+$ php phpunit-7.2.phar --version
 ```
 
-You can also immediately use the PHAR after you have downloaded it, of course:
-
-```bash
-$ wget https://phar.phpunit.de/phpunit.phar
-
-$ php phpunit.phar
-```
-
-Alternatively, you may use [Composer](https://getcomposer.org/) to download and install PHPUnit as well as its dependencies. Please refer to the [documentation](https://phpunit.de/documentation.html) for details on how to do this.
+Alternatively, you may use [Composer](https://getcomposer.org/) to download and install PHPUnit as well as its dependencies. Please refer to the "[Getting Started](https://phpunit.de/getting-started-with-phpunit.html)" guide for details on how to install PHPUnit.
 
 ## Contribute
 
@@ -38,7 +28,6 @@ Thanks to everyone who has contributed to PHPUnit! You can find a detailed list 
 
 * [PHPUnit](https://github.com/sebastianbergmann/phpunit/graphs/contributors)
 * [php-code-coverage](https://github.com/sebastianbergmann/php-code-coverage/graphs/contributors)
-* [phpunit-mock-objects](https://github.com/sebastianbergmann/phpunit-mock-objects/graphs/contributors)
 
 A very special thanks to everyone who has contributed to the documentation and helps maintain the translations:
 

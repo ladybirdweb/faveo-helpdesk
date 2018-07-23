@@ -71,7 +71,7 @@ class Profile
     /**
      * Sets the parent token.
      */
-    public function setParent(Profile $parent)
+    public function setParent(self $parent)
     {
         $this->parent = $parent;
     }
@@ -210,10 +210,21 @@ class Profile
     /**
      * Adds the child token.
      */
-    public function addChild(Profile $child)
+    public function addChild(self $child)
     {
         $this->children[] = $child;
         $child->setParent($this);
+    }
+
+    public function getChildByToken(string $token): ?self
+    {
+        foreach ($this->children as $child) {
+            if ($token === $child->getToken()) {
+                return $child;
+            }
+        }
+
+        return null;
     }
 
     /**

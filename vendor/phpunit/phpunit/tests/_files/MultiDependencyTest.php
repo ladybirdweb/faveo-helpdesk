@@ -28,13 +28,23 @@ class MultiDependencyTest extends TestCase
     /**
      * @depends testOne
      * @depends testTwo
-     *
-     * @param mixed $a
-     * @param mixed $b
      */
     public function testThree($a, $b): void
     {
         $this->assertEquals('foo', $a);
         $this->assertEquals('bar', $b);
+    }
+
+    /**
+     * @depends MultiDependencyTest::testThree
+     */
+    public function testFour()
+    {
+        $this->assertTrue(true);
+    }
+
+    public function testFive()
+    {
+        $this->assertTrue(true);
     }
 }

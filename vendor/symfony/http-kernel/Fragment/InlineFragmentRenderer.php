@@ -115,7 +115,9 @@ class InlineFragmentRenderer extends RoutableFragmentRenderer
             $server['HTTP_X_FORWARDED_FOR'] = ($currentXForwardedFor ? $currentXForwardedFor.', ' : '').$request->getClientIp();
         }
 
-        $server['REMOTE_ADDR'] = '127.0.0.1';
+        $trustedProxies = Request::getTrustedProxies();
+        $server['REMOTE_ADDR'] = $trustedProxies ? reset($trustedProxies) : '127.0.0.1';
+
         unset($server['HTTP_IF_MODIFIED_SINCE']);
         unset($server['HTTP_IF_NONE_MATCH']);
 
@@ -124,9 +126,12 @@ class InlineFragmentRenderer extends RoutableFragmentRenderer
             $subRequest->headers->set('Surrogate-Capability', $request->headers->get('Surrogate-Capability'));
         }
 
-        if ($session = $request->getSession()) {
-            $subRequest->setSession($session);
+        static $setSession;
+
+        if (null === $setSession) {
+            $setSession = \Closure::bind(function ($subRequest, $request) { $subRequest->session = $request->session; }, null, Request::class);
         }
+        $setSession($subRequest, $request);
 
         return $subRequest;
     }

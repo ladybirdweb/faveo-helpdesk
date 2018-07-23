@@ -37,7 +37,7 @@ class WebDriverOptions
     /**
      * Add a specific cookie.
      *
-     * @see Facebook\WebDriver\Cookie for description of possible cookie properties
+     * @see Cookie for description of possible cookie properties
      * @param Cookie|array $cookie Cookie object. May be also created from array for compatibility reasons.
      * @return WebDriverOptions The current instance.
      */
@@ -90,7 +90,7 @@ class WebDriverOptions
      * Get the cookie with a given name.
      *
      * @param string $name
-     * @return Cookie The cookie, or null if no cookie with the given name is presented.
+     * @return Cookie|null The cookie, or null if no cookie with the given name is presented.
      */
     public function getCookieNamed($name)
     {

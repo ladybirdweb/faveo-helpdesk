@@ -1,5 +1,8 @@
 parameters:
     ignoreErrors:
+        # https://github.com/phpstan/phpstan/issues/1185
+        - '#Function xdebug_disable not found.#'
+
         # parent calls are intentionally omitted
         - '#Issue244Exception::__construct\(\) does not call parent constructor from Exception.#'
         - '#Issue244ExceptionIntCode::__construct\(\) does not call parent constructor from Exception.#'
@@ -12,6 +15,33 @@ parameters:
         # global constants does not work properly in PHPStan yet https://github.com/phpstan/phpstan/issues/768
         - '#Constant TEST_FILES_PATH not found.#'
         - '#Constant GITHUB_ISSUE not found.#'
+
+        # This access to undefined property is legit
+        - '#Access to an undefined property SplObjectStorage::\$foo#'
+
+        # intentionally non existent function in tests/Regression/GitHub/3107/Issue3107Test.php
+        - '#Function does_not_exist not found#'
+
+        # https://github.com/sebastianbergmann/phpunit/issues/3129
+        - '#Access to an undefined property PHPUnit\\Framework\\MockObject\\MockObject::\$constructorArgs#'
+        - '#Access to an undefined property PHPUnit\\Framework\\MockObject\\MockObject::\$constructorCalled#'
+        - '#Access to an undefined property PHPUnit\\Framework\\MockObject\\MockObject::\$cloned#'
+        - '#Call to an undefined method PHPUnit\\Framework\\MockObject\\MockObject::foo()#'
+        - '#Call to an undefined method PHPUnit\\Framework\\MockObject\\MockObject::bar()#'
+        - '#Call to an undefined method PHPUnit\\Framework\\MockObject\\MockObject::doSomething()#'
+        - '#Call to an undefined method PHPUnit\\Framework\\MockObject\\MockObject::wrong()#'
+        - '#Call to an undefined method PHPUnit\\Framework\\MockObject\\MockObject::right()#'
+        - '#Call to an undefined method PHPUnit\\Framework\\MockObject\\MockObject::staticMethod()#'
+        - '#Call to an undefined method PHPUnit\\Framework\\MockObject\\MockObject::returnAnything()#'
+        - '#Call to an undefined method PHPUnit\\Framework\\MockObject\\MockObject::mockableMethod()#'
+        - '#Call to an undefined method PHPUnit\\Framework\\MockObject\\MockObject::anotherMockableMethod()#'
+        - '#Call to an undefined method PHPUnit\\Framework\\MockObject\\MockObject::someMethod()#'
+        - '#Call to an undefined method PHPUnit\\Framework\\MockObject\\MockObject::callback()#'
+        - '#Call to an undefined method object::ohHai#'
+        - '#Call to static method bar\(\) on an unknown class Legacy#'
+        - '#Class ACustomClassName not found#'
+        - '#Function functionCallback not found while trying to analyse it - autoloading is probably not configured properly#'
+        - '#Result of method ClassWithAllPossibleReturnTypes::methodWithVoidReturnTypeDeclaration\(\) \(void\) is used#'
 
     excludes_analyse:
         # duplicated classname OneTest

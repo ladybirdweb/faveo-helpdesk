@@ -9,12 +9,13 @@
  */
 class Mockable
 {
-    public $constructorCalled = false;
-    public $cloned            = false;
+    public $constructorArgs;
 
-    public function __construct()
+    public $cloned;
+
+    public function __construct($arg1 = null, $arg2 = null)
     {
-        $this->constructorCalled = false;
+        $this->constructorArgs = [$arg1, $arg2];
     }
 
     public function __clone()
@@ -22,13 +23,15 @@ class Mockable
         $this->cloned = true;
     }
 
-    public function foo()
+    public function mockableMethod()
     {
+        // something different from NULL
         return true;
     }
 
-    public function bar()
+    public function anotherMockableMethod()
     {
+        // something different from NULL
         return true;
     }
 }

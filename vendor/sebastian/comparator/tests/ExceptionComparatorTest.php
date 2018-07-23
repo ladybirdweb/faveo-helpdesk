@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace SebastianBergmann\Comparator;
 
 use Exception;
@@ -15,17 +14,20 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @coversDefaultClass SebastianBergmann\Comparator\ExceptionComparator
+ * @covers \SebastianBergmann\Comparator\ExceptionComparator<extended>
  *
- * @uses SebastianBergmann\Comparator\Comparator
- * @uses SebastianBergmann\Comparator\Factory
- * @uses SebastianBergmann\Comparator\ComparisonFailure
+ * @uses \SebastianBergmann\Comparator\Comparator
+ * @uses \SebastianBergmann\Comparator\Factory
+ * @uses \SebastianBergmann\Comparator\ComparisonFailure
  */
-class ExceptionComparatorTest extends TestCase
+final class ExceptionComparatorTest extends TestCase
 {
+    /**
+     * @var ExceptionComparator
+     */
     private $comparator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->comparator = new ExceptionComparator;
         $this->comparator->setFactory(new Factory);
@@ -34,18 +36,18 @@ class ExceptionComparatorTest extends TestCase
     public function acceptsSucceedsProvider()
     {
         return [
-          [new Exception, new Exception],
-          [new RuntimeException, new RuntimeException],
-          [new Exception, new RuntimeException]
+            [new Exception, new Exception],
+            [new RuntimeException, new RuntimeException],
+            [new Exception, new RuntimeException]
         ];
     }
 
     public function acceptsFailsProvider()
     {
         return [
-          [new Exception, null],
-          [null, new Exception],
-          [null, null]
+            [new Exception, null],
+            [null, new Exception],
+            [null, null]
         ];
     }
 
@@ -58,10 +60,10 @@ class ExceptionComparatorTest extends TestCase
         $exception4 = new RuntimeException('Error', 100);
 
         return [
-          [$exception1, $exception1],
-          [$exception1, $exception2],
-          [$exception3, $exception3],
-          [$exception3, $exception4]
+            [$exception1, $exception1],
+            [$exception1, $exception2],
+            [$exception3, $exception3],
+            [$exception3, $exception4]
         ];
     }
 
@@ -78,22 +80,18 @@ class ExceptionComparatorTest extends TestCase
         $exception5 = new RuntimeException('Error', 101);
 
         return [
-          [$exception1, $exception2, $equalMessage],
-          [$exception1, $exception3, $equalMessage],
-          [$exception1, $exception4, $typeMessage],
-          [$exception2, $exception3, $equalMessage],
-          [$exception4, $exception5, $equalMessage]
+            [$exception1, $exception2, $equalMessage],
+            [$exception1, $exception3, $equalMessage],
+            [$exception1, $exception4, $typeMessage],
+            [$exception2, $exception3, $equalMessage],
+            [$exception4, $exception5, $equalMessage]
         ];
     }
 
     /**
-     * @covers       ::accepts
      * @dataProvider acceptsSucceedsProvider
-     *
-     * @param mixed $expected
-     * @param mixed $actual
      */
-    public function testAcceptsSucceeds($expected, $actual)
+    public function testAcceptsSucceeds($expected, $actual): void
     {
         $this->assertTrue(
           $this->comparator->accepts($expected, $actual)
@@ -101,13 +99,9 @@ class ExceptionComparatorTest extends TestCase
     }
 
     /**
-     * @covers       ::accepts
      * @dataProvider acceptsFailsProvider
-     *
-     * @param mixed $expected
-     * @param mixed $actual
      */
-    public function testAcceptsFails($expected, $actual)
+    public function testAcceptsFails($expected, $actual): void
     {
         $this->assertFalse(
           $this->comparator->accepts($expected, $actual)
@@ -115,13 +109,9 @@ class ExceptionComparatorTest extends TestCase
     }
 
     /**
-     * @covers       ::assertEquals
      * @dataProvider assertEqualsSucceedsProvider
-     *
-     * @param mixed $expected
-     * @param mixed $actual
      */
-    public function testAssertEqualsSucceeds($expected, $actual)
+    public function testAssertEqualsSucceeds($expected, $actual): void
     {
         $exception = null;
 
@@ -134,14 +124,9 @@ class ExceptionComparatorTest extends TestCase
     }
 
     /**
-     * @covers       ::assertEquals
      * @dataProvider assertEqualsFailsProvider
-     *
-     * @param mixed $expected
-     * @param mixed $actual
-     * @param mixed $message
      */
-    public function testAssertEqualsFails($expected, $actual, $message)
+    public function testAssertEqualsFails($expected, $actual, $message): void
     {
         $this->expectException(ComparisonFailure::class);
         $this->expectExceptionMessage($message);

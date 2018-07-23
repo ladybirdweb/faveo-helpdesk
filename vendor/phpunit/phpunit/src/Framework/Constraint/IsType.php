@@ -18,22 +18,33 @@ namespace PHPUnit\Framework\Constraint;
 class IsType extends Constraint
 {
     public const TYPE_ARRAY    = 'array';
+
     public const TYPE_BOOL     = 'bool';
+
     public const TYPE_FLOAT    = 'float';
+
     public const TYPE_INT      = 'int';
+
     public const TYPE_NULL     = 'null';
+
     public const TYPE_NUMERIC  = 'numeric';
+
     public const TYPE_OBJECT   = 'object';
+
     public const TYPE_RESOURCE = 'resource';
+
     public const TYPE_STRING   = 'string';
+
     public const TYPE_SCALAR   = 'scalar';
+
     public const TYPE_CALLABLE = 'callable';
+
     public const TYPE_ITERABLE = 'iterable';
 
     /**
      * @var array
      */
-    private $types = [
+    private const KNOWN_TYPES = [
         'array'    => true,
         'boolean'  => true,
         'bool'     => true,
@@ -64,7 +75,7 @@ class IsType extends Constraint
     {
         parent::__construct();
 
-        if (!isset($this->types[$type])) {
+        if (!isset(self::KNOWN_TYPES[$type])) {
             throw new \PHPUnit\Framework\Exception(
                 \sprintf(
                     'Type specified for PHPUnit\Framework\Constraint\IsType <%s> ' .

@@ -140,7 +140,7 @@ class PhpRedisConnection extends Connection implements ConnectionContract
      */
     public function hsetnx($hash, $key, $value)
     {
-        return (int) $this->client->hsetnx($hash, $key, $value);
+        return (int) $this->client->hSetNx($hash, $key, $value);
     }
 
     /**
@@ -309,7 +309,7 @@ class PhpRedisConnection extends Connection implements ConnectionContract
     }
 
     /**
-     * Evaluate a script and retunr its result.
+     * Evaluate a script and return its result.
      *
      * @param  string  $script
      * @param  int  $numberOfKeys

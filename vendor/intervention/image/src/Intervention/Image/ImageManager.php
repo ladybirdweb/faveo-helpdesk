@@ -30,6 +30,8 @@ class ImageManager
      * Overrides configuration settings
      *
      * @param array $config
+     *
+     * @return self
      */
     public function configure(array $config = [])
     {
@@ -53,8 +55,8 @@ class ImageManager
     /**
      * Creates an empty image canvas
      *
-     * @param  integer $width
-     * @param  integer $height
+     * @param  int   $width
+     * @param  int   $height
      * @param  mixed $background
      *
      * @return \Intervention\Image\Image
@@ -69,7 +71,7 @@ class ImageManager
      * (requires additional package intervention/imagecache)
      *
      * @param Closure $callback
-     * @param integer $lifetime
+     * @param int     $lifetime
      * @param boolean $returnObj
      *
      * @return Image

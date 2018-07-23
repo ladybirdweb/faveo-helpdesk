@@ -210,7 +210,7 @@ class ResponseHeaderBag extends HeaderBag
      *
      * @param string $format
      *
-     * @return array
+     * @return Cookie[]
      *
      * @throws \InvalidArgumentException When the $format is invalid
      */
@@ -290,13 +290,12 @@ class ResponseHeaderBag extends HeaderBag
             throw new \InvalidArgumentException('The filename and the fallback cannot contain the "/" and "\\" characters.');
         }
 
-        $output = sprintf('%s; filename="%s"', $disposition, str_replace('"', '\\"', $filenameFallback));
-
+        $params = array('filename' => $filenameFallback);
         if ($filename !== $filenameFallback) {
-            $output .= sprintf("; filename*=utf-8''%s", rawurlencode($filename));
+            $params['filename*'] = "utf-8''".rawurlencode($filename);
         }
 
-        return $output;
+        return $disposition.'; '.HeaderUtils::toString($params, ';');
     }
 
     /**

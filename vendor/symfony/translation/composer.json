@@ -21,6 +21,7 @@
     },
     "require-dev": {
         "symfony/config": "~3.4|~4.0",
+        "symfony/console": "~3.4|~4.0",
         "symfony/dependency-injection": "~3.4|~4.0",
         "symfony/intl": "~3.4|~4.0",
         "symfony/yaml": "~3.4|~4.0",
@@ -46,7 +47,7 @@
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-master": "4.0-dev"
+            "dev-master": "4.1-dev"
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Symfony\Component\Process;
 use Symfony\Component\Process\Exception\InvalidArgumentException;
 use Symfony\Component\Process\Exception\LogicException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\Pipes\PipesInterface;
@@ -389,7 +390,7 @@ class Process implements \IteratorAggregate
         }
 
         if ($this->processInformation['signaled'] && $this->processInformation['termsig'] !== $this->latestSignal) {
-            throw new RuntimeException(sprintf('The process has been signaled with signal "%s".', $this->processInformation['termsig']));
+            throw new ProcessSignaledException($this);
         }
 
         return $this->exitcode;
@@ -974,16 +975,9 @@ class Process implements \IteratorAggregate
         if ('\\' === DIRECTORY_SEPARATOR && $tty) {
             throw new RuntimeException('TTY mode is not supported on Windows platform.');
         }
-        if ($tty) {
-            static $isTtySupported;
 
-            if (null === $isTtySupported) {
-                $isTtySupported = (bool) @proc_open('echo 1 >/dev/null', array(array('file', '/dev/tty', 'r'), array('file', '/dev/tty', 'w'), array('file', '/dev/tty', 'w')), $pipes);
-            }
-
-            if (!$isTtySupported) {
-                throw new RuntimeException('TTY mode requires /dev/tty to be read/writable.');
-            }
+        if ($tty && !self::isTtySupported()) {
+            throw new RuntimeException('TTY mode requires /dev/tty to be read/writable.');
         }
 
         $this->tty = (bool) $tty;
@@ -1165,6 +1159,20 @@ class Process implements \IteratorAggregate
 
             throw new ProcessTimedOutException($this, ProcessTimedOutException::TYPE_IDLE);
         }
+    }
+
+    /**
+     * Returns whether TTY is supported on the current operating system.
+     */
+    public static function isTtySupported(): bool
+    {
+        static $isTtySupported;
+
+        if (null === $isTtySupported) {
+            $isTtySupported = (bool) @proc_open('echo 1 >/dev/null', array(array('file', '/dev/tty', 'r'), array('file', '/dev/tty', 'w'), array('file', '/dev/tty', 'w')), $pipes);
+        }
+
+        return $isTtySupported;
     }
 
     /**

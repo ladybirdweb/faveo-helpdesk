@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:annotation>
     <xs:documentation source="https://phpunit.de/documentation.html">
-      This Schema file defines the rules by which the XML configuration file of PHPUnit 7.1 may be structured.
+      This Schema file defines the rules by which the XML configuration file of PHPUnit 7.2 may be structured.
     </xs:documentation>
     <xs:appinfo source="https://phpunit.de/documentation.html"/>
   </xs:annotation>
@@ -90,6 +90,7 @@
       <xs:element name="object" type="objectType" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="file" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="directory" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="boolean" type="xs:boolean" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:group>
   <xs:group name="argumentChoice">
@@ -102,6 +103,7 @@
       <xs:element name="object" type="objectType" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="file" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="directory" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="boolean" type="xs:boolean" minOccurs="0" maxOccurs="unbounded"/>
     </xs:choice>
   </xs:group>
   <xs:simpleType name="columnsType">
@@ -162,6 +164,13 @@
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
+  <xs:simpleType name="executionOrderType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="default"/>
+      <xs:enumeration value="reverse"/>
+      <xs:enumeration value="random"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:complexType name="fileFilterType">
     <xs:simpleContent>
       <xs:extension base="xs:anyURI">
@@ -214,6 +223,7 @@
     <xs:attribute name="convertErrorsToExceptions" type="xs:boolean" default="true"/>
     <xs:attribute name="convertNoticesToExceptions" type="xs:boolean" default="true"/>
     <xs:attribute name="convertWarningsToExceptions" type="xs:boolean" default="true"/>
+    <xs:attribute name="disableCodeCoverageIgnore" type="xs:boolean" default="false"/>
     <xs:attribute name="forceCoversAnnotation" type="xs:boolean" default="false"/>
     <xs:attribute name="printerClass" type="xs:string" default="PHPUnit\TextUI\ResultPrinter"/>
     <xs:attribute name="printerFile" type="xs:anyURI"/>
@@ -245,6 +255,8 @@
     <xs:attribute name="reverseDefectList" type="xs:boolean" default="false"/>
     <xs:attribute name="registerMockObjectsFromTestArgumentsRecursively" type="xs:boolean" default="false"/>
     <xs:attribute name="extensionsDirectory" type="xs:string"/>
+    <xs:attribute name="executionOrder" type="executionOrderType" default="default"/>
+    <xs:attribute name="resolveDependencies" type="xs:boolean" default="false"/>
   </xs:attributeGroup>
   <xs:group name="configGroup">
     <xs:all>
