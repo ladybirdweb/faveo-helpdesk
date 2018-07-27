@@ -1,4 +1,9 @@
 <?php
+/*
+  |--------------------------------------
+  |   中文语言包
+  |--------------------------------------
+ */
 
 return [
     /*
@@ -6,9 +11,10 @@ return [
       | Authentication Pages [English(en)]
       |----------------------------------------------------------------------------------------
       |
-      | The following language lines are used in all authentication related issues to translate
-      | some words in view to English. You are free to change them to anything you want to
-      | customize your views to better match your application.
+      | The following language lines are used in all authentication related
+      | issues to translate some words in view to English. You are free to
+      | change them to anything you want to customize your views to better
+      | match your application.
       |
      */
 
@@ -17,64 +23,64 @@ return [
       |   Error
       |--------------------------------------
      */
-    'success'                                                                                     => '成功',
-    'fails'                                                                                       => '失败',
-    'alert'                                                                                       => '提醒',
-    'warning'                                                                                     => '警告',
-    'required-error'                                                                              => '请填写所有必填字段',
-    'invalid'                                                                                     => '错误的用户名或密码',
-    'sorry_something_went_wrong'                                                                  => '抱歉，出错了',
-    'were_working_on_it_and_well_get_it_fixed_as_soon_as_we_can'                                  => '我们正在努力，我们会尽快把它修好.',
-    'we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found'                              => '很抱歉，你要的页面找不到了.',
-    'go_back'                                                                                     => '返回',
-    'the_board_is_offline'                                                                        => '面板已经下线',
-    'error_establishing_connection_to_database'                                                   => '数据库连接错误',
-    'unauthorized_access'                                                                         => '权限不足',
-    'not-autherised'                                                                              => '没有权限',
-    'otp-not-matched'                                                                             => 'Oops! 你输入的OTP代码与我们发送给你的号码不一致.',
-    'otp-invalid'                                                                                 => 'OTP代码必须是六位数字.',
-    'otp-input-title'                                                                             => '输入六位数字.',
-    'otp-expired'                                                                                 => '你的OTP代码已过期.<br/> 点击 "Resend OTP" 发送一个新的 OTP 代码到你的手机上.',
-    'resend-otp-title'                                                                            => '点击这里重新发送 OTP',
+    'success'                                                                => '成功',
+    'fails'                                                                  => '失败',
+    'alert'                                                                  => '提醒',
+    'warning'                                                                => '警告',
+    'required-error'                                                         => '请填写所有必填字段',
+    'invalid'                                                                => '错误的用户名或密码',
+    'sorry_something_went_wrong'                                             => '抱歉，出错了',
+    'were_working_on_it_and_well_get_it_fixed_as_soon_as_we_can'             => '我们正在努力，我们会尽快把它修好.',
+    'we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found'         => '很抱歉，你要的页面找不到了.',
+    'go_back'                                                                => '返回',
+    'the_board_is_offline'                                                   => '面板已经下线',
+    'error_establishing_connection_to_database'                              => '数据库连接错误',
+    'unauthorized_access'                                                    => '权限不足',
+    'not-autherised'                                                         => '没有权限',
+    'otp-not-matched'                                                        => 'Oops! 你输入的OTP代码与我们发送给你的号码不一致.',
+    'otp-invalid'                                                            => 'OTP代码必须是六位数字.',
+    'otp-input-title'                                                        => '输入六位数字.',
+    'otp-expired'                                                            => '你的OTP代码已过期.<br/> 点击 "Resend OTP" 发送一个新的 OTP 代码到你的手机上.',
+    'resend-otp-title'                                                       => '点击这里重新发送 OTP',
     /*
       |--------------------------------------
       |   Login Page
       |--------------------------------------
      */
-    'login_to_start_your_session'                                                                 => '登陆去启动你的会话',
-    'login'                                                                                       => '登陆',
-    'remember'                                                                                    => '登陆',
-    'signmein'                                                                                    => '登陆标志',
-    'iforgot'                                                                                     => '忘记密码',
-    'email_address'                                                                               => '邮箱地址',
-    'password'                                                                                    => '密码',
-    'password_confirmation'                                                                       => '确认密码',
-    'woops'                                                                                       => 'Whoops!',
-    'theirisproblem'                                                                              => '检查文本框输入值是否正确.',
-    'login'                                                                                       => '登陆',
-    'e-mail'                                                                                      => '邮箱',
-    'reg_new_member'                                                                              => '注册一个会员',
-    'this_account_is_currently_inactive'                                                          => '这个账号还为激活!',
-    'not-registered'                                                                              => '电子邮件/用户名未注册',
-    'verify'                                                                                      => '验证',
-    'enter-otp'                                                                                   => 'Enter OTP',
-    'did-not-recive-code'                                                                         => '没有收到OTP?',
-    'resend_otp'                                                                                  => '重新发送OTP',
-    'verify-screen-msg'                                                                           => '你的账户当前未激活.<br/>去激活你的账号, 请输入我们发送给你的OTP码',
-    'otp-sent'                                                                                    => '我们已经像你发送了一个OTP码.',
-    'verify-number'                                                                               => '验证号码',
-    'get-verify-message'                                                                          => '输入我们发送给你的新的OTP码.',
-    'number-verification-sussessfull'                                                             => '您的号码已被成功验证，请稍候，我们正在更新您的资料.',
-    'enter_your_email_here'                                                                       => '在这里输入你的电子邮件',
+    'login_to_start_your_session'                                            => '登陆去启动你的会话',
+    'login'                                                                  => '登陆',
+    'remember'                                                               => '登陆',
+    'signmein'                                                               => '登陆标志',
+    'iforgot'                                                                => '忘记密码',
+    'email_address'                                                          => '邮箱地址',
+    'password'                                                               => '密码',
+    'password_confirmation'                                                  => '确认密码',
+    'woops'                                                                  => 'Whoops!',
+    'theirisproblem'                                                         => '检查文本框输入值是否正确.',
+    'login'                                                                  => '登陆',
+    'e-mail'                                                                 => '邮箱',
+    'reg_new_member'                                                         => '注册一个会员',
+    'this_account_is_currently_inactive'                                     => '这个账号还为激活!',
+    'not-registered'                                                         => '电子邮件/用户名未注册',
+    'verify'                                                                 => '验证',
+    'enter-otp'                                                              => 'Enter OTP',
+    'did-not-recive-code'                                                    => '没有收到OTP?',
+    'resend_otp'                                                             => '重新发送OTP',
+    'verify-screen-msg'                                                      => '你的账户当前未激活.<br/>去激活你的账号, 请输入我们发送给你的OTP码',
+    'otp-sent'                                                               => '我们已经像你发送了一个OTP码.',
+    'verify-number'                                                          => '验证号码',
+    'get-verify-message'                                                     => '输入我们发送给你的新的OTP码.',
+    'number-verification-sussessfull'                                        => '您的号码已被成功验证，请稍候，我们正在更新您的资料.',
+    'enter_your_email_here'                                                  => '在这里输入你的电子邮件',
     /*
       |--------------------------------------
       |   Register Page
       |--------------------------------------
      */
-    'registration'                                                                                => '注册',
-    'full_name'                                                                                   => '全名',
-    'firstname'                                                                                   => '名字',
-    'lastname'                                                                                    => '姓氏',
+    'registration'                                                           => '注册',
+    'full_name'                                                              => '全名',
+    'firstname'                                                              => '名字',
+    'lastname'                                                               => '姓氏',
     'profilepicture'                                                                              => '图像',
     'oldpassword'                                                                                 => '旧密码',
     'newpassword'                                                                                 => '新密码',
