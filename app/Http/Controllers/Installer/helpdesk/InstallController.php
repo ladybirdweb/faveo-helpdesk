@@ -49,8 +49,6 @@ class InstallController extends Controller
         } else {
             return Redirect::route('prerequisites');
         }
-
-
     }
 
     /**
@@ -87,6 +85,7 @@ class InstallController extends Controller
         } else {
             Cache::flush();
             Artisan::call('config:clear');
+
             return view('themes/default1/installer/helpdesk/view2');
         }
     }
