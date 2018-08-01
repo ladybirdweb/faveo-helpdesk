@@ -134,7 +134,7 @@ active
     </p>
     <p class="setup-actions step">
         <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue">
-        <a href="{!! route('prerequisites') !!}" class="button button-large button-next" style="float: left">Previous</a>
+        <a href="{!! route('licence') !!}" class="button button-large button-next" style="float: left">Previous</a>
     </p>
     <br>
 </form>

@@ -1,14 +1,11 @@
 @extends('themes.default1.installer.layout.installer')
+@section('environment')
+done
+@stop
 @section('license')
 active
 @stop
 @section('content')
-    <div id="no-js">
-   <noscript>
-        <meta http-equiv="refresh" content="0; URL=JavaScript-disabled">
-        <style type="text/css">#form-content {display: none;}</style>
-    </noscript>
-    </div>
     <div id="form-content">
         <center><h1>License Agreement</h1></center>
 
@@ -31,13 +28,13 @@ active
 
                     </div>
                 </div>
-                <input id="Acceptme" class="input-checkbox" type="checkbox">
+                <input id="Acceptme" class="input-checkbox" name="acceptme" type="checkbox">
             <label for="Acceptme">I accept the <a href="#openModal">License Agreement</a></label>
             </div>
             <br>
             <p class="setup-actions step">
                 <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue" name="accept1">
-                <input type="submit" class="button button-large button-next" value="Cancel" style="float: left">
+                <a href="{!! route('prerequisites') !!}" class="button button-large button-next" style="float: left">Previous</a>
             </p>
             <br>
         </form>

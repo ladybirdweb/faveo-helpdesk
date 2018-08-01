@@ -2026,5 +2026,6 @@ class DatabaseSeeder extends Seeder
 
         Limit_Login::create(['id' => '1']);
         $this->call(UserSeeder::class);
+        $this->call(OutboundMailSeeder::class);
     }
 }

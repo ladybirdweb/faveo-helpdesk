@@ -17,7 +17,7 @@ Route::get('/JavaScript-disabled', [
     'as'   => 'js-disabled',
     'uses' => 'Installer\helpdesk\InstallController@jsDisabled',
 ]);
-Route::get('/step1', [
+Route::get('/step2', [
     'as'   => 'licence',
     'uses' => 'Installer\helpdesk\InstallController@licence',
 ]);
@@ -25,7 +25,7 @@ Route::post('/step1post', [
     'as'   => 'postlicence',
     'uses' => 'Installer\helpdesk\InstallController@licencecheck',
 ]);
-Route::get('/step2', [
+Route::get('/step1', [
     'as'   => 'prerequisites',
     'uses' => 'Installer\helpdesk\InstallController@prerequisites',
 ]);

@@ -1,9 +1,5 @@
 @extends('themes.default1.installer.layout.installer')
 
-@section('license')
-done    
-@stop
-
 @section('environment')
 active
 @stop
@@ -11,7 +7,13 @@ active
 
 
 @section('content')
-
+<div id="no-js">
+   <noscript>
+        <meta http-equiv="refresh" content="0; URL=JavaScript-disabled">
+        <style type="text/css">#form-content {display: none;}</style>
+    </noscript>
+</div>
+    
 <div id="form-content">
 <center><h1>Environment Test</h1></center>
          @if (Session::has('fail_to_change'))
@@ -180,7 +182,7 @@ function validate_extensions(&$results) {
     $ok = true;
 
     $required_extensions = ['curl', 'ctype', 'imap', 'mbstring',
-       'mcrypt', 'openssl', 'tokenizer', 'zip', 'pdo', 'mysqli', 'bcmath',
+        'openssl', 'tokenizer', 'zip', 'pdo', 'mysqli', 'bcmath',
        'iconv', 'xml', 'json'];
 
     foreach ($required_extensions as $required_extension) {
@@ -205,8 +207,8 @@ function validate_extensions(&$results) {
     } // if
 
     $recommended_extensions = array(
-        'imap' => 'IMAP extension is used for connecting to mail server using IMAP settings to fetch emails in the system.',
-        'mcrypt' => 'Optional extension',
+        // 'imap' => 'IMAP extension is used for connecting to mail server using IMAP settings to fetch emails in the system.',
+        // 'mcrypt' => 'Optional extension',
         // 'gd' => 'GD is used for image manipulation. Without it, system is not able to create thumbnails for files or manage avatars, logos and project icons. Please refer to <a href="http://www.php.net/manual/en/image.installation.php">this</a> page for installation instructions',
         // 'mbstring' => 'MultiByte String is used for work with Unicode. Without it, system may not split words and string properly and you can have weird question mark characters in Recent Activities for example. Please refer to <a href="http://www.php.net/manual/en/mbstring.installation.php">this</a> page for installation instructions',
         // 'curl' => 'cURL is used to support various network tasks. Please refer to <a href="http://www.php.net/manual/en/curl.installation.php">this</a> page for installation instructions',

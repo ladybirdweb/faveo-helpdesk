@@ -44,16 +44,13 @@ class InstallController extends Controller
      */
     public function licence()
     {
-        // checking if the installation is running for the first time or not
-        $directory = base_path();
-        if (file_exists($directory.DIRECTORY_SEPARATOR.'.env')) {
-            return redirect('/auth/login');
+        if (Cache::get('step1') == 'step1') {
+            return View::make('themes/default1/installer/helpdesk/view1');
         } else {
-            Cache::flush();
-            Artisan::call('config:clear');
-
-            return view('themes/default1/installer/helpdesk/view1');
+            return Redirect::route('prerequisites');
         }
+
+
     }
 
     /**
@@ -64,11 +61,10 @@ class InstallController extends Controller
     public function licencecheck(Request $request)
     {
         // checking if the user have accepted the licence agreement
-        $accept = (Input::has('accept1')) ? true : false;
-        if ($accept == 'accept') {
-            Cache::forever('step1', 'step1');
+        if (Input::has('acceptme')) {
+            Cache::forever('step2', 'step2');
 
-            return Redirect::route('prerequisites');
+            return Redirect::route('configuration');
         } else {
             return Redirect::route('licence')->with('fails', 'Failed! first accept the licence agreeement');
         }
@@ -85,10 +81,13 @@ class InstallController extends Controller
     public function prerequisites(Request $request)
     {
         // checking if the installation is running for the first time or not
-        if (Cache::get('step1') == 'step1') {
-            return View::make('themes/default1/installer/helpdesk/view2');
+        $directory = base_path();
+        if (file_exists($directory.DIRECTORY_SEPARATOR.'.env')) {
+            return redirect('/auth/login');
         } else {
-            return Redirect::route('licence');
+            Cache::flush();
+            Artisan::call('config:clear');
+            return view('themes/default1/installer/helpdesk/view2');
         }
     }
 
@@ -100,9 +99,9 @@ class InstallController extends Controller
      */
     public function prerequisitescheck(Request $request)
     {
-        Cache::forever('step2', 'step2');
+        Cache::forever('step1', 'step1');
 
-        return Redirect::route('configuration');
+        return Redirect::route('licence');
     }
 
     /**

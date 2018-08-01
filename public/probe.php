@@ -6,7 +6,7 @@ $extensions = [
     'ctype',
     'imap',
     'mbstring',
-    'mcrypt',
+    // 'mcrypt',
     'openssl',
     'tokenizer',
     'zip',
