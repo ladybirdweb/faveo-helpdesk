@@ -53,7 +53,7 @@ class="active"
             </div>
             <!-- user name -->
             <div class="col-xs-6 form-group {{ $errors->has('user_name') ? 'has-error' : '' }}" id="user_name_error">
-                {!! Form::label('user_name',Lang::get('lang.user_name')) !!} <span class="text-red"> *</span>
+                {!! Form::label('user_name',Lang::get('lang.user_name')) !!}
                 {!! $errors->first('user_name', '<spam class="help-block">:message</spam>') !!}
                 {!! Form::text('user_name',null,['class' => 'form-control']) !!}
             </div>

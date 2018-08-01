@@ -249,12 +249,13 @@ class EmailsController extends Controller
         $enc = $request->input('sending_encryption');
         $service_request = $request->except('sending_status', '_token', 'email_address', 'email_name', 'password', 'department', 'priority', 'help_topic', 'fetching_protocol', 'fetching_host', 'fetching_port', 'fetching_encryption', 'imap_authentication', 'sending_protocol', 'sending_host', 'sending_port', 'sending_encryption', 'smtp_authentication', 'internal_notes', '_wysihtml5_mode');
 
-        $this->emailService($driver, $service_request);
-        $this->setMailConfig($driver, $username, $name, $password, $enc, $host, $port);
-        $transport = \Swift_SmtpTransport::newInstance($host, $port, $enc);
+        $https['ssl']['verify_peer']      = false;
+        $https['ssl']['verify_peer_name'] = false;
+        $transport                        = (new \Swift_SmtpTransport($host, $port, $enc));
         $transport->setUsername($username);
         $transport->setPassword($password);
-        $mailer = \Swift_Mailer::newInstance($transport);
+        $transport->setStreamOptions($https);
+        $mailer                           = new \Swift_Mailer($transport);
         $mailer->getTransport()->start();
 
         return 1;
