@@ -40,6 +40,7 @@ use Auth;
 use DB;
 // classes
 use Exception;
+use GeoIP;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\support\Collection;
@@ -47,7 +48,6 @@ use Input;
 use Lang;
 use Mail;
 use PDF;
-use GeoIP;
 
 /**
  * TicketController.
@@ -235,7 +235,6 @@ class TicketController extends Controller
         $email_mandatory = commonsettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
 
         return view('themes.default1.agent.helpdesk.ticket.new', compact('email_mandatory', 'settings'))->with('phonecode', $pcode);
-
     }
 
     /**
