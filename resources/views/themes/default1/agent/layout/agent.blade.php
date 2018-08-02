@@ -272,7 +272,7 @@
                            @foreach($statuses as $status)
                            @if($dept->get($status))
                            <ul class="treeview-menu">
-                                <li @if($status2 == $dept->get($status)->status && $dept2 === $name) @yield('inbox') @endif><a href="{{url('tickets/'.$name.'/'.$dept->get($status)->status)}}"><i class="fa fa-circle-o"></i> {!!$dept->get($status)->status !!}<small class="label pull-right bg-green">{{$dept->get($status)->count}}</small></a></li>
+                                <li @if($status2 == $dept->get($status)->status && $dept2 === $name) @yield('inbox') @endif><a href="{!! url('tickets?departments='.$name.'&status='.$dept->get($status)->status) !!}"><i class="fa fa-circle-o"></i> {!!$dept->get($status)->status !!}<small class="label pull-right bg-green">{{$dept->get($status)->count}}</small></a></li>
                             </ul>
                            @endif
                             @endforeach

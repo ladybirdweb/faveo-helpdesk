@@ -47,6 +47,7 @@ use Input;
 use Lang;
 use Mail;
 use PDF;
+use GeoIP;
 
 /**
  * TicketController.
@@ -224,7 +225,17 @@ class TicketController extends Controller
      */
     public function newticket(CountryCode $code)
     {
-        return view('themes.default1.agent.helpdesk.ticket.new');
+        $location = geoip::getlocation();
+        $phonecode = $code->where('iso', '=', $location->iso_code)->first();
+        $pcode = '';
+        if ($phonecode) {
+            $pcode = $phonecode->phonecode;
+        }
+        $settings = commonsettings::select('status')->where('option_name', '=', 'send_otp')->first();
+        $email_mandatory = commonsettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
+
+        return view('themes.default1.agent.helpdesk.ticket.new', compact('email_mandatory', 'settings'))->with('phonecode', $pcode);
+
     }
 
     /**
@@ -434,28 +445,21 @@ class TicketController extends Controller
      */
     public function thread($id)
     {
-        $tickets = Tickets::where('tickets.id', $id)
-                ->select('tickets.id', 'ticket_number', 'tickets.user_id', 'tickets.assigned_to', 'source', 'dept_id', 'priority_id', 'sla', 'help_topic_id', 'status', 'tickets.created_at', 'tickets.duedate');
-        if (!$tickets->first()) {
-            return redirect()->back()->with('fails', \Lang::get('lang.invalid_attempt'));
-        }
-        $auth_agent = \Auth::user();
-        $ticket_policy = new \App\Policies\TicketPolicy();
-        if ($auth_agent->role == 'agent') {
-            $dept = Department::where('id', '=', $auth_agent->primary_dpt)->first();
+        if (Auth::user()->role == 'agent') {
+            $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('id', '=', $id)->first();
             if ($tickets->dept_id == $dept->id) {
                 $tickets = $tickets;
-            } elseif ($tickets->assigned_to == $auth_agent->id) {
+            } elseif ($tickets->assigned_to == Auth::user()->id) {
                 $tickets = $tickets;
             } else {
                 $tickets = null;
             }
 //            $tickets = $tickets->where('dept_id', '=', $dept->id)->orWhere('assigned_to', Auth::user()->id)->first();
 //            dd($tickets);
-        } elseif ($auth_agent->role == 'admin') {
+        } elseif (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('id', '=', $id)->first();
-        } elseif ($auth_agent->role == 'user') {
+        } elseif (Auth::user()->role == 'user') {
             $thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
             $ticket_id = \Crypt::encrypt($id);
 
@@ -474,7 +478,7 @@ class TicketController extends Controller
         $max_size_in_actual = $fileupload[1];
         $tickets_approval = Tickets::where('id', '=', $id)->first();
 
-        return view('themes.default1.agent.helpdesk.ticket.timeline', compact('tickets', 'max_size_in_bytes', 'max_size_in_actual', 'tickets_approval'), compact('thread', 'avg_rating', 'ticket_policy'));
+        return view('themes.default1.agent.helpdesk.ticket.timeline', compact('tickets', 'max_size_in_bytes', 'max_size_in_actual', 'tickets_approval'), compact('thread', 'avg_rating'));
     }
 
     public function size()
@@ -2539,7 +2543,7 @@ class TicketController extends Controller
     public static function usertimezone($utc)
     {
         $set = System::whereId('1')->first();
-        $timezone = Timezones::whereId($set->time_zone)->first();
+        $timezone = Timezones::where('name', $set->time_zone)->first();
         $tz = $timezone->name;
         $format = $set->date_time_format;
         date_default_timezone_set($tz);

@@ -428,8 +428,7 @@ function faveoDate($date = '', $format = '', $tz = '')
 
         return $date->tz($tz)->format($format);
     } catch (\Exception $ex) {
-        dd($ex);
-
+        
         return 'invalid';
     }
 }
