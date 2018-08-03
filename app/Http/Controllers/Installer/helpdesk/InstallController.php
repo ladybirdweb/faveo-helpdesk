@@ -316,6 +316,7 @@ class InstallController extends Controller
                 \Cache::flush();
                 \Cache::forever('language', $language);
                 $this->updateInstalEnv();
+
                 return View::make('themes/default1/installer/helpdesk/view6');
             } catch (Exception $e) {
                 return Redirect::route('account')->with('fails', $e->getMessage());
