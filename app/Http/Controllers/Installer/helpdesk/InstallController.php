@@ -316,7 +316,6 @@ class InstallController extends Controller
                 \Cache::flush();
                 \Cache::forever('language', $language);
                 $this->updateInstalEnv();
-
                 return View::make('themes/default1/installer/helpdesk/view6');
             } catch (Exception $e) {
                 return Redirect::route('account')->with('fails', $e->getMessage());
@@ -553,13 +552,13 @@ class InstallController extends Controller
 
     public function updateInstalEnv()
     {
-        Artisan::call('jwt:generate');
+        Artisan::call('jwt:secret');
 
         $env = base_path().DIRECTORY_SEPARATOR.'.env';
         if (is_file($env)) {
             $txt = 'DB_INSTALL=1';
             $txt1 = 'APP_ENV=development';
-            file_put_contents($env, $txt.PHP_EOL, FILE_APPEND | LOCK_EX);
+            file_put_contents($env, PHP_EOL.$txt.PHP_EOL, FILE_APPEND | LOCK_EX);
             file_put_contents($env, $txt1.PHP_EOL, FILE_APPEND | LOCK_EX);
         } else {
             throw new Exception('.env not found');
