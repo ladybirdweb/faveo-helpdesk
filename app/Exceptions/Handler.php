@@ -143,7 +143,7 @@ class Handler extends ExceptionHandler
     {
         $seg = $request->segments();
         if (in_array('api', $seg)) {
-            return response()->json(['status' => '404']);
+            return response()->json(['success' => false, 'message' => trans('lang.invalid_attempt')], 404);
         }
         if (config('app.debug') == true) {
             if ($e->getStatusCode() == '404') {
