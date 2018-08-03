@@ -1,8 +1,9 @@
 <?php
     /**
-     * ================================================================================================
+     * ================================================================================================.
+     *
      * @version v1
-     * @access public
+     *
      * @copyright (c) 2016, Ladybird web solution
      * @author Vijay Sebastian<vijay.sebastian@ladybirdweb.com>
      * @name Faveo
@@ -60,4 +61,4 @@
          * FCM token response
          */
         Route::post('fcmtoken', ['as' => 'fcmtoken', 'uses' => 'Common\PushNotificationController@fcmToken']);
-	});
+    });
