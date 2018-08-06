@@ -1,15 +1,15 @@
-<?php namespace Unisharp\Laravelfilemanager;
+<?php
 
-use Illuminate\Support\ServiceProvider;
+namespace UniSharp\LaravelFilemanager;
+
 use Illuminate\Support\Facades\Config;
-
+use Illuminate\Support\ServiceProvider;
 
 /**
- * Class LaravelFilemanagerServiceProvider
- * @package Unisharp\Laravelfilemanager
+ * Class LaravelFilemanagerServiceProvider.
  */
-class LaravelFilemanagerServiceProvider extends ServiceProvider {
-
+class LaravelFilemanagerServiceProvider extends ServiceProvider
+{
     /**
      * Bootstrap the application services.
      *
@@ -17,8 +17,9 @@ class LaravelFilemanagerServiceProvider extends ServiceProvider {
      */
     public function boot()
     {
-        if (Config::get('lfm.use_package_routes'))
+        if (Config::get('lfm.use_package_routes')) {
             include __DIR__ . '/routes.php';
+        }
 
         $this->loadTranslationsFrom(__DIR__.'/lang', 'laravel-filemanager');
 
@@ -28,13 +29,17 @@ class LaravelFilemanagerServiceProvider extends ServiceProvider {
             __DIR__ . '/config/lfm.php' => base_path('config/lfm.php'),
         ], 'lfm_config');
 
-        $this->publishes([      
-            __DIR__.'/../public' => public_path('vendor/laravel-filemanager'),     
+        $this->publishes([
+            __DIR__.'/../public' => public_path('vendor/laravel-filemanager'),
         ], 'lfm_public');
 
         $this->publishes([
             __DIR__.'/views'  => base_path('resources/views/vendor/laravel-filemanager'),
         ], 'lfm_view');
+
+        $this->publishes([
+            __DIR__.'/Handlers/LfmConfigHandler.php' => base_path('app/Handlers/LfmConfigHandler.php'),
+        ], 'lfm_handler');
     }
 
     /**
@@ -44,10 +49,8 @@ class LaravelFilemanagerServiceProvider extends ServiceProvider {
      */
     public function register()
     {
-        $this->app['laravel-filemanager'] = $this->app->share(function ()
-        {
+        $this->app->singleton('laravel-filemanager', function () {
             return true;
         });
     }
-
 }

@@ -12,11 +12,11 @@
 namespace Symfony\Component\Routing\Loader;
 
 use Doctrine\Common\Annotations\Reader;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\Config\Loader\LoaderResolverInterface;
 
 /**
  * AnnotationClassLoader loads routing information from a PHP class and its methods.
@@ -57,9 +57,6 @@ use Symfony\Component\Config\Loader\LoaderResolverInterface;
  */
 abstract class AnnotationClassLoader implements LoaderInterface
 {
-    /**
-     * @var Reader
-     */
     protected $reader;
 
     /**
@@ -72,11 +69,6 @@ abstract class AnnotationClassLoader implements LoaderInterface
      */
     protected $defaultRouteIndex = 0;
 
-    /**
-     * Constructor.
-     *
-     * @param Reader $reader
-     */
     public function __construct(Reader $reader)
     {
         $this->reader = $reader;
@@ -127,6 +119,17 @@ abstract class AnnotationClassLoader implements LoaderInterface
             }
         }
 
+        if (0 === $collection->count() && $class->hasMethod('__invoke')) {
+            foreach ($this->reader->getClassAnnotations($class) as $annot) {
+                if ($annot instanceof $this->routeAnnotationClass) {
+                    $globals['path'] = '';
+                    $globals['name'] = '';
+
+                    $this->addRoute($collection, $annot, $globals, $class, $class->getMethod('__invoke'));
+                }
+            }
+        }
+
         return $collection;
     }
 
@@ -136,10 +139,11 @@ abstract class AnnotationClassLoader implements LoaderInterface
         if (null === $name) {
             $name = $this->getDefaultRouteName($class, $method);
         }
+        $name = $globals['name'].$name;
 
         $defaults = array_replace($globals['defaults'], $annot->getDefaults());
         foreach ($method->getParameters() as $param) {
-            if (!isset($defaults[$param->getName()]) && $param->isDefaultValueAvailable()) {
+            if (false !== strpos($globals['path'].$annot->getPath(), sprintf('{%s}', $param->getName())) && !isset($defaults[$param->getName()]) && $param->isDefaultValueAvailable()) {
                 $defaults[$param->getName()] = $param->getDefaultValue();
             }
         }
@@ -170,7 +174,7 @@ abstract class AnnotationClassLoader implements LoaderInterface
      */
     public function supports($resource, $type = null)
     {
-        return is_string($resource) && preg_match('/^(?:\\\\?[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)+$/', $resource) && (!$type || 'annotation' === $type);
+        return \is_string($resource) && preg_match('/^(?:\\\\?[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)+$/', $resource) && (!$type || 'annotation' === $type);
     }
 
     /**
@@ -217,9 +221,14 @@ abstract class AnnotationClassLoader implements LoaderInterface
             'methods' => array(),
             'host' => '',
             'condition' => '',
+            'name' => '',
         );
 
         if ($annot = $this->reader->getClassAnnotation($class, $this->routeAnnotationClass)) {
+            if (null !== $annot->getName()) {
+                $globals['name'] = $annot->getName();
+            }
+
             if (null !== $annot->getPath()) {
                 $globals['path'] = $annot->getPath();
             }

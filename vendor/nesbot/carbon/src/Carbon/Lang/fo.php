@@ -9,20 +9,23 @@
  * file that was distributed with this source code.
  */
 
-/**
- * Translation messages.  See http://symfony.com/doc/current/book/translation.html
- * for possible formats.
- */
 return array(
-    'year'      => '1 ár|:count ár',
-    'month'     => '1 mánaður|:count mánaðir',
-    'week'      => '1 vika|:count vikur',
-    'day'       => '1 dag|:count dagar',
-    'hour'      => '1 tími|:count tímar',
-    'minute'    => '1 minutt|:count minuttir',
-    'second'    => '1 sekund|:count sekundir',
-    'ago'       => ':time síðan',
-    'from_now'  => 'um :time',
-    'after'     => ':time aftaná',
-    'before'    => ':time áðrenn',
+    'year' => ':count ár|:count ár',
+    'y' => ':count ár|:count ár',
+    'month' => ':count mánaður|:count mánaðir',
+    'm' => ':count mánaður|:count mánaðir',
+    'week' => ':count vika|:count vikur',
+    'w' => ':count vika|:count vikur',
+    'day' => ':count dag|:count dagar',
+    'd' => ':count dag|:count dagar',
+    'hour' => ':count tími|:count tímar',
+    'h' => ':count tími|:count tímar',
+    'minute' => ':count minutt|:count minuttir',
+    'min' => ':count minutt|:count minuttir',
+    'second' => ':count sekund|:count sekundir',
+    's' => ':count sekund|:count sekundir',
+    'ago' => ':time síðan',
+    'from_now' => 'um :time',
+    'after' => ':time aftaná',
+    'before' => ':time áðrenn',
 );

@@ -396,7 +396,7 @@ if (typeof(PhpDebugBar) == 'undefined') {
 
         options: {
             bodyMarginBottom: true,
-            bodyMarginBottomHeight: parseInt($('body').css('margin-bottom'))
+            bodyMarginBottomHeight: 0
         },
 
         initialize: function() {
@@ -406,6 +406,7 @@ if (typeof(PhpDebugBar) == 'undefined') {
             this.firstTabName = null;
             this.activePanelName = null;
             this.datesetTitleFormater = new DatasetTitleFormater(this);
+            this.options.bodyMarginBottomHeight = parseInt($('body').css('margin-bottom'));
             this.registerResizeHandler();
         },
 
@@ -831,7 +832,7 @@ if (typeof(PhpDebugBar) == 'undefined') {
                     return $('body').css('margin-bottom', this.options.bodyMarginBottomHeight || '');
                 }
                 
-                var offset = parseInt(this.$el.height()) + this.options.bodyMarginBottomHeight;
+                var offset = parseInt(this.$el.height()) + (this.options.bodyMarginBottomHeight || 0);
                 $('body').css('margin-bottom', offset);
             }
         },
@@ -1019,6 +1020,10 @@ if (typeof(PhpDebugBar) == 'undefined') {
          * @return {Bool}
          */
         handle: function(xhr) {
+             // Check if the debugbar header is available
+            if (xhr.getAllResponseHeaders().indexOf(this.headerName) === -1){
+                return true;
+            }
             if (!this.loadFromId(xhr)) {
                 return this.loadFromData(xhr);
             }

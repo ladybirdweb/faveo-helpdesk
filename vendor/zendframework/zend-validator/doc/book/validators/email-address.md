@@ -31,21 +31,26 @@ at instantiation, by giving an array with the related options, or afterwards, by
 using `setOptions()`. The following options are supported:
 
 - `allow`: Defines which type of domain names are accepted. This option is used
-  in conjunction with the hostname option to set the hostname validator. For
-  more information about possible values of this option, look at
-  [Hostname](hostname.md) and possible `ALLOW_*` constants. This option
-  defaults to `ALLOW_DNS`.
-- `deep`: Defines if the servers MX records should be verified by a deep check.
+  in conjunction with the hostnameValidator option to set the hostname validator. 
+  Possible values of this option defined in [Hostname](hostname.md) validator's 
+  `ALLOW_*` constants:
+  - `ALLOW_DNS` (default) - Allows Internet domain names _(e.g. example.com)_
+  - `ALLOW_IP` - Allows IP addresses _(e.g. 192.168.0.1)_
+  - `ALLOW_LOCAL` - Allows local network such as _localhost_ or _www.localdomain_
+  - `ALLOW_URI`  - Allows hostnames in URI generic syntax. See [RFC 3986](https://www.ietf.org/rfc/rfc3986.txt)
+  - `ALLOW_ALL` - Allows all types of hostnames
+    
+- `useDeepMxCheck`: Defines if the servers MX records should be verified by a deep check.
   When this option is set to `true` then additionally to MX records also the `A`,
   `A6` and `AAAA` records are used to verify if the server accepts emails. This
   option defaults to `false`.
-- `domain`: Defines if the domain part should be checked. When this option is
+- `useDomainCheck`: Defines if the domain part should be checked. When this option is
   set to `false`, then only the local part of the email address will be checked.
   In this case the hostname validator will not be called. This option defaults
   to `true`.
-- `hostname`: Sets the hostname validator with which the domain part of the
-  email address will be validated.
-- `mx`: Defines if the MX records from the server should be detected. If this
+- `hostnameValidator`: Sets the hostname validator object instance with which the
+  domain part of the email address will be validated.
+- `useMxCheck`: Defines if the MX records from the server should be detected. If this
   option is defined to `true` then the MX records are used to verify if the
   server accepts emails. This option defaults to `false`.
 

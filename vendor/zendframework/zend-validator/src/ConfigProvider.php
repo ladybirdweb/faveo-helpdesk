@@ -29,8 +29,11 @@ class ConfigProvider
     public function getDependencyConfig()
     {
         return [
+            'aliases' => [
+                'ValidatorManager' => ValidatorPluginManager::class,
+            ],
             'factories' => [
-                'ValidatorManager' => ValidatorPluginManagerFactory::class,
+                ValidatorPluginManager::class => ValidatorPluginManagerFactory::class,
             ],
         ];
     }

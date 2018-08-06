@@ -13,9 +13,9 @@ namespace Symfony\Component\Finder\Tests\Iterator;
 
 class MockSplFileInfo extends \SplFileInfo
 {
-    const   TYPE_DIRECTORY = 1;
-    const   TYPE_FILE = 2;
-    const   TYPE_UNKNOWN = 3;
+    const TYPE_DIRECTORY = 1;
+    const TYPE_FILE = 2;
+    const TYPE_UNKNOWN = 3;
 
     private $contents = null;
     private $mode = null;
@@ -25,9 +25,9 @@ class MockSplFileInfo extends \SplFileInfo
 
     public function __construct($param)
     {
-        if (is_string($param)) {
+        if (\is_string($param)) {
             parent::__construct($param);
-        } elseif (is_array($param)) {
+        } elseif (\is_array($param)) {
             $defaults = array(
               'name' => 'file.txt',
               'contents' => null,
@@ -92,15 +92,13 @@ class MockSplFileInfo extends \SplFileInfo
 
     public function setType($type)
     {
-        if (is_string($type)) {
+        if (\is_string($type)) {
             switch ($type) {
                 case 'directory':
-                    $this->type = self::TYPE_DIRECTORY;
                 case 'd':
                     $this->type = self::TYPE_DIRECTORY;
                     break;
                 case 'file':
-                    $this->type = self::TYPE_FILE;
                 case 'f':
                     $this->type = self::TYPE_FILE;
                     break;

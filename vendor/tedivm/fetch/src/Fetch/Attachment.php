@@ -97,9 +97,8 @@ class Attachment
         } elseif (isset($parameters['name'])) {
             $this->filename = $parameters['name'];
         }
-        if (isset($structure->bytes)) {
-            $this->size = $structure->bytes;
-        }
+
+        $this->size = $structure->bytes;
 
         $this->mimeType = Message::typeIdToString($structure->type);
 

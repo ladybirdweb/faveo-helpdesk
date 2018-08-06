@@ -2,10 +2,13 @@
 
 ## Getting started
 
+**NOTE** If you want even easier start, please check our facades
+* [Facades](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/facades.md)
+
 First, we are going to discover this library entities:
 
 * Models (messages, pushes, devices)
-* Adapters (APNS, GCM etc.)
+* Adapters (APNS, GCM (FCM) etc.)
 * The Manager
 
 Here is the basic principle of a notification push:
@@ -38,6 +41,10 @@ $message = new Sly\NotificationPusher\Model\Message('This is an example.');
 $push = new Sly\NotificationPusher\Model\Push($exampleAdapter, $devices, $message);
 $pushManager->add($push);
 $pushManager->push();
+
+foreach($push->getResponses() as $token => $response) {
+    // ...
+}
 ```
 
 ## More about the Message entity
@@ -82,6 +89,7 @@ $devices = new Sly\NotificationPusher\Collection\DeviceCollection(array(
 * [Installation](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/installation.md)
 * Getting started
 * [APNS adapter](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/apns-adapter.md)
-* [GCM adapter](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/gcm-adapter.md)
+* [GCM (FCM) adapter](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/gcm-fcm-adapter.md)
 * [Create an adapter](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/create-an-adapter.md)
 * [Push from CLI](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/push-from-cli.md)
+* [Facades](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/facades.md)

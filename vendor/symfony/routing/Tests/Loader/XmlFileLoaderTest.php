@@ -11,15 +11,16 @@
 
 namespace Symfony\Component\Routing\Tests\Loader;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\XmlFileLoader;
 use Symfony\Component\Routing\Tests\Fixtures\CustomXmlFileLoader;
 
-class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
+class XmlFileLoaderTest extends TestCase
 {
     public function testSupports()
     {
-        $loader = new XmlFileLoader($this->getMock('Symfony\Component\Config\FileLocator'));
+        $loader = new XmlFileLoader($this->getMockBuilder('Symfony\Component\Config\FileLocator')->getMock());
 
         $this->assertTrue($loader->supports('foo.xml'), '->supports() returns true if the resource is loadable');
         $this->assertFalse($loader->supports('foo.foo'), '->supports() returns true if the resource is loadable');
@@ -60,6 +61,7 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('en|fr|de', $route->getRequirement('_locale'));
         $this->assertNull($route->getDefault('slug'));
         $this->assertSame('RouteCompiler', $route->getOption('compiler_class'));
+        $this->assertSame(1, $route->getDefault('page'));
     }
 
     public function testLoadWithImport()
@@ -128,5 +130,256 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($route->getDefault('bar'));
         $this->assertEquals('foo', $route->getDefault('foobar'));
         $this->assertEquals('bar', $route->getDefault('baz'));
+    }
+
+    public function testScalarDataTypeDefaults()
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures')));
+        $routeCollection = $loader->load('scalar_defaults.xml');
+        $route = $routeCollection->get('blog');
+
+        $this->assertSame(
+            array(
+                '_controller' => 'AcmeBlogBundle:Blog:index',
+                'slug' => null,
+                'published' => true,
+                'page' => 1,
+                'price' => 3.5,
+                'archived' => false,
+                'free' => true,
+                'locked' => false,
+                'foo' => null,
+                'bar' => null,
+            ),
+            $route->getDefaults()
+        );
+    }
+
+    public function testListDefaults()
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures')));
+        $routeCollection = $loader->load('list_defaults.xml');
+        $route = $routeCollection->get('blog');
+
+        $this->assertSame(
+            array(
+                '_controller' => 'AcmeBlogBundle:Blog:index',
+                'values' => array(true, 1, 3.5, 'foo'),
+            ),
+            $route->getDefaults()
+        );
+    }
+
+    public function testListInListDefaults()
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures')));
+        $routeCollection = $loader->load('list_in_list_defaults.xml');
+        $route = $routeCollection->get('blog');
+
+        $this->assertSame(
+            array(
+                '_controller' => 'AcmeBlogBundle:Blog:index',
+                'values' => array(array(true, 1, 3.5, 'foo')),
+            ),
+            $route->getDefaults()
+        );
+    }
+
+    public function testListInMapDefaults()
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures')));
+        $routeCollection = $loader->load('list_in_map_defaults.xml');
+        $route = $routeCollection->get('blog');
+
+        $this->assertSame(
+            array(
+                '_controller' => 'AcmeBlogBundle:Blog:index',
+                'values' => array('list' => array(true, 1, 3.5, 'foo')),
+            ),
+            $route->getDefaults()
+        );
+    }
+
+    public function testMapDefaults()
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures')));
+        $routeCollection = $loader->load('map_defaults.xml');
+        $route = $routeCollection->get('blog');
+
+        $this->assertSame(
+            array(
+                '_controller' => 'AcmeBlogBundle:Blog:index',
+                'values' => array(
+                    'public' => true,
+                    'page' => 1,
+                    'price' => 3.5,
+                    'title' => 'foo',
+                ),
+            ),
+            $route->getDefaults()
+        );
+    }
+
+    public function testMapInListDefaults()
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures')));
+        $routeCollection = $loader->load('map_in_list_defaults.xml');
+        $route = $routeCollection->get('blog');
+
+        $this->assertSame(
+            array(
+                '_controller' => 'AcmeBlogBundle:Blog:index',
+                'values' => array(array(
+                    'public' => true,
+                    'page' => 1,
+                    'price' => 3.5,
+                    'title' => 'foo',
+                )),
+            ),
+            $route->getDefaults()
+        );
+    }
+
+    public function testMapInMapDefaults()
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures')));
+        $routeCollection = $loader->load('map_in_map_defaults.xml');
+        $route = $routeCollection->get('blog');
+
+        $this->assertSame(
+            array(
+                '_controller' => 'AcmeBlogBundle:Blog:index',
+                'values' => array('map' => array(
+                    'public' => true,
+                    'page' => 1,
+                    'price' => 3.5,
+                    'title' => 'foo',
+                )),
+            ),
+            $route->getDefaults()
+        );
+    }
+
+    public function testNullValuesInList()
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures')));
+        $routeCollection = $loader->load('list_null_values.xml');
+        $route = $routeCollection->get('blog');
+
+        $this->assertSame(array(null, null, null, null, null, null), $route->getDefault('list'));
+    }
+
+    public function testNullValuesInMap()
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures')));
+        $routeCollection = $loader->load('map_null_values.xml');
+        $route = $routeCollection->get('blog');
+
+        $this->assertSame(
+            array(
+                'boolean' => null,
+                'integer' => null,
+                'float' => null,
+                'string' => null,
+                'list' => null,
+                'map' => null,
+            ),
+            $route->getDefault('map')
+        );
+    }
+
+    public function testLoadRouteWithControllerAttribute()
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures/controller')));
+        $routeCollection = $loader->load('routing.xml');
+
+        $route = $routeCollection->get('app_homepage');
+
+        $this->assertSame('AppBundle:Homepage:show', $route->getDefault('_controller'));
+    }
+
+    public function testLoadRouteWithoutControllerAttribute()
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures/controller')));
+        $routeCollection = $loader->load('routing.xml');
+
+        $route = $routeCollection->get('app_logout');
+
+        $this->assertNull($route->getDefault('_controller'));
+    }
+
+    public function testLoadRouteWithControllerSetInDefaults()
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures/controller')));
+        $routeCollection = $loader->load('routing.xml');
+
+        $route = $routeCollection->get('app_blog');
+
+        $this->assertSame('AppBundle:Blog:list', $route->getDefault('_controller'));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessageRegExp /The routing file "[^"]*" must not specify both the "controller" attribute and the defaults key "_controller" for "app_blog"/
+     */
+    public function testOverrideControllerInDefaults()
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures/controller')));
+        $loader->load('override_defaults.xml');
+    }
+
+    /**
+     * @dataProvider provideFilesImportingRoutesWithControllers
+     */
+    public function testImportRouteWithController($file)
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures/controller')));
+        $routeCollection = $loader->load($file);
+
+        $route = $routeCollection->get('app_homepage');
+        $this->assertSame('FrameworkBundle:Template:template', $route->getDefault('_controller'));
+
+        $route = $routeCollection->get('app_blog');
+        $this->assertSame('FrameworkBundle:Template:template', $route->getDefault('_controller'));
+
+        $route = $routeCollection->get('app_logout');
+        $this->assertSame('FrameworkBundle:Template:template', $route->getDefault('_controller'));
+    }
+
+    public function provideFilesImportingRoutesWithControllers()
+    {
+        yield array('import_controller.xml');
+        yield array('import__controller.xml');
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessageRegExp /The routing file "[^"]*" must not specify both the "controller" attribute and the defaults key "_controller" for the "import" tag/
+     */
+    public function testImportWithOverriddenController()
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures/controller')));
+        $loader->load('import_override_defaults.xml');
+    }
+
+    public function testImportRouteWithGlobMatchingSingleFile()
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures/glob')));
+        $routeCollection = $loader->load('import_single.xml');
+
+        $route = $routeCollection->get('bar_route');
+        $this->assertSame('AppBundle:Bar:view', $route->getDefault('_controller'));
+    }
+
+    public function testImportRouteWithGlobMatchingMultipleFiles()
+    {
+        $loader = new XmlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures/glob')));
+        $routeCollection = $loader->load('import_multiple.xml');
+
+        $route = $routeCollection->get('bar_route');
+        $this->assertSame('AppBundle:Bar:view', $route->getDefault('_controller'));
+
+        $route = $routeCollection->get('baz_route');
+        $this->assertSame('AppBundle:Baz:view', $route->getDefault('_controller'));
     }
 }

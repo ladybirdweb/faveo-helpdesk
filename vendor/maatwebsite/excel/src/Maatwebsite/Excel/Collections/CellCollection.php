@@ -17,7 +17,7 @@ class CellCollection extends ExcelCollection {
      * @param  array $items
      * @return \Maatwebsite\Excel\Collections\CellCollection
      */
-    public function __construct(array $items = array())
+    public function __construct(array $items = [])
     {
         $this->setItems($items);
     }
@@ -29,30 +29,25 @@ class CellCollection extends ExcelCollection {
      */
     public function setItems($items)
     {
-        foreach ($items as $name => $value)
-        {
-            $value = !empty($value) || is_numeric($value) ? $value : null;
-
-            if ($name)
-            {
-                $this->put($name, $value);
-            }
-            else
-            {
-                $this->push($value);
-            }
+        foreach ($items as $name => $value) {
+            $name = trim($name) !== '' && !empty($name) ? $name : null;
+            $value = !empty($value) || is_numeric($value) || is_bool($value) ? $value : null;
+            $this->put($name, $value);
         }
     }
 
     /**
      * Dynamically get values
      * @param  string $key
-     * @return string
+     * @return string|null
      */
     public function __get($key)
     {
-        if ($this->has($key))
+        if ($this->has($key)) {
             return $this->get($key);
+        }
+
+        return null;
     }
 
     /**

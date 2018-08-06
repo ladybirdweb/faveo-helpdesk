@@ -49,7 +49,7 @@ class FileProfilerStorage implements ProfilerStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function find($ip, $url, $limit, $method, $start = null, $end = null)
+    public function find($ip, $url, $limit, $method, $start = null, $end = null, $statusCode = null)
     {
         $file = $this->getIndexFilename();
 
@@ -61,14 +61,12 @@ class FileProfilerStorage implements ProfilerStorageInterface
         fseek($file, 0, SEEK_END);
 
         $result = array();
-        while (count($result) < $limit && $line = $this->readLineFromFile($file)) {
+        while (\count($result) < $limit && $line = $this->readLineFromFile($file)) {
             $values = str_getcsv($line);
-            list($csvToken, $csvIp, $csvMethod, $csvUrl, $csvTime, $csvParent) = $values;
-            $csvStatusCode = isset($values[6]) ? $values[6] : null;
-
+            list($csvToken, $csvIp, $csvMethod, $csvUrl, $csvTime, $csvParent, $csvStatusCode) = $values;
             $csvTime = (int) $csvTime;
 
-            if ($ip && false === strpos($csvIp, $ip) || $url && false === strpos($csvUrl, $url) || $method && false === strpos($csvMethod, $method)) {
+            if ($ip && false === strpos($csvIp, $ip) || $url && false === strpos($csvUrl, $url) || $method && false === strpos($csvMethod, $method) || $statusCode && false === strpos($csvStatusCode, $statusCode)) {
                 continue;
             }
 
@@ -138,22 +136,31 @@ class FileProfilerStorage implements ProfilerStorageInterface
         $profileIndexed = is_file($file);
         if (!$profileIndexed) {
             // Create directory
-            $dir = dirname($file);
+            $dir = \dirname($file);
             if (!is_dir($dir) && false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
                 throw new \RuntimeException(sprintf('Unable to create the storage directory (%s).', $dir));
             }
         }
 
+        $profileToken = $profile->getToken();
+        // when there are errors in sub-requests, the parent and/or children tokens
+        // may equal the profile token, resulting in infinite loops
+        $parentToken = $profile->getParentToken() !== $profileToken ? $profile->getParentToken() : null;
+        $childrenToken = array_filter(array_map(function ($p) use ($profileToken) {
+            return $profileToken !== $p->getToken() ? $p->getToken() : null;
+        }, $profile->getChildren()));
+
         // Store profile
         $data = array(
-            'token' => $profile->getToken(),
-            'parent' => $profile->getParentToken(),
-            'children' => array_map(function ($p) { return $p->getToken(); }, $profile->getChildren()),
+            'token' => $profileToken,
+            'parent' => $parentToken,
+            'children' => $childrenToken,
             'data' => $profile->getCollectors(),
             'ip' => $profile->getIp(),
             'method' => $profile->getMethod(),
             'url' => $profile->getUrl(),
             'time' => $profile->getTime(),
+            'status_code' => $profile->getStatusCode(),
         );
 
         if (false === file_put_contents($file, serialize($data))) {
@@ -261,6 +268,7 @@ class FileProfilerStorage implements ProfilerStorageInterface
         $profile->setMethod($data['method']);
         $profile->setUrl($data['url']);
         $profile->setTime($data['time']);
+        $profile->setStatusCode($data['status_code']);
         $profile->setCollectors($data['data']);
 
         if (!$parent && $data['parent']) {

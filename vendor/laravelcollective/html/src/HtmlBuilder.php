@@ -10,7 +10,6 @@ use Illuminate\Contracts\Routing\UrlGenerator;
 
 class HtmlBuilder
 {
-
     use Macroable, Componentable {
         Macroable::__call as macroCall;
         Componentable::__call as componentCall;
@@ -79,7 +78,7 @@ class HtmlBuilder
     {
         $attributes['src'] = $this->url->asset($url, $secure);
 
-        return $this->toHtmlString('<script' . $this->attributes($attributes) . '></script>' . PHP_EOL);
+        return $this->toHtmlString('<script' . $this->attributes($attributes) . '></script>');
     }
 
     /**
@@ -95,11 +94,11 @@ class HtmlBuilder
     {
         $defaults = ['media' => 'all', 'type' => 'text/css', 'rel' => 'stylesheet'];
 
-        $attributes = $attributes + $defaults;
+        $attributes = array_merge($attributes, $defaults);
 
         $attributes['href'] = $this->url->asset($url, $secure);
 
-        return $this->toHtmlString('<link' . $this->attributes($attributes) . '>' . PHP_EOL);
+        return $this->toHtmlString('<link' . $this->attributes($attributes) . '>');
     }
 
     /**
@@ -133,11 +132,11 @@ class HtmlBuilder
     {
         $defaults = ['rel' => 'shortcut icon', 'type' => 'image/x-icon'];
 
-        $attributes = $attributes + $defaults;
+        $attributes = array_merge($attributes, $defaults);
 
         $attributes['href'] = $this->url->asset($url, $secure);
 
-        return $this->toHtmlString('<link' . $this->attributes($attributes) . '>' . PHP_EOL);
+        return $this->toHtmlString('<link' . $this->attributes($attributes) . '>');
     }
 
     /**
@@ -147,10 +146,11 @@ class HtmlBuilder
      * @param string $title
      * @param array  $attributes
      * @param bool   $secure
+     * @param bool   $escape
      *
      * @return \Illuminate\Support\HtmlString
      */
-    public function link($url, $title = null, $attributes = [], $secure = null)
+    public function link($url, $title = null, $attributes = [], $secure = null, $escape = true)
     {
         $url = $this->url->to($url, [], $secure);
 
@@ -158,7 +158,11 @@ class HtmlBuilder
             $title = $url;
         }
 
-        return $this->toHtmlString('<a href="' . $url . '"' . $this->attributes($attributes) . '>' . $this->entities($title) . '</a>');
+        if ($escape) {
+            $title = $this->entities($title);
+        }
+
+        return $this->toHtmlString('<a href="' . $this->entities($url) . '"' . $this->attributes($attributes) . '>' . $title . '</a>');
     }
 
     /**
@@ -242,18 +246,23 @@ class HtmlBuilder
      * @param string $email
      * @param string $title
      * @param array  $attributes
+     * @param bool   $escape
      *
      * @return \Illuminate\Support\HtmlString
      */
-    public function mailto($email, $title = null, $attributes = [])
+    public function mailto($email, $title = null, $attributes = [], $escape = true)
     {
         $email = $this->email($email);
 
         $title = $title ?: $email;
 
+        if ($escape) {
+            $title = $this->entities($title);
+        }
+
         $email = $this->obfuscate('mailto:') . $email;
 
-        return $this->toHtmlString('<a href="' . $email . '"' . $this->attributes($attributes) . '>' . $this->entities($title) . '</a>');
+        return $this->toHtmlString('<a href="' . $email . '"' . $this->attributes($attributes) . '>' . $title . '</a>');
     }
 
     /**
@@ -266,6 +275,18 @@ class HtmlBuilder
     public function email($email)
     {
         return str_replace('@', '&#64;', $this->obfuscate($email));
+    }
+
+    /**
+     * Generates non-breaking space entities based on number supplied.
+     *
+     * @param int $num
+     *
+     * @return string
+     */
+    public function nbsp($num = 1)
+    {
+        return str_repeat('&nbsp;', $num);
     }
 
     /**
@@ -336,7 +357,7 @@ class HtmlBuilder
     {
         $html = '';
 
-        if (count($list) == 0) {
+        if (count($list) === 0) {
             return $html;
         }
 
@@ -420,11 +441,18 @@ class HtmlBuilder
      */
     protected function attributeElement($key, $value)
     {
-        // For numeric keys we will assume that the key and the value are the same
-        // as this will convert HTML attributes such as "required" to a correct
-        // form like required="required" instead of using incorrect numerics.
+        // For numeric keys we will assume that the value is a boolean attribute
+        // where the presence of the attribute represents a true value and the
+        // absence represents a false value.
+        // This will convert HTML attributes such as "required" to a correct
+        // form instead of using incorrect numerics.
         if (is_numeric($key)) {
-            $key = $value;
+            return $value;
+        }
+
+        // Treat boolean attributes as HTML properties
+        if (is_bool($value) && $key !== 'value') {
+            return $value ? $key : '';
         }
 
         if (! is_null($value)) {
@@ -483,7 +511,7 @@ class HtmlBuilder
 
         $attributes = array_merge($defaults, $attributes);
 
-        return $this->toHtmlString('<meta' . $this->attributes($attributes) . '>' . PHP_EOL);
+        return $this->toHtmlString('<meta' . $this->attributes($attributes) . '>');
     }
 
     /**
@@ -497,8 +525,8 @@ class HtmlBuilder
      */
     public function tag($tag, $content, array $attributes = [])
     {
-        $content = is_array($content) ? implode(PHP_EOL, $content) : $content;
-        return $this->toHtmlString('<' . $tag . $this->attributes($attributes) . '>' . PHP_EOL . $this->toHtmlString($content) . PHP_EOL . '</' . $tag . '>' . PHP_EOL);
+        $content = is_array($content) ? implode('', $content) : $content;
+        return $this->toHtmlString('<' . $tag . $this->attributes($attributes) . '>' . $this->toHtmlString($content) . '</' . $tag . '>');
     }
 
     /**
@@ -525,16 +553,12 @@ class HtmlBuilder
      */
     public function __call($method, $parameters)
     {
-        try {
+        if (static::hasComponent($method)) {
             return $this->componentCall($method, $parameters);
-        } catch (BadMethodCallException $e) {
-            //
         }
 
-        try {
+        if (static::hasMacro($method)) {
             return $this->macroCall($method, $parameters);
-        } catch (BadMethodCallException $e) {
-            //
         }
 
         throw new BadMethodCallException("Method {$method} does not exist.");

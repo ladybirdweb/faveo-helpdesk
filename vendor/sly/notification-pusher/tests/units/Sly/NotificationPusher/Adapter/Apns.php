@@ -4,13 +4,13 @@ namespace tests\units\Sly\NotificationPusher\Adapter;
 
 use mageekguy\atoum as Units;
 use Sly\NotificationPusher\Adapter\Apns as TestedModel;
-
-use Sly\NotificationPusher\Model\Message as BaseMessage;
-use Sly\NotificationPusher\Model\Device as BaseDevice;
 use Sly\NotificationPusher\Collection\DeviceCollection as BaseDeviceCollection;
-
-use ZendService\Apple\Apns\Message as BaseServiceMessage;
+use Sly\NotificationPusher\Collection\DeviceCollection;
+use Sly\NotificationPusher\Model\Device as BaseDevice;
+use Sly\NotificationPusher\Model\Message as BaseMessage;
+use Sly\NotificationPusher\Model\Response;
 use ZendService\Apple\Apns\Client\Message as BaseServiceClient;
+use ZendService\Apple\Apns\Message as BaseServiceMessage;
 
 /**
  * Apns.
@@ -42,6 +42,7 @@ class Apns extends Units\Test
             ->and($this->mockClass('\Sly\NotificationPusher\Adapter\Apns', '\Mock'))
             ->and($object = new \Mock\Apns())
             ->and($object->setParameters(['certificate' => 'test.pem', 'passPhrase' => 'test']))
+            ->and($object->setResponse(new Response()))
             ->array($object->getParameters())
                 ->isNotEmpty()
                 ->hasSize(2)
@@ -141,22 +142,26 @@ class Apns extends Units\Test
 
     public function testPush()
     {
-        $this->if($this->mockGenerator()->orphanize('__construct'))
-            ->and($this->mockClass('\Sly\NotificationPusher\Adapter\Apns', '\Mock'))
+        $this->if($this->mockGenerator()->orphanize('__construct')
+                                        ->makeVisible('getOpenedServiceClient')
+                                        ->generate(\Sly\NotificationPusher\Adapter\Apns::class, '\Mock', 'Apns'))
             ->and($object = new \Mock\Apns())
+            ->and($object->setResponse(new Response()))
 
-            ->and($this->mockClass('\ZendService\Apple\Apns\Response\Message', '\Mock\ZendService', 'Response'))
+            ->and($this->mockClass(\ZendService\Apple\Apns\Response\Message::class, '\Mock\ZendService', 'Response'))
             ->and($serviceResponse = new \Mock\ZendService\Response())
+            ->and($serviceResponse->getMockController()->getCode = \ZendService\Apple\Apns\Response\Message::RESULT_OK)
+            ->and($serviceResponse->getMockController()->getId = 0)
 
-            ->and($this->mockGenerator()->orphanize('__construct'))
-            ->and($this->mockGenerator()->orphanize('open'))
-            ->and($this->mockGenerator()->orphanize('send'))
-            ->and($this->mockClass('\ZendService\Apple\Apns\Client\Message', '\Mock\ZendService'))
+            ->and($this->mockGenerator()->orphanize('__construct')
+                        ->orphanize('open')
+                        ->orphanize('send')
+                        ->generate(\ZendService\Apple\Apns\Client\Message::class, '\Mock\ZendService'))
             ->and($serviceClient = new \Mock\ZendService\Message())
-            ->and($serviceClient->getMockController()->send = new $serviceResponse)
+            ->and($serviceClient->getMockController()->send = $serviceResponse)
 
             ->and($this->mockGenerator()->orphanize('__construct'))
-            ->and($this->mockClass('\Sly\NotificationPusher\Model\Push', '\Mock'))
+            ->and($this->mockClass(\Sly\NotificationPusher\Model\Push::class, '\Mock'))
             ->and($push = new \Mock\Push())
             ->and($push->getMockController()->getMessage = new BaseMessage('Test'))
             ->and($push->getMockController()->getDevices = new BaseDeviceCollection(
@@ -165,11 +170,18 @@ class Apns extends Units\Test
 
             ->and($object->getMockController()->getServiceMessageFromOrigin = new BaseServiceMessage())
             ->and($object->getMockController()->getOpenedClient = $serviceClient)
+            ->and($this->calling($object)->getOpenedServiceClient = $serviceClient)
 
-            ->object($object->push($push))
+            ->object($result = $object->push($push))
                 ->isInstanceOf('\Sly\NotificationPusher\Collection\DeviceCollection')
-                ->hasSize(1)
-        ;
+                    ->boolean($result->count() == 1)
+                    ->isTrue();
+    }
+
+    public function testCountIsEmpty() {
+        $this->if($dcoll = new DeviceCollection())
+            ->boolean($dcoll->isEmpty())
+                ->isTrue();
     }
 
     public function testFeedback()

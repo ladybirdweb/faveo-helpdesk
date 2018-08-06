@@ -5,21 +5,20 @@ phpunit --debug BankAccountTest ../_files/BankAccountTest.php
 $_SERVER['argv'][1] = '--no-configuration';
 $_SERVER['argv'][2] = '--debug';
 $_SERVER['argv'][3] = 'BankAccountTest';
-$_SERVER['argv'][4] = dirname(__FILE__) . '/../_files/BankAccountTest.php';
+$_SERVER['argv'][4] = __DIR__ . '/../_files/BankAccountTest.php';
 
 require __DIR__ . '/../bootstrap.php';
-PHPUnit_TextUI_Command::main();
-?>
+PHPUnit\TextUI\Command::main();
 --EXPECTF--
 PHPUnit %s by Sebastian Bergmann and contributors.
 
+Test 'BankAccountTest::testBalanceIsInitiallyZero' started
+Test 'BankAccountTest::testBalanceIsInitiallyZero' ended
+Test 'BankAccountTest::testBalanceCannotBecomeNegative' started
+Test 'BankAccountTest::testBalanceCannotBecomeNegative' ended
+Test 'BankAccountTest::testBalanceCannotBecomeNegative2' started
+Test 'BankAccountTest::testBalanceCannotBecomeNegative2' ended
 
-Starting test 'BankAccountTest::testBalanceIsInitiallyZero'.
-.
-Starting test 'BankAccountTest::testBalanceCannotBecomeNegative'.
-.
-Starting test 'BankAccountTest::testBalanceCannotBecomeNegative2'.
-.
 
 Time: %s, Memory: %s
 

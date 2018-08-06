@@ -2,6 +2,7 @@
 
 namespace Illuminate\Database\Console\Migrations;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Composer;
 use Illuminate\Database\Migrations\MigrationCreator;
 
@@ -58,21 +59,35 @@ class MigrateMakeCommand extends BaseCommand
      *
      * @return void
      */
-    public function fire()
+    public function handle()
     {
         // It's possible for the developer to specify the tables to modify in this
         // schema operation. The developer may also specify if this table needs
         // to be freshly created so we can create the appropriate migrations.
-        $name = trim($this->input->getArgument('name'));
+        $name = Str::snake(trim($this->input->getArgument('name')));
 
         $table = $this->input->getOption('table');
 
         $create = $this->input->getOption('create') ?: false;
 
+        // If no table was given as an option but a create option is given then we
+        // will use the "create" option as the table name. This allows the devs
+        // to pass a table name into this option as a short-cut for creating.
         if (! $table && is_string($create)) {
             $table = $create;
 
             $create = true;
+        }
+
+        // Next, we will attempt to guess the table name if this the migration has
+        // "create" in the name. This will allow us to provide a convenient way
+        // of creating migrations that create new tables for the application.
+        if (! $table) {
+            if (preg_match('/^create_(\w+)_table$/', $name, $matches)) {
+                $table = $matches[1];
+
+                $create = true;
+            }
         }
 
         // Now we are ready to write the migration out to disk. Once we've written
@@ -93,11 +108,11 @@ class MigrateMakeCommand extends BaseCommand
      */
     protected function writeMigration($name, $table, $create)
     {
-        $path = $this->getMigrationPath();
+        $file = pathinfo($this->creator->create(
+            $name, $this->getMigrationPath(), $table, $create
+        ), PATHINFO_FILENAME);
 
-        $file = pathinfo($this->creator->create($name, $path, $table, $create), PATHINFO_FILENAME);
-
-        $this->line("<info>Created Migration:</info> $file");
+        $this->line("<info>Created Migration:</info> {$file}");
     }
 
     /**

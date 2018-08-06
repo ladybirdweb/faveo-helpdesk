@@ -19,21 +19,22 @@ namespace Symfony\Component\HttpKernel;
 class UriSigner
 {
     private $secret;
+    private $parameter;
 
     /**
-     * Constructor.
-     *
-     * @param string $secret A secret
+     * @param string $secret    A secret
+     * @param string $parameter Query string parameter to use
      */
-    public function __construct($secret)
+    public function __construct($secret, $parameter = '_hash')
     {
         $this->secret = $secret;
+        $this->parameter = $parameter;
     }
 
     /**
      * Signs a URI.
      *
-     * The given URI is signed by adding a _hash query string parameter
+     * The given URI is signed by adding the query string parameter
      * which value depends on the URI and the secret.
      *
      * @param string $uri A URI to sign
@@ -51,15 +52,11 @@ class UriSigner
 
         $uri = $this->buildUrl($url, $params);
 
-        return $uri.(false === strpos($uri, '?') ? '?' : '&').'_hash='.$this->computeHash($uri);
+        return $uri.(false === strpos($uri, '?') ? '?' : '&').$this->parameter.'='.$this->computeHash($uri);
     }
 
     /**
      * Checks that a URI contains the correct hash.
-     *
-     * The _hash query string parameter must be the last one
-     * (as it is generated that way by the sign() method, it should
-     * never be a problem).
      *
      * @param string $uri A signed URI
      *
@@ -74,12 +71,12 @@ class UriSigner
             $params = array();
         }
 
-        if (empty($params['_hash'])) {
+        if (empty($params[$this->parameter])) {
             return false;
         }
 
-        $hash = urlencode($params['_hash']);
-        unset($params['_hash']);
+        $hash = urlencode($params[$this->parameter]);
+        unset($params[$this->parameter]);
 
         return $this->computeHash($this->buildUrl($url, $params)) === $hash;
     }
@@ -98,7 +95,7 @@ class UriSigner
         $host = isset($url['host']) ? $url['host'] : '';
         $port = isset($url['port']) ? ':'.$url['port'] : '';
         $user = isset($url['user']) ? $url['user'] : '';
-        $pass = isset($url['pass']) ? ':'.$url['pass']  : '';
+        $pass = isset($url['pass']) ? ':'.$url['pass'] : '';
         $pass = ($user || $pass) ? "$pass@" : '';
         $path = isset($url['path']) ? $url['path'] : '';
         $query = isset($url['query']) && $url['query'] ? '?'.$url['query'] : '';

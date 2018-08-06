@@ -2,7 +2,7 @@
     "name": "illuminate/encryption",
     "description": "The Illuminate Encryption package.",
     "license": "MIT",
-    "homepage": "http://laravel.com",
+    "homepage": "https://laravel.com",
     "support": {
         "issues": "https://github.com/laravel/framework/issues",
         "source": "https://github.com/laravel/framework"
@@ -14,12 +14,11 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=7.0",
         "ext-mbstring": "*",
         "ext-openssl": "*",
-        "illuminate/contracts": "5.2.*",
-        "illuminate/support": "5.2.*",
-        "paragonie/random_compat": "~1.4"
+        "illuminate/contracts": "5.5.*",
+        "illuminate/support": "5.5.*"
     },
     "autoload": {
         "psr-4": {
@@ -28,8 +27,11 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "5.2-dev"
+            "dev-master": "5.5-dev"
         }
+    },
+    "config": {
+        "sort-packages": true
     },
     "minimum-stability": "dev"
 }

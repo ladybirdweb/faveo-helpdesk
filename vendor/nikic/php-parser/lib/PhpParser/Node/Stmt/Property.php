@@ -1,56 +1,71 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
-use PhpParser\Error;
 
 class Property extends Node\Stmt
 {
     /** @var int Modifiers */
-    public $type;
+    public $flags;
     /** @var PropertyProperty[] Properties */
     public $props;
 
     /**
      * Constructs a class property list node.
      *
-     * @param int                $type       Modifiers
+     * @param int                $flags      Modifiers
      * @param PropertyProperty[] $props      Properties
      * @param array              $attributes Additional attributes
      */
-    public function __construct($type, array $props, array $attributes = array()) {
-        if ($type & Class_::MODIFIER_ABSTRACT) {
-            throw new Error('Properties cannot be declared abstract');
-        }
-
-        if ($type & Class_::MODIFIER_FINAL) {
-            throw new Error('Properties cannot be declared final');
-        }
-
+    public function __construct(int $flags, array $props, array $attributes = []) {
         parent::__construct($attributes);
-        $this->type = $type;
+        $this->flags = $flags;
         $this->props = $props;
     }
 
-    public function getSubNodeNames() {
-        return array('type', 'props');
+    public function getSubNodeNames() : array {
+        return ['flags', 'props'];
     }
 
-    public function isPublic() {
-        return ($this->type & Class_::MODIFIER_PUBLIC) !== 0
-            || ($this->type & Class_::VISIBILITY_MODIFER_MASK) === 0;
+    /**
+     * Whether the property is explicitly or implicitly public.
+     *
+     * @return bool
+     */
+    public function isPublic() : bool {
+        return ($this->flags & Class_::MODIFIER_PUBLIC) !== 0
+            || ($this->flags & Class_::VISIBILITY_MODIFIER_MASK) === 0;
     }
 
-    public function isProtected() {
-        return (bool) ($this->type & Class_::MODIFIER_PROTECTED);
+    /**
+     * Whether the property is protected.
+     *
+     * @return bool
+     */
+    public function isProtected() : bool {
+        return (bool) ($this->flags & Class_::MODIFIER_PROTECTED);
     }
 
-    public function isPrivate() {
-        return (bool) ($this->type & Class_::MODIFIER_PRIVATE);
+    /**
+     * Whether the property is private.
+     *
+     * @return bool
+     */
+    public function isPrivate() : bool {
+        return (bool) ($this->flags & Class_::MODIFIER_PRIVATE);
     }
 
-    public function isStatic() {
-        return (bool) ($this->type & Class_::MODIFIER_STATIC);
+    /**
+     * Whether the property is static.
+     *
+     * @return bool
+     */
+    public function isStatic() : bool {
+        return (bool) ($this->flags & Class_::MODIFIER_STATIC);
+    }
+    
+    public function getType() : string {
+        return 'Stmt_Property';
     }
 }

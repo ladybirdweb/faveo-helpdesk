@@ -11,16 +11,19 @@
 
 namespace Symfony\Component\HttpFoundation\Tests\Session\Storage\Handler;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\WriteCheckSessionHandler;
 
 /**
  * @author Adrien Brault <adrien.brault@gmail.com>
+ *
+ * @group legacy
  */
-class WriteCheckSessionHandlerTest extends \PHPUnit_Framework_TestCase
+class WriteCheckSessionHandlerTest extends TestCase
 {
     public function test()
     {
-        $wrappedSessionHandlerMock = $this->getMock('SessionHandlerInterface');
+        $wrappedSessionHandlerMock = $this->getMockBuilder('SessionHandlerInterface')->getMock();
         $writeCheckSessionHandler = new WriteCheckSessionHandler($wrappedSessionHandlerMock);
 
         $wrappedSessionHandlerMock
@@ -35,7 +38,7 @@ class WriteCheckSessionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testWrite()
     {
-        $wrappedSessionHandlerMock = $this->getMock('SessionHandlerInterface');
+        $wrappedSessionHandlerMock = $this->getMockBuilder('SessionHandlerInterface')->getMock();
         $writeCheckSessionHandler = new WriteCheckSessionHandler($wrappedSessionHandlerMock);
 
         $wrappedSessionHandlerMock
@@ -50,7 +53,7 @@ class WriteCheckSessionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testSkippedWrite()
     {
-        $wrappedSessionHandlerMock = $this->getMock('SessionHandlerInterface');
+        $wrappedSessionHandlerMock = $this->getMockBuilder('SessionHandlerInterface')->getMock();
         $writeCheckSessionHandler = new WriteCheckSessionHandler($wrappedSessionHandlerMock);
 
         $wrappedSessionHandlerMock
@@ -71,7 +74,7 @@ class WriteCheckSessionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testNonSkippedWrite()
     {
-        $wrappedSessionHandlerMock = $this->getMock('SessionHandlerInterface');
+        $wrappedSessionHandlerMock = $this->getMockBuilder('SessionHandlerInterface')->getMock();
         $writeCheckSessionHandler = new WriteCheckSessionHandler($wrappedSessionHandlerMock);
 
         $wrappedSessionHandlerMock

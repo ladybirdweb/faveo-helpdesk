@@ -7,19 +7,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Framework\Constraint;
 
 /**
  * Constraint that asserts that the string it is evaluated for contains
  * a given string.
  *
- * Uses strpos() to find the position of the string in the input, if not found
- * the evaluation fails.
+ * Uses mb_strpos() to find the position of the string in the input, if not
+ * found the evaluation fails.
  *
  * The sub-string is passed in the constructor.
- *
- * @since Class available since Release 3.0.0
  */
-class PHPUnit_Framework_Constraint_StringContains extends PHPUnit_Framework_Constraint
+class StringContains extends Constraint
 {
     /**
      * @var string
@@ -53,11 +52,15 @@ class PHPUnit_Framework_Constraint_StringContains extends PHPUnit_Framework_Cons
      */
     protected function matches($other)
     {
-        if ($this->ignoreCase) {
-            return stripos($other, $this->string) !== false;
-        } else {
-            return strpos($other, $this->string) !== false;
+        if ('' === $this->string) {
+            return true;
         }
+
+        if ($this->ignoreCase) {
+            return \mb_stripos($other, $this->string) !== false;
+        }
+
+        return \mb_strpos($other, $this->string) !== false;
     }
 
     /**
@@ -68,12 +71,12 @@ class PHPUnit_Framework_Constraint_StringContains extends PHPUnit_Framework_Cons
     public function toString()
     {
         if ($this->ignoreCase) {
-            $string = strtolower($this->string);
+            $string = \mb_strtolower($this->string);
         } else {
             $string = $this->string;
         }
 
-        return sprintf(
+        return \sprintf(
             'contains "%s"',
             $string
         );

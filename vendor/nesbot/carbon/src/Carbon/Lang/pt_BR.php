@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Carbon package.
  *
@@ -7,20 +8,33 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-/**
- * Translation messages.  See http://symfony.com/doc/current/book/translation.html
- * for possible formats.
- */
+
 return array(
-    'year'      => '1 ano|:count anos',
-    'month'     => '1 mês|:count meses',
-    'week'      => '1 semana|:count semanas',
-    'day'       => '1 dia|:count dias',
-    'hour'      => '1 hora|:count horas',
-    'minute'    => '1 minuto|:count minutos',
-    'second'    => '1 segundo|:count segundos',
-    'ago'       => 'há :time',
-    'from_now'  => 'dentro de :time',
-    'after'     => 'após :time',
-    'before'    => ':time atrás',
+    'year' => ':count ano|:count anos',
+    'y' => ':counta|:counta',
+    'month' => ':count mês|:count meses',
+    'm' => ':countm|:countm',
+    'week' => ':count semana|:count semanas',
+    'w' => ':countsem|:countsem',
+    'day' => ':count dia|:count dias',
+    'd' => ':countd|:countd',
+    'hour' => ':count hora|:count horas',
+    'h' => ':counth|:counth',
+    'minute' => ':count minuto|:count minutos',
+    'min' => ':countmin|:countmin',
+    'second' => ':count segundo|:count segundos',
+    's' => ':counts|:counts',
+    'ago' => 'há :time',
+    'from_now' => 'em :time',
+    'after' => 'após :time',
+    'before' => ':time atrás',
+    'diff_now' => 'agora',
+    'diff_yesterday' => 'ontem',
+    'diff_tomorrow' => 'amanhã',
+    'diff_before_yesterday' => 'anteontem',
+    'diff_after_tomorrow' => 'depois de amanhã',
+    'period_recurrences' => 'uma|:count vez',
+    'period_interval' => 'toda :interval',
+    'period_start_date' => 'de :date',
+    'period_end_date' => 'até :date',
 );

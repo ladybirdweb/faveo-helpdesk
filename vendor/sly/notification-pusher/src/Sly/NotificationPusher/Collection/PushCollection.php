@@ -20,7 +20,7 @@ use Sly\NotificationPusher\Model\PushInterface;
  * @uses \IteratorAggregate
  * @author Cédric Dugat <cedric@dugat.me>
  */
-class PushCollection extends AbstractCollection implements \IteratorAggregate
+class PushCollection extends AbstractCollection
 {
     /**
      * Constructor.

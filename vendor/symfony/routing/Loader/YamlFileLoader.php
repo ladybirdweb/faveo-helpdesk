@@ -11,12 +11,12 @@
 
 namespace Symfony\Component\Routing\Loader;
 
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Route;
+use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Parser as YamlParser;
-use Symfony\Component\Config\Loader\FileLoader;
 
 /**
  * YamlFileLoader loads Yaml routing files.
@@ -27,7 +27,7 @@ use Symfony\Component\Config\Loader\FileLoader;
 class YamlFileLoader extends FileLoader
 {
     private static $availableKeys = array(
-        'resource', 'type', 'prefix', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options', 'condition',
+        'resource', 'type', 'prefix', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options', 'condition', 'controller',
     );
     private $yamlParser;
 
@@ -57,10 +57,18 @@ class YamlFileLoader extends FileLoader
             $this->yamlParser = new YamlParser();
         }
 
+        $prevErrorHandler = set_error_handler(function ($level, $message, $script, $line) use ($file, &$prevErrorHandler) {
+            $message = E_USER_DEPRECATED === $level ? preg_replace('/ on line \d+/', ' in "'.$file.'"$0', $message) : $message;
+
+            return $prevErrorHandler ? $prevErrorHandler($level, $message, $script, $line) : false;
+        });
+
         try {
-            $parsedConfig = $this->yamlParser->parse(file_get_contents($path));
+            $parsedConfig = $this->yamlParser->parseFile($path);
         } catch (ParseException $e) {
             throw new \InvalidArgumentException(sprintf('The file "%s" does not contain valid YAML.', $path), 0, $e);
+        } finally {
+            restore_error_handler();
         }
 
         $collection = new RouteCollection();
@@ -72,7 +80,7 @@ class YamlFileLoader extends FileLoader
         }
 
         // not an array
-        if (!is_array($parsedConfig)) {
+        if (!\is_array($parsedConfig)) {
             throw new \InvalidArgumentException(sprintf('The file "%s" must contain a YAML array.', $path));
         }
 
@@ -94,7 +102,7 @@ class YamlFileLoader extends FileLoader
      */
     public function supports($resource, $type = null)
     {
-        return is_string($resource) && in_array(pathinfo($resource, PATHINFO_EXTENSION), array('yml', 'yaml'), true) && (!$type || 'yaml' === $type);
+        return \is_string($resource) && \in_array(pathinfo($resource, PATHINFO_EXTENSION), array('yml', 'yaml'), true) && (!$type || 'yaml' === $type);
     }
 
     /**
@@ -114,6 +122,10 @@ class YamlFileLoader extends FileLoader
         $schemes = isset($config['schemes']) ? $config['schemes'] : array();
         $methods = isset($config['methods']) ? $config['methods'] : array();
         $condition = isset($config['condition']) ? $config['condition'] : null;
+
+        if (isset($config['controller'])) {
+            $defaults['_controller'] = $config['controller'];
+        }
 
         $route = new Route($config['path'], $defaults, $requirements, $options, $host, $schemes, $methods, $condition);
 
@@ -140,28 +152,39 @@ class YamlFileLoader extends FileLoader
         $schemes = isset($config['schemes']) ? $config['schemes'] : null;
         $methods = isset($config['methods']) ? $config['methods'] : null;
 
-        $this->setCurrentDir(dirname($path));
+        if (isset($config['controller'])) {
+            $defaults['_controller'] = $config['controller'];
+        }
 
-        $subCollection = $this->import($config['resource'], $type, false, $file);
-        /* @var $subCollection RouteCollection */
-        $subCollection->addPrefix($prefix);
-        if (null !== $host) {
-            $subCollection->setHost($host);
-        }
-        if (null !== $condition) {
-            $subCollection->setCondition($condition);
-        }
-        if (null !== $schemes) {
-            $subCollection->setSchemes($schemes);
-        }
-        if (null !== $methods) {
-            $subCollection->setMethods($methods);
-        }
-        $subCollection->addDefaults($defaults);
-        $subCollection->addRequirements($requirements);
-        $subCollection->addOptions($options);
+        $this->setCurrentDir(\dirname($path));
 
-        $collection->addCollection($subCollection);
+        $imported = $this->import($config['resource'], $type, false, $file);
+
+        if (!\is_array($imported)) {
+            $imported = array($imported);
+        }
+
+        foreach ($imported as $subCollection) {
+            /* @var $subCollection RouteCollection */
+            $subCollection->addPrefix($prefix);
+            if (null !== $host) {
+                $subCollection->setHost($host);
+            }
+            if (null !== $condition) {
+                $subCollection->setCondition($condition);
+            }
+            if (null !== $schemes) {
+                $subCollection->setSchemes($schemes);
+            }
+            if (null !== $methods) {
+                $subCollection->setMethods($methods);
+            }
+            $subCollection->addDefaults($defaults);
+            $subCollection->addRequirements($requirements);
+            $subCollection->addOptions($options);
+
+            $collection->addCollection($subCollection);
+        }
     }
 
     /**
@@ -176,7 +199,7 @@ class YamlFileLoader extends FileLoader
      */
     protected function validate($config, $name, $path)
     {
-        if (!is_array($config)) {
+        if (!\is_array($config)) {
             throw new \InvalidArgumentException(sprintf('The definition of "%s" in "%s" must be a YAML array.', $name, $path));
         }
         if ($extraKeys = array_diff(array_keys($config), self::$availableKeys)) {
@@ -202,6 +225,9 @@ class YamlFileLoader extends FileLoader
                 'You must define a "path" for the route "%s" in file "%s".',
                 $name, $path
             ));
+        }
+        if (isset($config['controller']) && isset($config['defaults']['_controller'])) {
+            throw new \InvalidArgumentException(sprintf('The routing file "%s" must not specify both the "controller" key and the defaults key "_controller" for "%s".', $path, $name));
         }
     }
 }

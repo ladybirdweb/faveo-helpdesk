@@ -22,7 +22,6 @@ The following validators come with the zend-validator distribution.
 - [IsInstanceOf](validators/isinstanceof.md)
 - [LessThan](validators/less-than.md)
 - [NotEmpty](validators/not-empty.md)
-- [PostCode](validators/post-code.md)
 - [Regex](validators/regex.md)
 - [Sitemap](validators/sitemap.md)
 - [Step](validators/step.md)

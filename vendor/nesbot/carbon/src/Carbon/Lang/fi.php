@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Carbon package.
  *
@@ -7,23 +8,24 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-/**
- * Translation messages.  See http://symfony.com/doc/current/book/translation.html
- * for possible formats.
- */
-/**
- * Extracted from https://github.com/jenssegers/laravel-date/blob/master/src/lang/fi/date.php
- */
+
 return array(
-    'year'      => '1 vuosi|:count vuotta',
-    'month'     => '1 kuukausi|:count kuukautta',
-    'week'      => '1 viikko|:count viikkoa',
-    'day'       => '1 päivä|:count päivää',
-    'hour'      => '1 tunti|:count tuntia',
-    'minute'    => '1 minuutti|:count minuuttia',
-    'second'    => '1 sekunti|:count sekuntia',
-    'ago'       => ':time sitten',
-    'from_now'  => ':time tästä hetkestä',
-    'after'     => ':time sen jälkeen',
-    'before'    => ':time ennen'
+    'year' => ':count vuosi|:count vuotta',
+    'y' => ':count vuosi|:count vuotta',
+    'month' => ':count kuukausi|:count kuukautta',
+    'm' => ':count kuukausi|:count kuukautta',
+    'week' => ':count viikko|:count viikkoa',
+    'w' => ':count viikko|:count viikkoa',
+    'day' => ':count päivä|:count päivää',
+    'd' => ':count päivä|:count päivää',
+    'hour' => ':count tunti|:count tuntia',
+    'h' => ':count tunti|:count tuntia',
+    'minute' => ':count minuutti|:count minuuttia',
+    'min' => ':count minuutti|:count minuuttia',
+    'second' => ':count sekunti|:count sekuntia',
+    's' => ':count sekunti|:count sekuntia',
+    'ago' => ':time sitten',
+    'from_now' => ':time tästä hetkestä',
+    'after' => ':time sen jälkeen',
+    'before' => ':time ennen',
 );

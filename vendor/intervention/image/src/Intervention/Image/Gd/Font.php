@@ -9,7 +9,7 @@ class Font extends \Intervention\Image\AbstractFont
     /**
      * Get font size in points
      *
-     * @return integer
+     * @return int
      */
     protected function getPointSize()
     {
@@ -19,14 +19,14 @@ class Font extends \Intervention\Image\AbstractFont
     /**
      * Filter function to access internal integer font values
      *
-     * @return integer
+     * @return int
      */
     private function getInternalFont()
     {
         $internalfont = is_null($this->file) ? 1 : $this->file;
         $internalfont = is_numeric($internalfont) ? $internalfont : false;
 
-        if ( ! in_array($internalfont, array(1, 2, 3, 4, 5))) {
+        if ( ! in_array($internalfont, [1, 2, 3, 4, 5])) {
             throw new \Intervention\Image\Exception\NotSupportedException(
                 sprintf('Internal GD font (%s) not available. Use only 1-5.', $internalfont)
             );
@@ -38,7 +38,7 @@ class Font extends \Intervention\Image\AbstractFont
     /**
      * Get width of an internal font character
      *
-     * @return integer
+     * @return int
      */
     private function getInternalFontWidth()
     {
@@ -48,7 +48,7 @@ class Font extends \Intervention\Image\AbstractFont
     /**
      * Get height of an internal font character
      *
-     * @return integer
+     * @return int
      */
     private function getInternalFontHeight()
     {
@@ -77,7 +77,7 @@ class Font extends \Intervention\Image\AbstractFont
      */
     public function getBoxSize()
     {
-        $box = array();
+        $box = [];
 
         if ($this->hasApplicableFontFile()) {
 
@@ -124,8 +124,8 @@ class Font extends \Intervention\Image\AbstractFont
      * Draws font to given image at given position
      *
      * @param  Image   $image
-     * @param  integer $posx
-     * @param  integer $posy
+     * @param  int     $posx
+     * @param  int     $posy
      * @return void
      */
     public function applyToImage(Image $image, $posx = 0, $posy = 0)

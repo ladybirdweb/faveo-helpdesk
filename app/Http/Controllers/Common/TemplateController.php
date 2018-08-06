@@ -97,7 +97,7 @@ class TemplateController extends Controller
     {
         try {
             $i = $this->template->orderBy('created_at', 'desc')->first()->id + 1;
-            $type = $this->type->lists('name', 'id')->toArray();
+            $type = $this->type->pluck('name', 'id')->toArray();
 
             return view('themes.default1.common.template.create', compact('type'));
         } catch (\Exception $ex) {
@@ -135,7 +135,7 @@ class TemplateController extends Controller
         try {
             $i = $this->template->orderBy('created_at', 'desc')->first()->id + 1;
             $template = $this->template->where('id', $id)->first();
-            $type = $this->type->lists('name', 'id')->toArray();
+            $type = $this->type->pluck('name', 'id')->toArray();
 
             return view('themes.default1.common.template.edit', compact('type', 'template'));
         } catch (\Exception $ex) {

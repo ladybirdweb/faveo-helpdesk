@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\Translation\Tests\Loader;
 
-use Symfony\Component\Translation\Loader\IniFileLoader;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\Translation\Loader\IniFileLoader;
 
-class IniFileLoaderTest extends \PHPUnit_Framework_TestCase
+class IniFileLoaderTest extends TestCase
 {
     public function testLoad()
     {

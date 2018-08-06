@@ -14,8 +14,6 @@ use Aws\RetryMiddleware;
 use Aws\ResultInterface;
 use Aws\CommandInterface;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Promise;
-use GuzzleHttp\Psr7;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -33,10 +31,18 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise createMultipartUploadAsync(array $args = [])
  * @method \Aws\Result deleteBucket(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteBucketAsync(array $args = [])
+ * @method \Aws\Result deleteBucketAnalyticsConfiguration(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteBucketAnalyticsConfigurationAsync(array $args = [])
  * @method \Aws\Result deleteBucketCors(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteBucketCorsAsync(array $args = [])
+ * @method \Aws\Result deleteBucketEncryption(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteBucketEncryptionAsync(array $args = [])
+ * @method \Aws\Result deleteBucketInventoryConfiguration(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteBucketInventoryConfigurationAsync(array $args = [])
  * @method \Aws\Result deleteBucketLifecycle(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteBucketLifecycleAsync(array $args = [])
+ * @method \Aws\Result deleteBucketMetricsConfiguration(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteBucketMetricsConfigurationAsync(array $args = [])
  * @method \Aws\Result deleteBucketPolicy(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteBucketPolicyAsync(array $args = [])
  * @method \Aws\Result deleteBucketReplication(array $args = [])
@@ -47,14 +53,22 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise deleteBucketWebsiteAsync(array $args = [])
  * @method \Aws\Result deleteObject(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteObjectAsync(array $args = [])
+ * @method \Aws\Result deleteObjectTagging(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteObjectTaggingAsync(array $args = [])
  * @method \Aws\Result deleteObjects(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteObjectsAsync(array $args = [])
  * @method \Aws\Result getBucketAccelerateConfiguration(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getBucketAccelerateConfigurationAsync(array $args = [])
  * @method \Aws\Result getBucketAcl(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getBucketAclAsync(array $args = [])
+ * @method \Aws\Result getBucketAnalyticsConfiguration(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getBucketAnalyticsConfigurationAsync(array $args = [])
  * @method \Aws\Result getBucketCors(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getBucketCorsAsync(array $args = [])
+ * @method \Aws\Result getBucketEncryption(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getBucketEncryptionAsync(array $args = [])
+ * @method \Aws\Result getBucketInventoryConfiguration(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getBucketInventoryConfigurationAsync(array $args = [])
  * @method \Aws\Result getBucketLifecycle(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getBucketLifecycleAsync(array $args = [])
  * @method \Aws\Result getBucketLifecycleConfiguration(array $args = [])
@@ -63,6 +77,8 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise getBucketLocationAsync(array $args = [])
  * @method \Aws\Result getBucketLogging(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getBucketLoggingAsync(array $args = [])
+ * @method \Aws\Result getBucketMetricsConfiguration(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getBucketMetricsConfigurationAsync(array $args = [])
  * @method \Aws\Result getBucketNotification(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getBucketNotificationAsync(array $args = [])
  * @method \Aws\Result getBucketNotificationConfiguration(array $args = [])
@@ -83,12 +99,20 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise getObjectAsync(array $args = [])
  * @method \Aws\Result getObjectAcl(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getObjectAclAsync(array $args = [])
+ * @method \Aws\Result getObjectTagging(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getObjectTaggingAsync(array $args = [])
  * @method \Aws\Result getObjectTorrent(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getObjectTorrentAsync(array $args = [])
  * @method \Aws\Result headBucket(array $args = [])
  * @method \GuzzleHttp\Promise\Promise headBucketAsync(array $args = [])
  * @method \Aws\Result headObject(array $args = [])
  * @method \GuzzleHttp\Promise\Promise headObjectAsync(array $args = [])
+ * @method \Aws\Result listBucketAnalyticsConfigurations(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise listBucketAnalyticsConfigurationsAsync(array $args = [])
+ * @method \Aws\Result listBucketInventoryConfigurations(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise listBucketInventoryConfigurationsAsync(array $args = [])
+ * @method \Aws\Result listBucketMetricsConfigurations(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise listBucketMetricsConfigurationsAsync(array $args = [])
  * @method \Aws\Result listBuckets(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listBucketsAsync(array $args = [])
  * @method \Aws\Result listMultipartUploads(array $args = [])
@@ -105,14 +129,22 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise putBucketAccelerateConfigurationAsync(array $args = [])
  * @method \Aws\Result putBucketAcl(array $args = [])
  * @method \GuzzleHttp\Promise\Promise putBucketAclAsync(array $args = [])
+ * @method \Aws\Result putBucketAnalyticsConfiguration(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise putBucketAnalyticsConfigurationAsync(array $args = [])
  * @method \Aws\Result putBucketCors(array $args = [])
  * @method \GuzzleHttp\Promise\Promise putBucketCorsAsync(array $args = [])
+ * @method \Aws\Result putBucketEncryption(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise putBucketEncryptionAsync(array $args = [])
+ * @method \Aws\Result putBucketInventoryConfiguration(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise putBucketInventoryConfigurationAsync(array $args = [])
  * @method \Aws\Result putBucketLifecycle(array $args = [])
  * @method \GuzzleHttp\Promise\Promise putBucketLifecycleAsync(array $args = [])
  * @method \Aws\Result putBucketLifecycleConfiguration(array $args = [])
  * @method \GuzzleHttp\Promise\Promise putBucketLifecycleConfigurationAsync(array $args = [])
  * @method \Aws\Result putBucketLogging(array $args = [])
  * @method \GuzzleHttp\Promise\Promise putBucketLoggingAsync(array $args = [])
+ * @method \Aws\Result putBucketMetricsConfiguration(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise putBucketMetricsConfigurationAsync(array $args = [])
  * @method \Aws\Result putBucketNotification(array $args = [])
  * @method \GuzzleHttp\Promise\Promise putBucketNotificationAsync(array $args = [])
  * @method \Aws\Result putBucketNotificationConfiguration(array $args = [])
@@ -133,6 +165,8 @@ use Psr\Http\Message\RequestInterface;
  * @method \GuzzleHttp\Promise\Promise putObjectAsync(array $args = [])
  * @method \Aws\Result putObjectAcl(array $args = [])
  * @method \GuzzleHttp\Promise\Promise putObjectAclAsync(array $args = [])
+ * @method \Aws\Result putObjectTagging(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise putObjectTaggingAsync(array $args = [])
  * @method \Aws\Result restoreObject(array $args = [])
  * @method \GuzzleHttp\Promise\Promise restoreObjectAsync(array $args = [])
  * @method \Aws\Result uploadPart(array $args = [])
@@ -179,6 +213,15 @@ class S3Client extends AwsClient implements S3ClientInterface
                     . ' \'@use_dual_stack_endpoint\' to true or false.',
                 'default' => false,
             ],
+            'use_path_style_endpoint' => [
+                'type' => 'config',
+                'valid' => ['bool'],
+                'doc' => 'Set to true to send requests to an S3 path style'
+                    . ' endpoint by default.'
+                    . ' Can be enabled or disabled on individual operations by setting'
+                    . ' \'@use_path_style_endpoint\' to true or false.',
+                'default' => false,
+            ],
         ];
     }
 
@@ -205,6 +248,11 @@ class S3Client extends AwsClient implements S3ClientInterface
      *   Can be enabled or disabled on individual operations by setting
      *   '@use_dual_stack_endpoint\' to true or false. Note:
      *   you cannot use it together with an accelerate endpoint.
+     * - use_path_style_endpoint: (bool) Set to true to send requests to an S3
+     *   path style endpoint by default.
+     *   Can be enabled or disabled on individual operations by setting
+     *   '@use_path_style_endpoint\' to true or false. Note:
+     *   you cannot use it together with an accelerate endpoint.
      *
      * @param array $args
      */
@@ -219,20 +267,22 @@ class S3Client extends AwsClient implements S3ClientInterface
             's3.content_type'
         );
 
-        $stack->appendBuild(
-            S3EndpointMiddleware::wrap(
-                $this->getRegion(),
-                [
-                    'dual_stack' => $this->getConfig('use_dual_stack_endpoint'),
-                    'accelerate' => $this->getConfig('use_accelerate_endpoint')
-                ]
-            ),
-            's3.endpoint_middleware'
-        );
 
         // Use the bucket style middleware when using a "bucket_endpoint" (for cnames)
         if ($this->getConfig('bucket_endpoint')) {
             $stack->appendBuild(BucketEndpointMiddleware::wrap(), 's3.bucket_endpoint');
+        } else {
+            $stack->appendBuild(
+                S3EndpointMiddleware::wrap(
+                    $this->getRegion(),
+                    [
+                        'dual_stack' => $this->getConfig('use_dual_stack_endpoint'),
+                        'accelerate' => $this->getConfig('use_accelerate_endpoint'),
+                        'path_style' => $this->getConfig('use_path_style_endpoint')
+                    ]
+                ),
+                's3.endpoint_middleware'
+            );
         }
 
         $stack->appendSign(PutObjectUrlMiddleware::wrap(), 's3.put_object_url');
@@ -416,9 +466,9 @@ class S3Client extends AwsClient implements S3ClientInterface
                             }
                             foreach ($nested as $steps) {
                                 if (isset($result[$steps[0]])) {
-                                    foreach ($result[$steps[0]] as &$part) {
+                                    foreach ($result[$steps[0]] as $key => $part) {
                                         if (isset($part[$steps[1]])) {
-                                            $part[$steps[1]]
+                                            $result[$steps[0]][$key][$steps[1]]
                                                 = urldecode($part[$steps[1]]);
                                         }
                                     }
@@ -448,24 +498,28 @@ class S3Client extends AwsClient implements S3ClientInterface
 
             if ($decider($retries, $command, $request, $result, $error)) {
                 return true;
-            } elseif ($error instanceof AwsException
+            }
+
+            if ($error instanceof AwsException
                 && $retries < $maxRetries
             ) {
-                if (
-                    $error->getResponse()
+                if ($error->getResponse()
                     && $error->getResponse()->getStatusCode() >= 400
                 ) {
                     return strpos(
-                        $error->getResponse()->getBody(),
-                        'Your socket connection to the server'
-                    ) !== false;
-                } elseif ($error->getPrevious() instanceof RequestException) {
+                            $error->getResponse()->getBody(),
+                            'Your socket connection to the server'
+                        ) !== false;
+                }
+
+                if ($error->getPrevious() instanceof RequestException) {
                     // All commands except CompleteMultipartUpload are
                     // idempotent and may be retried without worry if a
                     // networking error has occurred.
                     return $command->getName() !== 'CompleteMultipartUpload';
                 }
             }
+
             return false;
         };
 

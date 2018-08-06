@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Http\Client\Adapter;
@@ -20,6 +18,13 @@ use Zend\Stdlib\ArrayUtils;
  */
 class Curl implements HttpAdapter, StreamInterface
 {
+    /**
+     * Operation timeout.
+     *
+     * @var int
+     */
+    const ERROR_OPERATION_TIMEDOUT = 28;
+
     /**
      * Parameters array
      *
@@ -39,7 +44,7 @@ class Curl implements HttpAdapter, StreamInterface
      *
      * @var resource|null
      */
-    protected $curl = null;
+    protected $curl;
 
     /**
      * List of cURL options that should never be overwritten
@@ -53,7 +58,7 @@ class Curl implements HttpAdapter, StreamInterface
      *
      * @var string
      */
-    protected $response = null;
+    protected $response;
 
     /**
      * Stream for storing output
@@ -71,7 +76,7 @@ class Curl implements HttpAdapter, StreamInterface
      */
     public function __construct()
     {
-        if (!extension_loaded('curl')) {
+        if (! extension_loaded('curl')) {
             throw new AdapterException\InitializationException(
                 'cURL extension has to be loaded to use this Zend\Http\Client adapter'
             );
@@ -104,10 +109,11 @@ class Curl implements HttpAdapter, StreamInterface
         if ($options instanceof Traversable) {
             $options = ArrayUtils::iteratorToArray($options);
         }
-        if (!is_array($options)) {
-            throw new AdapterException\InvalidArgumentException(
-                'Array or Traversable object expected, got ' . gettype($options)
-            );
+        if (! is_array($options)) {
+            throw new AdapterException\InvalidArgumentException(sprintf(
+                'Array or Traversable object expected, got %s',
+                gettype($options)
+            ));
         }
 
         /** Config Key Normalization */
@@ -117,7 +123,7 @@ class Curl implements HttpAdapter, StreamInterface
         }
 
         if (isset($options['proxyuser']) && isset($options['proxypass'])) {
-            $this->setCurlOption(CURLOPT_PROXYUSERPWD, $options['proxyuser'] . ":" . $options['proxypass']);
+            $this->setCurlOption(CURLOPT_PROXYUSERPWD, $options['proxyuser'] . ':' . $options['proxypass']);
             unset($options['proxyuser'], $options['proxypass']);
         }
 
@@ -166,7 +172,7 @@ class Curl implements HttpAdapter, StreamInterface
      */
     public function setCurlOption($option, $value)
     {
-        if (!isset($this->config['curloptions'])) {
+        if (! isset($this->config['curloptions'])) {
             $this->config['curloptions'] = [];
         }
         $this->config['curloptions'][$option] = $value;
@@ -195,13 +201,22 @@ class Curl implements HttpAdapter, StreamInterface
             curl_setopt($this->curl, CURLOPT_PORT, intval($port));
         }
 
-        if (isset($this->config['timeout'])) {
+        if (isset($this->config['connecttimeout'])) {
+            $connectTimeout = $this->config['connecttimeout'];
+        } elseif (isset($this->config['timeout'])) {
+            $connectTimeout = $this->config['timeout'];
+        } else {
+            $connectTimeout = null;
+        }
+        if ($connectTimeout !== null) {
             if (defined('CURLOPT_CONNECTTIMEOUT_MS')) {
-                curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT_MS, $this->config['timeout'] * 1000);
+                curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT_MS, $connectTimeout * 1000);
             } else {
-                curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT, $this->config['timeout']);
+                curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
             }
+        }
 
+        if (isset($this->config['timeout'])) {
             if (defined('CURLOPT_TIMEOUT_MS')) {
                 curl_setopt($this->curl, CURLOPT_TIMEOUT_MS, $this->config['timeout'] * 1000);
             } else {
@@ -209,12 +224,19 @@ class Curl implements HttpAdapter, StreamInterface
             }
         }
 
+        if (isset($this->config['sslcafile']) && $this->config['sslcafile']) {
+            curl_setopt($this->curl, CURLOPT_CAINFO, $this->config['sslcafile']);
+        }
+        if (isset($this->config['sslcapath']) && $this->config['sslcapath']) {
+            curl_setopt($this->curl, CURLOPT_CAPATH, $this->config['sslcapath']);
+        }
+
         if (isset($this->config['maxredirects'])) {
             // Set Max redirects
             curl_setopt($this->curl, CURLOPT_MAXREDIRS, $this->config['maxredirects']);
         }
 
-        if (!$this->curl) {
+        if (! $this->curl) {
             $this->close();
 
             throw new AdapterException\RuntimeException('Unable to Connect to ' . $host . ':' . $port);
@@ -247,16 +269,17 @@ class Curl implements HttpAdapter, StreamInterface
      *     to wrong host, no PUT file defined, unsupported method, or unsupported
      *     cURL option.
      * @throws AdapterException\InvalidArgumentException if $method is currently not supported
+     * @throws AdapterException\TimeoutException if connection timed out
      */
     public function write($method, $uri, $httpVersion = 1.1, $headers = [], $body = '')
     {
         // Make sure we're properly connected
-        if (!$this->curl) {
-            throw new AdapterException\RuntimeException("Trying to write but we are not connected");
+        if (! $this->curl) {
+            throw new AdapterException\RuntimeException('Trying to write but we are not connected');
         }
 
         if ($this->connectedTo[0] != $uri->getHost() || $this->connectedTo[1] != $uri->getPort()) {
-            throw new AdapterException\RuntimeException("Trying to write but we are connected to the wrong host");
+            throw new AdapterException\RuntimeException('Trying to write but we are connected to the wrong host');
         }
 
         // set URL
@@ -282,8 +305,8 @@ class Curl implements HttpAdapter, StreamInterface
                 if (isset($this->config['curloptions'][CURLOPT_INFILE])) {
                     // Now we will probably already have Content-Length set, so that we have to delete it
                     // from $headers at this point:
-                    if (!isset($headers['Content-Length'])
-                        && !isset($this->config['curloptions'][CURLOPT_INFILESIZE])
+                    if (! isset($headers['Content-Length'])
+                        && ! isset($this->config['curloptions'][CURLOPT_INFILESIZE])
                     ) {
                         throw new AdapterException\RuntimeException(
                             'Cannot set a file-handle for cURL option CURLOPT_INFILE'
@@ -303,46 +326,49 @@ class Curl implements HttpAdapter, StreamInterface
                     $curlMethod = CURLOPT_UPLOAD;
                 } else {
                     $curlMethod = CURLOPT_CUSTOMREQUEST;
-                    $curlValue = "PUT";
+                    $curlValue = 'PUT';
                 }
                 break;
 
             case 'PATCH':
                 $curlMethod = CURLOPT_CUSTOMREQUEST;
-                $curlValue = "PATCH";
+                $curlValue = 'PATCH';
                 break;
 
             case 'DELETE':
                 $curlMethod = CURLOPT_CUSTOMREQUEST;
-                $curlValue = "DELETE";
+                $curlValue = 'DELETE';
                 break;
 
             case 'OPTIONS':
                 $curlMethod = CURLOPT_CUSTOMREQUEST;
-                $curlValue = "OPTIONS";
+                $curlValue = 'OPTIONS';
                 break;
 
             case 'TRACE':
                 $curlMethod = CURLOPT_CUSTOMREQUEST;
-                $curlValue = "TRACE";
+                $curlValue = 'TRACE';
                 break;
 
             case 'HEAD':
                 $curlMethod = CURLOPT_CUSTOMREQUEST;
-                $curlValue = "HEAD";
+                $curlValue = 'HEAD';
                 break;
 
             default:
                 // For now, through an exception for unsupported request methods
-                throw new AdapterException\InvalidArgumentException("Method '$method' currently not supported");
+                throw new AdapterException\InvalidArgumentException(sprintf(
+                    'Method \'%s\' currently not supported',
+                    $method
+                ));
         }
 
         if (is_resource($body) && $curlMethod != CURLOPT_UPLOAD) {
-            throw new AdapterException\RuntimeException("Streaming requests are allowed only with PUT");
+            throw new AdapterException\RuntimeException('Streaming requests are allowed only with PUT');
         }
 
         // get http version to use
-        $curlHttp = ($httpVersion == 1.1) ? CURL_HTTP_VERSION_1_1 : CURL_HTTP_VERSION_1_0;
+        $curlHttp = $httpVersion == 1.1 ? CURL_HTTP_VERSION_1_1 : CURL_HTTP_VERSION_1_0;
 
         // mark as HTTP request and set HTTP method
         curl_setopt($this->curl, CURLOPT_HTTP_VERSION, $curlHttp);
@@ -354,7 +380,7 @@ class Curl implements HttpAdapter, StreamInterface
         if ($this->outputStream) {
             // headers will be read into the response
             curl_setopt($this->curl, CURLOPT_HEADER, false);
-            curl_setopt($this->curl, CURLOPT_HEADERFUNCTION, [$this, "readHeader"]);
+            curl_setopt($this->curl, CURLOPT_HEADERFUNCTION, [$this, 'readHeader']);
             // and data will be written into the file
             curl_setopt($this->curl, CURLOPT_FILE, $this->outputStream);
         } else {
@@ -373,7 +399,7 @@ class Curl implements HttpAdapter, StreamInterface
         }
 
         // set additional headers
-        if (!isset($headers['Accept'])) {
+        if (! isset($headers['Accept'])) {
             $headers['Accept'] = '';
         }
         $curlHeaders = [];
@@ -402,7 +428,7 @@ class Curl implements HttpAdapter, StreamInterface
         // set additional curl options
         if (isset($this->config['curloptions'])) {
             foreach ((array) $this->config['curloptions'] as $k => $v) {
-                if (!in_array($k, $this->invalidOverwritableCurlOptions)) {
+                if (! in_array($k, $this->invalidOverwritableCurlOptions)) {
                     if (curl_setopt($this->curl, $k, $v) == false) {
                         throw new AdapterException\RuntimeException(sprintf(
                             'Unknown or erroreous cURL option "%s" set',
@@ -413,19 +439,30 @@ class Curl implements HttpAdapter, StreamInterface
             }
         }
 
+        $this->response = '';
+
         // send the request
 
         $response = curl_exec($this->curl);
         // if we used streaming, headers are already there
-        if (!is_resource($this->outputStream)) {
+        if (! is_resource($this->outputStream)) {
             $this->response = $response;
         }
 
         $request  = curl_getinfo($this->curl, CURLINFO_HEADER_OUT);
         $request .= $body;
 
-        if (empty($this->response)) {
-            throw new AdapterException\RuntimeException("Error in cURL request: " . curl_error($this->curl));
+        if ($response === false || empty($this->response)) {
+            if (curl_errno($this->curl) === static::ERROR_OPERATION_TIMEDOUT) {
+                throw new AdapterException\TimeoutException(
+                    'Read timed out',
+                    AdapterException\TimeoutException::READ_TIMEOUT
+                );
+            }
+            throw new AdapterException\RuntimeException(sprintf(
+                'Error in cURL request: %s',
+                curl_error($this->curl)
+            ));
         }
 
         // separating header from body because it is dangerous to accidentially replace strings in the body
@@ -434,7 +471,7 @@ class Curl implements HttpAdapter, StreamInterface
 
         // cURL automatically decodes chunked-messages, this means we have to
         // disallow the Zend\Http\Response to do it again.
-        $responseHeaders = preg_replace("/Transfer-Encoding:\s*chunked\\r\\n/i", "", $responseHeaders);
+        $responseHeaders = preg_replace("/Transfer-Encoding:\s*chunked\\r\\n/i", '', $responseHeaders);
 
         // cURL can automatically handle content encoding; prevent double-decoding from occurring
         if (isset($this->config['curloptions'][CURLOPT_ENCODING])

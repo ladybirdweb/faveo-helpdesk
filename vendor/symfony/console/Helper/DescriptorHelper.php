@@ -16,8 +16,8 @@ use Symfony\Component\Console\Descriptor\JsonDescriptor;
 use Symfony\Component\Console\Descriptor\MarkdownDescriptor;
 use Symfony\Component\Console\Descriptor\TextDescriptor;
 use Symfony\Component\Console\Descriptor\XmlDescriptor;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * This class adds helper method to describe objects in various formats.
@@ -31,9 +31,6 @@ class DescriptorHelper extends Helper
      */
     private $descriptors = array();
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this
@@ -78,7 +75,7 @@ class DescriptorHelper extends Helper
      * @param string              $format
      * @param DescriptorInterface $descriptor
      *
-     * @return DescriptorHelper
+     * @return $this
      */
     public function register($format, DescriptorInterface $descriptor)
     {

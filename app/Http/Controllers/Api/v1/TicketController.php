@@ -627,7 +627,7 @@ class TicketController extends Controller
     public function autosearch()
     {
         $term = \Input::get('term');
-        $user = \App\User::where('email', 'LIKE', '%'.$term.'%')->orWhere('first_name', 'LIKE', '%'.$term.'%')->orWhere('last_name', 'LIKE', '%'.$term.'%')->orWhere('user_name', 'LIKE', '%'.$term.'%')->lists('email');
+        $user = \App\User::where('email', 'LIKE', '%'.$term.'%')->orWhere('first_name', 'LIKE', '%'.$term.'%')->orWhere('last_name', 'LIKE', '%'.$term.'%')->orWhere('user_name', 'LIKE', '%'.$term.'%')->pluck('email');
 
         return $user;
     }

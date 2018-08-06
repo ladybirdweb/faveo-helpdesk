@@ -11,9 +11,13 @@
 
 namespace Symfony\Component\Process\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\ProcessUtils;
 
-class ProcessUtilsTest extends \PHPUnit_Framework_TestCase
+/**
+ * @group legacy
+ */
+class ProcessUtilsTest extends TestCase
 {
     /**
      * @dataProvider dataArguments
@@ -25,7 +29,7 @@ class ProcessUtilsTest extends \PHPUnit_Framework_TestCase
 
     public function dataArguments()
     {
-        if ('\\' === DIRECTORY_SEPARATOR) {
+        if ('\\' === \DIRECTORY_SEPARATOR) {
             return array(
                 array('"\"php\" \"-v\""', '"php" "-v"'),
                 array('"foo bar"', 'foo bar'),
@@ -43,6 +47,7 @@ class ProcessUtilsTest extends \PHPUnit_Framework_TestCase
             array("'<|>\" \"'\\''f'", '<|>" "\'f'),
             array("''", ''),
             array("'with\\trailingbs\\'", 'with\trailingbs\\'),
+            array("'withNonAsciiAccentLikeéÉèÈàÀöä'", 'withNonAsciiAccentLikeéÉèÈàÀöä'),
         );
     }
 }

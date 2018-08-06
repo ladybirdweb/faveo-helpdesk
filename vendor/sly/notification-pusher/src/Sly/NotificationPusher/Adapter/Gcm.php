@@ -11,19 +11,18 @@
 
 namespace Sly\NotificationPusher\Adapter;
 
-use Sly\NotificationPusher\Model\BaseOptionedModel;
-use Sly\NotificationPusher\Model\PushInterface;
+use InvalidArgumentException;
 use Sly\NotificationPusher\Collection\DeviceCollection;
 use Sly\NotificationPusher\Exception\PushException;
-
+use Sly\NotificationPusher\Model\BaseOptionedModel;
+use Sly\NotificationPusher\Model\DeviceInterface;
+use Sly\NotificationPusher\Model\GcmMessage;
+use Sly\NotificationPusher\Model\PushInterface;
 use Zend\Http\Client as HttpClient;
 use Zend\Http\Client\Adapter\Socket as HttpSocketAdapter;
-
+use ZendService\Google\Exception\RuntimeException as ServiceRuntimeException;
 use ZendService\Google\Gcm\Client as ServiceClient;
 use ZendService\Google\Gcm\Message as ServiceMessage;
-use ZendService\Google\Exception\RuntimeException as ServiceRuntimeException;
-
-use InvalidArgumentException;
 
 /**
  * GCM adapter.
@@ -49,7 +48,7 @@ class Gcm extends BaseAdapter
      */
     public function supports($token)
     {
-        return is_string($token) && $token != '';
+        return is_string($token) && $token !== '';
     }
 
     /**
@@ -67,15 +66,39 @@ class Gcm extends BaseAdapter
             $message = $this->getServiceMessageFromOrigin($tokensRange, $push->getMessage());
 
             try {
-                $this->response = $client->send($message);
+
+                /** @var \ZendService\Google\Gcm\Response $response */
+                $response        = $client->send($message);
+                $responseResults = $response->getResults();
+
+                foreach ($tokensRange as $token) {
+                    /** @var DeviceInterface $device */
+                    $device = $push->getDevices()->get($token);
+
+                    // map the overall response object
+                    // into a per device response
+                    $tokenResponse = [];
+                    if (isset($responseResults[$token]) && is_array($responseResults[$token])) {
+                        $tokenResponse = $responseResults[$token];
+                    }
+
+                    $responseData = $response->getResponse();
+                    if ($responseData && is_array($responseData)) {
+                        $tokenResponse = array_merge(
+                            $tokenResponse,
+                            array_diff_key($responseData, ['results' => true])
+                        );
+                    }
+
+                    $push->addResponse($device, $tokenResponse);
+
+                    $pushedDevices->add($device);
+
+                    $this->response->addOriginalResponse($device, $response);
+                    $this->response->addParsedResponse($device, $tokenResponse);
+                }
             } catch (ServiceRuntimeException $e) {
                 throw new PushException($e->getMessage());
-            }
-
-            if ((bool) $this->response->getSuccessCount()) {
-                foreach ($tokensRange as $token) {
-                    $pushedDevices->add($push->getDevices()->get($token));
-                }
             }
         }
 
@@ -96,8 +119,8 @@ class Gcm extends BaseAdapter
             $newClient = new \Zend\Http\Client(
                 null,
                 [
-                    'adapter' => 'Zend\Http\Client\Adapter\Socket',
-                    'sslverifypeer' => false
+                    'adapter'       => 'Zend\Http\Client\Adapter\Socket',
+                    'sslverifypeer' => false,
                 ]
             );
 
@@ -114,6 +137,7 @@ class Gcm extends BaseAdapter
      * @param BaseOptionedModel|\Sly\NotificationPusher\Model\MessageInterface $message Message
      *
      * @return \ZendService\Google\Gcm\Message
+     * @throws \ZendService\Google\Exception\InvalidArgumentException
      */
     public function getServiceMessageFromOrigin(array $tokens, BaseOptionedModel $message)
     {
@@ -122,7 +146,18 @@ class Gcm extends BaseAdapter
 
         $serviceMessage = new ServiceMessage();
         $serviceMessage->setRegistrationIds($tokens);
+
+        if (isset($data['notificationData']) && !empty($data['notificationData'])) {
+            $serviceMessage->setNotification($data['notificationData']);
+            unset($data['notificationData']);
+        }
+
+        if ($message instanceof GcmMessage) {
+            $serviceMessage->setNotification($message->getNotificationData());
+        }
+
         $serviceMessage->setData($data);
+
         $serviceMessage->setCollapseKey($this->getParameter('collapseKey'));
         $serviceMessage->setRestrictedPackageName($this->getParameter('restrictedPackageName'));
         $serviceMessage->setDelayWhileIdle($this->getParameter('delayWhileIdle', false));
@@ -138,11 +173,11 @@ class Gcm extends BaseAdapter
     public function getDefinedParameters()
     {
         return [
-            'collapse_key',
-            'delay_while_idle',
-            'time_to_live',
-            'restricted_package_name',
-            'dry_run'
+            'collapseKey',
+            'delayWhileIdle',
+            'ttl',
+            'restrictedPackageName',
+            'dryRun',
         ];
     }
 

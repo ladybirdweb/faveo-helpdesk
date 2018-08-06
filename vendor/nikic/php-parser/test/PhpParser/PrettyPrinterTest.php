@@ -1,11 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace PhpParser;
 
-use PhpParser\Comment;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\EncapsedStringPart;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\PrettyPrinter\Standard;
@@ -43,7 +45,7 @@ class PrettyPrinterTest extends CodeTestAbstract
         if ('php5' === $version) {
             $this->assertSame($expected, $output5, $name);
             $this->assertNotSame($expected, $output7, $name);
-        } else if ('php7' === $version) {
+        } elseif ('php7' === $version) {
             $this->assertSame($expected, $output7, $name);
             $this->assertNotSame($expected, $output5, $name);
         } else {
@@ -54,7 +56,7 @@ class PrettyPrinterTest extends CodeTestAbstract
 
     /**
      * @dataProvider provideTestPrettyPrint
-     * @covers PhpParser\PrettyPrinter\Standard<extended>
+     * @covers \PhpParser\PrettyPrinter\Standard<extended>
      */
     public function testPrettyPrint($name, $code, $expected, $mode) {
         $this->doTestPrettyPrintMethod('prettyPrint', $name, $code, $expected, $mode);
@@ -62,7 +64,7 @@ class PrettyPrinterTest extends CodeTestAbstract
 
     /**
      * @dataProvider provideTestPrettyPrintFile
-     * @covers PhpParser\PrettyPrinter\Standard<extended>
+     * @covers \PhpParser\PrettyPrinter\Standard<extended>
      */
     public function testPrettyPrintFile($name, $code, $expected, $mode) {
         $this->doTestPrettyPrintMethod('prettyPrintFile', $name, $code, $expected, $mode);
@@ -84,9 +86,9 @@ class PrettyPrinterTest extends CodeTestAbstract
         );
         $this->assertEquals('($a + $b) * $c', $prettyPrinter->prettyPrintExpr($expr));
 
-        $expr = new Expr\Closure(array(
-            'stmts' => array(new Stmt\Return_(new String_("a\nb")))
-        ));
+        $expr = new Expr\Closure([
+            'stmts' => [new Stmt\Return_(new String_("a\nb"))]
+        ]);
         $this->assertEquals("function () {\n    return 'a\nb';\n}", $prettyPrinter->prettyPrintExpr($expr));
     }
 
@@ -99,8 +101,8 @@ class PrettyPrinterTest extends CodeTestAbstract
     }
 
     private function parseModeLine($modeLine) {
-        $parts = explode(' ', $modeLine, 2);
-        $version = isset($parts[0]) ? $parts[0] : 'both';
+        $parts = explode(' ', (string) $modeLine, 2);
+        $version = $parts[0] ?? 'both';
         $options = isset($parts[1]) ? json_decode($parts[1], true) : [];
         return [$version, $options];
     }
@@ -160,5 +162,154 @@ class PrettyPrinterTest extends CodeTestAbstract
             [new Encapsed([new EncapsedStringPart("STR\n"), new Expr\Variable('y')], $heredoc), '"STR\\n{$y}"'],
             [new Encapsed([new EncapsedStringPart("STR")], $heredoc), '"STR"'],
         ];
+    }
+
+    /** @dataProvider provideTestUnnaturalLiterals */
+    public function testUnnaturalLiterals($node, $expected) {
+        $prttyPrinter = new PrettyPrinter\Standard;
+        $result = $prttyPrinter->prettyPrintExpr($node);
+        $this->assertSame($expected, $result);
+    }
+
+    public function provideTestUnnaturalLiterals() {
+        return [
+            [new LNumber(-1), '-1'],
+            [new LNumber(-PHP_INT_MAX - 1), '(-' . PHP_INT_MAX . '-1)'],
+            [new LNumber(-1, ['kind' => LNumber::KIND_BIN]), '-0b1'],
+            [new LNumber(-1, ['kind' => LNumber::KIND_OCT]), '-01'],
+            [new LNumber(-1, ['kind' => LNumber::KIND_HEX]), '-0x1'],
+            [new DNumber(\INF), '\INF'],
+            [new DNumber(-\INF), '-\INF'],
+            [new DNumber(-\NAN), '\NAN'],
+        ];
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Cannot pretty-print AST with Error nodes
+     */
+    public function testPrettyPrintWithError() {
+        $stmts = [new Stmt\Expression(
+            new Expr\PropertyFetch(new Expr\Variable('a'), new Expr\Error())
+        )];
+        $prettyPrinter = new PrettyPrinter\Standard;
+        $prettyPrinter->prettyPrint($stmts);
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Cannot pretty-print AST with Error nodes
+     */
+    public function testPrettyPrintWithErrorInClassConstFetch() {
+        $stmts = [new Stmt\Expression(
+            new Expr\ClassConstFetch(new Name('Foo'), new Expr\Error())
+        )];
+        $prettyPrinter = new PrettyPrinter\Standard;
+        $prettyPrinter->prettyPrint($stmts);
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Cannot directly print EncapsedStringPart
+     */
+    public function testPrettyPrintEncapsedStringPart() {
+        $expr = new Node\Scalar\EncapsedStringPart('foo');
+        $prettyPrinter = new PrettyPrinter\Standard;
+        $prettyPrinter->prettyPrintExpr($expr);
+    }
+
+    /**
+     * @dataProvider provideTestFormatPreservingPrint
+     * @covers \PhpParser\PrettyPrinter\Standard<extended>
+     */
+    public function testFormatPreservingPrint($name, $code, $modification, $expected, $modeLine) {
+        $lexer = new Lexer\Emulative([
+            'usedAttributes' => [
+                'comments',
+                'startLine', 'endLine',
+                'startTokenPos', 'endTokenPos',
+            ],
+        ]);
+
+        $parser = new Parser\Php7($lexer);
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor(new NodeVisitor\CloningVisitor());
+
+        $printer = new PrettyPrinter\Standard();
+
+        $oldStmts = $parser->parse($code);
+        $oldTokens = $lexer->getTokens();
+
+        $newStmts = $traverser->traverse($oldStmts);
+
+        /** @var callable $fn */
+        eval(<<<CODE
+use PhpParser\Comment;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Scalar;
+use PhpParser\Node\Stmt;
+\$fn = function(&\$stmts) { $modification };
+CODE
+        );
+        $fn($newStmts);
+
+        $newCode = $printer->printFormatPreserving($newStmts, $oldStmts, $oldTokens);
+        $this->assertSame(canonicalize($expected), canonicalize($newCode), $name);
+    }
+
+    public function provideTestFormatPreservingPrint() {
+        return $this->getTests(__DIR__ . '/../code/formatPreservation', 'test', 3);
+    }
+
+    /**
+     * @dataProvider provideTestRoundTripPrint
+     * @covers \PhpParser\PrettyPrinter\Standard<extended>
+     */
+    public function testRoundTripPrint($name, $code, $expected, $modeLine) {
+        /**
+         * This test makes sure that the format-preserving pretty printer round-trips for all
+         * the pretty printer tests (i.e. returns the input if no changes occurred).
+         */
+
+        list($version) = $this->parseModeLine($modeLine);
+
+        $lexer = new Lexer\Emulative([
+            'usedAttributes' => [
+                'comments',
+                'startLine', 'endLine',
+                'startTokenPos', 'endTokenPos',
+            ],
+        ]);
+
+        $parserClass = $version === 'php5' ? Parser\Php5::class : Parser\Php7::class;
+        /** @var Parser $parser */
+        $parser = new $parserClass($lexer);
+
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor(new NodeVisitor\CloningVisitor());
+
+        $printer = new PrettyPrinter\Standard();
+
+        try {
+            $oldStmts = $parser->parse($code);
+        } catch (Error $e) {
+            // Can't do a format-preserving print on a file with errors
+            return;
+        }
+
+        $oldTokens = $lexer->getTokens();
+
+        $newStmts = $traverser->traverse($oldStmts);
+
+        $newCode = $printer->printFormatPreserving($newStmts, $oldStmts, $oldTokens);
+        $this->assertSame(canonicalize($code), canonicalize($newCode), $name);
+    }
+
+    public function provideTestRoundTripPrint() {
+        return array_merge(
+            $this->getTests(__DIR__ . '/../code/prettyPrinter', 'test'),
+            $this->getTests(__DIR__ . '/../code/parser', 'test')
+        );
     }
 }

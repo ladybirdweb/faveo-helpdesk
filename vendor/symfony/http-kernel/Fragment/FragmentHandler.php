@@ -11,9 +11,9 @@
 
 namespace Symfony\Component\HttpKernel\Fragment;
 
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 /**
@@ -33,8 +33,6 @@ class FragmentHandler
     private $requestStack;
 
     /**
-     * Constructor.
-     *
      * @param RequestStack                $requestStack The Request stack that controls the lifecycle of requests
      * @param FragmentRendererInterface[] $renderers    An array of FragmentRendererInterface instances
      * @param bool                        $debug        Whether the debug mode is enabled or not
@@ -50,8 +48,6 @@ class FragmentHandler
 
     /**
      * Adds a renderer.
-     *
-     * @param FragmentRendererInterface $renderer A FragmentRendererInterface instance
      */
     public function addRenderer(FragmentRendererInterface $renderer)
     {
@@ -96,8 +92,6 @@ class FragmentHandler
      *
      * When the Response is a StreamedResponse, the content is streamed immediately
      * instead of being returned.
-     *
-     * @param Response $response A Response instance
      *
      * @return string|null The Response content or null when the Response is streamed
      *

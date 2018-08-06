@@ -1,5 +1,7 @@
 <?php
-class Issue1351Test extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Issue1351Test extends TestCase
 {
     protected $instance;
 
@@ -15,7 +17,7 @@ class Issue1351Test extends PHPUnit_Framework_TestCase
     public function testFailurePost()
     {
         $this->assertNull($this->instance);
-        $this->assertFalse(class_exists('ChildProcessClass1351', false), 'ChildProcessClass1351 is not loaded.');
+        $this->assertFalse(class_exists(ChildProcessClass1351::class, false), 'ChildProcessClass1351 is not loaded.');
     }
 
     /**
@@ -34,7 +36,7 @@ class Issue1351Test extends PHPUnit_Framework_TestCase
     public function testExceptionPost()
     {
         $this->assertNull($this->instance);
-        $this->assertFalse(class_exists('ChildProcessClass1351', false), 'ChildProcessClass1351 is not loaded.');
+        $this->assertFalse(class_exists(ChildProcessClass1351::class, false), 'ChildProcessClass1351 is not loaded.');
     }
 
     public function testPhpCoreLanguageException()

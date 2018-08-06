@@ -1,13 +1,13 @@
-ZendService\Google\Gcm [![Build Status](https://travis-ci.org/zendframework/ZendService_Google_Gcm.png?branch=master.png?branch=master)](https://travis-ci.org/zendframework/ZendService_Google_Gcm)
+ZendService\Google\Gcm [![Build Status](https://api.travis-ci.org/zendframework/ZendService_Google_Gcm.svg?branch=develop)](https://travis-ci.org/zendframework/ZendService_Google_Gcm)
 ================================
 
 Provides support for Google push notifications.
 
-## Requirements ##
+## Requirements
 
-* PHP >= 5.3.3
+* PHP >= 5.6
 
-## Getting Started ##
+## Getting Started
 
 Install this library using [Composer](http://getcomposer.org/):
 
@@ -15,6 +15,6 @@ Install this library using [Composer](http://getcomposer.org/):
 $ composer require zendframework/zendservice-google-gcm
 ```
 
-## Documentation ##
+## Documentation
 
 The documentation can be found at: http://framework.zend.com/manual/current/en/modules/zendservice.google.gcm.html

@@ -1,4 +1,4 @@
 bin
-composer.lock
 vendor/
 web/
+.idea/

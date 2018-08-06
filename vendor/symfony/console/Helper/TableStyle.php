@@ -37,7 +37,7 @@ class TableStyle
      *
      * @param string $paddingChar
      *
-     * @return TableStyle
+     * @return $this
      */
     public function setPaddingChar($paddingChar)
     {
@@ -65,7 +65,7 @@ class TableStyle
      *
      * @param string $horizontalBorderChar
      *
-     * @return TableStyle
+     * @return $this
      */
     public function setHorizontalBorderChar($horizontalBorderChar)
     {
@@ -89,7 +89,7 @@ class TableStyle
      *
      * @param string $verticalBorderChar
      *
-     * @return TableStyle
+     * @return $this
      */
     public function setVerticalBorderChar($verticalBorderChar)
     {
@@ -113,7 +113,7 @@ class TableStyle
      *
      * @param string $crossingChar
      *
-     * @return TableStyle
+     * @return $this
      */
     public function setCrossingChar($crossingChar)
     {
@@ -137,7 +137,7 @@ class TableStyle
      *
      * @param string $cellHeaderFormat
      *
-     * @return TableStyle
+     * @return $this
      */
     public function setCellHeaderFormat($cellHeaderFormat)
     {
@@ -161,7 +161,7 @@ class TableStyle
      *
      * @param string $cellRowFormat
      *
-     * @return TableStyle
+     * @return $this
      */
     public function setCellRowFormat($cellRowFormat)
     {
@@ -185,7 +185,7 @@ class TableStyle
      *
      * @param string $cellRowContentFormat
      *
-     * @return TableStyle
+     * @return $this
      */
     public function setCellRowContentFormat($cellRowContentFormat)
     {
@@ -209,7 +209,7 @@ class TableStyle
      *
      * @param string $borderFormat
      *
-     * @return TableStyle
+     * @return $this
      */
     public function setBorderFormat($borderFormat)
     {
@@ -233,11 +233,11 @@ class TableStyle
      *
      * @param int $padType STR_PAD_*
      *
-     * @return TableStyle
+     * @return $this
      */
     public function setPadType($padType)
     {
-        if (!in_array($padType, array(STR_PAD_LEFT, STR_PAD_RIGHT, STR_PAD_BOTH), true)) {
+        if (!\in_array($padType, array(STR_PAD_LEFT, STR_PAD_RIGHT, STR_PAD_BOTH), true)) {
             throw new InvalidArgumentException('Invalid padding type. Expected one of (STR_PAD_LEFT, STR_PAD_RIGHT, STR_PAD_BOTH).');
         }
 

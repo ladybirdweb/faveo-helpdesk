@@ -2,10 +2,9 @@
 
 require_once __DIR__.'/AbstractStreamBufferAcceptanceTest.php';
 
-class Swift_Transport_StreamBuffer_ProcessAcceptanceTest
-    extends Swift_Transport_StreamBuffer_AbstractStreamBufferAcceptanceTest
+class Swift_Transport_StreamBuffer_ProcessAcceptanceTest extends Swift_Transport_StreamBuffer_AbstractStreamBufferAcceptanceTest
 {
-    public function setUp()
+    protected function setUp()
     {
         if (!defined('SWIFT_SENDMAIL_PATH')) {
             $this->markTestSkipped(
@@ -17,11 +16,11 @@ class Swift_Transport_StreamBuffer_ProcessAcceptanceTest
         parent::setUp();
     }
 
-    protected function _initializeBuffer()
+    protected function initializeBuffer()
     {
-        $this->_buffer->initialize(array(
+        $this->buffer->initialize([
             'type' => Swift_Transport_IoBuffer::TYPE_PROCESS,
             'command' => SWIFT_SENDMAIL_PATH.' -bs',
-        ));
+        ]);
     }
 }

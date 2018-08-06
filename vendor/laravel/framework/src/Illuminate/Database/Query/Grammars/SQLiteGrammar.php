@@ -7,70 +7,63 @@ use Illuminate\Database\Query\Builder;
 class SQLiteGrammar extends Grammar
 {
     /**
+     * The components that make up a select clause.
+     *
+     * @var array
+     */
+    protected $selectComponents = [
+        'aggregate',
+        'columns',
+        'from',
+        'joins',
+        'wheres',
+        'groups',
+        'havings',
+        'orders',
+        'limit',
+        'offset',
+        'lock',
+    ];
+
+    /**
      * All of the available clause operators.
      *
      * @var array
      */
     protected $operators = [
         '=', '<', '>', '<=', '>=', '<>', '!=',
-        'like', 'not like', 'between', 'ilike',
+        'like', 'not like', 'ilike',
         '&', '|', '<<', '>>',
     ];
 
     /**
-     * Compile an insert statement into SQL.
+     * Compile a select query into SQL.
      *
      * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $values
      * @return string
      */
-    public function compileInsert(Builder $query, array $values)
+    public function compileSelect(Builder $query)
     {
-        // Essentially we will force every insert to be treated as a batch insert which
-        // simply makes creating the SQL easier for us since we can utilize the same
-        // basic routine regardless of an amount of records given to us to insert.
-        $table = $this->wrapTable($query->from);
+        $sql = parent::compileSelect($query);
 
-        if (! is_array(reset($values))) {
-            $values = [$values];
+        if ($query->unions) {
+            $sql = 'select * from ('.$sql.') '.$this->compileUnions($query);
         }
 
-        // If there is only one record being inserted, we will just use the usual query
-        // grammar insert builder because no special syntax is needed for the single
-        // row inserts in SQLite. However, if there are multiples, we'll continue.
-        if (count($values) == 1) {
-            return parent::compileInsert($query, reset($values));
-        }
-
-        $names = $this->columnize(array_keys(reset($values)));
-
-        $columns = [];
-
-        // SQLite requires us to build the multi-row insert as a listing of select with
-        // unions joining them together. So we'll build out this list of columns and
-        // then join them all together with select unions to complete the queries.
-        foreach (array_keys(reset($values)) as $column) {
-            $columns[] = '? as '.$this->wrap($column);
-        }
-
-        $columns = array_fill(0, count($values), implode(', ', $columns));
-
-        return "insert into $table ($names) select ".implode(' union all select ', $columns);
+        return $sql;
     }
 
     /**
-     * Compile a truncate table statement into SQL.
+     * Compile a single union statement.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @return array
+     * @param  array  $union
+     * @return string
      */
-    public function compileTruncate(Builder $query)
+    protected function compileUnion(array $union)
     {
-        $sql = ['delete from sqlite_sequence where name = ?' => [$query->from]];
+        $conjuction = $union['all'] ? ' union all ' : ' union ';
 
-        $sql['delete from '.$this->wrapTable($query->from)] = [];
-
-        return $sql;
+        return $conjuction.'select * from ('.$union['query']->toSql().')';
     }
 
     /**
@@ -122,6 +115,18 @@ class SQLiteGrammar extends Grammar
     }
 
     /**
+     * Compile a "where time" clause.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $where
+     * @return string
+     */
+    protected function whereTime(Builder $query, $where)
+    {
+        return $this->dateBasedWhere('%H:%M:%S', $query, $where);
+    }
+
+    /**
      * Compile a date based where clause.
      *
      * @param  string  $type
@@ -135,6 +140,63 @@ class SQLiteGrammar extends Grammar
 
         $value = $this->parameter($value);
 
-        return 'strftime(\''.$type.'\', '.$this->wrap($where['column']).') '.$where['operator'].' '.$value;
+        return "strftime('{$type}', {$this->wrap($where['column'])}) {$where['operator']} {$value}";
+    }
+
+    /**
+     * Compile an insert statement into SQL.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $values
+     * @return string
+     */
+    public function compileInsert(Builder $query, array $values)
+    {
+        // Essentially we will force every insert to be treated as a batch insert which
+        // simply makes creating the SQL easier for us since we can utilize the same
+        // basic routine regardless of an amount of records given to us to insert.
+        $table = $this->wrapTable($query->from);
+
+        if (! is_array(reset($values))) {
+            $values = [$values];
+        }
+
+        // If there is only one record being inserted, we will just use the usual query
+        // grammar insert builder because no special syntax is needed for the single
+        // row inserts in SQLite. However, if there are multiples, we'll continue.
+        if (count($values) == 1) {
+            return empty(reset($values))
+                    ? "insert into $table default values"
+                    : parent::compileInsert($query, reset($values));
+        }
+
+        $names = $this->columnize(array_keys(reset($values)));
+
+        $columns = [];
+
+        // SQLite requires us to build the multi-row insert as a listing of select with
+        // unions joining them together. So we'll build out this list of columns and
+        // then join them all together with select unions to complete the queries.
+        foreach (array_keys(reset($values)) as $column) {
+            $columns[] = '? as '.$this->wrap($column);
+        }
+
+        $columns = array_fill(0, count($values), implode(', ', $columns));
+
+        return "insert into $table ($names) select ".implode(' union all select ', $columns);
+    }
+
+    /**
+     * Compile a truncate table statement into SQL.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return array
+     */
+    public function compileTruncate(Builder $query)
+    {
+        return [
+            'delete from sqlite_sequence where name = ?' => [$query->from],
+            'delete from '.$this->wrapTable($query->from) => [],
+        ];
     }
 }

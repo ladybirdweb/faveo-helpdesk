@@ -9,20 +9,23 @@
  * file that was distributed with this source code.
  */
 
-/**
- * Translation messages.  See http://symfony.com/doc/current/book/translation.html
- * for possible formats.
- */
 return array(
-    'year'      => '1 år|:count år',
-    'month'     => '1 måned|:count måneder',
-    'week'      => '1 uge|:count uger',
-    'day'       => '1 dag|:count dage',
-    'hour'      => '1 time|:count timer',
-    'minute'    => '1 minut|:count minutter',
-    'second'    => '1 sekund|:count sekunder',
-    'ago'       => ':time siden',
-    'from_now'  => 'om :time',
-    'after'     => ':time efter',
-    'before'    => ':time før',
+    'year' => ':count år|:count år',
+    'y' => ':count år|:count år',
+    'month' => ':count måned|:count måneder',
+    'm' => ':count måned|:count måneder',
+    'week' => ':count uge|:count uger',
+    'w' => ':count uge|:count uger',
+    'day' => ':count dag|:count dage',
+    'd' => ':count dag|:count dage',
+    'hour' => ':count time|:count timer',
+    'h' => ':count time|:count timer',
+    'minute' => ':count minut|:count minutter',
+    'min' => ':count minut|:count minutter',
+    'second' => ':count sekund|:count sekunder',
+    's' => ':count sekund|:count sekunder',
+    'ago' => ':time siden',
+    'from_now' => 'om :time',
+    'after' => ':time efter',
+    'before' => ':time før',
 );

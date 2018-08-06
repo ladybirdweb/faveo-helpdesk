@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\Translation\Tests\Loader;
 
-use Symfony\Component\Translation\Loader\YamlFileLoader;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\Translation\Loader\YamlFileLoader;
 
-class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
+class YamlFileLoaderTest extends TestCase
 {
     public function testLoad()
     {

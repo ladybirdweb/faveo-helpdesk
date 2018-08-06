@@ -82,7 +82,7 @@ class EmailsController extends Controller
             $mailbox_protocols = $mailbox_protocol->get();
 
             $service = new \App\Model\MailJob\MailService();
-            $services = $service->lists('name', 'id')->toArray();
+            $services = $service->pluck('name', 'id')->toArray();
 
             // return with all the table data
             return view('themes.default1.admin.helpdesk.emails.emails.create', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'services'));
@@ -351,7 +351,7 @@ class EmailsController extends Controller
             $mailbox_protocols = $mailbox_protocol->get();
 
             $service = new \App\Model\MailJob\MailService();
-            $services = $service->lists('name', 'id')->toArray();
+            $services = $service->pluck('name', 'id')->toArray();
 
             // return if the execution is succeeded
             return view('themes.default1.admin.helpdesk.emails.emails.edit', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'emails', 'sys_email', 'services'))->with('count', $count);

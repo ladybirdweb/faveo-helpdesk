@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Carbon package.
  *
@@ -6,20 +7,27 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
  */
+
 return array(
-    'year'      => '1 aasta|:count aastat',
-    'month'     => '1 kuu|:count kuud',
-    'week'      => '1 nädal|:count nädalat',
-    'day'       => '1 päev|:count päeva',
-    'hour'      => '1 tund|:count tundi',
-    'minute'    => '1 minut|:count minutit',
-    'second'    => '1 sekund|:count sekundit',
-    'ago'       => ':time tagasi',
-    'from_now'  => ':time pärast',
-    'after'     => ':time pärast',
-    'before'    => ':time enne',
+    'year' => ':count aasta|:count aastat',
+    'y' => ':count aasta|:count aastat',
+    'month' => ':count kuu|:count kuud',
+    'm' => ':count kuu|:count kuud',
+    'week' => ':count nädal|:count nädalat',
+    'w' => ':count nädal|:count nädalat',
+    'day' => ':count päev|:count päeva',
+    'd' => ':count päev|:count päeva',
+    'hour' => ':count tund|:count tundi',
+    'h' => ':count tund|:count tundi',
+    'minute' => ':count minut|:count minutit',
+    'min' => ':count minut|:count minutit',
+    'second' => ':count sekund|:count sekundit',
+    's' => ':count sekund|:count sekundit',
+    'ago' => ':time tagasi',
+    'from_now' => ':time pärast',
+    'after' => ':time pärast',
+    'before' => ':time enne',
     'year_from_now' => ':count aasta',
     'month_from_now' => ':count kuu',
     'week_from_now' => ':count nädala',

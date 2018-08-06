@@ -33,8 +33,6 @@ class InputOption
     private $description;
 
     /**
-     * Constructor.
-     *
      * @param string       $name        The option name
      * @param string|array $shortcut    The shortcuts, can be null, a string of shortcuts delimited by | or an array of shortcuts
      * @param int          $mode        The option mode: One of the VALUE_* constants
@@ -58,7 +56,7 @@ class InputOption
         }
 
         if (null !== $shortcut) {
-            if (is_array($shortcut)) {
+            if (\is_array($shortcut)) {
                 $shortcut = implode('|', $shortcut);
             }
             $shortcuts = preg_split('{(\|)-?}', ltrim($shortcut, '-'));
@@ -72,7 +70,7 @@ class InputOption
 
         if (null === $mode) {
             $mode = self::VALUE_NONE;
-        } elseif (!is_int($mode) || $mode > 15 || $mode < 1) {
+        } elseif (!\is_int($mode) || $mode > 15 || $mode < 1) {
             throw new InvalidArgumentException(sprintf('Option mode "%s" is not valid.', $mode));
         }
 
@@ -164,7 +162,7 @@ class InputOption
         if ($this->isArray()) {
             if (null === $default) {
                 $default = array();
-            } elseif (!is_array($default)) {
+            } elseif (!\is_array($default)) {
                 throw new LogicException('A default value for an array option must be an array.');
             }
         }
@@ -195,11 +193,9 @@ class InputOption
     /**
      * Checks whether the given option equals this one.
      *
-     * @param InputOption $option option to compare
-     *
      * @return bool
      */
-    public function equals(InputOption $option)
+    public function equals(self $option)
     {
         return $option->getName() === $this->getName()
             && $option->getShortcut() === $this->getShortcut()

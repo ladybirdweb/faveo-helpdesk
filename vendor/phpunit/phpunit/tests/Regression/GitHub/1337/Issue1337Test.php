@@ -1,5 +1,7 @@
 <?php
-class Issue1337Test extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Issue1337Test extends TestCase
 {
     /**
      * @dataProvider dataProvider
@@ -11,9 +13,9 @@ class Issue1337Test extends PHPUnit_Framework_TestCase
 
     public function dataProvider()
     {
-        return array(
-          'c:\\'=> array(true),
-          0.9   => array(true)
-        );
+        return [
+          'c:\\'=> [true],
+          0.9   => [true]
+        ];
     }
 }

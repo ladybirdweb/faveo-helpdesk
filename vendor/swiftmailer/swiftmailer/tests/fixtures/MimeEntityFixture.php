@@ -1,6 +1,6 @@
 <?php
 
-class MimeEntityFixture implements Swift_Mime_MimeEntity
+class MimeEntityFixture extends Swift_Mime_SimpleMimeEntity
 {
     private $level;
     private $string;
@@ -32,28 +32,36 @@ class MimeEntityFixture implements Swift_Mime_MimeEntity
     public function getId()
     {
     }
+
     public function getHeaders()
     {
     }
+
     public function getBody()
     {
     }
+
     public function setBody($body, $contentType = null)
     {
     }
+
     public function toByteStream(Swift_InputByteStream $is)
     {
     }
+
     public function charsetChanged($charset)
     {
     }
+
     public function encoderChanged(Swift_Mime_ContentEncoder $encoder)
     {
     }
+
     public function getChildren()
     {
     }
-    public function setChildren(array $children)
+
+    public function setChildren(array $children, $compoundLevel = null)
     {
     }
 }

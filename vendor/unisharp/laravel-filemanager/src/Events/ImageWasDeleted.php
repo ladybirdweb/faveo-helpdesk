@@ -1,6 +1,6 @@
 <?php
 
-namespace Unisharp\Laravelfilemanager\Events;
+namespace UniSharp\LaravelFilemanager\Events;
 
 class ImageWasDeleted
 {
@@ -18,5 +18,4 @@ class ImageWasDeleted
     {
         return $this->path;
     }
-
 }

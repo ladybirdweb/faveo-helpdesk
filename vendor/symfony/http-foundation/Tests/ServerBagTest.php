@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\HttpFoundation\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ServerBag;
 
 /**
@@ -18,7 +19,7 @@ use Symfony\Component\HttpFoundation\ServerBag;
  *
  * @author Bulat Shakirzyanov <mallluhuct@gmail.com>
  */
-class ServerBagTest extends \PHPUnit_Framework_TestCase
+class ServerBagTest extends TestCase
 {
     public function testShouldExtractHeadersFromServerArray()
     {
@@ -73,8 +74,8 @@ class ServerBagTest extends \PHPUnit_Framework_TestCase
 
         // Username and passwords should not be set as the header is bogus
         $headers = $bag->getHeaders();
-        $this->assertFalse(isset($headers['PHP_AUTH_USER']));
-        $this->assertFalse(isset($headers['PHP_AUTH_PW']));
+        $this->assertArrayNotHasKey('PHP_AUTH_USER', $headers);
+        $this->assertArrayNotHasKey('PHP_AUTH_PW', $headers);
     }
 
     public function testHttpBasicAuthWithPhpCgiRedirect()
@@ -117,8 +118,8 @@ class ServerBagTest extends \PHPUnit_Framework_TestCase
 
         // Username and passwords should not be set as the header is bogus
         $headers = $bag->getHeaders();
-        $this->assertFalse(isset($headers['PHP_AUTH_USER']));
-        $this->assertFalse(isset($headers['PHP_AUTH_PW']));
+        $this->assertArrayNotHasKey('PHP_AUTH_USER', $headers);
+        $this->assertArrayNotHasKey('PHP_AUTH_PW', $headers);
     }
 
     public function testHttpDigestAuthWithPhpCgiRedirect()

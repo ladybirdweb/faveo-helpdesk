@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Carbon package.
  *
@@ -7,23 +8,33 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-/**
- * Translation messages.  See http://symfony.com/doc/current/book/translation.html
- * for possible formats.
- */
-/**
- * Extracted from https://github.com/jenssegers/laravel-date/blob/master/src/lang/ca/date.php
- */
+
 return array(
-    'year'      => '1 any|:count anys',
-    'month'     => '1 mes|:count mesos',
-    'week'      => '1 setmana|:count setmanes',
-    'day'       => '1 dia|:count díes',
-    'hour'      => '1 hora|:count hores',
-    'minute'    => '1 minut|:count minuts',
-    'second'    => '1 segon|:count segons',
-    'ago'       => 'Fa :time',
-    'from_now'  => 'Dins de :time',
-    'after'     => ':time després',
-    'before'    => ':time abans',
+    'year' => ':count any|:count anys',
+    'y' => ':count any|:count anys',
+    'month' => ':count mes|:count mesos',
+    'm' => ':count mes|:count mesos',
+    'week' => ':count setmana|:count setmanes',
+    'w' => ':count setmana|:count setmanes',
+    'day' => ':count dia|:count dies',
+    'd' => ':count dia|:count dies',
+    'hour' => ':count hora|:count hores',
+    'h' => ':count hora|:count hores',
+    'minute' => ':count minut|:count minuts',
+    'min' => ':count minut|:count minuts',
+    'second' => ':count segon|:count segons',
+    's' => ':count segon|:count segons',
+    'ago' => 'fa :time',
+    'from_now' => 'dins de :time',
+    'after' => ':time després',
+    'before' => ':time abans',
+    'diff_now' => 'ara mateix',
+    'diff_yesterday' => 'ahir',
+    'diff_tomorrow' => 'demà',
+    'diff_before_yesterday' => "abans d'ahir",
+    'diff_after_tomorrow' => 'demà passat',
+    'period_recurrences' => ':count cop|:count cops',
+    'period_interval' => 'cada :interval',
+    'period_start_date' => 'de :date',
+    'period_end_date' => 'fins a :date',
 );

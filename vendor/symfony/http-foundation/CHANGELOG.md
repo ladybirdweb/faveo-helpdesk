@@ -1,6 +1,38 @@
 CHANGELOG
 =========
 
+3.4.14
+------
+
+ * [BC BREAK] Support for the IIS-only `X_ORIGINAL_URL` and `X_REWRITE_URL`
+   HTTP headers has been dropped for security reasons.
+
+3.4.0
+-----
+
+ * implemented PHP 7.0's `SessionUpdateTimestampHandlerInterface` with a new
+   `AbstractSessionHandler` base class and a new `StrictSessionHandler` wrapper
+ * deprecated the `WriteCheckSessionHandler`, `NativeSessionHandler` and `NativeProxy` classes
+ * deprecated setting session save handlers that do not implement `\SessionHandlerInterface` in `NativeSessionStorage::setSaveHandler()`
+ * deprecated using `MongoDbSessionHandler` with the legacy mongo extension; use it with the mongodb/mongodb package and ext-mongodb instead
+ * deprecated `MemcacheSessionHandler`; use `MemcachedSessionHandler` instead
+
+3.3.0
+-----
+
+ * the `Request::setTrustedProxies()` method takes a new `$trustedHeaderSet` argument,
+   see http://symfony.com/doc/current/components/http_foundation/trusting_proxies.html for more info,
+ * deprecated the `Request::setTrustedHeaderName()` and `Request::getTrustedHeaderName()` methods,
+ * added `File\Stream`, to be passed to `BinaryFileResponse` when the size of the served file is unknown,
+   disabling `Range` and `Content-Length` handling, switching to chunked encoding instead
+ * added the `Cookie::fromString()` method that allows to create a cookie from a
+   raw header string
+
+3.1.0
+-----
+
+ * Added support for creating `JsonResponse` with a string of JSON data
+
 3.0.0
 -----
 

@@ -10,25 +10,31 @@ class A {
 -----
 array(
     0: Stmt_Class(
-        type: 0
-        name: A
+        flags: 0
+        name: Identifier(
+            name: A
+        )
         extends: null
         implements: array(
         )
         stmts: array(
             0: Stmt_Property(
-                type: 0
+                flags: 0
                 props: array(
                     0: Stmt_PropertyProperty(
-                        name: foo
+                        name: VarLikeIdentifier(
+                            name: foo
+                        )
                         default: null
                     )
                 )
             )
             1: Stmt_ClassMethod(
-                type: 0
+                flags: 0
                 byRef: false
-                name: bar
+                name: Identifier(
+                    name: bar
+                )
                 params: array(
                 )
                 returnType: null
@@ -36,9 +42,11 @@ array(
                 )
             )
             2: Stmt_ClassMethod(
-                type: 24
+                flags: MODIFIER_ABSTRACT | MODIFIER_STATIC (24)
                 byRef: false
-                name: baz
+                name: Identifier(
+                    name: baz
+                )
                 params: array(
                 )
                 returnType: null

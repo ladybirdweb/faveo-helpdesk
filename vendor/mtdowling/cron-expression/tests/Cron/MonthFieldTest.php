@@ -4,16 +4,17 @@ namespace Cron\Tests;
 
 use Cron\MonthField;
 use DateTime;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @author Michael Dowling <mtdowling@gmail.com>
  */
-class MonthFieldTest extends \PHPUnit_Framework_TestCase
+class MonthFieldTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @covers Cron\MonthField::validate
      */
-    public function testValdatesField()
+    public function testValidatesField()
     {
         $f = new MonthField();
         $this->assertTrue($f->validate('12'));

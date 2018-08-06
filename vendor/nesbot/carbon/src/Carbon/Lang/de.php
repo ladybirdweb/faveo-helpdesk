@@ -3,36 +3,44 @@
 /*
  * This file is part of the Carbon package.
  *
- * (c) Michael Hohl <me@michaelhohl.net>
+ * (c) Brian Nesbitt <brian@nesbot.com>
  *
- * This file is released under the terms of CC0.
- * CC0 is even more permissive than the MIT license, allowing you to use the code in
- * any manner you want, without any copyright headers, notices, or other attribution.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
-/**
- * Translation messages.  See http://symfony.com/doc/current/book/translation.html
- * for possible formats.
- */
 return array(
-    'year'      => '1 Jahr|:count Jahre',
-    'month'     => '1 Monat|:count Monate',
-    'week'      => '1 Woche|:count Wochen',
-    'day'       => '1 Tag|:count Tage',
-    'hour'      => '1 Stunde|:count Stunden',
-    'minute'    => '1 Minute|:count Minuten',
-    'second'    => '1 Sekunde|:count Sekunden',
-    'ago'       => 'vor :time',
-    'from_now'  => 'in :time',
-    'after'     => ':time später',
-    'before'    => ':time zuvor',
+    'year' => ':count Jahr|:count Jahre',
+    'y' => ':countJ|:countJ',
+    'month' => ':count Monat|:count Monate',
+    'm' => ':countMon|:countMon',
+    'week' => ':count Woche|:count Wochen',
+    'w' => ':countWo|:countWo',
+    'day' => ':count Tag|:count Tage',
+    'd' => ':countTg|:countTg',
+    'hour' => ':count Stunde|:count Stunden',
+    'h' => ':countStd|:countStd',
+    'minute' => ':count Minute|:count Minuten',
+    'min' => ':countMin|:countMin',
+    'second' => ':count Sekunde|:count Sekunden',
+    's' => ':countSek|:countSek',
+    'ago' => 'vor :time',
+    'from_now' => 'in :time',
+    'after' => ':time später',
+    'before' => ':time zuvor',
 
-    'year_from_now' => '1 Jahr|:count Jahren',
-    'month_from_now' => '1 Monat|:count Monaten',
-    'week_from_now' => '1 Woche|:count Wochen',
-    'day_from_now' => '1 Tag|:count Tagen',
-    'year_ago' => '1 Jahr|:count Jahren',
-    'month_ago' => '1 Monat|:count Monaten',
-    'week_ago' => '1 Woche|:count Wochen',
-    'day_ago' => '1 Tag|:count Tagen',
+    'year_from_now' => ':count Jahr|:count Jahren',
+    'month_from_now' => ':count Monat|:count Monaten',
+    'week_from_now' => ':count Woche|:count Wochen',
+    'day_from_now' => ':count Tag|:count Tagen',
+    'year_ago' => ':count Jahr|:count Jahren',
+    'month_ago' => ':count Monat|:count Monaten',
+    'week_ago' => ':count Woche|:count Wochen',
+    'day_ago' => ':count Tag|:count Tagen',
+
+    'diff_now' => 'Gerade eben',
+    'diff_yesterday' => 'Gestern',
+    'diff_tomorrow' => 'Heute',
+    'diff_before_yesterday' => 'Vorgestern',
+    'diff_after_tomorrow' => 'Übermorgen',
 );

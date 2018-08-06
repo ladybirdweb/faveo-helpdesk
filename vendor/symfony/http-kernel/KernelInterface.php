@@ -11,9 +11,9 @@
 
 namespace Symfony\Component\HttpKernel;
 
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Symfony\Component\Config\Loader\LoaderInterface;
 
 /**
  * The Kernel is the heart of the Symfony system.
@@ -27,14 +27,12 @@ interface KernelInterface extends HttpKernelInterface, \Serializable
     /**
      * Returns an array of bundles to register.
      *
-     * @return BundleInterface[] An array of bundle instances
+     * @return iterable|BundleInterface[] An iterable of bundle instances
      */
     public function registerBundles();
 
     /**
      * Loads the container configuration.
-     *
-     * @param LoaderInterface $loader A LoaderInterface instance
      */
     public function registerContainerConfiguration(LoaderInterface $loader);
 
@@ -59,6 +57,9 @@ interface KernelInterface extends HttpKernelInterface, \Serializable
 
     /**
      * Returns a bundle and optionally its descendants by its name.
+     *
+     * The second argument is deprecated as of 3.4 and will be removed in 4.0. This method
+     * will always return an instance of BundleInterface in 4.0.
      *
      * @param string $name  Bundle name
      * @param bool   $first Whether to return the first bundle only or together with its descendants
@@ -121,9 +122,9 @@ interface KernelInterface extends HttpKernelInterface, \Serializable
     public function isDebug();
 
     /**
-     * Gets the application root dir.
+     * Gets the application root dir (path of the project's Kernel class).
      *
-     * @return string The application root dir
+     * @return string The Kernel root dir
      */
     public function getRootDir();
 

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false"
+         bootstrap="test/bootstrap.php"
+        >
+    <testsuites>
+        <testsuite name="Flow Test Suite">
+            <directory>./test/Unit/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./src/Flow/</directory>
+            <exclude>
+                <file>./src/Flow/Basic.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-clover" target="build/coverage.xml"/>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+    </logging>
+
+    <listeners>
+        <listener class="League\PHPUnitCoverageListener\Listener">
+            <arguments>
+                <array>
+                    <element key="printer">
+                        <object class="League\PHPUnitCoverageListener\Printer\StdOut"/>
+                    </element>
+                    <element key="hook">
+                        <object class="League\PHPUnitCoverageListener\Hook\Travis"/>
+                    </element>
+                    <element key="namespace">
+                        <string>Flow</string>
+                    </element>
+                    <element key="repo_token">
+                        <string>TtscpSyNYUnuG2LkxtWCQmAtBk8vWAMsI</string>
+                    </element>
+                    <element key="target_url">
+                        <string>https://coveralls.io/api/v1/jobs</string>
+                    </element>
+                    <element key="coverage_dir">
+                        <string>build</string>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
+    </listeners>
+</phpunit>

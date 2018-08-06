@@ -1,24 +1,19 @@
-<?php namespace Unisharp\Laravelfilemanager\controllers;
+<?php
 
-use Unisharp\Laravelfilemanager\controllers\Controller;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Response;
+namespace UniSharp\LaravelFilemanager\Controllers;
 
 /**
- * Class DownloadController
- * @package Unisharp\Laravelfilemanager\controllers
+ * Class DownloadController.
  */
-class DownloadController extends LfmController {
-
+class DownloadController extends LfmController
+{
     /**
-     * Download a file
+     * Download a file.
      *
      * @return mixed
      */
     public function getDownload()
     {
-        return Response::download(parent::getPath('directory') . Input::get('file'));
+        return response()->download(parent::getCurrentPath(request('file')));
     }
-
 }

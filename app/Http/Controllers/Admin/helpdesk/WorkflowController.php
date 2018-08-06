@@ -145,7 +145,7 @@ class WorkflowController extends Controller
     public function create(Emails $emails)
     {
         $email_data = '';
-        foreach ($emails->lists('email_address', 'id') as $key => $email) {
+        foreach ($emails->pluck('email_address', 'id') as $key => $email) {
             $email_data["E-$key"] = $email;
         }
         $emails = $email_data;

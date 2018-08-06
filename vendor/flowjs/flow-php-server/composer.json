@@ -1,0 +1,35 @@
+{
+  "name": "flowjs/flow-php-server",
+  "description": "PHP library for handling chunk uploads. Works with flow.js html5 file uploads.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Aidas Klimas",
+      "email": "aidaskk@gmail.com"
+    }
+  ],
+  "keywords": [
+    "flow.js",
+    "flow",
+    "resumable.js",
+    "resumable",
+    "upload",
+    "file upload",
+    "html5 file upload",
+    "chunks"
+  ],
+  "require": {
+      "php": ">=5.3"
+  },
+  "require-dev": {
+    "mikey179/vfsStream": "v1.2.0",
+    "league/phpunit-coverage-listener": "~1.1",
+    "fabpot/php-cs-fixer": "dev-master",
+    "phpunit/phpunit": "4.*"
+  },
+  "autoload": {
+    "psr-0": {
+      "Flow": "src"
+    }
+  }
+}

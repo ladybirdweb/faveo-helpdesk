@@ -5,11 +5,12 @@ namespace Illuminate\Log;
 use Closure;
 use RuntimeException;
 use InvalidArgumentException;
-use Monolog\Handler\SyslogHandler;
 use Monolog\Handler\StreamHandler;
-use Monolog\Logger as MonologLogger;
+use Monolog\Handler\SyslogHandler;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\ErrorLogHandler;
+use Monolog\Logger as MonologLogger;
+use Illuminate\Log\Events\MessageLogged;
 use Monolog\Handler\RotatingFileHandler;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -53,7 +54,7 @@ class Writer implements LogContract, PsrLoggerInterface
      * Create a new log writer instance.
      *
      * @param  \Monolog\Logger  $monolog
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $dispatcher
+     * @param  \Illuminate\Contracts\Events\Dispatcher|null  $dispatcher
      * @return void
      */
     public function __construct(MonologLogger $monolog, Dispatcher $dispatcher = null)
@@ -74,7 +75,7 @@ class Writer implements LogContract, PsrLoggerInterface
      */
     public function emergency($message, array $context = [])
     {
-        return $this->writeLog(__FUNCTION__, $message, $context);
+        $this->writeLog(__FUNCTION__, $message, $context);
     }
 
     /**
@@ -86,7 +87,7 @@ class Writer implements LogContract, PsrLoggerInterface
      */
     public function alert($message, array $context = [])
     {
-        return $this->writeLog(__FUNCTION__, $message, $context);
+        $this->writeLog(__FUNCTION__, $message, $context);
     }
 
     /**
@@ -98,7 +99,7 @@ class Writer implements LogContract, PsrLoggerInterface
      */
     public function critical($message, array $context = [])
     {
-        return $this->writeLog(__FUNCTION__, $message, $context);
+        $this->writeLog(__FUNCTION__, $message, $context);
     }
 
     /**
@@ -110,7 +111,7 @@ class Writer implements LogContract, PsrLoggerInterface
      */
     public function error($message, array $context = [])
     {
-        return $this->writeLog(__FUNCTION__, $message, $context);
+        $this->writeLog(__FUNCTION__, $message, $context);
     }
 
     /**
@@ -122,7 +123,7 @@ class Writer implements LogContract, PsrLoggerInterface
      */
     public function warning($message, array $context = [])
     {
-        return $this->writeLog(__FUNCTION__, $message, $context);
+        $this->writeLog(__FUNCTION__, $message, $context);
     }
 
     /**
@@ -134,7 +135,7 @@ class Writer implements LogContract, PsrLoggerInterface
      */
     public function notice($message, array $context = [])
     {
-        return $this->writeLog(__FUNCTION__, $message, $context);
+        $this->writeLog(__FUNCTION__, $message, $context);
     }
 
     /**
@@ -146,7 +147,7 @@ class Writer implements LogContract, PsrLoggerInterface
      */
     public function info($message, array $context = [])
     {
-        return $this->writeLog(__FUNCTION__, $message, $context);
+        $this->writeLog(__FUNCTION__, $message, $context);
     }
 
     /**
@@ -158,7 +159,7 @@ class Writer implements LogContract, PsrLoggerInterface
      */
     public function debug($message, array $context = [])
     {
-        return $this->writeLog(__FUNCTION__, $message, $context);
+        $this->writeLog(__FUNCTION__, $message, $context);
     }
 
     /**
@@ -171,7 +172,7 @@ class Writer implements LogContract, PsrLoggerInterface
      */
     public function log($level, $message, array $context = [])
     {
-        return $this->writeLog($level, $message, $context);
+        $this->writeLog($level, $message, $context);
     }
 
     /**
@@ -184,7 +185,7 @@ class Writer implements LogContract, PsrLoggerInterface
      */
     public function write($level, $message, array $context = [])
     {
-        return $this->writeLog($level, $message, $context);
+        $this->writeLog($level, $message, $context);
     }
 
     /**
@@ -238,11 +239,12 @@ class Writer implements LogContract, PsrLoggerInterface
      *
      * @param  string  $name
      * @param  string  $level
+     * @param  mixed  $facility
      * @return \Psr\Log\LoggerInterface
      */
-    public function useSyslog($name = 'laravel', $level = 'debug')
+    public function useSyslog($name = 'laravel', $level = 'debug', $facility = LOG_USER)
     {
-        return $this->monolog->pushHandler(new SyslogHandler($name, LOG_USER, $level));
+        return $this->monolog->pushHandler(new SyslogHandler($name, $facility, $level));
     }
 
     /**
@@ -255,10 +257,8 @@ class Writer implements LogContract, PsrLoggerInterface
     public function useErrorLog($level = 'debug', $messageType = ErrorLogHandler::OPERATING_SYSTEM)
     {
         $this->monolog->pushHandler(
-            $handler = new ErrorLogHandler($messageType, $this->parseLevel($level))
+            new ErrorLogHandler($messageType, $this->parseLevel($level))
         );
-
-        $handler->setFormatter($this->getDefaultFormatter());
     }
 
     /**
@@ -275,7 +275,7 @@ class Writer implements LogContract, PsrLoggerInterface
             throw new RuntimeException('Events dispatcher has not been set.');
         }
 
-        $this->dispatcher->listen('illuminate.log', $callback);
+        $this->dispatcher->listen(MessageLogged::class, $callback);
     }
 
     /**
@@ -292,7 +292,7 @@ class Writer implements LogContract, PsrLoggerInterface
         // log listeners. These are useful for building profilers or other tools
         // that aggregate all of the log messages for a given "request" cycle.
         if (isset($this->dispatcher)) {
-            $this->dispatcher->fire('illuminate.log', compact('level', 'message', 'context'));
+            $this->dispatcher->dispatch(new MessageLogged($level, $message, $context));
         }
     }
 
@@ -349,7 +349,9 @@ class Writer implements LogContract, PsrLoggerInterface
      */
     protected function getDefaultFormatter()
     {
-        return new LineFormatter(null, null, true, true);
+        return tap(new LineFormatter(null, null, true, true), function ($formatter) {
+            $formatter->includeStacktraces();
+        });
     }
 
     /**

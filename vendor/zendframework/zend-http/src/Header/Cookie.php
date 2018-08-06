@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Http\Header;
@@ -97,11 +95,26 @@ class Cookie extends ArrayObject implements HeaderInterface
     {
         $nvPairs = [];
 
-        foreach ($this as $name => $value) {
+        foreach ($this->flattenCookies($this) as $name => $value) {
             $nvPairs[] = $name . '=' . (($this->encodeValue) ? urlencode($value) : $value);
         }
 
         return implode('; ', $nvPairs);
+    }
+
+    protected function flattenCookies($data, $prefix = null)
+    {
+        $result = [];
+        foreach ($data as $key => $value) {
+            $key = $prefix ? $prefix . '[' . $key . ']' : $key;
+            if (is_array($value)) {
+                $result = array_merge($result, $this->flattenCookies($value, $key));
+            } else {
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
     }
 
     public function toString()

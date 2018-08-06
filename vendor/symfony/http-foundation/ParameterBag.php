@@ -20,14 +20,10 @@ class ParameterBag implements \IteratorAggregate, \Countable
 {
     /**
      * Parameter storage.
-     *
-     * @var array
      */
     protected $parameters;
 
     /**
-     * Constructor.
-     *
      * @param array $parameters An array of parameters
      */
     public function __construct(array $parameters = array())
@@ -204,12 +200,12 @@ class ParameterBag implements \IteratorAggregate, \Countable
         $value = $this->get($key, $default);
 
         // Always turn $options into an array - this allows filter_var option shortcuts.
-        if (!is_array($options) && $options) {
+        if (!\is_array($options) && $options) {
             $options = array('flags' => $options);
         }
 
         // Add a convenience check for arrays.
-        if (is_array($value) && !isset($options['flags'])) {
+        if (\is_array($value) && !isset($options['flags'])) {
             $options['flags'] = FILTER_REQUIRE_ARRAY;
         }
 
@@ -233,6 +229,6 @@ class ParameterBag implements \IteratorAggregate, \Countable
      */
     public function count()
     {
-        return count($this->parameters);
+        return \count($this->parameters);
     }
 }

@@ -7,16 +7,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Framework\Constraint;
+
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Constraint that asserts that the object it is evaluated for is an instance
  * of a given class.
  *
  * The expected class name is passed in the constructor.
- *
- * @since Class available since Release 3.0.0
  */
-class PHPUnit_Framework_Constraint_IsInstanceOf extends PHPUnit_Framework_Constraint
+class IsInstanceOf extends Constraint
 {
     /**
      * @var string
@@ -57,7 +59,7 @@ class PHPUnit_Framework_Constraint_IsInstanceOf extends PHPUnit_Framework_Constr
      */
     protected function failureDescription($other)
     {
-        return sprintf(
+        return \sprintf(
             '%s is an instance of %s "%s"',
             $this->exporter->shortenedExport($other),
             $this->getType(),
@@ -72,7 +74,7 @@ class PHPUnit_Framework_Constraint_IsInstanceOf extends PHPUnit_Framework_Constr
      */
     public function toString()
     {
-        return sprintf(
+        return \sprintf(
             'is instance of %s "%s"',
             $this->getType(),
             $this->className

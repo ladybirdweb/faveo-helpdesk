@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 1.3.0 - 2018-05-08
+
+### Added
+
+- [#63](https://github.com/zendframework/ZendService_Apple_Apns/pull/63) adds support for PHP 7.1 and 7.2.
+
+- [#53](https://github.com/zendframework/ZendService_Apple_Apns/pull/53) adds support for the mutable-content Notification field within the `Message` implementation.
+
+- [#48](https://github.com/zendframework/ZendService_Apple_Apns/pull/48) adds two new methods to `ZendService\Apple\Apns\Message\Alert`: `setAction($key)` and `getAction()`.
+  These allow specifying an action property for notifications.
+
+### Changed
+
+- [#42](https://github.com/zendframework/ZendService_Apple_Apns/pull/42) modifies the allowed character set for tokens to include uppercase A-F.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- [#63](https://github.com/zendframework/ZendService_Apple_Apns/pull/63) removes support for PHP 5.3, 5.4, and 5.5.
+
+- [#63](https://github.com/zendframework/ZendService_Apple_Apns/pull/63) removes support for HHVM.
+
+### Fixed
+
+- [#49](https://github.com/zendframework/ZendService_Apple_Apns/pull/49) fixes how `Message::getPayload()` and `Message::getPayloadJson()` create a
+  representation of the `aps` key when it is an empty value. With #18, the value was removed,
+  which was incorrect; it is not rendered as an empty object.
+
+- [#62](https://github.com/zendframework/ZendService_Apple_Apns/pull/62) modifies the `AbstractClient::connect()` method such that it now
+  restores the previous error handler after catching a socket-related connection exception.
+
 ## 1.2.0 - 2015-12-09
 
 ### Added

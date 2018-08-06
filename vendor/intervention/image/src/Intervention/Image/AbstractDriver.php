@@ -21,8 +21,8 @@ abstract class AbstractDriver
     /**
      * Creates new image instance
      *
-     * @param  integer $width
-     * @param  integer $height
+     * @param  int     $width
+     * @param  int     $height
      * @param  string  $background
      * @return \Intervention\Image\Image
      */
@@ -69,7 +69,7 @@ abstract class AbstractDriver
      *
      * @param  Image   $image
      * @param  string  $format
-     * @param  integer $quality
+     * @param  int     $quality
      * @return \Intervention\Image\Image
      */
     public function encode($image, $format, $quality)
@@ -102,6 +102,8 @@ abstract class AbstractDriver
      */
     private function getCommandClassName($name)
     {
+        $name = mb_convert_case($name[0], MB_CASE_UPPER, 'utf-8') . mb_substr($name, 1, mb_strlen($name));
+        
         $drivername = $this->getDriverName();
         $classnameLocal = sprintf('\Intervention\Image\%s\Commands\%sCommand', $drivername, ucfirst($name));
         $classnameGlobal = sprintf('\Intervention\Image\Commands\%sCommand', ucfirst($name));

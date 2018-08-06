@@ -11,10 +11,22 @@
 
 namespace Tymon\JWTAuth\Exceptions;
 
+use Exception;
+use Tymon\JWTAuth\Claims\Claim;
+
 class InvalidClaimException extends JWTException
 {
     /**
-     * @var int
+     * Constructor.
+     *
+     * @param  \Tymon\JWTAuth\Claims\Claim  $claim
+     * @param  int  $code
+     * @param  \Exception|null  $previous
+     *
+     * @return void
      */
-    protected $statusCode = 400;
+    public function __construct(Claim $claim, $code = 0, Exception $previous = null)
+    {
+        parent::__construct('Invalid value provided for claim ['.$claim->getName().']', $code, $previous);
+    }
 }

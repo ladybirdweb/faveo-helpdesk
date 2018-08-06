@@ -45,7 +45,7 @@ class FormatterHelper extends Helper
      */
     public function formatBlock($messages, $style, $large = false)
     {
-        if (!is_array($messages)) {
+        if (!\is_array($messages)) {
             $messages = array($messages);
         }
 
@@ -70,6 +70,30 @@ class FormatterHelper extends Helper
         }
 
         return implode("\n", $messages);
+    }
+
+    /**
+     * Truncates a message to the given length.
+     *
+     * @param string $message
+     * @param int    $length
+     * @param string $suffix
+     *
+     * @return string
+     */
+    public function truncate($message, $length, $suffix = '...')
+    {
+        $computedLength = $length - $this->strlen($suffix);
+
+        if ($computedLength > $this->strlen($message)) {
+            return $message;
+        }
+
+        if (false === $encoding = mb_detect_encoding($message, null, true)) {
+            return substr($message, 0, $length).$suffix;
+        }
+
+        return mb_substr($message, 0, $length, $encoding).$suffix;
     }
 
     /**

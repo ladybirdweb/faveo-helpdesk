@@ -124,11 +124,15 @@ class XmlParser
 
     private function parse_boolean(Shape $shape, $value)
     {
-        return $value == 'true' ? true : false;
+        return $value == 'true';
     }
 
     private function parse_timestamp(Shape $shape, $value)
     {
+        if (!empty($shape['timestampFormat'])
+            && $shape['timestampFormat'] === 'unixTimestamp') {
+            return DateTimeResult::fromEpoch((string) $value);
+        }
         return new DateTimeResult($value);
     }
 }

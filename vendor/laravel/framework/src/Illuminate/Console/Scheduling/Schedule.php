@@ -2,28 +2,53 @@
 
 namespace Illuminate\Console\Scheduling;
 
-use Symfony\Component\Process\ProcessUtils;
-use Symfony\Component\Process\PhpExecutableFinder;
+use Illuminate\Console\Application;
+use Illuminate\Container\Container;
+use Illuminate\Support\ProcessUtils;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class Schedule
 {
     /**
      * All of the events on the schedule.
      *
-     * @var array
+     * @var \Illuminate\Console\Scheduling\Event[]
      */
     protected $events = [];
 
     /**
+     * The mutex implementation.
+     *
+     * @var \Illuminate\Console\Scheduling\Mutex
+     */
+    protected $mutex;
+
+    /**
+     * Create a new schedule instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $container = Container::getInstance();
+
+        $this->mutex = $container->bound(Mutex::class)
+                                ? $container->make(Mutex::class)
+                                : $container->make(CacheMutex::class);
+    }
+
+    /**
      * Add a new callback event to the schedule.
      *
-     * @param  string  $callback
+     * @param  string|callable  $callback
      * @param  array   $parameters
-     * @return \Illuminate\Console\Scheduling\Event
+     * @return \Illuminate\Console\Scheduling\CallbackEvent
      */
     public function call($callback, array $parameters = [])
     {
-        $this->events[] = $event = new CallbackEvent($callback, $parameters);
+        $this->events[] = $event = new CallbackEvent(
+            $this->mutex, $callback, $parameters
+        );
 
         return $event;
     }
@@ -37,19 +62,33 @@ class Schedule
      */
     public function command($command, array $parameters = [])
     {
-        $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false));
-
-        if (defined('HHVM_VERSION')) {
-            $binary .= ' --php';
+        if (class_exists($command)) {
+            $command = Container::getInstance()->make($command)->getName();
         }
 
-        if (defined('ARTISAN_BINARY')) {
-            $artisan = ProcessUtils::escapeArgument(ARTISAN_BINARY);
-        } else {
-            $artisan = 'artisan';
-        }
+        return $this->exec(
+            Application::formatCommandString($command), $parameters
+        );
+    }
 
-        return $this->exec("{$binary} {$artisan} {$command}", $parameters);
+    /**
+     * Add a new job callback event to the schedule.
+     *
+     * @param  object|string  $job
+     * @param  string|null  $queue
+     * @return \Illuminate\Console\Scheduling\CallbackEvent
+     */
+    public function job($job, $queue = null)
+    {
+        return $this->call(function () use ($job, $queue) {
+            $job = is_string($job) ? resolve($job) : $job;
+
+            if ($job instanceof ShouldQueue) {
+                dispatch($job)->onQueue($queue);
+            } else {
+                dispatch_now($job);
+            }
+        })->name(is_string($job) ? $job : get_class($job));
     }
 
     /**
@@ -65,7 +104,7 @@ class Schedule
             $command .= ' '.$this->compileParameters($parameters);
         }
 
-        $this->events[] = $event = new Event($command);
+        $this->events[] = $event = new Event($this->mutex, $command);
 
         return $event;
     }
@@ -79,30 +118,36 @@ class Schedule
     protected function compileParameters(array $parameters)
     {
         return collect($parameters)->map(function ($value, $key) {
-            return is_numeric($key) ? $value : $key.'='.(is_numeric($value) ? $value : ProcessUtils::escapeArgument($value));
-        })->implode(' ');
-    }
+            if (is_array($value)) {
+                $value = collect($value)->map(function ($value) {
+                    return ProcessUtils::escapeArgument($value);
+                })->implode(' ');
+            } elseif (! is_numeric($value) && ! preg_match('/^(-.$|--.*)/i', $value)) {
+                $value = ProcessUtils::escapeArgument($value);
+            }
 
-    /**
-     * Get all of the events on the schedule.
-     *
-     * @return array
-     */
-    public function events()
-    {
-        return $this->events;
+            return is_numeric($key) ? $value : "{$key}={$value}";
+        })->implode(' ');
     }
 
     /**
      * Get all of the events on the schedule that are due.
      *
      * @param  \Illuminate\Contracts\Foundation\Application  $app
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
     public function dueEvents($app)
     {
-        return array_filter($this->events, function ($event) use ($app) {
-            return $event->isDue($app);
-        });
+        return collect($this->events)->filter->isDue($app);
+    }
+
+    /**
+     * Get all of the events on the schedule.
+     *
+     * @return \Illuminate\Console\Scheduling\Event[]
+     */
+    public function events()
+    {
+        return $this->events;
     }
 }

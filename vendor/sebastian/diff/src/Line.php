@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 /*
- * This file is part of the Diff package.
+ * This file is part of sebastian/diff.
  *
  * (c) Sebastian Bergmann <sebastian@phpunit.de>
  *
@@ -10,9 +10,7 @@
 
 namespace SebastianBergmann\Diff;
 
-/**
- */
-class Line
+final class Line
 {
     const ADDED     = 1;
     const REMOVED   = 2;
@@ -28,28 +26,18 @@ class Line
      */
     private $content;
 
-    /**
-     * @param int    $type
-     * @param string $content
-     */
-    public function __construct($type = self::UNCHANGED, $content = '')
+    public function __construct(int $type = self::UNCHANGED, string $content = '')
     {
         $this->type    = $type;
         $this->content = $content;
     }
 
-    /**
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * @return int
-     */
-    public function getType()
+    public function getType(): int
     {
         return $this->type;
     }

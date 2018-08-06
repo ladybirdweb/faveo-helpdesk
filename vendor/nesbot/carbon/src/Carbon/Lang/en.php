@@ -9,20 +9,32 @@
  * file that was distributed with this source code.
  */
 
-/**
- * Translation messages.  See http://symfony.com/doc/current/book/translation.html
- * for possible formats.
- */
 return array(
-    'year'      => '1 year|:count years',
-    'month'     => '1 month|:count months',
-    'week'      => '1 week|:count weeks',
-    'day'       => '1 day|:count days',
-    'hour'      => '1 hour|:count hours',
-    'minute'    => '1 minute|:count minutes',
-    'second'    => '1 second|:count seconds',
-    'ago'       => ':time ago',
-    'from_now'  => ':time from now',
-    'after'     => ':time after',
-    'before'    => ':time before',
+    'year' => ':count year|:count years',
+    'y' => ':countyr|:countyrs',
+    'month' => ':count month|:count months',
+    'm' => ':countmo|:countmos',
+    'week' => ':count week|:count weeks',
+    'w' => ':countw|:countw',
+    'day' => ':count day|:count days',
+    'd' => ':countd|:countd',
+    'hour' => ':count hour|:count hours',
+    'h' => ':counth|:counth',
+    'minute' => ':count minute|:count minutes',
+    'min' => ':countm|:countm',
+    'second' => ':count second|:count seconds',
+    's' => ':counts|:counts',
+    'ago' => ':time ago',
+    'from_now' => ':time from now',
+    'after' => ':time after',
+    'before' => ':time before',
+    'diff_now' => 'just now',
+    'diff_yesterday' => 'yesterday',
+    'diff_tomorrow' => 'tomorrow',
+    'diff_before_yesterday' => 'before yesterday',
+    'diff_after_tomorrow' => 'after tomorrow',
+    'period_recurrences' => 'once|:count times',
+    'period_interval' => 'every :interval',
+    'period_start_date' => 'from :date',
+    'period_end_date' => 'to :date',
 );

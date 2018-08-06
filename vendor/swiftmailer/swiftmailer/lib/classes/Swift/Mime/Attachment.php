@@ -16,23 +16,19 @@
 class Swift_Mime_Attachment extends Swift_Mime_SimpleMimeEntity
 {
     /** Recognized MIME types */
-    private $_mimeTypes = array();
+    private $mimeTypes = [];
 
     /**
      * Create a new Attachment with $headers, $encoder and $cache.
      *
-     * @param Swift_Mime_HeaderSet      $headers
-     * @param Swift_Mime_ContentEncoder $encoder
-     * @param Swift_KeyCache            $cache
-     * @param Swift_Mime_Grammar        $grammar
-     * @param array                     $mimeTypes optional
+     * @param array $mimeTypes
      */
-    public function __construct(Swift_Mime_HeaderSet $headers, Swift_Mime_ContentEncoder $encoder, Swift_KeyCache $cache, Swift_Mime_Grammar $grammar, $mimeTypes = array())
+    public function __construct(Swift_Mime_SimpleHeaderSet $headers, Swift_Mime_ContentEncoder $encoder, Swift_KeyCache $cache, Swift_IdGenerator $idGenerator, $mimeTypes = [])
     {
-        parent::__construct($headers, $encoder, $cache, $grammar);
+        parent::__construct($headers, $encoder, $cache, $idGenerator);
         $this->setDisposition('attachment');
         $this->setContentType('application/octet-stream');
-        $this->_mimeTypes = $mimeTypes;
+        $this->mimeTypes = $mimeTypes;
     }
 
     /**
@@ -56,7 +52,7 @@ class Swift_Mime_Attachment extends Swift_Mime_SimpleMimeEntity
      */
     public function getDisposition()
     {
-        return $this->_getHeaderFieldModel('Content-Disposition');
+        return $this->getHeaderFieldModel('Content-Disposition');
     }
 
     /**
@@ -64,11 +60,11 @@ class Swift_Mime_Attachment extends Swift_Mime_SimpleMimeEntity
      *
      * @param string $disposition
      *
-     * @return Swift_Mime_Attachment
+     * @return $this
      */
     public function setDisposition($disposition)
     {
-        if (!$this->_setHeaderFieldModel('Content-Disposition', $disposition)) {
+        if (!$this->setHeaderFieldModel('Content-Disposition', $disposition)) {
             $this->getHeaders()->addParameterizedHeader('Content-Disposition', $disposition);
         }
 
@@ -82,7 +78,7 @@ class Swift_Mime_Attachment extends Swift_Mime_SimpleMimeEntity
      */
     public function getFilename()
     {
-        return $this->_getHeaderParameter('Content-Disposition', 'filename');
+        return $this->getHeaderParameter('Content-Disposition', 'filename');
     }
 
     /**
@@ -90,12 +86,12 @@ class Swift_Mime_Attachment extends Swift_Mime_SimpleMimeEntity
      *
      * @param string $filename
      *
-     * @return Swift_Mime_Attachment
+     * @return $this
      */
     public function setFilename($filename)
     {
-        $this->_setHeaderParameter('Content-Disposition', 'filename', $filename);
-        $this->_setHeaderParameter('Content-Type', 'name', $filename);
+        $this->setHeaderParameter('Content-Disposition', 'filename', $filename);
+        $this->setHeaderParameter('Content-Type', 'name', $filename);
 
         return $this;
     }
@@ -107,7 +103,7 @@ class Swift_Mime_Attachment extends Swift_Mime_SimpleMimeEntity
      */
     public function getSize()
     {
-        return $this->_getHeaderParameter('Content-Disposition', 'size');
+        return $this->getHeaderParameter('Content-Disposition', 'size');
     }
 
     /**
@@ -115,11 +111,11 @@ class Swift_Mime_Attachment extends Swift_Mime_SimpleMimeEntity
      *
      * @param int $size
      *
-     * @return Swift_Mime_Attachment
+     * @return $this
      */
     public function setSize($size)
     {
-        $this->_setHeaderParameter('Content-Disposition', 'size', $size);
+        $this->setHeaderParameter('Content-Disposition', 'size', $size);
 
         return $this;
     }
@@ -127,10 +123,9 @@ class Swift_Mime_Attachment extends Swift_Mime_SimpleMimeEntity
     /**
      * Set the file that this attachment is for.
      *
-     * @param Swift_FileStream $file
-     * @param string           $contentType optional
+     * @param string $contentType optional
      *
-     * @return Swift_Mime_Attachment
+     * @return $this
      */
     public function setFile(Swift_FileStream $file, $contentType = null)
     {
@@ -139,8 +134,8 @@ class Swift_Mime_Attachment extends Swift_Mime_SimpleMimeEntity
         if (!isset($contentType)) {
             $extension = strtolower(substr($file->getPath(), strrpos($file->getPath(), '.') + 1));
 
-            if (array_key_exists($extension, $this->_mimeTypes)) {
-                $this->setContentType($this->_mimeTypes[$extension]);
+            if (array_key_exists($extension, $this->mimeTypes)) {
+                $this->setContentType($this->mimeTypes[$extension]);
             }
         }
 

@@ -2,12 +2,11 @@
 
 namespace Illuminate\Database\Console\Migrations;
 
-use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
 use Illuminate\Database\Migrations\Migrator;
 use Symfony\Component\Console\Input\InputOption;
 
-class RollbackCommand extends Command
+class RollbackCommand extends BaseCommand
 {
     use ConfirmableTrait;
 
@@ -50,17 +49,20 @@ class RollbackCommand extends Command
      *
      * @return void
      */
-    public function fire()
+    public function handle()
     {
         if (! $this->confirmToProceed()) {
             return;
         }
 
-        $this->migrator->setConnection($this->input->getOption('database'));
+        $this->migrator->setConnection($this->option('database'));
 
-        $pretend = $this->input->getOption('pretend');
-
-        $this->migrator->rollback($pretend);
+        $this->migrator->rollback(
+            $this->getMigrationPaths(), [
+                'pretend' => $this->option('pretend'),
+                'step' => (int) $this->option('step'),
+            ]
+        );
 
         // Once the migrator has run we will grab the note output and send it out to
         // the console screen, since the migrator itself functions without having
@@ -82,7 +84,11 @@ class RollbackCommand extends Command
 
             ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when in production.'],
 
+            ['path', null, InputOption::VALUE_OPTIONAL, 'The path of migrations files to be executed.'],
+
             ['pretend', null, InputOption::VALUE_NONE, 'Dump the SQL queries that would be run.'],
+
+            ['step', null, InputOption::VALUE_OPTIONAL, 'The number of migrations to be reverted.'],
         ];
     }
 }

@@ -18,29 +18,12 @@ namespace Symfony\Component\HttpFoundation;
  */
 class AcceptHeaderItem
 {
-    /**
-     * @var string
-     */
     private $value;
-
-    /**
-     * @var float
-     */
     private $quality = 1.0;
-
-    /**
-     * @var int
-     */
     private $index = 0;
-
-    /**
-     * @var array
-     */
     private $attributes = array();
 
     /**
-     * Constructor.
-     *
      * @param string $value
      * @param array  $attributes
      */
@@ -57,7 +40,7 @@ class AcceptHeaderItem
      *
      * @param string $itemValue
      *
-     * @return AcceptHeaderItem
+     * @return self
      */
     public static function fromString($itemValue)
     {
@@ -67,18 +50,18 @@ class AcceptHeaderItem
 
         $lastNullAttribute = null;
         foreach ($bits as $bit) {
-            if (($start = substr($bit, 0, 1)) === ($end = substr($bit, -1)) && ($start === '"' || $start === '\'')) {
+            if (($start = substr($bit, 0, 1)) === ($end = substr($bit, -1)) && ('"' === $start || '\'' === $start)) {
                 $attributes[$lastNullAttribute] = substr($bit, 1, -1);
             } elseif ('=' === $end) {
                 $lastNullAttribute = $bit = substr($bit, 0, -1);
                 $attributes[$bit] = null;
             } else {
                 $parts = explode('=', $bit);
-                $attributes[$parts[0]] = isset($parts[1]) && strlen($parts[1]) > 0 ? $parts[1] : '';
+                $attributes[$parts[0]] = isset($parts[1]) && \strlen($parts[1]) > 0 ? $parts[1] : '';
             }
         }
 
-        return new self(($start = substr($value, 0, 1)) === ($end = substr($value, -1)) && ($start === '"' || $start === '\'') ? substr($value, 1, -1) : $value, $attributes);
+        return new self(($start = substr($value, 0, 1)) === ($end = substr($value, -1)) && ('"' === $start || '\'' === $start) ? substr($value, 1, -1) : $value, $attributes);
     }
 
     /**
@@ -89,7 +72,7 @@ class AcceptHeaderItem
     public function __toString()
     {
         $string = $this->value.($this->quality < 1 ? ';q='.$this->quality : '');
-        if (count($this->attributes) > 0) {
+        if (\count($this->attributes) > 0) {
             $string .= ';'.implode(';', array_map(function ($name, $value) {
                 return sprintf(preg_match('/[,;=]/', $value) ? '%s="%s"' : '%s=%s', $name, $value);
             }, array_keys($this->attributes), $this->attributes));
@@ -103,7 +86,7 @@ class AcceptHeaderItem
      *
      * @param string $value
      *
-     * @return AcceptHeaderItem
+     * @return $this
      */
     public function setValue($value)
     {
@@ -127,7 +110,7 @@ class AcceptHeaderItem
      *
      * @param float $quality
      *
-     * @return AcceptHeaderItem
+     * @return $this
      */
     public function setQuality($quality)
     {
@@ -151,7 +134,7 @@ class AcceptHeaderItem
      *
      * @param int $index
      *
-     * @return AcceptHeaderItem
+     * @return $this
      */
     public function setIndex($index)
     {
@@ -211,7 +194,7 @@ class AcceptHeaderItem
      * @param string $name
      * @param string $value
      *
-     * @return AcceptHeaderItem
+     * @return $this
      */
     public function setAttribute($name, $value)
     {

@@ -62,8 +62,8 @@ class JsonBody
 
             case 'list':
                 $items = $shape->getMember();
-                foreach ($value as &$v) {
-                    $v = $this->format($items, $v);
+                foreach ($value as $k => $v) {
+                    $value[$k] = $this->format($items, $v);
                 }
                 return $value;
 
@@ -72,8 +72,8 @@ class JsonBody
                     return new \stdClass;
                 }
                 $values = $shape->getValue();
-                foreach ($value as &$v) {
-                    $v = $this->format($values, $v);
+                foreach ($value as $k => $v) {
+                    $value[$k] = $this->format($values, $v);
                 }
                 return $value;
 
@@ -81,7 +81,10 @@ class JsonBody
                 return base64_encode($value);
 
             case 'timestamp':
-                return TimestampShape::format($value, 'unixTimestamp');
+                $timestampFormat = !empty($shape['timestampFormat'])
+                    ? $shape['timestampFormat']
+                    : 'unixTimestamp';
+                return TimestampShape::format($value, $timestampFormat);
 
             default:
                 return $value;

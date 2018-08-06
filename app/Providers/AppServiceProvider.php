@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Model\Update\BarNotification;
 use Illuminate\Queue\Events\JobFailed;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Dusk\DuskServiceProvider;
 use Queue;
 use View;
 
@@ -23,33 +25,20 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind('Illuminate\Contracts\Auth\Registrar');
         require_once __DIR__.'/../Http/helpers.php';
+        if ($this->app->environment('local', 'testing')) {
+            $this->app->register(DuskServiceProvider::class);
+        }
+        // if (isInstall()) {
+        //     $this->plugin();
+        // }
     }
 
     public function boot()
     {
         Queue::failing(function (JobFailed $event) {
-            loging('Failed Job - '.$event->connectionName, json_encode($event->data));
-            $failedid = $event->failedId;
-            //\Artisan::call('queue:retry',['id'=>[$failedid]]);
+            loging('Failed Job - '.$event->connectionName, json_encode([$event->job->payload(), 'error' => $event->exception->getMessage().' file=>'.$event->exception->getFile().' line=>'.$event->exception->getLine()]));
         });
-        // Please note the different namespace
-        // and please add a \ in front of your classes in the global namespace
-        \Event::listen('cron.collectJobs', function () {
-            \Cron::add('example1', '* * * * *', function () {
-                $this->index();
-
-                return 'No';
-            });
-
-            \Cron::add('example2', '*/2 * * * *', function () {
-                // Do some crazy things successfully every two minute
-            });
-
-            \Cron::add('disabled job', '0 * * * *', function () {
-                // Do some crazy things successfully every hour
-            }, false);
-        });
-
+        Route::singularResourceParameters(false);
         $this->composer();
     }
 
@@ -62,5 +51,71 @@ class AppServiceProvider extends ServiceProvider
             ];
             view()->share($not);
         });
+    }
+
+    public function plugin()
+    {
+        if (isPlugin('Ldap') && $this->isPluginDir('Ldap')) {
+            $this->app->register(\App\Plugins\Ldap\ServiceProvider::class);
+        }
+        if (isPlugin('Chat') && $this->isPluginDir('Chat')) {
+            $this->app->register(\App\Plugins\Chat\ServiceProvider::class);
+        }
+        if (isPlugin('Envato') && $this->isPluginDir('Envato')) {
+            $this->app->register(\App\Plugins\Envato\ServiceProvider::class);
+        }
+        if (isPlugin('Htrunk') && $this->isPluginDir('Htrunk')) {
+            $this->app->register(\App\Plugins\Htrunk\ServiceProvider::class);
+        }
+        if (isPlugin('HtrunkDocs') && $this->isPluginDir('HtrunkDocs')) {
+            $this->app->register(\App\Plugins\HtrunkDocs\ServiceProvider::class);
+        }
+        if (isPlugin('Licenses') && $this->isPluginDir('Licenses')) {
+            $this->app->register(\App\Plugins\Licenses\ServiceProvider::class);
+        }
+        if (isPlugin('Migration') && $this->isPluginDir('Migration')) {
+            $this->app->register(\App\Plugins\Migration\ServiceProvider::class);
+        }
+        if (isPlugin('Reseller') && $this->isPluginDir('Reseller')) {
+            $this->app->register(\App\Plugins\Reseller\ServiceProvider::class);
+        }
+        if (isPlugin('SMS') && $this->isPluginDir('SMS')) {
+            $this->app->register(\App\Plugins\SMS\ServiceProvider::class);
+        }
+        if (isPlugin('ServiceDesk') && $this->isPluginDir('ServiceDesk')) {
+            $this->app->register(\App\Plugins\ServiceDesk\ServiceProvider::class);
+        }
+        if (isPlugin('Social') && $this->isPluginDir('Social')) {
+            $this->app->register(\App\Plugins\Social\ServiceProvider::class);
+        }
+        if (isPlugin('Telephony') && $this->isPluginDir('Telephony')) {
+            $this->app->register(\App\Plugins\Telephony\ServiceProvider::class);
+        }
+        if (isPlugin('Zapier') && $this->isPluginDir('Zapier')) {
+            $this->app->register(\App\Plugins\Zapier\ServiceProvider::class);
+        }
+        if ($this->isModuleDir('Location')) {
+            $this->app->register(\App\Location\LocationServiceProvider::class);
+        }
+    }
+
+    public function isPluginDir($name)
+    {
+        $check = false;
+        if (is_dir(app_path('Plugins'.DIRECTORY_SEPARATOR.$name))) {
+            $check = true;
+        }
+
+        return $check;
+    }
+
+    public function isModuleDir($name)
+    {
+        $check = false;
+        if (is_dir(app_path($name))) {
+            $check = true;
+        }
+
+        return $check;
     }
 }

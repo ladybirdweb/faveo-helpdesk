@@ -50,9 +50,15 @@ class ProphecySubjectPatch implements ClassPatchInterface
                 continue;
             }
 
-            $method->setCode(
-                'return $this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());'
-            );
+            if ($method->getReturnType() === 'void') {
+                $method->setCode(
+                    '$this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());'
+                );
+            } else {
+                $method->setCode(
+                    'return $this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());'
+                );
+            }
         }
 
         $prophecySetter = new MethodNode('setProphecy');
@@ -71,7 +77,7 @@ class ProphecySubjectPatch implements ClassPatchInterface
             $__call->addArgument(new ArgumentNode('name'));
             $__call->addArgument(new ArgumentNode('arguments'));
 
-            $node->addMethod($__call);
+            $node->addMethod($__call, true);
         }
 
         $__call->setCode(<<<PHP
@@ -82,8 +88,8 @@ throw new \Prophecy\Exception\Doubler\MethodNotFoundException(
 PHP
         );
 
-        $node->addMethod($prophecySetter);
-        $node->addMethod($prophecyGetter);
+        $node->addMethod($prophecySetter, true);
+        $node->addMethod($prophecyGetter, true);
     }
 
     /**
