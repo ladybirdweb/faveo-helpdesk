@@ -276,6 +276,11 @@ return [
       |   System Settings Page
       |--------------------------------------
      */
+    'api'                   => 'Api',
+    'api_key'               => 'Chiave Api',
+    'api_key_mandatory'     => 'Chiave Api obbligatoria',
+    'api_configurations'    => 'Configurazioni Api',
+    'generate_key'          => 'Genera chiave',
     'system'                                                     => 'Sistema',
     'online'                                                     => 'Online',
     'offline'                                                    => 'Manutenzione',
