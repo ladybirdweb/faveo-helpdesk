@@ -234,15 +234,15 @@ class PhpMailController extends Controller
             if ($cc != null) {
                 foreach ($cc as $collaborator) {
                     //mail to collaborators
-                            $collab_user_id = $collaborator->user_id;
+                    $collab_user_id = $collaborator->user_id;
                     $user_id_collab = User::where('id', '=', $collab_user_id)->first();
                     $collab_email = $user_id_collab->email;
                     $m->cc($collab_email);
                 }
             }
 
-                    //            $mail->addBCC($bc);
-                    $size = count($attach);
+            //            $mail->addBCC($bc);
+            $size = count($attach);
             if ($size > 0) {
                 for ($i = 0; $i < $size; $i++) {
                     if (is_array($attach) && array_key_exists($i, $attach)) {

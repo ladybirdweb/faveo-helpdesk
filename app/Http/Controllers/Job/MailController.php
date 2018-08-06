@@ -43,6 +43,7 @@ class MailController extends Controller
     public function getServiceForm($short_name)
     {
         $form = '';
+
         try {
             switch ($short_name) {
                 case 'smtp':

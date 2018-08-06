@@ -58,25 +58,25 @@ class Finder
         return $group->first()->name;
     }
 
-        /**
-         * STATUS TYPE
-         * This function is used for returning status type name with respect to id.
-         *
-         * @param $id type int
-         * @param $custom type array/null
-         *
-         * @return type string
-         */
-        public static function statusType($id, $custom = null)
-        {
-            if ($custom == null) {
-                $status_type = TicketStatusType::whereId($id)->select(['name']);
-            } elseif (isset($custom)) {
-                $status_type = TicketStatusType::whereId($id)->select($custom);
-            }
-
-            return $status_type->first()->name;
+    /**
+     * STATUS TYPE
+     * This function is used for returning status type name with respect to id.
+     *
+     * @param $id type int
+     * @param $custom type array/null
+     *
+     * @return type string
+     */
+    public static function statusType($id, $custom = null)
+    {
+        if ($custom == null) {
+            $status_type = TicketStatusType::whereId($id)->select(['name']);
+        } elseif (isset($custom)) {
+            $status_type = TicketStatusType::whereId($id)->select($custom);
         }
+
+        return $status_type->first()->name;
+    }
 
     /**
      * STATUS
@@ -137,48 +137,48 @@ class Finder
                 }
     }
 
-        /**
-         * ANY TYPE STATUS
-         * This function is used to return the set of status which are of any type passed in the param.
-         *
-         * @param type $id
-         *
-         * @return type array
-         */
-        public static function anyTypeStatus($id)
-        {
-            $status_group = Ticket_Status::where('purpose_of_status', '=', $id)->select(['id'])->get();
-            foreach ($status_group as $status) {
-                $status_group2[] = $status->id;
-            }
-
-            return $status_group2;
+    /**
+     * ANY TYPE STATUS
+     * This function is used to return the set of status which are of any type passed in the param.
+     *
+     * @param type $id
+     *
+     * @return type array
+     */
+    public static function anyTypeStatus($id)
+    {
+        $status_group = Ticket_Status::where('purpose_of_status', '=', $id)->select(['id'])->get();
+        foreach ($status_group as $status) {
+            $status_group2[] = $status->id;
         }
 
-        /**
-         * RETURNS ALL STATUS
-         * This function is used to return all the status given in the system.
-         *
-         * @return type array
-         */
-        public static function getAllStatus()
-        {
-            $status = Ticket_Status::where('purpose_of_status', '!=', 3)->orwhere('purpose_of_status', '!=', 4)->get();
+        return $status_group2;
+    }
 
-            return $status;
+    /**
+     * RETURNS ALL STATUS
+     * This function is used to return all the status given in the system.
+     *
+     * @return type array
+     */
+    public static function getAllStatus()
+    {
+        $status = Ticket_Status::where('purpose_of_status', '!=', 3)->orwhere('purpose_of_status', '!=', 4)->get();
+
+        return $status;
+    }
+
+    /**
+     * VARIABLE REPLACEMENT
+     * This function is used to replace the replaceable variables form a given content for templates.
+     */
+    public static function replaceTemplateVariables($variables, $data, $contents)
+    {
+        foreach ($variables as $key => $variable) {
+            $messagebody = str_replace($variables[$key], $data[$key], $contents);
+            $contents = $messagebody;
         }
 
-        /**
-         * VARIABLE REPLACEMENT
-         * This function is used to replace the replaceable variables form a given content for templates.
-         */
-        public static function replaceTemplateVariables($variables, $data, $contents)
-        {
-            foreach ($variables as $key => $variable) {
-                $messagebody = str_replace($variables[$key], $data[$key], $contents);
-                $contents = $messagebody;
-            }
-
-            return $contents;
-        }
+        return $contents;
+    }
 }
