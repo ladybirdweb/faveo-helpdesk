@@ -35,7 +35,7 @@ class EmailsEditRequest extends Request
             // 'priority' => 'required',
             // 'help_topic' => 'required',
             // 'imap_config' => 'required',
-            'password' => 'required|min:6',
+            'password'  => 'required|min:6',
             'user_name' => 'required',
             // 'sending_host' => 'required',
             // 'sending_port' => 'required',
