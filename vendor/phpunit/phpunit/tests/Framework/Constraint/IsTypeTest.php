@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\Framework\Constraint;
 
 use PHPUnit\Framework\Assert;
@@ -16,7 +15,7 @@ use PHPUnit\Framework\TestFailure;
 
 class IsTypeTest extends ConstraintTestCase
 {
-    public function testConstraintIsType()
+    public function testConstraintIsType(): void
     {
         $constraint = Assert::isType('string');
 
@@ -43,7 +42,7 @@ EOF
         $this->fail();
     }
 
-    public function testConstraintIsType2()
+    public function testConstraintIsType2(): void
     {
         $constraint = Assert::isType('string');
 
@@ -69,7 +68,7 @@ EOF
     /**
      * @dataProvider resources
      */
-    public function testConstraintIsResourceTypeEvaluatesCorrectlyWithResources($resource)
+    public function testConstraintIsResourceTypeEvaluatesCorrectlyWithResources($resource): void
     {
         $constraint = Assert::isType('resource');
 
@@ -87,6 +86,15 @@ EOF
             'open resource'     => [\fopen(__FILE__, 'r')],
             'closed resource'   => [$fh],
         ];
+    }
+
+    public function testIterableTypeIsSupported(): void
+    {
+        $constraint = Assert::isType('iterable');
+
+        $this->assertFalse($constraint->evaluate('', '', true));
+        $this->assertTrue($constraint->evaluate([], '', true));
+        $this->assertEquals('is of type "iterable"', $constraint->toString());
     }
 
     /**

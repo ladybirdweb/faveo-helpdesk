@@ -1,5 +1,12 @@
 <?php
-
+/*
+ * This file is part of PHPUnit.
+ *
+ * (c) Sebastian Bergmann <sebastian@phpunit.de>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Issue2725;
 
 use PHPUnit\Framework\TestCase;
@@ -9,29 +16,35 @@ use PHPUnit\Framework\TestCase;
  */
 class BeforeAfterClassPidTest extends TestCase
 {
+    const PID_VARIABLE = 'current_pid';
+
     /**
      * @beforeClass
      */
-    public static function showPidBefore()
+    public static function showPidBefore(): void
     {
-        $GLOBALS['PID_BEFORE'] = getmypid();
-    }
-
-    public function testComparePids()
-    {
-        $this->assertEquals($GLOBALS['PID_BEFORE'], getmypid());
-    }
-
-    public function testThatClassDidNotReload()
-    {
-        $this->assertEquals($GLOBALS['PID_BEFORE'], getmypid());
+        $GLOBALS[static::PID_VARIABLE] = \getmypid();
     }
 
     /**
      * @afterClass
      */
-    public static function showPidAfter()
+    public static function showPidAfter(): void
     {
-        echo "\n@afterClass output - PID difference should be zero: " . ($GLOBALS['PID_BEFORE'] - getmypid());
+        if ($GLOBALS[static::PID_VARIABLE] - \getmypid() !== 0) {
+            print "\n@afterClass output - PID difference should be zero!";
+        }
+
+        unset($GLOBALS[static::PID_VARIABLE]);
+    }
+
+    public function testMethod1WithItsBeforeAndAfter(): void
+    {
+        $this->assertEquals($GLOBALS[static::PID_VARIABLE], \getmypid());
+    }
+
+    public function testMethod2WithItsBeforeAndAfter(): void
+    {
+        $this->assertEquals($GLOBALS[static::PID_VARIABLE], \getmypid());
     }
 }

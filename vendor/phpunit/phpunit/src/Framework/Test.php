@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\Framework;
 
 use Countable;
@@ -19,10 +18,6 @@ interface Test extends Countable
 {
     /**
      * Runs a test and collects its result in a TestResult instance.
-     *
-     * @param TestResult $result
-     *
-     * @return TestResult
      */
-    public function run(TestResult $result = null);
+    public function run(TestResult $result = null): TestResult;
 }

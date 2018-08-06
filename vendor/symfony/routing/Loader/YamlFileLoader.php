@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Parser as YamlParser;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * YamlFileLoader loads Yaml routing files.
@@ -27,7 +28,7 @@ use Symfony\Component\Yaml\Parser as YamlParser;
 class YamlFileLoader extends FileLoader
 {
     private static $availableKeys = array(
-        'resource', 'type', 'prefix', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options', 'condition', 'controller',
+        'resource', 'type', 'prefix', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options', 'condition', 'controller', 'name_prefix', 'trailing_slash_on_root',
     );
     private $yamlParser;
 
@@ -57,18 +58,10 @@ class YamlFileLoader extends FileLoader
             $this->yamlParser = new YamlParser();
         }
 
-        $prevErrorHandler = set_error_handler(function ($level, $message, $script, $line) use ($file, &$prevErrorHandler) {
-            $message = E_USER_DEPRECATED === $level ? preg_replace('/ on line \d+/', ' in "'.$file.'"$0', $message) : $message;
-
-            return $prevErrorHandler ? $prevErrorHandler($level, $message, $script, $line) : false;
-        });
-
         try {
-            $parsedConfig = $this->yamlParser->parseFile($path);
+            $parsedConfig = $this->yamlParser->parseFile($path, Yaml::PARSE_CONSTANT);
         } catch (ParseException $e) {
             throw new \InvalidArgumentException(sprintf('The file "%s" does not contain valid YAML.', $path), 0, $e);
-        } finally {
-            restore_error_handler();
         }
 
         $collection = new RouteCollection();
@@ -127,9 +120,20 @@ class YamlFileLoader extends FileLoader
             $defaults['_controller'] = $config['controller'];
         }
 
-        $route = new Route($config['path'], $defaults, $requirements, $options, $host, $schemes, $methods, $condition);
+        if (\is_array($config['path'])) {
+            $route = new Route('', $defaults, $requirements, $options, $host, $schemes, $methods, $condition);
 
-        $collection->add($name, $route);
+            foreach ($config['path'] as $locale => $path) {
+                $localizedRoute = clone $route;
+                $localizedRoute->setDefault('_locale', $locale);
+                $localizedRoute->setDefault('_canonical_route', $name);
+                $localizedRoute->setPath($path);
+                $collection->add($name.'.'.$locale, $localizedRoute);
+            }
+        } else {
+            $route = new Route($config['path'], $defaults, $requirements, $options, $host, $schemes, $methods, $condition);
+            $collection->add($name, $route);
+        }
     }
 
     /**
@@ -151,6 +155,7 @@ class YamlFileLoader extends FileLoader
         $condition = isset($config['condition']) ? $config['condition'] : null;
         $schemes = isset($config['schemes']) ? $config['schemes'] : null;
         $methods = isset($config['methods']) ? $config['methods'] : null;
+        $trailingSlashOnRoot = $config['trailing_slash_on_root'] ?? true;
 
         if (isset($config['controller'])) {
             $defaults['_controller'] = $config['controller'];
@@ -166,7 +171,39 @@ class YamlFileLoader extends FileLoader
 
         foreach ($imported as $subCollection) {
             /* @var $subCollection RouteCollection */
-            $subCollection->addPrefix($prefix);
+            if (!\is_array($prefix)) {
+                $subCollection->addPrefix($prefix);
+                if (!$trailingSlashOnRoot) {
+                    $rootPath = (new Route(trim(trim($prefix), '/').'/'))->getPath();
+                    foreach ($subCollection->all() as $route) {
+                        if ($route->getPath() === $rootPath) {
+                            $route->setPath(rtrim($rootPath, '/'));
+                        }
+                    }
+                }
+            } else {
+                foreach ($prefix as $locale => $localePrefix) {
+                    $prefix[$locale] = trim(trim($localePrefix), '/');
+                }
+                foreach ($subCollection->all() as $name => $route) {
+                    if (null === $locale = $route->getDefault('_locale')) {
+                        $subCollection->remove($name);
+                        foreach ($prefix as $locale => $localePrefix) {
+                            $localizedRoute = clone $route;
+                            $localizedRoute->setDefault('_locale', $locale);
+                            $localizedRoute->setDefault('_canonical_route', $name);
+                            $localizedRoute->setPath($localePrefix.(!$trailingSlashOnRoot && '/' === $route->getPath() ? '' : $route->getPath()));
+                            $subCollection->add($name.'.'.$locale, $localizedRoute);
+                        }
+                    } elseif (!isset($prefix[$locale])) {
+                        throw new \InvalidArgumentException(sprintf('Route "%s" with locale "%s" is missing a corresponding prefix when imported in "%s".', $name, $locale, $file));
+                    } else {
+                        $route->setPath($prefix[$locale].(!$trailingSlashOnRoot && '/' === $route->getPath() ? '' : $route->getPath()));
+                        $subCollection->add($name, $route);
+                    }
+                }
+            }
+
             if (null !== $host) {
                 $subCollection->setHost($host);
             }
@@ -182,6 +219,10 @@ class YamlFileLoader extends FileLoader
             $subCollection->addDefaults($defaults);
             $subCollection->addRequirements($requirements);
             $subCollection->addOptions($options);
+
+            if (isset($config['name_prefix'])) {
+                $subCollection->addNamePrefix($config['name_prefix']);
+            }
 
             $collection->addCollection($subCollection);
         }

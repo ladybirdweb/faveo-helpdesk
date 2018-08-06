@@ -7,37 +7,30 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\Util;
 
-/**
- * Utility class for textual type (and value) representation.
- */
-class Type
+final class Type
 {
-    /**
-     * @param string $type
-     *
-     * @return bool
-     */
-    public static function isType($type)
+    public static function isType(string $type): bool
     {
-        return \in_array(
-            $type,
-            [
-                'numeric',
-                'integer',
-                'int',
-                'float',
-                'string',
-                'boolean',
-                'bool',
-                'null',
-                'array',
-                'object',
-                'resource',
-                'scalar'
-            ]
-        );
+        switch ($type) {
+            case 'numeric':
+            case 'integer':
+            case 'int':
+            case 'iterable':
+            case 'float':
+            case 'string':
+            case 'boolean':
+            case 'bool':
+            case 'null':
+            case 'array':
+            case 'object':
+            case 'resource':
+            case 'scalar':
+                return true;
+
+            default:
+                return false;
+        }
     }
 }

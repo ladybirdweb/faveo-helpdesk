@@ -17,17 +17,15 @@ use SebastianBergmann\CodeCoverage\RuntimeException;
  *
  * @codeCoverageIgnore
  */
-class Xdebug implements Driver
+final class Xdebug implements Driver
 {
     /**
-     * Cache the number of lines for each file
-     *
      * @var array
      */
     private $cacheNumLines = [];
 
     /**
-     * Constructor.
+     * @throws RuntimeException
      */
     public function __construct()
     {
@@ -35,20 +33,15 @@ class Xdebug implements Driver
             throw new RuntimeException('This driver requires Xdebug');
         }
 
-        if (\version_compare(\phpversion('xdebug'), '2.2.1', '>=') &&
-            !\ini_get('xdebug.coverage_enable')) {
-            throw new RuntimeException(
-                'xdebug.coverage_enable=On has to be set in php.ini'
-            );
+        if (!\ini_get('xdebug.coverage_enable')) {
+            throw new RuntimeException('xdebug.coverage_enable=On has to be set in php.ini');
         }
     }
 
     /**
      * Start collection of code coverage information.
-     *
-     * @param bool $determineUnusedAndDead
      */
-    public function start($determineUnusedAndDead = true)
+    public function start(bool $determineUnusedAndDead = true): void
     {
         if ($determineUnusedAndDead) {
             \xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
@@ -59,23 +52,17 @@ class Xdebug implements Driver
 
     /**
      * Stop collection of code coverage information.
-     *
-     * @return array
      */
-    public function stop()
+    public function stop(): array
     {
         $data = \xdebug_get_code_coverage();
+
         \xdebug_stop_code_coverage();
 
         return $this->cleanup($data);
     }
 
-    /**
-     * @param array $data
-     *
-     * @return array
-     */
-    private function cleanup(array $data)
+    private function cleanup(array $data): array
     {
         foreach (\array_keys($data) as $file) {
             unset($data[$file][0]);
@@ -94,24 +81,19 @@ class Xdebug implements Driver
         return $data;
     }
 
-    /**
-     * @param string $file
-     *
-     * @return int
-     */
-    private function getNumberOfLinesInFile($file)
+    private function getNumberOfLinesInFile(string $fileName): int
     {
-        if (!isset($this->cacheNumLines[$file])) {
-            $buffer = \file_get_contents($file);
+        if (!isset($this->cacheNumLines[$fileName])) {
+            $buffer = \file_get_contents($fileName);
             $lines  = \substr_count($buffer, "\n");
 
             if (\substr($buffer, -1) !== "\n") {
                 $lines++;
             }
 
-            $this->cacheNumLines[$file] = $lines;
+            $this->cacheNumLines[$fileName] = $lines;
         }
 
-        return $this->cacheNumLines[$file];
+        return $this->cacheNumLines[$fileName];
     }
 }

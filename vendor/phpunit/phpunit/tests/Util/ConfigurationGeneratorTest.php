@@ -7,14 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\Util;
 
 use PHPUnit\Framework\TestCase;
 
 class ConfigurationGeneratorTest extends TestCase
 {
-    public function testGeneratesConfigurationCorrectly()
+    public function testGeneratesConfigurationCorrectly(): void
     {
         $generator = new ConfigurationGenerator;
 
@@ -28,9 +27,11 @@ class ConfigurationGeneratorTest extends TestCase
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
          verbose="true">
-    <testsuite name="default">
-        <directory suffix="Test.php">tests</directory>
-    </testsuite>
+    <testsuites>
+        <testsuite name="default">
+            <directory suffix="Test.php">tests</directory>
+        </testsuite>
+    </testsuites>
 
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">

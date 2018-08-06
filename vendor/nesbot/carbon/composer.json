@@ -30,12 +30,17 @@
     },
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "Carbon\\": "src/Carbon/"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.23-dev"
         }
     },
     "config": {
@@ -49,12 +54,5 @@
         "phpunit": "phpunit --verbose --coverage-clover=coverage.xml",
         "phpcs": "php-cs-fixer fix -v --diff --dry-run",
         "phpstan": "phpstan analyse --configuration phpstan.neon --level 3 src tests"
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Carbon\\Laravel\\ServiceProvider"
-            ]
-        }
     }
 }

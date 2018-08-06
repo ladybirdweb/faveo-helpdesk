@@ -10,7 +10,7 @@
 
 namespace SebastianBergmann\CodeCoverage;
 
-use SebastianBergmann\CodeCoverage\Driver\Xdebug;
+use SebastianBergmann\CodeCoverage\Driver\Driver;
 
 /**
  * Abstract base class for test case classes.
@@ -83,7 +83,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $data = $this->getXdebugDataForBankAccount();
         require_once TEST_FILES_PATH . '/BankAccountTest.php';
 
-        $stub = $this->createMock(Xdebug::class);
+        $stub = $this->createMock(Driver::class);
 
         $stub->expects($this->any())
             ->method('stop')
@@ -149,7 +149,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         $data = $this->getXdebugDataForBankAccount();
 
-        $stub = $this->createMock(Xdebug::class);
+        $stub = $this->createMock(Driver::class);
 
         $stub->expects($this->any())
             ->method('stop')
@@ -189,7 +189,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         $data = $this->getXdebugDataForBankAccount();
 
-        $stub = $this->createMock(Xdebug::class);
+        $stub = $this->createMock(Driver::class);
 
         $stub->expects($this->any())
             ->method('stop')
@@ -264,6 +264,40 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    protected function getExpectedDataArrayForBankAccountInReverseOrder()
+    {
+        return [
+            TEST_FILES_PATH . 'BankAccount.php' => [
+                8 => [
+                    0 => 'BankAccountTest::testDepositWithdrawMoney',
+                    1 => 'BankAccountTest::testBalanceIsInitiallyZero'
+                ],
+                9  => null,
+                13 => [],
+                14 => [],
+                15 => [],
+                16 => [],
+                18 => [],
+                22 => [
+                    0 => 'BankAccountTest::testBalanceCannotBecomeNegative2',
+                    1 => 'BankAccountTest::testDepositWithdrawMoney'
+                ],
+                24 => [
+                    0 => 'BankAccountTest::testDepositWithdrawMoney',
+                ],
+                25 => null,
+                29 => [
+                    0 => 'BankAccountTest::testDepositWithdrawMoney',
+                    1 => 'BankAccountTest::testBalanceCannotBecomeNegative'
+                ],
+                31 => [
+                    0 => 'BankAccountTest::testDepositWithdrawMoney'
+                ],
+                32 => null
+            ]
+        ];
+    }
+
     protected function getCoverageForFileWithIgnoredLines()
     {
         $filter = new Filter;
@@ -282,7 +316,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     protected function setUpXdebugStubForFileWithIgnoredLines()
     {
-        $stub = $this->createMock(Xdebug::class);
+        $stub = $this->createMock(Driver::class);
 
         $stub->expects($this->any())
             ->method('stop')
@@ -318,7 +352,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     protected function setUpXdebugStubForClassWithAnonymousFunction()
     {
-        $stub = $this->createMock(Xdebug::class);
+        $stub = $this->createMock(Driver::class);
 
         $stub->expects($this->any())
             ->method('stop')

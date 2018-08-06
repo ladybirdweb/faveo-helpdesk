@@ -15,25 +15,21 @@ namespace PHPUnit\Framework\Constraint;
 class IsInfinite extends Constraint
 {
     /**
-     * Evaluates the constraint for parameter $other. Returns true if the
-     * constraint is met, false otherwise.
-     *
-     * @param mixed $other Value or object to evaluate.
-     *
-     * @return bool
+     * Returns a string representation of the constraint.
      */
-    protected function matches($other)
+    public function toString(): string
     {
-        return \is_infinite($other);
+        return 'is infinite';
     }
 
     /**
-     * Returns a string representation of the constraint.
+     * Evaluates the constraint for parameter $other. Returns true if the
+     * constraint is met, false otherwise.
      *
-     * @return string
+     * @param mixed $other value or object to evaluate
      */
-    public function toString()
+    protected function matches($other): bool
     {
-        return 'is infinite';
+        return \is_infinite($other);
     }
 }

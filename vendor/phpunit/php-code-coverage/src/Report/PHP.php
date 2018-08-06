@@ -16,15 +16,17 @@ use SebastianBergmann\CodeCoverage\RuntimeException;
 /**
  * Uses var_export() to write a SebastianBergmann\CodeCoverage\CodeCoverage object to a file.
  */
-class PHP
+final class PHP
 {
     /**
      * @param CodeCoverage $coverage
-     * @param string       $target
+     * @param null|string  $target
+     *
+     * @throws \SebastianBergmann\CodeCoverage\RuntimeException
      *
      * @return string
      */
-    public function process(CodeCoverage $coverage, $target = null)
+    public function process(CodeCoverage $coverage, ?string $target = null): string
     {
         $filter = $coverage->filter();
 

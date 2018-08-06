@@ -310,6 +310,20 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
     }
 
     /**
+     * This method belongs to Symfony HttpFoundation and is not usually needed when using Laravel.
+     *
+     * Instead, you may use the "input" method.
+     *
+     * @param  string  $key
+     * @param  mixed  $default
+     * @return mixed
+     */
+    public function get($key, $default = null)
+    {
+        return parent::get($key, $default);
+    }
+
+    /**
      * Get the JSON payload for the request.
      *
      * @param  string  $key
@@ -344,6 +358,44 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
     }
 
     /**
+     * Create a new request instance from the given Laravel request.
+     *
+     * @param  \Illuminate\Http\Request  $from
+     * @param  \Illuminate\Http\Request|null  $to
+     * @return static
+     */
+    public static function createFrom(self $from, $to = null)
+    {
+        $request = $to ?: new static;
+
+        $files = $from->files->all();
+
+        $files = is_array($files) ? array_filter($files) : $files;
+
+        $request->initialize(
+            $from->query->all(),
+            $from->request->all(),
+            $from->attributes->all(),
+            $from->cookies->all(),
+            $files,
+            $from->server->all(),
+            $from->getContent()
+        );
+
+        $request->setJson($from->json());
+
+        if ($session = $from->getSession()) {
+            $request->setLaravelSession($session);
+        }
+
+        $request->setUserResolver($from->getUserResolver());
+
+        $request->setRouteResolver($from->getRouteResolver());
+
+        return $request;
+    }
+
+    /**
      * Create an Illuminate request from a Symfony instance.
      *
      * @param  \Symfony\Component\HttpFoundation\Request  $request
@@ -358,12 +410,8 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
         $content = $request->content;
 
         $request = (new static)->duplicate(
-            $request->query->all(),
-            $request->request->all(),
-            $request->attributes->all(),
-            $request->cookies->all(),
-            $request->files->all(),
-            $request->server->all()
+            $request->query->all(), $request->request->all(), $request->attributes->all(),
+            $request->cookies->all(), $request->files->all(), $request->server->all()
         );
 
         $request->content = $content;
@@ -419,7 +467,17 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
             throw new RuntimeException('Session store not set on request.');
         }
 
-        return $this->getSession();
+        return $this->session;
+    }
+
+    /**
+     * Get the session associated with the request.
+     *
+     * @return \Illuminate\Session\Store|null
+     */
+    public function getSession()
+    {
+        return $this->session;
     }
 
     /**

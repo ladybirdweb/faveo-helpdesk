@@ -31,7 +31,7 @@ class FileLinkFormatter implements \Serializable
     /**
      * @param string|\Closure $urlFormat the URL format, or a closure that returns it on-demand
      */
-    public function __construct($fileLinkFormat = null, RequestStack $requestStack = null, $baseDir = null, $urlFormat = null)
+    public function __construct($fileLinkFormat = null, RequestStack $requestStack = null, string $baseDir = null, $urlFormat = null)
     {
         $fileLinkFormat = $fileLinkFormat ?: ini_get('xdebug.file_link_format') ?: get_cfg_var('xdebug.file_link_format');
         if ($fileLinkFormat && !\is_array($fileLinkFormat)) {
@@ -68,11 +68,7 @@ class FileLinkFormatter implements \Serializable
 
     public function unserialize($serialized)
     {
-        if (\PHP_VERSION_ID >= 70000) {
-            $this->fileLinkFormat = unserialize($serialized, array('allowed_classes' => false));
-        } else {
-            $this->fileLinkFormat = unserialize($serialized);
-        }
+        $this->fileLinkFormat = unserialize($serialized, array('allowed_classes' => false));
     }
 
     /**

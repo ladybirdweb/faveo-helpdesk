@@ -12,12 +12,12 @@ namespace PHPUnit\Util\TestDox;
 /**
  * Prints TestDox documentation in HTML format.
  */
-class HtmlResultPrinter extends ResultPrinter
+final class HtmlResultPrinter extends ResultPrinter
 {
     /**
      * @var string
      */
-    private $pageHeader = <<<EOT
+    private const PAGE_HEADER = <<<EOT
 <!doctype html>
 <html lang="en">
     <head>
@@ -53,7 +53,7 @@ EOT;
     /**
      * @var string
      */
-    private $classHeader = <<<EOT
+    private const CLASS_HEADER = <<<EOT
 
         <h2 id="%s">%s</h2>
         <ul>
@@ -63,14 +63,14 @@ EOT;
     /**
      * @var string
      */
-    private $classFooter = <<<EOT
+    private const CLASS_FOOTER = <<<EOT
         </ul>
 EOT;
 
     /**
      * @var string
      */
-    private $pageFooter = <<<EOT
+    private const PAGE_FOOTER = <<<EOT
 
     </body>
 </html>
@@ -79,21 +79,19 @@ EOT;
     /**
      * Handler for 'start run' event.
      */
-    protected function startRun()
+    protected function startRun(): void
     {
-        $this->write($this->pageHeader);
+        $this->write(self::PAGE_HEADER);
     }
 
     /**
      * Handler for 'start class' event.
-     *
-     * @param string $name
      */
-    protected function startClass($name)
+    protected function startClass(string $name): void
     {
         $this->write(
             \sprintf(
-                $this->classHeader,
+                self::CLASS_HEADER,
                 $name,
                 $this->currentTestClassPrettified
             )
@@ -102,11 +100,8 @@ EOT;
 
     /**
      * Handler for 'on test' event.
-     *
-     * @param string $name
-     * @param bool   $success
      */
-    protected function onTest($name, $success = true)
+    protected function onTest($name, bool $success = true): void
     {
         $this->write(
             \sprintf(
@@ -120,19 +115,17 @@ EOT;
 
     /**
      * Handler for 'end class' event.
-     *
-     * @param string $name
      */
-    protected function endClass($name)
+    protected function endClass(string $name): void
     {
-        $this->write($this->classFooter);
+        $this->write(self::CLASS_FOOTER);
     }
 
     /**
      * Handler for 'end run' event.
      */
-    protected function endRun()
+    protected function endRun(): void
     {
-        $this->write($this->pageFooter);
+        $this->write(self::PAGE_FOOTER);
     }
 }

@@ -13,22 +13,22 @@
 
 namespace PhpSpec\Process\ReRunner;
 
-use PhpSpec\Process\Context\ExecutionContextInterface;
+use PhpSpec\Process\Context\ExecutionContext;
 use Symfony\Component\Process\PhpExecutableFinder;
 
-class PcntlReRunner extends PhpExecutableReRunner
+final class PcntlReRunner extends PhpExecutableReRunner
 {
     /**
-     * @var ExecutionContextInterface
+     * @var ExecutionContext
      */
     private $executionContext;
 
     /**
      * @param PhpExecutableFinder $phpExecutableFinder
-     * @param ExecutionContextInterface $executionContext
+     * @param ExecutionContext $executionContext
      * @return static
      */
-    public static function withExecutionContext(PhpExecutableFinder $phpExecutableFinder, ExecutionContextInterface $executionContext)
+    public static function withExecutionContext(PhpExecutableFinder $phpExecutableFinder, ExecutionContext $executionContext)
     {
         $reRunner = new static($phpExecutableFinder);
         $reRunner->executionContext = $executionContext;
@@ -39,12 +39,12 @@ class PcntlReRunner extends PhpExecutableReRunner
     /**
      * @return bool
      */
-    public function isSupported()
+    public function isSupported(): bool
     {
         return (php_sapi_name() == 'cli')
             && $this->getExecutablePath()
             && function_exists('pcntl_exec')
-            && !defined('HHVM_VERSION');
+            && !\defined('HHVM_VERSION');
     }
 
     /**

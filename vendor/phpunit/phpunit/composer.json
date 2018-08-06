@@ -21,23 +21,23 @@
     },
     "prefer-stable": true,
     "require": {
-        "php": "^7.0",
+        "php": "^7.1",
         "ext-dom": "*",
         "ext-json": "*",
         "ext-libxml": "*",
         "ext-mbstring": "*",
         "ext-xml": "*",
-        "myclabs/deep-copy": "^1.6.1",
-        "phar-io/manifest": "^1.0.1",
-        "phar-io/version": "^1.0",
+        "doctrine/instantiator": "^1.1",
+        "myclabs/deep-copy": "^1.7",
+        "phar-io/manifest": "^1.0.2",
+        "phar-io/version": "^2.0",
         "phpspec/prophecy": "^1.7",
-        "phpunit/php-code-coverage": "^5.3",
-        "phpunit/php-file-iterator": "^1.4.3",
+        "phpunit/php-code-coverage": "^6.0.7",
+        "phpunit/php-file-iterator": "^2.0.1",
         "phpunit/php-text-template": "^1.2.1",
-        "phpunit/php-timer": "^1.0.9",
-        "phpunit/phpunit-mock-objects": "^5.0.8",
-        "sebastian/comparator": "^2.1",
-        "sebastian/diff": "^2.0",
+        "phpunit/php-timer": "^2.0",
+        "sebastian/comparator": "^3.0",
+        "sebastian/diff": "^3.0",
         "sebastian/environment": "^3.1",
         "sebastian/exporter": "^3.1",
         "sebastian/global-state": "^2.0",
@@ -49,18 +49,18 @@
         "ext-PDO": "*"
     },
     "conflict": {
-        "phpunit/dbunit": "<3.0",
-        "phpdocumentor/reflection-docblock": "3.0.2"
+        "phpunit/phpunit-mock-objects": "*"
     },
     "config": {
         "platform": {
-            "php": "7.0.0"
+            "php": "7.1.0"
         },
         "optimize-autoloader": true,
         "sort-packages": true
     },
     "suggest": {
-        "phpunit/php-invoker": "^1.1",
+        "phpunit/php-invoker": "^2.0",
+        "ext-soap": "*",
         "ext-xdebug": "*"
     },
     "bin": [
@@ -77,12 +77,14 @@
         ],
         "files": [
             "src/Framework/Assert/Functions.php",
-            "tests/_files/CoveredFunction.php"
+            "tests/_files/CoverageNamespacedFunctionTest.php",
+            "tests/_files/CoveredFunction.php",
+            "tests/_files/NamespaceCoveredFunction.php"
         ]
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "6.5.x-dev"
+            "dev-master": "7.3-dev"
         }
     }
 }

@@ -16,10 +16,8 @@ class Warning extends Exception implements SelfDescribing
 {
     /**
      * Wrapper for getMessage() which is declared as final.
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return $this->getMessage();
     }

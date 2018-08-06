@@ -22,23 +22,13 @@ class DefaultPhpProcess extends AbstractPhpProcess
     protected $tempFile;
 
     /**
-     * @var bool
-     */
-    protected $useTempFile = false;
-
-    /**
      * Runs a single job (PHP code) using a separate PHP process.
-     *
-     * @param string $job
-     * @param array  $settings
-     *
-     * @return array<string, string>
      *
      * @throws Exception
      */
-    public function runJob($job, array $settings = [])
+    public function runJob(string $job, array $settings = []): array
     {
-        if ($this->useTempFile || $this->stdin) {
+        if ($this->useTemporaryFile() || $this->stdin) {
             if (!($this->tempFile = \tempnam(\sys_get_temp_dir(), 'PHPUnit')) ||
                 \file_put_contents($this->tempFile, $job) === false) {
                 throw new Exception(
@@ -54,10 +44,8 @@ class DefaultPhpProcess extends AbstractPhpProcess
 
     /**
      * Returns an array of file handles to be used in place of pipes
-     *
-     * @return array
      */
-    protected function getHandles()
+    protected function getHandles(): array
     {
         return [];
     }
@@ -65,14 +53,9 @@ class DefaultPhpProcess extends AbstractPhpProcess
     /**
      * Handles creating the child process and returning the STDOUT and STDERR
      *
-     * @param string $job
-     * @param array  $settings
-     *
-     * @return array<string, string>
-     *
      * @throws Exception
      */
-    protected function runProcess($job, $settings)
+    protected function runProcess(string $job, array $settings): array
     {
         $handles = $this->getHandles();
 
@@ -116,9 +99,9 @@ class DefaultPhpProcess extends AbstractPhpProcess
 
         \fclose($pipes[0]);
 
-        if ($this->timeout) {
-            $stderr = $stdout = '';
+        $stderr = $stdout = '';
 
+        if ($this->timeout) {
             unset($pipes[0]);
 
             while (true) {
@@ -130,7 +113,9 @@ class DefaultPhpProcess extends AbstractPhpProcess
 
                 if ($n === false) {
                     break;
-                } elseif ($n === 0) {
+                }
+
+                if ($n === 0) {
                     \proc_terminate($process, 9);
 
                     throw new Exception(
@@ -139,12 +124,14 @@ class DefaultPhpProcess extends AbstractPhpProcess
                             $this->timeout
                         )
                     );
-                } elseif ($n > 0) {
+                }
+
+                if ($n > 0) {
                     foreach ($r as $pipe) {
                         $pipeOffset = 0;
 
                         foreach ($pipes as $i => $origPipe) {
-                            if ($pipe == $origPipe) {
+                            if ($pipe === $origPipe) {
                                 $pipeOffset = $i;
 
                                 break;
@@ -157,12 +144,12 @@ class DefaultPhpProcess extends AbstractPhpProcess
 
                         $line = \fread($pipe, 8192);
 
-                        if (\strlen($line) == 0) {
+                        if ($line === '') {
                             \fclose($pipes[$pipeOffset]);
 
                             unset($pipes[$pipeOffset]);
                         } else {
-                            if ($pipeOffset == 1) {
+                            if ($pipeOffset === 1) {
                                 $stdout .= $line;
                             } else {
                                 $stderr .= $line;
@@ -212,21 +199,20 @@ class DefaultPhpProcess extends AbstractPhpProcess
         return ['stdout' => $stdout, 'stderr' => $stderr];
     }
 
-    /**
-     * @param resource $pipe
-     * @param string   $job
-     *
-     * @throws Exception
-     */
-    protected function process($pipe, $job)
+    protected function process($pipe, string $job): void
     {
         \fwrite($pipe, $job);
     }
 
-    protected function cleanup()
+    protected function cleanup(): void
     {
         if ($this->tempFile) {
             \unlink($this->tempFile);
         }
+    }
+
+    protected function useTemporaryFile(): bool
+    {
+        return false;
     }
 }

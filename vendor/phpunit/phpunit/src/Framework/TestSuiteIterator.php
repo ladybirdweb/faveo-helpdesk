@@ -14,21 +14,18 @@ use RecursiveIterator;
 /**
  * Iterator for test suites.
  */
-class TestSuiteIterator implements RecursiveIterator
+final class TestSuiteIterator implements RecursiveIterator
 {
     /**
      * @var int
      */
-    protected $position;
+    private $position;
 
     /**
      * @var Test[]
      */
-    protected $tests;
+    private $tests;
 
-    /**
-     * @param TestSuite $testSuite
-     */
     public function __construct(TestSuite $testSuite)
     {
         $this->tests = $testSuite->tests();
@@ -37,37 +34,31 @@ class TestSuiteIterator implements RecursiveIterator
     /**
      * Rewinds the Iterator to the first element.
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = 0;
     }
 
     /**
      * Checks if there is a current element after calls to rewind() or next().
-     *
-     * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->position < \count($this->tests);
     }
 
     /**
      * Returns the key of the current element.
-     *
-     * @return int
      */
-    public function key()
+    public function key(): int
     {
         return $this->position;
     }
 
     /**
      * Returns the current element.
-     *
-     * @return Test
      */
-    public function current()
+    public function current(): Test
     {
         return $this->valid() ? $this->tests[$this->position] : null;
     }
@@ -75,17 +66,15 @@ class TestSuiteIterator implements RecursiveIterator
     /**
      * Moves forward to next element.
      */
-    public function next()
+    public function next(): void
     {
         $this->position++;
     }
 
     /**
      * Returns the sub iterator for the current element.
-     *
-     * @return TestSuiteIterator
      */
-    public function getChildren()
+    public function getChildren(): self
     {
         return new self(
             $this->tests[$this->position]
@@ -94,10 +83,8 @@ class TestSuiteIterator implements RecursiveIterator
 
     /**
      * Checks whether the current element has children.
-     *
-     * @return bool
      */
-    public function hasChildren()
+    public function hasChildren(): bool
     {
         return $this->tests[$this->position] instanceof TestSuite;
     }

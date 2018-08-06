@@ -13,6 +13,7 @@ class ExampleNodeSpec extends ObjectBehavior
 {
     function let(ReflectionFunctionAbstract $function)
     {
+        $function->isClosure()->willReturn(false);
         $this->beConstructedWith('example node', $function);
     }
 
@@ -21,7 +22,15 @@ class ExampleNodeSpec extends ObjectBehavior
         $this->getTitle()->shouldReturn('example node');
     }
 
-    function it_provides_a_link_to_function($function)
+    function it_can_set_a_title()
+    {
+      $this->setTitle('node example');
+      $this->getTitle()->shouldReturn('node example');
+      $this->setTitle('example node');
+    }
+
+
+  function it_provides_a_link_to_function($function)
     {
         $this->getFunctionReflection()->shouldReturn($function);
     }
@@ -53,5 +62,21 @@ class ExampleNodeSpec extends ObjectBehavior
     {
         $this->markAsPending(false);
         $this->isPending()->shouldReturn(false);
+    }
+
+    function it_returns_its_line_number(\ReflectionFunctionAbstract $function)
+    {
+        $function->getStartLine()->willReturn(100);
+
+        $this->getLineNumber()->shouldReturn(100);
+    }
+
+    function it_returns_its_line_number_as_zero_if_constructed_with_closure(
+        \ReflectionFunctionAbstract $function
+    )
+    {
+        $function->isClosure()->willReturn(true);
+
+        $this->getLineNumber()->shouldReturn(0);
     }
 }

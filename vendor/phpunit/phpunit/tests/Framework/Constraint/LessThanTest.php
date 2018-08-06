@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\Framework\Constraint;
 
 use PHPUnit\Framework\ExpectationFailedException;
@@ -15,7 +14,7 @@ use PHPUnit\Framework\TestFailure;
 
 class LessThanTest extends ConstraintTestCase
 {
-    public function testConstraintLessThan()
+    public function testConstraintLessThan(): void
     {
         $constraint = new LessThan(1);
 
@@ -42,7 +41,7 @@ EOF
         $this->fail();
     }
 
-    public function testConstraintLessThan2()
+    public function testConstraintLessThan2(): void
     {
         $constraint = new LessThan(1);
 

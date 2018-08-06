@@ -11,12 +11,12 @@ namespace PHPUnit\Util;
 
 use Closure;
 
-class GlobalState
+final class GlobalState
 {
     /**
      * @var string[]
      */
-    protected static $superGlobalArrays = [
+    private const SUPER_GLOBAL_ARRAYS = [
         '_ENV',
         '_POST',
         '_GET',
@@ -26,20 +26,15 @@ class GlobalState
         '_REQUEST'
     ];
 
-    /**
-     * @return string
-     */
-    public static function getIncludedFilesAsString()
+    public static function getIncludedFilesAsString(): string
     {
         return static::processIncludedFilesAsString(\get_included_files());
     }
 
     /**
-     * @param array $files
-     *
-     * @return string
+     * @param string[] $files
      */
-    public static function processIncludedFilesAsString(array $files)
+    public static function processIncludedFilesAsString(array $files): string
     {
         $blacklist = new Blacklist;
         $prefix    = false;
@@ -74,10 +69,7 @@ class GlobalState
         return $result;
     }
 
-    /**
-     * @return string
-     */
-    public static function getIniSettingsAsString()
+    public static function getIniSettingsAsString(): string
     {
         $result      = '';
         $iniSettings = \ini_get_all(null, false);
@@ -93,10 +85,7 @@ class GlobalState
         return $result;
     }
 
-    /**
-     * @return string
-     */
-    public static function getConstantsAsString()
+    public static function getConstantsAsString(): string
     {
         $constants = \get_defined_constants(true);
         $result    = '';
@@ -115,15 +104,11 @@ class GlobalState
         return $result;
     }
 
-    /**
-     * @return string
-     */
-    public static function getGlobalsAsString()
+    public static function getGlobalsAsString(): string
     {
-        $result            = '';
-        $superGlobalArrays = self::getSuperGlobalArrays();
+        $result = '';
 
-        foreach ($superGlobalArrays as $superGlobalArray) {
+        foreach (self::SUPER_GLOBAL_ARRAYS as $superGlobalArray) {
             if (isset($GLOBALS[$superGlobalArray]) && \is_array($GLOBALS[$superGlobalArray])) {
                 foreach (\array_keys($GLOBALS[$superGlobalArray]) as $key) {
                     if ($GLOBALS[$superGlobalArray][$key] instanceof Closure) {
@@ -140,11 +125,11 @@ class GlobalState
             }
         }
 
-        $blacklist   = $superGlobalArrays;
+        $blacklist   = self::SUPER_GLOBAL_ARRAYS;
         $blacklist[] = 'GLOBALS';
 
         foreach (\array_keys($GLOBALS) as $key) {
-            if (!\in_array($key, $blacklist) && !$GLOBALS[$key] instanceof Closure) {
+            if (!$GLOBALS[$key] instanceof Closure && !\in_array($key, $blacklist, true)) {
                 $result .= \sprintf(
                     '$GLOBALS[\'%s\'] = %s;' . "\n",
                     $key,
@@ -156,39 +141,24 @@ class GlobalState
         return $result;
     }
 
-    /**
-     * @return string[]
-     */
-    protected static function getSuperGlobalArrays()
+    private static function exportVariable($variable): string
     {
-        return self::$superGlobalArrays;
-    }
-
-    protected static function exportVariable($variable)
-    {
-        if (\is_scalar($variable) || null === $variable ||
+        if (\is_scalar($variable) || $variable === null ||
             (\is_array($variable) && self::arrayOnlyContainsScalars($variable))) {
             return \var_export($variable, true);
         }
 
-        return 'unserialize(' .
-            \var_export(\serialize($variable), true) .
-            ')';
+        return 'unserialize(' . \var_export(\serialize($variable), true) . ')';
     }
 
-    /**
-     * @param array $array
-     *
-     * @return bool
-     */
-    protected static function arrayOnlyContainsScalars(array $array)
+    private static function arrayOnlyContainsScalars(array $array): bool
     {
         $result = true;
 
         foreach ($array as $element) {
             if (\is_array($element)) {
                 $result = self::arrayOnlyContainsScalars($element);
-            } elseif (!\is_scalar($element) && null !== $element) {
+            } elseif (!\is_scalar($element) && $element !== null) {
                 $result = false;
             }
 

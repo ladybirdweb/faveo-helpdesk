@@ -105,8 +105,6 @@ abstract class AbstractCloner implements ClonerInterface
         'SplPriorityQueue' => array('Symfony\Component\VarDumper\Caster\SplCaster', 'castHeap'),
         'OuterIterator' => array('Symfony\Component\VarDumper\Caster\SplCaster', 'castOuterIterator'),
 
-        'MongoCursorInterface' => array('Symfony\Component\VarDumper\Caster\MongoCaster', 'castCursor'),
-
         'Redis' => array('Symfony\Component\VarDumper\Caster\RedisCaster', 'castRedis'),
         'RedisArray' => array('Symfony\Component\VarDumper\Caster\RedisCaster', 'castRedisArray'),
 
@@ -114,6 +112,8 @@ abstract class AbstractCloner implements ClonerInterface
         'DateInterval' => array('Symfony\Component\VarDumper\Caster\DateCaster', 'castInterval'),
         'DateTimeZone' => array('Symfony\Component\VarDumper\Caster\DateCaster', 'castTimeZone'),
         'DatePeriod' => array('Symfony\Component\VarDumper\Caster\DateCaster', 'castPeriod'),
+
+        'GMP' => array('Symfony\Component\VarDumper\Caster\GmpCaster', 'castGmp'),
 
         ':curl' => array('Symfony\Component\VarDumper\Caster\ResourceCaster', 'castCurl'),
         ':dba' => array('Symfony\Component\VarDumper\Caster\ResourceCaster', 'castDba'),
@@ -134,7 +134,6 @@ abstract class AbstractCloner implements ClonerInterface
     protected $maxItems = 2500;
     protected $maxString = -1;
     protected $minDepth = 1;
-    protected $useExt;
 
     private $casters = array();
     private $prevErrorHandler;
@@ -152,7 +151,6 @@ abstract class AbstractCloner implements ClonerInterface
             $casters = static::$defaultCasters;
         }
         $this->addCasters($casters);
-        $this->useExt = \extension_loaded('symfony_debug');
     }
 
     /**

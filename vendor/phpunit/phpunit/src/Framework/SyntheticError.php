@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\Framework;
 
 /**
@@ -36,16 +35,7 @@ class SyntheticError extends AssertionFailedError
      */
     protected $syntheticTrace = [];
 
-    /**
-     * Constructor.
-     *
-     * @param string $message
-     * @param int    $code
-     * @param string $file
-     * @param int    $line
-     * @param array  $trace
-     */
-    public function __construct($message, $code, $file, $line, $trace)
+    public function __construct(string $message, int $code, string $file, int $line, array $trace)
     {
         parent::__construct($message, $code);
 
@@ -54,26 +44,17 @@ class SyntheticError extends AssertionFailedError
         $this->syntheticTrace = $trace;
     }
 
-    /**
-     * @return string
-     */
-    public function getSyntheticFile()
+    public function getSyntheticFile(): string
     {
         return $this->syntheticFile;
     }
 
-    /**
-     * @return int
-     */
-    public function getSyntheticLine()
+    public function getSyntheticLine(): int
     {
         return $this->syntheticLine;
     }
 
-    /**
-     * @return array
-     */
-    public function getSyntheticTrace()
+    public function getSyntheticTrace(): array
     {
         return $this->syntheticTrace;
     }

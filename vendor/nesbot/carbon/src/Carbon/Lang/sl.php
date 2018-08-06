@@ -35,9 +35,4 @@ return array(
     'from_now' => 'čez :time',
     'after' => 'čez :time',
     'before' => 'pred :time',
-    'diff_now' => 'ravnokar',
-    'diff_yesterday' => 'včeraj',
-    'diff_tomorrow' => 'jutri',
-    'diff_before_yesterday' => 'predvčerajšnjim',
-    'diff_after_tomorrow' => 'pojutrišnjem',
 );

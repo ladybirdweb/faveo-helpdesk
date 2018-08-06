@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace SebastianBergmann\Comparator;
 
 /**
@@ -26,7 +25,7 @@ class DateTimeComparator extends ObjectComparator
     public function accepts($expected, $actual)
     {
         return ($expected instanceof \DateTime || $expected instanceof \DateTimeInterface) &&
-            ($actual instanceof \DateTime || $actual instanceof \DateTimeInterface);
+               ($actual instanceof \DateTime || $actual instanceof \DateTimeInterface);
     }
 
     /**
@@ -39,13 +38,16 @@ class DateTimeComparator extends ObjectComparator
      * @param bool  $ignoreCase   Case is ignored when set to true
      * @param array $processed    List of already processed elements (used to prevent infinite recursion)
      *
+     * @throws \Exception
      * @throws ComparisonFailure
      */
     public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false, array &$processed = [])
     {
         /** @var \DateTimeInterface $expected */
         /** @var \DateTimeInterface $actual */
-        $delta = new \DateInterval(\sprintf('PT%dS', \abs($delta)));
+        $absDelta = \abs($delta);
+        $delta    = new \DateInterval(\sprintf('PT%dS', $absDelta));
+        $delta->f = $absDelta - \floor($absDelta);
 
         $actualClone = (clone $actual)
             ->setTimezone(new \DateTimeZone('UTC'));

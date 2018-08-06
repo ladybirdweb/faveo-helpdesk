@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\Framework\Constraint;
 
 use PHPUnit\Framework\ExpectationFailedException;
@@ -15,7 +14,7 @@ use PHPUnit\Framework\TestFailure;
 
 class SameSizeTest extends ConstraintTestCase
 {
-    public function testConstraintSameSizeWithAnArray()
+    public function testConstraintSameSizeWithAnArray(): void
     {
         $constraint = new SameSize([1, 2, 3, 4, 5]);
 
@@ -23,7 +22,7 @@ class SameSizeTest extends ConstraintTestCase
         $this->assertFalse($constraint->evaluate([1, 2, 3, 4], '', true));
     }
 
-    public function testConstraintSameSizeWithAnIteratorWhichDoesNotImplementCountable()
+    public function testConstraintSameSizeWithAnIteratorWhichDoesNotImplementCountable(): void
     {
         $constraint = new SameSize(new \TestIterator([1, 2, 3, 4, 5]));
 
@@ -31,7 +30,7 @@ class SameSizeTest extends ConstraintTestCase
         $this->assertFalse($constraint->evaluate(new \TestIterator([1, 2, 3, 4]), '', true));
     }
 
-    public function testConstraintSameSizeWithAnObjectImplementingCountable()
+    public function testConstraintSameSizeWithAnObjectImplementingCountable(): void
     {
         $constraint = new SameSize(new \ArrayObject([1, 2, 3, 4, 5]));
 
@@ -39,7 +38,7 @@ class SameSizeTest extends ConstraintTestCase
         $this->assertFalse($constraint->evaluate(new \ArrayObject([1, 2, 3, 4]), '', true));
     }
 
-    public function testConstraintSameSizeFailing()
+    public function testConstraintSameSizeFailing(): void
     {
         $constraint = new SameSize([1, 2, 3, 4, 5]);
 

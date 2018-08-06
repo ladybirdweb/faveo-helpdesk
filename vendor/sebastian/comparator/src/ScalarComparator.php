@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace SebastianBergmann\Comparator;
 
 /**
@@ -62,18 +61,18 @@ class ScalarComparator extends Comparator
             }
         }
 
-        if ($expectedToCompare != $actualToCompare) {
-            if (\is_string($expected) && \is_string($actual)) {
-                throw new ComparisonFailure(
-                    $expected,
-                    $actual,
-                    $this->exporter->export($expected),
-                    $this->exporter->export($actual),
-                    false,
-                    'Failed asserting that two strings are equal.'
-                );
-            }
+        if ($expectedToCompare !== $actualToCompare && \is_string($expected) && \is_string($actual)) {
+            throw new ComparisonFailure(
+                $expected,
+                $actual,
+                $this->exporter->export($expected),
+                $this->exporter->export($actual),
+                false,
+                'Failed asserting that two strings are equal.'
+            );
+        }
 
+        if ($expectedToCompare != $actualToCompare) {
             throw new ComparisonFailure(
                 $expected,
                 $actual,

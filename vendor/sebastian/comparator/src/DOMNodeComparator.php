@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace SebastianBergmann\Comparator;
 
 use DOMDocument;
@@ -82,6 +81,6 @@ class DOMNodeComparator extends ObjectComparator
 
         $text = $node instanceof DOMDocument ? $node->saveXML() : $document->saveXML($node);
 
-        return $ignoreCase ? $text : \strtolower($text);
+        return $ignoreCase ? \strtolower($text) : $text;
     }
 }

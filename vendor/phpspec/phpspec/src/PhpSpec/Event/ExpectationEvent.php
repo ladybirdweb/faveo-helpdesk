@@ -13,14 +13,16 @@
 
 namespace PhpSpec\Event;
 
+use PhpSpec\Loader\Node\SpecificationNode;
+use PhpSpec\Loader\Suite;
 use Symfony\Component\EventDispatcher\Event;
 use PhpSpec\Loader\Node\ExampleNode;
-use PhpSpec\Matcher\MatcherInterface;
+use PhpSpec\Matcher\Matcher;
 
 /**
  * Class ExpectationEvent holds information about the expectation event
  */
-class ExpectationEvent extends Event implements EventInterface
+final class ExpectationEvent extends Event implements PhpSpecEvent
 {
     /**
      * Expectation passed
@@ -43,7 +45,7 @@ class ExpectationEvent extends Event implements EventInterface
     private $example;
 
     /**
-     * @var MatcherInterface
+     * @var Matcher
      */
     private $matcher;
 
@@ -74,7 +76,7 @@ class ExpectationEvent extends Event implements EventInterface
 
     /**
      * @param ExampleNode      $example
-     * @param MatcherInterface $matcher
+     * @param Matcher $matcher
      * @param mixed            $subject
      * @param string           $method
      * @param array            $arguments
@@ -83,11 +85,11 @@ class ExpectationEvent extends Event implements EventInterface
      */
     public function __construct(
         ExampleNode $example,
-        MatcherInterface $matcher,
+        Matcher $matcher,
         $subject,
         $method,
         $arguments,
-        $result = null,
+        $result = self::PASSED,
         $exception = null
     ) {
         $this->example = $example;
@@ -100,9 +102,9 @@ class ExpectationEvent extends Event implements EventInterface
     }
 
     /**
-     * @return MatcherInterface
+     * @return Matcher
      */
-    public function getMatcher()
+    public function getMatcher(): Matcher
     {
         return $this->matcher;
     }
@@ -110,23 +112,23 @@ class ExpectationEvent extends Event implements EventInterface
     /**
      * @return ExampleNode
      */
-    public function getExample()
+    public function getExample(): ExampleNode
     {
         return $this->example;
     }
 
     /**
-     * @return \PhpSpec\Loader\Node\SpecificationNode
+     * @return SpecificationNode
      */
-    public function getSpecification()
+    public function getSpecification(): SpecificationNode
     {
         return $this->example->getSpecification();
     }
 
     /**
-     * @return \PhpSpec\Loader\Suite
+     * @return Suite
      */
-    public function getSuite()
+    public function getSuite(): Suite
     {
         return $this->example->getSpecification()->getSuite();
     }
@@ -142,7 +144,7 @@ class ExpectationEvent extends Event implements EventInterface
     /**
      * @return string
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
@@ -150,13 +152,13 @@ class ExpectationEvent extends Event implements EventInterface
     /**
      * @return array
      */
-    public function getArguments()
+    public function getArguments(): array
     {
         return $this->arguments;
     }
 
     /**
-     * @return \Exception
+     * @return \Exception|null
      */
     public function getException()
     {
@@ -166,7 +168,7 @@ class ExpectationEvent extends Event implements EventInterface
     /**
      * @return integer
      */
-    public function getResult()
+    public function getResult(): int
     {
         return $this->result;
     }

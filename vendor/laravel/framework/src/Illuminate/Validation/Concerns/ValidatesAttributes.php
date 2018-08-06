@@ -11,6 +11,7 @@ use DateTimeInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rules\Exists;
 use Illuminate\Validation\Rules\Unique;
 use Illuminate\Validation\ValidationData;
@@ -178,7 +179,19 @@ trait ValidatesAttributes
      */
     protected function getDateTimestamp($value)
     {
-        return $value instanceof DateTimeInterface ? $value->getTimestamp() : strtotime($value);
+        if ($value instanceof DateTimeInterface) {
+            return $value->getTimestamp();
+        }
+
+        if ($this->isTestingRelativeDateTime($value)) {
+            $date = $this->getDateTime($value);
+
+            if (! is_null($date)) {
+                return $date->getTimestamp();
+            }
+        }
+
+        return strtotime($value);
     }
 
     /**
@@ -214,11 +227,39 @@ trait ValidatesAttributes
             return $date;
         }
 
+        return $this->getDateTime($value);
+    }
+
+    /**
+     * Get a DateTime instance from a string with no format.
+     *
+     * @param  string $value
+     * @return \DateTime|null
+     */
+    protected function getDateTime($value)
+    {
         try {
+            if ($this->isTestingRelativeDateTime($value)) {
+                return new Carbon($value);
+            }
+
             return new DateTime($value);
         } catch (Exception $e) {
             //
         }
+    }
+
+    /**
+     * Check if the given value should be adjusted to Carbon::getTestNow().
+     *
+     * @param  mixed $value
+     * @return bool
+     */
+    protected function isTestingRelativeDateTime($value)
+    {
+        return Carbon::hasTestNow() && is_string($value) && (
+            $value === 'now' || Carbon::hasRelativeKeywords($value)
+        );
     }
 
     /**
@@ -447,6 +488,10 @@ trait ValidatesAttributes
      */
     public function validateDimensions($attribute, $value, $parameters)
     {
+        if ($this->isValidFileInstance($value) && $value->getClientMimeType() == 'image/svg+xml') {
+            return true;
+        }
+
         if (! $this->isValidFileInstance($value) || ! $sizeDetails = @getimagesize($value->getRealPath())) {
             return false;
         }
@@ -782,6 +827,106 @@ trait ValidatesAttributes
     }
 
     /**
+     * Validate that an attribute is greater than another attribute.
+     *
+     * @param  string  $attribute
+     * @param  mixed   $value
+     * @param  array   $parameters
+     * @return bool
+     */
+    public function validateGt($attribute, $value, $parameters)
+    {
+        $this->requireParameterCount(1, $parameters, 'gt');
+
+        $comparedToValue = $this->getValue($parameters[0]);
+
+        $this->shouldBeNumeric($attribute, 'Gt');
+
+        if (is_null($comparedToValue) && (is_numeric($value) && is_numeric($parameters[0]))) {
+            return $this->getSize($attribute, $value) > $parameters[0];
+        }
+
+        $this->requireSameType($value, $comparedToValue);
+
+        return $this->getSize($attribute, $value) > $this->getSize($attribute, $comparedToValue);
+    }
+
+    /**
+     * Validate that an attribute is less than another attribute.
+     *
+     * @param  string  $attribute
+     * @param  mixed   $value
+     * @param  array   $parameters
+     * @return bool
+     */
+    public function validateLt($attribute, $value, $parameters)
+    {
+        $this->requireParameterCount(1, $parameters, 'lt');
+
+        $comparedToValue = $this->getValue($parameters[0]);
+
+        $this->shouldBeNumeric($attribute, 'Lt');
+
+        if (is_null($comparedToValue) && (is_numeric($value) && is_numeric($parameters[0]))) {
+            return $this->getSize($attribute, $value) < $parameters[0];
+        }
+
+        $this->requireSameType($value, $comparedToValue);
+
+        return $this->getSize($attribute, $value) < $this->getSize($attribute, $comparedToValue);
+    }
+
+    /**
+     * Validate that an attribute is greater than or equal another attribute.
+     *
+     * @param  string  $attribute
+     * @param  mixed   $value
+     * @param  array   $parameters
+     * @return bool
+     */
+    public function validateGte($attribute, $value, $parameters)
+    {
+        $this->requireParameterCount(1, $parameters, 'gte');
+
+        $comparedToValue = $this->getValue($parameters[0]);
+
+        $this->shouldBeNumeric($attribute, 'Gte');
+
+        if (is_null($comparedToValue) && (is_numeric($value) && is_numeric($parameters[0]))) {
+            return $this->getSize($attribute, $value) >= $parameters[0];
+        }
+
+        $this->requireSameType($value, $comparedToValue);
+
+        return $this->getSize($attribute, $value) >= $this->getSize($attribute, $comparedToValue);
+    }
+
+    /**
+     * Validate that an attribute is less than or equal another attribute.
+     *
+     * @param  string  $attribute
+     * @param  mixed   $value
+     * @param  array   $parameters
+     * @return bool
+     */
+    public function validateLte($attribute, $value, $parameters)
+    {
+        $this->requireParameterCount(1, $parameters, 'lte');
+
+        $comparedToValue = $this->getValue($parameters[0]);
+
+        $this->shouldBeNumeric($attribute, 'Lte');
+
+        if (is_null($comparedToValue) && (is_numeric($value) && is_numeric($parameters[0]))) {
+            return $this->getSize($attribute, $value) <= $parameters[0];
+        }
+
+        $this->requireSameType($value, $comparedToValue);
+
+        return $this->getSize($attribute, $value) <= $this->getSize($attribute, $comparedToValue);
+    }
+
+    /**
      * Validate the MIME type of a file is an image MIME type.
      *
      * @param  string  $attribute
@@ -981,9 +1126,13 @@ trait ValidatesAttributes
             return false;
         }
 
+        $phpExtensions = [
+            'php', 'php3', 'php4', 'php5', 'phtml',
+        ];
+
         return ($value instanceof UploadedFile)
-           ? trim(strtolower($value->getClientOriginalExtension())) === 'php'
-           : trim(strtolower($value->getExtension())) === 'php';
+           ? in_array(trim(strtolower($value->getClientOriginalExtension())), $phpExtensions)
+           : in_array(trim(strtolower($value->getExtension())), $phpExtensions);
     }
 
     /**
@@ -1067,6 +1216,25 @@ trait ValidatesAttributes
         $this->requireParameterCount(1, $parameters, 'regex');
 
         return preg_match($parameters[0], $value) > 0;
+    }
+
+    /**
+     * Validate that an attribute does not pass a regular expression check.
+     *
+     * @param  string  $attribute
+     * @param  mixed   $value
+     * @param  array   $parameters
+     * @return bool
+     */
+    public function validateNotRegex($attribute, $value, $parameters)
+    {
+        if (! is_string($value) && ! is_numeric($value)) {
+            return false;
+        }
+
+        $this->requireParameterCount(1, $parameters, 'not_regex');
+
+        return preg_match($parameters[0], $value) < 1;
     }
 
     /**
@@ -1473,6 +1641,37 @@ trait ValidatesAttributes
     {
         if (count($parameters) < $count) {
             throw new InvalidArgumentException("Validation rule $rule requires at least $count parameters.");
+        }
+    }
+
+    /**
+     * Require comparison values to be of the same type.
+     *
+     * @param  mixed  $first
+     * @param  mixed  $second
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function requireSameType($first, $second)
+    {
+        if (gettype($first) != gettype($second)) {
+            throw new InvalidArgumentException('The values under comparison must be of the same type');
+        }
+    }
+
+    /**
+     * Adds the existing rule to the numericRules array if the attribute's value is numeric.
+     *
+     * @param  string  $attribute
+     * @param  string  $rule
+     *
+     * @return void
+     */
+    protected function shouldBeNumeric($attribute, $rule)
+    {
+        if (is_numeric($this->getValue($attribute))) {
+            $this->numericRules[] = $rule;
         }
     }
 }

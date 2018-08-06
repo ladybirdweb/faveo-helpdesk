@@ -7,12 +7,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\Framework\Constraint;
 
 class CountTest extends ConstraintTestCase
 {
-    public function testCount()
+    public function testCount(): void
     {
         $countConstraint = new Count(3);
         $this->assertTrue($countConstraint->evaluate([1, 2, 3], '', true));
@@ -30,7 +29,7 @@ class CountTest extends ConstraintTestCase
         $this->assertTrue($countConstraint->evaluate($ia2, '', true));
     }
 
-    public function testCountDoesNotChangeIteratorKey()
+    public function testCountDoesNotChangeIteratorKey(): void
     {
         $countConstraint = new Count(2);
 
@@ -97,7 +96,7 @@ class CountTest extends ConstraintTestCase
         $this->assertFalse($it->valid());
     }
 
-    public function testCountGeneratorsDoNotRewind()
+    public function testCountGeneratorsDoNotRewind(): void
     {
         $generatorMaker = new \TestGeneratorMaker;
 
@@ -129,7 +128,7 @@ class CountTest extends ConstraintTestCase
         $this->assertEquals(null, $generator->current());
     }
 
-    public function testCountTraversable()
+    public function testCountTraversable(): void
     {
         $countConstraint = new Count(5);
 

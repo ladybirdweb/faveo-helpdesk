@@ -13,18 +13,18 @@
 
 namespace PhpSpec\CodeGenerator\Generator;
 
-use PhpSpec\Console\IO;
+use PhpSpec\Console\ConsoleIO;
 use PhpSpec\CodeGenerator\TemplateRenderer;
 use PhpSpec\Util\Filesystem;
-use PhpSpec\Locator\ResourceInterface;
+use PhpSpec\Locator\Resource;
 
 /**
  * Generates interface method signatures from a resource
  */
-class MethodSignatureGenerator implements GeneratorInterface
+final class MethodSignatureGenerator implements Generator
 {
     /**
-     * @var IO
+     * @var ConsoleIO
      */
     private $io;
 
@@ -39,34 +39,23 @@ class MethodSignatureGenerator implements GeneratorInterface
     private $filesystem;
 
     /**
-     * @param IO               $io
+     * @param ConsoleIO               $io
      * @param TemplateRenderer $templates
      * @param Filesystem       $filesystem
      */
-    public function __construct(IO $io, TemplateRenderer $templates, Filesystem $filesystem = null)
+    public function __construct(ConsoleIO $io, TemplateRenderer $templates, Filesystem $filesystem)
     {
         $this->io         = $io;
         $this->templates  = $templates;
-        $this->filesystem = $filesystem ?: new Filesystem();
+        $this->filesystem = $filesystem;
     }
 
-    /**
-     * @param ResourceInterface $resource
-     * @param string            $generation
-     * @param array             $data
-     *
-     * @return bool
-     */
-    public function supports(ResourceInterface $resource, $generation, array $data)
+    public function supports(Resource $resource, string $generation, array $data) : bool
     {
         return 'method-signature' === $generation;
     }
 
-    /**
-     * @param ResourceInterface $resource
-     * @param array             $data
-     */
-    public function generate(ResourceInterface $resource, array $data = array())
+    public function generate(Resource $resource, array $data = array())
     {
         $filepath  = $resource->getSrcFilename();
         $name      = $data['name'];
@@ -89,41 +78,27 @@ class MethodSignatureGenerator implements GeneratorInterface
         ), 2);
     }
 
-    /**
-     * @return int
-     */
-    public function getPriority()
+    public function getPriority() : int
     {
         return 0;
     }
 
-    /**
-     * @return string
-     */
-    protected function getTemplate()
+    protected function getTemplate() : string
     {
         return file_get_contents(__DIR__.'/templates/interface_method_signature.template');
     }
 
-    /**
-     * @param string $filepath
-     * @param string $content
-     */
-    private function insertMethodSignature($filepath, $content)
+    private function insertMethodSignature(string $filepath, string $content)
     {
         $code = $this->filesystem->getFileContents($filepath);
         $code = preg_replace('/}[ \n]*$/', rtrim($content) . "\n}\n", trim($code));
         $this->filesystem->putFileContents($filepath, $code);
     }
 
-    /**
-     * @param array $arguments
-     * @return string
-     */
-    private function buildArgumentString($arguments)
+    private function buildArgumentString(array $arguments) : string
     {
-        $argString = count($arguments)
-            ? '$argument' . implode(', $argument', range(1, count($arguments)))
+        $argString = \count($arguments)
+            ? '$argument' . implode(', $argument', range(1, \count($arguments)))
             : '';
         return $argString;
     }

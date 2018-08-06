@@ -68,7 +68,7 @@ class RouteListCommand extends Command
      */
     public function handle()
     {
-        if (count($this->routes) == 0) {
+        if (count($this->routes) === 0) {
             return $this->error("Your application doesn't have any routes.");
         }
 
@@ -110,7 +110,7 @@ class RouteListCommand extends Command
             'method' => implode('|', $route->methods()),
             'uri'    => $route->uri(),
             'name'   => $route->getName(),
-            'action' => $route->getActionName(),
+            'action' => ltrim($route->getActionName(), '\\'),
             'middleware' => $this->getMiddleware($route),
         ]);
     }

@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\Framework\Constraint;
 
 use PHPUnit\Framework\SelfDescribing;
@@ -15,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 abstract class ConstraintTestCase extends TestCase
 {
-    final public function testIsCountable()
+    final public function testIsCountable(): void
     {
         $className = $this->className();
 
@@ -28,7 +27,7 @@ abstract class ConstraintTestCase extends TestCase
         ));
     }
 
-    final public function testIsSelfDescribing()
+    final public function testIsSelfDescribing(): void
     {
         $className = $this->className();
 
@@ -43,8 +42,6 @@ abstract class ConstraintTestCase extends TestCase
 
     /**
      * Returns the class name of the constraint.
-     *
-     * @return string
      */
     final protected function className(): string
     {

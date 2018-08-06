@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\Runner;
 
 use ReflectionClass;
@@ -17,18 +16,7 @@ use ReflectionClass;
  */
 interface TestSuiteLoader
 {
-    /**
-     * @param string $suiteClassName
-     * @param string $suiteClassFile
-     *
-     * @return ReflectionClass
-     */
-    public function load($suiteClassName, $suiteClassFile = '');
+    public function load(string $suiteClassName, string $suiteClassFile = ''): ReflectionClass;
 
-    /**
-     * @param ReflectionClass $aClass
-     *
-     * @return ReflectionClass
-     */
-    public function reload(ReflectionClass $aClass);
+    public function reload(ReflectionClass $aClass): ReflectionClass;
 }

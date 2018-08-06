@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\Util;
 
 use PHPUnit\Framework\TestCase;
@@ -16,11 +15,15 @@ class JsonTest extends TestCase
 {
     /**
      * @dataProvider canonicalizeProvider
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testCanonicalize($actual, $expected, $expectError)
+    public function testCanonicalize($actual, $expected, $expectError): void
     {
-        list($error, $canonicalized) = Json::canonicalize($actual);
+        [$error, $canonicalized] = Json::canonicalize($actual);
         $this->assertEquals($expectError, $error);
+
         if (!$expectError) {
             $this->assertEquals($expected, $canonicalized);
         }
@@ -40,8 +43,12 @@ class JsonTest extends TestCase
 
     /**
      * @dataProvider prettifyProvider
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testPrettify($actual, $expected)
+    public function testPrettify($actual, $expected): void
     {
         $this->assertEquals($expected, Json::prettify($actual));
     }
@@ -61,7 +68,7 @@ class JsonTest extends TestCase
      * @expectedException \PHPUnit\Framework\Exception
      * @expectedExceptionMessage Cannot prettify invalid json
      */
-    public function testPrettifyException($json)
+    public function testPrettifyException($json): void
     {
         Json::prettify($json);
     }

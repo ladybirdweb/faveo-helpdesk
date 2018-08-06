@@ -17,13 +17,9 @@ class Attribute extends Composite
     /**
      * @var string
      */
-    protected $attributeName;
+    private $attributeName;
 
-    /**
-     * @param Constraint $constraint
-     * @param string     $attributeName
-     */
-    public function __construct(Constraint $constraint, $attributeName)
+    public function __construct(Constraint $constraint, string $attributeName)
     {
         parent::__construct($constraint);
 
@@ -40,13 +36,13 @@ class Attribute extends Composite
      * a boolean value instead: true in case of success, false in case of a
      * failure.
      *
-     * @param mixed  $other        Value or object to evaluate.
+     * @param mixed  $other        value or object to evaluate
      * @param string $description  Additional information about the test
      * @param bool   $returnResult Whether to return a result or throw an exception
      *
-     * @return mixed
-     *
      * @throws ExpectationFailedException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function evaluate($other, $description = '', $returnResult = false)
     {
@@ -62,13 +58,10 @@ class Attribute extends Composite
 
     /**
      * Returns a string representation of the constraint.
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
-        return 'attribute "' . $this->attributeName . '" ' .
-            $this->innerConstraint->toString();
+        return 'attribute "' . $this->attributeName . '" ' . $this->innerConstraint()->toString();
     }
 
     /**
@@ -77,11 +70,9 @@ class Attribute extends Composite
      * The beginning of failure messages is "Failed asserting that" in most
      * cases. This method should return the second part of that sentence.
      *
-     * @param mixed $other Evaluated value or object.
-     *
-     * @return string
+     * @param mixed $other evaluated value or object
      */
-    protected function failureDescription($other)
+    protected function failureDescription($other): string
     {
         return $this->toString();
     }

@@ -14,7 +14,7 @@
 namespace PhpSpec\Formatter\Html;
 
 use PhpSpec\Event\ExampleEvent;
-use PhpSpec\Formatter\Presenter\PresenterInterface;
+use PhpSpec\Formatter\Presenter\Presenter;
 use PhpSpec\Formatter\Template as TemplateInterface;
 
 class ReportItemFactory
@@ -33,12 +33,12 @@ class ReportItemFactory
     }
 
     /**
-     * @param ExampleEvent       $event
-     * @param PresenterInterface $presenter
+     * @param ExampleEvent $event
+     * @param Presenter    $presenter
      *
-     * @return ReportFailedItem|ReportPassedItem|ReportPendingItem
+     * @return ReportFailedItem|ReportPassedItem|ReportPendingItem|ReportSkippedItem
      */
-    public function create(ExampleEvent $event, PresenterInterface $presenter)
+    public function create(ExampleEvent $event, Presenter $presenter)
     {
         switch ($event->getResult()) {
             case ExampleEvent::PASSED:
@@ -60,7 +60,7 @@ class ReportItemFactory
      *
      * @throws InvalidExampleResultException
      */
-    private function invalidResultException($result)
+    private function invalidResultException(int $result)
     {
         throw new InvalidExampleResultException(
             "Unrecognised example result $result"

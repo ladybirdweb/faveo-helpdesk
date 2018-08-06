@@ -25,26 +25,33 @@ final class StaticRejectingNamespaceResolver implements NamespaceResolver
         $this->namespaceResolver = $namespaceResolver;
     }
 
-    public function analyse($code)
+    public function analyse(string $code)
     {
         $this->namespaceResolver->analyse($code);
     }
 
-    public function resolve($typeAlias)
+    public function resolve(string $typeAlias) : string
     {
-        $this->guardScalarTypeHints($typeAlias);
+        $this->guardNonObjectTypeHints($typeAlias);
 
         return $this->namespaceResolver->resolve($typeAlias);
     }
 
     /**
-     * @param $typeAlias
      * @throws \Exception
      */
-    private function guardScalarTypeHints($typeAlias)
+    private function guardNonObjectTypeHints(string $typeAlias)
     {
-        if (in_array($typeAlias, array('int', 'float', 'string', 'bool'))) {
-            throw new DisallowedScalarTypehintException("Scalar type $typeAlias cannot be resolved within a namespace");
+        $nonObjectTypes = [
+            'int',
+            'float',
+            'string',
+            'bool',
+            'iterable',
+        ];
+
+        if (\in_array($typeAlias, $nonObjectTypes, true)) {
+            throw new DisallowedNonObjectTypehintException("Non-object type $typeAlias cannot be resolved within a namespace");
         }
     }
 }

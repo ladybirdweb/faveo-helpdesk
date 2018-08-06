@@ -27,6 +27,16 @@ class RedirectableUrlMatcherTest extends UrlMatcherTest
         $matcher->match('/foo');
     }
 
+    public function testExtraTrailingSlash()
+    {
+        $coll = new RouteCollection();
+        $coll->add('foo', new Route('/foo'));
+
+        $matcher = $this->getUrlMatcher($coll);
+        $matcher->expects($this->once())->method('redirect')->will($this->returnValue(array()));
+        $matcher->match('/foo/');
+    }
+
     /**
      * @expectedException \Symfony\Component\Routing\Exception\ResourceNotFoundException
      */
@@ -115,6 +125,16 @@ class RedirectableUrlMatcherTest extends UrlMatcherTest
         $matcher = $this->getUrlMatcher($coll, new RequestContext());
         $matcher->expects($this->once())->method('redirect')->with('/foo', 'foo', 'https')->willReturn(array());
         $this->assertSame(array('_route' => 'foo'), $matcher->match('/foo'));
+    }
+
+    public function testMissingTrailingSlashAndScheme()
+    {
+        $coll = new RouteCollection();
+        $coll->add('foo', (new Route('/foo/'))->setSchemes(array('https')));
+
+        $matcher = $this->getUrlMatcher($coll);
+        $matcher->expects($this->once())->method('redirect')->with('/foo/', 'foo', 'https')->will($this->returnValue(array()));
+        $matcher->match('/foo');
     }
 
     protected function getUrlMatcher(RouteCollection $routes, RequestContext $context = null)

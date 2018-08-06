@@ -7,12 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\Framework\Constraint;
+
+use PHPUnit\Framework\ExpectationFailedException;
 
 class StringMatchesFormatDescriptionTest extends ConstraintTestCase
 {
-    public function testConstraintStringMatches()
+    public function testConstraintStringMatchesCharacter(): void
     {
         $constraint = new StringMatchesFormatDescription('*%c*');
 
@@ -22,7 +23,7 @@ class StringMatchesFormatDescriptionTest extends ConstraintTestCase
         $this->assertCount(1, $constraint);
     }
 
-    public function testConstraintStringMatches2()
+    public function testConstraintStringMatchesString(): void
     {
         $constraint = new StringMatchesFormatDescription('*%s*');
 
@@ -32,7 +33,7 @@ class StringMatchesFormatDescriptionTest extends ConstraintTestCase
         $this->assertCount(1, $constraint);
     }
 
-    public function testConstraintStringMatches3()
+    public function testConstraintStringMatchesInteger(): void
     {
         $constraint = new StringMatchesFormatDescription('*%i*');
 
@@ -42,7 +43,7 @@ class StringMatchesFormatDescriptionTest extends ConstraintTestCase
         $this->assertCount(1, $constraint);
     }
 
-    public function testConstraintStringMatches4()
+    public function testConstraintStringMatchesUnsignedInt(): void
     {
         $constraint = new StringMatchesFormatDescription('*%d*');
 
@@ -52,7 +53,7 @@ class StringMatchesFormatDescriptionTest extends ConstraintTestCase
         $this->assertCount(1, $constraint);
     }
 
-    public function testConstraintStringMatches5()
+    public function testConstraintStringMatchesHexadecimal(): void
     {
         $constraint = new StringMatchesFormatDescription('*%x*');
 
@@ -62,7 +63,7 @@ class StringMatchesFormatDescriptionTest extends ConstraintTestCase
         $this->assertCount(1, $constraint);
     }
 
-    public function testConstraintStringMatches6()
+    public function testConstraintStringMatchesFloat(): void
     {
         $constraint = new StringMatchesFormatDescription('*%f*');
 
@@ -70,5 +71,38 @@ class StringMatchesFormatDescriptionTest extends ConstraintTestCase
         $this->assertTrue($constraint->evaluate('*1.0*', '', true));
         $this->assertEquals('matches PCRE pattern "/^\*[+-]?\.?\d+\.?\d*(?:[Ee][+-]?\d+)?\*$/s"', $constraint->toString());
         $this->assertCount(1, $constraint);
+    }
+
+    public function testConstraintStringMatchesNewline(): void
+    {
+        $constraint = new StringMatchesFormatDescription("\r\n");
+
+        $this->assertFalse($constraint->evaluate("*\r\n", '', true));
+        $this->assertTrue($constraint->evaluate("\r\n", '', true));
+        $this->assertEquals("matches PCRE pattern \"/^\n$/s\"", $constraint->toString());
+        $this->assertCount(1, $constraint);
+    }
+
+    public function testFailureMessageWithNewlines(): void
+    {
+        $constraint = new StringMatchesFormatDescription("%c\nfoo\n%c");
+
+        try {
+            $constraint->evaluate("*\nbar\n*");
+            $this->fail('Expected ExpectationFailedException, but it was not thrown.');
+        } catch (ExpectationFailedException $e) {
+            $expected = <<<EOD
+Failed asserting that string matches format description.
+--- Expected
++++ Actual
+@@ @@
+ *
+-foo
++bar
+ *
+
+EOD;
+            $this->assertEquals($expected, $e->getMessage());
+        }
     }
 }

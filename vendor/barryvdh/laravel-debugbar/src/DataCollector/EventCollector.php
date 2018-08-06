@@ -1,36 +1,25 @@
 <?php
 namespace Barryvdh\Debugbar\DataCollector;
 
+use Barryvdh\Debugbar\DataFormatter\SimpleFormatter;
 use DebugBar\DataCollector\TimeDataCollector;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Str;
-use Symfony\Component\HttpKernel\DataCollector\Util\ValueExporter;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
 
 class EventCollector extends TimeDataCollector
 {
     /** @var Dispatcher */
     protected $events;
 
-    /** @var ValueExporter */
-    protected $exporter;
-
     public function __construct($requestStartTime = null)
     {
         parent::__construct($requestStartTime);
-
-        $this->exporter = new ValueExporter();
+        $this->setDataFormatter(new SimpleFormatter());
     }
 
     public function onWildcardEvent($name = null, $data = [])
     {
-        // Pre-Laravel 5.4, using 'firing' to get the current event name.
-        if (method_exists($this->events, 'firing')) {
-            $name = $this->events->firing();
-
-            // Get the arguments passed to the event
-            $data = func_get_args();
-        }
-
         $params = $this->prepareParams($data);
         $time = microtime(true);
 
@@ -63,7 +52,7 @@ class EventCollector extends TimeDataCollector
                 $listener = $reflector->getName() . ' (' . $filename . ':' . $reflector->getStartLine() . '-' . $reflector->getEndLine() . ')';
             } else {
                 // Not sure if this is possible, but to prevent edge cases
-                $listener = $this->formatVar($listener);
+                $listener = $this->getDataFormatter()->formatVar($listener);
             }
 
             $params['listeners.' . $i] = $listener;
@@ -84,7 +73,7 @@ class EventCollector extends TimeDataCollector
             if (is_object($value) && Str::is('Illuminate\*\Events\*', get_class($value))) {
                 $value =  $this->prepareParams(get_object_vars($value));
             }
-            $data[$key] = htmlentities($this->exporter->exportValue($value), ENT_QUOTES, 'UTF-8', false);
+            $data[$key] = htmlentities($this->getDataFormatter()->formatVar($value), ENT_QUOTES, 'UTF-8', false);
         }
 
         return $data;

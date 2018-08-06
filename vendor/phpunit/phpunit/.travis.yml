@@ -8,7 +8,6 @@ addons:
       - libxml2-utils
 
 php:
-  - 7.0
   - 7.1
   - 7.2
   - master
@@ -26,12 +25,11 @@ env:
     - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
 
 before_install:
-  - composer self-update
-  - composer clear-cache
+  - ./build/tools/composer clear-cache
 
 install:
-  - if [[ "$DEPENDENCIES" = 'high' ]]; then travis_retry composer update $DEFAULT_COMPOSER_FLAGS; fi
-  - if [[ "$DEPENDENCIES" = 'low' ]]; then travis_retry composer update $DEFAULT_COMPOSER_FLAGS --prefer-lowest; fi
+  - if [[ "$DEPENDENCIES" = 'high' ]]; then travis_retry ./build/tools/composer update $DEFAULT_COMPOSER_FLAGS; fi
+  - if [[ "$DEPENDENCIES" = 'low' ]]; then travis_retry ./build/tools/composer update $DEFAULT_COMPOSER_FLAGS --prefer-lowest; fi
 
 before_script:
   - echo 'zend.assertions=1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
@@ -51,3 +49,21 @@ after_success:
 notifications:
   email: false
 
+jobs:
+  include:
+    - stage: Static Code Analysis
+      php: 7.2
+      env: PHPStan
+      before_install:
+        - travis_retry ./build/tools/composer require --no-update phpunit/php-invoker:^2.0
+      install: travis_retry ./build/tools/composer update --prefer-dist --prefer-stable
+      script:
+        - ./build/tools/phpstan analyse --level=0 -c phpstan.neon src
+        - ./build/tools/phpstan analyse --level=2 -c phpstan-tests.neon tests
+    - stage: Static Code Analysis
+      php: 7.2
+      env: php-cs-fixer
+      install:
+        - phpenv config-rm xdebug.ini
+      script:
+        - ./build/tools/php-cs-fixer fix --dry-run -v --show-progress=dots --diff-format=udiff

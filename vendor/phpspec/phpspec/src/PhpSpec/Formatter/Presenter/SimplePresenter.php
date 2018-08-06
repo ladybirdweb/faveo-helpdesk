@@ -16,7 +16,7 @@ namespace PhpSpec\Formatter\Presenter;
 use PhpSpec\Formatter\Presenter\Exception\ExceptionPresenter;
 use PhpSpec\Formatter\Presenter\Value\ValuePresenter;
 
-final class SimplePresenter implements PresenterInterface
+final class SimplePresenter implements Presenter
 {
     /**
      * @var ValuePresenter
@@ -43,7 +43,7 @@ final class SimplePresenter implements PresenterInterface
      *
      * @return string
      */
-    public function presentValue($value)
+    public function presentValue($value): string
     {
         return $this->valuePresenter->presentValue($value);
     }
@@ -54,7 +54,7 @@ final class SimplePresenter implements PresenterInterface
      *
      * @return string
      */
-    public function presentException(\Exception $exception, $verbose = false)
+    public function presentException(\Exception $exception, bool $verbose = false): string
     {
         return $this->exceptionPresenter->presentException($exception, $verbose);
     }
@@ -64,7 +64,7 @@ final class SimplePresenter implements PresenterInterface
      *
      * @return string
      */
-    public function presentString($string)
+    public function presentString(string $string): string
     {
         return $string;
     }

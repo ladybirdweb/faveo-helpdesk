@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\Framework\Constraint;
 
 use PHPUnit\Framework\ExpectationFailedException;
@@ -15,33 +14,33 @@ use PHPUnit\Framework\TestFailure;
 
 class StringEndsWithTest extends ConstraintTestCase
 {
-    public function testConstraintStringEndsWithCorrectValueAndReturnResult()
+    public function testConstraintStringEndsWithCorrectValueAndReturnResult(): void
     {
         $constraint = new StringEndsWith('suffix');
         $this->assertTrue($constraint->evaluate('foosuffix', '', true));
     }
 
-    public function testConstraintStringEndsWithNotCorrectValueAndReturnResult()
+    public function testConstraintStringEndsWithNotCorrectValueAndReturnResult(): void
     {
         $constraint = new StringEndsWith('suffix');
         $this->assertFalse($constraint->evaluate('suffixerror', '', true));
     }
 
-    public function testConstraintStringEndsWithToStringMethod()
+    public function testConstraintStringEndsWithToStringMethod(): void
     {
         $constraint = new StringEndsWith('suffix');
 
         $this->assertEquals('ends with "suffix"', $constraint->toString());
     }
 
-    public function testConstraintStringEndsWithCountMethod()
+    public function testConstraintStringEndsWithCountMethod(): void
     {
         $constraint = new StringEndsWith('suffix');
 
         $this->assertCount(1, $constraint);
     }
 
-    public function testConstraintStringEndsWithNotCorrectValueAndExpectation()
+    public function testConstraintStringEndsWithNotCorrectValueAndExpectation(): void
     {
         $constraint = new StringEndsWith('suffix');
 
@@ -63,7 +62,7 @@ EOF
         $this->fail();
     }
 
-    public function testConstraintStringEndsWithNotCorrectValueExceptionAndCustomMessage()
+    public function testConstraintStringEndsWithNotCorrectValueExceptionAndCustomMessage(): void
     {
         $constraint = new StringEndsWith('suffix');
 

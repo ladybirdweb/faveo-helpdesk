@@ -7,7 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace SebastianBergmann\Diff\Output;
+
+use SebastianBergmann\Diff\Differ;
 
 /**
  * Builds a diff string representation in a loose unified diff format
@@ -31,17 +34,18 @@ final class DiffOnlyOutputBuilder implements DiffOutputBuilderInterface
 
         if ('' !== $this->header) {
             \fwrite($buffer, $this->header);
+
             if ("\n" !== \substr($this->header, -1, 1)) {
                 \fwrite($buffer, "\n");
             }
         }
 
         foreach ($diff as $diffEntry) {
-            if ($diffEntry[1] === 1 /* ADDED */) {
+            if ($diffEntry[1] === Differ::ADDED) {
                 \fwrite($buffer, '+' . $diffEntry[0]);
-            } elseif ($diffEntry[1] === 2 /* REMOVED */) {
+            } elseif ($diffEntry[1] === Differ::REMOVED) {
                 \fwrite($buffer, '-' . $diffEntry[0]);
-            } elseif ($diffEntry[1] === 3 /* WARNING */) {
+            } elseif ($diffEntry[1] === Differ::DIFF_LINE_END_WARNING) {
                 \fwrite($buffer, ' ' . $diffEntry[0]);
 
                 continue; // Warnings should not be tested for line break, it will always be there
@@ -50,6 +54,7 @@ final class DiffOnlyOutputBuilder implements DiffOutputBuilderInterface
             }
 
             $lc = \substr($diffEntry[0], -1);
+
             if ($lc !== "\n" && $lc !== "\r") {
                 \fwrite($buffer, "\n"); // \No newline at end of file
             }

@@ -111,7 +111,7 @@ class ElementResolver
      *
      * @param string  $field
      * @param array  $values
-     * @return array
+     * @return \Facebook\WebDriver\Remote\RemoteWebElement[]
      */
     public function resolveSelectOptions($field, array $values)
     {
@@ -122,7 +122,7 @@ class ElementResolver
             return [];
         }
 
-        return array_filter($options, function($option) use ($values) {
+        return array_filter($options, function ($option) use ($values) {
             return in_array($option->getAttribute('value'), $values);
         });
     }
@@ -189,6 +189,24 @@ class ElementResolver
 
         return $this->firstOrFail([
             $field, "input[type=file][name='{$field}']"
+        ]);
+    }
+
+    /**
+     * Resolve the element for a given "field".
+     *
+     * @param  string  $field
+     * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     */
+    public function resolveForField($field)
+    {
+        if (! is_null($element = $this->findById($field))) {
+            return $element;
+        }
+
+        return $this->firstOrFail([
+            $field, "input[name='{$field}']", "textarea[name='{$field}']",
+            "select[name='{$field}']", "button[name='{$field}']"
         ]);
     }
 
@@ -337,7 +355,7 @@ class ElementResolver
      * Find the elements by the given selector or return an empty array.
      *
      * @param  string  $selector
-     * @return array
+     * @return \Facebook\WebDriver\Remote\RemoteWebElement[]
      */
     public function all($selector)
     {
@@ -360,7 +378,7 @@ class ElementResolver
      */
     public function format($selector)
     {
-        $sortedElements = collect($this->elements)->sortByDesc(function($element, $key){
+        $sortedElements = collect($this->elements)->sortByDesc(function ($element, $key) {
             return strlen($key);
         })->toArray();
 

@@ -7,12 +7,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\Framework;
 
 class TestImplementorTest extends TestCase
 {
-    public function testSuccessfulRun()
+    public function testSuccessfulRun(): void
     {
         $result = new TestResult;
 

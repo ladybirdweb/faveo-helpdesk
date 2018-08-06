@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PHPUnit\Framework\Constraint;
 
 use PHPUnit\Framework\ExpectationFailedException;
@@ -15,7 +14,7 @@ use PHPUnit\Framework\TestFailure;
 
 class ArrayHasKeyTest extends ConstraintTestCase
 {
-    public function testConstraintArrayHasKey()
+    public function testConstraintArrayHasKey(): void
     {
         $constraint = new ArrayHasKey(0);
 
@@ -41,7 +40,7 @@ EOF
         $this->fail();
     }
 
-    public function testConstraintArrayHasKey2()
+    public function testConstraintArrayHasKey2(): void
     {
         $constraint = new ArrayHasKey(0);
 

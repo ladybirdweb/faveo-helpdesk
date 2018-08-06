@@ -17,18 +17,12 @@ use SebastianBergmann\CodeCoverage\RuntimeException;
 /**
  * Generates a Clover XML logfile from a code coverage object.
  */
-class Clover
+final class Clover
 {
     /**
-     * @param CodeCoverage $coverage
-     * @param string       $target
-     * @param string       $name
-     *
-     * @return string
-     *
-     * @throws \SebastianBergmann\CodeCoverage\RuntimeException
+     * @throws \RuntimeException
      */
-    public function process(CodeCoverage $coverage, $target = null, $name = null)
+    public function process(CodeCoverage $coverage, ?string $target = null, ?string $name = null): string
     {
         $xmlDocument               = new \DOMDocument('1.0', 'UTF-8');
         $xmlDocument->formatOutput = true;
@@ -48,7 +42,6 @@ class Clover
 
         $packages = [];
         $report   = $coverage->getReport();
-        unset($coverage);
 
         foreach ($report as $item) {
             if (!$item instanceof File) {
@@ -60,10 +53,10 @@ class Clover
             $xmlFile = $xmlDocument->createElement('file');
             $xmlFile->setAttribute('name', $item->getPath());
 
-            $classes   = $item->getClassesAndTraits();
-            $coverage  = $item->getCoverageData();
-            $lines     = [];
-            $namespace = 'global';
+            $classes      = $item->getClassesAndTraits();
+            $coverageData = $item->getCoverageData();
+            $lines        = [];
+            $namespace    = 'global';
 
             foreach ($classes as $className => $class) {
                 $classStatements        = 0;
@@ -87,8 +80,8 @@ class Clover
                     $methodCount = 0;
 
                     foreach (\range($method['startLine'], $method['endLine']) as $line) {
-                        if (isset($coverage[$line]) && ($coverage[$line] !== null)) {
-                            $methodCount = \max($methodCount, \count($coverage[$line]));
+                        if (isset($coverageData[$line]) && ($coverageData[$line] !== null)) {
+                            $methodCount = \max($methodCount, \count($coverageData[$line]));
                         }
                     }
 
@@ -153,7 +146,7 @@ class Clover
                 $xmlClass->appendChild($xmlMetrics);
             }
 
-            foreach ($coverage as $line => $data) {
+            foreach ($coverageData as $line => $data) {
                 if ($data === null || isset($lines[$line])) {
                     continue;
                 }
@@ -206,7 +199,7 @@ class Clover
             $xmlMetrics->setAttribute('coveredelements', $item->getNumTestedMethods() + $item->getNumExecutedLines() /* + coveredconditionals */);
             $xmlFile->appendChild($xmlMetrics);
 
-            if ($namespace == 'global') {
+            if ($namespace === 'global') {
                 $xmlProject->appendChild($xmlFile);
             } else {
                 if (!isset($packages[$namespace])) {
@@ -242,8 +235,8 @@ class Clover
         $buffer = $xmlDocument->saveXML();
 
         if ($target !== null) {
-            if (!\is_dir(\dirname($target))) {
-                \mkdir(\dirname($target), 0777, true);
+            if (!$this->createDirectory(\dirname($target))) {
+                throw new \RuntimeException(\sprintf('Directory "%s" was not created', \dirname($target)));
             }
 
             if (@\file_put_contents($target, $buffer) === false) {
@@ -257,5 +250,10 @@ class Clover
         }
 
         return $buffer;
+    }
+
+    private function createDirectory(string $directory): bool
+    {
+        return !(!\is_dir($directory) && !@\mkdir($directory, 0777, true) && !\is_dir($directory));
     }
 }

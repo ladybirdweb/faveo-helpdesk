@@ -12,12 +12,12 @@ namespace PHPUnit\Framework\Constraint;
 class ExceptionCode extends Constraint
 {
     /**
-     * @var int
+     * @var int|string
      */
-    protected $expectedCode;
+    private $expectedCode;
 
     /**
-     * @param int $expected
+     * @param int|string $expected
      */
     public function __construct($expected)
     {
@@ -26,17 +26,20 @@ class ExceptionCode extends Constraint
         $this->expectedCode = $expected;
     }
 
+    public function toString(): string
+    {
+        return 'exception code is ';
+    }
+
     /**
      * Evaluates the constraint for parameter $other. Returns true if the
      * constraint is met, false otherwise.
      *
      * @param \Throwable $other
-     *
-     * @return bool
      */
-    protected function matches($other)
+    protected function matches($other): bool
     {
-        return (string) $other->getCode() == (string) $this->expectedCode;
+        return (string) $other->getCode() === (string) $this->expectedCode;
     }
 
     /**
@@ -45,24 +48,16 @@ class ExceptionCode extends Constraint
      * The beginning of failure messages is "Failed asserting that" in most
      * cases. This method should return the second part of that sentence.
      *
-     * @param mixed $other Evaluated value or object.
+     * @param mixed $other evaluated value or object
      *
-     * @return string
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    protected function failureDescription($other)
+    protected function failureDescription($other): string
     {
         return \sprintf(
             '%s is equal to expected exception code %s',
             $this->exporter->export($other->getCode()),
             $this->exporter->export($this->expectedCode)
         );
-    }
-
-    /**
-     * @return string
-     */
-    public function toString()
-    {
-        return 'exception code is ';
     }
 }

@@ -18,6 +18,12 @@ use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
  */
 final class Differ
 {
+    public const OLD                     = 0;
+    public const ADDED                   = 1;
+    public const REMOVED                 = 2;
+    public const DIFF_LINE_END_WARNING   = 3;
+    public const NO_LINE_END_EOF_WARNING = 4;
+
     /**
      * @var DiffOutputBuilderInterface
      */
@@ -54,33 +60,19 @@ final class Differ
      *
      * @param array|string                            $from
      * @param array|string                            $to
-     * @param LongestCommonSubsequenceCalculator|null $lcs
+     * @param null|LongestCommonSubsequenceCalculator $lcs
      *
      * @return string
      */
     public function diff($from, $to, LongestCommonSubsequenceCalculator $lcs = null): string
     {
-        $from = $this->validateDiffInput($from);
-        $to   = $this->validateDiffInput($to);
-        $diff = $this->diffToArray($from, $to, $lcs);
+        $diff = $this->diffToArray(
+            $this->normalizeDiffInput($from),
+            $this->normalizeDiffInput($to),
+            $lcs
+        );
 
         return $this->outputBuilder->getDiff($diff);
-    }
-
-    /**
-     * Casts variable to string if it is not a string or array.
-     *
-     * @param mixed $input
-     *
-     * @return string
-     */
-    private function validateDiffInput($input): string
-    {
-        if (!\is_array($input) && !\is_string($input)) {
-            return (string) $input;
-        }
-
-        return $input;
     }
 
     /**
@@ -105,16 +97,16 @@ final class Differ
         if (\is_string($from)) {
             $from = $this->splitStringByLines($from);
         } elseif (!\is_array($from)) {
-            throw new \InvalidArgumentException('"from" must be an array or string.');
+            throw new InvalidArgumentException('"from" must be an array or string.');
         }
 
         if (\is_string($to)) {
             $to = $this->splitStringByLines($to);
         } elseif (!\is_array($to)) {
-            throw new \InvalidArgumentException('"to" must be an array or string.');
+            throw new InvalidArgumentException('"to" must be an array or string.');
         }
 
-        list($from, $to, $start, $end) = self::getArrayDiffParted($from, $to);
+        [$from, $to, $start, $end] = self::getArrayDiffParted($from, $to);
 
         if ($lcs === null) {
             $lcs = $this->selectLcsImplementation($from, $to);
@@ -124,7 +116,7 @@ final class Differ
         $diff   = [];
 
         foreach ($start as $token) {
-            $diff[] = [$token, 0 /* OLD */];
+            $diff[] = [$token, self::OLD];
         }
 
         \reset($from);
@@ -132,36 +124,52 @@ final class Differ
 
         foreach ($common as $token) {
             while (($fromToken = \reset($from)) !== $token) {
-                $diff[] = [\array_shift($from), 2 /* REMOVED */];
+                $diff[] = [\array_shift($from), self::REMOVED];
             }
 
             while (($toToken = \reset($to)) !== $token) {
-                $diff[] = [\array_shift($to), 1 /* ADDED */];
+                $diff[] = [\array_shift($to), self::ADDED];
             }
 
-            $diff[] = [$token, 0 /* OLD */];
+            $diff[] = [$token, self::OLD];
 
             \array_shift($from);
             \array_shift($to);
         }
 
         while (($token = \array_shift($from)) !== null) {
-            $diff[] = [$token, 2 /* REMOVED */];
+            $diff[] = [$token, self::REMOVED];
         }
 
         while (($token = \array_shift($to)) !== null) {
-            $diff[] = [$token, 1 /* ADDED */];
+            $diff[] = [$token, self::ADDED];
         }
 
         foreach ($end as $token) {
-            $diff[] = [$token, 0 /* OLD */];
+            $diff[] = [$token, self::OLD];
         }
 
         if ($this->detectUnmatchedLineEndings($diff)) {
-            \array_unshift($diff, ["#Warning: Strings contain different line endings!\n", 3]);
+            \array_unshift($diff, ["#Warning: Strings contain different line endings!\n", self::DIFF_LINE_END_WARNING]);
         }
 
         return $diff;
+    }
+
+    /**
+     * Casts variable to string if it is not a string or array.
+     *
+     * @param mixed $input
+     *
+     * @return array|string
+     */
+    private function normalizeDiffInput($input)
+    {
+        if (!\is_array($input) && !\is_string($input)) {
+            return (string) $input;
+        }
+
+        return $input;
     }
 
     /**
@@ -203,7 +211,7 @@ final class Differ
      * @param array $from
      * @param array $to
      *
-     * @return int|float
+     * @return float|int
      */
     private function calculateEstimatedFootprint(array $from, array $to)
     {
@@ -225,13 +233,13 @@ final class Differ
         $oldLineBreaks = ['' => true];
 
         foreach ($diff as $entry) {
-            if (0 === $entry[1]) { /* OLD */
+            if (self::OLD === $entry[1]) {
                 $ln                 = $this->getLinebreak($entry[0]);
                 $oldLineBreaks[$ln] = true;
                 $newLineBreaks[$ln] = true;
-            } elseif (1 === $entry[1]) {  /* ADDED */
+            } elseif (self::ADDED === $entry[1]) {
                 $newLineBreaks[$this->getLinebreak($entry[0])] = true;
-            } elseif (2 === $entry[1]) {  /* REMOVED */
+            } elseif (self::REMOVED === $entry[1]) {
                 $oldLineBreaks[$this->getLinebreak($entry[0])] = true;
             }
         }
@@ -264,6 +272,7 @@ final class Differ
         }
 
         $lc = \substr($line, -1);
+
         if ("\r" === $lc) {
             return "\r";
         }

@@ -13,8 +13,8 @@
 
 namespace PhpSpec\Formatter;
 
-use PhpSpec\IO\IOInterface as IO;
-use PhpSpec\Formatter\Presenter\PresenterInterface;
+use PhpSpec\Formatter\Presenter\Presenter;
+use PhpSpec\IO\IO;
 use PhpSpec\Listener\StatisticsCollector;
 use PhpSpec\Event\ExampleEvent;
 use PhpSpec\Event\SuiteEvent;
@@ -25,7 +25,7 @@ use PhpSpec\Event\SpecificationEvent;
  *
  * @author Gildas Quemener <gildas.quemener@gmail.com>
  */
-class JUnitFormatter extends BasicFormatter
+final class JUnitFormatter extends BasicFormatter
 {
     /** @var array */
     protected $testCaseNodes = array();
@@ -52,7 +52,7 @@ class JUnitFormatter extends BasicFormatter
         ExampleEvent::SKIPPED => 'skipped',
     );
 
-    public function __construct(PresenterInterface $presenter, IO $io, StatisticsCollector $stats)
+    public function __construct(Presenter $presenter, IO $io, StatisticsCollector $stats)
     {
         parent::__construct($presenter, $io, $stats);
 
@@ -74,7 +74,7 @@ class JUnitFormatter extends BasicFormatter
      *
      * @return array
      */
-    public function getTestCaseNodes()
+    public function getTestCaseNodes(): array
     {
         return $this->testCaseNodes;
     }
@@ -94,7 +94,7 @@ class JUnitFormatter extends BasicFormatter
      *
      * @return array
      */
-    public function getTestSuiteNodes()
+    public function getTestSuiteNodes(): array
     {
         return $this->testSuiteNodes;
     }
@@ -114,7 +114,7 @@ class JUnitFormatter extends BasicFormatter
      *
      * @return array
      */
-    public function getExampleStatusCounts()
+    public function getExampleStatusCounts(): array
     {
         return $this->exampleStatusCounts;
     }
@@ -134,7 +134,7 @@ class JUnitFormatter extends BasicFormatter
 
         $this->exampleStatusCounts[$event->getResult()]++;
 
-        if (in_array($event->getResult(), array(ExampleEvent::BROKEN, ExampleEvent::FAILED))) {
+        if (\in_array($event->getResult(), array(ExampleEvent::BROKEN, ExampleEvent::FAILED))) {
             $exception = $event->getException();
             $testCaseNode .= sprintf(
                 '>'."\n".
@@ -146,7 +146,7 @@ class JUnitFormatter extends BasicFormatter
                 '</system-err>'."\n".
                 '</testcase>',
                 $this->resultTags[$event->getResult()],
-                get_class($exception),
+                \get_class($exception),
                 htmlspecialchars($exception->getMessage()),
                 $exception->getTraceAsString()
             );
@@ -175,7 +175,7 @@ class JUnitFormatter extends BasicFormatter
             '</testsuite>',
             $event->getTitle(),
             $event->getTime(),
-            count($this->testCaseNodes),
+            \count($this->testCaseNodes),
             $this->exampleStatusCounts[ExampleEvent::FAILED],
             $this->exampleStatusCounts[ExampleEvent::BROKEN],
             $this->exampleStatusCounts[ExampleEvent::PENDING] + $this->exampleStatusCounts[ExampleEvent::SKIPPED],
@@ -199,12 +199,12 @@ class JUnitFormatter extends BasicFormatter
             '</testsuites>',
             $event->getTime(),
             $stats->getEventsCount(),
-            count($stats->getFailedEvents()),
-            count($stats->getBrokenEvents()),
+            \count($stats->getFailedEvents()),
+            \count($stats->getBrokenEvents()),
             implode("\n", $this->testSuiteNodes)
         );
 
-        $this->getIo()->write($output);
+        $this->getIO()->write($output);
     }
 
     /**

@@ -541,11 +541,20 @@ class Arr
      * Shuffle the given array and return the result.
      *
      * @param  array  $array
+     * @param  int|null  $seed
      * @return array
      */
-    public static function shuffle($array)
+    public static function shuffle($array, $seed = null)
     {
-        shuffle($array);
+        if (is_null($seed)) {
+            shuffle($array);
+        } else {
+            srand($seed);
+
+            usort($array, function () {
+                return rand(-1, 1);
+            });
+        }
 
         return $array;
     }
@@ -598,13 +607,17 @@ class Arr
     }
 
     /**
-     * If the given value is not an array, wrap it in one.
+     * If the given value is not an array and not null, wrap it in one.
      *
      * @param  mixed  $value
      * @return array
      */
     public static function wrap($value)
     {
+        if (is_null($value)) {
+            return [];
+        }
+
         return ! is_array($value) ? [$value] : $value;
     }
 }

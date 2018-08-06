@@ -11,6 +11,7 @@
 namespace SebastianBergmann\Diff;
 
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\Diff\Utils\FileUtils;
 
 /**
  * @covers SebastianBergmann\Diff\Parser
@@ -26,14 +27,14 @@ final class ParserTest extends TestCase
      */
     private $parser;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->parser = new Parser;
     }
 
-    public function testParse()
+    public function testParse(): void
     {
-        $content = \file_get_contents(__DIR__ . '/fixtures/patch.txt');
+        $content = FileUtils::getFileContent(__DIR__ . '/fixtures/patch.txt');
 
         $diffs = $this->parser->parse($content);
 
@@ -52,9 +53,9 @@ final class ParserTest extends TestCase
         $this->assertCount(4, $chunks[0]->getLines());
     }
 
-    public function testParseWithMultipleChunks()
+    public function testParseWithMultipleChunks(): void
     {
-        $content = \file_get_contents(__DIR__ . '/fixtures/patch2.txt');
+        $content = FileUtils::getFileContent(__DIR__ . '/fixtures/patch2.txt');
 
         $diffs = $this->parser->parse($content);
 
@@ -72,9 +73,9 @@ final class ParserTest extends TestCase
         $this->assertCount(4, $chunks[2]->getLines());
     }
 
-    public function testParseWithRemovedLines()
+    public function testParseWithRemovedLines(): void
     {
-        $content = <<<A
+        $content = <<<END
 diff --git a/Test.txt b/Test.txt
 index abcdefg..abcdefh 100644
 --- a/Test.txt
@@ -82,7 +83,7 @@ index abcdefg..abcdefh 100644
 @@ -49,9 +49,8 @@
  A
 -B
-A;
+END;
         $diffs = $this->parser->parse($content);
         $this->assertInternalType('array', $diffs);
         $this->assertContainsOnlyInstancesOf(Diff::class, $diffs);
@@ -115,9 +116,9 @@ A;
         $this->assertSame(Line::REMOVED, $line->getType());
     }
 
-    public function testParseDiffForMulitpleFiles()
+    public function testParseDiffForMulitpleFiles(): void
     {
-        $content = <<<A
+        $content = <<<END
 diff --git a/Test.txt b/Test.txt
 index abcdefg..abcdefh 100644
 --- a/Test.txt
@@ -133,7 +134,7 @@ index abcdefg..abcdefh 100644
 @@ -1,2 +1,3 @@
  A
 +B
-A;
+END;
         $diffs = $this->parser->parse($content);
         $this->assertCount(2, $diffs);
 
@@ -147,5 +148,28 @@ A;
         $this->assertSame('a/Test2.txt', $diff->getFrom());
         $this->assertSame('b/Test2.txt', $diff->getTo());
         $this->assertCount(1, $diff->getChunks());
+    }
+
+    /**
+     * @param string $diff
+     * @param Diff[] $expected
+     *
+     * @dataProvider diffProvider
+     */
+    public function testParser(string $diff, array $expected): void
+    {
+        $result = $this->parser->parse($diff);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function diffProvider(): array
+    {
+        return [
+            [
+                "--- old.txt	2014-11-04 08:51:02.661868729 +0300\n+++ new.txt	2014-11-04 08:51:02.665868730 +0300\n@@ -1,3 +1,4 @@\n+2222111\n 1111111\n 1111111\n 1111111\n@@ -5,10 +6,8 @@\n 1111111\n 1111111\n 1111111\n +1121211\n 1111111\n -1111111\n -1111111\n -2222222\n 2222222\n 2222222\n 2222222\n@@ -17,5 +16,6 @@\n 2222222\n 2222222\n 2222222\n +2122212\n 2222222\n 2222222\n",
+                \unserialize(FileUtils::getFileContent(__DIR__ . '/fixtures/serialized_diff.bin')),
+            ],
+        ];
     }
 }

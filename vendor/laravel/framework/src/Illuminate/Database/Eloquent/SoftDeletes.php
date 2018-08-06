@@ -30,11 +30,13 @@ trait SoftDeletes
     {
         $this->forceDeleting = true;
 
-        $deleted = $this->delete();
+        return tap($this->delete(), function ($deleted) {
+            $this->forceDeleting = false;
 
-        $this->forceDeleting = false;
-
-        return $deleted;
+            if ($deleted) {
+                $this->fireModelEvent('forceDeleted', false);
+            }
+        });
     }
 
     /**
@@ -74,7 +76,9 @@ trait SoftDeletes
             $columns[$this->getUpdatedAtColumn()] = $this->fromDateTime($time);
         }
 
-        $query->update($columns);
+        if ($query->update($columns)) {
+            $this->syncOriginal();
+        }
     }
 
     /**

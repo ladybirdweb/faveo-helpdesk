@@ -10,48 +10,43 @@
 
 namespace SebastianBergmann\CodeCoverage\Report\Xml;
 
-class Unit
+final class Unit
 {
     /**
      * @var \DOMElement
      */
     private $contextNode;
 
-    public function __construct(\DOMElement $context, $name)
+    public function __construct(\DOMElement $context, string $name)
     {
         $this->contextNode = $context;
 
         $this->setName($name);
     }
 
-    private function setName($name)
-    {
-        $this->contextNode->setAttribute('name', $name);
-    }
-
-    public function setLines($start, $executable, $executed)
+    public function setLines(int $start, int $executable, int $executed): void
     {
         $this->contextNode->setAttribute('start', $start);
         $this->contextNode->setAttribute('executable', $executable);
         $this->contextNode->setAttribute('executed', $executed);
     }
 
-    public function setCrap($crap)
+    public function setCrap(float $crap): void
     {
         $this->contextNode->setAttribute('crap', $crap);
     }
 
-    public function setPackage($full, $package, $sub, $category)
+    public function setPackage(string $full, string $package, string $sub, string $category): void
     {
         $node = $this->contextNode->getElementsByTagNameNS(
-            'http://schema.phpunit.de/coverage/1.0',
+            'https://schema.phpunit.de/coverage/1.0',
             'package'
         )->item(0);
 
         if (!$node) {
             $node = $this->contextNode->appendChild(
                 $this->contextNode->ownerDocument->createElementNS(
-                    'http://schema.phpunit.de/coverage/1.0',
+                    'https://schema.phpunit.de/coverage/1.0',
                     'package'
                 )
             );
@@ -63,17 +58,17 @@ class Unit
         $node->setAttribute('category', $category);
     }
 
-    public function setNamespace($namespace)
+    public function setNamespace(string $namespace): void
     {
         $node = $this->contextNode->getElementsByTagNameNS(
-            'http://schema.phpunit.de/coverage/1.0',
+            'https://schema.phpunit.de/coverage/1.0',
             'namespace'
         )->item(0);
 
         if (!$node) {
             $node = $this->contextNode->appendChild(
                 $this->contextNode->ownerDocument->createElementNS(
-                    'http://schema.phpunit.de/coverage/1.0',
+                    'https://schema.phpunit.de/coverage/1.0',
                     'namespace'
                 )
             );
@@ -82,15 +77,20 @@ class Unit
         $node->setAttribute('name', $namespace);
     }
 
-    public function addMethod($name)
+    public function addMethod(string $name): Method
     {
         $node = $this->contextNode->appendChild(
             $this->contextNode->ownerDocument->createElementNS(
-                'http://schema.phpunit.de/coverage/1.0',
+                'https://schema.phpunit.de/coverage/1.0',
                 'method'
             )
         );
 
         return new Method($node, $name);
+    }
+
+    private function setName(string $name): void
+    {
+        $this->contextNode->setAttribute('name', $name);
     }
 }
