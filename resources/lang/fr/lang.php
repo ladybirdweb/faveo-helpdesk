@@ -148,7 +148,6 @@ return [
      */
     'ban_lists'                         => 'Ban lists',
     'ban_email'                         => 'Ban email',
-    'banlists'                          => 'Ban lists',
     'ban_status'                        => 'Ban status',
     'list_of_banned_emails'             => 'List of banned emails',
     'edit_banned_email'                 => 'Edit banned email',
@@ -1124,6 +1123,7 @@ return [
     'copyright'           => 'Copyright',
     'all_rights_reserved' => 'Tous droits réservés',
     'powered_by'          => 'Powered by',
+    'version'             => 'Version',
     /*
       |------------------------------------------------
       |Guest-User Page

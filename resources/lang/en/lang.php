@@ -170,7 +170,6 @@ return [
      */
     'ban_lists'                        => 'Ban lists',
     'ban_email'                        => 'Ban email',
-    'banlists'                         => 'Ban lists',
     'ban_status'                       => 'Ban status',
     'list_of_banned_emails'            => 'List of banned emails',
     'edit_banned_email'                => 'Edit banned email',
@@ -883,6 +882,7 @@ return [
     'group_deleted_successfully'                                                             => 'Group deleted successfully',
     'group_cannot_delete'                                                                    => 'Group cannot delete',
     'failed_to_load_the_page'                                                                => 'Failed to load the page',
+    'list_of_groups'                                                                         => 'List of groups',
     /*
       |--------------------------------------
       |  SMTP Page
@@ -1161,6 +1161,7 @@ return [
     'copyright'           => 'Copyright',
     'all_rights_reserved' => 'All rights reserved',
     'powered_by'          => 'Powered by',
+    'version'             => 'Version',
     /*
       |------------------------------------------------
       |Guest-User Page
