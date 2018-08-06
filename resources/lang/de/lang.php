@@ -28,7 +28,7 @@ return [
       |--------------------------------------
      */
     'Login_to_start_your_session' => 'Einloggen um Ihre Sitzung zu starten',
-    'login'                       => 'Login',
+    'login'                       => 'Anmeldung',
     'remember'                    => 'Erinnere dich an mich',
     'signmein'                    => 'Melde mich an',
     'iforgot'                     => 'Ich habe mein Passwort vergessen',
@@ -36,7 +36,6 @@ return [
     'password'                    => 'Passwort',
     'woops'                       => 'Whoops!',
     'theirisproblem'              => 'Es gab einige Probleme mit Ihrer Eingabe.',
-    'login'                       => 'Anmeldung',
     'e-mail'                      => 'E-Mail',
     'reg_new_member'              => 'Registrieren für eine neue Mitgliedschaft',
     /*
@@ -923,7 +922,6 @@ return [
      *translation required from here
      *****************************************************/
     'edit_profile'                                                                     => 'Profil bearbeiten',
-    'you_are_here'                                                                     => 'Du bist hier',
     'Send'                                                                             => 'senden',
     'no_article'                                                                       => 'Kein Artikel',
     'profile_settings'                                                                 => 'Profileinstellungen',
@@ -1154,7 +1152,6 @@ return [
      'banned-users'        => 'Gesperrte Benutzer',
      'inactive-users'      => 'Inaktiver Benutzer',
      'all-users'           => 'Alle Nutzer',
-     'search'              => 'Suche...',
      //update 21-12-2016
      'selected-user-is-already-the-owner' => 'Der ausgewählte Benutzer ist bereits Inhaber dieses Tickets.',
      //updated 15-5-2017

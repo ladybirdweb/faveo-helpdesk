@@ -1356,7 +1356,6 @@ return [
     'post_comment'                                                                     => 'Pubblica un commento',
     'plugin'                                                                           => 'Plugin',
     'edit_profile'                                                                     => 'Modifica profilo',
-    'you_are_here'                                                                     => 'Sei qui',
     'Send'                                                                             => 'INVIA',
     'no_article'                                                                       => 'Nessun articolo',
     'profile_settings'                                                                 => 'Impostazioni profilo',
@@ -1586,7 +1585,6 @@ return [
      'banned-users'   => 'Utenti bannati',
      'inactive-users' => 'Utenti inattivi',
      'all-users'      => 'Tutti gli utenti',
-     'search'         => 'Cerca...',
      //update 21-12-2016
      'selected-user-is-already-the-owner' => 'L\'utente selezionato è già il proprietario del ticket.',
 ];
