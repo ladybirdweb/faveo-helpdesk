@@ -172,7 +172,7 @@ return [
       | Settings Pages [English(en)]
       |----------------------------------------------------------------------------------------
       |
-      | Die folgenden Sprachzeilen werden in allen Problemen mit der Einstellung verwendet, 
+      | Die folgenden Sprachzeilen werden in allen Problemen mit der Einstellung verwendet,
       | verwendet um einige Wörter ins Deutsche zu übersetzen. Es steht Ihnen frei, Sie so zu ändern
       | dass Sie IHre Ansichten an Ihre Anforderungen anpassen können.
       |
@@ -703,7 +703,7 @@ return [
     'please_select_an_organization' => 'Bitte wählen Sie eine Organisation',
     'please_select_an_user'         => 'Bitte wählen Sie einen Benutzer aus',
     'organization_profile'          => 'Organisationsprofil',
-    'organization-s_head'           => "Leiter der Organisation",
+    'organization-s_head'           => 'Leiter der Organisation',
     'select_department_manager'     => 'Wählen Sie den Abteilungsmanager',
     'users_of'                      => 'Benutzer von',
     /*
@@ -934,7 +934,7 @@ return [
     'password_updated_sucessfully'                                                     => 'Passwort wurde erfolgreich aktualisiert',
     'password_was_not_updated_incorrect_old_password'                                  => 'Das Passwort wurde nicht aktualisiert. Falsches altes Passwort',
     'there_is_no_such_ticket_number'                                                   => 'Es gibt keine solche Ticketnummer',
-    "email_didn't_match_with_ticket_number"                                            => "Die E-Mail-Adresse stimmt nicht mit der Ticketnummer überein",
+    "email_didn't_match_with_ticket_number"                                            => 'Die E-Mail-Adresse stimmt nicht mit der Ticketnummer überein',
     'we_have_sent_you_a_link_by_email_please_click_on_that_link_to_view_ticket'        => 'Wir haben Ihnen einen Link per E-Mail gesendet. Bitte klicken Sie auf diesen Link, um das Ticket anzuzeigen',
     'no_records_on_publish_time'                                                       => 'Keine Einträge zur Veröffentlichungszeit',
     'your_details_send_to_system'                                                      => 'Ihre Daten werden an das System gesendet',
