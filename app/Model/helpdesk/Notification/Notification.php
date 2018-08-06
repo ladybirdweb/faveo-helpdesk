@@ -59,7 +59,7 @@ class Notification extends BaseModel
     public function delete()
     {
         $this->deleteUserNotification();
-       // $this->dummyDelete();
+        // $this->dummyDelete();
         parent::delete();
     }
 }

@@ -98,13 +98,13 @@ class GuestController extends Controller
             if (Input::file('profile_pic')) {
                 // fetching picture name
                 $name = Input::file('profile_pic')->getClientOriginalName();
-            // fetching upload destination path
+                // fetching upload destination path
                 $destinationPath = 'uploads/profilepic';
-            // adding a random value to profile picture filename
-                $fileName = rand(0000, 9999).'.'.str_replace(" ", "_", $name);
-            // moving the picture to a destination folder
+                // adding a random value to profile picture filename
+                $fileName = rand(0000, 9999).'.'.str_replace(' ', '_', $name);
+                // moving the picture to a destination folder
                 Input::file('profile_pic')->move($destinationPath, $fileName);
-            // saving filename to database
+                // saving filename to database
                 $user->profile_pic = $fileName;
             }
             if ($request->get('mobile')) {
@@ -237,6 +237,7 @@ class GuestController extends Controller
         //echo $user->password;
         if (Hash::check($request->input('old_password'), $user->getAuthPassword())) {
             $user->password = Hash::make($request->input('new_password'));
+
             try {
                 $user->save();
 

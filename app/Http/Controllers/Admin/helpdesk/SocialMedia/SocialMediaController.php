@@ -32,6 +32,7 @@ class SocialMediaController extends Controller
             'client_secret' => 'required',
             'redirect'      => 'required|url',
         ]);
+
         try {
             $requests = $request->except('_token');
             $this->insertProvider($provider, $requests);

@@ -47,7 +47,7 @@ class TokenAuthController extends Controller
         $password = $request->input('password');
         $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
 
-//$credentials = $request->only('email', 'password');
+        //$credentials = $request->only('email', 'password');
 
         try {
             if (!$token = JWTAuth::attempt([$field => $usernameinput, 'password' => $password, 'active'=>1])) {
@@ -62,7 +62,7 @@ class TokenAuthController extends Controller
         }
 
         $user_id = \Auth::user()->id;
-// if no errors are encountered we can return a JWT
+        // if no errors are encountered we can return a JWT
         return response()->json(compact('token', 'user_id'));
     }
 
@@ -89,7 +89,7 @@ class TokenAuthController extends Controller
 
             return response()->json(compact('error'));
         }
-//dd($user);
+        //dd($user);
         return response()->json(compact('user'));
     }
 

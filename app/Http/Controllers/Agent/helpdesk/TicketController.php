@@ -37,10 +37,11 @@ use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\User;
 use Auth;
+use Crypt;
 use DB;
 use Exception;
-use GeoIP;
 // classes
+use GeoIP;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\support\Collection;
@@ -49,7 +50,6 @@ use Lang;
 use Mail;
 use PDF;
 use UTC;
-use Crypt;
 
 /**
  * TicketController.
@@ -398,6 +398,7 @@ class TicketController extends Controller
     public function reply(Ticket_Thread $thread, Request $request, Ticket_attachments $ta, $mail = true, $system_reply = true, $user_id = '')
     {
         \Event::fire('reply.request', [$request]);
+
         try {
             if (is_array($request->file('attachment'))) {
             } else {
@@ -541,9 +542,9 @@ class TicketController extends Controller
                         ],
                         $template_variables = [
                             'ticket_number' => $ticket_number,
-                            'user'          => $username, 
-                            'agent_sign' => $agentsign,
-                            'system_link'=>$link
+                            'user'          => $username,
+                            'agent_sign'    => $agentsign,
+                            'system_link'   => $link,
                         ]
                 );
             }
@@ -810,6 +811,7 @@ class TicketController extends Controller
                 }
                 // Event fire
                 \Event::fire(new \App\Events\ReadMailEvent($user_id, $password));
+
                 try {
                     if ($auto_response == 0) {
                         $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user->first_name, 'email' => $emailadd], $message = ['subject' => null, 'scenario' => 'registration-notification'], $template_variables = ['user' => $user->first_name, 'email_address' => $emailadd, 'user_password' => $password]);
@@ -850,11 +852,11 @@ class TicketController extends Controller
                         if ($auto_response == 0) {
                             $encoded_ticketid = Crypt::encrypt($ticketdata->id);
                             $link = url('check_ticket/'.$encoded_ticketid);
-                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket-by-agent', 'body' => $body], 
+                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket-by-agent', 'body' => $body],
                                     $template_variables = [
-                                        'agent_sign' => Auth::user()->agent_sign, 
+                                        'agent_sign'    => Auth::user()->agent_sign,
                                         'ticket_number' => $ticket_number2,
-                                        'system_link'=>$link,
+                                        'system_link'   => $link,
                                     ]);
                         }
                     } catch (\Exception $e) {
@@ -862,13 +864,14 @@ class TicketController extends Controller
                     }
                 } else {
                     $body2 = null;
+
                     try {
                         if ($auto_response == 0) {
-                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket'], 
-                                    $template_variables = ['user' => $username, 
-                                        'ticket_number' => $ticket_number2, 
-                                        'department_sign' => '',
-                                        'system_link'=>$link,
+                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket'],
+                                    $template_variables = ['user' => $username,
+                                        'ticket_number'           => $ticket_number2,
+                                        'department_sign'         => '',
+                                        'system_link'             => $link,
                                         ]);
                         }
                     } catch (\Exception $e) {
@@ -1229,10 +1232,10 @@ class TicketController extends Controller
         } else {
             $ticket_status = $ticket->where('id', '=', $id)->first();
         }
-            // checking for unautherised access attempt on other than owner ticket id
-            if ($ticket_status == null) {
-                return redirect()->route('unauth');
-            }
+        // checking for unautherised access attempt on other than owner ticket id
+        if ($ticket_status == null) {
+            return redirect()->route('unauth');
+        }
         $ticket_status->status = 3;
         $ticket_status->closed = 1;
         $ticket_status->closed_at = date('Y-m-d H:i:s');
@@ -1260,6 +1263,7 @@ class TicketController extends Controller
         } else {
             $from_email = $sending_emails->id;
         }
+
         try {
             $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket_status->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
         } catch (\Exception $e) {
@@ -1496,6 +1500,7 @@ class TicketController extends Controller
                 $agent_email = $user_detail->email;
                 $ticket_link = route('ticket.thread', $id);
                 $master = Auth::user()->first_name.' '.Auth::user()->last_name;
+
                 try {
                     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket->dept_id), $to = ['name' => $agent, 'email' => $agent_email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'assign-ticket'], $template_variables = ['ticket_agent_name' => $agent, 'ticket_number' => $ticket_number, 'ticket_assigner' => $master, 'ticket_link' => $ticket_link]);
                 } catch (\Exception $e) {
@@ -1629,6 +1634,7 @@ class TicketController extends Controller
                     $create_user->password = Hash::make($password);
                     $create_user->save();
                     $user_id = $create_user->id;
+
                     try {
                         $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => 'password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
                     } catch (\Exception $e) {
@@ -2316,6 +2322,7 @@ class TicketController extends Controller
             $user->role = 'user';
             if ($user->save()) {
                 $user_id = $user->id;
+
                 try {
                     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => 'Password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
                 } catch (\Exception $e) {

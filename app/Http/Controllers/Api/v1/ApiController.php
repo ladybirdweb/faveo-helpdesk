@@ -61,6 +61,7 @@ class ApiController extends Controller
 
         $this->middleware('jwt.auth');
         $this->middleware('api', ['except' => 'GenerateApiKey']);
+
         try {
             $user = \JWTAuth::parseToken()->authenticate();
             $this->user = $user;
@@ -1092,7 +1093,7 @@ class ApiController extends Controller
             $result = $this->user->join('tickets', function ($join) use ($id) {
                 $join->on('users.id', '=', 'tickets.assigned_to')
                         ->where('status', '=', 1);
-                        //->where('user_id', '=', $id);
+                //->where('user_id', '=', $id);
             })
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
@@ -1288,6 +1289,7 @@ class ApiController extends Controller
     public function collaboratorSearch()
     {
         $this->validate($this->request, ['term' => 'required']);
+
         try {
             $emails = $this->ticket->autosearch();
             //return $emails;

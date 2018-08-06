@@ -28,7 +28,7 @@ Route::group(['middleware' => ['web']], function () {
       | Here is defining entire routes for the Admin Panel
       |
      */
-     Route::get('password/email/{one?}/{two?}/{three?}/{four?}/{five?}', ['as' => 'password.email', 'uses' => 'Auth\PasswordController@getEmail']);
+    Route::get('password/email/{one?}/{two?}/{three?}/{four?}/{five?}', ['as' => 'password.email', 'uses' => 'Auth\PasswordController@getEmail']);
     Breadcrumbs::register('password.email', function ($breadcrumbs) {
         $breadcrumbs->parent('/');
         $breadcrumbs->push('Login', url('auth/login'));
@@ -36,15 +36,15 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     // register page
-        Route::get('auth/register/{one?}/{two?}/{three?}/{four?}/{five?}', ['as' => 'auth.register', 'uses' => 'Auth\AuthController@getRegister']);
+    Route::get('auth/register/{one?}/{two?}/{three?}/{four?}/{five?}', ['as' => 'auth.register', 'uses' => 'Auth\AuthController@getRegister']);
     Breadcrumbs::register('auth.register', function ($breadcrumbs) {
         $breadcrumbs->parent('/');
         $breadcrumbs->push('Login', url('auth/login'));
         $breadcrumbs->push('Create Account', url('auth/register'));
     });
 
-  // Auth login
-        Route::get('auth/login/{one?}/{two?}/{three?}/{four?}/{five?}', ['as' => 'auth.login', 'uses' => 'Auth\AuthController@getLogin']);
+    // Auth login
+    Route::get('auth/login/{one?}/{two?}/{three?}/{four?}/{five?}', ['as' => 'auth.login', 'uses' => 'Auth\AuthController@getLogin']);
     Breadcrumbs::register('auth.login', function ($breadcrumbs) {
         $breadcrumbs->parent('/');
         $breadcrumbs->push('Create Account', url('auth/register'));
@@ -83,10 +83,10 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::resource('teams', 'Admin\helpdesk\TeamController'); // in teams module, for CRUD
         Route::get('/teams/show/{id}', ['as' => 'teams.show', 'uses' => 'Admin\helpdesk\TeamController@show']); /*  Get Team View */
-         Breadcrumbs::register('teams.show', function ($breadcrumbs) {
-             $breadcrumbs->parent('teams.index');
-             $breadcrumbs->push(Lang::get('lang.show'), url('teams/{teams}/show'));
-         });
+        Breadcrumbs::register('teams.show', function ($breadcrumbs) {
+            $breadcrumbs->parent('teams.index');
+            $breadcrumbs->push(Lang::get('lang.show'), url('teams/{teams}/show'));
+        });
         Route::get('getshow/{id}', ['as' => 'teams.getshow.list', 'uses' => 'Admin\helpdesk\TeamController@getshow']);
         Route::resource('agents', 'Admin\helpdesk\AgentController'); // in agents module, for CRUD
 
@@ -428,7 +428,7 @@ Route::group(['middleware' => ['web']], function () {
         // route to get the data on change
         Route::post('help-topic-report/{date1}/{date2}/{id}', ['as' => 'report.helptopic', 'uses' => 'Agent\helpdesk\ReportController@chartdataHelptopic']); /* To show dashboard pages */
         Route::post('help-topic-pdf', ['as' => 'help.topic.pdf', 'uses' => 'Agent\helpdesk\ReportController@helptopicPdf']);
-         // Route to get details of agents
+        // Route to get details of agents
         Route::post('get-agents', ['as' => 'get-agents', 'uses' => 'Agent\helpdesk\UserController@getAgentDetails']);
 
         /*
@@ -446,12 +446,12 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('get-tag', ['as'=>'tag.get', 'uses'=>'Agent\helpdesk\Filter\TagController@getTag']);
     });
 
-        /*
-         * Followup tickets
-         */
-        Route::get('/ticket/followup', ['as' => 'followup.ticket', 'uses' => 'Agent\helpdesk\TicketController@followupTicketList']); //  Get Closed Ticket /
+    /*
+     * Followup tickets
+     */
+    Route::get('/ticket/followup', ['as' => 'followup.ticket', 'uses' => 'Agent\helpdesk\TicketController@followupTicketList']); //  Get Closed Ticket /
 
-        Route::get('/ticket/get-followup', ['as' => 'get.followup.ticket', 'uses' => 'Agent\helpdesk\TicketController@getFollowup']);  // Get tickets in datatable /
+    Route::get('/ticket/get-followup', ['as' => 'get.followup.ticket', 'uses' => 'Agent\helpdesk\TicketController@getFollowup']);  // Get tickets in datatable /
         Route::get('/ticket/close/get-approval/{id}', ['as' => 'get.close.approval.ticket', 'uses' => 'Agent\helpdesk\TicketController@getCloseapproval']);  // Get tickets in datatable /
     /*
       |------------------------------------------------------------------
@@ -494,11 +494,11 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('check_ticket/{id}', ['as' => 'check_ticket', 'uses' => 'Client\helpdesk\GuestController@get_ticket_email']); //detail ticket information
 
-// show ticket via have a ticket
+    // show ticket via have a ticket
     Route::get('show-ticket/{id}/{code}', ['as' => 'show.ticket', 'uses' => 'Client\helpdesk\UnAuthController@showTicketCode']); //detail ticket information
 
 //testing ckeditor
-//===================================================================================
+    //===================================================================================
     Route::group(['middleware' => 'role.user', 'middleware' => 'auth'], function () {
         Route::get('client-profile', ['as' => 'client.profile', 'uses' => 'Client\helpdesk\GuestController@getProfile']); /*  User profile get  */
 
@@ -511,7 +511,7 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::post('verify-client-number2', ['as' => 'post-client-verify-number', 'uses' => 'Client\helpdesk\GuestController@verifyOTP']);
     });
-//====================================================================================
+    //====================================================================================
     Route::get('checkticket', 'Client\helpdesk\ClientTicketController@getCheckTicket'); /* Check your Ticket */
     Route::get('myticket', ['as' => 'ticket', 'uses' => 'Client\helpdesk\GuestController@getMyticket']); /* Get my tickets */
     Route::get('myticket/{id}', ['as' => 'ticket', 'uses' => 'Client\helpdesk\GuestController@thread']); /* Get my tickets */
@@ -816,8 +816,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('ticket/priority/edit1', ['as' => 'priority.edit1', 'uses' => 'Admin\helpdesk\PriorityController@priorityEdit1']);
     Route::get('ticket/priority/{ticket_priority}/edit', ['as' => 'priority.edit', 'uses' => 'Admin\helpdesk\PriorityController@priorityEdit']);
     Route::get('ticket/priority/{ticket_priority}/destroy', ['as' => 'priority.destroy', 'uses' => 'Admin\helpdesk\PriorityController@destroy']);
- // user---arindam
- Route::post('rolechangeadmin/{id}', ['as' => 'user.post.rolechangeadmin',  'uses' =>'Agent\helpdesk\UserController@changeRoleAdmin']);
+    // user---arindam
+    Route::post('rolechangeadmin/{id}', ['as' => 'user.post.rolechangeadmin',  'uses' =>'Agent\helpdesk\UserController@changeRoleAdmin']);
     Route::post('rolechangeagent/{id}', ['as' => 'user.post.rolechangeagent',  'uses' =>'Agent\helpdesk\UserController@changeRoleAgent']);
     Route::post('rolechangeuser/{id}', ['as' => 'user.post.rolechangeuser',  'uses' =>'Agent\helpdesk\UserController@changeRoleUser']);
     Route::get('password', ['as' => 'user.changepassword',  'uses' =>'Agent\helpdesk\UserController@randomPassword']);
@@ -825,15 +825,15 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('delete/{id}', ['as' => 'user.post.delete',  'uses' =>'Agent\helpdesk\UserController@deleteAgent']);
 
     // deleted user list
-         Route::get('deleted/user', ['as' => 'user.deleted', 'uses' => 'Agent\helpdesk\UserController@deletedUser']);
+    Route::get('deleted/user', ['as' => 'user.deleted', 'uses' => 'Agent\helpdesk\UserController@deletedUser']);
 
     Route::post('restore/{id}', ['as' => 'user.restore', 'uses' => 'Agent\helpdesk\UserController@restoreUser']);
 
-   //due today ticket
-   Route::get('duetoday', ['as' => 'ticket.duetoday',  'uses' =>'Agent\helpdesk\TicketController@dueTodayTicketlist']);
+    //due today ticket
+    Route::get('duetoday', ['as' => 'ticket.duetoday',  'uses' =>'Agent\helpdesk\TicketController@dueTodayTicketlist']);
 
-  // Route::post('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']);
- Route::get('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']); /*  Get Open Ticket */
+    // Route::post('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']);
+    Route::get('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']); /*  Get Open Ticket */
         // Breadcrumbs::register('open.ticket', function ($breadcrumbs) {
         //     $breadcrumbs->parent('dashboard');
         //     $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.open'), route('open.ticket'));
