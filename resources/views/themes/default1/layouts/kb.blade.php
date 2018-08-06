@@ -184,7 +184,7 @@ if ($company != null) {
                         </div>
                         <footer class="main-footer">
                             <div class="pull-right hidden-xs">
-                                <b>Version</b> 0.1
+                                <b>{!! Lang::get('lang.version') !!}</b> 0.1
                             </div>
             <strong>Copyright &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}">{!! $company->company_name !!}</a>.</strong> All rights reserved. Powered by <a href="http://www.faveohelpdesk.com/">Faveo</a>
                         </footer>

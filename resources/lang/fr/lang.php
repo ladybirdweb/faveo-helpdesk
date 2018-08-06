@@ -44,7 +44,6 @@ return [
     'password'                              => 'Mot de passe',
     'woops'                                 => 'Oups!',
     'theirisproblem'                        => 'Il y a eu un problème avec ce que vous avez saisi',
-    'login'                                 => 'Connexion',
     'e-mail'                                => 'E-mail',
     'reg_new_member'                        => 'Inscrivez-vous',
     'this_account_is_currently_inactive'    => 'Ce compte est actuellement inactif!',
@@ -149,7 +148,6 @@ return [
      */
     'ban_lists'                         => 'Ban lists',
     'ban_email'                         => 'Ban email',
-    'banlists'                          => 'Ban lists',
     'ban_status'                        => 'Ban status',
     'list_of_banned_emails'             => 'List of banned emails',
     'edit_banned_email'                 => 'Edit banned email',
@@ -790,7 +788,6 @@ return [
     'the_associated_helptopic_has_been_deactivated'    => 'La branche de support associée a été désactivée',
     'department_deleted_sucessfully'                   => 'Département supprimé avec succès',
     'department_can_not_delete'                        => 'Le département ne peut pas être supprimé',
-    'select_a_department'                              => 'Sélectionner un département',
     'make-default-department'                          => 'Marquer comme département par défaut du système',
     /*
       |--------------------------------------
@@ -1126,6 +1123,7 @@ return [
     'copyright'           => 'Copyright',
     'all_rights_reserved' => 'Tous droits réservés',
     'powered_by'          => 'Powered by',
+    'version'             => 'Version',
     /*
       |------------------------------------------------
       |Guest-User Page
@@ -1322,7 +1320,6 @@ return [
     'post_comment'                                                                     => 'Poster commentaire',
     'plugin'                                                                           => 'Plugin',
     'edit_profile'                                                                     => 'Modifier profil',
-    'you_are_here'                                                                     => 'Vous êtes ici',
     'Send'                                                                             => 'VALIDER',
     'no_article'                                                                       => 'Pas d\'article',
     'profile_settings'                                                                 => 'Paramètres du profil',
@@ -1562,7 +1559,6 @@ return [
      'banned-users'        => 'Utilisateurs bannis',
      'inactive-users'      => 'Utilisateurs inactifs',
      'all-users'           => 'Tous les utilisateurs',
-     'search'              => 'Rechercher...',
      //update 21-12-2016
      'selected-user-is-already-the-owner' => 'L\'utilisateur sélectionné est déjà le propriétaire du ticket.',
      //updated 15-5-2017

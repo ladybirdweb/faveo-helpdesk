@@ -366,7 +366,7 @@
             </div><!-- /.content-wrapper -->
             <footer class="main-footer">
                 <div class="pull-right hidden-xs">
-                    <b>Version</b> 0.1
+                    <b>{!! Lang::get('lang.version') !!}</b> 0.1
                 </div>
                 <strong>Copyright &copy; 2014-2015 <a href="http://www.ladybirdweb.com">Ladybird Web Solution</a>.</strong> All rights reserved.
             </footer>

@@ -51,7 +51,6 @@ return [
      'password_confirmation'                 => 'Password confirmation',
     'woops'                                  => 'Whoops!',
     'theirisproblem'                         => 'There were some problems with your input.',
-    'login'                                  => 'Login',
     'e-mail'                                 => 'Email',
     'reg_new_member'                         => 'Register a new membership',
     'this_account_is_currently_inactive'     => 'This account is currently inactive!',
@@ -171,7 +170,6 @@ return [
      */
     'ban_lists'                        => 'Ban lists',
     'ban_email'                        => 'Ban email',
-    'banlists'                         => 'Ban lists',
     'ban_status'                       => 'Ban status',
     'list_of_banned_emails'            => 'List of banned emails',
     'edit_banned_email'                => 'Edit banned email',
@@ -757,7 +755,6 @@ return [
     'edit'               => 'Edit',
     'departments'        => 'Departments',
     'groups'             => 'Groups',
-    'select_a_time_zone' => 'Select a time zone',
     'time_zones'         => 'Time zones',
     /*
       |--------------------------------------
@@ -828,7 +825,6 @@ return [
     'the_associated_helptopic_has_been_deactivated'    => 'The associated helptopic has been deactivated',
     'department_deleted_sucessfully'                   => 'Department deleted successfully',
     'department_can_not_delete'                        => 'Department can not be deleted',
-    'select_a_department'                              => 'Select a department',
     'make-default-department'                          => 'Make system\'s default department',
     /*
       |--------------------------------------
@@ -886,6 +882,7 @@ return [
     'group_deleted_successfully'                                                             => 'Group deleted successfully',
     'group_cannot_delete'                                                                    => 'Group cannot delete',
     'failed_to_load_the_page'                                                                => 'Failed to load the page',
+    'list_of_groups'                                                                         => 'List of groups',
     /*
       |--------------------------------------
       |  SMTP Page
@@ -1164,6 +1161,7 @@ return [
     'copyright'           => 'Copyright',
     'all_rights_reserved' => 'All rights reserved',
     'powered_by'          => 'Powered by',
+    'version'             => 'Version',
     /*
       |------------------------------------------------
       |Guest-User Page
@@ -1360,7 +1358,6 @@ return [
     'post_comment'                                                                     => 'Post comment',
     'plugin'                                                                           => 'Plugin',
     'edit_profile'                                                                     => 'Edit profile',
-    'you_are_here'                                                                     => 'You are here',
     'Send'                                                                             => 'SEND',
     'no_article'                                                                       => 'No article',
     'profile_settings'                                                                 => 'Profile settings',
@@ -1591,7 +1588,6 @@ return [
      'banned-users'        => 'Banned users',
      'inactive-users'      => 'Inactive users',
      'all-users'           => 'All users',
-     'search'              => 'Search...',
      //update 21-12-2016
      'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
      //updated 15-5-2017

@@ -345,7 +345,7 @@ class TicketController extends Controller
                 $re = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $eventthread->title, 'scenario' => 'create-ticket-by-agent', 'body' => $thread->body], $template_variables = ['agent_sign' => Auth::user()->agent_sign, 'ticket_number' => $tickets->number]);
                 //dd($re);
             } catch (\Exception $e) {
-                throw new \Exception($e->getMessage());
+                //throw new \Exception($e->getMessage());
             }
 
             $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket_id)->get();
@@ -426,11 +426,14 @@ class TicketController extends Controller
             $threads = $thread->where('ticket_id', '=', $ticket_id)->first();
             $threads->title = Input::get('subject');
             $threads->save();
+        } catch (\Exception $ex) {
+            $result = $ex->getMessage();
 
-            return $threads;
-        } catch (\Exception $e) {
-            return $e->getMessage();
+            return response()->json(compact('result'), 500);
         }
+        $result = ['success' => 'Edited successfully'];
+
+        return response()->json(compact('result'));
     }
 
     /**
