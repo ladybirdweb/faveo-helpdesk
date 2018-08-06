@@ -160,10 +160,10 @@ return [
       |  Diagnostics Page
       |--------------------------------------
      */
-    'diagnostics' => 'Diagnose',
+    'diagnostics' => 'Fehlerdiagnose',
     'from'        => 'Von',
-    'to'          => 'zu',
-    'subject'     => 'Thema',
+    'to'          => 'An',
+    'subject'     => 'Betreff',
     'message'     => 'Nachricht',
     'send'        => 'Senden',
     /*
@@ -201,8 +201,8 @@ return [
     'system'                => 'System',
     'online'                => 'Online',
     'offline'               => 'Offline',
-    'name/title'            => 'Name/Title',
-    'pagesize'              => 'Page Size',
+    'name/title'            => 'Name/Titel',
+    'pagesize'              => 'Seitengröße',
     'url'                   => 'URL',
     'default_department'    => 'Standardabteilung',
     'loglevel'              => 'Protokollebene',
@@ -409,10 +409,10 @@ return [
       |  SLA plan Index Page
       |--------------------------------------
      */
-    'sla_plans'    => 'SLA Plans',
-    'create_SLA'   => 'Create a SLA',
-    'grace_period' => 'Grace Period',
-    'added_date'   => 'Added Date',
+    'sla_plans'    => 'SLA Pläne',
+    'create_SLA'   => 'Erstelle ein SLA',
+    'grace_period' => 'Schonfrist',
+    'added_date'   => 'Erstellungsdatum',
     /*
       |--------------------------------------
       |  SLA plan Create Page
@@ -448,31 +448,30 @@ return [
       |--------------------------------------
      */
     'title'                                 => 'Title',
-    'instruction'                           => 'Instruction',
-    'label'                                 => 'Label',
-    'visibility'                            => 'Visibility',
+    'instruction'                           => 'Anweisung',
+    'label'                                 => 'Beschriftung',
+    'visibility'                            => 'Sichtbarkeit',
     'variable'                              => 'Variable',
-    'create_form'                           => 'Create Form',
-    'forms'                                 => 'Forms',
-    'form_name'                             => 'Form Name',
-    'view_this_form'                        => 'View This Form',
-    'delete_from'                           => 'Delete Form',
-    'are_you_sure_you_want_to_delete'       => 'Are you sure you want to Delete',
-    'close'                                 => 'Close',
-    'instructions'                          => 'Instructions',
-    'instructions_on_creating_form'         => "Select field type you want to add to the form below and click on 'Type' dropdown. Don't forget to set field options if type is select,checkbox or radio..Separate each option by a coma. After you finish creating the form, you can save the form by clicking Save Form button",
-    'form_properties'                       => 'Form Properties',
-    'adding_fields'                         => 'Adding Fields',
-    'click_add_fields_button_to_add_fields' => "Click <b>'Add Fields'</b> button to add Fields",
-    'add_fields'                            => 'Add Fields',
-    'save_form'                             => 'Save Form',
-    'label'                                 => 'Label',
+    'create_form'                           => 'Formular erstellen',
+    'forms'                                 => 'Formulare',
+    'form_name'                             => 'Formularname',
+    'view_this_form'                        => 'Dieses Formular anzeigen',
+    'delete_from'                           => 'Formular löschen',
+    'are_you_sure_you_want_to_delete'       => 'Sind Sie sicher, dass Sie löschen möchten?',
+    'close'                                 => 'Schliessen',
+    'instructions'                          => 'Anweisungen',
+    'instructions_on_creating_form'         => 'Wählen Sie den Feldtyp aus, den Sie dem untenstehenden Formular hinzufügen möchten, und klicken Sie auf die Dropdown-Liste "Typ". Vergessen Sie nicht, Feldoptionen zu setzen, wenn Typ "Checkbox" oder "Radio" ausgewählt ist... Trennen Sie jede Option durch ein Koma. Nachdem Sie die Erstellung des Formulars abgeschlossen haben, können Sie das Formular speichern, indem Sie auf die Schaltfläche Formular speichern klicken.',
+    'form_properties'                       => 'Formulareigenschaften',
+    'adding_fields'                         => 'Hinzufügen von Feldern',
+    'click_add_fields_button_to_add_fields' => "Klicke <b>'Felder hinzufügen'</b> Schaltfläche zum Hinzufügen von Feldern",
+    'add_fields'                            => 'Felder hinzufügen',
+    'save_form'                             => 'Formular speichern',
     'name'                                  => 'Name',
-    'type'                                  => 'Type',
-    'values(selected_fields)'               => 'Values(Selected Fields)',
-    'required'                              => 'Required',
-    'Action'                                => 'Action',
-    'remove'                                => 'Remove',
+    'type'                                  => 'Typ',
+    'values(selected_fields)'               => 'Werte(Ausgewählte Felder)',
+    'required'                              => 'Erforderlich',
+    'Action'                                => 'Aktion',
+    'remove'                                => 'E ntfernen',
     /*
       |----------------------------------------------------------------------------------------
       | Theme Pages [English(en)]
@@ -811,7 +810,7 @@ return [
       |-----------------------------------------------
      */
     'copyright'           => 'Copyright',
-    'all_rights_reserved' => 'All right Reserved',
+    'all_rights_reserved' => 'Alle Rechte vorbehalten',
     'powered_by'          => 'Powered by',
     /*
       |------------------------------------------------
@@ -957,11 +956,11 @@ return [
     'webhooks'                         => 'Webhooks',
     'enter_url_to_send_ticket_details' => 'Geben Sie die URL ein, um die Ticketdetails zu senden',
     'api'                              => 'API',
-    'api_key'                          => 'API-Schlüssel',
-    'api_key_mandatory'                => 'API-Schlüssel obligatorisch',
-    'api_configurations'               => 'API-Konfigurationen',
-    'generate_key'                     => 'Schlüssel generieren',
-    'api_settings'                     => 'API-Einstellungen',
+    'api_key'                          => 'API Schlüssel',
+    'api_key_mandatory'                => 'API key mandatory',
+    'api_configurations'               => 'API configurations',
+    'generate_key'                     => 'Generiere Schlüssel',
+    'api_settings'                     => 'API Einstellungen',
     /*
      * -----------------------------------------------------------------------------
      * Error log and debugging settings
