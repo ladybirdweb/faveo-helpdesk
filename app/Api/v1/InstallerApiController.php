@@ -43,7 +43,7 @@ class InstallerApiController extends Controller
                 'dbusername'   => 'required|min:1',
             ];
         if ($request->port) {
-                $rules['port']  = 'integer|min:0';
+            $rules['port'] = 'integer|min:0';
         }
         $validator = \Validator::make(
             [
