@@ -36,6 +36,15 @@ class InstallerApiController extends Controller
      */
     public function config_database(Request $request)
     {
+        $rules = [
+                'database'     => 'required|min:1',
+                'host'         => 'required',
+                'databasename' => 'required|min:1',
+                'dbusername'   => 'required|min:1',
+            ];
+        if ($request->port) {
+                $rules['port']  = 'integer|min:0';
+        }
         $validator = \Validator::make(
             [
                 'database'     => $request->database,
@@ -43,14 +52,7 @@ class InstallerApiController extends Controller
                 'databasename' => $request->databasename,
                 'dbusername'   => $request->dbusername,
                 'port'         => $request->port,
-            ],
-            [
-                'database'     => 'required|min:1',
-                'host'         => 'required',
-                'databasename' => 'required|min:1',
-                'dbusername'   => 'required|min:1',
-                'port'         => 'integer|min:0',
-            ]
+            ], $rules
         );
         if ($validator->fails()) {
             $jsons = $validator->messages();
@@ -76,7 +78,7 @@ class InstallerApiController extends Controller
             $port = $request->port;
             if (isset($default) && isset($host) && isset($database) && isset($dbusername)) {
                 // Setting environment values
-                $ENV['APP_ENV'] = 'production';
+                $ENV['APP_ENV'] = 'development';
                 $ENV['APP_DEBUG'] = 'false';
                 $ENV['APP_KEY'] = 'SomeRandomString';
                 $ENV['APP_URL'] = 'http://localhost';
@@ -165,6 +167,7 @@ class InstallerApiController extends Controller
             // Migrate database
             Artisan::call('migrate', ['--force' => true]);
             Artisan::call('db:seed', ['--force' => true]);
+            Artisan::call('key:generate');
 
             // checking requested timezone for the admin and system
             $timezones = Timezones::where('name', '=', $timezone)->first();
@@ -220,7 +223,9 @@ class InstallerApiController extends Controller
             $datacontent2 = File::get($app_url);
             $datacontent2 = str_replace('http://localhost', $link, $datacontent2);
             File::put($app_url, $datacontent2);
-            Artisan::call('key:generate');
+            $datacontent3 = File::get($app_url);
+            $datacontent3 = str_replace('APP_ENV=development', 'APP_ENV=production', $datacontent3);
+            File::put($app_url, $datacontent3);
             // If user created return success
             if ($user) {
                 return ['response' => 'success', 'status' => '1'];
