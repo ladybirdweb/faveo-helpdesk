@@ -233,7 +233,7 @@
             </div>
             <footer class="main-footer">
                 <div class="pull-right hidden-xs">
-                    <b>Version</b> {{$settings->version}}
+                    <b>{!! Lang::get('lang.version') !!}</b> {{$settings->version}}
                 </div>
                 <strong>Copyright &copy; {{date("Y")}} <a href="{{$settings->website}}"> {{$settings->company_name}}</a>.  Powered By <a href="http://www.faveohelpdesk.com">Faveo</a>.</strong>
             </footer>

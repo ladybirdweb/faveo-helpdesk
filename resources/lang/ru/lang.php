@@ -34,7 +34,6 @@ return [
     'password'                    => 'Пароль',
     'woops'                       => 'Whoops!',
     'theirisproblem'              => 'There were some problems with your input.',
-    'login'                       => 'Login',
     'e-mail'                      => 'E-mail',
     'reg_new_member'              => 'Register a new membership',
     /*
@@ -111,7 +110,6 @@ return [
      */
     'ban_lists'  => 'Лист запретов',
     'ban_email'  => 'Запрет Email',
-    'banlists'   => 'Листы запретов',
     'ban_status' => 'Статус запретов',
     /*
       |--------------------------------------
@@ -722,6 +720,7 @@ return [
     'copyright'           => 'Copyright',
     'all_rights_reserved' => 'Все права защищены',
     'powered_by'          => 'Разработано на',
+    'version'             => 'Version',
     /*
       |------------------------------------------------
       |Гостевая-Страница Пользователя
@@ -1062,7 +1061,6 @@ return [
      'banned-users'        => 'Banned users',
      'inactive-users'      => 'Inactive users',
      'all-users'           => 'All users',
-     'search'              => 'Search...',
      //update 21-12-2016
      'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
           //update 1-2-2017

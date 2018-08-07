@@ -5,7 +5,7 @@
         <title>Faveo | HELP DESK</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- faveo favicon -->
-        <link href="{{asset("lb-faveo/media/images/favicon.ico")}}" rel="shortcut icon"> 
+        <link href="{{asset("lb-faveo/media/images/favicon.ico")}}" rel="shortcut icon">
         <!-- Bootstrap 3.3.2 -->
         <link href="{{asset("lb-faveo/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Font Awesome Icons -->
@@ -33,9 +33,9 @@
         <!-- select2 -->
         <link href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}" rel="stylesheet" type="text/css">
         <!-- Colorpicker -->
-        
+
         <link href="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.css")}}" rel="stylesheet" type="text/css" />
-        
+
         <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" type="text/javascript"></script>
 
         <script src="{{asset("lb-faveo/js/jquery-2.1.4.js")}}" type="text/javascript"></script>
@@ -199,7 +199,7 @@
                                 <li @yield('email')><a href="{{url('getemail')}}"><i class="fa fa-at"></i>{!! Lang::get('lang.email-settings') !!}</a></li>
                                 <li @yield('queue')><a href="{{ url('queue') }}"><i class="fa fa-upload"></i>{!! Lang::get('lang.queues') !!}</a></li>
                                 <li @yield('diagnostics')><a href="{{ url('getdiagno') }}"><i class="fa fa-plus"></i>{!! Lang::get('lang.diagnostics') !!}</a></li>
-                               
+
                                 <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Auto Response</a></li> -->
                                 <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Rules/a></li> -->
                                 <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Breaklines</a></li> -->
@@ -320,7 +320,7 @@
             </div>
             <footer class="main-footer">
                 <div class="pull-right hidden-xs">
-                    <b>Version</b> {!! Config::get('app.version') !!}
+                    <b>{!! Lang::get('lang.version') !!}</b> {!! Config::get('app.version') !!}
                 </div>
                 <?php
                 $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
@@ -340,15 +340,15 @@
         <script src="{{asset("lb-faveo/js/app.min.js")}}" type="text/javascript"></script>
         <!-- iCheck -->
         <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
-        
+
         <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
-        
+
         <script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
         <!-- Page Script -->
         <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
 
         <script src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}"  type="text/javascript"></script>
-        
+
         <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"  type="text/javascript"></script>
         <!-- Colorpicker -->
         <script src="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.js")}}" ></script>
@@ -392,7 +392,7 @@
                         }
                     });
         });</script>
-    
+
     <script src="{{asset("lb-faveo/js/tabby.js")}}"></script>
     <!-- CK Editor -->
     <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
@@ -475,105 +475,16 @@ app.config(['$translateProvider', function($translateProvider){
 </body>
 <script>
     $(function() {
-      
-        
-//        $('input[type="checkbox"]').iCheck({
-//            checkboxClass: 'icheckbox_flat-blue'
-//        });
-//        $('input[type="radio"]').iCheck({
-//            radioClass: 'iradio_flat-blue'
-//        });
-    
-    });        
+
+
+
+        $('input[type="checkbox"]').iCheck({
+            checkboxClass: 'icheckbox_flat-blue'
+        });
+        $('input[type="radio"]').iCheck({
+            radioClass: 'iradio_flat-blue'
+        });
+
+    });
 </script>
-<script type="text/javascript">
-                function changeLang(lang) {
-                    location.href = "swtich-language/"+lang;
-                }
-            </script>
-    <script type="text/javascript">
-                        $(function () {
-                        if ('{{Lang::getLocale()}}' == 'ar'){
-
-                        // $('#cssRTL').removeAttr('disabled');
-                        //   $('#bootRTL').removeAttr('disabled');
-                        $('#adminLTR').attr('disabled', 'disabled');
-                                var adminRtl = document.createElement('link');
-                                adminRtl.id = 'id-rtl';
-                                adminRtl.rel = 'stylesheet';
-                                adminRtl.href = '{{asset("lb-faveo/rtl/css/AdminLTE.css")}}';
-                                document.head.appendChild(adminRtl);
-                                var cssRtl = document.createElement('link');
-                                cssRtl.id = 'id-csstrtl';
-                                cssRtl.rel = 'stylesheet';
-                                cssRtl.href = '{{asset("lb-faveo/rtl/css/rtl.css")}}';
-                                document.head.appendChild(cssRtl);
-                                var bootRtl = document.createElement('link');
-                                bootRtl.id = 'id-bootrtl';
-                                bootRtl.rel = 'stylesheet';
-                                bootRtl.href = '{{asset("lb-faveo/rtl/css/bootstrap-rtl.min.css")}}';
-                                document.head.appendChild(bootRtl);
-                                $('#adminLTR').remove();
-                                $('.container').attr('dir', 'RTL');
-                                $('.formbilder').attr('dir', 'RTL');
-                                $('.content-area').attr('dir', 'RTL');
-                                // agentpanel
-                                $('.content').attr('dir', 'RTL');
-                                $('.info').attr('dir', 'RTL');
-                                $('.table').attr('dir', 'RTL');
-                                $('.box-primary').attr('dir', 'RTL');
-                                // box-header with-borderclass="box box-primary"
-                                $('.dataTables_paginate').find('.row').attr('dir', 'RTL');
-                                // dataTables_paginate paging_full_numbers
-                                $('.sidebar-menu').attr('dir', 'RTL');
-                                $('.sidebar-menu').find('.pull-right').removeClass("pull-right");
-                                $('.sidebar-menu').find('.label').addClass("pull-left");
-                                $('.content').find('.btn').removeClass("pull-right");
-                                $('.content').find('.btn').addClass("pull-left");
-                                $('.tabs-horizontal').removeClass("navbar-left");
-                                $('.tabs-horizontal').addClass("navbar-right");
-                                $('#right-menu').removeClass("navbar-right");
-                                $('#right-menu').addClass("navbar-left");
-                                $('.navbar-nav').find('li').css("float", "right");
-                                $('#rtl1').css('display', 'none');
-                                $('#ltr1').css('display', 'block');
-                                $('#rtl2').css('display', 'none');
-                                $('#ltr2').css('display', 'block');
-                                $('#rtl3').css('display', 'none');
-                                $('#ltr3').css('display', 'block');
-                                $('#rtl4').css('display', 'none');
-                                $('#ltr4').css('display', 'block');
-                                $('.box-header').find('.pull-right').addClass("pull-left");
-                                $('.box-header').find('.pull-right').removeClass("pull-right");
-                                $('.btn').removeClass("pull-left");
-                                $('.iframe').attr('dir', 'RTL');
-                                $('.box-footer').find('a').removeClass("pull-right");
-                                $('.box-footer').find('a').addClass("pull-left");
-                                $('.box-footer').find('div').removeClass("pull-right");
-                                $('.box-footer').find('div').addClass("pull-left");
-                                // $('.col-md-3').css('float','right');
-                                $('.user-footer').css('float', 'none');
-                                $('.user-header').css('float', 'none');
-                                $('.sidebar-toggle').css('width', '60px');
-                                $('.dropdown-menu').css('right', 'inherit');
-                                $('.dropdown-menu').css('left', '0');
-// chart-data
-                                // label
-
-                                $('.box-header').find('.btn-primary').find('.pull-right').removeClass("pull-right");
-                                $('.box-header').find('.btn-primary').addClass("pull-left");
-                                $('.main-footer').find('.pull-right').removeClass("pull-right");
-                                $('.main-footer').find('.hidden-xs').addClass("pull-left");
-                                setTimeout(function(){
-                                $('#cke_details').addClass("cke_rtl");
-                                        $(".cke_wysiwyg_frame").contents().find("body").attr('dir', 'RTL');
-                                }, 3000);
-                                $('iframe').contents().find("body").attr('dir', 'RTL');
-                                /*$('#wys-form').remove();
-                                 $('#mobile-RTL').css('display','block');
-                                 $('#mobile-normal').css('display','none');
-                                 $('#form-foot1').css('display','block');
-                                 $('.list-inline').attr('dir','RTL');*/
-                        };
-                        });</script>
 </html>

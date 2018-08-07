@@ -304,24 +304,52 @@ class TicketController extends Controller
             if (!$api) {
                 return $thread;
             }
-            if (\Input::get('billable')) {
-                $bill = new Bill();
-                $bill->level = 'thread';
-                $bill->model_id = $request->input('ticket_id');
-                $bill->agent = Auth::user()->id;
-                $bill->ticket_id = $request->input('ticket_id');
-                $bill->hours = \Input::get('hours');
-                $bill->billable = \Input::get('billable');
-                $bill->amount_hourly = \Input::get('amount_hourly');
-                $bill->note = $body;
-                $bill->save();
+            \Event::fire(new \App\Events\FaveoAfterReply($reply_content, $user->phone_number, $request, $tickets));
+
+//             Mail::send(array('html' => 'emails.ticket_re-reply'), ['content' => $reply_content, 'ticket_number' => $ticket_number, 'From' => $company, 'name' => $username, 'Agent_Signature' => $agentsign], function ($message) use ($email, $user_name, $ticket_number, $ticket_subject, $check_attachment) {
+//                 $message->to($email, $user_name)->subject($ticket_subject . '[#' . $ticket_number . ']');
+//                 // if(isset($attachments)){
+            // //                if ($check_attachment == 1) {
+            // //                    $size = count($attach);
+            // //                    for ($i = 0; $i < $size; $i++) {
+            // //                        $message->attach($attachments[$i]->getRealPath(), ['as' => $attachments[$i]->getClientOriginalName(), 'mime' => $attachments[$i]->getClientOriginalExtension()]);
+            // //                    }
+            // //                }
+//             }, true);
+            //dd('reply');
+            /*
+             * Getting the subject of the thread
+             */
+            //dd($eventthread);
+            try {
+                $re = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $eventthread->title, 'scenario' => 'create-ticket-by-agent', 'body' => $thread->body], $template_variables = ['agent_sign' => Auth::user()->agent_sign, 'ticket_number' => $tickets->number]);
+                //dd($re);
+            } catch (\Exception $e) {
+                //throw new \Exception($e->getMessage());
             }
         } catch (\Exception $e) {
             $result = $e->getMessage();
 
-            return response()->json(compact('result'), 500);
-        }
-        $result = ['success' => 'Replyed successfully'];
+            $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket_id)->get();
+            foreach ($collaborators as $collaborator) {
+                //mail to collaborators
+                $collab_user_id = $collaborator->user_id;
+                $user_id_collab = User::where('id', '=', $collab_user_id)->first();
+                $collab_email = $user_id_collab->email;
+                if ($user_id_collab->role == 'user') {
+                    $collab_user_name = $user_id_collab->user_name;
+                } else {
+                    $collab_user_name = $user_id_collab->first_name.' '.$user_id_collab->last_name;
+                }
+//                 Mail::send('emails.ticket_re-reply', ['content' => $reply_content, 'ticket_number' => $ticket_number, 'From' => $company, 'name' => $collab_user_name, 'Agent_Signature' => $agentsign], function ($message) use ($collab_email, $collab_user_name, $ticket_number, $ticket_subject, $check_attachment) {
+//                     $message->to($collab_email, $collab_user_name)->subject($ticket_subject . '[#' . $ticket_number . ']');
+                // //                    if ($check_attachment == 1) {
+                // //                        $size = sizeOf($attachments);
+                // //                        for ($i = 0; $i < $size; $i++) {
+                // //                            $message->attach($attachments[$i]->getRealPath(), ['as' => $attachments[$i]->getClientOriginalName(), 'mime' => $attachments[$i]->getClientOriginalExtension()]);
+                // //                        }
+                // //                    }
+//                 }, true);
 
         return response()->json(compact('result'));
     }
@@ -388,11 +416,14 @@ class TicketController extends Controller
             $threads = $thread->where('ticket_id', '=', $ticket_id)->first();
             $threads->title = Input::get('subject');
             $threads->save();
+        } catch (\Exception $ex) {
+            $result = $ex->getMessage();
 
-            return $threads;
-        } catch (\Exception $e) {
-            return $e->getMessage();
+            return response()->json(compact('result'), 500);
         }
+        $result = ['success' => 'Edited successfully'];
+
+        return response()->json(compact('result'));
     }
 
     /**

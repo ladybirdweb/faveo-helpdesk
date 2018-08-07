@@ -259,8 +259,16 @@ class StorageController extends Controller
                 $size = $attachment->getSize();
                 $data = file_get_contents($attachment->getRealPath());
             }
-            $filename = $this->upload($data, $filename, $type, $size, $disposition, $thread_id, $attachment);
-            $thread = $this->updateBody($attachment, $thread_id, $filename);
+        }
+
+        if ($disposition == 'INLINE' || $disposition == 'inline') {
+            $id = str_replace('>', '', str_replace('<', '', $structure->id));
+            $body = $thread->body;
+            // dd($id,$filename,$body);
+            $body = str_replace('cid:'.$id, $filename, $body);
+            // dd($body);
+            $thread->body = $body;
+            $thread->save();
         }
 
         return $thread;

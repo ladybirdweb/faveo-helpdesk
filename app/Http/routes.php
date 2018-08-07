@@ -707,7 +707,6 @@ Route::group(['middleware' => ['web']], function () {
      * @name Faveo
      */
     Route::group(['prefix' => 'api/v1'], function () {
-        Route::post('register', 'Api\v1\ApiController@register');
         Route::post('authenticate', 'Api\v1\TokenAuthController@authenticate');
         Route::get('authenticate/user', 'Api\v1\TokenAuthController@getAuthenticatedUser');
         Route::get('/database-config', ['as' => 'database-config', 'uses' => 'Api\v1\InstallerApiController@config_database']);
@@ -753,6 +752,7 @@ Route::group(['middleware' => ['web']], function () {
             Route::post('collaborator/get-ticket', 'Api\v1\ApiController@getCollaboratorForTicket');
             Route::get('my-tickets-user', 'Api\v1\ApiController@getMyTicketsUser');
             Route::get('dependency', 'Api\v1\ApiController@dependency');
+            Route::post('register', 'Api\v1\ApiController@createUser');
         });
 
         /*

@@ -333,8 +333,8 @@ class UnAuthController extends Controller
         $path = base_path('resources/lang');  // Path to check available language packages
         if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
             \Cache::forever('language', $lang);
-            DB::table('settings_system')->where('id', '=', 1)
-                ->update(['content' => $lang]);
+        // dd(Cache::get('language'));
+            // dd()
         } else {
             return false;
         }
@@ -381,38 +381,33 @@ class UnAuthController extends Controller
 
         if ($followup->status = 1) {
             $tickets = Tickets::where('id', '>=', 1)->where('status', '!=', 5)->get();
+            // dd( $tickets);
+            // $tickets=Tickets::where('id', '>=', 1)->where('status', '!=', 5)->pluck('id');
+            // dd( $tickets);
+            // $id=1;
             foreach ($tickets as $ticket) {
+                // $id=1;
+                // $id++;
+                // $ticket=Tickets::where('status', '!=', 5)->get();
+
+                // dd($ticket);
+                // if($ticket != null){
+                // dd('here');
                 $ck = date('Y-m-d H:i:s', strtotime($ticket->updated_at.$followup_set));
+                // dd($ck);
                 $current_time = date('Y-m-d H:i:s');
                 if ($current_time > $ck) {
                     $ticket->follow_up = 1;
                     $ticket->save();
+
+                    //  Tickets::where('id', '=',$id)
+             // ->update(['follow_up' => 1]);
+
+            // }
                 }
+                //       if($id=2)
+        // {dd($ticket);}
             }
         }
-    }
-
-    /**
-     *@category function to change system's language
-     *
-     *@param string $lang //desired language's iso code
-     *
-     *@return response
-     */
-    public static function changeUserLanguage($lang)
-    {
-        $path = base_path('resources/lang');  // Path to check available language packages
-        if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
-            if (\Auth::check()) {
-                $id = \Auth::user()->id;
-                $user = User::find($id);
-                $user->user_language = $lang;
-                $user->save();
-            } else {
-                Session::put('language', $lang);
-            }
-        }
-
-        return redirect()->back();
     }
 }

@@ -28,10 +28,20 @@ class TicketRequest extends Request
      */
     public function rules()
     {
-        $panel = 'agent';
-        $rules = $this->check($panel);
+        $error = '';
 
-        return $rules;
+        try {
+            $size = $this->size();
+            if ($size > 800 || $size == 0) {
+                throw new \Exception('File size exceeded', 422);
+            }
+        } catch (\Exception $ex) {
+            dd($ex);
+            $error = $this->error($ex);
+        }
+//        return [
+//            'attachment' => 'not_in:'.$error,
+//        ];
     }
 
     public function messages()

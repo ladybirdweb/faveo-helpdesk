@@ -301,7 +301,26 @@ class InstallController extends Controller
     {
         // checking if the installation have been completed or not
         if (Cache::get('step6') == 'step6') {
+
+            $value = '1';
+            $install = base_path().DIRECTORY_SEPARATOR.'.env';
+            $datacontent = File::get($install);
+            $datacontent = str_replace('%0%', $value, $datacontent);
+            File::put($install, $datacontent);
+            // setting email settings in route
+            $smtpfilepath = "\App\Http\Controllers\Common\SettingsController::smtp()";
+
+            $link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+            $pos = strpos($link, 'final');
+            $link = substr($link, 0, $pos);
+            $app_url = base_path().DIRECTORY_SEPARATOR.'.env';
+            $datacontent2 = File::get($app_url);
+            $datacontent2 = str_replace('http://localhost', $link, $datacontent2);
+            File::put($app_url, $datacontent2);
             $language = Cache::get('language');
+
+            try {
+                Cache::flush();
 
             try {
                 \Cache::flush();

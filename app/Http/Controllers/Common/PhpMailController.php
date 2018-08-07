@@ -175,14 +175,14 @@ class PhpMailController extends Controller
             if ($cc != null) {
                 foreach ($cc as $cc_email) {
                     //mail to collaborators
-                    $m->cc($cc_email);
+                    $collab_user_id = $collaborator->user_id;
+                    $user_id_collab = User::where('id', '=', $collab_user_id)->first();
+                    $collab_email = $user_id_collab->email;
+                    $m->cc($collab_email);
                 }
             }
-            if ($thread && is_object($thread)) {
-                $attach = $thread->attach()
-                                        ->where('poster', 'ATTACHMENT')
-                                        ->select('driver', 'name', 'path', 'type', \DB::raw('type as mime'), \DB::raw('name as file_name'), \DB::raw('path as file_path'), \DB::raw('path as file_path'), \DB::raw('path as file_path'), \DB::raw('file as data'), 'poster', 'file')->get()->toArray();
-            }
+
+            //            $mail->addBCC($bc);
             $size = count($attach);
             if ($size > 0) {
                 for ($i = 0; $i < $size; $i++) {

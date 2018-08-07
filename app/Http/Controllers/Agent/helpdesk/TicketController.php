@@ -432,8 +432,8 @@ class TicketController extends Controller
                 return Redirect('newticket')->with('fails', Lang::get('lang.failed-to-create-user-tcket-as-mobile-has-been-taken'))->withInput($request->except('password'));
             }
         } catch (Exception $e) {
-            $api = true;
-            if ($api) {
+            dd($e);
+            if ($api != false) {
                 return response()->json(['error' => $e->getMessage()], 500);
             }
 
@@ -533,17 +533,7 @@ class TicketController extends Controller
     public function reply(Request $request, $ticketid = '', $mail = true, $system_reply
     = true, $user_id = '', $api = true)
     {
-        if (\Input::get('billable')) {
-            $this->validate($request, [
-
-                'hours' => ['required', 'regex:/^([0-9]|0[0-9]|1[0-9]|2[0-9]|0[0-9][0-9]|1[0-9][0-9]|2[0-9][0-9]):[0-5][0-9]$/'],
-            ]);
-        }
-        $this->validate($request, [
-            'content' => 'required',
-                ], [
-            'content.required' => 'Reply Content Required',
-        ]);
+        \Event::fire('reply.request', [$request]);
 
         try {
             if (!$ticketid) {
@@ -1033,30 +1023,16 @@ class TicketController extends Controller
                 }
                 // Event fire
                 \Event::fire(new \App\Events\ReadMailEvent($user_id, $password));
-                $notification[] = [
-                    'registration_notification_alert' => [
-                        'userid'   => $user_id,
-                        'from'     => $this->PhpMailController->mailfrom('1', '0'),
-                        'message'  => ['subject' => null, 'scenario' => 'registration-notification'],
-                        'variable' => ['new_user_name'  => $user->first_name, 'new_user_email' => $emailadd,
-                            'user_password'             => $password, ],
-                    ],
-                    'registration_alert'              => [
-                        'userid'   => $user_id,
-                        'from'     => $this->PhpMailController->mailfrom('1', '0'),
-                        'message'  => ['subject' => null, 'scenario' => 'registration'],
-                        'variable' => ['new_user_name'           => $user->first_name, 'new_user_email'          => $emailadd,
-                            'account_activation_link'            => faveoUrl('/account/activate/'.$token), ],
-                    ],
-                    'new_user_alert'                  => [
-                        'userid'   => $user_id,
-                        'model'    => $user,
-                        'from'     => $this->PhpMailController->mailfrom('1', '0'),
-                        'message'  => ['subject' => null, 'scenario' => 'new-user'],
-                        'variable' => ['new_user_name'     => $user->first_name, 'new_user_email'    => $unique,
-                            'user_profile_link'            => faveoUrl('/user/'.$user_id), ],
-                    ],
-                ];
+                try {
+                    if ($auto_response == 0) {
+                        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user->first_name, 'email' => $emailadd], $message = ['subject' => null, 'scenario' => 'registration-notification'], $template_variables = ['user' => $user->first_name, 'email_address' => $emailadd, 'user_password' => $password]);
+                        if ($user_status == 0) {
+                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user->first_name, 'email' => $emailadd], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $user->first_name, 'email_address' => $emailadd, 'password_reset_link' => url('account/activate/'.$token)]);
+                        }
+                    }
+                } catch (\Exception $e) {
+                    //dd($e);
+                }
             }
         } else {
             $username = $checkemail->first_name;
@@ -1171,56 +1147,87 @@ class TicketController extends Controller
                 } else {
                     $sign = $company;
                 }
+                $encoded_ticketid = Crypt::encrypt($ticketdata->id);
+                $link = url('check_ticket/'.$encoded_ticketid);
+                if ($source == 3) {
+                    try {
+                        if ($auto_response == 0) {
+                            $encoded_ticketid = Crypt::encrypt($ticketdata->id);
+                            $link = url('check_ticket/'.$encoded_ticketid);
+                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket-by-agent', 'body' => $body],
+                                    $template_variables = [
+                                        'agent_sign'    => Auth::user()->agent_sign,
+                                        'ticket_number' => $ticket_number2,
+                                        'system_link'   => $link,
+                                    ]);
+                        }
+                    } catch (\Exception $e) {
+                        //dd($e);
+                    }
+                } else {
+                    $body2 = null;
+
+                    try {
+                        if ($auto_response == 0) {
+                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket'],
+                                    $template_variables = ['user' => $username,
+                                        'ticket_number'           => $ticket_number2,
+                                        'department_sign'         => '',
+                                        'system_link'             => $link,
+                                        ]);
+                        }
+                    } catch (\Exception $e) {
+                    }
+                }
             } elseif ($is_reply == 1) {
                 $this_thread = Ticket_Thread::where('ticket_id', '=', $ticketdata->id)->where('is_internal', 0)->orderBy('id', 'DESC')->first();
                 $mail = 'ticket-reply-agent';
-                $message = $this_thread->purify(false);
             }
-            $message2 = str_replace('Â', '', utfEncoding($message));
-            if ($is_reply != 1) {
-                $notification[] = ['new_ticket_alert'              => [
-                        'from'     => $this->PhpMailController->mailfrom('0', $ticketdata->dept_id),
-                        'message'  => [
-                            'subject'  => $updated_subject,
-                            'body'     => $message,
-                            'scenario' => $mail,
-                        ],
-                        'variable' => [
-                            'client_name'             => $ticket_creator,
-                            'client_email'            => $emailadd,
-                            'ticket_number'           => $ticket_number2,
-                            'system_link'             => url('thread/'.$ticketdata->id),
-                            'department_sign'         => $this->getDepartmentSign($ticketdata->dept_id),
-                            'ticket_client_edit_link' => faveoUrl('ticket/'.$ticketdata->id.'/details'),
-                        //'agent_sign' => Auth::user()->agent_sign,
-                        ],
-                        'ticketid' => $ticketdata->id,
-                        'model'    => $ticketdata,
-                        'userid'   => $ticketdata->user_id,
-                        'thread'   => $threaddata,
-                    ],
-                    'new_ticket_confirmation_alert' => [
-                        'from'     => $this->PhpMailController->mailfrom('0', $ticketdata->dept_id),
-                        'message'  => [
-                            'subject'  => $updated_subject,
-                            'body'     => $message,
-                            'scenario' => 'create-ticket',
-                            'cc'       => $headers,
-                        ],
-                        'variable' => [
-                            'client_name'             => $ticket_creator,
-                            'client_email'            => $emailadd,
-                            'ticket_number'           => $ticket_number2,
-                            'system_link'             => url('/'),
-                            'department_signature'    => $this->getDepartmentSign($ticketdata->dept_id),
-                            'ticket_client_edit_link' => faveoUrl('ticket/'.$ticketdata->id.'/details'),
-                        ],
-                        'ticketid' => $ticketdata->id,
-                        'model'    => $ticketdata,
-                        'userid'   => $ticketdata->user_id,
-                        'thread'   => $threaddata,
-                    ],
-                ];
+
+            $set_mails = [];
+            if (Alert::first() && (Alert::first()->ticket_status == 1 || Alert::first()->ticket_admin_email == 1)) {
+                // send email to admin
+                $admins = User::where('role', '=', 'admin')->get();
+                foreach ($admins as $admin) {
+                    $to_email = $admin->email;
+                    $to_user = $admin->first_name;
+                    $to_user_name = $admin->first_name;
+                    array_push($set_mails, ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name]);
+                }
+            }
+
+            if ($is_reply == 0) {
+                if (Alert::first() && (Alert::first()->ticket_status == 1 || Alert::first()->ticket_department_member == 1)) {
+                    // send email to agents
+                    $agents = User::where('role', '=', 'agent')->get();
+                    foreach ($agents as $agent) {
+                        $department_data = Department::where('id', '=', $ticketdata->dept_id)->first();
+
+                        if ($department_data->name == $agent->primary_dpt) {
+                            $to_email = $agent->email;
+                            $to_user = $agent->first_name;
+                            $to_user_name = $agent->first_name;
+                            array_push($set_mails, ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name]);
+                        }
+                    }
+                }
+//                Event fire for new ticket['']
+            }
+            if ($is_reply == 1) {
+                $client_email = $ticketdata->user->email;
+                $client_user_name = $ticketdata->user->user_name;
+                array_push($set_mails, ['to_email' => $client_email, 'to_user' => $client_user_name, 'to_user_name' => $client_user_name]);
+            }
+
+            if ($ticketdata->assigned_to) {
+                $assigned_to = User::where('id', '=', $ticketdata->assigned_to)->first();
+                $to_email = $assigned_to->email;
+                $to_user = $assigned_to->first_name;
+                $to_user_name = $assigned_to->first_name;
+                array_push($set_mails, ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name]);
+            }
+
+            $emails_to_be_sent = array_unique($set_mails, SORT_REGULAR);
 
                 $data = [
                     'ticket_number' => $ticket_number2,
@@ -2253,40 +2260,14 @@ class TicketController extends Controller
                     $create_user->remember_token = $token;
                     $create_user->save();
                     $user_id = $create_user->id;
-                    $notification[] = [
-                        'registration_notification_alert' => [
-                            'userid'   => $user_id,
-                            'from'     => $this->PhpMailController->mailfrom('1', '0'),
-                            'message'  => ['subject' => null, 'scenario' => 'registration-notification'],
-                            'variable' => ['user'          => $create_user->first_name, 'email_address' => $email,
-                                'user_password'            => $password, ],
-                        ],
-                        'registration_alert'              => [
-                            'userid'   => $user_id,
-                            'from'     => $this->PhpMailController->mailfrom('1', '0'),
-                            'message'  => ['subject' => null, 'scenario' => 'registration'],
-                            'variable' => ['user'                => $create_user->first_name, 'email_address'       => $email,
-                                'password_reset_link'            => faveoUrl('/account/activate/'.$token), ],
-                        ],
-                        'new_user_alert'                  => [
-                            'userid'   => $user_id,
-                            'model'    => $create_user,
-                            'from'     => $this->PhpMailController->mailfrom('1', '0'),
-                            'message'  => ['subject' => null, 'scenario' => 'new-user'],
-                            'variable' => ['user'              => $create_user->first_name, 'email_address'     => $email,
-                                'user_profile_link'            => faveoUrl('/user/'.$user_id), ],
-                        ],
-                    ];
-                }
-                if ($user_id) {
-                    $alert = new Notifications\NotificationController();
-                    $alert->setDetails($notification);
-                    $collaborator_store = new Ticket_Collaborator();
-                    $collaborator_store->isactive = 1;
-                    $collaborator_store->ticket_id = $id;
-                    $collaborator_store->user_id = $user_id;
-                    $collaborator_store->role = 'ccc';
-                    $collaborator_store->save();
+
+                    try {
+                        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => 'password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
+                    } catch (\Exception $e) {
+                    }
+                } else {
+                    $user = $this->checkEmail($email);
+                    $user_id = $user->id;
                 }
             }
         }

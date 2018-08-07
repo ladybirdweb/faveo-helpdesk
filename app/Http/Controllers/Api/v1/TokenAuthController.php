@@ -47,7 +47,8 @@ class TokenAuthController extends Controller
         $password = $request->input('password');
         $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
 
-        //$credentials = $request->all('email', 'password');
+
+        //$credentials = $request->only('email', 'password');
 
         try {
             if (!$token = JWTAuth::attempt([$field => $usernameinput, 'password' => $password, 'active'=>1])) {

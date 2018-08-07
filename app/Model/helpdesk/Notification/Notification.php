@@ -44,4 +44,10 @@ class Notification extends Model
             return $value;
         }
     }
+    public function delete()
+    {
+        $this->deleteUserNotification();
+        // $this->dummyDelete();
+        parent::delete();
+    }
 }

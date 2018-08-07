@@ -57,7 +57,6 @@ return [
     'password'                              => 'Senha',
     'woops'                                 => 'Whoops!',
     'theirisproblem'                        => 'Ocorreu um erro durante o login.',
-    'login'                                 => 'Login',
     'e-mail'                                => 'E-mail',
     'reg_new_member'                        => 'Registrar uma nova associação.',
     'this_account_is_currently_inactive'    => 'Essa conta está inativa!',
@@ -160,7 +159,6 @@ return [
      */
     'ban_lists'                         => 'Lista de bloqueio',
     'ban_email'                         => 'E-mails bloqueados',
-    'banlists'                          => 'Lista de bloqueio',
     'ban_status'                        => 'Status de bloqueio',
     'list_of_banned_emails'             => 'Lista de E-mails bloqueados',
     'edit_banned_email'                 => 'Editar um bloqueio de E-mails',
@@ -789,7 +787,6 @@ return [
     'the_associated_helptopic_has_been_deactivated'    => 'O tópico de ajuda associado foi desativado',
     'department_deleted_sucessfully'                   => 'Departamento deletado com sucesso',
     'department_can_not_delete'                        => 'Departamento não pode ser deletado',
-    'select_a_department'                              => 'Selecione um departamento',
     'make-default-department'                          => 'Criar departamento padrão',
     /*
       |--------------------------------------
@@ -1122,6 +1119,7 @@ return [
     'copyright'           => 'Copyright',
     'all_rights_reserved' => 'Todos os direitos reservados',
     'powered_by'          => 'Distribuído por',
+    'version'             => 'Version',
     /*
       |------------------------------------------------
       |Guest-User Page
@@ -1553,7 +1551,6 @@ return [
      'banned-users'        => 'Banned users',
      'inactive-users'      => 'Inactive users',
      'all-users'           => 'All users',
-     'search'              => 'Search...',
      //update 21-12-2016
      'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
           //update 1-2-2017

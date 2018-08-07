@@ -339,12 +339,48 @@ class FilterController extends Controller
      */
     public function showPage($value, $table)
     {
-        $table = $this->userIsAgent($table);
-        $has_status = array_key_exists('status', (array) json_decode(htmlspecialchars_decode($this->request->get('options'))));
-        switch ($value[0]) {
-            case 'inbox':
-                return $this->returnShowPageWithStatus($has_status, $table, 'open');
-                break;
+        // if (Auth::user()->role == 'admin') {
+        $ticket = new Tickets();
+        $tickets = $ticket
+                    ->leftJoin('ticket_thread', function ($join) {
+                        $join->on('tickets.id', '=', 'ticket_thread.ticket_id')
+                        ->whereNotNull('title')
+                        ->where('ticket_thread.is_internal', '<>', 1);
+                    })
+                    ->leftJoin('ticket_thread as ticket_thread2', 'ticket_thread2.ticket_id', '=', 'tickets.id')
+                    ->Join('ticket_source', 'ticket_source.id', '=', 'tickets.source')
+                    ->leftJoin('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
+                    ->leftJoin('users as u', 'u.id', '=', 'tickets.user_id')
+                    ->leftJoin('users as u1', 'u1.id', '=', 'tickets.assigned_to')
+                    ->leftJoin('ticket_attachment', 'ticket_attachment.thread_id', '=', 'ticket_thread.id')
+
+                    ->leftJoin('ticket_collaborator', 'ticket_collaborator.ticket_id', '=', 'tickets.id')
+                    ->select(
+                        'tickets.id',
+                        'ticket_thread.title',
+                        'tickets.ticket_number',
+                        'ticket_priority.priority',
+                        'u.user_name as user_name',
+                        'u1.user_name as assign_user_name',
+                        \DB::raw('max(ticket_thread.updated_at) as updated_at'),
+                        \DB::raw('min(ticket_thread.updated_at) as created_at'),
+                        'u.first_name as first_name',
+                        'u.last_name as last_name',
+                        'u1.first_name as assign_first_name',
+                        'u1.last_name as assign_last_name',
+                        'ticket_priority.priority_color',
+                        DB::raw('COUNT(DISTINCT ticket_thread2.id) as countthread'),
+                        DB::raw('COUNT(ticket_attachment.thread_id) as countattachment'),
+                        DB::raw('COUNT(ticket_collaborator.ticket_id) as countcollaborator'),
+                        'tickets.status',
+                        'tickets.user_id',
+                        'tickets.priority_id', 'tickets.assigned_to',
+                        'ticket_status.name as tickets_status',
+                        'ticket_source.css_class as css',
+                        DB::raw('substring_index(group_concat(ticket_thread.poster order by ticket_thread.id desc) , ",", 1) as last_replier'),
+                        DB::raw('substring_index(group_concat(ticket_thread.title order by ticket_thread.id asc) , ",", 1) as ticket_title'),
+                        'u.active as verified')
+                    ->groupby('tickets.id');
 
             case 'mytickets':
                 $table = $table->Where('tickets.assigned_to', '=', Auth::user()->id);

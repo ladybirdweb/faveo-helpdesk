@@ -120,6 +120,13 @@ class FormController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'formname' => 'required|unique:custom_forms,formname',
+            'label.*'  => 'required',
+            'name.*'   => 'required',
+            'type.*'   => 'required',
+        ]);
+
         try {
             $array = $request->all();
             $collection = collect($array);

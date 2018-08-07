@@ -257,13 +257,8 @@ class EmailsController extends Controller
 
         $this->emailService($driver, $service_request);
         $this->setMailConfig($driver, $address, $name, $username, $password, $enc, $host, $port);
-        $transport = \Swift_SmtpTransport::newInstance($host, $port, $enc)
-                ->setStreamOptions(['ssl' => [
-                'allow_self_signed' => true,
-                'verify_peer'       => false,
-                'verify_peer_name'  => false,
-            ],
-        ]);
+
+        $transport = \Swift_SmtpTransport::newInstance($host, $port, $enc);
         $transport->setUsername($username);
         $transport->setPassword($password);
         $mailer = \Swift_Mailer::newInstance($transport);
