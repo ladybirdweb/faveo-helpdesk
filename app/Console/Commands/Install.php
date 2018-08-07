@@ -44,8 +44,8 @@ class Install extends Command
             $this->appEnv();
             if ($this->confirm('Do you want to intall faveo?')) {
                 $default = $this->choice(
-                            'Which sql engine would you like to use?', ['mysql']
-                    );
+                    'Which sql engine would you like to use?', ['mysql']
+                );
                 $host = $this->ask('Enter your sql host');
                 $database = $this->ask('Enter your database name');
                 $dbusername = $this->ask('Enter your database username');
@@ -66,20 +66,10 @@ class Install extends Command
     public function appEnv()
     {
         $extensions = [
-            'curl',
-            'ctype',
-            'imap',
-            'mbstring',
-            'mcrypt',
-            'mysql',
-            'openssl',
-            'tokenizer',
-            'zip',
-            'pdo',
-            'mysqli',
-            'bcmath',
-            'iconv',
-                //'ioncube_loader_dar_5.6',
+            'curl', 'ctype', 'imap', 'mbstring',
+            'openssl', 'tokenizer', 'zip',
+            'pdo', 'mysqli', 'bcmath', 'iconv',
+            'XML', 'json',  'fileinfo',
         ];
         $result = [];
         foreach ($extensions as $key => $extension) {
@@ -91,10 +81,10 @@ class Install extends Command
             }
         }
         $result['php']['extension'] = 'PHP';
-        if (phpversion() === 7.0) {
+        if (phpversion() >= 7.1) {
             $result['php']['status'] = 'PHP version supports';
         } else {
-            $result['php']['status'] = "PHP version doesn't supports please upgrade to 7.0";
+            $result['php']['status'] = "PHP version doesn't supports please upgrade to 7.1+";
         }
 
         $headers = ['Extension', 'Status'];

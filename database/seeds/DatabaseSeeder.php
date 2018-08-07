@@ -2028,5 +2028,6 @@ class DatabaseSeeder extends Seeder
         Rating::create(['id' => '2', 'name' => 'Reply Rating', 'display_order' => '1', 'allow_modification' => '1', 'rating_scale' => '5', 'rating_area' => 'Comment Area']);
 
         Limit_Login::create(['id' => '1']);
+        $this->call(UserSeeder::class);
     }
 }

@@ -2,53 +2,47 @@
 
 namespace App\Http\Controllers\Auth;
 
-// controllers
 use App\Http\Controllers\Common\PhpMailController;
 use App\Http\Controllers\Controller;
-// request
 use App\User;
-// model
-// classes
-use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use Lang;
 
-/**
- * PasswordController.
- *
- * @author      Ladybird <info@ladybirdweb.com>
- */
-class PasswordController extends Controller
+class ForgotPasswordController extends Controller
 {
-    use ResetsPasswords;
+    /*
+    |--------------------------------------------------------------------------
+    | Password Reset Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller is responsible for handling password reset emails and
+    | includes a trait which assists in sending these notifications from
+    | your application to your users. Feel free to explore this trait.
+    |
+    */
+
+    use SendsPasswordResetEmails;
 
     /**
-     * Create a new password controller instance.
+     * Create a new controller instance.
      *
      * @return void
      */
     public function __construct(PhpMailController $PhpMailController)
     {
-        $this->PhpMailController = $PhpMailController;
         $this->middleware('guest');
+        $this->PhpMailController = $PhpMailController;
     }
 
     /**
-     * Display the form to request a password reset link.
+     * Send a reset link to the given user.
      *
-     * @return Response
-     */
-    public function getEmail()
-    {
-        return view('auth.password');
-    }
-
-    /**
-     * Display the form to request a password reset link.
+     * @param \Illuminate\Http\Request $request
      *
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function postEmail(Request $request)
+    public function sendResetLinkEmail(Request $request)
     {
         try {
             $date = date('Y-m-d H:i:s');
@@ -87,49 +81,9 @@ class PasswordController extends Controller
                 return redirect()->back()->with('fails', Lang::get("lang.we_can't_find_a_user_with_that_e-mail_address"));
             }
         } catch (\Exception $e) {
-            return redirect()->back()->with('fails', $e->getMessage());
-        }
-    }
+            dd($e);
 
-    /**
-     * Reset the given user's password.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function reset(Request $request)
-    {
-        $this->validate(
-            $request,
-            $this->getResetValidationRules(),
-            $this->getResetValidationMessages(),
-            $this->getResetValidationCustomAttributes()
-        );
-        $credentials = $this->getResetCredentials($request);
-        // dd($credentials);
-        $email = $credentials['email'];
-        $password = $credentials['password'];
-        $token = $credentials['token'];
-        $response = 'fails';
-        $password_tokens = \DB::table('password_resets')->where('email', '=', $email)->first();
-        if ($password_tokens) {
-            if ($password_tokens->token == $token) {
-                $users = new User();
-                $user = $users->where('email', $email)->first();
-                if ($user) {
-                    $user->password = \Hash::make($password);
-                    $user->save();
-                    $response = 'success';
-                } else {
-                    $response = 'fails';
-                }
-            }
-        }
-        if ($response == 'success') {
-            return redirect('/auth/login')->with('status', Lang::get('lang.password-reset-successfully'));
-        } else {
-            return redirect('/home')->with('fails', Lang::get('lang.password-can-not-reset'));
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 }
