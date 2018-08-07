@@ -25,10 +25,10 @@ class ApiServiceProvider extends ServiceProvider
     {
         // Add routes
         // if (isInstall()) {
-            $routes = app_path('/Api/routes.php');
-            if (file_exists($routes)) {
-                require $routes;
-            }
+        $routes = app_path('/Api/routes.php');
+        if (file_exists($routes)) {
+            require $routes;
+        }
         // }
     }
 }
