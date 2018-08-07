@@ -696,7 +696,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/inbox/data', ['as' => 'api.inbox', 'uses' => 'Agent\helpdesk\TicketController@get_inbox']);
 //    Route::get('/report', 'HomeController@getreport');
 //    Route::get('/reportdata', 'HomeController@pushdata');
-    
+
     /*
      * Update module
      */
