@@ -23,7 +23,7 @@ class AuthUser
             'auth_name'             => $this->user->name(),
             'auth_user_active'      => $this->user->active,
             'auth_user_primary_dept'=> $this->user->primary_dept,
-            'auth_user_assign_group'=> '', //$this->user->assign_group,
+            'auth_user_assign_group'=> $this->user->assign_group,
         ]);
     }
 }

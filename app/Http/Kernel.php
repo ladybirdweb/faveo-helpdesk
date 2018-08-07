@@ -34,9 +34,11 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \App\Http\Middleware\LanguageMiddleware::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
         'api' => [
             'throttle:60,1',
+            'bindings',
         ],
     ];
 
@@ -46,19 +48,23 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth'        => \App\Http\Middleware\Authenticate::class,
-        'auth.basic'  => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'can'         => \Illuminate\Foundation\Http\Middleware\Authorize::class,
-        'guest'       => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle'    => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'roles'       => \App\Http\Middleware\CheckRole::class,
-        'role.agent'  => \App\Http\Middleware\CheckRoleAgent::class,
-        'role.user'   => \App\Http\Middleware\CheckRoleUser::class,
-        'api'         => \App\Http\Middleware\ApiKey::class,
-        'jwt.auth'    => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
-        'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
-        'update'      => \App\Http\Middleware\CheckUpdate::class,
-        'board'       => \App\Http\Middleware\CheckBoard::class,
-        'install'     => \App\Http\Middleware\Install::class,
+        'auth'         => \App\Http\Middleware\Authenticate::class,
+        'auth.basic'   => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'can'          => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest'        => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'throttle'     => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'roles'        => \App\Http\Middleware\CheckRole::class,
+        'role.agent'   => \App\Http\Middleware\CheckRoleAgent::class,
+        'role.user'    => \App\Http\Middleware\CheckRoleUser::class,
+        'api'          => \App\Http\Middleware\ApiKey::class,
+        'jwt.auth'     => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
+        'jwt.refresh'  => \Tymon\JWTAuth\Middleware\RefreshToken::class,
+        'update'       => \App\Http\Middleware\CheckUpdate::class,
+        'board'        => \App\Http\Middleware\CheckBoard::class,
+        'install'      => \App\Http\Middleware\Install::class,
+        'redirect'     => \App\Http\Middleware\Redirect::class,
+        'bindings'     => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        'installer'    => \App\Http\Middleware\IsInstalled::class,
+        'force.option' => \App\Http\Middleware\TicketViewURL::class,
     ];
 }

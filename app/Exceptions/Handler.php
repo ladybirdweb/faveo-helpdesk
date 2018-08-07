@@ -43,6 +43,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
+        dd($e);
         $debug = \Config::get('app.bugsnag_reporting');
         $debug = ($debug) ? 'true' : 'false';
         if ($debug == 'false') {

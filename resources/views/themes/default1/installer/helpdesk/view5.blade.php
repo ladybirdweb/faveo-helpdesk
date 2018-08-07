@@ -24,7 +24,7 @@ active
         
 
         <!-- checking if the form submit fails -->
-        @if($errors->first('firstname')||$errors->first('Lastname')||$errors->first('email')||$errors->first('username')||$errors->first('password')||$errors->first('confirmpassword'))
+        @if($errors->first('firstname')||$errors->first('Lastname')||$errors->first('email')||$errors->first('username')||$errors->first('password')||$errors->first('confirm_password'))
             <div class="woocommerce-message woocommerce-tracker">
                 <div class="fail">
                     @if($errors->first('firstname'))
@@ -42,8 +42,8 @@ active
                     @if($errors->first('password'))
                         <span id="fail">{!! $errors->first('password', ':message') !!}</span><br/>
                     @endif
-                    @if($errors->first('confirmpassword'))
-                        <span id="fail">{!! $errors->first('confirmpassword', ':message') !!}</span><br/><br/>
+                    @if($errors->first('confirm_password'))
+                        <span id="fail">{!! $errors->first('confirm_password', ':message') !!}</span><br/><br/>
                     @endif
                 </div>
             </div>        
@@ -319,7 +319,7 @@ active
                             ?>  
                                 <select name="language" data-placeholder="Choose a timezone..." class="chosen-select" style="width:295px;" tabindex="2">
                                     @foreach($values as $value)
-                                        <option value="{!! $value !!}">{!! Config::get('languages.' . $value) !!}</option>
+                                        <option value="{!! $value !!}">{!! Config::get('languages.' . $value)[0] !!}&nbsp;({!! Config::get('languages.' . $value)[1] !!})</option>
                                     @endforeach
                                 </select>
                            </div>
@@ -331,10 +331,6 @@ active
                     </tr>
                 </div>
             </table>
-            <input id="dummy-data" class="input-checkbox" type="checkbox" name="dummy-data">
-            <label for="dummy-data" style="color:#3AA7D9">Install dummy data</label>
-            <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{DummyDataTitle}}" data-content="@{{DummyDataContent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
-                            </button>
             <br><br>
             <p class="setup-actions step">
                 <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Install">
@@ -352,7 +348,7 @@ active
             @if($errors->has('firstname'))
                 addErrorClass('firstname');
             @endif
-            @if($errors->has('Lastname'))
+            @if($errors->has('lastname'))
                 addErrorClass('Lastname');
             @endif
             @if($errors->has('email'))
@@ -369,7 +365,10 @@ active
             @endif
 
         $('#postaccount').on('submit', function(e) {
-            $("#postaccount input").each(function(){
+            $('#submitme').attr('disabled', true);
+            $('#submitme').val('Installing, please wait...');
+            $empty_field = 0;
+            $("#postaccount input").each(function() {
                 if($(this).attr('name') == 'firstname' ||
                    $(this).attr('name') == 'Lastname' ||
                    $(this).attr('name') == 'email' ||
@@ -379,13 +378,18 @@ active
                     if ($(this).val() == '') {
                         $(this).css('border-color','red')
                         $(this).css('border-width','1px');
-                        e.preventDefault();
+                        $empty_field = 1;
+                    } else {
+                        $empty_field = 0;
                     }
-                } else {
-                    $('#submitme').attr('disabled', true);
-                    $('#submitme').val('Installing, please wait...');
                 }
             });
+            if ($empty_field !=0 ) {
+                alert('Please fill all required values.');
+                e.preventDefault();
+                $('#submitme').attr('disabled', false);
+                $('#submitme').val('Install');
+            }
         });
 
         $('input').on('focus', function(){
