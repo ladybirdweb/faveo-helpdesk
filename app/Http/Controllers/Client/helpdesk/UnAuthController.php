@@ -19,6 +19,7 @@ use Hash;
 // classes
 use Illuminate\Http\Request;
 use Lang;
+use Session;
 
 /**
  * GuestController.
@@ -414,5 +415,31 @@ class UnAuthController extends Controller
         // {dd($ticket);}
             }
         }
+    }
+
+    /**
+     * Function to chnage user language preference
+     *
+     * @param string $lang //desired language's iso code
+     *
+     * @category function to change system's language
+     *
+     * @return response
+     */
+    public static function changeUserLanguage($lang)
+    {
+        $path = base_path('resources/lang');  // Path to check available language packages
+        if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
+            if (\Auth::check()) {
+                $id = \Auth::user()->id;
+                $user = User::find($id);
+                $user->user_language = $lang;
+                $user->save();
+            } else {
+                Session::put('language', $lang);
+            }
+        }
+
+        return redirect()->back();
     }
 }

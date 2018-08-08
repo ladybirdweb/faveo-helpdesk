@@ -776,4 +776,5 @@ Route::group(['middleware' => ['web']], function () {
         //     $breadcrumbs->parent('dashboard');
         //     $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.open'), route('open.ticket'));
         // });
+    Route::get('swtich-language/{id}', ['as' => 'switch-user-lang', 'uses' => 'Client\helpdesk\UnAuthController@changeUserLanguage']);
 });

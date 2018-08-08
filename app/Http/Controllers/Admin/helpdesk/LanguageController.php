@@ -84,6 +84,7 @@ class LanguageController extends Controller
         $path = base_path('resources/lang');
         $values = scandir($path);  //Extracts names of directories present in lang directory
         $values = array_slice($values, 2); // skips array element $value[0] = '.' & $value[1] = '..'
+        $sysLanguage = \Cache::get('language');
         return \Datatable::collection(new Collection($values))
                         ->addColumn('language', function ($model) {
                             if ($model == Config::get('app.fallback_locale')) {
@@ -95,15 +96,15 @@ class LanguageController extends Controller
                         ->addColumn('id', function ($model) {
                             return $model;
                         })
-                        ->addColumn('status', function ($model) {
-                            if (Lang::getLocale() === $model) {
+                        ->addColumn('status', function ($model) use ($sysLanguage){
+                            if ($sysLanguage === $model) {
                                 return "<span style='color:green'>".Lang::trans('lang.active').'</span>';
                             } else {
                                 return "<span style='color:red'>".Lang::trans('lang.inactive').'</span>';
                             }
                         })
-                        ->addColumn('Action', function ($model) {
-                            if (Lang::getLocale() === $model) {
+                        ->addColumn('Action', function ($model) use ($sysLanguage) {
+                            if ($model === $sysLanguage) {
                                 return "<a href='change-language/".$model."'><input type='button' class='btn btn-info btn-xs btn-flat' disabled value='".Lang::trans('lang.disable')."'/></a>  
                 <a href='change-language/".$model."' class='btn btn-danger btn-xs btn-flat' disabled><i class='fa fa-trash' style='color:black;'> </i> ".Lang::trans('lang.delete').'</a>';
                             } else {

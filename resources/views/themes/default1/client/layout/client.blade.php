@@ -83,6 +83,7 @@
                                 @foreach($pages as $page)
                                 <li><a href="{{route('pages',$page->slug)}}">{{$page->name}}</a></li>
                                 @endforeach
+                                
                                 @if(Auth::user())
                                 <li @yield('myticket')><a href="{{url('mytickets')}}">{!! Lang::get('lang.my_tickets') !!}</a></li>
 
@@ -195,6 +196,23 @@
                                 </div>
                             </div><!-- #login-form -->
                             @endif
+                            <ul class="nav navbar-nav navbar-menu">
+
+                            <li class="dropdown">
+                                    <?php $src = Lang::getLocale().'.png'; ?>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><img src="{{asset("lb-faveo/flags/$src")}}"></img> &nbsp;<span class="caret"></span></a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            @foreach($langs as $key => $value)
+                                                <?php $src = $key.".png"; ?>
+                                                <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}"></img>&nbsp;{{$value[0]}}&nbsp;
+                                            @if(Lang::getLocale() == "ar")
+                                                &rlm;
+                                            @endif
+                                                ({{$value[1]}})</a></li>
+                                            @endforeach       
+                                        </ul>
+                                </li>
+                            </ul>
                         </nav><!-- #site-navigation -->
                     </div><!-- #navbar -->
                     <div id="header-search" class="site-search clearfix" style="padding-bottom:5px"><!-- #header-search -->
@@ -415,6 +433,10 @@
 
             <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
 
+            <script src="{{asset("lb-faveo/js/languagechanger.js")}}" type="text/javascript"></script>
+
+            <script src="{{asset("lb-faveo/js/languagechanger.js")}}" type="text/javascript"></script>
+            
             <script>
 $(function () {
 //Enable check and uncheck all functionality

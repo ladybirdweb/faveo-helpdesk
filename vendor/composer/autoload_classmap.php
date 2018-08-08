@@ -28,6 +28,7 @@ return array(
     'AddForeignKeysToUsersTable' => $baseDir . '/database/migrations/2016_02_16_140454_add_foreign_keys_to_users_table.php',
     'Adobe_Font_Metrics' => $vendorDir . '/phenx/php-font-lib/classes/Adobe_Font_Metrics.php',
     'AlterTicketSourceTable' => $baseDir . '/database/migrations/2016_08_16_104539_alter_ticket_source_table.php',
+    'AlterUsersTableAddUserLanguageColumn' => $baseDir . '/database/migrations/2018_08_08_094653_alter_users_table_add_user_language_column.php',
     'Attribute_Translator' => $vendorDir . '/dompdf/dompdf/include/attribute_translator.cls.php',
     'Block_Frame_Decorator' => $vendorDir . '/dompdf/dompdf/include/block_frame_decorator.cls.php',
     'Block_Frame_Reflower' => $vendorDir . '/dompdf/dompdf/include/block_frame_reflower.cls.php',

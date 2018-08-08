@@ -56,6 +56,18 @@
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
 
         @yield('HeadInclude')
+        <style type="text/css">
+            #bar {
+                border-right: 1px solid rgba(204, 204, 204, 0.41);
+            }
+            #bar a{
+                color: #FFF;
+            }
+            #bar a:hover, #bar a:focus{
+                background-color: #357CA5;
+            }
+
+        </style>
     </head>
     <body class="skin-blue fixed">
         <div class="wrapper">
@@ -172,6 +184,20 @@
                             <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
                             </li>
                         </ul>
+                        </li>
+                        <li class="dropdown">
+                            <?php $src = Lang::getLocale().'.png'; ?>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><img src="{{asset("lb-faveo/flags/$src")}}"></img> &nbsp;<span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                @foreach($langs as $key => $value)
+                                            <?php $src = $key.".png"; ?>
+                                            <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}"></img>&nbsp;{{$value[0]}}&nbsp;
+                                            @if(Lang::getLocale() == "ar")
+                                            &rlm;
+                                            @endif
+                                            ({{$value[1]}})</a></li>
+                                @endforeach      
+                            </ul>
                         </li>
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
@@ -325,7 +351,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
             <!-- Right side column. Contains the navbar and content of the page -->
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
-                <div class="tab-content" style="background-color: white;padding: 0 0px 0 20px">
+                <div class="tab-content" style="background-color: #80B5D3; position: fixed; width:100% ;padding: 0 0px 0 0px; z-index:999">
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         <div class="tabs-content">
                             @if($replacetop==0)
@@ -495,7 +521,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                     });</script>
 
         <script src="{{asset("lb-faveo/js/tabby.js")}}" type="text/javascript"></script>
-
+        <script src="{{asset("lb-faveo/js/languagechanger.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" type="text/javascript"></script>
 
         <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>

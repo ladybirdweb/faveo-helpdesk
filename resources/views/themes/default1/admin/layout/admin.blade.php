@@ -156,6 +156,20 @@
                             </li>
                         </ul>
                         </li>
+                        <li class="dropdown">
+                            <?php $src = Lang::getLocale().'.png'; ?>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><img src="{{asset("lb-faveo/flags/$src")}}"></img> &nbsp;<span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                @foreach($langs as $key => $value)
+                                            <?php $src = $key.".png"; ?>
+                                            <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}"></img>&nbsp;{{$value[0]}}&nbsp;
+                                            @if(Lang::getLocale() == "ar")
+                                            &rlm;
+                                            @endif
+                                            ({{$value[1]}})</a></li>
+                                @endforeach       
+                            </ul>
+                        </li>
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 @if(Auth::user())
@@ -443,7 +457,7 @@
     <script src="{{asset("lb-faveo/js/tabby.js")}}"></script>
     <!-- CK Editor -->
     <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
-
+    <script src="{{asset("lb-faveo/js/languagechanger.js")}}" type="text/javascript"></script>
     @yield('FooterInclude')
 </body>
 <script>
