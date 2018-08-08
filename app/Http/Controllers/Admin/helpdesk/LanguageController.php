@@ -85,6 +85,7 @@ class LanguageController extends Controller
         $values = scandir($path);  //Extracts names of directories present in lang directory
         $values = array_slice($values, 2); // skips array element $value[0] = '.' & $value[1] = '..'
         $sysLanguage = \Cache::get('language');
+
         return \Datatable::collection(new Collection($values))
                         ->addColumn('language', function ($model) {
                             if ($model == Config::get('app.fallback_locale')) {
@@ -96,7 +97,7 @@ class LanguageController extends Controller
                         ->addColumn('id', function ($model) {
                             return $model;
                         })
-                        ->addColumn('status', function ($model) use ($sysLanguage){
+                        ->addColumn('status', function ($model) use ($sysLanguage) {
                             if ($sysLanguage === $model) {
                                 return "<span style='color:green'>".Lang::trans('lang.active').'</span>';
                             } else {

@@ -772,9 +772,9 @@ Route::group(['middleware' => ['web']], function () {
 
     // Route::post('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']);
     Route::get('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']); /*  Get Open Ticket */
-        // Breadcrumbs::register('open.ticket', function ($breadcrumbs) {
-        //     $breadcrumbs->parent('dashboard');
-        //     $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.open'), route('open.ticket'));
-        // });
+    // Breadcrumbs::register('open.ticket', function ($breadcrumbs) {
+    //     $breadcrumbs->parent('dashboard');
+    //     $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.open'), route('open.ticket'));
+    // });
     Route::get('swtich-language/{id}', ['as' => 'switch-user-lang', 'uses' => 'Client\helpdesk\UnAuthController@changeUserLanguage']);
 });
