@@ -418,7 +418,7 @@ class UnAuthController extends Controller
     }
 
     /**
-     * Function to chnage user language preference
+     * Function to chnage user language preference.
      *
      * @param string $lang //desired language's iso code
      *
