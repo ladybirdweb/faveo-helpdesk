@@ -15,12 +15,12 @@ use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Ticket\TicketToken;
 use App\User;
-use DB;
+
 // classes
 use Hash;
 use Illuminate\Http\Request;
 use Lang;
-use Session;
+
 
 /**
  * GuestController.
