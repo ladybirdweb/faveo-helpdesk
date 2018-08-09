@@ -211,3 +211,14 @@ function faveoDate($date = '', $format = '', $tz = '')
         return 'invalid';
     }
 }
+
+function timezone()
+{
+    $system = App\Model\helpdesk\Settings\System::select('time_zone')->first();
+    $tz = 'UTC';
+    if ($system) {
+        $tz = App\Model\helpdesk\Utility\Timezones::where('id', $system->time_zone)->first()->name;
+    }
+
+    return $tz;
+}

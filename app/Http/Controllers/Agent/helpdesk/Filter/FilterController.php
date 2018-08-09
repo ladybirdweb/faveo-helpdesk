@@ -1035,14 +1035,13 @@ class FilterController extends Controller
     public function getGMT()
     {
         $system = \App\Model\helpdesk\Settings\System::select('time_zone')->first();
-        $timezone = \DB::table('timezone')->select('location')->where('name', '=', $system->time_zone)->first();
+        $timezone = \DB::table('timezone')->select('location')->where('id', '=', $system->time_zone)->first();
         $location = '(GMT) London';
         if ($timezone) {
             $location = $timezone->location;
         }
         $tz = explode(')', substr($location, stripos($location, 'T')
                             + 1));
-
         return $tz[0];
     }
 

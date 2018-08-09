@@ -2659,7 +2659,12 @@ class TicketController extends Controller
     {
         return \Datatable::table()
             ->addColumn(
-                '<a class="checkbox-toggle"><i class="fa fa-square-o fa-2x"></i></a>', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity')
+                '<a class="checkbox-toggle"><i class="fa fa-square-o fa-2x"></i></a>',
+                Lang::get('lang.subject'),
+                Lang::get('lang.ticket_id'),
+                Lang::get('lang.from'),
+                Lang::get('lang.assigned_to'),
+                Lang::get('lang.last_activity')
             )->noScript();
     }
 
@@ -2691,7 +2696,7 @@ class TicketController extends Controller
 
                             return "<center><input type='checkbox' name='select_all[]' id='".$tickets->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue ".$tickets->color.' '.$rep."' value='".$tickets->id."'></input></center>";
                         })
-                        ->addColumn('title', function ($tickets) {
+                        ->editColumn('title', function ($tickets) {
                             if (isset($tickets->ticket_title)) {
                                 $string = utfEncoding($tickets->ticket_title);
                                 if (strlen($string) > 25) {
@@ -2783,15 +2788,7 @@ class TicketController extends Controller
                                 }
                             }
                         })
-                        ->editColumn('updated_at', function ($tickets) {
-                            $TicketDatarow = $tickets->updated_at;
-                            $updated = '--';
-                            if ($TicketDatarow) {
-                                $updated = faveoDate($tickets->updated_at);
-                            }
-
-                            return '<span style="display:none">'.$updated.'</span>'.$updated;
-                        })
+                        
                         ->make();
     }
 
