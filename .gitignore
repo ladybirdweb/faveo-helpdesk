@@ -3,7 +3,7 @@
 Homestead.yaml
 Homestead.json
 /config/lfm.php
-/nbproject/private/
+/nbproject/*
 /node_modules
 /public/error_log
 /public/lb-faveo/media/

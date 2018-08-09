@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\helpdesk\InstallerRequest;
 use App\Model\helpdesk\Settings\System;
 // models
+use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\User;
 use Artisan;
@@ -246,9 +247,17 @@ class InstallController extends Controller
         $password = $request->input('password');
 
         $language = $request->input('language');
-        $timezone = $request->input('timezone');
-        $date = $request->input('date');
-        $datetime = $request->input('datetime');
+        // checking requested timezone for the admin and system
+        $timezones = Timezones::where('name', '=', $request->input('timezone'))->first();
+        if ($timezones == null) {
+            return redirect()->back()->with('fails', 'Invalid time-zone');
+        }
+        // checking requested date time format for the admin and system
+        $date_time_format = Date_time_format::where('format', '=', $request->input('datetime'))->first();
+        if ($date_time_format == null) {
+            return redirect()->back()->with('fails', 'invalid date-time format');
+        }
+
         $lang_path = base_path('resources/lang');
 
         //check user input language package is available or not in the system
@@ -266,19 +275,15 @@ class InstallController extends Controller
         $system = System::where('id', '=', 1)->first();
         $system->status = 1;
         $system->department = 1;
-        $system->date_time_format = $datetime; //$date_time_format->id;
-        $system->time_zone = $timezone; //$timezones->id;
+        $system->date_time_format = $date_time_format->id;
+        $system->time_zone = $timezones->id;
         $version = \Config::get('app.tags');
         // $version = explode(' ', $version);
         // $version = $version[1];
         $system->version = $version;
         $system->save();
 
-        $admin_tzone = 14;
-        $tzone = Timezones::select('id')->where('name', '=', $timezone)->first();
-        if ($tzone) {
-            $admin_tzone = $tzone->id;
-        }
+        $admin_tzone = $timezones->id;
         // creating an user
         $user = User::updateOrCreate(['id' => 1], [
                     'first_name'   => $firstname,
