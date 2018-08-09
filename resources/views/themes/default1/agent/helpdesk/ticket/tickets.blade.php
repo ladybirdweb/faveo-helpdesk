@@ -14,6 +14,8 @@ $activepage = $inputs[0];
 if (\Input::has('assigned'))
 {
     $activepage = \Input::get('assigned')[0];
+} elseif (\Input::has('last-response-by')){
+    $activepage = \Input::get('last-response-by')[0];
 }
 ?>
 
@@ -45,12 +47,20 @@ if (\Input::has('assigned'))
     @section('approval')
         class="active"
     @stop
+@elseif($activepage == 'Agent')
+    @section('answered')
+        class="active"
+    @stop
+@elseif($activepage == 'Client')
+    @section('open')
+        class="active"
+    @stop
 @elseif($activepage == 0)
     @section('unassigned')
         class="active"
     @stop
 @else
-    @section('inbox')
+    @section('assigned')
         class="active"
     @stop
 @endif
