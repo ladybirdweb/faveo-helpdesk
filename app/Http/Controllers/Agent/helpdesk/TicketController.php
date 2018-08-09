@@ -2788,7 +2788,7 @@ class TicketController extends Controller
                                 }
                             }
                         })
-                        
+
                         ->make();
     }
 
