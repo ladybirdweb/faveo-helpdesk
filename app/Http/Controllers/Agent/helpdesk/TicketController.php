@@ -2647,11 +2647,11 @@ class TicketController extends Controller
     }
 
     /**
-     * Ticket table rendering related functions
+     * Ticket table rendering related functions.
      */
 
     /**
-     * Function to get basic datatable format
+     * Function to get basic datatable format.
      *
      * @return object
      */
@@ -2664,7 +2664,7 @@ class TicketController extends Controller
     }
 
     /**
-     * Function to return new ticket table view 
+     * Function to return new ticket table view.
      *
      * @return repsone/view
      */
@@ -2677,6 +2677,7 @@ class TicketController extends Controller
 
     /**
      * chumper's function to return data to chumper datatable.
+     *
      * @param Array-object $tickets
      *
      * @return Array-object
@@ -2788,7 +2789,7 @@ class TicketController extends Controller
                             if ($TicketDatarow) {
                                 $updated = faveoDate($tickets->updated_at);
                             }
-                            
+
                             return '<span style="display:none">'.$updated.'</span>'.$updated;
                         })
                         ->make();
@@ -2801,7 +2802,7 @@ class TicketController extends Controller
      * Functions under this block have been deprecated and are no
      * longer used by the system.Though we have not removed these functions
      * in v1.10 but we will remove these routes in upcoming releas
-     * =====================================================================
+     * =====================================================================.
      **/
 
     /**

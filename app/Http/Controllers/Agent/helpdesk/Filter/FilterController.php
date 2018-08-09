@@ -83,6 +83,7 @@ class FilterController extends Controller
                 $table = $this->checkRequestIsCorrect($table, (array) $inputs);
             }
         }
+
         return \Ttable::genreateTableJson($table);
     }
 
