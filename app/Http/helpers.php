@@ -146,3 +146,68 @@ function faveotime($date, $hour = 0, $min = 0, $sec = 0)
 
     return $date1->hour($hour)->minute($min)->second($sec);
 }
+
+/**
+ * @category function to return array values if status id
+ *
+ * @param string purpose of status
+ *
+ * @return array ids of status with purpose passed as string
+ */
+function getStatusArray($status)
+{
+    $type = new App\Model\helpdesk\Ticket\Ticket_Status();
+    $values = $type->where('state', '=', $status)->pluck('id')->toArray();
+
+    return $values;
+}
+
+/**
+ * @category function to UTF encoding
+ *
+ * @param string name
+ *
+ * @return string name
+ */
+function utfEncoding($name)
+{
+    $title = '';
+    $array = imap_mime_header_decode($name);
+    if (is_array($array) && count($array) > 0) {
+        foreach ($array as $text) {
+            $title .= $text->text;
+        }
+        $name = $title;
+    }
+
+    return $name;
+}
+
+function faveoDate($date = '', $format = '', $tz = '')
+{
+    if (!$date) {
+        $date = \Carbon\Carbon::now();
+    }
+    if (!is_object($date)) {
+        $date = carbon($date);
+    }
+    if (!$format || !$tz) {
+        $system = App\Model\helpdesk\Settings\System::select('time_zone', 'date_time_format')->first();
+    }
+    if (!$format) {
+        $format = $system->date_time_format;
+    }
+    if (!$tz) {
+        $tz = $system->time_zone;
+    }
+
+    try {
+        if ($format == 'human-read') {
+            return $date->tz($tz)->diffForHumans();
+        }
+
+        return $date->tz($tz)->format($format);
+    } catch (\Exception $ex) {
+        return 'invalid';
+    }
+}
