@@ -911,6 +911,7 @@ return [
       | customize your views to better match your application.
       |
      */
+
     'agent_panel'        => 'Pannello agente',
     'profile'            => 'Profilo',
     'change_password'    => 'Cambia password',
@@ -1560,7 +1561,6 @@ return [
      'deleted_user_directory'                                       => 'Cartella utente cancellata',
      'restore'                                                      => 'Ripristina',
      'user_restore_successfully'                                    => 'Utente ripristinato correttamente',
-
      /*** updates 28-11-2016***/
      'apply' => 'Applica',
 

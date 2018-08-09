@@ -56,7 +56,7 @@ class MimeTypeGuesser implements MimeTypeGuesserInterface
     /**
      * Returns the singleton instance.
      *
-     * @return MimeTypeGuesser
+     * @return self
      */
     public static function getInstance()
     {
@@ -93,8 +93,6 @@ class MimeTypeGuesser implements MimeTypeGuesserInterface
      * Registers a new mime type guesser.
      *
      * When guessing, this guesser is preferred over previously registered ones.
-     *
-     * @param MimeTypeGuesserInterface $guesser
      */
     public function register(MimeTypeGuesserInterface $guesser)
     {

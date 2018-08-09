@@ -2,7 +2,8 @@
 
 namespace League\Flysystem\Util;
 
-use Finfo;
+use finfo;
+use ErrorException;
 
 /**
  * @internal
@@ -18,15 +19,18 @@ class MimeType
      */
     public static function detectByContent($content)
     {
-        if ( ! class_exists('Finfo') || ! is_string($content)) {
-            return;
+        if ( ! class_exists('finfo') || ! is_string($content)) {
+            return null;
         }
+        try {
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
 
-        $finfo = new Finfo(FILEINFO_MIME_TYPE);
-        $mimeType = $finfo->buffer($content);
-
-        return $mimeType ?: null;
-    }
+            return $finfo->buffer($content) ?: null;
+        // @codeCoverageIgnoreStart
+        } catch( ErrorException $e ) {
+            // This is caused by an array to string conversion error.
+        }
+    } // @codeCoverageIgnoreEnd
 
     /**
      * Detects MIME Type based on file extension.
@@ -53,11 +57,11 @@ class MimeType
     /**
      * @param string $filename
      *
-     * @return string
+     * @return string|null MIME Type or NULL if no extension detected
      */
     public static function detectByFilename($filename)
     {
-        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
         return empty($extension) ? 'text/plain' : static::detectByFileExtension($extension);
     }
@@ -150,6 +154,8 @@ class MimeType
             'rtf'   => 'text/rtf',
             'xml'   => 'application/xml',
             'xsl'   => 'application/xml',
+            'dmn'   => 'application/octet-stream',
+            'bpmn'  => 'application/octet-stream',
             'mpeg'  => 'video/mpeg',
             'mpg'   => 'video/mpeg',
             'mpe'   => 'video/mpeg',

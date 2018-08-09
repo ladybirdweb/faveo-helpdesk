@@ -20,4 +20,11 @@ class Help_topic extends BaseModel
 
         return $this->belongsTo($related, $foreignKey);
     }
+
+    public function delete()
+    {
+        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        parent::delete();
+        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+    }
 }

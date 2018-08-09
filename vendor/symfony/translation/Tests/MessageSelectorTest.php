@@ -11,9 +11,10 @@
 
 namespace Symfony\Component\Translation\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\MessageSelector;
 
-class MessageSelectorTest extends \PHPUnit_Framework_TestCase
+class MessageSelectorTest extends TestCase
 {
     /**
      * @dataProvider getChooseTests
@@ -34,7 +35,7 @@ class MessageSelectorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getNonMatchingMessages
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Symfony\Component\Translation\Exception\InvalidArgumentException
      */
     public function testThrowExceptionIfMatchingMessageCannotBeFound($id, $number)
     {
@@ -125,6 +126,12 @@ class MessageSelectorTest extends \PHPUnit_Framework_TestCase
             array('This is a text with a\nnew-line in it. Selector = 0.', '{0}This is a text with a\nnew-line in it. Selector = 0.|{1}This is a text with a\nnew-line in it. Selector = 1.|[1,Inf]This is a text with a\nnew-line in it. Selector > 1.', 0),
             // with double-quotes and id split accros lines
             array("This is a text with a\nnew-line in it. Selector = 1.", "{0}This is a text with a\nnew-line in it. Selector = 0.|{1}This is a text with a\nnew-line in it. Selector = 1.|[1,Inf]This is a text with a\nnew-line in it. Selector > 1.", 1),
+            // esacape pipe
+            array('This is a text with | in it. Selector = 0.', '{0}This is a text with || in it. Selector = 0.|{1}This is a text with || in it. Selector = 1.', 0),
+            // Empty plural set (2 plural forms) from a .PO file
+            array('', '|', 1),
+            // Empty plural set (3 plural forms) from a .PO file
+            array('', '||', 1),
         );
     }
 }

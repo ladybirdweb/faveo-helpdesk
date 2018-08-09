@@ -1,52 +1,69 @@
-<?php namespace Unisharp\Laravelfilemanager\controllers;
+<?php
 
-use Unisharp\Laravelfilemanager\controllers\Controller;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\View;
+namespace Unisharp\Laravelfilemanager\controllers;
+
 use Intervention\Image\Facades\Image;
+use Unisharp\Laravelfilemanager\Events\ImageIsCropping;
+use Unisharp\Laravelfilemanager\Events\ImageWasCropped;
 
 /**
- * Class CropController
- * @package Unisharp\Laravelfilemanager\controllers
+ * Class CropController.
  */
-class CropController extends LfmController {
-
+class CropController extends LfmController
+{
     /**
-     * Show crop page
+     * Show crop page.
      *
      * @return mixed
      */
     public function getCrop()
     {
-        $working_dir = Input::get('working_dir');
-        $img = parent::getUrl('directory') . Input::get('img');
+        $working_dir = request('working_dir');
+        $img = parent::objectPresenter(parent::getCurrentPath(request('img')));
 
-        return View::make('laravel-filemanager::crop')
+        return view('laravel-filemanager::crop')
             ->with(compact('working_dir', 'img'));
     }
 
-
     /**
-     * Crop the image (called via ajax)
+     * Crop the image (called via ajax).
      */
-    public function getCropimage()
+    public function getCropimage($overWrite = true)
     {
-        $image = Input::get('img');
-        $dataX = Input::get('dataX');
-        $dataY = Input::get('dataY');
-        $dataHeight = Input::get('dataHeight');
-        $dataWidth = Input::get('dataWidth');
+        $dataX = request('dataX');
+        $dataY = request('dataY');
+        $dataHeight = request('dataHeight');
+        $dataWidth = request('dataWidth');
+        $image_path = parent::getCurrentPath(request('img'));
+        $crop_path = $image_path;
 
+        if (! $overWrite) {
+            $fileParts = explode('.', request('img'));
+            $fileParts[count($fileParts) - 2] = $fileParts[count($fileParts) - 2] . '_cropped_' . time();
+            $crop_path = parent::getCurrentPath(implode('.', $fileParts));
+        }
+
+        event(new ImageIsCropping($image_path));
         // crop image
-        $tmp_img = Image::make(public_path() . $image);
-        $tmp_img->crop($dataWidth, $dataHeight, $dataX, $dataY)
-            ->save(public_path() . $image);
+        Image::make($image_path)
+            ->crop($dataWidth, $dataHeight, $dataX, $dataY)
+            ->save($crop_path);
 
-        // make new thumbnail
-        $thumb_img = Image::make(public_path() . $image);
-        $thumb_img->fit(200, 200)
-            ->save(parent::getPath('thumb') . parent::getFileName($image)['short']);
+        if (config('lfm.should_create_thumbnails', true)) {
+            // create thumb folder
+            parent::createFolderByPath(parent::getThumbPath());
+
+            // make new thumbnail
+            Image::make($crop_path)
+                ->fit(config('lfm.thumb_img_width', 200), config('lfm.thumb_img_height', 200))
+                ->save(parent::getThumbPath(parent::getName($crop_path)));
+        }
+
+        event(new ImageWasCropped($image_path));
     }
 
+    public function getNewCropimage()
+    {
+        $this->getCropimage(false);
+    }
 }

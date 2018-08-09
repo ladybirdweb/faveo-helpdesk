@@ -58,6 +58,9 @@ class ApiController extends Controller
     public function __construct(Request $request)
     {
         $this->request = $request;
+        $this->middleware('jwt.auth', ['except' => ['register']]);
+        $this->middleware('api', ['except' => ['GenerateApiKey']]);
+
 
         $this->middleware('jwt.auth');
         $this->middleware('api', ['except' => 'GenerateApiKey']);
@@ -69,7 +72,7 @@ class ApiController extends Controller
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
         }
 
-        $ticket = new TicketController();
+        $ticket = new CoreTicketController();
         $this->ticket = $ticket;
 
         $model = new Tickets();
@@ -87,8 +90,8 @@ class ApiController extends Controller
         $faveoUser = new User();
         $this->faveoUser = $faveoUser;
 
-        $faveoUser = new User();
-        $this->user = $faveoUser;
+//        $faveoUser = new User();
+//        $this->user = $faveoUser;
 
         $team = new Teams();
         $this->team = $team;
@@ -121,45 +124,35 @@ class ApiController extends Controller
      *
      * @return json
      */
-    public function createTicket(\App\Http\Requests\helpdesk\CreateTicketRequest $request, \App\Model\helpdesk\Utility\CountryCode $code)
+    public function createTicket(\App\Model\helpdesk\Utility\CountryCode $code)
     {
+        $v = \Validator::make($this->request->all(), [
+                    'user_id'   => 'required|exists:users,id',
+                    'subject'   => 'required',
+                    'body'      => 'required',
+                    'helptopic' => 'required',
+        ]);
+        if ($v->fails()) {
+            $error = $v->errors();
+
+            return response()->json(compact('error'));
+        }
+
         try {
             $user_id = $this->request->input('user_id');
-
-            $subject = $this->request->input('subject');
-            $body = $this->request->input('body');
-            $helptopic = $this->request->input('helptopic');
-            $sla = $this->request->input('sla');
-            $priority = $this->request->input('priority');
-            $header = $this->request->input('cc');
-            $dept = $this->request->input('dept');
-
-            $assignto = $this->request->input('assignto');
-            $form_data = $this->request->input('form_data');
-            $source = $this->request->input('source');
-            $attach = $this->request->input('attachments');
-            $headers = [];
-            if ($header) {
-                $headers = explode(',', $header);
-            }
-            //return $headers;
-            /*
-             * return s ticket number
-             */
+            $user = User::whereId($user_id)->select('email', 'first_name', 'last_name', 'mobile', 'country_code')->first()->toArray();
+            $all = $this->request->input() + ['Requester' => $user_id];
+            $merged = array_merge($user, $all);
+            $request = new \App\Http\Requests\helpdesk\CreateTicketRequest();
+            $request->replace($merged);
+            \Route::dispatch($request);
             $PhpMailController = new \App\Http\Controllers\Common\PhpMailController();
             $NotificationController = new \App\Http\Controllers\Common\NotificationController();
             $core = new CoreTicketController($PhpMailController, $NotificationController);
             $this->request->merge(['body' => preg_replace('/[ ](?=[^>]*(?:<|$))/', '&nbsp;', nl2br($this->request->get('body')))]);
             $request->replace($this->request->except('token', 'api_key'));
             $response = $core->post_newticket($request, $code, true);
-            //$response = $this->ticket->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $attach);
-            //return $response;
-            /*
-             * return ticket details
-             */
-            //dd($response);
-            //$result = $this->thread->where('id', $response)->first();
-            //$result = $this->attach($result->id,$file);
+
             return response()->json(compact('response'));
         } catch (\Exception $e) {
             $error = $e->getMessage();
@@ -184,10 +177,9 @@ class ApiController extends Controller
      */
     public function ticketReply()
     {
-        //dd($this->request->all());
         try {
             $v = \Validator::make($this->request->all(), [
-                        'ticket_ID'     => 'required|exists:tickets,id',
+                        'ticket_id'     => 'required|exists:tickets,id',
                         'reply_content' => 'required',
             ]);
             if ($v->fails()) {
@@ -195,8 +187,10 @@ class ApiController extends Controller
 
                 return response()->json(compact('error'));
             }
+            $user_id = $this->user->id;
             $attach = $this->request->input('attachments');
-            $result = $this->ticket->reply($this->thread, $this->request, $this->attach, $attach);
+            $this->request->merge(['content' => preg_replace('/[ ](?=[^>]*(?:<|$))/', '&nbsp;', nl2br($this->request->get('reply_content')))]);
+            $result = $this->ticket->reply($this->request, $this->request->input('ticket_id'), true, true, $user_id, false);
             $result = $result->join('users', 'ticket_thread.user_id', '=', 'users.id')
                     ->select('ticket_thread.*', 'users.first_name as first_name')
                     ->orderBy('ticket_thread.id', 'desc')
@@ -227,16 +221,26 @@ class ApiController extends Controller
             $v = \Validator::make($this->request->all(), [
                         'ticket_id'       => 'required|exists:tickets,id',
                         'subject'         => 'required',
-                        'sla_plan'        => 'required|exists:sla_plan,id',
-                        'help_topic'      => 'required|exists:help_topic,id',
-                        'ticket_source'   => 'required|exists:ticket_source,id',
-                        'ticket_priority' => 'required|exists:ticket_priority,priority_id',
+                        'help_topic'      => 'required',
+                        'ticket_source'   => 'required',
+                        'ticket_priority' => 'required',
+                        //'ticket_type'     => 'required',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
+
+            if ($this->request->has('assigned') && !is_numeric($this->request->get('assigned'))) {
+                return response()->json(['error' => ['assigned' => ['The assigned feild must me an integer value.']]]);
+            } elseif ($this->request->has('assigned') && is_numeric($this->request->get('assigned'))) {
+                $ticket_policy = new \App\Policies\TicketPolicy();
+                if (!$ticket_policy->assign()) {
+                    return response()->json(['message' => Lang::get('lang.permission_denied')], 403);
+                }
+            }
+
             $ticket_id = $this->request->input('ticket_id');
 
             return $this->ticket->ticketEditPost($ticket_id, $this->thread, $this->model);
@@ -340,18 +344,14 @@ class ApiController extends Controller
     public function unassignedTickets()
     {
         try {
-            //dd('sdhjbc');
-//            $result = $this->model->where('assigned_to', '=', null)->where('status', '1')->orderBy('id', 'DESC')->get();
-//            return response()->json(compact('result'));
             $user = \JWTAuth::parseToken()->authenticate();
             $unassigned = $this->user->join('tickets', function ($join) {
                 $join->on('users.id', '=', 'tickets.user_id')
-                        ->whereNull('assigned_to')->where('status', '=', 1);
+                        ->whereNull('assigned_to');
             })
-                    ->join('department', 'department.id', '=', 'tickets.dept_id')
-                    ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
-                    ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
-                    ->join('help_topic', 'help_topic.id', '=', 'tickets.help_topic_id')
+                    ->leftjoin('department', function ($join) {
+                        $join->on('department.id', '=', 'tickets.dept_id');
+                    })
                     ->join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
                     ->leftJoin('ticket_thread', function ($join) {
                         $join->on('tickets.id', '=', 'ticket_thread.ticket_id');
@@ -394,17 +394,13 @@ class ApiController extends Controller
     public function closeTickets()
     {
         try {
-            //            $result = $this->model->where('status', '>', 1)->where('status', '<', 4)->orderBy('id', 'DESC')->get();
-//            return response()->json(compact('result'));
             $user = \JWTAuth::parseToken()->authenticate();
             $result = $this->user->join('tickets', function ($join) {
-                $join->on('users.id', '=', 'tickets.user_id')
-                        ->where('status', '=', 3)->orWhere('status', '=', 2);
+                $join->on('users.id', '=', 'tickets.user_id');
             })
-                    ->join('department', 'department.id', '=', 'tickets.dept_id')
-                    ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
-                    ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
-                    ->join('help_topic', 'help_topic.id', '=', 'tickets.help_topic_id')
+                    ->leftjoin('department', function ($join) {
+                        $join->on('department.id', '=', 'tickets.dept_id');
+                    })
                     ->join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
                     ->leftJoin('ticket_thread', function ($join) {
                         $join->on('tickets.id', '=', 'ticket_thread.ticket_id');
@@ -496,8 +492,13 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'ticket_id' => 'required',
-                        'user'      => 'required',
+                        'ticket_id' => 'required|exists:tickets,id',
+                        'user'      => [
+                            'required',
+                            \Illuminate\Validation\Rule::exists('users', 'id')->where(function ($query) {
+                                $query->where('role', '!=', 'user');
+                            }),
+                        ],
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -602,7 +603,7 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'user_id' => 'required',
+                        'user_id' => 'required|exists:users,id',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -962,8 +963,7 @@ class ApiController extends Controller
         try {
             $user = \JWTAuth::parseToken()->authenticate();
             $inbox = $this->user->join('tickets', function ($join) {
-                $join->on('users.id', '=', 'tickets.user_id')
-                        ->where('status', '=', 1);
+                $join->on('users.id', '=', 'tickets.user_id');
             })
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
@@ -1047,9 +1047,9 @@ class ApiController extends Controller
         try {
             $user = \JWTAuth::parseToken()->authenticate();
             $trash = $this->user->join('tickets', function ($join) {
-                $join->on('users.id', '=', 'tickets.user_id')
-                        ->where('status', '=', 5);
+                $join->on('users.id', '=', 'tickets.user_id');
             })
+
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
@@ -1112,6 +1112,7 @@ class ApiController extends Controller
                 //->where('user_id', '=', $id);
             })
                     ->join('users as client', 'tickets.user_id', '=', 'client.id')
+
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
@@ -1149,15 +1150,17 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'user_id' => 'required|exists:users,id',
-            ]);
+                                        'user_id' => 'required|exists:users,id',
+                            ]);
             if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
             $id = $this->request->input('user_id');
-            if ($this->user->where('id', $id)->first()->role == 'admin' || $this->user->where('id', $id)->first()->role == 'agent') {
+            if ($this->user->where('id', $id)->first()->role == 'admin'
+                                    || $this->user->where('id', $id)->first()->role
+                                    == 'agent') {
                 $error = 'This is not a client';
 
                 return response()->json(compact('error'));
@@ -1170,7 +1173,7 @@ class ApiController extends Controller
                                             )->first()->toArray();
             $result = $this->user->join('tickets', function ($join) use ($id) {
                 $join->on('users.id', '=', 'tickets.user_id')
-                        ->where('user_id', '=', $id);
+                                        ->where('user_id', '=', $id);
             })
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
@@ -1208,6 +1211,7 @@ class ApiController extends Controller
             $v = \Validator::make($this->request->all(), [
                         'id' => 'required|exists:tickets,id',
             ]);
+
             if ($v->fails()) {
                 $error = $v->errors();
 
@@ -1229,11 +1233,13 @@ class ApiController extends Controller
                     ->leftJoin('ticket_priority', 'tickets.priority_id', '=', 'ticket_priority.priority_id')
                     ->leftJoin('ticket_status', 'tickets.status', '=', 'ticket_status.id')
                     ->leftJoin('sla_plan', 'tickets.sla', '=', 'sla_plan.id')
+
                     ->leftJoin('ticket_source', 'tickets.source', '=', 'ticket_source.id');
             //$select = 'users.email','users.user_name','users.first_name','users.last_name','tickets.id','ticket_number','num_sequence','user_id','priority_id','sla','max_open_ticket','captcha','status','lock_by','lock_at','source','isoverdue','reopened','isanswered','is_deleted', 'closed','is_transfer','transfer_at','reopened_at','duedate','closed_at','last_message_at';
 
             $result = $response->addSelect(
                             'users.email', 'users.user_name', 'users.first_name', 'users.last_name', 'tickets.id', 'ticket_number', 'user_id', 'ticket_priority.priority_id', 'ticket_priority.priority as priority_name', 'department.name as dept_name', 'ticket_status.name as status_name', 'sla_plan.name as sla_name', 'ticket_source.name as source_name', 'sla_plan.id as sla', 'ticket_status.id as status', 'lock_by', 'lock_at', 'ticket_source.id as source', 'isoverdue', 'reopened', 'isanswered', 'is_deleted', 'closed', 'reopened_at', 'duedate', 'closed_at', 'tickets.created_at', 'tickets.updated_at')->first();
+          
 
             return response()->json(compact('result'));
         } catch (\Exception $e) {
@@ -1280,6 +1286,7 @@ class ApiController extends Controller
 
     public function collaboratorSearch()
     {
+
         $this->validate($this->request, ['term' => 'required']);
 
         try {
@@ -1330,7 +1337,7 @@ class ApiController extends Controller
         try {
             $v = \Validator::make(\Input::get(), [
                         'email'     => 'required|email|unique:users',
-                        'ticket_id' => 'required',
+                        'ticket_id' => 'required|exists:tickets,id',
                             ]
             );
             if ($v->fails()) {
@@ -1390,8 +1397,8 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make(\Input::get(), [
-                        'ticketid' => 'required',
-                        'email'    => 'required',
+                        'ticketid' => 'required|exists:tickets,id',
+                        'email'    => 'required|email',
                             ]
             );
             if ($v->fails()) {
@@ -1402,7 +1409,7 @@ class ApiController extends Controller
             $collaborator = $this->ticket->userremove();
 
             return response()->json(compact('collaborator'));
-        } catch (\Exception $ex) {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
             $line = $e->getLine();
             $file = $e->getFile();
@@ -1423,10 +1430,18 @@ class ApiController extends Controller
             }
             $department = $this->department->select('name', 'id')->get()->toArray();
             $sla = $this->slaPlan->select('name', 'id')->get()->toArray();
-            $staff = $this->user->where('role', 'agent')->select('email', 'id')->get()->toArray();
+            $staff = $this->user->where('role', '!=', 'user')
+                            ->where('ban', '!=', 1)
+                            ->where('is_delete', '!=', 1)
+                            ->select('email', 'id', 'first_name', 'last_name', 'user_name')
+                            ->get()->toArray();
             $team = $this->team->select('name', 'id')->get()->toArray();
-            $priority = \DB::table('ticket_priority')->select('priority', 'priority_id')->get();
-            $helptopic = $this->helptopic->select('topic', 'id')->get()->toArray();
+            $priority = \DB::table('ticket_priority')
+                            ->where('status', '=', 1)
+                            ->select('priority', 'priority_id')->get();
+            $helptopic = $this->helptopic
+                            ->where('status', '=', 1)
+                            ->select('topic', 'id')->get()->toArray();
             $status = \DB::table('ticket_status')->select('name', 'id')->get();
             $source = \DB::table('ticket_source')->select('name', 'id')->get();
             $statuses = collect($tickets
@@ -1535,7 +1550,7 @@ class ApiController extends Controller
             $username = $request->input('email');
             $password = \Hash::make($request->input('password'));
             $role = $request->input('role');
-            if ($auth->role == 'agent') {
+            if (!$role) {
                 $role = 'user';
             }
             $user = new User();

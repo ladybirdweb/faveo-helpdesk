@@ -88,14 +88,23 @@ foreach($segments as $seg){
         });
 
         $('#open_tab').on('click', function(){
+            $('#open').css('display', 'none');
+            $('#close').css('display', 'inline');
+            $('#delete').css('display', 'inline');
             redrawTable("Open");
         });
 
         $('#closed_tab').on('click', function(){
+            $('#close').css('display', 'none');
+            $('#open').css('display', 'inline');
+            $('#delete').css('display', 'inline');
             redrawTable("Closed");
         });
 
         $('#deleted_tab').on('click', function(){
+            $('#delete').css('display', 'none');
+            $('#open').css('display', 'inline');
+            $('#close').css('display', 'inline');
             redrawTable("Deleted");
         });
 
@@ -105,5 +114,18 @@ foreach($segments as $seg){
             myFunction();
         }
     });
+
+    function appendValue(id) {
+        var txt = document.getElementById(id);
+        if (id == 'delete') {
+            txt.value = 'Delete';
+        }else if(id == 'close') {
+            txt.value = 'Close';
+        }else if(id == 'open') {
+            txt.value = 'Open';
+        } else {
+            txt.value = 'Delete forever';
+        }
+    }
 
 </script>

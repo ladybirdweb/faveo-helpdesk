@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Http;
@@ -26,7 +24,7 @@ class Headers implements Countable, Iterator
     /**
      * @var PluginClassLocator
      */
-    protected $pluginClassLoader = null;
+    protected $pluginClassLoader;
 
     /**
      * @var array key names for $headers array
@@ -81,7 +79,7 @@ class Headers implements Countable, Iterator
                 }
                 $current = [
                     'name' => $matches['name'],
-                    'line' => trim($line)
+                    'line' => trim($line),
                 ];
 
                 continue;
@@ -142,7 +140,7 @@ class Headers implements Countable, Iterator
      */
     public function addHeaders($headers)
     {
-        if (!is_array($headers) && !$headers instanceof Traversable) {
+        if (! is_array($headers) && ! $headers instanceof Traversable) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'Expected array or Traversable; received "%s"',
                 (is_object($headers) ? get_class($headers) : gettype($headers))
@@ -259,7 +257,7 @@ class Headers implements Countable, Iterator
     public function get($name)
     {
         $key = static::createKey($name);
-        if (!in_array($key, $this->headersKeys)) {
+        if (! in_array($key, $this->headersKeys)) {
             return false;
         }
 
@@ -403,7 +401,7 @@ class Headers implements Countable, Iterator
         foreach ($this->headers as $header) {
             if ($header instanceof Header\MultipleHeaderInterface) {
                 $name = $header->getFieldName();
-                if (!isset($headers[$name])) {
+                if (! isset($headers[$name])) {
                     $headers[$name] = [];
                 }
                 $headers[$name][] = $header->getFieldValue();

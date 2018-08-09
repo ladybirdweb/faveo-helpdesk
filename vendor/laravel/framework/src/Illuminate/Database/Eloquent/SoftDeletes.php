@@ -30,11 +30,13 @@ trait SoftDeletes
     {
         $this->forceDeleting = true;
 
-        $deleted = $this->delete();
+        return tap($this->delete(), function ($deleted) {
+            $this->forceDeleting = false;
 
-        $this->forceDeleting = false;
-
-        return $deleted;
+            if ($deleted) {
+                $this->fireModelEvent('forceDeleted', false);
+            }
+        });
     }
 
     /**
@@ -45,6 +47,8 @@ trait SoftDeletes
     protected function performDeleteOnModel()
     {
         if ($this->forceDeleting) {
+            $this->exists = false;
+
             return $this->newQueryWithoutScopes()->where($this->getKeyName(), $this->getKey())->forceDelete();
         }
 
@@ -60,9 +64,19 @@ trait SoftDeletes
     {
         $query = $this->newQueryWithoutScopes()->where($this->getKeyName(), $this->getKey());
 
-        $this->{$this->getDeletedAtColumn()} = $time = $this->freshTimestamp();
+        $time = $this->freshTimestamp();
 
-        $query->update([$this->getDeletedAtColumn() => $this->fromDateTime($time)]);
+        $columns = [$this->getDeletedAtColumn() => $this->fromDateTime($time)];
+
+        $this->{$this->getDeletedAtColumn()} = $time;
+
+        if ($this->timestamps && ! is_null($this->getUpdatedAtColumn())) {
+            $this->{$this->getUpdatedAtColumn()} = $time;
+
+            $columns[$this->getUpdatedAtColumn()] = $this->fromDateTime($time);
+        }
+
+        $query->update($columns);
     }
 
     /**
@@ -126,6 +140,16 @@ trait SoftDeletes
     }
 
     /**
+     * Determine if the model is currently force deleting.
+     *
+     * @return bool
+     */
+    public function isForceDeleting()
+    {
+        return $this->forceDeleting;
+    }
+
+    /**
      * Get the name of the "deleted at" column.
      *
      * @return string
@@ -142,6 +166,6 @@ trait SoftDeletes
      */
     public function getQualifiedDeletedAtColumn()
     {
-        return $this->getTable().'.'.$this->getDeletedAtColumn();
+        return $this->qualifyColumn($this->getDeletedAtColumn());
     }
 }

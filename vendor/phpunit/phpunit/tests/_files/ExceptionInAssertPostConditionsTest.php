@@ -1,5 +1,7 @@
 <?php
-class ExceptionInAssertPostConditionsTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class ExceptionInAssertPostConditionsTest extends TestCase
 {
     public $setUp                = false;
     public $assertPreConditions  = false;
@@ -7,7 +9,7 @@ class ExceptionInAssertPostConditionsTest extends PHPUnit_Framework_TestCase
     public $tearDown             = false;
     public $testSomething        = false;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setUp = true;
     }
@@ -28,7 +30,7 @@ class ExceptionInAssertPostConditionsTest extends PHPUnit_Framework_TestCase
         throw new Exception;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->tearDown = true;
     }

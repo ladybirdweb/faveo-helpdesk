@@ -7,11 +7,14 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Tymon\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
 
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract, AuthenticatableUserContract
 {
     use Authenticatable,
-        CanResetPassword;
+        CanResetPassword,
+        Notifiable;
 
     /**
      * The database table used by the model.
@@ -28,7 +31,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $fillable = ['user_name', 'email', 'password', 'active', 'first_name', 'last_name', 'ban', 'ext', 'mobile', 'profile_pic',
         'phone_number', 'company', 'agent_sign', 'account_type', 'account_status',
         'assign_group', 'primary_dpt', 'agent_tzone', 'daylight_save', 'limit_access',
-        'directory_listing', 'vacation_mode', 'role', 'internal_note', 'country_code', 'not_accept_ticket', 'is_delete', ];
+        'directory_listing', 'vacation_mode', 'role', 'internal_note', 'country_code', 'not_accept_ticket', 'is_delete', 'mobile_verify', ];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -45,13 +48,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $pic = $this->checkArray('avatar', $info);
         }
         if (!$pic && $value) {
-            $pic = '';
-            $file = asset('uploads/profilepic/'.$value);
-            if ($file) {
-                $type = pathinfo($file, PATHINFO_EXTENSION);
-                $data = file_get_contents($file);
-                $pic = 'data:image/'.$type.';base64,'.base64_encode($data);
-            }
+            $pic = asset('uploads/profilepic/'.$value);
         }
         if (!$value) {
             $pic = \Gravatar::src($this->attributes['email']);
@@ -125,7 +122,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $id = $this->attributes['id'];
         }
         $info = new UserAdditionalInfo();
-        $infos = $info->where('owner', $id)->lists('value', 'key')->toArray();
+        $infos = $info->where('owner', $id)->pluck('value', 'key')->toArray();
 
         return $infos;
     }
@@ -179,9 +176,107 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 //        dd($this->id);
 //        parent::save();
 //    }
-
 //    public function save(array $options = array()) {
 //        parent::save($options);
 //        dd($this->where('id',$this->id)->select('first_name','last_name','user_name','email')->get()->toJson());
 //    }
+
+    public function org()
+    {
+        return $this->hasOne('App\Model\helpdesk\Agent_panel\User_org', 'user_id');
+    }
+
+    public function permision()
+    {
+        return $this->hasOne('App\Model\helpdesk\Agent\Groups', 'user_id');
+    }
+
+    public function save(array $options = [])
+    {
+        $changed = $this->isDirty() ? $this->getDirty() : false;
+        $user = parent::save();
+        $this->updateDeletedUserDependency($changed);
+
+        return $user;
+    }
+
+    public function ticketsAssigned()
+    {
+        $related = 'App\Model\helpdesk\Ticket\Tickets';
+
+        return $this->hasMany($related, 'assigned_to');
+    }
+
+    public function updateDeletedUserDependency($changed)
+    {
+        if ($changed && checkArray('is_delete', $changed) == 1) {
+            $this->ticketsAssigned()->whereHas('statuses.type', function ($query) {
+                $query->where('name', 'open');
+            })->update(['assigned_to' => null]);
+        }
+    }
+
+    public function isDeleted()
+    {
+        $is_deleted = $this->attributes['is_delete'];
+        $check = false;
+        if ($is_deleted) {
+            $check = true;
+        }
+
+        return $check;
+    }
+
+    public function isBan()
+    {
+        $is_deleted = $this->attributes['ban'];
+        $check = false;
+        if ($is_deleted) {
+            $check = true;
+        }
+
+        return $check;
+    }
+
+    public function isActive()
+    {
+        $is_deleted = $this->attributes['active'];
+        $check = false;
+        if ($is_deleted) {
+            $check = true;
+        }
+
+        return $check;
+    }
+
+    public function isMobileVerified()
+    {
+        $is_deleted = $this->attributes['mobile_verify'];
+        $check = false;
+        if ($is_deleted) {
+            $check = true;
+        }
+
+        return $check;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();  // Eloquent model method
+    }
+
+    /**
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [
+             'user' => [
+                'id' => $this->id,
+             ],
+        ];
+    }
 }

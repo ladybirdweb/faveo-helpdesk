@@ -8,25 +8,16 @@
  * file that was distributed with this source code.
  */
 
+namespace PHPUnit\Runner;
+
+use ReflectionClass;
+
 /**
  * An interface to define how a test suite should be loaded.
- *
- * @since      Interface available since Release 2.0.0
  */
-interface PHPUnit_Runner_TestSuiteLoader
+interface TestSuiteLoader
 {
-    /**
-     * @param string $suiteClassName
-     * @param string $suiteClassFile
-     *
-     * @return ReflectionClass
-     */
-    public function load($suiteClassName, $suiteClassFile = '');
+    public function load(string $suiteClassName, string $suiteClassFile = ''): ReflectionClass;
 
-    /**
-     * @param ReflectionClass $aClass
-     *
-     * @return ReflectionClass
-     */
-    public function reload(ReflectionClass $aClass);
+    public function reload(ReflectionClass $aClass): ReflectionClass;
 }

@@ -60,6 +60,8 @@ class UserController extends Controller
      *
      * @return void
      */
+    protected $ticket_policy;
+
     public function __construct(PhpMailController $PhpMailController)
     {
         $this->PhpMailController = $PhpMailController;
@@ -67,6 +69,7 @@ class UserController extends Controller
         $this->middleware('auth');
         // checking if role is agent
         $this->middleware('role.agent');
+        $this->ticket_policy = new \App\Policies\TicketPolicy();
     }
 
     /**
@@ -202,7 +205,7 @@ class UserController extends Controller
                         ->addColumn('updated_at', function ($model) {
                             $t = $model->updated_at;
 
-                            return TicketController::usertimezone($t);
+                            return faveoDate($t);
                         })
                         /* column Role */
                         ->addColumn('role', function ($model) {
@@ -257,7 +260,7 @@ class UserController extends Controller
             $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
             $location = GeoIP::getLocation();
             $phonecode = $code->where('iso', '=', $location->iso_code)->first();
-            $org = Organization::lists('name', 'id')->toArray();
+            $org = Organization::pluck('name', 'id')->toArray();
 
             return view('themes.default1.agent.helpdesk.user.create', compact('org', 'settings', 'email_mandatory'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
@@ -614,8 +617,9 @@ class UserController extends Controller
     {
         try {
             $users = User::where('id', '=', $id)->first();
+            $policy = $this->ticket_policy;
             if (count($users) > 0) {
-                return view('themes.default1.agent.helpdesk.user.show', compact('users'));
+                return view('themes.default1.agent.helpdesk.user.show', compact('users', 'policy'));
             } else {
                 return redirect()->back()->with('fails', Lang::get('lang.user-not-found'));
             }
@@ -647,9 +651,9 @@ class UserController extends Controller
             $phonecode = $code->where('iso', '=', $location->iso_code)->first();
             $orgs = Organization::all();
             // dd($org);
-            $organization_id = User_org::where('user_id', '=', $id)->lists('org_id')->first();
+            $organization_id = User_org::where('user_id', '=', $id)->pluck('org_id')->first();
 
-            // $org_name=Organization::where('id','=',$org_id)->lists('name')->first();
+            // $org_name=Organization::where('id','=',$org_id)->pluck('name')->first();
             // dd($org_name);
 
             return view('themes.default1.agent.helpdesk.user.edit', compact('users', 'orgs', '$settings', '$email_mandatory', 'organization_id'))->with('phonecode', $phonecode->phonecode);
@@ -833,7 +837,7 @@ class UserController extends Controller
         $org_name = Input::get('org');
 
         if ($org_name) {
-            $org = Organization::where('name', '=', $org_name)->lists('id')->first();
+            $org = Organization::where('name', '=', $org_name)->pluck('id')->first();
             if ($org) {
                 $user_org = new User_org();
                 $user_org->org_id = $org;
@@ -854,7 +858,7 @@ class UserController extends Controller
         $org_name = Input::get('org');
 
         if ($org_name) {
-            $org = Organization::where('name', '=', $org_name)->lists('id')->first();
+            $org = Organization::where('name', '=', $org_name)->pluck('id')->first();
             if ($org) {
                 $user_org = User_org::where('user_id', '=', $id)->first();
                 $user_org->org_id = $org;
@@ -1084,5 +1088,123 @@ class UserController extends Controller
         foreach ($users as $user) {
             echo "<option value='user_$user->id'>".$user->name().'</option>';
         }
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function settingsUpdateStatus(Request $request)
+    {
+        try {
+            if (!$this->ticket_policy->emailVerification()) {
+                return redirect('dashboard')->with('fails', 'Permission denied');
+            }
+            $user_id = $request->user_id;
+            $user_status = $request->settings_status;
+            User::where('id', $user_id)->update(['active' => $user_status]);
+
+            return Lang::get('lang.status_updated_successfully');
+        } catch (Exception $e) {
+            return Redirect()->back()->with('fails', $e->getMessage());
+        }
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function settingsUpdateBan(Request $request)
+    {
+        try {
+            if (!$this->ticket_policy->ban()) {
+                return redirect('dashboard')->with('fails', 'Permission denied');
+            }
+            $user_id = $request->user_id;
+            $user_ban = $request->settings_ban;
+            $user = User::where('id', $user_id)->update(['ban' => $user_ban]);
+//            $spam_status_type = \App\Model\helpdesk\Ticket\Ticket_Status::whereHas('type', function($query) {
+//                        $query->where('name', 'spam');
+//                    })->first();
+            if ($user->role != 'user') {
+                $user->ticketsAssigned()->whereHas('statuses.type', function ($query) {
+                    $query->where('name', 'open');
+                })->update(['assigned_to' => null]);
+            }
+
+            return Lang::get('lang.status_updated_successfully');
+        } catch (Exception $e) {
+            return Redirect()->back()->with('fails', $e->getMessage());
+        }
+    }
+
+    public function settingsUpdateMobileVerify(Request $request)
+    {
+        try {
+            if (!$this->ticket_policy->mobileVerification()) {
+                return redirect('dashboard')->with('fails', 'Permission denied');
+            }
+            $user_id = $request->user_id;
+            $user_ban = $request->settings_ban;
+            User::where('id', $user_id)->update(['mobile_verify' => $user_ban]);
+
+            return Lang::get('lang.your_status_updated_successfully');
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function createRequester(Request $request)
+    {
+        $this->validate($request, [
+            'email'     => 'required|max:50|email|unique:users',
+            'full_name' => 'required',
+        ]);
+
+        try {
+            $auth_control = new \App\Http\Controllers\Auth\AuthController();
+            $user_create_request = new \App\Http\Requests\helpdesk\RegisterRequest();
+            $user = new User();
+            $password = str_random(8);
+            $all = $request->all() + ['password' => $password, 'password_confirmation' => $password];
+            $user_create_request->replace($all);
+            $response = $auth_control->postRegister($user, $user_create_request, true);
+            $status = 200;
+        } catch (\Exception $e) {
+            $response = ['error' => [$e->getMessage()]];
+            $status = 500;
+
+            return response()->json($response, $status);
+        }
+
+        return response()->json(compact('response'), $status);
+    }
+
+    public function getRequesterForCC(Request $request)
+    {
+        try {
+            $this->validate($request, [
+                'term' => 'required',
+            ]);
+            $term = $request->input('term');
+            $requester = User::where('ban', 0)
+                    ->where('active', 1)
+                    ->where('is_delete', 0)
+                    ->whereNotNull('email')
+                    ->where('email', 'LIKE', '%'.$term.'%')
+                    ->select('id', 'user_name', 'email', 'first_name', 'last_name', 'profile_pic')
+                    ->get();
+            $response = $requester->toArray();
+            $status = 200;
+        } catch (\Exception $e) {
+            $response = ['error' => [$e->getMessage()]];
+            $status = 500;
+
+            return response()->json($response, $status);
+        }
+
+        return response()->json(compact('response'), $status);
     }
 }

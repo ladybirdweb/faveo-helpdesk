@@ -448,6 +448,9 @@ Breadcrumbs::register('client.profile', function ($breadcrumbs) {
 Breadcrumbs::register('ticket2', function ($breadcrumbs) {
     $breadcrumbs->push('My Tickets', route('ticket2'));
 });
+Breadcrumbs::register('myorganizationtickets', function ($breadcrumbs) {
+    $breadcrumbs->push('My Organization Tickets', route('myorganizationtickets'));
+});
 
 Breadcrumbs::register('client-verify-number', function ($breadcrumbs) {
     $breadcrumbs->push('Profile', route('client-verify-number'));
@@ -616,4 +619,12 @@ Breadcrumbs::register('labels.edit', function ($breadcrumbs) {
 
 Breadcrumbs::register('readmails', function ($breadcrumbs) {
     $breadcrumbs->push('readmails', 'readmails');
+});
+
+Breadcrumbs::register('notification', function ($breadcrumbs) {
+    $breadcrumbs->push('notification', 'notification');
+});
+
+Breadcrumbs::register('switch-user-lang', function () {
+    $breadcrumbs->push('switch-language', 'switch-user-lang');
 });

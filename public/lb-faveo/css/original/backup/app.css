@@ -1,5 +1,5 @@
 /*	Google WebFonts	*/
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic,700,700italic);
+@import url(//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic,700,700italic);
 
 
 /*-----------------------------------------------------------------------------------*/
@@ -52,7 +52,7 @@ h6,
 .h1,
 .h2,
 .h3,
-.h4, 
+.h4,
 .h5,
 .h6 {
 	font-family: inherit;
@@ -396,7 +396,7 @@ ol.with-line-border > li {
 	height: 100%;
 }
 .map-frame,
-.map-frame > * {	
+.map-frame > * {
 	max-width: 100%;
 }
 
@@ -813,7 +813,7 @@ ol.with-line-border > li {
 }
 .entry-thumbnail,
 .entry-content .video-frame,
-.entry-content .map-frame {	
+.entry-content .map-frame {
 	width: 100%;
 	position: relative;
 	top: -1.5em;
@@ -1237,10 +1237,10 @@ ol.with-line-border > li {
 		content: "";
 		display: block;
 		float: left;
-		width: 0; 
-		height: 0; 
+		width: 0;
+		height: 0;
 		border-top: 8px solid transparent;
-		border-bottom: 8px solid transparent; 	
+		border-bottom: 8px solid transparent;
 		border-right: 12px solid #fff;
 		position: absolute;
 		top: 8px;

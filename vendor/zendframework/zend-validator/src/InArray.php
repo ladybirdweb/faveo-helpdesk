@@ -110,7 +110,9 @@ class InArray extends AbstractValidator
 
     /**
      * Sets the strict option mode
-     * InArray::COMPARE_STRICT | InArray::COMPARE_NOT_STRICT_AND_PREVENT_STR_TO_INT_VULNERABILITY | InArray::COMPARE_NOT_STRICT
+     * InArray::COMPARE_STRICT
+     * InArray::COMPARE_NOT_STRICT_AND_PREVENT_STR_TO_INT_VULNERABILITY
+     * InArray::COMPARE_NOT_STRICT
      *
      * @param  int $strict
      * @return InArray Provides a fluent interface
@@ -125,7 +127,7 @@ class InArray extends AbstractValidator
         ];
 
         // validate strict value
-        if (!in_array($strict, $checkTypes)) {
+        if (! in_array($strict, $checkTypes)) {
             throw new Exception\InvalidArgumentException('Strict option must be one of the COMPARE_ constants');
         }
 

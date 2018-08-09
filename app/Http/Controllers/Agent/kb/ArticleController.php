@@ -40,12 +40,14 @@ class ArticleController extends Controller
      *
      * @return void
      */
+    protected $ticket_policy;
+
     public function __construct()
     {
         // checking authentication
         $this->middleware('auth');
         // checking roles
-        $this->middleware('roles');
+        $this->ticket_policy = new \App\Policies\TicketPolicy();
         SettingsController::language();
     }
 
@@ -118,6 +120,10 @@ class ArticleController extends Controller
     {
         /* show article list */
         try {
+            if (!$this->ticket_policy->kb()) {
+                return redirect('dashboard')->with('fails', 'Permission denied');
+            }
+
             return view('themes.default1.agent.kb.article.index');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -134,9 +140,13 @@ class ArticleController extends Controller
     public function create(Category $category)
     {
         /* get the attributes of the category */
-        $category = $category->lists('id', 'name');
+        $category = $category->pluck('id', 'name');
         /* get the create page  */
         try {
+            if (!$this->ticket_policy->kb()) {
+                return redirect('dashboard')->with('fails', 'Permission denied');
+            }
+
             return view('themes.default1.agent.kb.article.create', compact('category'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -153,6 +163,9 @@ class ArticleController extends Controller
      */
     public function store(Article $article, ArticleRequest $request)
     {
+        if (!$this->ticket_policy->kb()) {
+            return redirect('dashboard')->with('fails', 'Permission denied');
+        }
         // requesting the values to store article data
         $publishTime = $request->input('year').'-'.$request->input('month').'-'.$request->input('day').' '.$request->input('hour').':'.$request->input('minute').':00';
 
@@ -190,15 +203,18 @@ class ArticleController extends Controller
      */
     public function edit($slug)
     {
+        if (!$this->ticket_policy->kb()) {
+            return redirect('dashboard')->with('fails', 'Permission denied');
+        }
         $article = new Article();
         $relation = new Relationship();
         $category = new Category();
         $aid = $article->where('id', $slug)->first();
         $id = $aid->id;
         /* define the selected fields */
-        $assign = $relation->where('article_id', $id)->lists('category_id');
+        $assign = $relation->where('article_id', $id)->pluck('category_id');
         /* get the attributes of the category */
-        $category = $category->lists('id', 'name');
+        $category = $category->pluck('id', 'name');
         /* get the selected article and display it at edit page  */
         /* Get the selected article with id */
         $article = $article->whereId($id)->first();
@@ -222,6 +238,9 @@ class ArticleController extends Controller
      */
     public function update($slug, ArticleUpdate $request)
     {
+        if (!$this->ticket_policy->kb()) {
+            return redirect('dashboard')->with('fails', 'Permission denied');
+        }
         $article = new Article();
         $relation = new Relationship();
         $aid = $article->where('id', $slug)->first();
@@ -266,6 +285,9 @@ class ArticleController extends Controller
      */
     public function destroy($slug, Article $article, Relationship $relation, Comment $comment)
     {
+        if (!$this->ticket_policy->kb()) {
+            return redirect('dashboard')->with('fails', 'Permission denied');
+        }
         /* delete the selected article from the table */
         $article = $article->where('slug', $slug)->first(); //get the selected article via id
         $id = $article->id;

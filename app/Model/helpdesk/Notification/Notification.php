@@ -2,60 +2,48 @@
 
 namespace App\Model\helpdesk\Notification;
 
-use App\BaseModel;
+use Illuminate\Database\Eloquent\Model;
 
-class Notification extends BaseModel
+class Notification extends Model
 {
     protected $table = 'notifications';
     protected $fillable = [
+        'message', 'by', 'to', 'seen', 'table', 'row_id', 'url',
+    ];
 
-            'model_id', 'userid_created', 'type_id',
-                            ];
-
-    public function type()
+    public function setByAttribute($value)
     {
-        $related = 'App\Model\helpdesk\Notification\NotificationType';
-        $id = 'type_id';
-
-        return $this->belongsTo($related, $id);
-    }
-
-    public function model()
-    {
-        $related = 'App\Model\helpdesk\Ticket\Tickets';
-        $id = 'model_id';
-
-        return $this->belongsTo($related, $id);
-    }
-
-    public function userNotification()
-    {
-        $related = 'App\Model\helpdesk\Notification\UserNotification';
-        $foreignKey = 'notification_id';
-
-        return $this->hasMany($related, $foreignKey);
-    }
-
-    public function deleteUserNotification()
-    {
-        $user_notifications = $this->userNotification;
-        if (count($user_notifications) > 0) {
-            foreach ($user_notifications as $noti) {
-                $noti->delete();
-            }
+        if (!$value) {
+            $this->attributes['by'] = 'System';
+        } else {
+            $this->attributes['by'] = $value;
         }
     }
 
-    public function dummyDelete()
+    public function requester()
     {
-        $user_notifications = UserNotification::get();
-        if (count($user_notifications) > 0) {
-            foreach ($user_notifications as $noti) {
-                $noti->delete();
-            }
+        $related = 'App\User';
+
+        return $this->belongsTo($related, 'by');
+    }
+
+    public function getMessageAttribute($value)
+    {
+        if ($value) {
+            return strip_tags($value);
+        } else {
+            return $value;
         }
     }
 
+    public function getCreatedAtAttribute($value)
+    {
+        if ($value) {
+            return faveoDate($value);
+        } else {
+            return $value;
+        }
+    }
     public function delete()
     {
         $this->deleteUserNotification();

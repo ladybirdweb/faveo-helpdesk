@@ -1,6 +1,77 @@
 CHANGELOG
 =========
 
+4.0.0
+-----
+
+ * removed the `DataCollector::varToString()` method, use `DataCollector::cloneVar()`
+   instead
+ * using the `DataCollector::cloneVar()` method requires the VarDumper component
+ * removed the `ValueExporter` class
+ * removed `ControllerResolverInterface::getArguments()`
+ * removed `TraceableControllerResolver::getArguments()`
+ * removed `ControllerResolver::getArguments()` and the ability to resolve arguments
+ * removed the `argument_resolver` service dependency from the `debug.controller_resolver`
+ * removed `LazyLoadingFragmentHandler::addRendererService()`
+ * removed `Psr6CacheClearer::addPool()`
+ * removed `Extension::addClassesToCompile()` and `Extension::getClassesToCompile()`
+ * removed `Kernel::loadClassCache()`, `Kernel::doLoadClassCache()`, `Kernel::setClassCache()`,
+   and `Kernel::getEnvParameters()`
+ * support for the `X-Status-Code` when handling exceptions in the `HttpKernel`
+   has been dropped, use the `HttpKernel::allowCustomResponseCode()` method
+   instead
+ * removed convention-based commands registration
+ * removed the `ChainCacheClearer::add()` method
+ * removed the `CacheaWarmerAggregate::add()` and `setWarmers()` methods
+ * made `CacheWarmerAggregate` and `ChainCacheClearer` classes final
+
+3.4.0
+-----
+
+ * added a minimalist PSR-3 `Logger` class that writes in `stderr`
+ * made kernels implementing `CompilerPassInterface` able to process the container
+ * deprecated bundle inheritance
+ * added `RebootableInterface` and implemented it in `Kernel`
+ * deprecated commands auto registration
+ * deprecated `EnvParametersResource`
+ * added `Symfony\Component\HttpKernel\Client::catchExceptions()`
+ * deprecated the `ChainCacheClearer::add()` method
+ * deprecated the `CacheaWarmerAggregate::add()` and `setWarmers()` methods
+ * made `CacheWarmerAggregate` and `ChainCacheClearer` classes final
+ * added the possibility to reset the profiler to its initial state
+ * deprecated data collectors without a `reset()` method
+ * deprecated implementing `DebugLoggerInterface` without a `clear()` method
+
+3.3.0
+-----
+
+ * added `kernel.project_dir` and `Kernel::getProjectDir()`
+ * deprecated `kernel.root_dir` and `Kernel::getRootDir()`
+ * deprecated `Kernel::getEnvParameters()`
+ * deprecated the special `SYMFONY__` environment variables
+ * added the possibility to change the query string parameter used by `UriSigner`
+ * deprecated `LazyLoadingFragmentHandler::addRendererService()`
+ * deprecated `Extension::addClassesToCompile()` and `Extension::getClassesToCompile()`
+ * deprecated `Psr6CacheClearer::addPool()`
+
+3.2.0
+-----
+
+ * deprecated `DataCollector::varToString()`, use `cloneVar()` instead
+ * changed surrogate capability name in `AbstractSurrogate::addSurrogateCapability` to 'symfony'
+ * Added `ControllerArgumentValueResolverPass`
+
+3.1.0
+-----
+ * deprecated passing objects as URI attributes to the ESI and SSI renderers
+ * deprecated `ControllerResolver::getArguments()`
+ * added `Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface`
+ * added `Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface` as argument to `HttpKernel`
+ * added `Symfony\Component\HttpKernel\Controller\ArgumentResolver`
+ * added `Symfony\Component\HttpKernel\DataCollector\RequestDataCollector::getMethod()`
+ * added `Symfony\Component\HttpKernel\DataCollector\RequestDataCollector::getRedirect()`
+ * added the `kernel.controller_arguments` event, triggered after controller arguments have been resolved
+
 3.0.0
 -----
 
@@ -12,8 +83,8 @@ CHANGELOG
  * removed `Symfony\Component\HttpKernel\EventListener\RouterListener::setRequest()`
  * removed `Symfony\Component\HttpKernel\EventListener\ProfilerListener::onKernelRequest()`
  * removed `Symfony\Component\HttpKernel\Fragment\FragmentHandler::setRequest()`
- * removed `Symfony\Component\HttpKernel\HttpCache\Esi::hasSurrogateEsiCapability()` 
- * removed `Symfony\Component\HttpKernel\HttpCache\Esi::addSurrogateEsiCapability()` 
+ * removed `Symfony\Component\HttpKernel\HttpCache\Esi::hasSurrogateEsiCapability()`
+ * removed `Symfony\Component\HttpKernel\HttpCache\Esi::addSurrogateEsiCapability()`
  * removed `Symfony\Component\HttpKernel\HttpCache\Esi::needsEsiParsing()`
  * removed `Symfony\Component\HttpKernel\HttpCache\HttpCache::getEsi()`
  * removed `Symfony\Component\HttpKernel\DependencyInjection\ContainerAwareHttpKernel`

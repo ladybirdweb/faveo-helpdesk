@@ -3,15 +3,19 @@
 namespace Illuminate\Foundation\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\InteractsWithTime;
 
 class DownCommand extends Command
 {
+    use InteractsWithTime;
+
     /**
-     * The console command name.
+     * The console command signature.
      *
      * @var string
      */
-    protected $name = 'down';
+    protected $signature = 'down {--message= : The message for the maintenance mode. }
+                                 {--retry= : The number of seconds after which the request may be retried.}';
 
     /**
      * The console command description.
@@ -25,10 +29,39 @@ class DownCommand extends Command
      *
      * @return void
      */
-    public function fire()
+    public function handle()
     {
-        touch($this->laravel->storagePath().'/framework/down');
+        file_put_contents(
+            storage_path('framework/down'),
+            json_encode($this->getDownFilePayload(), JSON_PRETTY_PRINT)
+        );
 
         $this->comment('Application is now in maintenance mode.');
+    }
+
+    /**
+     * Get the payload to be placed in the "down" file.
+     *
+     * @return array
+     */
+    protected function getDownFilePayload()
+    {
+        return [
+            'time' => $this->currentTime(),
+            'message' => $this->option('message'),
+            'retry' => $this->getRetryTime(),
+        ];
+    }
+
+    /**
+     * Get the number of seconds the client should wait before retrying their request.
+     *
+     * @return int|null
+     */
+    protected function getRetryTime()
+    {
+        $retry = $this->option('retry');
+
+        return is_numeric($retry) && $retry > 0 ? (int) $retry : null;
     }
 }

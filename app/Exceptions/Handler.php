@@ -4,15 +4,13 @@ namespace App\Exceptions;
 
 // controller
 use Bugsnag;
-//use Illuminate\Validation\ValidationException;
 use Bugsnag\BugsnagLaravel\BugsnagExceptionHandler as ExceptionHandler;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
-// use Symfony\Component\HttpKernel\Exception\HttpException;
-// use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Foundation\Validation\ValidationException;
+use Illuminate\Foundation\Validation\ValidationException as FoundationValidation;
 use Illuminate\Session\TokenMismatchException;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
@@ -25,11 +23,13 @@ class Handler extends ExceptionHandler
     protected $dontReport = [
 //        'Symfony\Component\HttpKernel\Exception\HttpException',
         \Illuminate\Http\Exception\HttpResponseException::class,
-        ValidationException::class,
+        FoundationValidation::class,
         AuthorizationException::class,
         HttpResponseException::class,
         ModelNotFoundException::class,
         \Symfony\Component\HttpKernel\Exception\HttpException::class,
+        \Illuminate\Validation\ValidationException::class,
+        \DaveJamesMiller\Breadcrumbs\Exception::class,
     ];
 
     /**
@@ -46,15 +46,28 @@ class Handler extends ExceptionHandler
         $debug = \Config::get('app.bugsnag_reporting');
         $debug = ($debug) ? 'true' : 'false';
         if ($debug == 'false') {
-            Bugsnag::setBeforeNotifyFunction(function ($error) {
-                return false;
-            });
+//            Bugsnag::setBeforeNotifyFunction(function ($error) {
+//                return false;
+//            });
         } else {
             $version = \Config::get('app.version');
             Bugsnag::setAppVersion($version);
         }
 
         return parent::report($e);
+    }
+
+    /**
+     * Convert a validation exception into a JSON response.
+     *
+     * @param \Illuminate\Http\Request                   $request
+     * @param \Illuminate\Validation\ValidationException $exception
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function invalidJson($request, ValidationException $exception)
+    {
+        return response()->json($exception->errors(), $exception->status);
     }
 
     /**
@@ -89,13 +102,19 @@ class Handler extends ExceptionHandler
      */
     public function render500($request, $e)
     {
+        $seg = $request->segments();
+        if (in_array('api', $seg)) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
         if (config('app.debug') == true) {
             return parent::render($request, $e);
         } elseif ($e instanceof ValidationException) {
             return parent::render($request, $e);
+        } elseif ($e instanceof \Illuminate\Validation\ValidationException) {
+            return parent::render($request, $e);
         }
 
-        return  response()->view('errors.500');
+        return response()->view('errors.500');
         //return redirect()->route('error500', []);
     }
 
@@ -173,6 +192,10 @@ class Handler extends ExceptionHandler
 //                    return parent::render($request, $e);
 //                }
             case $e instanceof TokenMismatchException:
+                if ($request->ajax()) {
+                    return response()->json(['message' => \Lang::get('lang.session-expired')], 402);
+                }
+
                 return redirect()->back()->with('fails', \Lang::get('lang.session-expired'));
             default:
                 return $this->render500($request, $e);

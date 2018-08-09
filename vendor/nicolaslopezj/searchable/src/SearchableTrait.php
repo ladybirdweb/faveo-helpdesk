@@ -48,7 +48,11 @@ trait SearchableTrait
         }
 
         $search = mb_strtolower(trim($search));
-        $words = explode(' ', $search);
+        preg_match_all('/(?:")((?:\\\\.|[^\\\\"])*)(?:")|(\S+)/', $search, $matches);
+        $words = $matches[1];
+        for ($i = 2; $i < count($matches); $i++) {
+          $words = array_filter($words) + $matches[$i];
+        }
 
         $selects = [];
         $this->search_bindings = [];
@@ -87,7 +91,11 @@ trait SearchableTrait
 
         $this->makeGroupBy($query);
 
+        $clone_bindings = $query->getBindings();
+        $query->setBindings([]);
+
         $this->addBindingsToQuery($query, $this->search_bindings);
+        $this->addBindingsToQuery($query, $clone_bindings);
 
         if(is_callable($restriction)) {
             $query = $restriction($query);
@@ -236,7 +244,7 @@ trait SearchableTrait
 
         $relevance_count=number_format($relevance_count,2,'.','');
 
-        $query->havingRaw("$comparator > $relevance_count");
+        $query->havingRaw("$comparator >= $relevance_count");
         $query->orderBy('relevance', 'desc');
 
         // add bindings to postgres
@@ -318,7 +326,7 @@ trait SearchableTrait
         $count = $this->getDatabaseDriver() != 'mysql' ? 2 : 1;
         for ($i = 0; $i < $count; $i++) {
             foreach($bindings as $binding) {
-                $type = $i == 0 ? 'select' : 'having';
+                $type = $i == 1 ? 'select' : 'having';
                 $query->addBinding($binding, $type);
             }
         }
@@ -337,6 +345,12 @@ trait SearchableTrait
         } else {
             $original->from(DB::connection($this->connection)->raw("({$clone->toSql()}) as `{$tableName}`"));
         }
-        $original->mergeBindings($clone->getQuery());
+
+        $original->setBindings(
+            array_merge_recursive(
+                $clone->getBindings(),
+                $original->getBindings()
+            )
+        );
     }
 }

@@ -84,8 +84,6 @@ class Router implements RouterInterface, RequestMatcherInterface
     private $expressionLanguageProviders = array();
 
     /**
-     * Constructor.
-     *
      * @param LoaderInterface $loader   A LoaderInterface instance
      * @param mixed           $resource The main resource to load
      * @param array           $options  An array of options
@@ -106,9 +104,19 @@ class Router implements RouterInterface, RequestMatcherInterface
      *
      * Available options:
      *
-     *   * cache_dir:     The cache directory (or null to disable caching)
-     *   * debug:         Whether to enable debugging or not (false by default)
-     *   * resource_type: Type hint for the main resource (optional)
+     *   * cache_dir:              The cache directory (or null to disable caching)
+     *   * debug:                  Whether to enable debugging or not (false by default)
+     *   * generator_class:        The name of a UrlGeneratorInterface implementation
+     *   * generator_base_class:   The base class for the dumped generator class
+     *   * generator_cache_class:  The class name for the dumped generator class
+     *   * generator_dumper_class: The name of a GeneratorDumperInterface implementation
+     *   * matcher_class:          The name of a UrlMatcherInterface implementation
+     *   * matcher_base_class:     The base class for the dumped matcher class
+     *   * matcher_dumper_class:   The class name for the dumped matcher class
+     *   * matcher_cache_class:    The name of a MatcherDumperInterface implementation
+     *   * resource_type:          Type hint for the main resource (optional)
+     *   * strict_requirements:    Configure strict requirement checking for generators
+     *                             implementing ConfigurableRequirementsInterface (default is true)
      *
      * @param array $options An array of options
      *
@@ -218,8 +226,6 @@ class Router implements RouterInterface, RequestMatcherInterface
 
     /**
      * Sets the ConfigCache factory to use.
-     *
-     * @param ConfigCacheFactoryInterface $configCacheFactory The factory to use
      */
     public function setConfigCacheFactory(ConfigCacheFactoryInterface $configCacheFactory)
     {
@@ -296,7 +302,9 @@ class Router implements RouterInterface, RequestMatcherInterface
             }
         );
 
-        require_once $cache->getPath();
+        if (!class_exists($this->options['matcher_cache_class'], false)) {
+            require_once $cache->getPath();
+        }
 
         return $this->matcher = new $this->options['matcher_cache_class']($this->context);
     }
@@ -328,7 +336,9 @@ class Router implements RouterInterface, RequestMatcherInterface
                 }
             );
 
-            require_once $cache->getPath();
+            if (!class_exists($this->options['generator_cache_class'], false)) {
+                require_once $cache->getPath();
+            }
 
             $this->generator = new $this->options['generator_cache_class']($this->context, $this->logger);
         }

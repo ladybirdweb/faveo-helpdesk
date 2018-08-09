@@ -10,7 +10,6 @@ use App\Http\Requests\helpdesk\InstallerRequest;
 use App\Model\helpdesk\Settings\System;
 // models
 use App\Model\helpdesk\Utility\Date_time_format;
-use App\Model\helpdesk\Utility\Timezones;
 use App\User;
 use Artisan;
 // classes
@@ -168,63 +167,14 @@ class InstallController extends Controller
     {
         Cache::forever('step4', 'step4');
 
-        Session::set('default', $request->input('default'));
-        Session::set('host', $request->input('host'));
-        Session::set('databasename', $request->input('databasename'));
-        Session::set('username', $request->input('username'));
-        Session::set('password', $request->input('password'));
-        Session::set('port', $request->input('port'));
+        Session::put('default', $request->input('default'));
+        Session::put('host', $request->input('host'));
+        Session::put('databasename', $request->input('databasename'));
+        Session::put('username', $request->input('username'));
+        Session::put('password', $request->input('password'));
+        Session::put('port', $request->input('port'));
 
         return Redirect::route('database');
-    }
-
-    /**
-     * postconnection.
-     *
-     * @return type view
-     */
-    public function postconnection(Request $request)
-    {
-        error_reporting(E_ALL & ~E_NOTICE);
-        $default = Input::get('default');
-        $host = Input::get('host');
-        $database = Input::get('databasename');
-        $dbusername = Input::get('username');
-        $dbpassword = Input::get('password');
-        $port = Input::get('port');
-
-        $ENV['APP_ENV'] = 'production';
-        $ENV['APP_DEBUG'] = 'false';
-        $ENV['APP_KEY'] = 'SomeRandomString';
-        $ENV['APP_BUGSNAG'] = 'true';
-        $ENV['APP_URL'] = 'http://localhost';
-        $ENV['DB_INSTALL'] = '%0%';
-        $ENV['DB_TYPE'] = $default;
-        $ENV['DB_HOST'] = $host;
-        $ENV['DB_PORT'] = $port;
-        $ENV['DB_DATABASE'] = $database;
-        $ENV['DB_USERNAME'] = $dbusername;
-        $ENV['DB_PASSWORD'] = $dbpassword;
-        $ENV['MAIL_DRIVER'] = 'smtp';
-        $ENV['MAIL_HOST'] = 'mailtrap.io';
-        $ENV['MAIL_PORT'] = '2525';
-        $ENV['MAIL_USERNAME'] = 'null';
-        $ENV['MAIL_PASSWORD'] = 'null';
-        $ENV['CACHE_DRIVER'] = 'file';
-        $ENV['SESSION_DRIVER'] = 'file';
-        $ENV['QUEUE_DRIVER'] = 'sync';
-
-        $config = '';
-        foreach ($ENV as $key => $val) {
-            $config .= "{$key}={$val}\n";
-        }
-        // Write environment file
-        $fp = fopen(base_path().DIRECTORY_SEPARATOR.'example.env', 'w');
-        fwrite($fp, $config);
-        fclose($fp);
-        rename(base_path().DIRECTORY_SEPARATOR.'example.env', base_path().DIRECTORY_SEPARATOR.'.env');
-
-        return 1;
     }
 
     /**
@@ -269,28 +219,24 @@ class InstallController extends Controller
      *
      * @return type view
      */
-    public function accountcheck(InstallerRequest $request)
+    public function accountcheck(Request $request)
     {
-        // checking is the installation was done previously
-        try {
-            $check_for_pre_installation = System::all();
-            if ($check_for_pre_installation) {
-                rename(base_path().DIRECTORY_SEPARATOR.'.env', base_path().DIRECTORY_SEPARATOR.'example.env');
-                Cache::put('fails', 'The data in database already exist. Please provide fresh database', 2);
+        $validator = \Validator::make($request->all(), [
+                    'firstname'       => 'required|max:20',
+                    'Lastname'        => 'required|max:20',
+                    'email'           => 'required|max:50|email',
+                    'username'        => 'required|max:50|min:3',
+                    'password'        => 'required|min:6',
+                    'confirmpassword' => 'required|same:password',
+        ]);
 
-                return redirect()->route('configuration');
-            }
-        } catch (Exception $e) {
+        if ($validator->fails()) {
+            return redirect('step5')
+                            ->withErrors($validator)
+                            ->withInput();
         }
-        if ($request->input('dummy-data') == 'on') {
-            $path = base_path().'/DB/dummy-data.sql';
-            DB::unprepared(file_get_contents($path));
-        } else {
-            // migrate database
-            Artisan::call('migrate', ['--force' => true]);
-            Artisan::call('db:seed', ['--force' => true]);
-        }
-        // create user
+        // checking is the installation was done previously
+        // Set variables fetched from input request
         $firstname = $request->input('firstname');
         $lastname = $request->input('Lastname');
         $email = $request->input('email');
@@ -301,42 +247,38 @@ class InstallController extends Controller
         $timezone = $request->input('timezone');
         $date = $request->input('date');
         $datetime = $request->input('datetime');
+        $lang_path = base_path('resources/lang');
+
+        //check user input language package is available or not in the system
+        if (array_key_exists($language, \Config::get('languages')) && in_array($language, scandir($lang_path))) {
+            // do something here
+        } else {
+            return \Redirect::back()->with('fails', 'Invalid language');
+        }
+
         $changed = UnAuth::changeLanguage($language);
         if (!$changed) {
             return \Redirect::back()->with('fails', 'Invalid language');
         }
-        // checking requested timezone for the admin and system
-        $timezones = Timezones::where('name', '=', $timezone)->first();
-        if ($timezones == null) {
-            return redirect()->back()->with('fails', 'Invalid time-zone');
-        }
-
-        // checking requested date time format for the admin and system
-        $date_time_format = Date_time_format::where('format', '=', $datetime)->first();
-        if ($date_time_format == null) {
-            return redirect()->back()->with('fails', 'invalid date-time format');
-        }
-
-        // Creating minum settings for system
-        $system = new System();
-        $system->status = 1;
-        $system->department = 1;
-        $system->date_time_format = $date_time_format->id;
-        $system->time_zone = $timezones->id;
         $version = \Config::get('app.version');
         $version = explode(' ', $version);
         $version = $version[1];
-        $system->version = $version;
-        $system->save();
+        $system = System::updateOrCreate(['id' => 1], [
+                    'status'           => 1,
+                    'department'       => 1,
+                    'date_time_format' => $datetime,
+                    'time_zone'        => $timezone,
+                    'version'          => $version,
+        ]);
 
         // creating an user
-        $user = User::create([
+        $user = User::updateOrCreate(['id' => 1], [
                     'first_name'   => $firstname,
                     'last_name'    => $lastname,
                     'email'        => $email,
                     'user_name'    => $username,
                     'password'     => Hash::make($password),
-                    'assign_group' => 1,
+                    //'assign_group' => 1,
                     'primary_dpt'  => 1,
                     'active'       => 1,
                     'role'         => 'admin',
@@ -359,6 +301,7 @@ class InstallController extends Controller
     {
         // checking if the installation have been completed or not
         if (Cache::get('step6') == 'step6') {
+
             $value = '1';
             $install = base_path().DIRECTORY_SEPARATOR.'.env';
             $datacontent = File::get($install);
@@ -379,14 +322,18 @@ class InstallController extends Controller
             try {
                 Cache::flush();
 
-                Artisan::call('key:generate');
+            try {
+                \Cache::flush();
                 \Cache::forever('language', $language);
+                $this->updateInstalEnv();
 
                 return View::make('themes/default1/installer/helpdesk/view6');
             } catch (Exception $e) {
                 return Redirect::route('account')->with('fails', $e->getMessage());
             }
         } else {
+            $this->updateInstalEnv();
+
             return redirect('/auth/login');
         }
     }
@@ -400,9 +347,11 @@ class InstallController extends Controller
     public function finalcheck()
     {
         try {
+            $this->updateInstalEnv();
+
             return redirect('/auth/login');
         } catch (Exception $e) {
-            return redirect('/auth/login');
+            return redirect('/auth/login')->with('fails', $e->getMessage());
         }
     }
 
@@ -424,5 +373,188 @@ class InstallController extends Controller
     public function jsDisabled()
     {
         return view('themes/default1/installer/helpdesk/check-js')->with('url', 'step1');
+    }
+
+    public function createEnv($api = true)
+    {
+        try {
+            if (Input::get('default')) {
+                $default = Input::get('default');
+            } else {
+                $default = Session::get('default');
+            }
+            if (Input::get('host')) {
+                $host = Input::get('host');
+            } else {
+                $host = Session::get('host');
+            }
+            if (Input::get('databasename')) {
+                $database = Input::get('databasename');
+            } else {
+                $database = Session::get('databasename');
+            }
+            if (Input::get('username')) {
+                $dbusername = Input::get('username');
+            } else {
+                $dbusername = Session::get('username');
+            }
+            if (Input::get('password')) {
+                $dbpassword = Input::get('password');
+            } else {
+                $dbpassword = Session::get('password');
+            }
+            if (Input::get('port')) {
+                $port = Input::get('port');
+            } else {
+                $port = Session::get('port');
+            }
+            $this->env($default, $host, $port, $database, $dbusername, $dbpassword);
+        } catch (Exception $ex) {
+            $result = ['error' => $ex->getMessage()];
+
+            return response()->json(compact('result'), 500);
+        }
+        if ($api) {
+            $url = url('preinstall/check');
+            $result = ['success' => '.env file has been created successfully', 'next' => 'Pre migration test', 'api' => $url];
+
+            return response()->json(compact('result'));
+        }
+    }
+
+    public function env($default, $host, $port, $database, $dbusername, $dbpassword)
+    {
+        $ENV['APP_DEBUG'] = 'true';
+        $ENV['APP_BUGSNAG'] = 'false';
+        $ENV['APP_URL'] = url('/');
+        $ENV['DB_TYPE'] = $default;
+        $ENV['DB_HOST'] = $host;
+        $ENV['DB_PORT'] = $port;
+        $ENV['DB_DATABASE'] = $database;
+        $ENV['DB_USERNAME'] = $dbusername;
+        $ENV['DB_PASSWORD'] = $dbpassword;
+        $ENV['MAIL_DRIVER'] = 'smtp';
+        $ENV['MAIL_HOST'] = 'mailtrap.io';
+        $ENV['MAIL_PORT'] = '2525';
+        $ENV['MAIL_USERNAME'] = 'null';
+        $ENV['MAIL_PASSWORD'] = 'null';
+        $ENV['CACHE_DRIVER'] = 'file';
+        $ENV['SESSION_DRIVER'] = 'file';
+        $ENV['QUEUE_DRIVER'] = 'sync';
+
+        $ENV['FCM_SERVER_KEY'] = 'AIzaSyCyx5OFnsRFUmDLTMbPV50ZMDUGSG-bLw4';
+        $ENV['FCM_SENDER_ID'] = '661051343223';
+
+        $config = '';
+        foreach ($ENV as $key => $val) {
+            $config .= "{$key}={$val}\n";
+        }
+        if (is_file(base_path().DIRECTORY_SEPARATOR.'.env')) {
+            unlink(base_path().DIRECTORY_SEPARATOR.'.env');
+        }
+        if (!is_file(base_path().DIRECTORY_SEPARATOR.'example.env')) {
+            fopen(base_path().DIRECTORY_SEPARATOR.'example.env', 'w');
+        }
+
+        // Write environment file
+        $fp = fopen(base_path().DIRECTORY_SEPARATOR.'example.env', 'w');
+        fwrite($fp, $config);
+        fclose($fp);
+        rename(base_path().DIRECTORY_SEPARATOR.'example.env', base_path().DIRECTORY_SEPARATOR.'.env');
+    }
+
+    public function checkPreInstall()
+    {
+        try {
+            $check_for_pre_installation = System::select('id')->first();
+            if ($check_for_pre_installation) {
+                throw new Exception('The data in database already exist. Please provide fresh database', 100);
+            }
+        } catch (Exception $ex) {
+            if ($ex->getCode() == 100) {
+                Artisan::call('droptables');
+                $this->createEnv(false);
+            }
+        }
+        Artisan::call('key:generate', ['--force' => true]);
+
+        $url = url('migrate');
+        $result = ['success' => 'Pre Migration has been tested successfully', 'next' => 'Migrating DB Tables', 'api' => $url];
+
+        return response()->json(compact('result'));
+    }
+
+    public function migrate()
+    {
+        try {
+            $tableNames = \Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
+            if (count($tableNames) === 0) {
+                Artisan::call('migrate', ['--force' => true]);
+            }
+        } catch (Exception $ex) {
+            $this->rollBackMigration();
+            $result = ['error' => $ex->getMessage()];
+
+            return response()->json(compact('result'), 500);
+        }
+        $url = url('seed');
+        $result = ['success' => 'DB tables have been migrated successfully', 'next' => 'Seeding pre configurations', 'api' => $url];
+
+        return response()->json(compact('result'));
+    }
+
+    public function rollBackMigration()
+    {
+        try {
+            Artisan::call('migrate:reset', ['--force' => true]);
+        } catch (Exception $ex) {
+            $result = ['error' => $ex->getMessage()];
+
+            return response()->json(compact('result'), 500);
+        }
+    }
+
+    public function seed(Request $request)
+    {
+        try {
+            if ($request->input('dummy-data') == 'on') {
+                $path = base_path().'/DB/dummy-data.sql';
+                DB::unprepared(DB::raw(file_get_contents($path)));
+            } else {
+                \Schema::disableForeignKeyConstraints();
+                $tableNames = \Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
+                foreach ($tableNames as $name) {
+                    //if you don't want to truncate migrations
+                    if ($name == 'migrations') {
+                        continue;
+                    }
+                    DB::table($name)->truncate();
+                }
+                Artisan::call('db:seed', ['--force' => true]);
+            }
+            //$this->updateInstalEnv();
+        } catch (Exception $ex) {
+            $result = ['error' => $ex->getMessage()];
+
+            return response()->json(compact('result'), 500);
+        }
+        $result = ['success' => 'installed'];
+
+        return response()->json(compact('result'));
+    }
+
+    public function updateInstalEnv()
+    {
+        Artisan::call('jwt:secret', ['--force'=>true]);
+
+        $env = base_path().DIRECTORY_SEPARATOR.'.env';
+        if (is_file($env)) {
+            $txt = PHP_EOL.'DB_INSTALL=1';
+            $txt1 = 'APP_ENV=production';
+            file_put_contents($env, $txt.PHP_EOL, FILE_APPEND | LOCK_EX);
+            file_put_contents($env, $txt1.PHP_EOL, FILE_APPEND | LOCK_EX);
+        } else {
+            throw new Exception('.env not found');
+        }
     }
 }

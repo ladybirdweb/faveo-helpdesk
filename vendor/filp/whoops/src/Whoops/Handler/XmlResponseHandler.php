@@ -40,12 +40,12 @@ class XmlResponseHandler extends Handler
      */
     public function handle()
     {
-        $response = array(
+        $response = [
             'error' => Formatter::formatExceptionAsDataArray(
                 $this->getInspector(),
                 $this->addTraceToOutput()
             ),
-        );
+        ];
 
         echo $this->toXml($response);
 
@@ -53,8 +53,16 @@ class XmlResponseHandler extends Handler
     }
 
     /**
+     * @return string
+     */
+    public function contentType()
+    {
+        return 'application/xml';
+    }
+
+    /**
      * @param  SimpleXMLElement  $node Node to append data to, will be modified in place
-     * @param  array|Traversable $data
+     * @param  array|\Traversable $data
      * @return SimpleXMLElement  The modified node, for chaining
      */
     private static function addDataToNode(\SimpleXMLElement $node, $data)
@@ -85,7 +93,7 @@ class XmlResponseHandler extends Handler
     /**
      * The main function for converting to an XML document.
      *
-     * @param  array|Traversable $data
+     * @param  array|\Traversable $data
      * @return string            XML
      */
     private static function toXml($data)

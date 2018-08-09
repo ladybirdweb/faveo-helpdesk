@@ -3,6 +3,7 @@
 namespace App\Http\ViewComposers;
 
 use App\Model\helpdesk\Agent\Department;
+use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\User;
@@ -20,6 +21,7 @@ class AgentLayout
     protected $users;
     protected $tickets;
     protected $department;
+    protected $emails;
 
     /**
      * Create a new profile composer.
@@ -28,13 +30,14 @@ class AgentLayout
      *
      * @return void
      */
-    public function __construct(Company $company, User $users, Tickets $tickets, Department $department)
+    public function __construct(Company $company, User $users, Tickets $tickets, Department $department, Emails $emails)
     {
         $this->company = $company;
         $this->auth = Auth::user();
         $this->users = $users;
         $this->tickets = $tickets;
         $this->department = $department;
+        $this->emails = $emails;
     }
 
     /**
@@ -48,16 +51,19 @@ class AgentLayout
     {
         $notifications = \App\Http\Controllers\Common\NotificationController::getNotifications();
         $view->with([
-            'company'         => $this->company,
-            'notifications'   => $notifications,
-            'myticket'        => $this->myTicket(),
-            'unassigned'      => $this->unassigned(),
-            'followup_ticket' => $this->followupTicket(),
-            'deleted'         => $this->deleted(),
-            'tickets'         => $this->inbox(),
-            'department'      => $this->departments(),
-            'overdues'        => $this->overdues(),
-            'due_today'       => $this->getDueToday(),
+            'company'           => $this->company,
+            'notifications'     => $notifications,
+            'myticket'          => $this->myTicket(),
+            'unassigned'        => $this->unassigned(),
+            'followup_ticket'   => $this->followupTicket(),
+            'deleted'           => $this->deleted(),
+            'closed'            => $this->closed(),
+            'tickets'           => $this->inbox(),
+            'department'        => $this->departments(),
+            'overdues'          => $this->overdues(),
+            'due_today'         => $this->getDueToday(),
+            'is_mail_conigured' => $this->getEmailConfig(),
+            'ticket_policy'     => new \App\Policies\TicketPolicy(),
         ]);
     }
 
@@ -98,26 +104,21 @@ class AgentLayout
         $ticket = $this->tickets();
         if ($this->auth->role == 'admin') {
             return $ticket->where('assigned_to', $this->auth->id)
-                    ->where('status', '1');
+                            ->where('status', '1');
         } elseif ($this->auth->role == 'agent') {
             return $ticket->where('assigned_to', $this->auth->id)
-                    ->where('status', '1');
+                            ->where('status', '1');
         }
     }
 
     public function unassigned()
     {
-        $ticket = $this->tickets();
-        if ($this->auth->role == 'admin') {
-            return $ticket->where('assigned_to', '=', null)
-                    ->where('status', '=', '1')
-                    ->select('id');
-        } elseif ($this->auth->role == 'agent') {
-            return $ticket->where('assigned_to', '=', null)
-                    ->where('status', '=', '1')
-                    ->where('dept_id', '=', $this->auth->primary_dpt)
-                    ->select('id');
+        $ticket = $this->tickets()->where('assigned_to', '=', null)
+                    ->where('status', '=', '1')->select('id');
+        if ($this->auth->role == 'agent') {
+            $ticket = $ticket->where('dept_id', '=', $this->auth->primary_dpt)
         }
+        return $ticket->select('id');
     }
 
     public function followupTicket()
@@ -137,7 +138,7 @@ class AgentLayout
             return $ticket->where('status', '5')->select('id');
         } elseif ($this->auth->role == 'agent') {
             return $ticket->where('status', '5')->where('dept_id', '=', $this->auth->primary_dpt)
-                    ->select('id');
+                            ->select('id');
         }
     }
 
@@ -151,7 +152,7 @@ class AgentLayout
 
         return $table->Join('ticket_status', function ($join) {
             $join->on('ticket_status.id', '=', 'tickets.status')
-                        ->whereIn('ticket_status.id', [1, 7]);
+                            ->whereIn('ticket_status.id', [1, 7]);
         });
     }
 
@@ -193,5 +194,46 @@ class AgentLayout
                             ->where('dept_id', '=', $this->auth->primary_dpt)
                             ->whereRaw('date(duedate) = ?', [date('Y-m-d')]);
         }
+    }
+
+    /**
+     * @category function to fetch closed tickets count
+     *
+     * @param null
+     *
+     * @return builder
+     */
+    public function closed()
+    {
+        $table = $this->tickets();
+        if (Auth::user()->role == 'agent') {
+            $id = Auth::user()->id;
+            $dept = DepartmentAssignAgents::where('agent_id', '=', $id)->pluck('department_id')->toArray();
+            $table = $table->whereIn('tickets.dept_id', $dept)->orWhere('assigned_to', '=', Auth::user()->id);
+
+            // $id = Auth::user()->primary_dpt;
+            // $table = $table->where('tickets.dept_id', '=', $id)->orWhere('assigned_to', '=', Auth::user()->id);
+        }
+
+        return $table->where('status', 3);
+    }
+
+    /**
+     * @category function to check configured mails
+     *
+     * @param null
+     *
+     * @var $emails
+     *
+     * @return bool true/false
+     */
+    public function getEmailConfig()
+    {
+        $emails = $this->emails->where('sending_status', '=', 1)->where('fetching_status', '=', 1)->count();
+        if ($emails >= 1) {
+            return true;
+        }
+
+        return false;
     }
 }

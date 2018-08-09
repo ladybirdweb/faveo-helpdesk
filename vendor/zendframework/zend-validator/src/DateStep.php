@@ -63,26 +63,26 @@ class DateStep extends Date
     {
         if ($options instanceof Traversable) {
             $options = ArrayUtils::iteratorToArray($options);
-        } elseif (!is_array($options)) {
+        } elseif (! is_array($options)) {
             $options = func_get_args();
             $temp['baseValue'] = array_shift($options);
-            if (!empty($options)) {
+            if (! empty($options)) {
                 $temp['step'] = array_shift($options);
             }
-            if (!empty($options)) {
+            if (! empty($options)) {
                 $temp['format'] = array_shift($options);
             }
-            if (!empty($options)) {
+            if (! empty($options)) {
                 $temp['timezone'] = array_shift($options);
             }
 
             $options = $temp;
         }
 
-        if (!isset($options['step'])) {
+        if (! isset($options['step'])) {
             $options['step'] = new DateInterval('P1D');
         }
-        if (!isset($options['timezone'])) {
+        if (! isset($options['timezone'])) {
             $options['timezone'] = new DateTimeZone(date_default_timezone_get());
         }
 
@@ -194,7 +194,7 @@ class DateStep extends Date
      */
     public function isValid($value)
     {
-        if (!parent::isValid($value)) {
+        if (! parent::isValid($value)) {
             return false;
         }
 

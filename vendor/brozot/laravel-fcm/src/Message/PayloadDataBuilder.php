@@ -1,77 +1,78 @@
-<?php namespace LaravelFCM\Message;
+<?php
+
+namespace LaravelFCM\Message;
 
 /**
- * Class PayloadDataBuilder
+ * Class PayloadDataBuilder.
  *
  * Official google documentation :
- * @link http://firebase.google.com/docs/cloud-messaging/http-server-ref#downstream-http-messages-json
  *
- * @package LaravelFCM\Message
+ * @link http://firebase.google.com/docs/cloud-messaging/http-server-ref#downstream-http-messages-json
  */
-class PayloadDataBuilder {
+class PayloadDataBuilder
+{
+    /**
+     * @internal
+     *
+     * @var array
+     */
+    protected $data;
 
-	/**
-	 * @internal
-	 * @var array
-	 */
-	protected $data;
+    /**
+     * add data to existing data.
+     *
+     * @param array $data
+     *
+     * @return PayloadDataBuilder
+     */
+    public function addData(array $data)
+    {
+        $this->data = $this->data ?: [];
 
-	
-	/**
-	 * add data to existing data
-	 *
-	 * @param array $data
-	 *
-	 * @return PayloadDataBuilder
-	 */
-	public function addData(array $data)
-	{
-		$this->data = $this->data ?: [];
+        $this->data = array_merge($data, $this->data);
 
-		$this->data = array_merge($data, $this->data);
+        return $this;
+    }
 
-		return $this;
-	}
+    /**
+     * erase data with new data.
+     *
+     * @param array $data
+     *
+     * @return PayloadDataBuilder
+     */
+    public function setData(array $data)
+    {
+        $this->data = $data;
 
-	/**
-	 * erase data with new data
-	 *
-	 * @param array $data
-	 *
-	 * @return PayloadDataBuilder
-	 */
-	public function setData(array $data)
-	{
-		$this->data = $data;
+        return $this;
+    }
 
-		return $this;
-	}
+    /**
+     * Remove all data.
+     */
+    public function removeAllData()
+    {
+        $this->data = null;
+    }
 
-	/**
-	 * Remove all data
-	 */
-	public function removeAllData()
-	{
-		$this->data = null;
-	}
+    /**
+     * return data.
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
 
-	/**
-	 * return data
-	 *
-	 * @return array
-	 */
-	public function getData()
-	{
-		return $this->data;
-	}
-
-	/**
-	 * generate a PayloadData
-	 *
-	 * @return PayloadData new PayloadData instance
-	 */
-	public function build()
-	{
-		return new PayloadData($this);
-	}
+    /**
+     * generate a PayloadData.
+     *
+     * @return PayloadData new PayloadData instance
+     */
+    public function build()
+    {
+        return new PayloadData($this);
+    }
 }

@@ -5,8 +5,12 @@ use Aws\AwsClient;
 
 /**
  * This client is used to interact with the **Amazon Kinesis Analytics** service.
+ * @method \Aws\Result addApplicationCloudWatchLoggingOption(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise addApplicationCloudWatchLoggingOptionAsync(array $args = [])
  * @method \Aws\Result addApplicationInput(array $args = [])
  * @method \GuzzleHttp\Promise\Promise addApplicationInputAsync(array $args = [])
+ * @method \Aws\Result addApplicationInputProcessingConfiguration(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise addApplicationInputProcessingConfigurationAsync(array $args = [])
  * @method \Aws\Result addApplicationOutput(array $args = [])
  * @method \GuzzleHttp\Promise\Promise addApplicationOutputAsync(array $args = [])
  * @method \Aws\Result addApplicationReferenceDataSource(array $args = [])
@@ -15,6 +19,10 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise createApplicationAsync(array $args = [])
  * @method \Aws\Result deleteApplication(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteApplicationAsync(array $args = [])
+ * @method \Aws\Result deleteApplicationCloudWatchLoggingOption(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteApplicationCloudWatchLoggingOptionAsync(array $args = [])
+ * @method \Aws\Result deleteApplicationInputProcessingConfiguration(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteApplicationInputProcessingConfigurationAsync(array $args = [])
  * @method \Aws\Result deleteApplicationOutput(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteApplicationOutputAsync(array $args = [])
  * @method \Aws\Result deleteApplicationReferenceDataSource(array $args = [])

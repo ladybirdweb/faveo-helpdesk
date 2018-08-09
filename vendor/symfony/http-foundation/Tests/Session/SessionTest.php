@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\HttpFoundation\Tests\Session;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
@@ -23,7 +24,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
  * @author Robert Schönthal <seroscho@googlemail.com>
  * @author Drak <drak@zikula.org>
  */
-class SessionTest extends \PHPUnit_Framework_TestCase
+class SessionTest extends TestCase
 {
     /**
      * @var \Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface
@@ -176,6 +177,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     {
         $this->session->start();
         $this->session->save();
+
+        $this->assertFalse($this->session->isStarted());
     }
 
     public function testGetId()
@@ -217,5 +220,23 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testGetMeta()
     {
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Session\Storage\MetadataBag', $this->session->getMetadataBag());
+    }
+
+    public function testIsEmpty()
+    {
+        $this->assertTrue($this->session->isEmpty());
+
+        $this->session->set('hello', 'world');
+        $this->assertFalse($this->session->isEmpty());
+
+        $this->session->remove('hello');
+        $this->assertTrue($this->session->isEmpty());
+
+        $flash = $this->session->getFlashBag();
+        $flash->set('hello', 'world');
+        $this->assertFalse($this->session->isEmpty());
+
+        $flash->get('hello');
+        $this->assertTrue($this->session->isEmpty());
     }
 }

@@ -14,12 +14,12 @@
 namespace PhpSpec\Runner\Maintainer;
 
 use PhpSpec\Loader\Node\ExampleNode;
-use PhpSpec\SpecificationInterface;
+use PhpSpec\Specification;
 use PhpSpec\Runner\MatcherManager;
 use PhpSpec\Runner\CollaboratorManager;
 use PhpSpec\Exception\Example as ExampleException;
 
-class ErrorMaintainer implements MaintainerInterface
+final class ErrorMaintainer implements Maintainer
 {
     /**
      * @var integer
@@ -33,7 +33,7 @@ class ErrorMaintainer implements MaintainerInterface
     /**
      * @param integer $errorLevel
      */
-    public function __construct($errorLevel)
+    public function __construct(int $errorLevel)
     {
         $this->errorLevel = $errorLevel;
     }
@@ -43,20 +43,20 @@ class ErrorMaintainer implements MaintainerInterface
      *
      * @return bool
      */
-    public function supports(ExampleNode $example)
+    public function supports(ExampleNode $example): bool
     {
         return true;
     }
 
     /**
      * @param ExampleNode            $example
-     * @param SpecificationInterface $context
+     * @param Specification $context
      * @param MatcherManager         $matchers
      * @param CollaboratorManager    $collaborators
      */
     public function prepare(
         ExampleNode $example,
-        SpecificationInterface $context,
+        Specification $context,
         MatcherManager $matchers,
         CollaboratorManager $collaborators
     ) {
@@ -65,13 +65,13 @@ class ErrorMaintainer implements MaintainerInterface
 
     /**
      * @param ExampleNode            $example
-     * @param SpecificationInterface $context
+     * @param Specification $context
      * @param MatcherManager         $matchers
      * @param CollaboratorManager    $collaborators
      */
     public function teardown(
         ExampleNode $example,
-        SpecificationInterface $context,
+        Specification $context,
         MatcherManager $matchers,
         CollaboratorManager $collaborators
     ) {
@@ -83,7 +83,7 @@ class ErrorMaintainer implements MaintainerInterface
     /**
      * @return int
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         return 999;
     }
@@ -100,11 +100,11 @@ class ErrorMaintainer implements MaintainerInterface
      * @param string  $file
      * @param integer $line
      *
-     * @return Boolean
+     * @return bool
      *
      * @throws ExampleException\ErrorException
      */
-    final public function errorHandler($level, $message, $file, $line)
+    final public function errorHandler(int $level, string $message, string $file, int $line): bool
     {
         $regex = '/^Argument (\d)+ passed to (?:(?P<class>[\w\\\]+)::)?(\w+)\(\)' .
                  ' must (?:be an instance of|implement interface) ([\w\\\]+),(?: instance of)? ([\w\\\]+) given/';
@@ -112,7 +112,7 @@ class ErrorMaintainer implements MaintainerInterface
         if (E_RECOVERABLE_ERROR === $level && preg_match($regex, $message, $matches)) {
             $class = $matches['class'];
 
-            if (in_array('PhpSpec\SpecificationInterface', class_implements($class))) {
+            if (\in_array('PhpSpec\Specification', class_implements($class))) {
                 return true;
             }
         }

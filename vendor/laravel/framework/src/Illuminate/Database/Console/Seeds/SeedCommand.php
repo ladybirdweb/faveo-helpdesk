@@ -51,7 +51,7 @@ class SeedCommand extends Command
      *
      * @return void
      */
-    public function fire()
+    public function handle()
     {
         if (! $this->confirmToProceed()) {
             return;
@@ -60,7 +60,7 @@ class SeedCommand extends Command
         $this->resolver->setDefaultConnection($this->getDatabase());
 
         Model::unguarded(function () {
-            $this->getSeeder()->run();
+            $this->getSeeder()->__invoke();
         });
     }
 

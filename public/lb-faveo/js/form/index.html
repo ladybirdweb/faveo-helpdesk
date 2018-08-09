@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html ng-app="demoApp">
+<head>
+  <meta charset="utf-8">
+  <title>AngularJS UI Tree demo</title>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="bower_components/bootstrap-css/css/bootstrap.min.css">
+  <link rel="stylesheet" href="source/angular-ui-tree.css">
+  <link rel="stylesheet" href="css/app.css">
+  <style>
+     .tree-node{
+        margin:10px;
+     }
+     .angular-ui-tree-empty {
+    border: 1px solid gainsboro;
+    min-height: 500px;
+    height: 100%;
+    background-color: white;
+    background-image: none;
+  }
+  .list-group{
+    border: 1px solid #ddd;
+  }
+  .list-group-item{
+    border: none;
+  }
+  .list-inline > li {
+    padding: 0px;
+  }
+  .affix {
+      top: 0;
+      z-index: 100;
+      width: 69%;
+      -webkit-box-shadow: 0 2px 6px rgba(63,63,63,0.1);
+      box-shadow: 0 2px 6px rgba(63,63,63,0.1);
+  }
+  </style>
+</head>
+
+<body ng-controller="CloningCtrl">
+<div class="container">
+  <!-- Nested node template -->
+<script type="text/ng-template" id="nodes_renderer1.html">
+  <div ui-tree-handle class="tree-node tree-node-content" style="margin:0px">
+    <span>{{node.title}}</span>
+  </div> 
+  <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}" class="list-inline">
+    <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer1.html'">
+    </li>
+  </ol>
+</script>
+<script type="text/ng-template" id="nodes_renderer2.html">
+  <div class="tree-node">
+    <div class="pull-left tree-handle" ui-tree-handle>
+      <span class="glyphicon glyphicon-list"></span>
+    </div>
+    <div class="tree-node-content dropdown">
+     
+       <label>{{node.title}}</label>
+      
+      <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="remove(this)" ng-show="node.default=='no'"><span class="glyphicon glyphicon-remove"></span></a>
+      <a class="pull-right btn btn-info btn-xs collapser"  data-toggle="collapse" aria-controls="collapseExample"><span class="glyphicon glyphicon glyphicon-pencil"></span></a>
+      <div class="panel-collapse collapse" id="collapseExample" style="margin-top: 10px;">
+        <ul class="list-group" >
+           <li class="list-group-item row" ng-show="node.title=='Search a Requester'" style="margin-left: 0px;margin-right: 0px">
+             <div class="col-sm-9">
+                  <h3>Behaviour</h3>
+             </div>
+             <div class="col-sm-3">
+                  <button type="button" class="btn btn-default btn-sm" ng-show="node.default=='yes'">Default</button>
+             </div>
+             <div class="col-sm-10">
+                <h4>For Agent</h4>
+                <div class="col-sm-1"><input type="checkbox" class="form-control" ng-model="node.agentCCfield" style="margin-top: -6px" ng-disabled="true"></div>
+                <div class="col-sm-10" ><p>Display CC Field</p></div>
+             </div>
+          </li>
+          <li class="list-group-item row" ng-show="node.title!='Search a Requester'" style="margin-left: 0px;margin-right: 0px">
+             <div class="col-sm-9"><h3>Behaviour</h3></div>
+             <div class="col-sm-3">
+                  <button type="button" class="btn btn-default btn-sm" ng-show="node.default=='yes'">Default</button>
+             </div>
+             <div class="col-sm-6">
+                <h4>For Agent</h4>
+                <div class="col-sm-1"><input type="checkbox" class="form-control" ng-model="node.agentRequiredFormSubmit" style="margin-top: -6px"></div>
+                <div class="col-sm-10" ><p>Required when submitting the form</p></div>
+             </div>
+             <div class="col-sm-6">
+                <h4>For Customers</h4>
+                <div class="col-sm-1" ><input type="checkbox" class="form-control" ng-model="node.customerDisplay" style="margin-top: -6px"></div>
+                <div class="col-sm-10" ><p>Display to customer</p></div>
+                <div class="col-sm-1" ><input type="checkbox" class="form-control" ng-model="node.customerRequiredFormSubmit" style="margin-top: -6px"></div>
+                <div class="col-sm-10" ><p>Required when submitting the form</p></div>
+             </div>
+          </li>
+          <li class="list-group-item row" ng-show="node.value==''||node.value!=null" style="margin-left: 0px;margin-right: 0px">
+             <div class="col-sm-3" style="line-height: 2.5"><label>label</label></div>
+             <div class="col-sm-9"><input type="text" name="" class="form-control" ng-model="node.value" style="border-radius: 0px" ng-disabled="node.default=='yes'"></div>
+          </li>
+          <li class="list-group-item row" ng-show="node.placeholder==''||node.placeholder!=null" style="margin-left: 0px;margin-right: 0px">
+              <div class="col-sm-3" style="line-height: 2.5"><label>Placeholder</label></div>
+             <div class="col-sm-9"><input type="text" class="form-control" name="" ng-model="node.placeholder" style="border-radius:0px"></div>
+          </li>
+          <li class="list-group-item row" ng-show="node.name==''||node.name!=null" style="margin-left: 0px;margin-right: 0px">
+              <div class="col-sm-3" style="line-height: 2.5"><label>Name</label></div>
+             <div class="col-sm-9"><input type="text" class="form-control" name="" ng-model="node.name" style="border-radius: 0px"></div>
+          </li>
+           <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px" ng-repeat="option in node.options" ng-show="node.type=='radio'||node.type=='checkbox'||node.type=='select' && node.default=='no'" >
+              <div class="col-sm-3" style="line-height: 2.5"><label>Option{{$index+1}}</label></div>
+             <div class="col-sm-6"><input type="text" class="form-control" name="" ng-model="option.optionvalue" style="border-radius: 0px">
+             </div>
+             <div class="col-sm-3">
+                  <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="removeOption(this,$index)">
+                      <span class="glyphicon glyphicon-remove"></span>
+                  </a>
+                  <a class="pull-right btn btn-primary btn-xs" ng-show="node.type=='select'&&node.title=='Nested Select'" data-nodrag ng-click="newSubForm(this,node.title,$index)" style="margin-right: 8px;">
+                      <span class="glyphicon glyphicon-plus"></span>
+                  </a>
+             </div>
+            <ol class="col-sm-12" ui-tree-nodes="" ng-model="option.nodes" ng-class="{hidden: collapsed}">
+                <li ng-repeat="node in option.nodes" ui-tree-node ng-include="'nodes_renderer2.html'"></li>
+            </ol> 
+          </li>
+          <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px" ng-repeat="option in node.options" ng-show="node.value=='Type'" >
+              <div class="col-sm-3" style="line-height: 2.5"><label>Option{{$index+1}}</label></div>
+             <div class="col-sm-6"><input type="text" class="form-control" name="" ng-model="option.optionvalue" style="border-radius: 0px">
+             </div>
+             <div class="col-sm-3">
+                  <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="removeOption(this,$index)">
+                      <span class="glyphicon glyphicon-remove"></span>
+                  </a>
+             </div>
+          </li>
+          <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px"  ng-show="node.value=='Status'">
+              <div class="col-sm-5">
+                    <label>For Agents</label>
+                </div>
+              <div class="col-sm-5">
+                    <label>For Customers</label>
+              </div>
+              
+           </li>
+          <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px" ng-repeat="option in node.options" ng-show="node.title=='Status'">
+              <div class="col-sm-5">
+                <input class="form-control" ng-model="option.optionvalue" ng-show="option.forAgentField=='default'" ng-disabled="true">
+                <input class="form-control" ng-model="option.optionvalue" ng-show="option.forAgentField=='none'">
+              </div>
+              <div class="col-sm-5">
+                <input class="form-control" ng-model="option.forCustomer" >
+              </div>
+              <div class="col-sm-1">
+                 <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="removeOption(this,$index)" ng-show="option.forAgentField=='none'">
+                      <span class="glyphicon glyphicon-remove"></span>
+                  </a>
+              </div>
+           </li>
+           <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px;text-align: center;" ng-show="node.title=='Nested Select'">
+                 <input type="button" name="addOption" class="btn btn-default" value="Add Option" ng-click="addOption(this)">
+          </li>
+          <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px;text-align: center;" ng-show="node.title=='Type' ||node.type=='radio' || node.type=='checkbox'||node.type=='select'&& node.title!='Nested Select'&& node.default=='no'">
+                 <input type="button" name="addOption" class="btn btn-default" value="Add Option" ng-click="addTypeOption(this)">
+          </li>
+          <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px;text-align: center;" ng-show="node.title=='Status'">
+                 <input type="button" name="addOption" class="btn btn-default" value="Add Option" ng-click="addStatusOption(this)">
+          </li>
+       </ul>
+      </div>
+    </div>
+  </div>
+  <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+    <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer2.html'">
+    </li>
+  </ol>
+</script>
+<div class="col-sm-9" style="border: 1px solid gainsboro;">
+<div class="row" data-spy="affix" data-offset-top="2">
+<div  class="col-sm-12" style="background-color: white;">
+    <div class="col-sm-6">
+    <h3>Create a new ticket</h3>
+    </div>
+    <div class="col-sm-5" style="line-height: 4">
+       <button type="button" class="btn btn-info">Save</button>
+       <button type="button" class="btn btn-default">Cancel</button>
+    </div>
+    <div ui-tree id="tree1-root" data-clone-enabled="true" data-nodrop-enabled="true" class="col-sm-12">
+    <span>Drag Here</span>
+      <ol ui-tree-nodes="" ng-model="tree1" class="list-inline" style="margin-left: 40px;margin-bottom: 15px;">
+        <li ng-repeat="node in tree1" ui-tree-node ng-include="'nodes_renderer1.html'" ng-click=addToTree(node)></li>
+      </ol>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+    <h3>Ticket Fields(Drop Here)</h3>
+    <div ui-tree id="tree2-root" data-clone-enabled="true" id="drp">
+      <ol ui-tree-nodes="" ng-model="tree2" id="drp">
+        <li ng-repeat="node in tree2" ui-tree-node ng-include="'nodes_renderer2.html'">
+         
+        </li>
+      </ol>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="https://rawgit.com/nostalgiaz/bootstrap-switch/master/dist/js/bootstrap-switch.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/angular-route/angular-route.min.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+<script src="source/main.js"></script>
+<script src="source/controllers/handleCtrl.js"></script>
+<script src="source/controllers/nodeCtrl.js"></script>
+<script src="source/controllers/nodesCtrl.js"></script>
+<script src="source/controllers/treeCtrl.js"></script>
+<script src="source/directives/uiTree.js"></script>
+<script src="source/directives/uiTreeHandle.js"></script>
+<script src="source/directives/uiTreeNode.js"></script>
+<script src="source/directives/uiTreeNodes.js"></script>
+<script src="source/services/helper.js"></script>
+
+<script src="js/app.js"></script>
+
+<script>
+$(function () {
+   $('body').on('click', '[data-toggle=collapse]', function (e) {
+        
+       $(this).next().collapse('toggle');
+});
+
+});
+</script>
+</body>
+</html>

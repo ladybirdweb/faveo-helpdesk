@@ -1,39 +1,38 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
-use PhpParser\Error;
 
 class TryCatch extends Node\Stmt
 {
-    /** @var Node[] Statements */
+    /** @var Node\Stmt[] Statements */
     public $stmts;
     /** @var Catch_[] Catches */
     public $catches;
-    /** @var null|Node[] Finally statements */
-    public $finallyStmts;
+    /** @var null|Finally_ Optional finally node */
+    public $finally;
 
     /**
      * Constructs a try catch node.
      *
-     * @param Node[]      $stmts        Statements
-     * @param Catch_[]    $catches      Catches
-     * @param null|Node[] $finallyStmts Finally statements (null means no finally clause)
-     * @param array|null  $attributes   Additional attributes
+     * @param Node\Stmt[]   $stmts      Statements
+     * @param Catch_[]      $catches    Catches
+     * @param null|Finally_ $finally    Optionaly finally node
+     * @param array         $attributes Additional attributes
      */
-    public function __construct(array $stmts, array $catches, array $finallyStmts = null, array $attributes = array()) {
-        if (empty($catches) && null === $finallyStmts) {
-            throw new Error('Cannot use try without catch or finally');
-        }
-
+    public function __construct(array $stmts, array $catches, Finally_ $finally = null, array $attributes = []) {
         parent::__construct($attributes);
         $this->stmts = $stmts;
         $this->catches = $catches;
-        $this->finallyStmts = $finallyStmts;
+        $this->finally = $finally;
     }
 
-    public function getSubNodeNames() {
-        return array('stmts', 'catches', 'finallyStmts');
+    public function getSubNodeNames() : array {
+        return ['stmts', 'catches', 'finally'];
+    }
+    
+    public function getType() : string {
+        return 'Stmt_TryCatch';
     }
 }

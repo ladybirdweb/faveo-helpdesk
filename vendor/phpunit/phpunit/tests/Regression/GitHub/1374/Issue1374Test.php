@@ -1,10 +1,12 @@
 <?php
+use PHPUnit\Framework\TestCase;
+
 /**
  * @requires extension I_DO_NOT_EXIST
  */
-class Issue1374Test extends PHPUnit_Framework_TestCase
+class Issue1374Test extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         print __FUNCTION__;
     }
@@ -14,7 +16,7 @@ class Issue1374Test extends PHPUnit_Framework_TestCase
         $this->fail('This should not be reached');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         print __FUNCTION__;
     }

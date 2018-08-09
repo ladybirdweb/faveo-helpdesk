@@ -69,11 +69,6 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
      *                            the cache can serve a stale response when an error is encountered (default: 60).
      *                            This setting is overridden by the stale-if-error HTTP Cache-Control extension
      *                            (see RFC 5861).
-     *
-     * @param HttpKernelInterface $kernel    An HttpKernelInterface instance
-     * @param StoreInterface      $store     A Store instance
-     * @param SurrogateInterface  $surrogate A SurrogateInterface instance
-     * @param array               $options   An array of options
      */
     public function __construct(HttpKernelInterface $kernel, StoreInterface $store, SurrogateInterface $surrogate = null, array $options = array())
     {
@@ -176,23 +171,24 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
             }
         }
 
-        $path = $request->getPathInfo();
-        if ($qs = $request->getQueryString()) {
-            $path .= '?'.$qs;
-        }
-        $this->traces[$request->getMethod().' '.$path] = array();
+        $this->traces[$this->getTraceKey($request)] = array();
 
-        if (!$request->isMethodSafe()) {
+        if (!$request->isMethodSafe(false)) {
             $response = $this->invalidate($request, $catch);
-        } elseif ($request->headers->has('expect')) {
+        } elseif ($request->headers->has('expect') || !$request->isMethodCacheable()) {
             $response = $this->pass($request, $catch);
+        } elseif ($this->options['allow_reload'] && $request->isNoCache()) {
+            /*
+                If allow_reload is configured and the client requests "Cache-Control: no-cache",
+                reload the cache by fetching a fresh response and caching it (if possible).
+            */
+            $this->record($request, 'reload');
+            $response = $this->fetch($request, $catch);
         } else {
             $response = $this->lookup($request, $catch);
         }
 
         $this->restoreResponseBody($request, $response);
-
-        $response->setDate(\DateTime::createFromFormat('U', time(), new \DateTimeZone('UTC')));
 
         if (HttpKernelInterface::MASTER_REQUEST === $type && $this->options['debug']) {
             $response->headers->set('X-Symfony-Cache', $this->getLog());
@@ -291,7 +287,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
      * it triggers "miss" processing.
      *
      * @param Request $request A Request instance
-     * @param bool    $catch   whether to process exceptions
+     * @param bool    $catch   Whether to process exceptions
      *
      * @return Response A Response instance
      *
@@ -299,13 +295,6 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
      */
     protected function lookup(Request $request, $catch = false)
     {
-        // if allow_reload and no-cache Cache-Control, allow a cache reload
-        if ($this->options['allow_reload'] && $request->isNoCache()) {
-            $this->record($request, 'reload');
-
-            return $this->fetch($request, $catch);
-        }
-
         try {
             $entry = $this->store->lookup($request);
         } catch (\Exception $e) {
@@ -354,7 +343,9 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         $subRequest = clone $request;
 
         // send no head requests because we want content
-        $subRequest->setMethod('GET');
+        if ('HEAD' === $request->getMethod()) {
+            $subRequest->setMethod('GET');
+        }
 
         // add our cached last-modified validator
         $subRequest->headers->set('if_modified_since', $entry->headers->get('Last-Modified'));
@@ -401,12 +392,11 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
     }
 
     /**
-     * Forwards the Request to the backend and determines whether the response should be stored.
-     *
-     * This methods is triggered when the cache missed or a reload is required.
+     * Unconditionally fetches a fresh response from the backend and
+     * stores it in the cache if is cacheable.
      *
      * @param Request $request A Request instance
-     * @param bool    $catch   whether to process exceptions
+     * @param bool    $catch   Whether to process exceptions
      *
      * @return Response A Response instance
      */
@@ -415,7 +405,9 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         $subRequest = clone $request;
 
         // send no head requests because we want content
-        $subRequest->setMethod('GET');
+        if ('HEAD' === $request->getMethod()) {
+            $subRequest->setMethod('GET');
+        }
 
         // avoid that the backend sends no content
         $subRequest->headers->remove('if_modified_since');
@@ -432,6 +424,9 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
 
     /**
      * Forwards the Request to the backend and returns the Response.
+     *
+     * All backend requests (cache passes, fetches, cache validations)
+     * run through this method.
      *
      * @param Request  $request A Request instance
      * @param bool     $catch   Whether to catch exceptions or not
@@ -460,7 +455,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         // make sure HttpCache is a trusted proxy
         if (!in_array('127.0.0.1', $trustedProxies = Request::getTrustedProxies())) {
             $trustedProxies[] = '127.0.0.1';
-            Request::setTrustedProxies($trustedProxies);
+            Request::setTrustedProxies($trustedProxies, Request::HEADER_X_FORWARDED_ALL);
         }
 
         // always a "master" request (as the real master request can be in cache)
@@ -480,6 +475,17 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
             }
         }
 
+        /*
+            RFC 7231 Sect. 7.1.1.2 says that a server that does not have a reasonably accurate
+            clock MUST NOT send a "Date" header, although it MUST send one in most other cases
+            except for 1xx or 5xx responses where it MAY do so.
+
+            Anyway, a client that received a message without a "Date" header MUST add it.
+        */
+        if (!$response->headers->has('Date')) {
+            $response->setDate(\DateTime::createFromFormat('U', time()));
+        }
+
         $this->processResponseBody($request, $response);
 
         if ($this->isPrivateRequest($request) && !$response->headers->hasCacheControlDirective('public')) {
@@ -493,9 +499,6 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
 
     /**
      * Checks whether the cache entry is "fresh enough" to satisfy the Request.
-     *
-     * @param Request  $request A Request instance
-     * @param Response $entry   A Response instance
      *
      * @return bool true if the cache entry if fresh enough, false otherwise
      */
@@ -515,9 +518,6 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
     /**
      * Locks a Request during the call to the backend.
      *
-     * @param Request  $request A Request instance
-     * @param Response $entry   A Response instance
-     *
      * @return bool true if the cache entry can be returned even if it is staled, false otherwise
      */
     protected function lock(Request $request, Response $entry)
@@ -525,64 +525,48 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         // try to acquire a lock to call the backend
         $lock = $this->store->lock($request);
 
+        if (true === $lock) {
+            // we have the lock, call the backend
+            return false;
+        }
+
         // there is already another process calling the backend
-        if (true !== $lock) {
-            // check if we can serve the stale entry
-            if (null === $age = $entry->headers->getCacheControlDirective('stale-while-revalidate')) {
-                $age = $this->options['stale_while_revalidate'];
-            }
 
-            if (abs($entry->getTtl()) < $age) {
-                $this->record($request, 'stale-while-revalidate');
-
-                // server the stale response while there is a revalidation
-                return true;
-            }
-
-            // wait for the lock to be released
-            $wait = 0;
-            while ($this->store->isLocked($request) && $wait < 5000000) {
-                usleep(50000);
-                $wait += 50000;
-            }
-
-            if ($wait < 5000000) {
-                // replace the current entry with the fresh one
-                $new = $this->lookup($request);
-                $entry->headers = $new->headers;
-                $entry->setContent($new->getContent());
-                $entry->setStatusCode($new->getStatusCode());
-                $entry->setProtocolVersion($new->getProtocolVersion());
-                foreach ($new->headers->getCookies() as $cookie) {
-                    $entry->headers->setCookie($cookie);
-                }
-            } else {
-                // backend is slow as hell, send a 503 response (to avoid the dog pile effect)
-                $entry->setStatusCode(503);
-                $entry->setContent('503 Service Unavailable');
-                $entry->headers->set('Retry-After', 10);
-            }
+        // May we serve a stale response?
+        if ($this->mayServeStaleWhileRevalidate($entry)) {
+            $this->record($request, 'stale-while-revalidate');
 
             return true;
         }
 
-        // we have the lock, call the backend
-        return false;
+        // wait for the lock to be released
+        if ($this->waitForLock($request)) {
+            // replace the current entry with the fresh one
+            $new = $this->lookup($request);
+            $entry->headers = $new->headers;
+            $entry->setContent($new->getContent());
+            $entry->setStatusCode($new->getStatusCode());
+            $entry->setProtocolVersion($new->getProtocolVersion());
+            foreach ($new->headers->getCookies() as $cookie) {
+                $entry->headers->setCookie($cookie);
+            }
+        } else {
+            // backend is slow as hell, send a 503 response (to avoid the dog pile effect)
+            $entry->setStatusCode(503);
+            $entry->setContent('503 Service Unavailable');
+            $entry->headers->set('Retry-After', 10);
+        }
+
+        return true;
     }
 
     /**
      * Writes the Response to the cache.
      *
-     * @param Request  $request  A Request instance
-     * @param Response $response A Response instance
-     *
      * @throws \Exception
      */
     protected function store(Request $request, Response $response)
     {
-        if (!$response->headers->has('Date')) {
-            $response->setDate(\DateTime::createFromFormat('U', time()));
-        }
         try {
             $this->store->write($request, $response);
 
@@ -603,20 +587,9 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
 
     /**
      * Restores the Response body.
-     *
-     * @param Request  $request  A Request instance
-     * @param Response $response A Response instance
      */
     private function restoreResponseBody(Request $request, Response $response)
     {
-        if ($request->isMethod('HEAD') || 304 === $response->getStatusCode()) {
-            $response->setContent(null);
-            $response->headers->remove('X-Body-Eval');
-            $response->headers->remove('X-Body-File');
-
-            return;
-        }
-
         if ($response->headers->has('X-Body-Eval')) {
             ob_start();
 
@@ -632,7 +605,11 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
                 $response->headers->set('Content-Length', strlen($response->getContent()));
             }
         } elseif ($response->headers->has('X-Body-File')) {
-            $response->setContent(file_get_contents($response->headers->get('X-Body-File')));
+            // Response does not include possibly dynamic content (ESI, SSI), so we need
+            // not handle the content for HEAD requests
+            if (!$request->isMethod('HEAD')) {
+                $response->setContent(file_get_contents($response->headers->get('X-Body-File')));
+            }
         } else {
             return;
         }
@@ -650,8 +627,6 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
     /**
      * Checks if the Request includes authorization or other sensitive information
      * that should cause the Response to be considered private by default.
-     *
-     * @param Request $request A Request instance
      *
      * @return bool true if the Request is private, false otherwise
      */
@@ -674,16 +649,51 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
 
     /**
      * Records that an event took place.
-     *
-     * @param Request $request A Request instance
-     * @param string  $event   The event name
      */
-    private function record(Request $request, $event)
+    private function record(Request $request, string $event)
+    {
+        $this->traces[$this->getTraceKey($request)][] = $event;
+    }
+
+    /**
+     * Calculates the key we use in the "trace" array for a given request.
+     */
+    private function getTraceKey(Request $request): string
     {
         $path = $request->getPathInfo();
         if ($qs = $request->getQueryString()) {
             $path .= '?'.$qs;
         }
-        $this->traces[$request->getMethod().' '.$path][] = $event;
+
+        return $request->getMethod().' '.$path;
+    }
+
+    /**
+     * Checks whether the given (cached) response may be served as "stale" when a revalidation
+     * is currently in progress.
+     */
+    private function mayServeStaleWhileRevalidate(Response $entry): bool
+    {
+        $timeout = $entry->headers->getCacheControlDirective('stale-while-revalidate');
+
+        if (null === $timeout) {
+            $timeout = $this->options['stale_while_revalidate'];
+        }
+
+        return abs($entry->getTtl()) < $timeout;
+    }
+
+    /**
+     * Waits for the store to release a locked entry.
+     */
+    private function waitForLock(Request $request): bool
+    {
+        $wait = 0;
+        while ($this->store->isLocked($request) && $wait < 100) {
+            usleep(50000);
+            ++$wait;
+        }
+
+        return $wait < 100;
     }
 }

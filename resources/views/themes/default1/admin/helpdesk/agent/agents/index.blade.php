@@ -68,7 +68,7 @@ class="active"
                 <th width="100px">{{Lang::get('lang.user_name')}}</th>
                 <th width="100px">{{Lang::get('lang.role')}}</th>
                 <th width="100px">{{Lang::get('lang.status')}}</th>
-                <th width="100px">{{Lang::get('lang.group')}}</th>
+                
                 <th width="100px">{{Lang::get('lang.department')}}</th>
                 <th width="100px">{{Lang::get('lang.created')}}</th>
                 {{-- <th width="100px">{{Lang::get('lang.lastlogin')}}</th> --}}
@@ -93,12 +93,11 @@ class="active"
                     <span style="color:red">{!! Lang::get('lang.inactive') !!}</span>
                     @endif
                     <?php
-                    $group = App\Model\helpdesk\Agent\Groups::whereId($use->assign_group)->first();
+                    
                     $department = App\Model\helpdesk\Agent\Department::whereId($use->primary_dpt)->first();
                     ?>
-                <td>{{ $group->name }}</td>
                 <td>{{ $department->name }}</td>
-                <td>{{ UTC::usertimezone($use->created_at) }}</td>
+                <td>{{ faveoDate($use->created_at) }}</td>
                 {{-- <td>{{$use->Lastlogin_at}}</td> --}}
                 <td>
                     {!! Form::open(['route'=>['agents.destroy', $use->id],'method'=>'DELETE']) !!}

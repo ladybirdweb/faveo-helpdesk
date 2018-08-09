@@ -7,12 +7,12 @@ $_SERVER['argv'][2] = 'Issue2158Test';
 $_SERVER['argv'][3] = __DIR__ . '/2158/Issue2158Test.php';
 
 require __DIR__ . '/../../bootstrap.php';
-PHPUnit_TextUI_Command::main();
+PHPUnit\TextUI\Command::main();
 ?>
 --EXPECTF--
 PHPUnit %s by Sebastian Bergmann and contributors.
 
-%s
+..                                                                  2 / 2 (100%)
 
 Time: %s, Memory: %s
 

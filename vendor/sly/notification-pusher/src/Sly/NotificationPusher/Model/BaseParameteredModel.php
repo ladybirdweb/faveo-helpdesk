@@ -48,8 +48,8 @@ abstract class BaseParameteredModel
     /**
      * Get parameter.
      *
-     * @param string $key     Key
-     * @param mixed  $default Default
+     * @param string $key Key
+     * @param mixed $default Default
      *
      * @return mixed
      */
@@ -75,8 +75,8 @@ abstract class BaseParameteredModel
     /**
      * Set parameter.
      *
-     * @param string $key   Key
-     * @param mixed  $value Value
+     * @param string $key Key
+     * @param mixed $value Value
      *
      * @return mixed
      */

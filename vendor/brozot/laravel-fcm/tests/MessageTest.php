@@ -5,19 +5,19 @@ use LaravelFCM\Message\OptionsPriorities;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 
-class PayloadTest extends FCMTestCase {
-
-	/**
-	 * @test
-	 */
-	public function it_construct_a_valid_json_with_option()
-	{
-		$targetPartial = '{
+class PayloadTest extends FCMTestCase
+{
+    /**
+     * @test
+     */
+    public function it_construct_a_valid_json_with_option()
+    {
+        $targetPartial = '{
 					"collapse_key":"collapseKey",
 					"content_available":true
 				}';
 
-		$targetFull = '{
+        $targetFull = '{
 					"collapse_key":"collapseKey",
 					"content_available":true,
 					"priority":"high",
@@ -27,70 +27,70 @@ class PayloadTest extends FCMTestCase {
 					"dry_run": true
 				}';
 
-		$optionBuilder = new OptionsBuilder();
+        $optionBuilder = new OptionsBuilder();
 
-		$optionBuilder->setCollapseKey("collapseKey");
-		$optionBuilder->setContentAvailable(true);
+        $optionBuilder->setCollapseKey('collapseKey');
+        $optionBuilder->setContentAvailable(true);
 
-		$json = json_encode($optionBuilder->build()->toArray());
-		$this->assertJsonStringEqualsJsonString($targetPartial, $json);
-		
-		$optionBuilder->setPriority(OptionsPriorities::high)
-			->setDelayWhileIdle(true)
-			->setDryRun(true)
-			->setRestrictedPackageName("customPackageName")
-			->setTimeToLive(200);
+        $json = json_encode($optionBuilder->build()->toArray());
+        $this->assertJsonStringEqualsJsonString($targetPartial, $json);
 
-		$json = json_encode($optionBuilder->build()->toArray());
-		$this->assertJsonStringEqualsJsonString($targetFull, $json);
+        $optionBuilder->setPriority(OptionsPriorities::high)
+            ->setDelayWhileIdle(true)
+            ->setDryRun(true)
+            ->setRestrictedPackageName('customPackageName')
+            ->setTimeToLive(200);
 
-	}
+        $json = json_encode($optionBuilder->build()->toArray());
+        $this->assertJsonStringEqualsJsonString($targetFull, $json);
+    }
 
-	/**
-	 * @test
-	 */
-	public function it_construct_a_valid_json_with_data()
-	{
-		$targetAdd = '{
+    /**
+     * @test
+     */
+    public function it_construct_a_valid_json_with_data()
+    {
+        $targetAdd = '{
 				"first_data":"first",
 				"second_data":true
 			}';
 
-		$targetSet = '
+        $targetSet = '
 				{
 					"third_data":"third",
 					"fourth_data":4
 				}';
 
-		$dataBuilder = new PayloadDataBuilder();
+        $dataBuilder = new PayloadDataBuilder();
 
-		$dataBuilder->addData([ 'first_data' => 'first' ])
-			->addData([ 'second_data' => true ]);
+        $dataBuilder->addData(['first_data' => 'first'])
+            ->addData(['second_data' => true]);
 
-		$json = json_encode($dataBuilder->build()->toArray());
-		$this->assertJsonStringEqualsJsonString($targetAdd, $json);
+        $json = json_encode($dataBuilder->build()->toArray());
+        $this->assertJsonStringEqualsJsonString($targetAdd, $json);
 
-		$dataBuilder->setData([ 'third_data' => 'third', 'fourth_data' => 4 ]);
+        $dataBuilder->setData(['third_data' => 'third', 'fourth_data' => 4]);
 
-		$json = json_encode($dataBuilder->build()->toArray());
-		$this->assertJsonStringEqualsJsonString($targetSet, $json);
-	}
+        $json = json_encode($dataBuilder->build()->toArray());
+        $this->assertJsonStringEqualsJsonString($targetSet, $json);
+    }
 
-	/**
-	 * @test
-	 */
-	public function it_construct_a_valid_json_with_notification()
-	{
-		$targetPartial = '{
+    /**
+     * @test
+     */
+    public function it_construct_a_valid_json_with_notification()
+    {
+        $targetPartial = '{
 					"title":"test_title",
 					"body":"test_body",
 					"badge":"test_badge",
 					"sound":"test_sound"
 				}';
 
-		$targetFull = '{
+        $targetFull = '{
 					"title":"test_title",
 					"body":"test_body",
+					"android_channel_id":"test_channel_id",
 					"badge":"test_badge",
 					"sound":"test_sound",
 					"tag":"test_tag",
@@ -103,27 +103,28 @@ class PayloadTest extends FCMTestCase {
 					"icon":"test_icon"
 				}';
 
-		$notificationBuilder = new PayloadNotificationBuilder();
+        $notificationBuilder = new PayloadNotificationBuilder();
 
-		$notificationBuilder->setTitle('test_title')
-					->setBody('test_body')
-					->setSound('test_sound')
-					->setBadge('test_badge');
+        $notificationBuilder->setTitle('test_title')
+                    ->setBody('test_body')
+                    ->setSound('test_sound')
+                    ->setBadge('test_badge');
 
-		$json = json_encode($notificationBuilder->build()->toArray());
-		$this->assertJsonStringEqualsJsonString($targetPartial, $json);
+        $json = json_encode($notificationBuilder->build()->toArray());
+        $this->assertJsonStringEqualsJsonString($targetPartial, $json);
 
-		$notificationBuilder->setTag('test_tag')
-					->setColor('test_color')
-					->setClickAction('test_click_action')
-					->setBodyLocationKey('test_body_key')
-					->setBodyLocationArgs('[ body0, body1 ]')
-					->setTitleLocationKey('test_title_key')
-					->setTitleLocationArgs('[ title0, title1 ]')
-					->setIcon('test_icon');
+        $notificationBuilder
+                    ->setChannelId('test_channel_id')
+                    ->setTag('test_tag')
+                    ->setColor('test_color')
+                    ->setClickAction('test_click_action')
+                    ->setBodyLocationKey('test_body_key')
+                    ->setBodyLocationArgs('[ body0, body1 ]')
+                    ->setTitleLocationKey('test_title_key')
+                    ->setTitleLocationArgs('[ title0, title1 ]')
+                    ->setIcon('test_icon');
 
-		$json = json_encode($notificationBuilder->build()->toArray());
-		$this->assertJsonStringEqualsJsonString($targetFull, $json);
-
-	}
+        $json = json_encode($notificationBuilder->build()->toArray());
+        $this->assertJsonStringEqualsJsonString($targetFull, $json);
+    }
 }

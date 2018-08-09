@@ -11,13 +11,14 @@
 
 namespace Symfony\Component\HttpFoundation\Tests\Session\Storage\Handler;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
 
 /**
  * @requires extension pdo_sqlite
  * @group time-sensitive
  */
-class PdoSessionHandlerTest extends \PHPUnit_Framework_TestCase
+class PdoSessionHandlerTest extends TestCase
 {
     private $dbFile;
 
@@ -135,12 +136,8 @@ class PdoSessionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testReadConvertsStreamToString()
     {
-        if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped('PHPUnit_MockObject cannot mock the PDOStatement class on HHVM. See https://github.com/sebastianbergmann/phpunit-mock-objects/pull/289');
-        }
-
         $pdo = new MockPdo('pgsql');
-        $pdo->prepareResult = $this->getMock('PDOStatement');
+        $pdo->prepareResult = $this->getMockBuilder('PDOStatement')->getMock();
 
         $content = 'foobar';
         $stream = $this->createStream($content);
@@ -156,13 +153,13 @@ class PdoSessionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testReadLockedConvertsStreamToString()
     {
-        if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped('PHPUnit_MockObject cannot mock the PDOStatement class on HHVM. See https://github.com/sebastianbergmann/phpunit-mock-objects/pull/289');
+        if (ini_get('session.use_strict_mode')) {
+            $this->markTestSkipped('Strict mode needs no locking for new sessions.');
         }
 
         $pdo = new MockPdo('pgsql');
-        $selectStmt = $this->getMock('PDOStatement');
-        $insertStmt = $this->getMock('PDOStatement');
+        $selectStmt = $this->getMockBuilder('PDOStatement')->getMock();
+        $insertStmt = $this->getMockBuilder('PDOStatement')->getMock();
 
         $pdo->prepareResult = function ($statement) use ($selectStmt, $insertStmt) {
             return 0 === strpos($statement, 'INSERT') ? $insertStmt : $selectStmt;
@@ -268,6 +265,9 @@ class PdoSessionHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('', $data, 'Destroyed session returns empty string');
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testSessionGC()
     {
         $previousLifeTime = ini_set('session.gc_maxlifetime', 1000);
@@ -315,6 +315,41 @@ class PdoSessionHandlerTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->assertInstanceOf('\PDO', $method->invoke($storage));
+    }
+
+    /**
+     * @dataProvider provideUrlDsnPairs
+     */
+    public function testUrlDsn($url, $expectedDsn, $expectedUser = null, $expectedPassword = null)
+    {
+        $storage = new PdoSessionHandler($url);
+
+        $this->assertAttributeEquals($expectedDsn, 'dsn', $storage);
+
+        if (null !== $expectedUser) {
+            $this->assertAttributeEquals($expectedUser, 'username', $storage);
+        }
+
+        if (null !== $expectedPassword) {
+            $this->assertAttributeEquals($expectedPassword, 'password', $storage);
+        }
+    }
+
+    public function provideUrlDsnPairs()
+    {
+        yield array('mysql://localhost/test', 'mysql:host=localhost;dbname=test;');
+        yield array('mysql://localhost:56/test', 'mysql:host=localhost;port=56;dbname=test;');
+        yield array('mysql2://root:pwd@localhost/test', 'mysql:host=localhost;dbname=test;', 'root', 'pwd');
+        yield array('postgres://localhost/test', 'pgsql:host=localhost;dbname=test;');
+        yield array('postgresql://localhost:5634/test', 'pgsql:host=localhost;port=5634;dbname=test;');
+        yield array('postgres://root:pwd@localhost/test', 'pgsql:host=localhost;dbname=test;', 'root', 'pwd');
+        yield 'sqlite relative path' => array('sqlite://localhost/tmp/test', 'sqlite:tmp/test');
+        yield 'sqlite absolute path' => array('sqlite://localhost//tmp/test', 'sqlite:/tmp/test');
+        yield 'sqlite relative path without host' => array('sqlite:///tmp/test', 'sqlite:tmp/test');
+        yield 'sqlite absolute path without host' => array('sqlite3:////tmp/test', 'sqlite:/tmp/test');
+        yield array('sqlite://localhost/:memory:', 'sqlite::memory:');
+        yield array('mssql://localhost/test', 'sqlsrv:server=localhost;Database=test');
+        yield array('mssql://localhost:56/test', 'sqlsrv:server=localhost,56;Database=test');
     }
 
     private function createStream($content)

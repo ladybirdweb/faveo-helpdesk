@@ -13,20 +13,20 @@
 
 namespace PhpSpec\Matcher;
 
-use PhpSpec\Formatter\Presenter\PresenterInterface;
+use PhpSpec\Formatter\Presenter\Presenter;
 use PhpSpec\Exception\Example\FailureException;
 
-class ScalarMatcher implements MatcherInterface
+final class ScalarMatcher implements Matcher
 {
     /**
-     * @var PresenterInterface
+     * @var Presenter
      */
     private $presenter;
 
     /**
-     * @param PresenterInterface $presenter
+     * @param Presenter $presenter
      */
-    public function __construct(PresenterInterface $presenter)
+    public function __construct(Presenter $presenter)
     {
         $this->presenter = $presenter;
     }
@@ -40,7 +40,7 @@ class ScalarMatcher implements MatcherInterface
      *
      * @return Boolean
      */
-    public function supports($name, $subject, array $arguments)
+    public function supports(string $name, $subject, array $arguments): bool
     {
         $checkerName = $this->getCheckerName($name);
 
@@ -57,11 +57,11 @@ class ScalarMatcher implements MatcherInterface
      * @throws \PhpSpec\Exception\Example\FailureException
      * @return boolean
      */
-    public function positiveMatch($name, $subject, array $arguments)
+    public function positiveMatch(string $name, $subject, array $arguments)
     {
         $checker = $this->getCheckerName($name);
 
-        if (!call_user_func($checker, $subject)) {
+        if (!\call_user_func($checker, $subject)) {
             throw new FailureException(sprintf(
                 '%s expected to return %s, but it did not.',
                 $this->presenter->presentString(sprintf(
@@ -84,11 +84,11 @@ class ScalarMatcher implements MatcherInterface
      * @throws \PhpSpec\Exception\Example\FailureException
      * @return boolean
      */
-    public function negativeMatch($name, $subject, array $arguments)
+    public function negativeMatch(string $name, $subject, array $arguments)
     {
         $checker = $this->getCheckerName($name);
 
-        if (call_user_func($checker, $subject)) {
+        if (\call_user_func($checker, $subject)) {
             throw new FailureException(sprintf(
                 '%s not expected to return %s, but it did.',
                 $this->presenter->presentString(sprintf(
@@ -106,7 +106,7 @@ class ScalarMatcher implements MatcherInterface
      *
      * @return integer
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         return 50;
     }
@@ -116,7 +116,7 @@ class ScalarMatcher implements MatcherInterface
      *
      * @return string|boolean
      */
-    private function getCheckerName($name)
+    private function getCheckerName(string $name)
     {
         if (0 !== strpos($name, 'be')) {
             return false;

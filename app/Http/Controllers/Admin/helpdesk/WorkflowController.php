@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\helpdesk;
 
 // controller
-use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
 // request
 use App\Http\Requests\helpdesk\WorkflowCreateRequest;
@@ -102,37 +101,32 @@ class WorkflowController extends Controller
                         })
                         /* add column target */
                         ->addColumn('target', function ($model) {
-                            $target = $model->target;
-                            $target1 = explode('-', $target);
-                            if ($target1[0] == 'A') {
-                                if ($target1[1] == 0) {
-                                    return 'Any';
-                                } elseif ($target1[1] == 1) {
-                                    return 'Web Forms';
-                                } elseif ($target1[1] == 2) {
-                                    return 'Email';
-                                } elseif ($target1[1] == 4) {
-                                    return 'API';
+                            $target = '';
+                            if ($model->target == 'any') {
+                                $target = 'Any';
+                            } else {
+                                $targets = $model->targets()->first();
+                                if ($targets) {
+                                    $target = $targets->value;
                                 }
-                            } elseif ($target1[0] == 'E') {
-                                $emails = Emails::where('id', '=', $target1[1])->first();
-
-                                return $emails->email_address;
                             }
+
+                            return $target;
                         })
                         /* add column created */
                         ->addColumn('Created', function ($model) {
-                            return TicketController::usertimezone($model->created_at);
+                            return faveoDate($model->created_at);
                         })
                         /* add column updated */
                         ->addColumn('Updated', function ($model) {
-                            return TicketController::usertimezone($model->updated_at);
+                            return faveoDate($model->updated_at);
                         })
                         /* add column action */
                         ->addColumn('Actions', function ($model) {
-                            $confirmation = 'Are you sure?';
+                            $url = url('/workflow/delete/'.$model->id);
+                            $confirmation = $delete = deletePopUp($model->id, $url, "Delete $model->subject");
 
-                            return "<a class='btn btn-info btn-xs btn-flat' href='".route('workflow.edit', $model->id)."'><i class='fa fa-edit text-black'></i> Edit</a>  <a class='btn btn-danger btn-xs btn-flat' href='".route('workflow.delete', $model->id)."'><i class='fa fa-trash text-black'></i> Delete</a>";
+                            return "<a class='btn btn-primary btn-xs ' href='".route('workflow.edit', $model->id)."'><i class='fa fa-edit text-white'></i>&nbsp; Edit</a> &nbsp;$confirmation";
                         })
                         ->make();
     }
@@ -144,8 +138,8 @@ class WorkflowController extends Controller
      */
     public function create(Emails $emails)
     {
-        $email_data = '';
-        foreach ($emails->lists('email_address', 'id') as $key => $email) {
+        $email_data = new Emails();
+        foreach ($emails->pluck('email_address', 'id') as $key => $email) {
             $email_data["E-$key"] = $email;
         }
         $emails = $email_data;

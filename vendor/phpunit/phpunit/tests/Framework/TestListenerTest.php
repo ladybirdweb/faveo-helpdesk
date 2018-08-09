@@ -8,67 +8,23 @@
  * file that was distributed with this source code.
  */
 
-/**
- * @since      Class available since Release 2.0.0
- * @covers     PHPUnit_Framework_TestCase
- */
-class Framework_TestListenerTest extends PHPUnit_Framework_TestCase implements PHPUnit_Framework_TestListener
+namespace PHPUnit\Framework;
+
+class TestListenerTest extends TestCase implements TestListener
 {
     protected $endCount;
     protected $errorCount;
     protected $failureCount;
+    protected $warningCount;
     protected $notImplementedCount;
     protected $riskyCount;
     protected $skippedCount;
     protected $result;
     protected $startCount;
 
-    public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
+    protected function setUp(): void
     {
-        $this->errorCount++;
-    }
-
-    public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
-    {
-        $this->failureCount++;
-    }
-
-    public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
-    {
-        $this->notImplementedCount++;
-    }
-
-    public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time)
-    {
-        $this->riskyCount++;
-    }
-
-    public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
-    {
-        $this->skippedCount++;
-    }
-
-    public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
-    {
-    }
-
-    public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
-    {
-    }
-
-    public function startTest(PHPUnit_Framework_Test $test)
-    {
-        $this->startCount++;
-    }
-
-    public function endTest(PHPUnit_Framework_Test $test, $time)
-    {
-        $this->endCount++;
-    }
-
-    protected function setUp()
-    {
-        $this->result = new PHPUnit_Framework_TestResult;
+        $this->result = new TestResult;
         $this->result->addListener($this);
 
         $this->endCount            = 0;
@@ -79,27 +35,75 @@ class Framework_TestListenerTest extends PHPUnit_Framework_TestCase implements P
         $this->startCount          = 0;
     }
 
-    public function testError()
+    public function addError(Test $test, \Throwable $t, float $time): void
     {
-        $test = new TestError;
+        $this->errorCount++;
+    }
+
+    public function addWarning(Test $test, Warning $e, float $time): void
+    {
+        $this->warningCount++;
+    }
+
+    public function addFailure(Test $test, AssertionFailedError $e, float $time): void
+    {
+        $this->failureCount++;
+    }
+
+    public function addIncompleteTest(Test $test, \Throwable $t, float $time): void
+    {
+        $this->notImplementedCount++;
+    }
+
+    public function addRiskyTest(Test $test, \Throwable $t, float $time): void
+    {
+        $this->riskyCount++;
+    }
+
+    public function addSkippedTest(Test $test, \Throwable $t, float $time): void
+    {
+        $this->skippedCount++;
+    }
+
+    public function startTestSuite(TestSuite $suite): void
+    {
+    }
+
+    public function endTestSuite(TestSuite $suite): void
+    {
+    }
+
+    public function startTest(Test $test): void
+    {
+        $this->startCount++;
+    }
+
+    public function endTest(Test $test, float $time): void
+    {
+        $this->endCount++;
+    }
+
+    public function testError(): void
+    {
+        $test = new \TestError;
         $test->run($this->result);
 
         $this->assertEquals(1, $this->errorCount);
         $this->assertEquals(1, $this->endCount);
     }
 
-    public function testFailure()
+    public function testFailure(): void
     {
-        $test = new Failure;
+        $test = new \Failure;
         $test->run($this->result);
 
         $this->assertEquals(1, $this->failureCount);
         $this->assertEquals(1, $this->endCount);
     }
 
-    public function testStartStop()
+    public function testStartStop(): void
     {
-        $test = new Success;
+        $test = new \Success;
         $test->run($this->result);
 
         $this->assertEquals(1, $this->startCount);

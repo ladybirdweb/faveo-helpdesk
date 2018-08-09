@@ -34,15 +34,75 @@ class ModelMakeCommand extends GeneratorCommand
      *
      * @return void
      */
-    public function fire()
+    public function handle()
     {
-        if (parent::fire() !== false) {
-            if ($this->option('migration')) {
-                $table = Str::plural(Str::snake(class_basename($this->argument('name'))));
-
-                $this->call('make:migration', ['name' => "create_{$table}_table", '--create' => $table]);
-            }
+        if (parent::handle() === false && ! $this->option('force')) {
+            return;
         }
+
+        if ($this->option('all')) {
+            $this->input->setOption('factory', true);
+            $this->input->setOption('migration', true);
+            $this->input->setOption('controller', true);
+            $this->input->setOption('resource', true);
+        }
+
+        if ($this->option('factory')) {
+            $this->createFactory();
+        }
+
+        if ($this->option('migration')) {
+            $this->createMigration();
+        }
+
+        if ($this->option('controller') || $this->option('resource')) {
+            $this->createController();
+        }
+    }
+
+    /**
+     * Create a model factory for the model.
+     *
+     * @return void
+     */
+    protected function createFactory()
+    {
+        $this->call('make:factory', [
+            'name' => $this->argument('name').'Factory',
+            '--model' => $this->argument('name'),
+        ]);
+    }
+
+    /**
+     * Create a migration file for the model.
+     *
+     * @return void
+     */
+    protected function createMigration()
+    {
+        $table = Str::plural(Str::snake(class_basename($this->argument('name'))));
+
+        $this->call('make:migration', [
+            'name' => "create_{$table}_table",
+            '--create' => $table,
+        ]);
+    }
+
+    /**
+     * Create a controller for the model.
+     *
+     * @return void
+     */
+    protected function createController()
+    {
+        $controller = Str::studly(class_basename($this->argument('name')));
+
+        $modelName = $this->qualifyClass($this->getNameInput());
+
+        $this->call('make:controller', [
+            'name' => "{$controller}Controller",
+            '--model' => $this->option('resource') ? $modelName : null,
+        ]);
     }
 
     /**
@@ -52,6 +112,10 @@ class ModelMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
+        if ($this->option('pivot')) {
+            return __DIR__.'/stubs/pivot.model.stub';
+        }
+
         return __DIR__.'/stubs/model.stub';
     }
 
@@ -74,7 +138,19 @@ class ModelMakeCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
+            ['all', 'a', InputOption::VALUE_NONE, 'Generate a migration, factory, and resource controller for the model'],
+
+            ['controller', 'c', InputOption::VALUE_NONE, 'Create a new controller for the model'],
+
+            ['factory', 'f', InputOption::VALUE_NONE, 'Create a new factory for the model'],
+
+            ['force', null, InputOption::VALUE_NONE, 'Create the class even if the model already exists.'],
+
             ['migration', 'm', InputOption::VALUE_NONE, 'Create a new migration file for the model.'],
+
+            ['pivot', 'p', InputOption::VALUE_NONE, 'Indicates if the generated model should be a custom intermediate table model.'],
+
+            ['resource', 'r', InputOption::VALUE_NONE, 'Indicates if the generated controller should be a resource controller.'],
         ];
     }
 }

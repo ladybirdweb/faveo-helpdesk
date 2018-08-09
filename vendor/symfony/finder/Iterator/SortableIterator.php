@@ -28,8 +28,6 @@ class SortableIterator implements \IteratorAggregate
     private $sort;
 
     /**
-     * Constructor.
-     *
      * @param \Traversable $iterator The Iterator to filter
      * @param int|callable $sort     The sort type (SORT_BY_NAME, SORT_BY_TYPE, or a PHP callback)
      *
@@ -41,7 +39,7 @@ class SortableIterator implements \IteratorAggregate
 
         if (self::SORT_BY_NAME === $sort) {
             $this->sort = function ($a, $b) {
-                return strcmp($a->getRealpath(), $b->getRealpath());
+                return strcmp($a->getRealpath() ?: $a->getPathname(), $b->getRealpath() ?: $b->getPathname());
             };
         } elseif (self::SORT_BY_TYPE === $sort) {
             $this->sort = function ($a, $b) {
@@ -51,7 +49,7 @@ class SortableIterator implements \IteratorAggregate
                     return 1;
                 }
 
-                return strcmp($a->getRealpath(), $b->getRealpath());
+                return strcmp($a->getRealpath() ?: $a->getPathname(), $b->getRealpath() ?: $b->getPathname());
             };
         } elseif (self::SORT_BY_ACCESSED_TIME === $sort) {
             $this->sort = function ($a, $b) {

@@ -1,34 +1,41 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 
 class Catch_ extends Node\Stmt
 {
-    /** @var Node\Name Class of exception */
-    public $type;
-    /** @var string Variable for exception */
+    /** @var Node\Name[] Types of exceptions to catch */
+    public $types;
+    /** @var Expr\Variable Variable for exception */
     public $var;
-    /** @var Node[] Statements */
+    /** @var Node\Stmt[] Statements */
     public $stmts;
 
     /**
      * Constructs a catch node.
      *
-     * @param Node\Name $type       Class of exception
-     * @param string    $var        Variable for exception
-     * @param Node[]    $stmts      Statements
-     * @param array     $attributes Additional attributes
+     * @param Node\Name[]   $types      Types of exceptions to catch
+     * @param Expr\Variable $var        Variable for exception
+     * @param Node\Stmt[]   $stmts      Statements
+     * @param array         $attributes Additional attributes
      */
-    public function __construct(Node\Name $type, $var, array $stmts = array(), array $attributes = array()) {
+    public function __construct(
+        array $types, Expr\Variable $var, array $stmts = [], array $attributes = []
+    ) {
         parent::__construct($attributes);
-        $this->type = $type;
+        $this->types = $types;
         $this->var = $var;
         $this->stmts = $stmts;
     }
 
-    public function getSubNodeNames() {
-        return array('type', 'var', 'stmts');
+    public function getSubNodeNames() : array {
+        return ['types', 'var', 'stmts'];
+    }
+    
+    public function getType() : string {
+        return 'Stmt_Catch';
     }
 }

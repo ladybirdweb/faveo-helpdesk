@@ -181,6 +181,9 @@ class="active"
                     <div class="col-md-3"><span id="legend-holder" style="background-color: #6DC5B2;"></span>&nbsp; <span class="lead"> <span id="total-reopen-tickets" class="lead"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.reopen') !!}</span></div> 
                     <div class="col-md-3"><span id="legend-holder" style="background-color: #E3B870;"></span>&nbsp; <span class="lead"> <span id="total-closed-tickets" class="lead"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.closed') !!}</span></div> 
                 </div>
+                <div class="row" id="no-data-msg" style="display: none">
+                    <center><h4>{{Lang::get('lang.invalid-date-range')}}</h4></center>
+                </div>
             </div>
         </form>
         <!--<div id="legendDiv"></div>-->
@@ -348,18 +351,33 @@ class="active"
                                     success: function (result2) {
                                         //  $.getJSON("agen", function (result) {
                                         var labels = [], open = [], closed = [], reopened = [], open_total = 0, closed_total = 0, reopened_total = 0;
-                                        //,data2=[],data3=[],data4=[];
-                                        for (var i = 0; i < result2.length; i++) {
-                                            // $var12 = result[i].day;
-                                            // labels.push($var12);
-                                            labels.push(result2[i].date);
-                                            open.push(result2[i].open);
-                                            closed.push(result2[i].closed);
-                                            reopened.push(result2[i].reopened);
-                                            // data4.push(result[i].open);
-                                            open_total += parseInt(result2[i].open);
-                                            closed_total += parseInt(result2[i].closed);
-                                            reopened_total += parseInt(result2[i].reopened);
+                                        if (result2.length == 0) {
+                                             // $var12 = result[i].day;
+                                                // labels.push($var12);
+                                                labels.push(0);
+                                                open.push(0);
+                                                closed.push(0);
+                                                reopened.push(0);
+                                                // data4.push(result[i].open);
+                                                open_total += parseInt(0);
+                                                closed_total += parseInt(0);
+                                                reopened_total += parseInt(0);
+                                                $('#no-data-msg').css('display', 'block');
+                                        } else {
+                                            //,data2=[],data3=[],data4=[];
+                                            for (var i = 0; i < result2.length; i++) {
+                                                // $var12 = result[i].day;
+                                                // labels.push($var12);
+                                                labels.push(result2[i].date);
+                                                open.push(result2[i].open);
+                                                closed.push(result2[i].closed);
+                                                reopened.push(result2[i].reopened);
+                                                // data4.push(result[i].open);
+                                                open_total += parseInt(result2[i].open);
+                                                closed_total += parseInt(result2[i].closed);
+                                                reopened_total += parseInt(result2[i].reopened);
+                                            }
+                                            $('#no-data-msg').css('display', 'none');
                                         }
 
                                         var buyerData = {

@@ -13,10 +13,10 @@
 
 namespace PhpSpec\Matcher;
 
-use PhpSpec\Formatter\Presenter\PresenterInterface;
+use PhpSpec\Formatter\Presenter\Presenter;
 use PhpSpec\Exception\Example\FailureException;
 
-class TypeMatcher extends BasicMatcher
+final class TypeMatcher extends BasicMatcher
 {
     /**
      * @var array
@@ -28,14 +28,14 @@ class TypeMatcher extends BasicMatcher
         'implement'
     );
     /**
-     * @var PresenterInterface
+     * @var Presenter
      */
     private $presenter;
 
     /**
-     * @param PresenterInterface $presenter
+     * @param Presenter $presenter
      */
-    public function __construct(PresenterInterface $presenter)
+    public function __construct(Presenter $presenter)
     {
         $this->presenter = $presenter;
     }
@@ -47,10 +47,10 @@ class TypeMatcher extends BasicMatcher
      *
      * @return bool
      */
-    public function supports($name, $subject, array $arguments)
+    public function supports(string $name, $subject, array $arguments): bool
     {
-        return in_array($name, self::$keywords)
-            && 1 == count($arguments)
+        return \in_array($name, self::$keywords)
+            && 1 == \count($arguments)
         ;
     }
 
@@ -60,7 +60,7 @@ class TypeMatcher extends BasicMatcher
      *
      * @return bool
      */
-    protected function matches($subject, array $arguments)
+    protected function matches($subject, array $arguments): bool
     {
         return (null !== $subject) && ($subject instanceof $arguments[0]);
     }
@@ -72,7 +72,7 @@ class TypeMatcher extends BasicMatcher
      *
      * @return FailureException
      */
-    protected function getFailureException($name, $subject, array $arguments)
+    protected function getFailureException(string $name, $subject, array $arguments): FailureException
     {
         return new FailureException(sprintf(
             'Expected an instance of %s, but got %s.',
@@ -88,7 +88,7 @@ class TypeMatcher extends BasicMatcher
      *
      * @return FailureException
      */
-    protected function getNegativeFailureException($name, $subject, array $arguments)
+    protected function getNegativeFailureException(string $name, $subject, array $arguments): FailureException
     {
         return new FailureException(sprintf(
             'Did not expect instance of %s, but got %s.',

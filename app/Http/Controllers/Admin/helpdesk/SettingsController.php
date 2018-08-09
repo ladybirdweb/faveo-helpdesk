@@ -155,7 +155,7 @@ class SettingsController extends Controller
             /* Fetch the values from Department table */
             $departments = $department->get();
             /* Fetch the values from Timezones table */
-            $timezones = $timezone->get();
+            $timezones = $timezone->pluck('name', 'name')->toArray();
             /* Fetch status value of common settings */
             $common_setting = $common_settings->select('status')
                     ->where('option_name', '=', 'user_set_ticket_status')
@@ -166,8 +166,17 @@ class SettingsController extends Controller
             $email_mandatory = $common_settings->select('status')
                     ->where('option_name', '=', 'email_mandatory')
                     ->first();
+            $formats = $date_time->pluck('format', 'format')->merge(['custom'=>'Custom', 'human-read'=>'Human readable'])->toArray();
+
+            $common = new CommonSettings();
+            $verify = $common->getOptionValue('verify', 'verify');
+            $verify_decode = ['email'=>'', 'mobile'=>''];
+            if ($verify->count() > 0) {
+                $verify_decode = json_decode($verify->option_value, true);
+            }
+
             /* Direct to System Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp', 'email_mandatory'));
+            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp', 'email_mandatory', 'formats', 'verify_decode'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -208,11 +217,15 @@ class SettingsController extends Controller
             $email_mandatory = CommonSettings::where('option_name', '=', 'email_mandatory')
                     ->update(['status' => $request->email_mandatory]);
 
-            if ($request->has('itil')) {
+            if ($request->filled('itil')) {
                 $itil = $request->input('itil');
                 $sett = CommonSettings::firstOrCreate(['option_name'=>'itil']);
                 $sett->status = $itil;
                 $sett->save();
+            }
+            if ($request->filled('verify')) {
+                $json = json_encode($request->input('verify'));
+                CommonSettings::updateOrCreate(['option_name' => 'verify'], ['option_value'=>$json, 'optional_field'=>'verify']);
             }
             /* redirect to Index page with Success Message */
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
@@ -363,7 +376,7 @@ class SettingsController extends Controller
         $workflow = $workflow->whereId('1')->first();
         $cron_path = base_path('artisan');
         $command = ":- <pre>***** php $cron_path schedule:run >> /dev/null 2>&1</pre>";
-        $shared = ":- <pre>/usr/bin/php-cli -q  $cron_path schedule:run >> /dev/null 2>&1</pre>";
+        $shared = ':- <pre>'.PHP_BINDIR."/php -q  $cron_path schedule:run >> /dev/null 2>&1</pre>";
         $warn = '';
         $condition = new \App\Model\MailJob\Condition();
         $job = $condition->checkActiveJob();
@@ -498,12 +511,9 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function getalert(Alert $alert)
+    public function getalert(Alert $alerts)
     {
         try {
-            /* fetch the values of alert from alert table */
-            $alerts = $alert->whereId('1')->first();
-            /* Direct to Alert Settings Page */
             return view('themes.default1.admin.helpdesk.settings.alert', compact('alerts'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -519,63 +529,25 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function postalert($id, Alert $alert, Request $request)
+    public function postalert(Alert $alert, Request $request)
     {
         try {
-            /* fetch the values of alert request  */
-            $alerts = $alert->whereId('1')->first();
-            /* Insert Checkbox to DB */
-            $alerts->assignment_status = $request->input('assignment_status');
-            $alerts->ticket_status = $request->input('ticket_status');
-            $alerts->overdue_department_member = $request->input('overdue_department_member');
-            $alerts->sql_error = $request->input('sql_error');
-            $alerts->excessive_failure = $request->input('excessive_failure');
-            $alerts->overdue_status = $request->input('overdue_status');
-            $alerts->overdue_assigned_agent = $request->input('overdue_assigned_agent');
-            $alerts->overdue_department_manager = $request->input('overdue_department_manager');
-            $alerts->internal_status = $request->input('internal_status');
-            $alerts->internal_last_responder = $request->input('internal_last_responder');
-            $alerts->internal_assigned_agent = $request->input('internal_assigned_agent');
-            $alerts->internal_department_manager = $request->input('internal_department_manager');
-            $alerts->assignment_assigned_agent = $request->input('assignment_assigned_agent');
-            $alerts->assignment_team_leader = $request->input('assignment_team_leader');
-            $alerts->assignment_team_member = $request->input('assignment_team_member');
-            $alerts->system_error = $request->input('system_error');
-            $alerts->transfer_department_member = $request->input('transfer_department_member');
-            $alerts->transfer_department_manager = $request->input('transfer_department_manager');
-            $alerts->transfer_assigned_agent = $request->input('transfer_assigned_agent');
-            $alerts->transfer_status = $request->input('transfer_status');
-            $alerts->message_organization_accmanager = $request->input('message_organization_accmanager');
-            $alerts->message_department_manager = $request->input('message_department_manager');
-            $alerts->message_assigned_agent = $request->input('message_assigned_agent');
-            $alerts->message_last_responder = $request->input('message_last_responder');
-            $alerts->message_status = $request->input('message_status');
-            $alerts->ticket_organization_accmanager = $request->input('ticket_organization_accmanager');
-            $alerts->ticket_department_manager = $request->input('ticket_department_manager');
-            $alerts->ticket_department_member = $request->input('ticket_department_member');
-            $alerts->ticket_admin_email = $request->input('ticket_admin_email');
-
-            if ($request->input('system_error') == null) {
-                $str = '%0%';
-                $path = app_path('../config/app.php');
-                $content = \File::get($path);
-                $content = str_replace('%1%', $str, $content);
-                \File::put($path, $content);
-            } else {
-                $str = '%1%';
-                $path = app_path('../config/app.php');
-                $content = \File::get($path);
-                $content = str_replace('%0%', $str, $content);
-                \File::put($path, $content);
+            $requests = $request->except('_token');
+            Alert::truncate();
+            foreach ($requests as $key => $value) {
+                if (is_array($value)) {
+                    $value = implode(',', $value);
+                }
+                Alert::create([
+                    'key'   => $key,
+                    'value' => $value,
+                ]);
             }
-            /* fill the values to coompany table */
-            /* Check whether function success or not */
-            $alerts->save();
-            /* redirect to Index page with Success Message */
-            return redirect('getalert')->with('success', Lang::get('lang.alert_&_notices_updated_successfully'));
+
+            return redirect('alert')->with('success', Lang::get('lang.alert_&_notices_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getalert')->with('fails', Lang::get('lang.alert_&_notices_can_not_updated').'<li>'.$e->getMessage().'</li>');
+            return redirect('alert')->with('fails', $e->getMessage());
         }
     }
 

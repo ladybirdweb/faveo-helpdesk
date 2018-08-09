@@ -5,7 +5,6 @@ namespace App\FaveoLog;
 use Illuminate\Support\Facades\File;
 use Psr\Log\LogLevel;
 use ReflectionClass;
-use UTC;
 
 /**
  * Class LaravelLogViewer.
@@ -188,7 +187,7 @@ class LaravelLogViewer
 
     public static function date($utc)
     {
-        $system_date = UTC::usertimezone($utc);
+        $system_date = faveoDate($utc);
 
         return $system_date;
     }

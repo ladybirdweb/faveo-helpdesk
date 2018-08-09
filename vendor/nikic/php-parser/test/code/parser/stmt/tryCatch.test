@@ -24,64 +24,82 @@ finally { }
 array(
     0: Stmt_TryCatch(
         stmts: array(
-            0: Expr_FuncCall(
-                name: Name(
-                    parts: array(
-                        0: doTry
+            0: Stmt_Expression(
+                expr: Expr_FuncCall(
+                    name: Name(
+                        parts: array(
+                            0: doTry
+                        )
                     )
-                )
-                args: array(
+                    args: array(
+                    )
                 )
             )
         )
         catches: array(
             0: Stmt_Catch(
-                type: Name(
-                    parts: array(
-                        0: A
+                types: array(
+                    0: Name(
+                        parts: array(
+                            0: A
+                        )
                     )
                 )
-                var: b
+                var: Expr_Variable(
+                    name: b
+                )
                 stmts: array(
-                    0: Expr_FuncCall(
-                        name: Name(
-                            parts: array(
-                                0: doCatchA
+                    0: Stmt_Expression(
+                        expr: Expr_FuncCall(
+                            name: Name(
+                                parts: array(
+                                    0: doCatchA
+                                )
                             )
-                        )
-                        args: array(
+                            args: array(
+                            )
                         )
                     )
                 )
             )
             1: Stmt_Catch(
-                type: Name(
-                    parts: array(
-                        0: B
+                types: array(
+                    0: Name(
+                        parts: array(
+                            0: B
+                        )
                     )
                 )
-                var: c
+                var: Expr_Variable(
+                    name: c
+                )
                 stmts: array(
-                    0: Expr_FuncCall(
-                        name: Name(
-                            parts: array(
-                                0: doCatchB
+                    0: Stmt_Expression(
+                        expr: Expr_FuncCall(
+                            name: Name(
+                                parts: array(
+                                    0: doCatchB
+                                )
                             )
-                        )
-                        args: array(
+                            args: array(
+                            )
                         )
                     )
                 )
             )
         )
-        finallyStmts: array(
-            0: Expr_FuncCall(
-                name: Name(
-                    parts: array(
-                        0: doFinally
+        finally: Stmt_Finally(
+            stmts: array(
+                0: Stmt_Expression(
+                    expr: Expr_FuncCall(
+                        name: Name(
+                            parts: array(
+                                0: doFinally
+                            )
+                        )
+                        args: array(
+                        )
                     )
-                )
-                args: array(
                 )
             )
         )
@@ -91,17 +109,21 @@ array(
         )
         catches: array(
             0: Stmt_Catch(
-                type: Name(
-                    parts: array(
-                        0: A
+                types: array(
+                    0: Name(
+                        parts: array(
+                            0: A
+                        )
                     )
                 )
-                var: b
+                var: Expr_Variable(
+                    name: b
+                )
                 stmts: array(
                 )
             )
         )
-        finallyStmts: null
+        finally: null
         comments: array(
             0: // no finally
         )
@@ -111,7 +133,9 @@ array(
         )
         catches: array(
         )
-        finallyStmts: array(
+        finally: Stmt_Finally(
+            stmts: array(
+            )
         )
         comments: array(
             0: // no catch

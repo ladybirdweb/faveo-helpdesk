@@ -503,6 +503,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('client-profile', ['as' => 'client.profile', 'uses' => 'Client\helpdesk\GuestController@getProfile']); /*  User profile get  */
 
         Route::get('mytickets', ['as' => 'ticket2', 'uses' => 'Client\helpdesk\GuestController@getMyticket']);
+        Route::get('myorganizationtickets', ['as' => 'myorganizationtickets', 'uses' => 'Client\helpdesk\GuestController@getMyorganizationticket']);
         Route::get('myticket/{id}', ['as' => 'ticket', 'uses' => 'Client\helpdesk\GuestController@thread']); /* Get my tickets */
         Route::patch('client-profile-edit', 'Client\helpdesk\GuestController@postProfile'); /* User Profile Post */
         Route::patch('client-profile-password', 'Client\helpdesk\GuestController@postProfilePassword'); /*  Profile Password Post */

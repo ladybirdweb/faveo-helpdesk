@@ -53,8 +53,8 @@ class TestResult {
      <?php
 
 function validate_php(&$results) {
-    if (version_compare(PHP_VERSION, '5.5') == -1) {
-        $results[] = new TestResult('Minimum PHP version required in order to run Faveo HELPDESK is PHP 5.5. Your PHP version: ' . PHP_VERSION, STATUS_ERROR);
+    if (version_compare(PHP_VERSION, '7.1.3') == -1) {
+        $results[] = new TestResult('PHP version required in order to run Faveo HELPDESK is PHP 7.1.3 or greater. Your PHP version: ' . PHP_VERSION, STATUS_ERROR);
         return false;
     } else {
         $results[] = new TestResult('Your PHP version is ' . PHP_VERSION, STATUS_OK);
@@ -74,6 +74,7 @@ function validate_php(&$results) {
 function php_config_value_to_bytes($val) {
     $val = trim($val);
     $last = strtolower($val{strlen($val) - 1});
+    $val = (integer)$val;
     switch ($last) {
         // The 'G' modifier is available since PHP 5.1.0
         case 'g':
@@ -178,7 +179,9 @@ function validate_zend_compatibility_mode(&$results) {
 function validate_extensions(&$results) {
     $ok = true;
 
-    $required_extensions = array('mcrypt', 'openssl', 'pdo', 'fileinfo', 'curl', 'zip', 'mbstring');
+    $required_extensions = ['curl', 'ctype', 'imap', 'mbstring',
+       'mcrypt', 'openssl', 'tokenizer', 'zip', 'pdo', 'mysqli', 'bcmath',
+       'iconv', 'xml', 'json'];
 
     foreach ($required_extensions as $required_extension) {
         if (extension_loaded($required_extension)) {
@@ -202,7 +205,8 @@ function validate_extensions(&$results) {
     } // if
 
     $recommended_extensions = array(
-        'imap' => 'IMAP extension is used for connecting to mail server using IMAP settings to fetch emails in the system.'
+        'imap' => 'IMAP extension is used for connecting to mail server using IMAP settings to fetch emails in the system.',
+        'mcrypt' => 'Optional extension',
         // 'gd' => 'GD is used for image manipulation. Without it, system is not able to create thumbnails for files or manage avatars, logos and project icons. Please refer to <a href="http://www.php.net/manual/en/image.installation.php">this</a> page for installation instructions',
         // 'mbstring' => 'MultiByte String is used for work with Unicode. Without it, system may not split words and string properly and you can have weird question mark characters in Recent Activities for example. Please refer to <a href="http://www.php.net/manual/en/mbstring.installation.php">this</a> page for installation instructions',
         // 'curl' => 'cURL is used to support various network tasks. Please refer to <a href="http://www.php.net/manual/en/curl.installation.php">this</a> page for installation instructions',
@@ -257,6 +261,7 @@ function checkMaxExecutiontime(&$results)
     }
     return $ok;
 }
+
 // ---------------------------------------------------
 //  Do the magic
 // ---------------------------------------------------
@@ -288,7 +293,7 @@ if ($php_ok && $memory_ok && $extensions_ok && $file_permission && $required_fun
 
 
     <form action="{{URL::route('postprerequisites')}}" method="post"  class="border-line">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        {{ csrf_field() }}
         <p class="setup-actions step">
             <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue">
             <a href="{!! route('licence') !!}" class="button button-large button-next" style="float: left">Previous</a>

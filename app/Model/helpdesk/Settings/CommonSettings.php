@@ -22,15 +22,22 @@ class CommonSettings extends BaseModel
         return $status;
     }
 
-    public function getOptionValue($option, $field = '')
+    public function getOptionValue($option, $field = '', $option_value = false)
     {
+        $value = '';
         $schema = $this->where('option_name', $option);
         if ($field != '') {
             $schema = $schema->where('optional_field', $field);
 
-            return $schema->first();
+            $value = $schema->first();
         }
-        $value = $schema->get();
+        if ($value && $option_value) {
+            $value = $value->option_value;
+        }
+
+        if (!$value && !$option_value) {
+            $value = $schema->get();
+        }
 
         return $value;
     }

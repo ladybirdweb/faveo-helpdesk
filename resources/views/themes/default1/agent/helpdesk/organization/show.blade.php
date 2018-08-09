@@ -125,7 +125,7 @@ class="active"
         </div>
 
         <?php
-        $user_orga_relation_id = "";
+        $user_orga_relation_id = [];
         $user_orga_relations = App\Model\helpdesk\Agent_panel\User_org::where('org_id', '=', $orgs->id)->get();
         foreach ($user_orga_relations as $user_orga_relation) {
             $user_orga_relation_id[] = $user_orga_relation->user_id;
@@ -249,7 +249,7 @@ class="active"
                                 <?php $from = App\User::where('id', '=', $ticket->user_id)->first(); ?> 
                                 <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! $username !!}</td>
                                 <td>{!! $assigned !!}</td>
-                                <td class="mailbox-last-activity">{!! UTC::usertimezone($title->updated_at) !!}</td>
+                                <td class="mailbox-last-activity">{!! faveoDate($title->updated_at) !!}</td>
                                 </tr>
                                 @endforeach
                                 </tbody>
@@ -367,7 +367,7 @@ class="active"
                                 <?php $from = App\User::where('id', '=', $ticket->user_id)->first(); ?> 
                                 <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! $username !!}</td>
                                 <td>{!! $assigned !!}</td>
-                                <td class="mailbox-last-activity">{!! UTC::usertimezone($title->updated_at) !!}</td>
+                                <td class="mailbox-last-activity">{!! faveoDate($title->updated_at) !!}</td>
                                 </tr>
                                 @endforeach
                                 </tbody>
@@ -489,7 +489,7 @@ class="active"
                                 <?php $from = App\User::where('id', '=', $ticket->user_id)->first(); ?> 
                                 <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! $username !!}</td>
                                 <td>{!! $assigned !!}</td>
-                                <td class="mailbox-last-activity">{!! UTC::usertimezone($title->updated_at) !!}</td>
+                                <td class="mailbox-last-activity">{!! faveoDate($title->updated_at) !!}</td>
                                 </tr>
                                 @endforeach
                                 </tbody>

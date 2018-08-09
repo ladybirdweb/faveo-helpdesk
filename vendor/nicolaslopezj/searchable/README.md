@@ -32,6 +32,13 @@ class User extends \Eloquent
      * @var array
      */
     protected $searchable = [
+        /**
+         * Columns and their priority in search results.
+         * Columns with higher values are more important.
+         * Columns with equal values have equal importance.
+         *
+         * @var array
+         */
         'columns' => [
             'users.first_name' => 10,
             'users.last_name' => 10,
@@ -124,7 +131,7 @@ $users = User::search("John Doe", null, true, true)->get();
 Searchable builds a query that search through your model using Laravel's Eloquent.
 Here is an example query
 
-####Eloquent Model:
+#### Eloquent Model:
 ```php
 use Nicolaslopezj\Searchable\SearchableTrait;
 
@@ -149,12 +156,12 @@ class User extends \Eloquent
 }
 ```
 
-####Search:
+#### Search:
 ```php
 $search = User::search('Sed neque labore', null, true)->get();
 ```
 
-####Result:
+#### Result:
 ```sql
 select `users`.*, 
 

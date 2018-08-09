@@ -3,8 +3,8 @@ language: php
 
 # Versions of PHP you want your project run with.
 php:
-  - 5.5
-  - 5.6
+  - 7.1
+  - 7.2
   - hhvm
 
 # Commands to be run before your environment runs.
@@ -20,6 +20,7 @@ script: phpunit
 matrix:
   allow_failures:
     - php: 5.5
+    - php: 5.6
     - php: hhvm
   fast_finish: true
 

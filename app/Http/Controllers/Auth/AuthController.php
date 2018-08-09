@@ -22,7 +22,7 @@ use Auth;
 use DateTime;
 use DB;
 use Hash;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
 use Lang;
 use Socialite;
 
@@ -148,6 +148,7 @@ class AuthController extends Controller
      *
      * @return type Response
      */
+
     public function postRegister(User $user, RegisterRequest $request, $api = false)
     {
         //dd($request->all());
@@ -186,9 +187,13 @@ class AuthController extends Controller
             $sms = Plugin::select('status')->where('name', '=', 'SMS')->first();
             // Event for login
             \Event::fire(new \App\Events\LoginEvent($request));
+
             if ($request->input('email') !== '') {
                 $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/'.$code)]);
+
             }
+            $alert->setDetails($notifications);
+
             if ($settings->status == 1 || $settings->status == '1') {
                 if (count($sms) > 0) {
                     if ($sms->status == 1 || $sms->status == '1') {
@@ -295,6 +300,7 @@ class AuthController extends Controller
      */
     public function postLogin(LoginRequest $request)
     {
+
         try {
             // dd($request->input());
             \Event::fire('auth.login.event', []); //added 5/5/2016
@@ -310,11 +316,11 @@ class AuthController extends Controller
             $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
             $result = $this->confirmIPAddress($value, $usernameinput);
 
-            // If attempts > 3 and time < 30 minutes
-            $security = Security::whereId('1')->first();
-            if ($result == 1) {
-                return redirect()->back()->withErrors('email', 'Incorrect details')->with(['error' => $security->lockout_message, 'referer' => $referer]);
-            }
+        // If attempts > 3 and time < 30 minutes
+        $security = Security::whereId('1')->first();
+        if ($result == 1) {
+            return redirect()->back()->withErrors('email', 'Incorrect details')->with(['error' => $security->lockout_message, 'referer' => $referer]);
+        }
 
             $check_active = User::where('email', '=', $request->input('email'))->orwhere('user_name', '=', $request->input('email'))->first();
             if (!$check_active) { //check if user exists or not
@@ -328,8 +334,9 @@ class AuthController extends Controller
                             'referer'               => $referer, ]);
             }
 
-            //if user exists
-            $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
+        //if user exists
+        $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
+
 
             if ($settings->status == '1' || $settings->status == 1) { // check for otp verification setting
                 // setting is enabled
@@ -362,6 +369,7 @@ class AuthController extends Controller
                     goto a; //attenmpt login  (be careful while using goto statements)
                 }
             } else {
+
                 // setting is disabled
                 a: if (!$check_active->active) { //check account is active or not
                     // if accoutn is not active return back with error message that account is inactive
@@ -396,23 +404,28 @@ class AuthController extends Controller
                     } else { // If no login attempts stored, init login attempts and time
                         \Session::put('loginAttempts', $loginAttempts);
                         \Session::put('loginAttemptTime', time());
-                        $this->clearLoginAttempts($value, $usernameinput);
                     }
-                    // If auth ok, redirect to restricted area
-                    \Session::put('loginAttempts', $loginAttempts + 1);
-                    if (Auth::Attempt([$field => $usernameinput, 'password' => $password], $request->has('remember'))) {
-                        if (Auth::user()->role == 'user') {
-                            if ($request->input('referer')) {
-                                return \Redirect::route($request->input('referer'));
-                            }
-
-                            return \Redirect::route('/');
-                        } else {
-                            return redirect()->intended($this->redirectPath());
+                } else { // If no login attempts stored, init login attempts and time
+                    \Session::put('loginAttempts', $loginAttempts);
+                    \Session::put('loginAttemptTime', time());
+                    $this->clearLoginAttempts($value, $usernameinput);
+                }
+                // If auth ok, redirect to restricted area
+                \Session::put('loginAttempts', $loginAttempts + 1);
+                $credentials = $this->credential([$field => $usernameinput, 'password' => $password, 'is_delete' => 0]);
+                if (Auth::Attempt($credentials, $request->filled('remember'))) {
+                    if (Auth::user()->role == 'user') {
+                        if ($request->input('referer')) {
+                            return \Redirect::route($request->input('referer'));
                         }
+
+                        return \Redirect::route('/');
+                    } else {
+                        return redirect()->intended($this->redirectPath());
                     }
                 }
             }
+        }
 
             return redirect()->back()
                             ->withInput($request->only('email', 'remember'))
@@ -425,6 +438,8 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
+
+        return $credentials;
     }
 
     /**

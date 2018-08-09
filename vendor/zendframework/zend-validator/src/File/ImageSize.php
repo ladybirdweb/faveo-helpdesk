@@ -92,16 +92,16 @@ class ImageSize extends AbstractValidator
     public function __construct($options = null)
     {
         if (1 < func_num_args()) {
-            if (!is_array($options)) {
+            if (! is_array($options)) {
                 $options = ['minWidth' => $options];
             }
 
             $argv = func_get_args();
             array_shift($argv);
             $options['minHeight'] = array_shift($argv);
-            if (!empty($argv)) {
+            if (! empty($argv)) {
                 $options['maxWidth'] = array_shift($argv);
-                if (!empty($argv)) {
+                if (! empty($argv)) {
                     $options['maxHeight'] = array_shift($argv);
                 }
             }
@@ -124,8 +124,8 @@ class ImageSize extends AbstractValidator
      * Sets the minimum allowed width
      *
      * @param  int $minWidth
-     * @return ImageSize Provides a fluid interface
      * @throws Exception\InvalidArgumentException When minwidth is greater than maxwidth
+     * @return self Provides a fluid interface
      */
     public function setMinWidth($minWidth)
     {
@@ -154,8 +154,8 @@ class ImageSize extends AbstractValidator
      * Sets the maximum allowed width
      *
      * @param  int $maxWidth
-     * @return ImageSize Provides a fluid interface
      * @throws Exception\InvalidArgumentException When maxwidth is less than minwidth
+     * @return self Provides a fluid interface
      */
     public function setMaxWidth($maxWidth)
     {
@@ -184,8 +184,8 @@ class ImageSize extends AbstractValidator
      * Sets the minimum allowed height
      *
      * @param  int $minHeight
-     * @return ImageSize Provides a fluid interface
      * @throws Exception\InvalidArgumentException When minheight is greater than maxheight
+     * @return self Provides a fluid interface
      */
     public function setMinHeight($minHeight)
     {
@@ -214,8 +214,8 @@ class ImageSize extends AbstractValidator
      * Sets the maximum allowed height
      *
      * @param  int $maxHeight
-     * @return ImageSize Provides a fluid interface
      * @throws Exception\InvalidArgumentException When maxheight is less than minheight
+     * @return self Provides a fluid interface
      */
     public function setMaxHeight($maxHeight)
     {
@@ -274,7 +274,7 @@ class ImageSize extends AbstractValidator
      * Sets the minimum image size
      *
      * @param  array $options                 The minimum image dimensions
-     * @return ImageSize Provides a fluent interface
+     * @return self Provides a fluent interface
      */
     public function setImageMin($options)
     {
@@ -286,7 +286,7 @@ class ImageSize extends AbstractValidator
      * Sets the maximum image size
      *
      * @param  array|\Traversable $options The maximum image dimensions
-     * @return ImageSize Provides a fluent interface
+     * @return self Provides a fluent interface
      */
     public function setImageMax($options)
     {
@@ -298,7 +298,7 @@ class ImageSize extends AbstractValidator
      * Sets the minimum and maximum image width
      *
      * @param  array $options               The image width dimensions
-     * @return ImageSize Provides a fluent interface
+     * @return self Provides a fluent interface
      */
     public function setImageWidth($options)
     {
@@ -312,7 +312,7 @@ class ImageSize extends AbstractValidator
      * Sets the minimum and maximum image height
      *
      * @param  array $options               The image height dimensions
-     * @return ImageSize Provides a fluent interface
+     * @return self Provides a fluent interface
      */
     public function setImageHeight($options)
     {
@@ -337,7 +337,7 @@ class ImageSize extends AbstractValidator
             $filename = $file['name'];
             $file     = $file['tmp_name'];
         } elseif (is_array($value)) {
-            if (!isset($value['tmp_name']) || !isset($value['name'])) {
+            if (! isset($value['tmp_name']) || ! isset($value['name'])) {
                 throw new Exception\InvalidArgumentException(
                     'Value array must be in $_FILES format'
                 );
@@ -351,7 +351,7 @@ class ImageSize extends AbstractValidator
         $this->setValue($filename);
 
         // Is file readable ?
-        if (empty($file) || false === stream_resolve_include_path($file)) {
+        if (empty($file) || false === is_readable($file)) {
             $this->error(self::NOT_READABLE);
             return false;
         }

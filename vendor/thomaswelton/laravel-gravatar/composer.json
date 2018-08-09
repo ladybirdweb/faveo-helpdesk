@@ -35,5 +35,15 @@
          "Thomaswelton\\Tests\\LaravelGravatar\\":"tests/"
       }
    },
+   "extra": {
+        "laravel": {
+            "providers": [
+                "Thomaswelton\\LaravelGravatar\\LaravelGravatarServiceProvider"
+            ],
+            "aliases": {
+                "Gravatar": "Thomaswelton\\LaravelGravatar\\Facades\\Gravatar"
+            }
+        }
+    },
    "minimum-stability":"stable"
 }

@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\Translation\Tests\DataCollector;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\DataCollectorTranslator;
 use Symfony\Component\Translation\DataCollector\TranslationDataCollector;
 
-class TranslationDataCollectorTest extends \PHPUnit_Framework_TestCase
+class TranslationDataCollectorTest extends TestCase
 {
     protected function setUp()
     {
@@ -34,7 +35,7 @@ class TranslationDataCollectorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $dataCollector->getCountMissings());
         $this->assertEquals(0, $dataCollector->getCountFallbacks());
         $this->assertEquals(0, $dataCollector->getCountDefines());
-        $this->assertEquals(array(), $dataCollector->getMessages());
+        $this->assertEquals(array(), $dataCollector->getMessages()->getValue());
     }
 
     public function testCollect()
@@ -132,7 +133,8 @@ class TranslationDataCollectorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $dataCollector->getCountMissings());
         $this->assertEquals(1, $dataCollector->getCountFallbacks());
         $this->assertEquals(1, $dataCollector->getCountDefines());
-        $this->assertEquals($expectedMessages, array_values($dataCollector->getMessages()));
+
+        $this->assertEquals($expectedMessages, array_values($dataCollector->getMessages()->getValue(true)));
     }
 
     private function getTranslator()

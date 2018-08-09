@@ -21,13 +21,13 @@ class Message extends BaseOptionedModel implements MessageInterface
     /**
      * @var string
      */
-    private $text;
+    protected $text;
 
     /**
      * Constructor.
      *
-     * @param string $text    Text
-     * @param array  $options Options
+     * @param string $text Text
+     * @param array $options Options
      */
     public function __construct($text, array $options = [])
     {

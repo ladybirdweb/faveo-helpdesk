@@ -262,67 +262,47 @@ class TicketController extends Controller
      *
      * @return type bool
      */
-    public function reply($thread, $request, $ta, $attach = '')
+    public function reply(Request $request, $ticketid = '', $mail = true, $system_reply
+    = true, $user_id = '', $api = true)
     {
+        if (\Input::get('billable')) {
+            $this->validate($request, [
+
+                'hours' => ['required', 'regex:/^([0-9]|0[0-9]|1[0-9]|2[0-9]|0[0-9][0-9]|1[0-9][0-9]|2[0-9][0-9]):[0-5][0-9]$/'],
+            ]);
+        }
+        $this->validate($request, [
+            'content' => 'required',
+                ], [
+            'content.required' => 'Reply Content Required',
+        ]);
+
         try {
-            $check_attachment = null;
-            $eventthread = $thread->where('ticket_id', $request->input('ticket_ID'))->first();
-            //dd($request->input('ticket_ID'));
-            //dd($eventthread);
-            $eventuserid = $eventthread->user_id;
-            $emailadd = User::where('id', $eventuserid)->first()->email;
-            //dd($emailadd);
-            $source = $eventthread->source;
-
-            $form_data = $request->except('reply_content', 'ticket_ID', 'attachment');
-            \Event::fire(new \App\Events\ClientTicketFormPost($form_data, $emailadd, $source));
-            //dd('yes');
-            $reply_content = $request->input('reply_content');
-            $thread->ticket_id = $request->input('ticket_ID');
-            $thread->poster = 'support';
-            $thread->body = $request->input('reply_content');
-            $thread->user_id = Auth::user()->id;
-            $ticket_id = $request->input('ticket_ID');
-            $tickets = Tickets::where('id', '=', $ticket_id)->first();
-            $tickets->isanswered = '1';
-            $tickets->save();
-
-            $ticket_user = User::where('id', '=', $tickets->user_id)->first();
-
-            if ($tickets->assigned_to == 0) {
-                $tickets->assigned_to = Auth::user()->id;
-                $tickets->save();
-                $thread2 = new Ticket_Thread();
-                $thread2->ticket_id = $thread->ticket_id;
-                $thread2->user_id = Auth::user()->id;
-                $thread2->is_internal = 1;
-                $thread2->body = 'This Ticket have been assigned to '.Auth::user()->first_name.' '.Auth::user()->last_name;
-                $thread2->save();
+            if (!$ticketid) {
+                $ticketid = $request->input('ticket_id');
             }
-            if ($tickets->status > 1) {
-                $tickets->status = '1';
-                $tickets->isanswered = '1';
-                $tickets->save();
+            $body = $request->input('content');
+            $email = $request->input('email');
+            $inline = $request->input('inline');
+            $attachment = $request->input('attachment');
+            $source = source($ticketid);
+            $form_data = $request->except('content', 'ticket_id', 'attachment', 'inline');
+            //\Event::fire(new \App\Events\ClientTicketFormPost($form_data, $email, $source));
+            if (!$request->has('do-not-send')) {
+                \Event::fire('Reply-Ticket', [['ticket_id' => $ticketid, 'body' => $body]]);
             }
-            $thread->save();
-
-            if (!empty($attach)) {
-                $check_attachment = $this->attach($thread->id, $attach);
-            }
-
-            $thread1 = Ticket_Thread::where('ticket_id', '=', $ticket_id)->first();
-            $ticket_subject = $thread1->title;
-            $user_id = $tickets->user_id;
-            $user = User::where('id', '=', $user_id)->first();
-            $email = $user->email;
-            $user_name = $user->user_name;
-            $ticket_number = $tickets->ticket_number;
-            $company = $this->company();
-            $username = $ticket_user->user_name;
-            if (!empty(Auth::user()->agent_sign)) {
-                $agentsign = Auth::user()->agent_sign;
+            if ($system_reply == true && Auth::user()) {
+                $user_id = Auth::user()->id;
             } else {
-                $agentsign = null;
+                $user_id = requester($ticketid);
+                if ($user_id !== '') {
+                    $user_id = $user_id;
+                }
+            }
+
+            $thread = $this->saveReply($ticketid, $body, $user_id, $system_reply, $attachment, $inline, $mail);
+            if (!$api) {
+                return $thread;
             }
             \Event::fire(new \App\Events\FaveoAfterReply($reply_content, $user->phone_number, $request, $tickets));
 
@@ -347,6 +327,8 @@ class TicketController extends Controller
             } catch (\Exception $e) {
                 //throw new \Exception($e->getMessage());
             }
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
 
             $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket_id)->get();
             foreach ($collaborators as $collaborator) {
@@ -369,17 +351,25 @@ class TicketController extends Controller
                 // //                    }
 //                 }, true);
 
-                try {
-                    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $admin_user, 'email' => $admin_email], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $admin_user, 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $admin_user, 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
-                } catch (\Exception $e) {
-                }
-            }
+        return response()->json(compact('result'));
+    }
 
-            return $thread;
-        } catch (\Exception $e) {
-            //dd($e);
-            return $e->getMessage();
-        }
+    public function saveReply($ticket_id, $body, $user_id, $system_reply, $attachment
+    = [], $inline = [], $mail = true, $poster = 'support', $email_content = [])
+    {
+        $user = User::where('id', $user_id)->select('id', 'role')->first();
+        $ticket = $this->saveReplyTicket($ticket_id, $system_reply, $user);
+        $thread = $ticket->thread()->create([
+            'ticket_id' => $ticket_id,
+            'user_id'   => $user_id,
+            'poster'    => $poster,
+            'body'      => $body,
+        ]);
+        $this->saveEmailThread($thread, $email_content);
+        $this->saveReplyAttachment($thread, $attachment, $inline);
+        $this->replyNotification($ticket, $thread, $mail);
+
+        return $thread;
     }
 
     /**
@@ -449,7 +439,7 @@ class TicketController extends Controller
             $UserEmail = Input::get('user');
             //dd($UserEmail);
             // $UserEmail = 'sujitprasad12@yahoo.in';
-            $user = User::where('email', '=', $UserEmail)->first();
+            $user = User::where('id', '=', $UserEmail)->first();
             if (!$user) {
                 return ['error' => 'No agent not found'];
             }
@@ -627,7 +617,7 @@ class TicketController extends Controller
     public function autosearch()
     {
         $term = \Input::get('term');
-        $user = \App\User::where('email', 'LIKE', '%'.$term.'%')->orWhere('first_name', 'LIKE', '%'.$term.'%')->orWhere('last_name', 'LIKE', '%'.$term.'%')->orWhere('user_name', 'LIKE', '%'.$term.'%')->lists('email');
+        $user = \App\User::where('email', 'LIKE', '%'.$term.'%')->orWhere('first_name', 'LIKE', '%'.$term.'%')->orWhere('last_name', 'LIKE', '%'.$term.'%')->orWhere('user_name', 'LIKE', '%'.$term.'%')->pluck('email');
 
         return $user;
     }
@@ -679,16 +669,18 @@ class TicketController extends Controller
         $ticketid = Input::get('ticketid');
         $user = new User();
         $user = $user->where('email', $email)->first();
-        $ticket_collaborator = Ticket_Collaborator::where('ticket_id', '=', $ticketid)
-                ->where('user_id', $user->id)
-                ->first();
-        if ($ticket_collaborator) {
-            $ticket_collaborator->delete();
+        if ($user) {
+            $ticket_collaborator = Ticket_Collaborator::where('ticket_id', '=', $ticketid)
+                    ->where('user_id', $user->id)
+                    ->first();
+            if ($ticket_collaborator) {
+                $ticket_collaborator->delete();
 
-            return 'deleted successfully';
-        } else {
-            return 'not found';
+                return 'deleted successfully';
+            }
         }
+
+        return 'not found';
     }
 
     public function getCollaboratorForTicket()

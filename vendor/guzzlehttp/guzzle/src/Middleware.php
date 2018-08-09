@@ -34,10 +34,11 @@ final class Middleware
                 $cookieJar = $options['cookies'];
                 $request = $cookieJar->withCookieHeader($request);
                 return $handler($request, $options)
-                    ->then(function ($response) use ($cookieJar, $request) {
-                        $cookieJar->extractCookies($request, $response);
-                        return $response;
-                    }
+                    ->then(
+                        function ($response) use ($cookieJar, $request) {
+                            $cookieJar->extractCookies($request, $response);
+                            return $response;
+                        }
                 );
             };
         };
@@ -102,7 +103,7 @@ final class Middleware
                             'error'    => $reason,
                             'options'  => $options
                         ];
-                        return new RejectedPromise($reason);
+                        return \GuzzleHttp\Promise\rejection_for($reason);
                     }
                 );
             };

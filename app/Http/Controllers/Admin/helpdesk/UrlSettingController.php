@@ -15,12 +15,15 @@ class UrlSettingController extends Controller
 
     public function settings(Request $request)
     {
-        $url = $request->url();
-        $www = $this->checkWWW($url);
-        $https = $this->checkHTTP($url);
-        //dd($www, $https);
+        $url = $request->root();
+        $schema = new \App\Model\helpdesk\Settings\CommonSettings();
+        $row = $schema->getOptionValue('url', 'app_url');
+        if ($row) {
+            $url = $row->option_value;
+        }
+
         try {
-            return view('themes.default1.admin.helpdesk.settings.url.settings', compact('www', 'https'));
+            return view('themes.default1.admin.helpdesk.settings.url.settings', compact('url'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -29,17 +32,20 @@ class UrlSettingController extends Controller
     public function postSettings(Request $request)
     {
         try {
-            $www = $request->input('www');
-            $ssl = $request->input('ssl');
-            $string_www = $this->www($www);
-            $sting_ssl = $this->ssl($ssl);
-            $string = $string_www.$sting_ssl;
-            $this->writeHtaccess($string);
+            $url = $request->input('url');
+            $schema = new \App\Model\helpdesk\Settings\CommonSettings();
+            $row = $schema->getOptionValue('url', 'app_url');
+            if ($row) {
+                $row->delete();
+            }
+            \App\Model\helpdesk\Settings\CommonSettings::create([
+                'option_name'    => 'url',
+                'optional_field' => 'app_url',
+                'option_value'   => $url,
+            ]);
 
             return redirect()->back()->with('success', 'updated');
         } catch (Exception $ex) {
-            dd($ex);
-
             return redirect()->back()->with('fails', $ex->getMessage());
         }
     }

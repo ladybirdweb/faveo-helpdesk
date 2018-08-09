@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\HttpKernel\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Client;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -18,7 +19,10 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Tests\Fixtures\TestClient;
 
-class ClientTest extends \PHPUnit_Framework_TestCase
+/**
+ * @group time-sensitive
+ */
+class ClientTest extends TestCase
 {
     public function testDoRequest()
     {
@@ -57,8 +61,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $m->setAccessible(true);
 
         $expected = array(
-            'foo=bar; expires=Sun, 15 Feb 2009 20:00:00 GMT; domain=http://example.com; path=/foo; secure; httponly',
-            'foo1=bar1; expires=Sun, 15 Feb 2009 20:00:00 GMT; domain=http://example.com; path=/foo; secure; httponly',
+            'foo=bar; expires=Sun, 15-Feb-2009 20:00:00 GMT; max-age='.(strtotime('Sun, 15-Feb-2009 20:00:00 GMT') - time()).'; path=/foo; domain=http://example.com; secure; httponly',
+            'foo1=bar1; expires=Sun, 15-Feb-2009 20:00:00 GMT; max-age='.(strtotime('Sun, 15-Feb-2009 20:00:00 GMT') - time()).'; path=/foo; domain=http://example.com; secure; httponly',
         );
 
         $response = new Response();
@@ -93,6 +97,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testUploadedFile()
     {
         $source = tempnam(sys_get_temp_dir(), 'source');
+        file_put_contents($source, '1');
         $target = sys_get_temp_dir().'/sf.moved.file';
         @unlink($target);
 
@@ -100,8 +105,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client = new Client($kernel);
 
         $files = array(
-            array('tmp_name' => $source, 'name' => 'original', 'type' => 'mime/original', 'size' => 123, 'error' => UPLOAD_ERR_OK),
-            new UploadedFile($source, 'original', 'mime/original', 123, UPLOAD_ERR_OK, true),
+            array('tmp_name' => $source, 'name' => 'original', 'type' => 'mime/original', 'size' => 1, 'error' => UPLOAD_ERR_OK),
+            new UploadedFile($source, 'original', 'mime/original', 1, UPLOAD_ERR_OK, true),
         );
 
         $file = null;
@@ -116,7 +121,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
             $this->assertEquals('original', $file->getClientOriginalName());
             $this->assertEquals('mime/original', $file->getClientMimeType());
-            $this->assertEquals('123', $file->getClientSize());
+            $this->assertSame(1, $file->getClientSize());
             $this->assertTrue($file->isValid());
         }
 

@@ -9,16 +9,19 @@ class Prompter implements PrompterInterface
     private $answers = array();
     private $hasBeenAsked = false;
     private $question;
+    private $unansweredQuestions = false;
 
     public function setAnswer($answer)
     {
         $this->answers[] = $answer;
     }
 
-    public function askConfirmation($question, $default = true)
+    public function askConfirmation(string $question, bool $default = true) : bool
     {
         $this->hasBeenAsked = true;
         $this->question = $question;
+
+        $this->unansweredQuestions = count($this->answers) > 1;
         return (bool)array_shift($this->answers);
     }
 
@@ -29,6 +32,19 @@ class Prompter implements PrompterInterface
         }
 
         return $this->hasBeenAsked
-            && preg_replace('/\s+/', ' ', trim(strip_tags($this->question))) == preg_replace('/\s+/', ' ', $question) ;
+            && $this->normalise($this->question) == $this->normalise($question);
+    }
+
+    public function hasUnansweredQuestions()
+    {
+        return $this->unansweredQuestions;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function normalise($question)
+    {
+        return preg_replace('/\s+/', '', trim(strip_tags($question)));
     }
 }

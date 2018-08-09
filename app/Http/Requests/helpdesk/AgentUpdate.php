@@ -35,7 +35,7 @@ class AgentUpdate extends Request
             'email'               => 'required|email|unique:users,email,'.$this->segment(2),
             'active'              => 'required',
             'role'                => 'required',
-            'group'               => 'required',
+            //'group'               => 'required',
             'primary_department'  => 'required',
             'agent_time_zone'     => 'required',
             'team'                => 'required',

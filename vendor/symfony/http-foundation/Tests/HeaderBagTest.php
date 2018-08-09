@@ -11,9 +11,10 @@
 
 namespace Symfony\Component\HttpFoundation\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\HeaderBag;
 
-class HeaderBagTest extends \PHPUnit_Framework_TestCase
+class HeaderBagTest extends TestCase
 {
     public function testConstructor()
     {
@@ -171,6 +172,15 @@ class HeaderBagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(10, $bag->getCacheControlDirective('max-age'));
     }
 
+    public function testCacheControlClone()
+    {
+        $headers = array('foo' => 'bar');
+        $bag1 = new HeaderBag($headers);
+        $bag2 = new HeaderBag($bag1->all());
+
+        $this->assertEquals($bag1->all(), $bag2->all());
+    }
+
     public function testGetIterator()
     {
         $headers = array('foo' => 'bar', 'hello' => 'world', 'third' => 'charm');
@@ -190,6 +200,6 @@ class HeaderBagTest extends \PHPUnit_Framework_TestCase
         $headers = array('foo' => 'bar', 'HELLO' => 'WORLD');
         $headerBag = new HeaderBag($headers);
 
-        $this->assertEquals(count($headers), count($headerBag));
+        $this->assertCount(count($headers), $headerBag);
     }
 }

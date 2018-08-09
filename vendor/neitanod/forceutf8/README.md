@@ -54,8 +54,13 @@ Edit your composer.json file to include the following:
 ```json
 {
     "require": {
-        "neitanod/forceutf8": "dev-master"
+        "neitanod/forceutf8": "~2.0"
     }
 }
 ```
 
+Tips:
+=====
+You can tip me with Bitcoin if you want. :)
+
+<img src="resources/wallet.jpg" width="225" alt="1Awfu4TZpy99H7Pyzt1mooxU1aP2mJVdHP">

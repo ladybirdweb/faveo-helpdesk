@@ -8,11 +8,33 @@ use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 class BcryptHasher implements HasherContract
 {
     /**
-     * Default crypt cost factor.
+     * The default cost factor.
      *
      * @var int
      */
     protected $rounds = 10;
+
+    /**
+     * Create a new hasher instance.
+     *
+     * @param  array  $options
+     * @return void
+     */
+    public function __construct(array $options = [])
+    {
+        $this->rounds = $options['rounds'] ?? $this->rounds;
+    }
+
+    /**
+     * Get information about the given hashed value.
+     *
+     * @param  string  $hashedValue
+     * @return array
+     */
+    public function info($hashedValue)
+    {
+        return password_get_info($hashedValue);
+    }
 
     /**
      * Hash the given value.
@@ -25,9 +47,9 @@ class BcryptHasher implements HasherContract
      */
     public function make($value, array $options = [])
     {
-        $cost = isset($options['rounds']) ? $options['rounds'] : $this->rounds;
-
-        $hash = password_hash($value, PASSWORD_BCRYPT, ['cost' => $cost]);
+        $hash = password_hash($value, PASSWORD_BCRYPT, [
+            'cost' => $this->cost($options),
+        ]);
 
         if ($hash === false) {
             throw new RuntimeException('Bcrypt hashing not supported.');
@@ -62,9 +84,9 @@ class BcryptHasher implements HasherContract
      */
     public function needsRehash($hashedValue, array $options = [])
     {
-        $cost = isset($options['rounds']) ? $options['rounds'] : $this->rounds;
-
-        return password_needs_rehash($hashedValue, PASSWORD_BCRYPT, ['cost' => $cost]);
+        return password_needs_rehash($hashedValue, PASSWORD_BCRYPT, [
+            'cost' => $this->cost($options),
+        ]);
     }
 
     /**
@@ -78,5 +100,16 @@ class BcryptHasher implements HasherContract
         $this->rounds = (int) $rounds;
 
         return $this;
+    }
+
+    /**
+     * Extract the cost value from the options array.
+     *
+     * @param  array  $options
+     * @return int
+     */
+    protected function cost(array $options = [])
+    {
+        return $options['rounds'] ?? $this->rounds;
     }
 }

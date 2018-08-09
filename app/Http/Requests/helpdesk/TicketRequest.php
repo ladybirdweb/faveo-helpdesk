@@ -44,31 +44,55 @@ class TicketRequest extends Request
 //        ];
     }
 
-    public function size()
+    public function messages()
     {
-        $files = $this->file('attachment');
-        if (!$files) {
-            throw new \Exception('exceeded', 422);
-        }
-        $size = 0;
-        if (count($files) > 0) {
-            foreach ($files as $file) {
-                $size += $file->getSize();
-            }
-        }
+        $panel = 'agent';
+        $message = \App\Model\Custom\Required::
+                where('form', 'ticket')
+                ->select("$panel as panel", 'field', 'label')
+                ->where(function ($query) use ($panel) {
+                    return $query->whereNotNull($panel)
+                            ->where($panel, '!=', '');
+                })
+                ->get()
+                ->transform(function ($value) {
+                    $panel = $value->panel;
+                    if (str_contains($panel, ':')) {
+                        $explode = explode(':', $panel);
+                        $panel = $explode[0];
+                    }
+                    $request["$value->field.$panel"] = "$value->label is required";
 
-        return $size;
+                    return $request;
+                })
+                ->collapse()
+                ->toArray();
+
+        return $message;
     }
 
-    public function error($e)
+    public function check($panel)
     {
-        if ($this->ajax() || $this->wantsJson()) {
-            $message = $e->getMessage();
-            if (is_object($message)) {
-                $message = $message->toArray();
-            }
+        $required = \App\Model\Custom\Required::
+                where('form', 'ticket')
+                ->select("$panel as panel", 'field', 'option')
+                ->where(function ($query) use ($panel) {
+                    return $query->whereNotNull($panel)
+                            ->where($panel, '!=', '');
+                })
+                ->get()
+                ->transform(function ($value) {
+                    $option = $value->option;
+                    if ($option) {
+                        $option = ','.$value->option;
+                    }
+                    $request[$value->field] = $value->panel.$option;
 
-            return $message;
-        }
+                    return $request;
+                })
+                ->collapse()
+                ->toArray();
+        //dd($required);
+        return $required;
     }
 }

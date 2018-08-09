@@ -3,7 +3,7 @@
 return [
     /*
       |----------------------------------------------------------------------------------------
-      | Authentication Pages [English(en)]
+      | Authentication Seites [English(en)]
       |----------------------------------------------------------------------------------------
       |
       | The following language lines are used in all authentication related issues to translate
@@ -17,14 +17,28 @@ return [
       |   Error
       |--------------------------------------
      */
-    'success'        => 'Erfolgreich',
-    'fails'          => 'Fehler',
-    'alert'          => 'Alarm',
-    'required-error' => 'Bitte alle notwendigen Felder ausfüllen',
-    'invalid'        => 'Falsche Benutzer-ID oder Passwort',
+    'success'                                                         => 'Erfolg',
+    'fails'                                                           => 'Fehler',
+    'alert'                                                           => 'Alarm',
+    'warning'                                                         => 'Warnung',
+    'required-error'                                                  => 'Bitte füllen Sie die benötigten Felder aus',
+    'invalid'                                                         => 'Falsche Benutzer ID oder Passwort',
+    'sorry_something_went_wrong'                                      => 'Entschuldigung, da ist etwas schief gelaufen',
+    'were_working_on_it_and_well_get_it_fixed_as_soon_as_we_can'      => 'Wir arbeiten daran und behenben den Fehler so schnell wir können.',
+    'we_are_sorry_but_the_Seite_you_are_looking_for_can_not_be_found' => 'Tut uns leid aber die Seite nach der Sie suchen kann nicht gefunden werden.',
+    'go_back'                                                         => 'Zurück gehen',
+    'the_board_is_offline'                                            => 'Das Board ist offline',
+    'error_establishing_connection_to_database'                       => 'Fehler beim Herstellen der Verbindung zur Datenbank',
+    'unauthorized_access'                                             => 'Nicht authorisierter Zugriff',
+    'not-autherised'                                                  => 'Sie sind nicht authorisiert',
+    'otp-not-matched'                                                 => 'Das Einmalpasswort was Sie eingegeben haben stimmt nicht mit dem an Sie gesendeten überein.',
+    'otp-invalid'                                                     => 'Das Einmalpasswort muss eine sechsstellige Zahl sein.',
+    'otp-input-title'                                                 => 'Sechsstelliges Einmalpasswort eingeben',
+    'otp-expired'                                                     => 'Ihr Einmalpasswort ist abgelaufen.<br/> klicken Sie auf "Einmalpasswort erneut senden" um ein neues Einmalpasswort zu erhalten.',
+    'resend-otp-title'                                                => 'Hier klicken um Einmalpasswort erneut zu senden.',
     /*
       |--------------------------------------
-      |   Login Page
+      |   Login Seite
       |--------------------------------------
      */
     'Login_to_start_your_session' => 'Einloggen um Ihre Sitzung zu starten',
@@ -40,40 +54,51 @@ return [
     'reg_new_member'              => 'Registrieren für eine neue Mitgliedschaft',
     /*
       |--------------------------------------
-      |   Register Page
+      |   Register Seite
       |--------------------------------------
      */
-    'registration'                => 'Registrierung',
-    'full_name'                   => 'Vollständiger Name',
-    'firstname'                   => 'Vorname',
-    'lastname'                    => 'Familienname',
-    'profilepicture'              => 'Profilbild',
-    'oldpassword'                 => 'Altes Passwort',
-    'newpassword'                 => 'Neues Passwort',
-    'retype_password'             => 'Passwort erneut eingeben',
-    'i_agree_to_the'              => 'Ich stimme dem zu',
-    'terms'                       => 'Bedingungen',
-    'register'                    => 'Neu registrieren',
-    'i_already_have_a_membership' => 'Ich habe bereits eine Mitgliedschaft',
+    'registration'                                                                                => 'Registrierung',
+    'full_name'                                                                                   => 'Vollständiger Name',
+    'firstname'                                                                                   => 'Vorname',
+    'lastname'                                                                                    => 'Nachname',
+    'profilepicture'                                                                              => 'Profielbild',
+    'oldpassword'                                                                                 => 'Altes Passwort',
+    'newpassword'                                                                                 => 'Neues Passwort',
+    'retype_password'                                                                             => 'Passwort erneut eingeben',
+    'i_agree_to_the'                                                                              => 'Ich akzeptiere die',
+    'terms'                                                                                       => 'Bedingungen',
+    'register'                                                                                    => 'registriere',
+    'i_already_have_a_membership'                                                                 => 'Ich habe bereits ein Konto',
+    'see-profile1'                                                                                => 'Klicken Sie hier um ',
+    'see-profile2'                                                                                => '\'s Profil zu sehen',
+    'activate_your_account_click_on_Link_that_send_to_your_mail'                                  => 'Aktivieren Sie Ihr Konto! Klicken Sie auf den Link, den wir an Ihre E-Mail gesendet haben.',
+    'activate_your_account_click_on_Link_that_send_to_your_mail_and_moble'                        => 'Aktivieren Sie Ihr Konto! Klicken Sie auf den Link, den wir an Ihre E-Mail gesendet haben oder Melden Sie sich mit Ihrem Konto an und geben Sie das Einmalpasswort ein, welches wir an Ihre Nummer gesendet haben.',
+    'activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup' => 'Konto erstellt, bitte wenden Sie sich an den Systemadministrator da wir nicht in der Lage waren ein Einmalpasswort an Ihre nummer und eine E-Mail an Ihre Aderesse zu senden.',
+    'this_field_do_not_match_our_records'                                                         => 'Dieses Feld stimmt nicht mit unseren Aufzeichnungen überein.',
+    'we_have_e-mailed_your_password_reset_link'                                                   => 'Wir haben Ihrnen einen Link zum Zurücksetzen des Passwortes geschickt!',
+    "we_can't_find_a_user_with_that_e-mail_address"                                               => 'Wir konnten keinen Benutzer mit dieser E-Mail-Adresse finden.',
     /*
       |--------------------------------------
-      |   Reset Password Page
+      |   Reset Password Seite
       |--------------------------------------
      */
-    'reset_password' => 'Passwort zurücksetzen',
+    'reset_password'              => 'Passwort zurücksetzen',
+    'password-reset-successfully' => 'Ihr Passwort wurde zurückgesetzt. Melden Sie sich an Ihrem Konto mit Ihrem neuen Passwort an.',
+    'password-can-not-reset'      => 'Wir konnten Ihr Passwort nicht zurücksetzen.',
     /*
       |--------------------------------------
-      |   Forgot Password Page
+      |   Forgot Password Seite
       |--------------------------------------
      */
-    'i_know_my_password'            => 'Ich weiß mein Passwort',
+    'i_know_my_password'            => 'Ich kenne mein Passwort',
     'recover_passord'               => 'Passwort wiederherstellen',
-    'send_password_reset_link'      => 'Passwort Reset Link senden',
-    'enter_email_to_reset_password' => 'E-Mail angeben um Passwort zurücksetzen',
+    'send_password_reset_link'      => 'Sende Link zum Zurücksetzden des Passwortes',
+    'enter_email_to_reset_password' => 'Enter email/mobile number to reset password E-Mail/Mobilnummer eingeben um Passwort zurückzusetzen.',
     'link'                          => 'Link',
+    'email_or_mobile'               => 'E-Mail oder Handy',
     /*
       |----------------------------------------------------------------------------------------
-      | Emails Pages [English(en)]
+      | Emails Seites [English(en)]
       |----------------------------------------------------------------------------------------
       |
       | The following language lines are used in all Emails related issues to translate
@@ -81,10 +106,10 @@ return [
       | customize your views to better match your application.
       |
      */
-    'admin_panel' => 'Administrationsmenü',
+    'admin_panel' => 'Admin Panel',
     /*
       |--------------------------------------
-      |  Emails Create Page
+      |  Emails Create Seite
       |--------------------------------------
      */
     'emails'                         => 'E-Mails',
@@ -118,7 +143,7 @@ return [
     'disable_for_this_email_address' => 'Deaktivieren Sie diese E-Mail-Adresse',
     /*
       |--------------------------------------
-      |  Ban Emails Create Page
+      |  Ban Emails Create Seite
       |--------------------------------------
      */
     'ban_lists'  => 'Sperrlisten',
@@ -127,7 +152,7 @@ return [
     'ban_status' => 'Verbotsstatus',
     /*
       |--------------------------------------
-      |  Templates Index Page
+      |  Templates Index Seite
       |--------------------------------------
      */
     'templates'       => 'Vorlagen',
@@ -150,14 +175,14 @@ return [
     'Create ticket by agent'    => 'Ein Agent erstellt ein Ticket für den Client im Namen des Clients',
     /*
       |--------------------------------------
-      |  Templates Create Page
+      |  Templates Create Seite
       |--------------------------------------
      */
     'template_set_to_clone' => 'Vorlage zum Klonen',
     'language'              => 'Sprache',
     /*
       |--------------------------------------
-      |  Diagnostics Page
+      |  Diagnostics Seite
       |--------------------------------------
      */
     'diagnostics' => 'Fehlerdiagnose',
@@ -168,7 +193,7 @@ return [
     'send'        => 'Senden',
     /*
       |----------------------------------------------------------------------------------------
-      | Settings Pages [English(en)]
+      | Einstellungen Seites [English(en)]
       |----------------------------------------------------------------------------------------
       |
       | Die folgenden Sprachzeilen werden in allen Problemen mit der Einstellung verwendet,
@@ -179,25 +204,34 @@ return [
 
     /*
       |--------------------------------------
-      |   Company Settings Page
+      |   Company Einstellungen Seite
       |--------------------------------------
      */
-    'company'      => 'Unternehmen',
-    'website'      => 'Webseite',
-    'phone'        => 'Telefon',
-    'address'      => 'Adresse',
-    'landing'      => 'Landing Seite',
-    'offline'      => 'Offline Seite',
-    'thank'        => 'Danke Seite',
-    'logo'         => 'Logo',
-    'save'         => 'Speichern',
-    'delete-logo'  => 'Logo löschen',
-    'click-delete' => 'Hier klicken, um zu löschen',
+    'country-code'                      => 'Code',
+    'company'                           => 'Firma',
+    'company_Einstellungen'             => 'Firmeneinstellungen',
+    'website'                           => 'Website',
+    'phone'                             => 'Telefon',
+    'address'                           => 'Adresse',
+    'landing'                           => 'Landing Seite',
+    'offline'                           => 'Offline Seite',
+    'thank'                             => 'Danke Seite',
+    'logo'                              => 'Logo',
+    'save'                              => 'Speichern',
+    'delete-logo'                       => 'Logo löschen',
+    'click-delete'                      => 'Hier klicken zum Löschen',
+    'use_logo'                          => 'Logo verwenden',
+    'company_updated_successfully'      => 'Firma erfolgreich aktualisiert',
+    'company_can_not_updated'           => 'Firma kann nicht aktualisiert werden',
+    'enter-country-phone-code'          => 'Ländertelefoncode angeben',
+    'country-code-required-error'       => 'Code wird für Telefon-/Mobilnummer benötigt.',
+    'incorrect-country-code-error'      => 'Falscher Ländercode.',
     /*
       |--------------------------------------
-      |   System Settings Page
+      |   System Einstellungen Seite
       |--------------------------------------
      */
+
     'system'                => 'System',
     'online'                => 'Online',
     'offline'               => 'Offline',
@@ -221,7 +255,7 @@ return [
     'generate_key'          => 'Schlüssel generieren',
     /*
       |--------------------------------------
-      |   Email Settings Page
+      |   Email Einstellungen Seite
       |--------------------------------------
      */
     'email'                               => 'E-Mail-Addresse',
@@ -254,7 +288,7 @@ return [
     'job-scheduler-success'               => 'Job scheduler updated successfully.',
     /*
       |--------------------------------------
-      |   Ticket Settings Page
+      |   Ticket Einstellungen Seite
       |--------------------------------------
      */
     'ticket'                             => 'Ticket',
@@ -275,7 +309,7 @@ return [
     'allow_client_updates'               => 'Client-Updates zulassen',
     /*
       |--------------------------------------
-      |   Access Settings Page
+      |   Access Einstellungen Seite
       |--------------------------------------
      */
     'access'                                           => 'Zugriff',
@@ -295,9 +329,10 @@ return [
 
     /*
       |--------------------------------------
-      |   Auto-Response Settings Page
+      |   Auto-Response Einstellungen Seite
       |--------------------------------------
      */
+
     'auto_responce'                 => 'Automatische Antwort',
     'new_ticket'                    => 'Neues Ticket',
     'new_ticket_by_agent'           => 'Neues Ticket vom Agenten',
@@ -308,64 +343,103 @@ return [
     'send_new_activity_notice'      => 'Sende eine neue Aktivitätsbenachrichtigung',
     'overlimit_notice'              => 'Überschreitungshinweis',
     'email_attachments_to_the_user' => 'E-Mail-Anhänge an den Benutzer',
+
     /*
       |--------------------------------------
-      |   Alert & Notice Settings Page
+      |   Alert & Notice Einstellungen Seite
       |--------------------------------------
      */
-    'disable'                                               => 'Disable',
-    'admin_email_2'                                         => 'Admin Email',
-    'alert_notices'                                         => 'Alert & Notices',
-    'new_ticket_alert'                                      => 'New Ticket Alert',
-    'department_manager'                                    => 'Department Manager',
-    'department_members'                                    => 'Department Members',
-    'organization_account_manager'                          => 'Organization Account Manager',
-    'new_message_alert'                                     => 'New Message Alert',
-    'last_respondent'                                       => 'Last Respondent',
-    'assigned_agent_team'                                   => 'Assigned Agent / Team',
-    'new_internal_note_alert'                               => 'New Internal Note Alert',
-    'ticket_assignment_alert'                               => 'Ticket Assignment Alert',
-    'team_lead'                                             => 'Team Lead',
-    'team_members'                                          => 'Team Members',
+    'disable'                                               => 'deaktivieren',
+    'admin_email_2'                                         => 'Admin E-Mail',
+    'alert_notices'                                         => 'Alarm und Hinweise',
+    'alert_notices_setitngs'                                => 'Alarm und Hinweis Einstellungen',
+    'new_ticket_alert'                                      => 'Neuer Ticketalarm',
+    'department_manager'                                    => 'Abteilungsleiter',
+    'department_members'                                    => 'Abteilungsangehörige',
+    'organization_account_manager'                          => 'Organisations Kontenmanager',
+    'new_message_alert'                                     => 'Neuer Nachrichtenalarm',
+    'last_respondent'                                       => 'Letzer Beantworter',
+    'assigned_agent_team'                                   => 'Zuwgewiesener/es Agent/Team',
+    'new_internal_note_alert'                               => 'Interner Hinweis Alarm',
+    'ticket_assignment_alert'                               => 'Ticket Zuweisungsalarm',
+    'team_lead'                                             => 'Teamleiter',
+    'team_members'                                          => 'Teammitglieder',
     'ticket_transfer_alert'                                 => 'Ticket Transfer Alert',
-    'overdue_ticket_alert'                                  => 'Overdue Ticket Alert ',
-    'system_alerts'                                         => 'System Alerts',
-    'system_errors'                                         => 'System Errors',
-    'SQL_errors'                                            => 'SQL errors',
-    'excessive_failed_login_attempts'                       => 'Excessive failed login attempts',
-    'system_error_reports'                                  => 'System error Reports',
-    'Send_app_crash_reports_to_help_Ladybird_improve_Faveo' => 'Send app crash reports to help Ladybird improve Faveo',
+    'overdue_ticket_alert'                                  => 'Alarm für Überfälliges Ticket ',
+    'system_alerts'                                         => 'System Alarme',
+    'system_errors'                                         => 'System Fehler',
+    'SQL_errors'                                            => 'SQL Fehler',
+    'excessive_failed_login_attempts'                       => 'Übermäßige fehlgeschlagene Anmeldeversuche',
+    'system_error_reports'                                  => 'System Fehlerbericht',
+    'Send_app_crash_reports_to_help_Ladybird_improve_Faveo' => 'Anwendungsabsturzbericht an Ladybird senden um Faveo zu verbessern',
+    'alert_&_notices_updated_successfully'                  => 'Alarm und Hinweise erfolgreich aktualisiert.',
+    'alert_&_notices_can_not_updated'                       => 'Alarme und Hinweise können nicht aktualisiert werden.',
+
+    /*
+      |-----------------------------------------------
+      | Ratings Einstellungen
+      |-----------------------------------------------
+     */
+    'current_ratings' => 'Aktuelle Bewertung',
+    'edit_ratings'    => 'Bewertung bearbeiten',
+
+    /*
+      |-------------------------------------------------
+      |Social login
+      |--------------------------------------------------
+    */
+      'social-login' => 'Social Login',
+
     /*
       |------------------------------------------------
-      |Language page
+      | Language Seite
       |------------------------------------------------
      */
-    'default'            => 'default',
+    'default'            => 'Standard',
+    'language-settings'  => 'Language Einstellungen',
     'iso-code'           => 'ISO-CODE',
-    'download'           => 'Downlaod',
-    'upload_file'        => 'Upload File',
-    'enter_iso-code'     => 'Enter ISO-CODE',
-    'eg.'                => 'Example',
-    'for'                => 'for',
-    'english'            => 'English',
-    'language-name'      => 'Language name',
-    'file'               => 'File',
-    'read-more'          => 'Read more.',
-    'enable_lang'        => 'Enable it.',
-    'add-lang-package'   => 'Add new language package',
-    'package_exist'      => 'Package already exists.',
-    'iso-code-error'     => 'Error in iso-code. enter correct iso-code.',
-    'zipp-error'         => 'Error in zip file. Zip must contian language php files only.',
-    'upload-success'     => 'Uploaded successfully.',
-    'file-error'         => 'Error in file or invalid file.',
-    'delete-success'     => 'Language package deleted successfully.',
-    'lang-doesnot-exist' => 'Language package does not exist.',
-    'active-lang-error'  => 'Language package can not be deleted when it is active.',
-    'language-error'     => 'Language package not found in your lang directroy.',
-    'lang-fallback-lang' => 'Cannot delete system\'s defualt fallback language',
+    'download'           => 'Download',
+    'upload_file'        => 'Upload Datei',
+    'enter_iso-code'     => 'Enter ISO Code',
+    'eg.'                => 'Beispiel',
+    'for'                => 'zum',
+    'english'            => 'Englisch',
+    'language-name'      => 'Sprachname',
+    'file'               => 'Datei',
+    'read-more'          => 'Weiterlesen.',
+    'enable_lang'        => 'Aktivieren.',
+    'add-lang-package'   => 'Neues Sprachpaket hinzufügen',
+    'package_exist'      => 'Paket existiert bereits.',
+    'iso-code-error'     => 'Fehler im ISO code. Korrekten ISO Code eingeben.',
+    'zipp-error'         => 'Fehler im Zip File. Zip darf nur PHP-Dateien enthalten.',
+    'upload-success'     => 'Upload erfolgreich.',
+    'file-error'         => 'Fehler in der Datei oder ungültige Datei.',
+    'delete-success'     => 'Sprachpaket erfolgreich gelöscht.',
+    'lang-doesnot-exist' => 'Sprachpaket existiert nicht.',
+    'active-lang-error'  => 'Sprachpakte kann nicht gelöscht werden, wenn es aktiv ist.',
+    'language-error'     => 'Sprachpaket nicht gefunden im lang-Verzeichnis.',
+    'lang-fallback-lang' => 'Kann System default-Fallbacksprache nicht löschen',
+
+    /*
+      |--------------------------------------
+      | Plugin Einstellungen
+      |--------------------------------------
+     */
+    'add_plugin'            => 'Plugin hinzufügen',
+    'plugins'               => 'Plugins',
+    'upload'                => 'Upload',
+    'plugins-list'          => 'Liste der Plugins',
+    'plugin-exists'         => 'Plugin existiert bereits',
+    'plugin-installed'      => 'Plugin erfolgreich installiert.',
+    'plugin-path-missing'   => 'Plugin Dateipfad existiert nicht',
+    'no-plugin-file'        => 'Da ist kein ',
+    'plugin-config-missing' => 'Da ist kein <b>config.php oder ServiceProvider.php</b>',
+    'plugin-info'           => 'Bist du ein Entwickler? Wir möchten dich ermutigen deine eigenen Plugins zu schreiben und sie für die Community verfügbar zu machen. ',
+    'plugin-info-pro'       => ' um die Plugins der Pro-Edition zu entdecken.',
+    'click-here'            => 'hier klicken',
     /*
       |----------------------------------------------------------------------------------------
-      | Manage Pages [English(en)]
+      | Manage Seites [English(en)]
       |----------------------------------------------------------------------------------------
       |
       | The following language lines are used in all Manage related issues to translate
@@ -373,80 +447,132 @@ return [
       | customize your views to better match your application.
       |
      */
-    'manage' => 'Manage',
+    'manage' => 'Verwalten',
     /*
       |--------------------------------------
-      |  Help Topic index Page
+      |  Help Topic index Seite
       |--------------------------------------
      */
-    'help_topics'       => 'Help Topics',
-    'topic'             => 'Topic',
-    'type'              => 'Type',
-    'priority'          => 'Priority',
-    'last_updated'      => 'Last Updated',
-    'create_help_topic' => 'Create Help topic',
-    'action'            => 'Action',
+    'help_topics'       => 'Hilfe Themen',
+    'topic'             => 'Thema',
+    'type'              => 'Typ',
+    'priority'          => 'Priorität',
+    'last_updated'      => 'Zuletzt aktualisiert',
+    'create_help_topic' => 'Hilfethema erstellen',
+    'action'            => 'Aktion',
     /*
       |--------------------------------------
-      |  Help Topic Create Page
+      |  Help Topic Create Seite
       |--------------------------------------
      */
-    'active'               => 'Active',
-    'disabled'             => 'Disabled',
-    'public'               => 'Public',
-    'private'              => 'Private',
-    'parent_topic'         => 'Parent Topic',
-    'Custom_form'          => 'Custom Form',
-    'SLA_plan'             => 'SLA Plan',
-    'auto_assign'          => 'Auto assign',
-    'auto_respons'         => 'Auto Respons',
-    'ticket_number_format' => 'Ticket Number Format',
-    'system_default'       => 'System Default',
-    'custom'               => 'Custom',
-    'internal_notes'       => 'Internal Notes',
+    'active'                                => 'Aktiv',
+    'disabled'                              => 'Deaktiviert',
+    'public'                                => 'Öffentlich',
+    'private'                               => 'Privat',
+    'parent_topic'                          => 'übergeordnetes Thema',
+    'Custom_form'                           => 'Benutzerdefiniertes Formular',
+    'SLA_plan'                              => 'SLA Plan',
+    'sla-plans'                             => 'SLA Plans',
+    'auto_assign'                           => 'automatische Zuweisung',
+    'auto_respons'                          => 'automatische Antwort',
+    'ticket_number_format'                  => 'Ticket Nummernformat',
+    'system_default'                        => 'System Standard',
+    'custom'                                => 'Benutzerdefiniert',
+    'internal_notes'                        => 'Interne Anmerkungen',
+    'select_a_parent_topic'                 => 'Übergeordnetes Thema auswählen',
+    'custom_form'                           => 'benutzerdefiniertes Forumlar',
+    'select_a_form'                         => 'Formular auswählen',
+    'select_a_department'                   => 'Abteilung wählen',
+    'departments'                           => 'Abteilungen',
+    'select_a_priority'                     => 'Priorität wählen',
+    'priorities'                            => 'Prioritäten',
+    'select_a_sla_plan'                     => 'SLA-Plan auswählen',
+    'sla_plans'                             => 'SLA Pläne',
+    'select_an_agent'                       => 'Agent auswählen',
+    'helptopic_created_successfully'        => 'Hilfethema erfolgreich erstellt',
+    'helptopic_can_not_create'              => 'Hilfethema kann nicht erstellt werden',
+    'helptopic_updated_successfully'        => 'Hilfethema erfolgreich aktualisiert',
+    'helptopic_can_not_update'              => 'Hilfethema kann nicht aktualisiert werden',
+    'you_cannot_delete_default_department'  => 'Sie können die Standardabteilung nicht löschen',
+    'have_been_moved_to_default_help_topic' => 'wurde zum Standardhilfethema verschoben',
+    'helptopic_deleted_successfully'        => 'Hilfethema erfolgreich gelöscht',
+    'make-default-helptopic'                => 'Zum Standardhilfethema machen',
     /*
       |--------------------------------------
-      |  SLA plan Index Page
+      |  SLA plan Index Seite
       |--------------------------------------
      */
+
     'sla_plans'    => 'SLA Pläne',
     'create_SLA'   => 'Erstelle ein SLA',
     'grace_period' => 'Schonfrist',
     'added_date'   => 'Erstellungsdatum',
     /*
       |--------------------------------------
-      |  SLA plan Create Page
+      |  SLA plan Create Seite
       |--------------------------------------
      */
-    'transient'            => 'Transient',
-    'ticket_overdue_alert' => 'Ticket Overdue Alerts',
-
+    'transient'                                            => 'Transient',
+    'ticket_overdue_alert'                                 => 'Alarm für überfälliges Ticket',
+    'sla_plan_created_successfully'                        => 'SLA Plan erfolgreich erstellt',
+    'sla_plan_can_not_create'                              => 'SLA Plan kann nicht erstellt werden',
+    'sla_plan_updated_successfully'                        => 'SLA Plan erfolgreich aktualisiert',
+    'sla_plan_can_not_update'                              => 'SLA Plan kann nicht aktualisiert werden',
+    'you_cannot_delete_default_department'                 => 'Sie können die Standardabteilung nicht löschen',
+    'have_been_moved_to_default_sla'                       => 'wurde zum Standard SLA verschoben',
+    'associated_department_have_been_moved_to_default_sla' => 'Zugeordnete Abteilung wurde zum Standard SLA verschoben',
+    'associated_help_topic_have_been_moved_to_default_sla' => 'Zugeordnetes Hilfethema wurde zum Stanard SLA verschoben',
+    'sla_plan_deleted_successfully'                        => 'SLA Plan erfolgreich gelöscht',
+    'sla_plan_can_not_delete'                              => 'SLA Plan kann nicht gelöscht werden',
+    'make-default-sla'                                     => 'zum Standard SLA Plan machen',
     /*
       |--------------------------------------
       |  Work Flow
       |--------------------------------------
      */
-    'workflow'                   => 'Workflow',
-    'ticket_workflow'            => 'Ticket Workflow',
-    'create_workflow'            => 'Create Workflow',
-    'edit_workflow'              => 'Edit Workflow',
-    'updated'                    => 'Updated',
-    'target'                     => 'Target',
-    'target_channel'             => 'Target Channel',
-    'exceution_order'            => 'Exceution Order',
-    'target_channel'             => 'Target Channel',
-    'workflow_rules'             => 'Workflow Rules',
-    'workflow_action'            => 'Workflow Action',
-    'rules'                      => 'Rules',
-    'order'                      => 'Order',
-    'condition'                  => 'Condition',
-    'statement'                  => 'Statement',
+    'workflow'                      => 'Workflow',
+    'ticket_workflow'               => 'Ticket Workflow',
+    'create_workflow'               => 'Workflow erstellen',
+    'edit_workflow'                 => 'Workflow bearbeitens',
+    'updated'                       => 'aktualisiert',
+    'target'                        => 'Ziel',
+    'target_channel'                => 'Zielkanal',
+    'execution_order'               => 'Ausführungsreihenfolge',
+    'target_channel'                => 'Zielkanal',
+    'workflow_rules'                => 'Workflow Regeln',
+    'workflow_action'               => 'Workflow Aktionen',
+    'rules'                         => 'Regeln',
+    'order'                         => 'Reihenfolge',
+    'condition'                     => 'Bedingung',
+    'statement'                     => 'Aussage',
+    'select_a_channel'              => 'Einen Kanal auswählen',
+    'body'                          => 'Körper',
+    'select_one'                    => 'einen auswählen',
+    'equal_to'                      => 'gleich',
+    'not_equal_to'                  => 'ungleich',
+    'contains'                      => 'beinhaltet',
+    'does_not_contain'              => 'beinhaltet nicht',
+    'starts_with'                   => 'Beginnt mit',
+    'ends_with'                     => 'endet mit',
+    'select_an_action'              => 'Aktion auswählen',
+    'reject_ticket'                 => 'Ticket zurückweisen',
+    'set_department'                => 'Abteilung setzen',
+    'set_priority'                  => 'Priorität setzen',
+    'set_sla_plan'                  => 'SLA Plan setzen',
+    'assign_team'                   => 'Team zuweisen',
+    'assign_agent'                  => 'Agent zuweisen',
+    'set_help_topic'                => 'Hilfethema setzen',
+    'set_ticket_status'             => 'Ticket Status setzen',
+    'workflow_created_successfully' => 'Workflow erfolgreich erstellt',
+    'workflow_updated_successfully' => 'Workflow erfolgreich aktualisiert',
+    'workflow_deleted_successfully' => 'Workflow erfolgreich gelöscht',
 
     /*
       |--------------------------------------
-      |  Form Create Page
+      |  Form Create Seite
       |--------------------------------------
      */
+
     'title'                                 => 'Title',
     'instruction'                           => 'Anweisung',
     'label'                                 => 'Beschriftung',
@@ -474,7 +600,7 @@ return [
     'remove'                                => 'E ntfernen',
     /*
       |----------------------------------------------------------------------------------------
-      | Theme Pages [English(en)]
+      | Theme Seites [English(en)]
       |----------------------------------------------------------------------------------------
       |
       | The following language lines are used in all Theme related issues to translate
@@ -485,7 +611,7 @@ return [
     'themes' => 'Themes',
     /*
       |--------------------------------------
-      |  Footer Pages
+      |  Footer Seites
       |--------------------------------------
      */
     'footer'  => 'Footer',
@@ -493,22 +619,21 @@ return [
     'footer2' => 'Footer2',
     'footer3' => 'Footer3',
     'footer4' => 'Footer4',
-     /*
+    /*
       |--------------------------------------
       |  Custom alert box
       |--------------------------------------
      */
-    'ok'                     => 'Ok',
-    'cancel'                 => 'Abbrechen',
-    'select-ticket'          => 'Bitte Tickets auswählen.',
-    'confirm'                => 'Sind Sie sicher?',
-    'delete-tickets'         => 'Lösche Tickets',
-    'close-tickets'          => 'Schließe Tickets',
-    'open-tickets'           => 'Öffne Tickets',
-
+    'ok'             => 'Ok',
+    'cancel'         => 'Abbrechen',
+    'select-ticket'  => 'Bitte Tickets auswählen.',
+    'confirm'        => 'Sind Sie sicher?',
+    'delete-tickets' => 'Tickets löschen',
+    'close-tickets'  => 'Tickets schließen',
+    'open-tickets'   => 'Tickets öffnen',
     /*
       |----------------------------------------------------------------------------------------
-      | Staff Pages [English(en)]
+      | Staff Seites [English(en)]
       |----------------------------------------------------------------------------------------
       |
       | The following language lines are used in all Staff related issues to translate
@@ -516,6 +641,7 @@ return [
       | customize your views to better match your application.
       |
      */
+
     'are_you_sure' => 'Bist du sicher',
     'staffs'       => 'Mitarbeiter',
     'name'         => 'Name',
@@ -532,11 +658,13 @@ return [
     'edit'         => 'Bearbeiten',
     'departments'  => 'Abteilungen',
     'groups'       => 'Gruppen',
+
     /*
       |--------------------------------------
-      |  Staff Create Page
+      |  Staff Create Seite
       |--------------------------------------
      */
+
     'create_agent'           => 'Agent erstellen',
     'first_name'             => 'Vorname',
     'last_name'              => 'Nachname',
@@ -556,11 +684,13 @@ return [
     'directory_listing'      => 'Verzeichnisliste',
     'vocation_mode'          => 'Bewerbungsmodus',
     'assigned_team'          => 'Zugewiesenes Team',
+
     /*
       |--------------------------------------
-      |  Department Create Page
+      |  Department Create Seite
       |--------------------------------------
      */
+
     'create_department'                                => 'Abteilung erstellen',
     'manager'                                          => 'Manager',
     'ticket_assignment'                                => 'Ticket-Zuweisung',
@@ -574,21 +704,25 @@ return [
     'recipient'                                        => 'Empfänger',
     'group_access'                                     => 'Gruppenzugriff',
     'department_signature'                             => 'Abteilungs Signature',
+
     /*
       |--------------------------------------
-      |  Team Create Page
+      |  Team Create Seite
       |--------------------------------------
      */
+
     'create_team'           => 'Team erstellen',
     'team_lead'             => 'Teamleiter',
     'assignment_alert'      => 'Zuweisungsalarm',
     'disable_for_this_team' => 'Deaktivieren Sie für dieses Team',
     'teams'                 => 'Teams',
+
     /*
       |--------------------------------------
-      |  Group Create Page
+      |  Group Create Seite
       |--------------------------------------
      */
+
     'create_group'         => 'Gruppe erstellen',
     'goups'                => 'Gruppe',
     'can_create_ticket'    => 'Kann ein Ticket erstellen',
@@ -606,9 +740,10 @@ return [
     'admin_notes'          => 'Abteilung Zugriff',
     'group_members'        => 'Gruppenmitglieder',
     'group_name'           => 'Gruppenname',
+
     /*
       |--------------------------------------
-      |  SMTP Page
+      |  SMTP Seite
       |--------------------------------------
      */
     'driver'     => 'Treiber',
@@ -626,6 +761,7 @@ return [
       | customize your views to better match your application.
       |
      */
+
     'agent_panel'       => 'Agenten Panel',
     'profile'           => 'Profil',
     'change_password'   => 'Passwort ändern',
@@ -649,20 +785,27 @@ return [
     'ratings'           => 'Bewertungen',
     'please_rate'       => 'Bitte bewerten:',
     'ticket_ratings'    => 'TICKET-BEWERTUNG',
+
     /*
       |-----------------------------------------------
       |  Profile
       |-----------------------------------------------
      */
-    'user_information'    => 'Benutzer Informationen',
-    'time_zone'           => 'Zeitzone',
-    'phone_number'        => 'Telefonnummer',
-    'contact_information' => 'Kontakt Informationen',
+    'view-profile'                      => 'Profil ansehen',
+    'edit-profile'                      => 'Profil bearbeiten',
+    'user_information'                  => 'Benutzerinformationen',
+    'time_zone'                         => 'Zeitzone',
+    'phone_number'                      => 'Telefonnummer',
+    'contact_information'               => 'Kontaktinformationen',
+    'Profile-Updated-sucessfully'       => 'Profil erfolgreich aktualisiert',
+    'User-profile-Updated-Successfully' => 'Benutzerprofil erfolgreich aktualisiert.',
+    'User-Created-Successfully'         => 'Benutzer erfolgreich erstellt.',
     /*
       |-----------------------------------------------
       |  Dashboard
       |-----------------------------------------------
      */
+
     'dashboard'  => 'Dashboard',
     'line_chart' => 'Liniendiagramm',
     'statistics' => 'Statistiken',
@@ -670,11 +813,13 @@ return [
     'resolved'   => 'gelöste',
     'closed'     => 'geschlossen',
     'deleted'    => 'gelöscht',
+
     /*
       |------------------------------------------------
-      |User Page
+      |User Seite
       |------------------------------------------------
      */
+
     'user_directory'  => 'Benutzerverzeichnis',
     'ban'             => 'Ban',
     'user'            => 'Nutzername',
@@ -688,11 +833,13 @@ return [
     'open_tickets'    => 'Tickets öffnen',
     'closed_tickets'  => 'Geschlossene Tickets',
     'deleted_tickets' => 'Gelöschte Tickets',
+
     /*
       |------------------------------------------------
-      |Organization Page
+      |Organization Seite
       |------------------------------------------------
      */
+
     'organizations'                 => 'Organisationen',
     'organization'                  => 'Organisation',
     'create_organization'           => 'Organisation erstellen',
@@ -704,11 +851,13 @@ return [
     'organization-s_head'           => 'Leiter der Organisation',
     'select_department_manager'     => 'Wählen Sie den Abteilungsmanager',
     'users_of'                      => 'Benutzer von',
+
     /*
       |----------------------------------------------
-      |  Ticket page
+      |  Ticket Seite
       |----------------------------------------------
      */
+
     'subject'                                         => 'Thema',
     'ticket_id'                                       => 'Ticket ID',
     'priority'                                        => 'Priorität',
@@ -795,29 +944,133 @@ return [
     'overdue'                                         => 'Überfällig',
     'change_owner_for_ticket'                         => 'Besitzer für Ticket ändern',
 
+
     /*
       |------------------------------------------------
-      |Tools Page
+      |Tools Seite
       |------------------------------------------------
      */
+
     'canned_response'        => 'vorgefertigte Antworten',
     'create_canned_response' => 'Erstellen Sie eine vorgefertigte Antwort',
     'surrender'              => 'Kapitulation',
     'view'                   => 'Aussicht',
+
     /*
       |-----------------------------------------------
       | Main text
       |-----------------------------------------------
      */
     'copyright'           => 'Copyright',
+
     'all_rights_reserved' => 'Alle Rechte vorbehalten',
+
     'powered_by'          => 'Powered by',
     'version'             => 'Version',
     /*
       |------------------------------------------------
-      |Guest-User Page
+      |Guest-User Seite
       |------------------------------------------------
      */
+    'issue_summary'             => 'Zusammenfassung des Vorfalls',
+    'contact'                   => 'Kontakt',
+    'issue_details'             => 'Vorfall Details',
+    'contact_informations'      => 'Kontaktinformationen',
+    'contact_details'           => 'Kontaktdetails',
+    'role'                      => 'Rolle',
+    'ext'                       => 'EXT',
+    'profile_pic'               => 'Profilbild',
+    'agent_sign'                => 'Agent Signatur',
+    'inactive'                  => 'Inaktiv',
+    'male'                      => 'Männlich',
+    'female'                    => 'Weiblich',
+    'old_password'              => 'Altes Passwort',
+    'new_password'              => 'Neues Passwort',
+    'confirm_password'          => 'Passwort bestätigen',
+    'gender'                    => 'Geschlächt',
+    'ticket_number'             => 'Ticketnummer',
+    'content'                   => 'Inhalt',
+    'edit_template'             => 'Vorlage bearbeiten',
+    'edit_status'               => 'Status bearbeiten',
+    'create_status'             => 'Status erstellen',
+    'edit_details'              => 'Details bearbeiten',
+    'edit_templates'            => 'Vorlagen bearbeiten',
+    'activate_this_set'         => 'Dieses Set aktivieren',
+    'show'                      => 'Anzeigen',
+    'no_notification_available' => 'Keine Benachrichtigungen verfügbar',
+
+    //auto-close workflow
+    'close-msg1'                                          => 'Die Anzahl an Tagen nach denen das Ticket automatisch geschlossen wird.',
+    'no_of_days'                                          => 'Anzal an Tagen',
+    'close-msg2'                                          => 'Auto-Close-Workflow aktivieren?',
+    'enable_workflow'                                     => 'Workflow aktivieren',
+    'send_email_to_user'                                  => 'E-Mail an Benutzer senden',
+    'close-msg3'                                          => 'Wählen Sie einen Status für die Auswahl beim Schließen des Tickets.',
+    'close-msg4'                                          => 'E-Mail an Benutzer senden, wenn das Ticket automatisch geschlossen wird?',
+    'edit_status'                                         => 'Status bearbeiten',
+    'list_of_status'                                      => 'Liste der Status',
+    'status_settings'                                     => 'Status Einstellungen',
+    'icon_class'                                          => 'Icon Klasse',
+    'close_ticket_workflow'                               => 'Ticket Schließen Workflow',
+    'ratings_settings'                                    => 'Bewertungsinstellungen',
+    'notification'                                        => 'Benachrichtigung',
+    'status_has_been_updated_successfully'                => 'Status wurde erfolgreich aktualisiert',
+    'status_has_been_created_successfully'                => 'Status wurde erfolgreich erstellt',
+    'status_has_been_deleted'                             => 'Status wurde gelöscht',
+    'you_cannot_delete_this_status'                       => 'Sie können diesen Status nicht löschen',
+    'you_have_deleted_all_the_read_notifications'         => 'Sie haben alle Lesebenachrichtigungen gelöscht',
+    'you_have_deleted_all_the_notification_records_since' => 'Sie haben alle Benachrichtigungen gelöscht seit ',
+    'ratings_updated_successfully'                        => 'Bewertungen erfolgreich aktualisiert',
+    'ratings_can_not_be_created'                          => 'Bewertungen können nicht erstellt werden',
+    'successfully_created_this_rating'                    => 'Bewertung erfolgreich erstellt',
+    'rating_deleted_successfully'                         => 'Bewertung erfolgreich gelöscht',
+    //status msg
+
+    'status_msg1'                           => 'Wenn Sie JA wählen wird eine Benachrichtigung an den Benutzer gesendet.',
+    'notify_user'                           => 'Benutzer über den Status informieren?',
+    'deleted_status'                        => 'Ist dies ein gelöschter Ticket Status?',
+    'resolved_status'                       => 'Ist dies ein gelöster Ticet Status?',
+    'status_msg3'                           => 'Wenn Sie JA wählen wird das Ticket als gelöst markiert.',
+    'status_msg2'                           => 'Wenn Sie JA wählen wird das Ticket als gelöscht markiert.',
+    'rating-msg2'                           => 'Wählen Sie eine Abteilung um diese Bewertung auf Tickets oder Chats innerhalb einer bestimmten Abteilung zu begrenzen. Wenn keine Abteilung ausgewählt ist wird die Bewertung Abteilungsübergreifend angezeigt.',
+    'rating-msg3'                           => 'Wenn Sie JA wählen können Benutzer die Bewertung verändern.',
+    'rating_restrict'                       => 'Bewertung auf eine Abteilung begrenzen',
+    'rating_change'                         => 'Benutzern erlauben eine Bewertung zu ändern?',
+    'security_msg1'                         => 'Nachricht, die angezeicht wird wenn Benutzer (host) ausgesperrt sind.',
+    'security_msg2'                         => 'Die Anzahl an Login-Versuchen die ein Benutzer hat bevor ihr host/Benutzer oder computer vom System ausgesperrt wird. Setzen Sie den Wert 0 um fehlgeschlagene Versuche zu Dokumentieren ohne Benutzer auszusperren.',
+    'security_msg3'                         => 'Anzahl der Minuten, die ein Benutzer ausgesperrt bleibt, nachdem die Anzahl für fehlgeschlagene Logins überschritten wurde.',
+    'max_attempt'                           => 'Maximale Login-Versuche pro Host/Benutzer',
+    'rating-msg1'                           => 'Die maximale Bewertung die gegeben werden kann. Wenn zum Beispiel 5 gewählt wird ist 1 die niedrigste und 5 die höchste Bewertung',
+    'enter_no_of_days'                      => 'Anzah von Tagen angeben',
+    'template-types'                        => 'Vorlagentypen',
+    'close-workflow'                        => 'Ticket Schließen Workflow',
+    'template'                              => 'Vorlage',
+    'rating_label'                          => 'Bewertungslabel',
+    'display_order'                         => 'Anzeigereihenfolge',
+    'rating_scale'                          => 'Bewertungsmaßstab',
+    'rating_area'                           => 'Bewertungsbereich',
+
+    'modify'                                => 'Verändern',
+    'rating_name'                           => 'Bewertungsname',
+    'add_user_to_this_organization'         => 'Benutzer dieser Organisation hinzufügen',
+    'Tickets_of'                            => 'Tickets von',
+    'security'                              => 'Sicherheit',
+    'security_settings'                     => 'Sicherheitseinstellungen',
+    'lockouts'                              => 'Lockouts',
+    'security_settings_saved_successfully'  => 'Sicherheitseinstellungen erfolgreich gespeichert',
+    'manage_status'                         => 'Status verwalten',
+    'notifications'                         => 'Benachrichtigungen',
+
+    'auto_close_workflow'               => 'Auto-close Workflow',
+    'close_ticket_workflow_settings'    => 'Ticket schließen-Workflow Einstellungen',
+    'successfully_saved_your_settings'  => 'Einstellungen erfolgreich gespeichert',
+
+    /*
+      |------------------------------------------------
+      |   Notification Einstellungen Seites
+      |------------------------------------------------
+     */
+
     'issue_summary'        => 'Problemzusammenfassung',
     'issue_details'        => 'Details zum Problem',
     'contact_informations' => 'Kontakt Informationen',
@@ -835,11 +1088,13 @@ return [
     'gender'               => 'Geschlecht',
     'ticket_number'        => 'Ticketnummer',
     'content'              => 'Inhalt',
+
     /*
       |------------------------------------------------
-      |   Error Pages
+      |   Error Seites
       |------------------------------------------------
      */
+
     'not_found'                                        => 'Nicht gefunden',
     'oops_page_not_found'                              => 'Hoppla! Seite nicht gefunden',
     'we_could_not_find_the_page_you_were_looking_for'  => 'Wir konnten die von Ihnen gesuchte Seite nicht finden',
@@ -878,10 +1133,12 @@ return [
     'comment'                                          => 'Kommentar',
     'not_published'                                    => 'Nicht veröffentlicht',
     'numberofelementstodisplay'                        => 'Anzahl der anzuzeigenden Elemente',
+
     //======================================
     'language'                                                                 => 'Sprache',
     'save'                                                                     => 'Speichern',
     'create'                                                                   => 'Erstellen',
+
     'dateformat'                                                               => 'Datumsformat',
     'slug'                                                                     => 'Slug',
     'read_more'                                                                => 'Weiterlesen',
@@ -894,6 +1151,7 @@ return [
     'frequently_asked_questions'                                               => 'Häufig gestellte Fragen',
     'leave_a_reply'                                                            => 'Hinterlasse eine Antwort',
     'post_message'                                                             => 'Nachrichten posten',
+
     /*
       |--------------------------------------------------------------------------------------
       |  Client Panel [English(en)]
@@ -903,6 +1161,7 @@ return [
       | customize your views to better match your application.
       |
      */
+
     'home'                => 'Home',
     'submit_a_ticket'     => 'Ein Ticket erstellen',
     'my_profile'          => 'Mein Profil',
@@ -946,28 +1205,34 @@ return [
     'thank_you_for_your_rating'                                                        => 'Danke für deine Bewertung!',
     'your_ticket_has_been'                                                             => 'Dein Ticket wurde',
     'failed_to_send_email_contact_administrator'                                       => 'E-Mail-Versand fehlgeschlagen. Bitte kontaktieren Sie den Systemadministrator',
+
     /*
      * |---------------------------------------------------------------------------------------
-     * |API settings
+     * |API Einstellungen
      * |----------------------------------------------------------------------------------
-     * |The following lanuage line used to get english traslation of api settings in admin panel
+     * |The following lanuage line used to get english traslation of api Einstellungen in admin panel
      * |
      * |
      */
     'webhooks'                         => 'Webhooks',
+
     'enter_url_to_send_ticket_details' => 'Geben Sie die URL ein, um die Ticketdetails zu senden',
+
     'api'                              => 'API',
     'api_key'                          => 'API Schlüssel',
     'api_key_mandatory'                => 'API key mandatory',
     'api_configurations'               => 'API configurations',
+
     'generate_key'                     => 'Generiere Schlüssel',
+
     'api_settings'                     => 'API Einstellungen',
     /*
      * -----------------------------------------------------------------------------
-     * Error log and debugging settings
+     * Error log and debugging Einstellungen
      * --------------------------------------------------------------------------
      *
      */
+
     'error-debug'                        => 'Fehlerprotokolle und Debugging',
     'debug-options'                      => 'Debugging-Optionen',
     'view-logs'                          => 'Fehlerprotokolle anzeigen',
@@ -978,13 +1243,16 @@ return [
     'error-debug-settings-saved-message' => 'Ihre Fehler- und Debugging-Einstellungen wurden erfolgreich gespeichert',
     'error-debug-settings-error-message' => 'Sie haben die Einstellungen nicht geändert.',
     'error-logs'                         => 'Fehlerprotokolle',
+
     /* ---------------------------------------------------------------------------------------
      * Latest update 16-06-2016
      * -----------------------------------------------------------------------------------
      */
+
     'that_email_is not_available_in_this_system' => 'Diese E-Mail-Adresse ist in diesem System nicht verfügbar',
     'use_subject'                                => 'Verwenden Sie Betreff',
     'reopen'                                     => 'Wieder geöffnet',
+
     'invalid_attempt'                            => 'Ungültiger Versuch',
     /* ---------------------------------------------------------------------------------------
      * Latest update 27-07-2016
@@ -997,13 +1265,15 @@ return [
      * --------------------------------------------------------------------------------------------------
      */
     'hello'                   => 'Hallo',
+
     'reset-link-msg'          => ",\r\nHier ist der Link zum Zurücksetzen Ihres Passworts.\r\n",
     'otp-for-your'            => ",\r\nOTP für Ihre",
     'account-verification-is' => 'Kontobestätigung ist',
     'extra-text'              => ".\r\nSie können sich anmelden, um Ihr Konto über OTP zu bestätigen, oder klicken Sie einfach auf den Link, den wir an Ihre E-Mail-Adresse gesendet haben.",
     'otp-not-sent'            => 'Wir hatten Probleme beim Senden von OTP, bitte versuchen Sie es nach einiger Zeit.',
+
     /*     * -------------------------------------------------------------------------------------------
-     * Ticket number settings 03-08-2016
+     * Ticket number Einstellungen 03-08-2016
      * ------------------------------------------------------------------------------------------
      */
     'format'               => 'Format',
@@ -1022,7 +1292,7 @@ return [
      * Report
      * ----------------------------------------------------------------------------------------------
      */
-    'report'              => 'Report',
+    'report'              => 'Bericht',
     'Report'              => 'REPORT',
     'start_date'          => 'Anfangsdatum',
     'end_date'            => 'Enddatum',

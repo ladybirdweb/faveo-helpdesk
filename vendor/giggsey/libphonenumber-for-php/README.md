@@ -9,6 +9,52 @@
 A PHP library for parsing, formatting, storing and validating international phone numbers. This library is based on Google's [libphonenumber](https://github.com/googlei18n/libphonenumber).
 
 
+
+ - [Installation](#installation)
+ - [Documentation](#documentation)
+ - [Online Demo](#online-demo)
+ - [Highlights of functionality](#highlights-of-functionality)
+   - [Versioning](#versioning)
+   - [Quick Examples](#quick-examples)
+     - [Geocoder](#geocoder)
+     - [ShortNumberInfo](#shortnumberinfo)
+     - [Mapping Phone Numbers to carrier](#mapping-phone-numbers-to-carrier)
+     - [Mapping Phone Numbers to TimeZones](#mapping-phone-numbers-to-timezones)
+ - [FAQ](#faq)
+   - [Problems with Invalid Numbers?](#problems-with-invalid-numbers)
+ - [Generating data](#generating-data)
+ - [Integration with frameworks](#integration-with-frameworks)
+
+
+## Installation
+
+PHP versions 5.3 up to PHP 7.2 are currently supported. HHVM is also supported.
+
+The PECL [mbstring](http://php.net/mbstring) extension is required.
+
+It is recommended to use [composer](https://getcomposer.org) to install the library.
+
+```bash
+$ composer require giggsey/libphonenumber-for-php
+```
+
+You can also use any other [PSR-4](http://www.php-fig.org/psr/psr-4/) compliant autoloader.
+
+If you do not use composer, ensure that you also load any dependencies that this project has, such as [giggsey/locale](https://github.com/giggsey/Locale).
+
+## Documentation
+
+ - [PhoneNumber Util](docs/PhoneNumberUtil.md)
+ - [ShortNumber Info](docs/ShortNumberInfo.md)
+ - [Phone Number Geolocation](docs/PhoneNumberOfflineGeocoder.md)
+ - [Phone Number to Carrier Mapping](docs/PhoneNumberToCarrierMapper.md)
+ - [Phone Number to Timezone Mapping](docs/PhoneNumberToTimeZonesMapper.md)
+ - [Phone Number Matcher](docs/PhoneNumberMatcher.md)
+ - [As You Type Formatter](docs/AsYouTypeFormatter.md)
+
+## Online Demo
+An [online demo](http://giggsey.com/libphonenumber/) is available, and the source can be found at [giggsey/libphonenumber-example](https://github.com/giggsey/libphonenumber-example).
+
 # Highlights of functionality
 * Parsing/formatting/validating phone numbers for all countries/regions of the world.
 * `getNumberType` - gets the type of the number based on the number itself; able to distinguish Fixed-line, Mobile, Toll-free, Premium Rate, Shared Cost, VoIP and Personal Numbers (whenever feasible).
@@ -19,36 +65,14 @@ A PHP library for parsing, formatting, storing and validating international phon
 * `PhoneNumberToTimeZonesMapper` - provides timezone information related to a phone number.
 * `PhoneNumberToCarrierMapper` - provides carrier information related to a phone number.
 
-## Installation
-
-PHP versions 5.3 up to PHP 7 are currently supported. HHVM is also supported.
-
-The PECL [mbstring](http://php.net/mbstring) extension is required.
-
-It is recommended to use [composer](https://getcomposer.org) to install the library.
-
-```bash
-$ composer require giggsey/libphonenumber-for-php
-```
-
-You can also use any other [PSR-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md) compliant autoloader.
-
-If you do not use composer, ensure that you also load any dependencies that this project has, such as [giggsey/locale](https://github.com/giggsey/Locale).
-
-## Documentation
-
-Documentation can be found in the [docs](docs/) directory.
-
 ## Versioning
 
 This library will try to follow the same version numbers as Google. There could be additional releases where needed to fix critical issues that can not wait until the next release from Google.
 
-This does mean that this project will not follow [Semantic Versioning](http://semver.org/), but instead Google's version policy. As a result, jumps in major versions may not actually contain any backwards
+This does mean that this project may not follow [Semantic Versioning](http://semver.org/), but instead Google's version policy. As a result, jumps in major versions may not actually contain any backwards
 incompatible changes. Please read the release notes for such releases.
 
-
-## Online Demo
-An [online demo](http://giggsey.com/libphonenumber/) is available, and the source can be found at [giggsey/libphonenumber-example](https://github.com/giggsey/libphonenumber-example).
+Google try to release their versions according to Semantic Versioning, as laid out of in their [Versioning Guide](https://github.com/googlei18n/libphonenumber#versioning-and-announcements).
 
 ## Quick Examples
 Let's say you have a string representing a phone number from Switzerland. This is how you parse/normalize it into a PhoneNumber object:
@@ -133,7 +157,6 @@ echo $geocoder->getDescriptionForNumber($swissNumberProto, "de_DE");
 // Outputs "Zurigo"
 echo $geocoder->getDescriptionForNumber($swissNumberProto, "it_IT");
 
-
 // Outputs "Mountain View, CA"
 echo $geocoder->getDescriptionForNumber($usNumberProto, "en_US");
 
@@ -180,7 +203,6 @@ var_dump($shortNumberInfo->connectsToEmergencyNumber("911123", "US"));
 ### Mapping Phone Numbers to carrier
 
 ```php
-
 $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
 $swissNumberProto = $phoneUtil->parse("798765432", "CH");
 
@@ -192,14 +214,12 @@ echo $carrierMapper->getNameForNumber($swissNumberProto, "en");
 ### Mapping Phone Numbers to TimeZones
 
 ```php
-
 $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
 $swissNumberProto = $phoneUtil->parse("798765432", "CH");
 
 $timeZoneMapper = \libphonenumber\PhoneNumberToTimeZonesMapper::getInstance();
 // returns array("Europe/Zurich")
 $timeZones = $timeZoneMapper->getTimeZonesForNumber($swissNumberProto);
-
 ```
 
 ## FAQ
@@ -228,9 +248,11 @@ This compile process clones the [libphonenumber](https://github.com/googlei18n/l
 
 Other packages exist that integrate libphonenumber-for-php into frameworks.
 
- - Symfony: [PhoneNumberBundle](https://github.com/misd-service-development/phone-number-bundle)
- - Laravel: [Laravel Phone](https://github.com/Propaganistas/Laravel-Phone)
- - Yii2: [PhoneInput](https://github.com/Borales/yii2-phone-input)
- - Kohana: [PhoneNumber](https://github.com/softmediadev/kohana-phonenumber)
+| Framework | Packages      |
+| --------- |:-------------:|
+|Symfony|[PhoneNumberBundle](https://github.com/misd-service-development/phone-number-bundle)|
+|Laravel|[Laravel Phone](https://github.com/Propaganistas/Laravel-Phone)|
+|Yii2|[PhoneInput](https://github.com/Borales/yii2-phone-input)|
+|Kohana|[PhoneNumber](https://github.com/softmediadev/kohana-phonenumber)|
 
 These packages are supplied by third parties, and their quality can not be guaranteed.

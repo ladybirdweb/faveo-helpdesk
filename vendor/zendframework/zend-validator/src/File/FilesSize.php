@@ -61,7 +61,7 @@ class FilesSize extends Size
             $options = ArrayUtils::iteratorToArray($options);
         } elseif (is_scalar($options)) {
             $options = ['max' => $options];
-        } elseif (!is_array($options)) {
+        } elseif (! is_array($options)) {
             throw new Exception\InvalidArgumentException('Invalid options to validator provided');
         }
 
@@ -69,7 +69,7 @@ class FilesSize extends Size
             $argv = func_get_args();
             array_shift($argv);
             $options['max'] = array_shift($argv);
-            if (!empty($argv)) {
+            if (! empty($argv)) {
                 $options['useByteString'] = array_shift($argv);
             }
         }
@@ -98,22 +98,22 @@ class FilesSize extends Size
         $size = $this->getSize();
         foreach ($value as $files) {
             if (is_array($files)) {
-                if (!isset($files['tmp_name']) || !isset($files['name'])) {
+                if (! isset($files['tmp_name']) || ! isset($files['name'])) {
                     throw new Exception\InvalidArgumentException(
                         'Value array must be in $_FILES format'
                     );
                 }
-                $file = $files;
+                $file  = $files;
                 $files = $files['tmp_name'];
             }
 
             // Is file readable ?
-            if (empty($files) || false === stream_resolve_include_path($files)) {
+            if (empty($files) || false === is_readable($files)) {
                 $this->throwError($file, self::NOT_READABLE);
                 continue;
             }
 
-            if (!isset($this->files[$files])) {
+            if (! isset($this->files[$files])) {
                 $this->files[$files] = $files;
             } else {
                 // file already counted... do not count twice
@@ -128,10 +128,10 @@ class FilesSize extends Size
             if (($max !== null) && ($max < $size)) {
                 if ($this->getByteString()) {
                     $this->options['max'] = $this->toByteString($max);
-                    $this->size          = $this->toByteString($size);
+                    $this->size           = $this->toByteString($size);
                     $this->throwError($file, self::TOO_BIG);
                     $this->options['max'] = $max;
-                    $this->size          = $size;
+                    $this->size           = $size;
                 } else {
                     $this->throwError($file, self::TOO_BIG);
                 }
@@ -142,10 +142,10 @@ class FilesSize extends Size
         if (($min !== null) && ($size < $min)) {
             if ($this->getByteString()) {
                 $this->options['min'] = $this->toByteString($min);
-                $this->size          = $this->toByteString($size);
+                $this->size           = $this->toByteString($size);
                 $this->throwError($file, self::TOO_SMALL);
                 $this->options['min'] = $min;
-                $this->size          = $size;
+                $this->size           = $size;
             } else {
                 $this->throwError($file, self::TOO_SMALL);
             }

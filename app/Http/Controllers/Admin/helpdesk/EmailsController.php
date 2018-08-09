@@ -82,7 +82,7 @@ class EmailsController extends Controller
             $mailbox_protocols = $mailbox_protocol->get();
 
             $service = new \App\Model\MailJob\MailService();
-            $services = $service->lists('name', 'id')->toArray();
+            $services = $service->pluck('name', 'id')->toArray();
 
             // return with all the table data
             return view('themes.default1.admin.helpdesk.emails.emails.create', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'services'));
@@ -185,6 +185,8 @@ class EmailsController extends Controller
 
         if ($request->smtp_validate == 'on') {
             $email->smtp_validate = $request->smtp_validate;
+        } else {
+            $email->smtp_validate = '';
         }
 
         if ($request->input('password')) {
@@ -208,6 +210,8 @@ class EmailsController extends Controller
         $email->fetching_encryption = $request->input('fetching_encryption');
         if (!$request->input('imap_validate')) {
             $email->mailbox_protocol = 'novalidate-cert';
+        } else {
+            $email->mailbox_protocol = 'validate-cert';
         }
         $email->department = $this->departmentValue($request->input('department'));
         // fetching priority value
@@ -253,6 +257,7 @@ class EmailsController extends Controller
 
         $this->emailService($driver, $service_request);
         $this->setMailConfig($driver, $address, $name, $username, $password, $enc, $host, $port);
+
         $transport = \Swift_SmtpTransport::newInstance($host, $port, $enc);
         $transport->setUsername($username);
         $transport->setPassword($password);
@@ -351,7 +356,7 @@ class EmailsController extends Controller
             $mailbox_protocols = $mailbox_protocol->get();
 
             $service = new \App\Model\MailJob\MailService();
-            $services = $service->lists('name', 'id')->toArray();
+            $services = $service->pluck('name', 'id')->toArray();
 
             // return if the execution is succeeded
             return view('themes.default1.admin.helpdesk.emails.emails.edit', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'emails', 'sys_email', 'services'))->with('count', $count);

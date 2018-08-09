@@ -63,6 +63,16 @@
                     <span class="widgetitemtitle">{!! Lang::get('lang.my_tickets') !!}</span>
                 </a>
             </span>
+        @if(Auth::user())
+            <?php $isHead = App\Model\helpdesk\Agent_panel\Organization::where('head', '=', Auth::user()->id)->get()->count(); ?>
+            @if($isHead > 0)
+            <span onclick="javascript: window.location.href='{{url('myorganizationtickets')}}';">
+                <a href="{{url('myorganizationtickets')}}" class="widgetrowitem defaultwidget" style="background-image: URL('lb-faveo/media/images/news.png');">
+                    <span class="widgetitemtitle">{!! Lang::get('lang.my_organization_tickets') !!}</span>
+                </a>
+            </span>
+            @endif
+        @endif
             <span onclick="javascript: window.location.href='{{url('/knowledgebase')}}';">
                 <a href="{{url('/knowledgebase')}}" class="widgetrowitem defaultwidget" style="background-image: URL('lb-faveo/media/images/knowledgebase.png');">
                     <span class="widgetitemtitle">{!! Lang::get('lang.knowledge_base') !!}</span>

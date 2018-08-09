@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Agent\kb;
 
 // Controllers
-use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
 // Request
 use App\Http\Requests\kb\ProfilePassword;
@@ -149,7 +148,7 @@ class SettingsController extends Controller
                         })
 
                         ->addColumn('comment', function ($model) {
-                            $created = TicketController::usertimezone(date($model->created_at));
+                            $created = faveoDate($model->created_at);
 
                             return $model->comment."<p>$created</p>";
                         })

@@ -124,6 +124,12 @@ function resolveMacros($code) {
                 return '$this->startAttributeStack[#1] + $this->endAttributes';
             }
 
+            if ('stackAttributes' == $name) {
+                assertArgs(1, $args, $name);
+                return '$this->startAttributeStack[' . $args[0] . ']'
+                     . ' + $this->endAttributeStack[' . $args[0] . ']';
+            }
+
             if ('init' == $name) {
                 return '$$ = array(' . implode(', ', $args) . ')';
             }
@@ -170,11 +176,11 @@ function resolveMacros($code) {
             }
 
             if ('makeNop' == $name) {
-                assertArgs(2, $args, $name);
+                assertArgs(3, $args, $name);
 
                 return '$startAttributes = ' . $args[1] . ';'
                 . ' if (isset($startAttributes[\'comments\']))'
-                . ' { ' . $args[0] . ' = new Stmt\Nop([\'comments\' => $startAttributes[\'comments\']]); }'
+                . ' { ' . $args[0] . ' = new Stmt\Nop($startAttributes + ' . $args[2] . '); }'
                 . ' else { ' . $args[0] . ' = null; }';
             }
 
@@ -199,7 +205,7 @@ function resolveMacros($code) {
                 assertArgs(1, $args, $name);
 
                 return '$attrs = $this->startAttributeStack[#1]; $stmts = ' . $args[0] . '; '
-                . 'if (!empty($attrs[\'comments\']) && isset($stmts[0])) {'
+                . 'if (!empty($attrs[\'comments\'])) {'
                 . '$stmts[0]->setAttribute(\'comments\', '
                 . 'array_merge($attrs[\'comments\'], $stmts[0]->getAttribute(\'comments\', []))); }';
             }

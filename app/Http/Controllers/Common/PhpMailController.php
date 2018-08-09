@@ -10,12 +10,20 @@ use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
 use App\User;
 use Auth;
-use Exception;
-use Lang;
 use Mail;
 
 class PhpMailController extends Controller
 {
+    /**
+     *@var variable to instantiate common mailer class
+     */
+    protected $commonMailer;
+
+    public function __construct()
+    {
+        $this->commonMailer = new CommonMailer();
+    }
+
     public function fetch_smtp_details($id)
     {
         $emails = Emails::where('id', '=', $id)->first();
@@ -52,7 +60,9 @@ class PhpMailController extends Controller
     {
         $email_id = '';
         $emails = Emails::where('department', '=', $dept_id)->first();
-
+        if (!$emails) {
+            $emails = Emails::first();
+        }
         $email = Email::find(1);
         if ($emails && $emails->sending_status) {
             $email_id = $emails->id;
@@ -63,150 +73,76 @@ class PhpMailController extends Controller
         return $email_id;
     }
 
-    public function sendmail($from, $to, $message, $template_variables)
+    public function sendmail($from, $to, $message, $template_variables, $thread = '', $auto_respond = '')
     {
         $this->setQueue();
-        $job = new \App\Jobs\SendEmail($from, $to, $message, $template_variables);
-        $this->dispatch($job);
+        $job = new \App\Jobs\SendEmail($from, $to, $message, $template_variables, $thread, $auto_respond);
+        dispatch($job);
     }
 
-    public function sendEmail($from, $to, $message, $template_variables)
+    public function sendEmail($from, $to, $message, $template_variables, $thread = '', $auto_respond = '')
     {
         $from_address = $this->fetch_smtp_details($from);
         if ($from_address == null) {
-            throw new Exception(Lang::get('lang.system-email-not-configured'));
+            loging('email-config', 'Invalid Email Configuration');
         }
-
         $this->setMailConfig($from_address);
-
         $recipants = $this->checkElement('email', $to);
         $recipantname = $this->checkElement('name', $to);
         $cc = $this->checkElement('cc', $to);
         $bc = $this->checkElement('bc', $to);
         $subject = $this->checkElement('subject', $message);
-        $content = $this->checkElement('body', $message);
         $template_type = $this->checkElement('scenario', $message);
         $attachment = $this->checkElement('attachments', $message);
-
-        $agent = null;
-        // template variables
-        if (Auth::user()) {
-            $agent = Auth::user()->user_name;
+        $content_array = $this->mailTemplate($template_type, $template_variables, $message, $from, $subject);
+        $content = $this->checkElement('body', $message);
+        if ($content_array) {
+            $content = checkArray('content', $content_array);
+            $subject = checkArray('subject', $content_array);
         }
-        $ticket_agent_name = $this->checkElement('ticket_agent_name', $template_variables);
-        $ticket_number = $this->checkElement('ticket_number', $template_variables);
-        $ticket_client_name = $this->checkElement('ticket_client_name', $template_variables);
-        $ticket_client_email = $this->checkElement('ticket_client_email', $template_variables);
-        $ticket_body = $this->checkElement('ticket_body', $template_variables);
-        $ticket_assigner = $this->checkElement('ticket_assigner', $template_variables);
-        $ticket_link_with_number = $this->checkElement('ticket_link_with_number', $template_variables);
-
-        $system_from = $this->checkElement('system_from', $template_variables);
-        if ($system_from === '') {
-            $system_from = $this->company();
-        }
-        $system_link = $this->checkElement('system_link', $template_variables);
-        if ($system_link === '') {
-            $system_link = \Config::get('app.url');
-        }
-        $ticket_link = $this->checkElement('ticket_link', $template_variables);
-        $system_error = $this->checkElement('system_error', $template_variables);
-        $agent_sign = $this->checkElement('agent_sign', $template_variables);
-        $department_sign = $this->checkElement('department_sign', $template_variables);
-        $password_reset_link = $this->checkElement('password_reset_link', $template_variables);
-        $user_password = $this->checkElement('user_password', $template_variables);
-        $merged_ticket_numbers = $this->checkElement('merged_ticket_numbers', $template_variables);
-        $email_address = $this->checkElement('email_address', $template_variables);
-        $user = $this->checkElement('user', $template_variables);
-
-        $status = \DB::table('settings_email')->first();
-
-        $template = TemplateType::where('name', '=', $template_type)->first();
-
-        $set = \App\Model\Common\TemplateSet::where('name', '=', $status->template)->first();
-        if ($template) {
-            if (isset($set['id'])) {
-                $template_data = \App\Model\Common\Template::where('set_id', '=', $set->id)->where('type', '=', $template->id)->first();
-                $contents = $template_data->message;
-                if ($template_data->variable == 1) {
-                    if ($template_data->subject) {
-                        $subject = $template_data->subject;
-                        if ($ticket_number != null) {
-                            $subject = $subject.' [#'.$ticket_number.']';
-                        }
-                    } else {
-                        $subject = $message['subject'];
-                    }
-                } else {
-                    $subject = $message['subject'];
-                }
-            } else {
-                $contents = null;
-                $subject = null;
-            }
-
-            $variables = ['{!!$user!!}', '{!!$agent!!}', '{!!$ticket_number!!}', '{!!$content!!}', '{!!$from!!}', '{!!$ticket_agent_name!!}', '{!!$ticket_client_name!!}', '{!!$ticket_client_email!!}', '{!!$ticket_body!!}', '{!!$ticket_assigner!!}', '{!!$ticket_link_with_number!!}', '{!!$system_error!!}', '{!!$agent_sign!!}', '{!!$department_sign!!}', '{!!$password_reset_link!!}', '{!!$email_address!!}', '{!!$user_password!!}', '{!!$system_from!!}', '{!!$system_link!!}', '{!!$ticket_link!!}', '{!!$merged_ticket_numbers!!}'];
-
-            $data = [$user, $agent, $ticket_number, $content, $from, $ticket_agent_name, $ticket_client_name, $ticket_client_email, $ticket_body, $ticket_assigner, $ticket_link_with_number, $system_error, $agent_sign, $department_sign, $password_reset_link, $email_address, $user_password, $system_from, $system_link, $ticket_link, $merged_ticket_numbers];
-
-            foreach ($variables as $key => $variable) {
-                $messagebody = str_replace($variables[$key], $data[$key], $contents);
-                $contents = $messagebody;
-            }
-
-            if ($template_type == 'ticket-reply-agent') {
-                $line = '---Reply above this line--- <br/><br/>';
-                $content = $line.$messagebody;
-            } else {
-                $content = $messagebody;
-            }
-        }
-        $send = $this->laravelMail($recipants, $recipantname, $subject, $content, $cc, $attachment);
+        $send = $this->laravelMail($recipants, $recipantname, $subject, $content, $from_address, $cc, $attachment, $thread, $auto_respond);
 
         return $send;
     }
 
-    public function setMailConfig($from_address)
+    public function setMailConfig($mail)
     {
-        $username = $from_address->email_address;
-        $fromname = $from_address->email_name;
-        $password = $from_address->password;
-        $smtpsecure = $from_address->sending_encryption;
-        $host = $from_address->sending_host;
-        $port = $from_address->sending_port;
-        $protocol = $from_address->sending_protocol;
-        $this->setServices($from_address->id, $protocol);
-        if ($protocol == 'mail') {
-            $username = '';
-            $fromname = '';
-            $host = '';
-            $smtpsecure = '';
-            $port = '';
-        }
-        $configs = [
-            'username'   => $username,
-            'from'       => ['address' => $username, 'name' => $fromname],
-            'password'   => $password,
-            'encryption' => $smtpsecure,
-            'host'       => $host,
-            'port'       => $port,
-            'driver'     => $protocol,
-        ];
-        foreach ($configs as $key => $config) {
-            if (is_array($config)) {
-                foreach ($config as $from) {
-                    \Config::set('mail.'.$key, $config);
+        switch ($mail->sending_protocol) {
+            case 'smtp':
+                $config = ['host'      => $mail->sending_host,
+                            'port'     => $mail->sending_port,
+                            'security' => $mail->sending_encryption,
+                            'username' => $mail->email_address,
+                            'password' => $mail->password,
+                        ];
+                if (!$this->commonMailer->setSmtpDriver($config)) {
+                    \Log::info('Invaid configuration :- '.$config);
+
+                    return 'invalid mail configuration';
                 }
-            } else {
-                \Config::set('mail.'.$key, $config);
-            }
+                break;
+            case 'send_mail':
+                $config = [
+                            'host'     => \Config::get('mail.host'),
+                            'port'     => \Config::get('mail.port'),
+                            'security' => \Config::get('mail.encryption'),
+                            'username' => \Config::get('mail.username'),
+                            'password' => \Config::get('mail.password'),
+                        ];
+                $this->commonMailer->setSmtpDriver($config);
+                break;
+            case 'mailgun':
+                $this->commonMailer->setMailGunDriver(null);
+                break;
+            default:
+                return 'Mail driver not supported';
         }
     }
 
     public function setServices($emailid, $protocol)
     {
         $service = new \App\Model\MailJob\FaveoMail();
-        $services = $service->where('email_id', $emailid)->lists('value', 'key')->toArray();
+        $services = $service->where('email_id', $emailid)->pluck('value', 'key')->toArray();
         $controller = new \App\Http\Controllers\Admin\helpdesk\EmailsController();
         $controller->setServiceConfig($protocol, $services);
     }
@@ -223,16 +159,21 @@ class PhpMailController extends Controller
         return $value;
     }
 
-    public function laravelMail($to, $toname, $subject, $data, $cc, $attach)
+    public function laravelMail($to, $toname, $subject, $data, $from_address, $cc = '', $attach = '', $thread = '', $auto_respond = '')
     {
-        //dd($to, $toname, $subject, $data, $cc, $attach);
-        //dd(\Config::get('mail'));
-        //dd($attach);
-        $mail = Mail::send('emails.mail', ['data' => $data], function ($m) use ($to, $subject, $toname, $cc, $attach) {
+        //dd($to, $toname, $subject, $data);
+        $mail = Mail::send('emails.mail', ['data' => $data, 'thread' => $thread], function ($m) use ($to, $subject, $toname, $cc, $attach, $thread, $auto_respond,$from_address) {
             $m->to($to, $toname)->subject($subject);
-
+            $m->from($from_address->email_address, $from_address->email_name);
+            if ($auto_respond) {
+                $swiftMessage = $m->getSwiftMessage();
+                $headers = $swiftMessage->getHeaders();
+                $headers->addTextHeader('X-Autoreply', 'true');
+                $headers->addTextHeader('Auto-Submitted', 'auto-replied');
+                $headers->addTextHeader('Content-Transfer-Encoding', 'base64');
+            }
             if ($cc != null) {
-                foreach ($cc as $collaborator) {
+                foreach ($cc as $cc_email) {
                     //mail to collaborators
                     $collab_user_id = $collaborator->user_id;
                     $user_id_collab = User::where('id', '=', $collab_user_id)->first();
@@ -247,22 +188,47 @@ class PhpMailController extends Controller
                 for ($i = 0; $i < $size; $i++) {
                     if (is_array($attach) && array_key_exists($i, $attach)) {
                         $mode = 'normal';
+                        $file = $attach[$i]['file'];
+                        if (checkArray('poster', $attach[$i])) {
+                            $file = $attach[$i]['file'];
+                        }
+                        if (checkArray('poster', $attach[$i]) && checkArray('data', $attach[$i])) {
+                            $file = $attach[$i]['data'];
+                            $mode = 'data';
+                        }
                         if (is_array($attach[$i]) && array_key_exists('mode', $attach[$i])) {
                             $mode = $attach[$i]['mode'];
                         }
-                        $file = $attach[$i]['file_path'];
+
                         $name = $attach[$i]['file_name'];
                         $mime = $attach[$i]['mime'];
+
                         $this->attachmentMode($m, $file, $name, $mime, $mode);
                     }
                 }
             }
         });
+        //$this->updateFilePermission($attach, $mode);
         if (is_object($mail) || (is_object($mail) && $mail->getStatusCode() == 200)) {
             $mail = 1;
         }
 
         return $mail;
+    }
+
+    public function updateFilePermission($attach, $mode)
+    {
+        $size = count($attach);
+        if ($size > 0) {
+            for ($i = 0; $i < $size; $i++) {
+                if (is_array($attach) && array_key_exists($i, $attach)) {
+                    if (checkArray('poster', $attach[$i])) {
+                        $file = $attach[$i]['file_path'].DIRECTORY_SEPARATOR.$attach[$i]['file_name'];
+                        chmod($file, 1204);
+                    }
+                }
+            }
+        }
     }
 
     public function setQueue()
@@ -279,7 +245,7 @@ class PhpMailController extends Controller
         if ($active_queue) {
             $short = $active_queue->short_name;
             $fields = new \App\Model\MailJob\FaveoQueue();
-            $field = $fields->where('service_id', $active_queue->id)->lists('value', 'key')->toArray();
+            $field = $fields->where('service_id', $active_queue->id)->pluck('value', 'key')->toArray();
         }
         $this->setQueueConfig($short, $field);
     }
@@ -294,10 +260,146 @@ class PhpMailController extends Controller
 
     public function attachmentMode($message, $file, $name, $mime, $mode)
     {
-        if ($mode == 'data') {
-            return $message->attachData(base64_decode($file, true), $name, ['mime' => $mime]);
+        $m = $message->attachData(base64_decode($file, true), $name, ['mime' => $mime]);
+
+        return $m;
+    }
+
+    public function mailTemplate($template_type, $template_variables, $message, $from, $subject)
+    {
+        $content = $this->checkElement('body', $message);
+        $ticket_number = $this->checkElement('ticket_number', $template_variables);
+        $template = TemplateType::where('name', '=', $template_type)->first();
+        $status = \DB::table('settings_email')->first();
+        $set = \App\Model\Common\TemplateSet::where('name', '=', $status->template)->first();
+        $temp = [];
+        if ($template) {
+            $temp = $this->set($set, $ticket_number, $message, $template);
+            $contents = $temp['content'];
+
+            $variables = $this->templateVariables($template_variables, $content, $from);
+            foreach ($variables as $k => $v) {
+                $messagebody = str_replace($k, $v, $contents);
+                $contents = $messagebody;
+            }
+            if ($template_type == 'ticket-reply-agent') {
+                $line = '---Reply above this line--- <br/><br/>';
+                $content = $line.$messagebody;
+            } else {
+                $content = $messagebody;
+            }
+        }
+        if (checkArray('subject', $temp)) {
+            $subject = checkArray('subject', $temp);
         }
 
-        return $message->attach($file, ['as' => $name, 'mime' => $mime]);
+        return ['content' => $content, 'subject' => $subject];
+    }
+
+    public function templateVariables($template_variables, $content, $from)
+    {
+        $agent = $this->checkElement('agent', $template_variables);
+        // template variables
+        if ($agent == '' && Auth::user()) {
+            $agent = Auth::user()->user_name;
+        }
+        $system_from = $this->checkElement('system_from', $template_variables);
+        if ($system_from === '') {
+            $system_from = $this->company();
+        }
+        $system_link = $this->checkElement('system_link', $template_variables);
+        if ($system_link === '') {
+            $system_link = url('/');
+        }
+        $variables = [
+            '{!!$user!!}'                      => checkArray('user', $template_variables),
+            '{!!$agent!!}'                     => $agent,
+            '{!!$ticket_number!!}'             => checkArray('ticket_number', $template_variables),
+            '{!!$content!!}'                   => $content,
+            '{!!$from!!}'                      => $from,
+            '{!!$ticket_agent_name!!}'         => checkArray('ticket_agent_name', $template_variables),
+            '{!!$ticket_client_name!!}'        => checkArray('ticket_client_name', $template_variables),
+            '{!!$ticket_client_email!!}'       => checkArray('ticket_client_email', $template_variables),
+            '{!!$ticket_body!!}'               => checkArray('ticket_body', $template_variables),
+            '{!!$ticket_assigner!!}'           => checkArray('ticket_assigner', $template_variables),
+            '{!!$ticket_link_with_number!!}'   => checkArray('ticket_link_with_number', $template_variables),
+            '{!!$system_error!!}'              => checkArray('system_error', $template_variables),
+            '{!!$agent_sign!!}'                => checkArray('agent_sign', $template_variables),
+            '{!!$department_sign!!}'           => checkArray('department_sign', $template_variables),
+            '{!!$password_reset_link!!}'       => checkArray('password_reset_link', $template_variables),
+            '{!!$email_address!!}'             => checkArray('email_address', $template_variables),
+            '{!!$user_password!!}'             => checkArray('user_password', $template_variables),
+            '{!!$system_from!!}'               => $system_from,
+            '{!!$system_link!!}'               => $system_link,
+            '{!!$duedate!!}'                   => checkArray('duedate', $template_variables),
+            '{!!$requester!!}'                 => checkArray('requester', $template_variables),
+            '{!!$title!!}'                     => checkArray('title', $template_variables),
+            '{!!$ticket_link!!}'               => checkArray('ticket_link', $template_variables),
+            '{!!$by!!}'                        => checkArray('by', $template_variables),
+            '{!!$internal_content!!}'          => checkArray('internal_content', $template_variables),
+            '{!!$user_profile_link!!}'         => checkArray('user_profile_link', $template_variables),
+            '{!! $receiver_name !!}'           => checkArray('receiver_name', $template_variables),
+            '{!! $new_user_name !!}'           => checkArray('new_user_name', $template_variables),
+            '{!! $new_user_email !!}'          => checkArray('new_user_email', $template_variables),
+            '{!! $password_reset_link !!}'     => checkArray('password_reset_link', $template_variables),
+            '{!! $reference_link !!}'          => checkArray('reference_link', $template_variables),
+            '{!! $user_password !!}'           => checkArray('user_password', $template_variables),
+            '{!! $account_activation_link !!}' => checkArray('account_activation_link', $template_variables),
+            '{!! $ticket_link !!}'             => checkArray('ticket_link', $template_variables),
+            '{!! $ticket_number !!}'           => checkArray('ticket_number', $template_variables),
+            '{!! $department_signature !!}'    => checkArray('department_signature', $template_variables),
+            '{!! $client_name !!}'             => checkArray('client_name', $template_variables),
+            '{!! $client_email !!}'            => checkArray('client_email', $template_variables),
+            '{!! $agent_name !!}'              => checkArray('agent_name', $template_variables),
+            '{!! $agent_email !!}'             => checkArray('agent_email', $template_variables),
+            '{!! $agent_contact !!}'           => checkArray('agent_contact', $template_variables),
+            '{!! $agent_signature !!}'         => checkArray('agent_sign', $template_variables),
+            '{!! $client_name !!}'             => checkArray('client_name', $template_variables),
+            '{!! $client_email !!}'            => checkArray('client_email', $template_variables),
+            '{!! $client_contact !!}'          => checkArray('client_contact', $template_variables),
+            '{!! $user_profile_link !!}'       => checkArray('user_profile_link', $template_variables),
+            '{!! $activity_by !!}'             => checkArray('activity_by', $template_variables),
+            '{!! $assigned_team_name !!}'      => checkArray('assigned_team_name', $template_variables),
+            '{!! $ticket_subject !!}'          => checkArray('ticket_subject', $template_variables),
+            '{!! $ticket_due_date !!}'         => checkArray('ticket_due_date', $template_variables),
+            '{!! $ticket_created_at !!}'       => checkArray('ticket_created_at', $template_variables),
+            '{!! $otp_code !!}'                => checkArray('otp_code', $template_variables),
+            '{!! $system_from !!}'             => $system_from,
+            '{!! $system_link !!}'             => $system_link,
+            '{!! $company_name !!}'            => $system_from,
+            '{!! $company_link !!}'            => $system_link,
+            '{!! $message_content !!}'         => $content,
+            '{!! $approve_url !!}'             => checkArray('approve_url', $template_variables),
+            '{!! $deny_url !!}'                => checkArray('deny_url', $template_variables),
+            '{!! $ticket_edit_link !!}'        => checkArray('ticket_client_edit_link', $template_variables),
+            '{!! $total_time !!}'              => checkArray('total_time', $template_variables),
+            '{!! $cost !!}'                    => checkArray('cost', $template_variables),
+            '{!! $bill_date !!}'               => checkArray('bill_date', $template_variables),
+            '{!! $currency !!}'                => checkArray('currency', $template_variables),
+        ];
+
+        return $variables;
+    }
+
+    public function set($set, $ticket_number, $message, $template)
+    {
+        $contents = null;
+        $subject = null;
+        if (isset($set['id'])) {
+            $subject = checkArray('subject', $message);
+            $template_data = \App\Model\Common\Template::where('set_id', '=', $set->id)->where('type', '=', $template->id)->first();
+            //dd($template_data);
+            $contents = $template_data->message;
+            if ($template_data->variable == 1) {
+                if ($template_data->subject) {
+                    $subject = $template_data->subject;
+                    if ($ticket_number != null) {
+                        $subject = $subject.' [#'.$ticket_number.']';
+                    }
+                }
+            }
+        }
+
+        return ['content' => $contents, 'subject' => $subject];
     }
 }

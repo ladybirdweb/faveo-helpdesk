@@ -1,9 +1,11 @@
 <?php
-class FailureTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class FailureTest extends TestCase
 {
     public function testAssertArrayEqualsArray()
     {
-        $this->assertEquals(array(1), array(2), 'message');
+        $this->assertEquals([1], [2], 'message');
     }
 
     public function testAssertIntegerEqualsInteger()
@@ -13,10 +15,10 @@ class FailureTest extends PHPUnit_Framework_TestCase
 
     public function testAssertObjectEqualsObject()
     {
-        $a      = new StdClass;
+        $a      = new stdClass;
         $a->foo = 'bar';
 
-        $b      = new StdClass;
+        $b      = new stdClass;
         $b->bar = 'foo';
 
         $this->assertEquals($a, $b, 'message');
@@ -54,12 +56,12 @@ class FailureTest extends PHPUnit_Framework_TestCase
 
     public function testAssertObjectSameObject()
     {
-        $this->assertSame(new StdClass, new StdClass, 'message');
+        $this->assertSame(new stdClass, new stdClass, 'message');
     }
 
     public function testAssertObjectSameNull()
     {
-        $this->assertSame(new StdClass, null, 'message');
+        $this->assertSame(new stdClass, null, 'message');
     }
 
     public function testAssertFloatSameFloat()

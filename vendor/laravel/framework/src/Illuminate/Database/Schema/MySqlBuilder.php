@@ -12,13 +12,11 @@ class MySqlBuilder extends Builder
      */
     public function hasTable($table)
     {
-        $sql = $this->grammar->compileTableExists();
-
-        $database = $this->connection->getDatabaseName();
-
         $table = $this->connection->getTablePrefix().$table;
 
-        return count($this->connection->select($sql, [$database, $table])) > 0;
+        return count($this->connection->select(
+            $this->grammar->compileTableExists(), [$this->connection->getDatabaseName(), $table]
+        )) > 0;
     }
 
     /**
@@ -29,14 +27,52 @@ class MySqlBuilder extends Builder
      */
     public function getColumnListing($table)
     {
-        $sql = $this->grammar->compileColumnExists();
-
-        $database = $this->connection->getDatabaseName();
-
         $table = $this->connection->getTablePrefix().$table;
 
-        $results = $this->connection->select($sql, [$database, $table]);
+        $results = $this->connection->select(
+            $this->grammar->compileColumnListing(), [$this->connection->getDatabaseName(), $table]
+        );
 
         return $this->connection->getPostProcessor()->processColumnListing($results);
+    }
+
+    /**
+     * Drop all tables from the database.
+     *
+     * @return void
+     */
+    public function dropAllTables()
+    {
+        $tables = [];
+
+        foreach ($this->getAllTables() as $row) {
+            $row = (array) $row;
+
+            $tables[] = reset($row);
+        }
+
+        if (empty($tables)) {
+            return;
+        }
+
+        $this->disableForeignKeyConstraints();
+
+        $this->connection->statement(
+            $this->grammar->compileDropAllTables($tables)
+        );
+
+        $this->enableForeignKeyConstraints();
+    }
+
+    /**
+     * Get all of the table names for the database.
+     *
+     * @return array
+     */
+    protected function getAllTables()
+    {
+        return $this->connection->select(
+            $this->grammar->compileGetAllTables()
+        );
     }
 }

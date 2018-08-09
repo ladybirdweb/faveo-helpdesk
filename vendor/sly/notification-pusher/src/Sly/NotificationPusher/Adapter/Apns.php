@@ -11,20 +11,18 @@
 
 namespace Sly\NotificationPusher\Adapter;
 
-use Sly\NotificationPusher\Model\BaseOptionedModel;
-use Sly\NotificationPusher\Model\PushInterface;
-use Sly\NotificationPusher\Model\DeviceInterface;
+use Sly\NotificationPusher\Collection\DeviceCollection;
 use Sly\NotificationPusher\Exception\AdapterException;
 use Sly\NotificationPusher\Exception\PushException;
-use Sly\NotificationPusher\Collection\DeviceCollection;
-
+use Sly\NotificationPusher\Model\BaseOptionedModel;
+use Sly\NotificationPusher\Model\DeviceInterface;
+use Sly\NotificationPusher\Model\PushInterface;
 use ZendService\Apple\Apns\Client\AbstractClient as ServiceAbstractClient;
+use ZendService\Apple\Apns\Client\Feedback as ServiceFeedbackClient;
 use ZendService\Apple\Apns\Client\Message as ServiceClient;
 use ZendService\Apple\Apns\Message as ServiceMessage;
 use ZendService\Apple\Apns\Message\Alert as ServiceAlert;
 use ZendService\Apple\Apns\Response\Message as ServiceResponse;
-use ZendService\Apple\Apns\Exception\RuntimeException as ServiceRuntimeException;
-use ZendService\Apple\Apns\Client\Feedback as ServiceFeedbackClient;
 
 /**
  * APNS adapter.
@@ -33,13 +31,17 @@ use ZendService\Apple\Apns\Client\Feedback as ServiceFeedbackClient;
  *
  * @author Cédric Dugat <cedric@dugat.me>
  */
-class Apns extends BaseAdapter
+class Apns extends BaseAdapter implements FeedbackAdapterInterface
 {
 
-    /** @var ServiceClient */
+    /**
+     * @var ServiceClient
+     */
     private $openedClient;
 
-    /** @var ServiceFeedbackClient */
+    /**
+     * @var ServiceFeedbackClient
+     */
     private $feedbackClient;
 
     /**
@@ -70,16 +72,32 @@ class Apns extends BaseAdapter
         $pushedDevices = new DeviceCollection();
 
         foreach ($push->getDevices() as $device) {
+            /** @var \ZendService\Apple\Apns\Message $message */
             $message = $this->getServiceMessageFromOrigin($device, $push->getMessage());
 
             try {
-                $this->response = $client->send($message);
-            } catch (ServiceRuntimeException $e) {
-                throw new PushException($e->getMessage());
-            }
+                /** @var \ZendService\Apple\Apns\Response\Message $response */
+                $response = $client->send($message);
 
-            if (ServiceResponse::RESULT_OK === $this->response->getCode()) {
-                $pushedDevices->add($device);
+                $responseArr = [
+                    'id'    => $response->getId(),
+                    'token' => $response->getCode(),
+                ];
+                $push->addResponse($device, $responseArr);
+
+                if (ServiceResponse::RESULT_OK === $response->getCode()) {
+                    $pushedDevices->add($device);
+                } else {
+                    $client->close();
+                    unset($this->openedClient, $client);
+                    // Assign returned new client to the in-scope/in-use $client variable
+                    $client = $this->getOpenedServiceClient();
+                }
+
+                $this->response->addOriginalResponse($device, $response);
+                $this->response->addParsedResponse($device, $responseArr);
+            } catch (\RuntimeException $e) {
+                throw new PushException($e->getMessage());
             }
         }
 
@@ -97,6 +115,7 @@ class Apns extends BaseAdapter
         $responses        = [];
         $serviceResponses = $client->feedback();
 
+        /** @var \ZendService\Apple\Apns\Response\Feedback $response */
         foreach ($serviceResponses as $response) {
             $responses[$response->getToken()] = new \DateTime(date('c', $response->getTime()));
         }
@@ -107,12 +126,16 @@ class Apns extends BaseAdapter
     /**
      * Get opened client.
      *
-     * @param \ZendService\Apple\Apns\Client\AbstractClient $client Client
+     * @param \ZendService\Apple\Apns\Client\AbstractClient|null $client Client
      *
      * @return \ZendService\Apple\Apns\Client\AbstractClient
      */
-    public function getOpenedClient(ServiceAbstractClient $client)
+    public function getOpenedClient(ServiceAbstractClient $client = null)
     {
+        if (!$client) {
+            $client = new ServiceClient();
+        }
+
         $client->open(
             $this->isProductionEnvironment() ? ServiceClient::PRODUCTION_URI : ServiceClient::SANDBOX_URI,
             $this->getParameter('certificate'),
@@ -125,9 +148,9 @@ class Apns extends BaseAdapter
     /**
      * Get opened ServiceClient
      *
-     * @return ServiceAbstractClient
+     * @return ServiceClient
      */
-    private function getOpenedServiceClient()
+    protected function getOpenedServiceClient()
     {
         if (!isset($this->openedClient)) {
             $this->openedClient = $this->getOpenedClient(new ServiceClient());
@@ -139,7 +162,7 @@ class Apns extends BaseAdapter
     /**
      * Get opened ServiceFeedbackClient
      *
-     * @return ServiceAbstractClient
+     * @return ServiceFeedbackClient
      */
     private function getOpenedFeedbackClient()
     {
@@ -161,13 +184,14 @@ class Apns extends BaseAdapter
     public function getServiceMessageFromOrigin(DeviceInterface $device, BaseOptionedModel $message)
     {
         $badge = ($message->hasOption('badge'))
-            ? (int) ($message->getOption('badge') + $device->getParameter('badge', 0))
-            : false
-        ;
+            ? (int)($message->getOption('badge') + $device->getParameter('badge', 0))
+            : false;
 
-        $sound = $message->getOption('sound', 'bingbong.aiff');
+        $sound            = $message->getOption('sound');
         $contentAvailable = $message->getOption('content-available');
-        $category = $message->getOption('category');
+        $category         = $message->getOption('category');
+        $urlArgs          = $message->getOption('urlArgs');
+        $expire           = $message->getOption('expire');
 
         $alert = new ServiceAlert(
             $message->getText(),
@@ -202,7 +226,7 @@ class Apns extends BaseAdapter
         }
 
         $serviceMessage = new ServiceMessage();
-        $serviceMessage->setId(sha1($device->getToken().$message->getText()));
+        $serviceMessage->setId(sha1($device->getToken() . $message->getText()));
         $serviceMessage->setAlert($alert);
         $serviceMessage->setToken($device->getToken());
         if (false !== $badge) {
@@ -220,6 +244,14 @@ class Apns extends BaseAdapter
 
         if (null !== $category) {
             $serviceMessage->setCategory($category);
+        }
+
+        if (null !== $urlArgs) {
+            $serviceMessage->setUrlArgs($urlArgs);
+        }
+
+        if (null !== $expire) {
+            $serviceMessage->setExpire($expire);
         }
 
         return $serviceMessage;

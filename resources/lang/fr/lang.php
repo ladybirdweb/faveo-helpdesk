@@ -865,33 +865,34 @@ return [
       | customize your views to better match your application.
       |
      */
-    'agent_panel'         => 'Panneau Agent',
-    'profile'             => 'Profil',
-    'change_password'     => 'Changer le mot de passe',
-    'sign_out'            => 'Déconnexion',
-    'Tickets'             => 'TICKETS',
-    'ticket-details'      => 'Détails des tickets',
-    'inbox'               => 'Boite de réception',
-    'my_tickets'          => 'Mes tickets',
-    'unassigned'          => 'Non assignés',
-    'trash'               => 'Corbeille',
-    'Updates'             => 'MAJ',
-    'no_new_updates'      => 'Pas de nouvelle MAJ',
-    'check_for_updates'   => 'Rechercher des MAJ',
-    'update-version'      => 'Version MAJ',
-    'open'                => 'Ouvrir',
-    'inprogress'          => 'En progrès',
-    'inprogress_tickets'  => 'ITickets en progrès',
-    'closed'              => 'Fermés',
-    'Departments'         => 'DEPARTEMENTS',
-    'tools'               => 'Outils',
-    'canned'              => 'En boîte',
-    'knowledge_base'      => 'Base de connaissances',
-    'kb-settings'         => 'Paramètres de la Base de connaissances',
-    'loading'             => 'Chargement',
-    'ratings'             => 'Avis',
-    'please_rate'         => 'Donnez un avis:',
-    'ticket_ratings'      => 'AVIS TICKET',
+    'agent_panel'             => 'Panneau Agent',
+    'profile'                 => 'Profil',
+    'change_password'         => 'Changer le mot de passe',
+    'sign_out'                => 'Déconnexion',
+    'Tickets'                 => 'TICKETS',
+    'ticket-details'          => 'Détails des tickets',
+    'inbox'                   => 'Boite de réception',
+    'my_tickets'              => 'Mes tickets',
+    'my_organization_tickets' => 'Les tickets de mon organisation',
+    'unassigned'              => 'Non assignés',
+    'trash'                   => 'Corbeille',
+    'Updates'                 => 'MAJ',
+    'no_new_updates'          => 'Pas de nouvelle MAJ',
+    'check_for_updates'       => 'Rechercher des MAJ',
+    'update-version'          => 'Version MAJ',
+    'open'                    => 'Ouvrir',
+    'inprogress'              => 'En progrès',
+    'inprogress_tickets'      => 'ITickets en progrès',
+    'closed'                  => 'Fermés',
+    'Departments'             => 'DEPARTEMENTS',
+    'tools'                   => 'Outils',
+    'canned'                  => 'En boîte',
+    'knowledge_base'          => 'Base de connaissances',
+    'kb-settings'             => 'Paramètres de la Base de connaissances',
+    'loading'                 => 'Chargement',
+    'ratings'                 => 'Avis',
+    'please_rate'             => 'Donnez un avis:',
+    'ticket_ratings'          => 'AVIS TICKET',
     /*
       |-----------------------------------------------
       |  Ticket
@@ -1514,7 +1515,7 @@ return [
      'change_password'                                              => 'Changer le mot de passe',
      'role_change'                                                  => 'Changer le rôle',
      'password_generator'                                           => 'Génerateur de mot de passe',
-     'depertment'                                                   => 'Département',
+     'department'                                                   => 'Département',
      'duetoday'                                                     => 'A faire aujourd\'hui',
      'today-due_tickets'                                            => 'Tickets a faire aujourd\'hui',
      'password_change_successfully'                                 => 'Mot de passe modifié avec succès',
@@ -1564,4 +1565,107 @@ return [
      //updated 15-5-2017
      'session-expired'     => 'Session expired or invalid, please try again.',
 
+      //update 1-2-2017
+     'system-outgoing-incoming-mail-not-configured' => 'You have not configured system mail. Faveo can\'t fetch tickets from mail or send mail to users without it.',
+     'confihure-the-mail-now'                       => 'Click here to configure the mail.',
+     'system-mail-not-configured-agent-message'     => 'System incoming and outgoing email settings are not configured. Please contct the admin.',
+
+      // arindam-14.2.2017
+     // sla
+     'min'   => 'Min',
+     'hours' => 'Hours',
+     'days'  => 'Days',
+     'months'=> 'Months',
+     'year'  => 'Year',
+// department change
+     'change_department'                    => 'Change Department',
+    'ticket_department_successfully_changed'=> 'Ticket Department Successfully Changed',
+    'select_another_department'             => 'Select another department',
+
+    // status
+    /**----------------------------------------------------------------
+     * Status
+     * ----------------------------------------------------------------
+     */
+    'client'                    => 'Client',
+    'send_email'                => 'Send Email',
+    'visibility_to_client'      => 'Visibility to Client',
+    'purpose_of_status'         => 'Purpose of Status',
+    'status_to_display'         => 'Status to Display',
+    'icon_color'                => 'Icon color',
+
+    /**--------------------------------------------------------------------------------------------
+     * Status
+     * --------------------------------------------------------------------------------------------
+     */
+    'visible_to_client'                                                                 => 'Visible to Client',
+    'icon'                                                                              => 'Icon',
+    'none'                                                                              => 'None',
+    'allow_client'                                                                      => 'Allow Client',
+    'if_yes_status_name_will_be_displayed'                                              => 'If yes status name will be displayed',
+    'if_yes_then_clients_can_choose_this_status'                                        => 'If yes then clients can choose this status',
+    'purpose_of_status_will_perform_the_action_to_be_applied_on_the_status_selection'   => 'Purpose of status will perform the action to be applied on the status selection',
+    'this_message_will_be_displayed_in_the_thread_as_internal_note'                     => 'This message will be displayed in the thread as Internal note',
+    'make_system_default_for_selected_purpose'                                          => 'Make system default for Selected Purpose',
+    'this_status_will_be_displayed_to_client_if_visibility_of_client_chosen_no'         => 'This status will be displayed to client if visibility of client chosen no',
+    'tick_who_all_to_send_notification'                                                 => 'Tick who all to send notification',
+    'Default'                                                                           => 'Default',
+    'unable_to_change_the_purpose_of_status_there_are_tickets_with_this_status'         => 'Unable to change the purpose of status. There are tickets with this status.',
+    'you_cannot_delete_a_default_ticket_status'                                         => 'You cannot delete a default Ticket Status',
+    'associated_tickets_moved_to_default_status'                                        => 'Associated tickets moved to default status',
+    'status_deleted_successfully'                                                       => 'Status Deleted Successfully',
+    'have_been_marked_as'                                                               => 'Tickets have been marked as ',
+    'have_been_deleted_forever'                                                         => 'Have been Deleted forever',
+    'related_tickets_moved_to_default_status'                                           => 'Related tickets moved to default status',
+
+    //updates 22-2-2017
+    'invalid-date-range' => 'Invalid date range',
+
+    //updates 14-4-2017
+    'notification.priority.update'  => 'Updated by :agent - Prority changed from :old to :new',
+    'notification.source.update'    => 'Updated by :agent - Source changed from :old to :new',
+    'notification.title.update'     => 'Updated by :agent - Title changed from :old to :new',
+    'notification.helptopic.update' => 'Updated by :agent - Help topic changed from :old to :new',
+    'notification.sla.update'       => 'Updated by :agent - Sla changed from :old to :new',
+    'notification.status.update'    => 'Updated by :agent - Status changed from :old to :new',
+    'notification.assign.update'    => 'Assigned by :agent - Ticket assigned to :new',
+    'notification.user.update'      => 'Ticket ownership changed by :agent - from :old to :new',
+    'notification.department.update'=> 'Updated by :agent - Department changed from :old to :new',
+    'created.ticket'                => 'A new ticket :subject has created',
+
+    'mode'                       => 'Mode',
+    'new_internal_activity_alert'=> 'New Internal Activity Alert',
+    'sms'                        => 'Sms',
+    'agent'                      => 'Agent',
+    'all_department_manager'     => 'All Department Manager',
+    'all_team_lead'              => 'All Team Lead',
+    'registration_notification'  => 'Registration Notification',
+    'reply_notification'         => 'Reply Notification',
+
+    'notification.update'       => ':model set to :new from :old',
+    'notification.update.inapp' => ':model set to :new from :old in <b>:ticket</b>',
+
+    'notification.assigned'      => 'Ticket has assigned to :new',
+    'notification.assigned.inapp'=> 'has assigned <b>:ticket</b> to :new',
+
+    'notification.assigned.myself'      => 'Ticket has assigned to himself',
+    'notification.assigned.myself.inapp'=> 'has assigned <b>:ticket</b> to himself',
+
+    'notification.duedate'      => 'Ticket :model on :new',
+    'notification.duedate.inapp'=> 'Ticket :model on :new',
+
+    'notification.note'      => 'New :model added - :new',
+    'notification.note.inapp'=> 'added new :model in <b>:ticket</b> - :new',
+
+    'agent_reply'                   => 'Agent Reply',
+    'client_reply'                  => 'Client Reply',
+    'new-user-register'             => 'registered',
+    'reply.notification'            => 'has replied in <b>:title</b>',
+    'custom-format'                 => 'Custom Format',
+    'assigned_agent'                => 'Assigned agent',
+    'in_app_system'                 => 'Notification',
+    'new_ticket_confirmation_alert' => 'New Ticket Confirmation',
+    'registration_verification'     => 'Registration Verififcation',
+    'client'                        => 'Client',
+    'sla_alert'                     => 'SLA Alert',
 ];

@@ -1,5 +1,10 @@
 <?php
-use Chumper\Zipper\Repositories\ZipRepository;
+
+namespace Chumper\Zipper\Repositories;
+
+use Exception;
+use Mockery;
+use ZipArchive;
 
 /**
  * Created by JetBrains PhpStorm.
@@ -8,10 +13,8 @@ use Chumper\Zipper\Repositories\ZipRepository;
  * Time: 20:57
  * To change this template use File | Settings | File Templates.
  */
-
-class ZipRepositoryTest extends PHPUnit_Framework_TestCase
+class ZipRepositoryTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var ZipRepository
      */
@@ -24,14 +27,33 @@ class ZipRepositoryTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->mock = Mockery::mock(new ZipArchive);
+        $this->mock = Mockery::mock(new ZipArchive());
         $this->zip = new ZipRepository('foo', true, $this->mock);
+    }
+
+    protected function tearDown()
+    {
+        Mockery::close();
     }
 
     public function testMake()
     {
         $zip = new ZipRepository('foo.zip', true);
         $this->assertFalse($zip->fileExists('foo'));
+    }
+
+    public function testOpenNonExistentZipThrowsException()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Error: Failed to open idonotexist.zip! Error: ZipArchive::ER_');
+        new ZipRepository('idonotexist.zip', false);
+    }
+
+    public function testOpenNonZipThrowsException()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageRegExp('/Error: Failed to open (.*)ZipRepositoryTest.php! Error: ZipArchive::ER_NOZIP - Not a zip archive./');
+        new ZipRepository(__DIR__.DIRECTORY_SEPARATOR.'ZipRepositoryTest.php', false);
     }
 
     public function testAddFile()
@@ -61,8 +83,8 @@ class ZipRepositoryTest extends PHPUnit_Framework_TestCase
         $this->mock->shouldReceive('getFromName')->once()
             ->with('foo/bar')->andReturn('baz');
 
-        $this->assertEquals('foo', $this->zip->getFileContent('bar'));
-        $this->assertEquals('baz', $this->zip->getFileContent('foo/bar'));
+        $this->assertSame('foo', $this->zip->getFileContent('bar'));
+        $this->assertSame('baz', $this->zip->getFileContent('foo/bar'));
     }
 
     public function testGetFileStream()
@@ -72,8 +94,8 @@ class ZipRepositoryTest extends PHPUnit_Framework_TestCase
         $this->mock->shouldReceive('getStream')->once()
             ->with('foo/bar')->andReturn('baz');
 
-        $this->assertEquals('foo', $this->zip->getFileStream('bar'));
-        $this->assertEquals('baz', $this->zip->getFileStream('foo/bar'));
+        $this->assertSame('foo', $this->zip->getFileStream('bar'));
+        $this->assertSame('baz', $this->zip->getFileStream('foo/bar'));
     }
 
     public function testFileExists()
@@ -91,11 +113,4 @@ class ZipRepositoryTest extends PHPUnit_Framework_TestCase
     {
         $this->zip->close();
     }
-
-    protected function tearDown()
-    {
-        Mockery::close();
-    }
-
-
 }

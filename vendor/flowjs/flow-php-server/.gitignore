@@ -1,0 +1,8 @@
+# Ide
+.idea
+
+# Composer
+composer.lock
+/vendor
+
+/build

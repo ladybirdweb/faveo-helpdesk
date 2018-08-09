@@ -8,31 +8,30 @@
  * file that was distributed with this source code.
  */
 
-/**
- * Utility class for textual type (and value) representation.
- *
- * @since Class available since Release 3.0.0
- */
-class PHPUnit_Util_Type
+namespace PHPUnit\Util;
+
+final class Type
 {
-    public static function isType($type)
+    public static function isType(string $type): bool
     {
-        return in_array(
-            $type,
-            array(
-            'numeric',
-            'integer',
-            'int',
-            'float',
-            'string',
-            'boolean',
-            'bool',
-            'null',
-            'array',
-            'object',
-            'resource',
-            'scalar'
-            )
-        );
+        switch ($type) {
+            case 'numeric':
+            case 'integer':
+            case 'int':
+            case 'iterable':
+            case 'float':
+            case 'string':
+            case 'boolean':
+            case 'bool':
+            case 'null':
+            case 'array':
+            case 'object':
+            case 'resource':
+            case 'scalar':
+                return true;
+
+            default:
+                return false;
+        }
     }
 }

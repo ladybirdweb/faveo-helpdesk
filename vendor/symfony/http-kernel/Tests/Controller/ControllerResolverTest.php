@@ -11,16 +11,16 @@
 
 namespace Symfony\Component\HttpKernel\Tests\Controller;
 
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
-use Symfony\Component\HttpKernel\Tests\Fixtures\Controller\VariadicController;
 use Symfony\Component\HttpFoundation\Request;
 
-class ControllerResolverTest extends \PHPUnit_Framework_TestCase
+class ControllerResolverTest extends TestCase
 {
     public function testGetControllerWithoutControllerParameter()
     {
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
         $logger->expects($this->once())->method('warning')->with('Unable to look for the controller as the "_controller" parameter is missing.');
         $resolver = $this->createControllerResolver($logger);
 
@@ -116,7 +116,12 @@ class ControllerResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetControllerOnNonUndefinedFunction($controller, $exceptionName = null, $exceptionMessage = null)
     {
         $resolver = $this->createControllerResolver();
-        $this->setExpectedException($exceptionName, $exceptionMessage);
+        if (method_exists($this, 'expectException')) {
+            $this->expectException($exceptionName);
+            $this->expectExceptionMessage($exceptionMessage);
+        } else {
+            $this->setExpectedException($exceptionName, $exceptionMessage);
+        }
 
         $request = Request::create('/');
         $request->attributes->set('_controller', $controller);
@@ -137,91 +142,6 @@ class ControllerResolverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetArguments()
-    {
-        $resolver = $this->createControllerResolver();
-
-        $request = Request::create('/');
-        $controller = array(new self(), 'testGetArguments');
-        $this->assertEquals(array(), $resolver->getArguments($request, $controller), '->getArguments() returns an empty array if the method takes no arguments');
-
-        $request = Request::create('/');
-        $request->attributes->set('foo', 'foo');
-        $controller = array(new self(), 'controllerMethod1');
-        $this->assertEquals(array('foo'), $resolver->getArguments($request, $controller), '->getArguments() returns an array of arguments for the controller method');
-
-        $request = Request::create('/');
-        $request->attributes->set('foo', 'foo');
-        $controller = array(new self(), 'controllerMethod2');
-        $this->assertEquals(array('foo', null), $resolver->getArguments($request, $controller), '->getArguments() uses default values if present');
-
-        $request->attributes->set('bar', 'bar');
-        $this->assertEquals(array('foo', 'bar'), $resolver->getArguments($request, $controller), '->getArguments() overrides default values if provided in the request attributes');
-
-        $request = Request::create('/');
-        $request->attributes->set('foo', 'foo');
-        $controller = function ($foo) {};
-        $this->assertEquals(array('foo'), $resolver->getArguments($request, $controller));
-
-        $request = Request::create('/');
-        $request->attributes->set('foo', 'foo');
-        $controller = function ($foo, $bar = 'bar') {};
-        $this->assertEquals(array('foo', 'bar'), $resolver->getArguments($request, $controller));
-
-        $request = Request::create('/');
-        $request->attributes->set('foo', 'foo');
-        $controller = new self();
-        $this->assertEquals(array('foo', null), $resolver->getArguments($request, $controller));
-        $request->attributes->set('bar', 'bar');
-        $this->assertEquals(array('foo', 'bar'), $resolver->getArguments($request, $controller));
-
-        $request = Request::create('/');
-        $request->attributes->set('foo', 'foo');
-        $request->attributes->set('foobar', 'foobar');
-        $controller = 'Symfony\Component\HttpKernel\Tests\Controller\some_controller_function';
-        $this->assertEquals(array('foo', 'foobar'), $resolver->getArguments($request, $controller));
-
-        $request = Request::create('/');
-        $request->attributes->set('foo', 'foo');
-        $request->attributes->set('foobar', 'foobar');
-        $controller = array(new self(), 'controllerMethod3');
-
-        try {
-            $resolver->getArguments($request, $controller);
-            $this->fail('->getArguments() throws a \RuntimeException exception if it cannot determine the argument value');
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('\RuntimeException', $e, '->getArguments() throws a \RuntimeException exception if it cannot determine the argument value');
-        }
-
-        $request = Request::create('/');
-        $controller = array(new self(), 'controllerMethod5');
-        $this->assertEquals(array($request), $resolver->getArguments($request, $controller), '->getArguments() injects the request');
-    }
-
-    /**
-     * @requires PHP 5.6
-     */
-    public function testGetVariadicArguments()
-    {
-        $resolver = new ControllerResolver();
-
-        $request = Request::create('/');
-        $request->attributes->set('foo', 'foo');
-        $request->attributes->set('bar', array('foo', 'bar'));
-        $controller = array(new VariadicController(), 'action');
-        $this->assertEquals(array('foo', 'foo', 'bar'), $resolver->getArguments($request, $controller));
-    }
-
-    public function testCreateControllerCanReturnAnyCallable()
-    {
-        $mock = $this->getMock('Symfony\Component\HttpKernel\Controller\ControllerResolver', array('createController'));
-        $mock->expects($this->once())->method('createController')->will($this->returnValue('Symfony\Component\HttpKernel\Tests\Controller\some_controller_function'));
-
-        $request = Request::create('/');
-        $request->attributes->set('_controller', 'foobar');
-        $mock->getController($request);
-    }
-
     protected function createControllerResolver(LoggerInterface $logger = null)
     {
         return new ControllerResolver($logger);
@@ -235,19 +155,7 @@ class ControllerResolverTest extends \PHPUnit_Framework_TestCase
     {
     }
 
-    protected function controllerMethod2($foo, $bar = null)
-    {
-    }
-
-    protected function controllerMethod3($foo, $bar, $foobar)
-    {
-    }
-
     protected static function controllerMethod4()
-    {
-    }
-
-    protected function controllerMethod5(Request $request)
     {
     }
 }

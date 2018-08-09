@@ -29,7 +29,7 @@ class LaravelGravatarServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app['gravatar'] = $this->app->share(function ($app) {
+        $this->app->singleton('gravatar', function ($app) {
             return new Gravatar($this->app['config']);
         });
     }

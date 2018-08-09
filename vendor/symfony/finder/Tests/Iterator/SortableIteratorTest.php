@@ -32,7 +32,7 @@ class SortableIteratorTest extends RealIteratorTestCase
     {
         if (!is_callable($mode)) {
             switch ($mode) {
-                case SortableIterator::SORT_BY_ACCESSED_TIME :
+                case SortableIterator::SORT_BY_ACCESSED_TIME:
                     if ('\\' === DIRECTORY_SEPARATOR) {
                         touch(self::toAbsolute('.git'));
                     } else {
@@ -41,12 +41,12 @@ class SortableIteratorTest extends RealIteratorTestCase
                     sleep(1);
                     file_get_contents(self::toAbsolute('.bar'));
                     break;
-                case SortableIterator::SORT_BY_CHANGED_TIME :
+                case SortableIterator::SORT_BY_CHANGED_TIME:
                     file_put_contents(self::toAbsolute('test.php'), 'foo');
                     sleep(1);
                     file_put_contents(self::toAbsolute('test.py'), 'foo');
                     break;
-                case SortableIterator::SORT_BY_MODIFIED_TIME :
+                case SortableIterator::SORT_BY_MODIFIED_TIME:
                     file_put_contents(self::toAbsolute('test.php'), 'foo');
                     sleep(1);
                     file_put_contents(self::toAbsolute('test.py'), 'foo');
@@ -58,9 +58,9 @@ class SortableIteratorTest extends RealIteratorTestCase
 
         $iterator = new SortableIterator($inner, $mode);
 
-        if ($mode === SortableIterator::SORT_BY_ACCESSED_TIME
-            || $mode === SortableIterator::SORT_BY_CHANGED_TIME
-            || $mode === SortableIterator::SORT_BY_MODIFIED_TIME
+        if (SortableIterator::SORT_BY_ACCESSED_TIME === $mode
+            || SortableIterator::SORT_BY_CHANGED_TIME === $mode
+            || SortableIterator::SORT_BY_MODIFIED_TIME === $mode
         ) {
             if ('\\' === DIRECTORY_SEPARATOR && SortableIterator::SORT_BY_MODIFIED_TIME !== $mode) {
                 $this->markTestSkipped('Sorting by atime or ctime is not supported on Windows');

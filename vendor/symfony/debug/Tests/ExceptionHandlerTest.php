@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Debug\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\Debug\Exception\OutOfMemoryException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -18,7 +19,7 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 require_once __DIR__.'/HeaderMock.php';
 
-class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
+class ExceptionHandlerTest extends TestCase
 {
     protected function setUp()
     {
@@ -38,8 +39,8 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
         $handler->sendPhpResponse(new \RuntimeException('Foo'));
         $response = ob_get_clean();
 
-        $this->assertContains('<h1>Whoops, looks like something went wrong.</h1>', $response);
-        $this->assertNotContains('<h2 class="block_exception clear_fix">', $response);
+        $this->assertContains('Whoops, looks like something went wrong.', $response);
+        $this->assertNotContains('<div class="trace trace-as-html">', $response);
 
         $handler = new ExceptionHandler(true);
 
@@ -47,8 +48,8 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
         $handler->sendPhpResponse(new \RuntimeException('Foo'));
         $response = ob_get_clean();
 
-        $this->assertContains('<h1>Whoops, looks like something went wrong.</h1>', $response);
-        $this->assertContains('<h2 class="block_exception clear_fix">', $response);
+        $this->assertContains('Whoops, looks like something went wrong.', $response);
+        $this->assertContains('<div class="trace trace-as-html">', $response);
     }
 
     public function testStatusCode()
@@ -93,14 +94,14 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
         $handler->sendPhpResponse(new \RuntimeException('Foo', 0, new \RuntimeException('Bar')));
         $response = ob_get_clean();
 
-        $this->assertStringMatchesFormat('%A<span class="exception_message">Foo</span>%A<span class="exception_message">Bar</span>%A', $response);
+        $this->assertStringMatchesFormat('%A<p class="break-long-words trace-message">Foo</p>%A<p class="break-long-words trace-message">Bar</p>%A', $response);
     }
 
     public function testHandle()
     {
         $exception = new \Exception('foo');
 
-        $handler = $this->getMock('Symfony\Component\Debug\ExceptionHandler', array('sendPhpResponse'));
+        $handler = $this->getMockBuilder('Symfony\Component\Debug\ExceptionHandler')->setMethods(array('sendPhpResponse'))->getMock();
         $handler
             ->expects($this->exactly(2))
             ->method('sendPhpResponse');
@@ -118,7 +119,7 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $exception = new OutOfMemoryException('foo', 0, E_ERROR, __FILE__, __LINE__);
 
-        $handler = $this->getMock('Symfony\Component\Debug\ExceptionHandler', array('sendPhpResponse'));
+        $handler = $this->getMockBuilder('Symfony\Component\Debug\ExceptionHandler')->setMethods(array('sendPhpResponse'))->getMock();
         $handler
             ->expects($this->once())
             ->method('sendPhpResponse');

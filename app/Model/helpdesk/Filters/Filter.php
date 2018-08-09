@@ -29,7 +29,7 @@ class Filter extends Model
 
     public function getTagsByTicketId($ticketid)
     {
-        $filter = $this->where('key', 'tag')->where('ticket_id', $ticketid)->lists('value')->toArray();
+        $filter = $this->where('key', 'tag')->where('ticket_id', $ticketid)->pluck('value')->toArray();
 
         return $filter;
     }

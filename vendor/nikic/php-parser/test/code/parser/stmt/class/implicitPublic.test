@@ -14,43 +14,53 @@ abstract class A {
 -----
 array(
     0: Stmt_Class(
-        type: 16
-        name: A
+        flags: MODIFIER_ABSTRACT (16)
+        name: Identifier(
+            name: A
+        )
         extends: null
         implements: array(
         )
         stmts: array(
             0: Stmt_Property(
-                type: 0
+                flags: 0
                 props: array(
                     0: Stmt_PropertyProperty(
-                        name: a
+                        name: VarLikeIdentifier(
+                            name: a
+                        )
                         default: null
                     )
                 )
             )
             1: Stmt_Property(
-                type: 8
+                flags: MODIFIER_STATIC (8)
                 props: array(
                     0: Stmt_PropertyProperty(
-                        name: b
+                        name: VarLikeIdentifier(
+                            name: b
+                        )
                         default: null
                     )
                 )
             )
             2: Stmt_ClassMethod(
-                type: 16
+                flags: MODIFIER_ABSTRACT (16)
                 byRef: false
-                name: c
+                name: Identifier(
+                    name: c
+                )
                 params: array(
                 )
                 returnType: null
                 stmts: null
             )
             3: Stmt_ClassMethod(
-                type: 32
+                flags: MODIFIER_FINAL (32)
                 byRef: false
-                name: d
+                name: Identifier(
+                    name: d
+                )
                 params: array(
                 )
                 returnType: null
@@ -58,9 +68,11 @@ array(
                 )
             )
             4: Stmt_ClassMethod(
-                type: 8
+                flags: MODIFIER_STATIC (8)
                 byRef: false
-                name: e
+                name: Identifier(
+                    name: e
+                )
                 params: array(
                 )
                 returnType: null
@@ -68,9 +80,11 @@ array(
                 )
             )
             5: Stmt_ClassMethod(
-                type: 40
+                flags: MODIFIER_STATIC | MODIFIER_FINAL (40)
                 byRef: false
-                name: f
+                name: Identifier(
+                    name: f
+                )
                 params: array(
                 )
                 returnType: null
@@ -78,9 +92,11 @@ array(
                 )
             )
             6: Stmt_ClassMethod(
-                type: 0
+                flags: 0
                 byRef: false
-                name: g
+                name: Identifier(
+                    name: g
+                )
                 params: array(
                 )
                 returnType: null

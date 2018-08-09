@@ -19,6 +19,8 @@ class JavascriptRenderer extends BaseJavascriptRenderer
 
         $this->cssFiles['laravel'] = __DIR__ . '/Resources/laravel-debugbar.css';
         $this->cssVendors['fontawesome'] = __DIR__ . '/Resources/vendor/font-awesome/style.css';
+        $this->jsFiles['laravel-sql'] = __DIR__ . '/Resources/sqlqueries/widget.js';
+        $this->jsFiles['laravel-cache'] = __DIR__ . '/Resources/cache/widget.js';
     }
 
     /**
@@ -43,7 +45,10 @@ class JavascriptRenderer extends BaseJavascriptRenderer
 
         $jsRoute = route('debugbar.assets.js', [
             'v' => $this->getModifiedTime('js')
-       ]);
+        ]);
+
+        $cssRoute = preg_replace('/\Ahttps?:/', '', $cssRoute);
+        $jsRoute  = preg_replace('/\Ahttps?:/', '', $jsRoute);
 
         $html  = "<link rel='stylesheet' type='text/css' property='stylesheet' href='{$cssRoute}'>";
         $html .= "<script type='text/javascript' src='{$jsRoute}'></script>";
@@ -52,9 +57,24 @@ class JavascriptRenderer extends BaseJavascriptRenderer
             $html .= '<script type="text/javascript">jQuery.noConflict(true);</script>' . "\n";
         }
 
+        $html .= $this->getInlineHtml();
+
+
         return $html;
     }
 
+    protected function getInlineHtml()
+    {
+        $html = '';
+
+        foreach (['head', 'css', 'js'] as $asset) {
+            foreach ($this->getAssets('inline_' . $asset) as $item) {
+                $html .= $item . "\n";
+            }
+        }
+
+        return $html;
+    }
     /**
      * Get the last modified time of any assets.
      *

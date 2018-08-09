@@ -9,6 +9,8 @@ use Aws\Api\StructureShape;
 use Aws\Api\TimestampShape;
 use Aws\CommandInterface;
 use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\Uri;
+use GuzzleHttp\Psr7\UriResolver;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -124,6 +126,15 @@ abstract class RestSerializer
         if ($member->getType() == 'timestamp') {
             $value = TimestampShape::format($value, 'rfc822');
         }
+        if ($member['jsonvalue']) {
+            $value = json_encode($value);
+            if (empty($value) && JSON_ERROR_NONE !== json_last_error()) {
+                throw new \InvalidArgumentException('Unable to encode the provided value'
+                    . ' with \'json_encode\'. ' . json_last_error_msg());
+            }
+
+            $value = base64_encode($value);
+        }
 
         $opts['headers'][$member['locationName'] ?: $name] = $value;
     }
@@ -149,7 +160,7 @@ abstract class RestSerializer
             if ($member->getType() === 'boolean') {
                 $value = $value ? 'true' : 'false';
             }
-            
+
             $opts['query'][$member['locationName'] ?: $name] = $value;
         }
     }
@@ -175,11 +186,13 @@ abstract class RestSerializer
                 $k = $isGreedy ? substr($matches[1], 0, -1) : $matches[1];
                 if (!isset($varspecs[$k])) {
                     return '';
-                } elseif ($isGreedy) {
-                    return str_replace('%2F', '/', rawurlencode($varspecs[$k]));
-                } else {
-                    return rawurlencode($varspecs[$k]);
                 }
+
+                if ($isGreedy) {
+                    return str_replace('%2F', '/', rawurlencode($varspecs[$k]));
+                }
+
+                return rawurlencode($varspecs[$k]);
             },
             $operation['http']['requestUri']
         );
@@ -192,6 +205,6 @@ abstract class RestSerializer
 
         // Expand path place holders using Amazon's slightly different URI
         // template syntax.
-        return Psr7\Uri::resolve($this->endpoint, $relative);
+        return UriResolver::resolve($this->endpoint, new Uri($relative));
     }
 }

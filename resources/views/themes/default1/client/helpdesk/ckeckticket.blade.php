@@ -93,13 +93,12 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                         <div class="row">
                             <div class="col-md-3"> 
                                 <?php
-                                $sla = $tickets->sla;
-                                $SlaPlan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', 1)->first();
+                                $SlaPlan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', $tickets->sla)->first();
                                 ?>
                                 <b>{!! Lang::get('lang.sla_plan') !!}: {{$SlaPlan->grace_period}} </b> 
                             </div>
                             <div class="col-md-3"> 
-                                <b>{!! Lang::get('lang.created_date') !!}: </b> {{ UTC::usertimezone($tickets->created_at) }}
+                                <b>{!! Lang::get('lang.created_date') !!}: </b> {{ faveoDate($tickets->created_at) }}
                             </div>
                             <div class="col-md-3"> 
                                 <b>{!! Lang::get('lang.due_date') !!}: </b> 
@@ -107,7 +106,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                                 $time = $tickets->created_at;
                                 $time = date_create($time);
                                 date_add($time, date_interval_create_from_date_string($SlaPlan->grace_period));
-                                echo UTC::usertimezone(date_format($time, 'd/m/Y H:i:s'));
+                                echo faveoDate(date_format($time, 'd/m/Y H:i:s'));
                                 ?>
                             </div>
                             <div class="col-md-3">
@@ -115,7 +114,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                                 @foreach($response as $last)
                                 <?php $ResponseDate = $last->created_at; ?>
                                 @endforeach
-                                <b>{!! Lang::get('lang.last_response') !!}: </b> {{ UTC::usertimezone($ResponseDate)}} 
+                                <b>{!! Lang::get('lang.last_response') !!}: </b> {{ faveoDate($ResponseDate)}} 
                             </div>
                         </div>
                     </div>
@@ -219,7 +218,7 @@ foreach ($conversations as $conversation) {
                     </div><!-- .comment-author -->
                     <div class="comment-metadata">
                         <small class="date text-muted">
-                            <time datetime="2013-10-23T01:50:50+00:00"><i class="fa fa-clock-o"> </i> {{ UTC::usertimezone($conversation->created_at) }}</time>
+                            <time datetime="2013-10-23T01:50:50+00:00"><i class="fa fa-clock-o"> </i> {{ faveoDate($conversation->created_at) }}</time>
                         </small>
                     </div><!-- .comment-metadata -->
                 </footer><!-- .comment-meta -->

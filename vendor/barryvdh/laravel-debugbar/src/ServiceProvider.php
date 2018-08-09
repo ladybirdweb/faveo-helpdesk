@@ -1,5 +1,10 @@
 <?php namespace Barryvdh\Debugbar;
 
+use Barryvdh\Debugbar\Middleware\DebugbarEnabled;
+use Barryvdh\Debugbar\Middleware\InjectDebugbar;
+use DebugBar\DataFormatter\DataFormatter;
+use DebugBar\DataFormatter\DataFormatterInterface;
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Routing\Router;
 use Illuminate\Session\SessionManager;
 
@@ -23,15 +28,15 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->mergeConfigFrom($configPath, 'debugbar');
 
         $this->app->alias(
-            'DebugBar\DataFormatter\DataFormatter',
-            'DebugBar\DataFormatter\DataFormatterInterface'
+            DataFormatter::class,
+            DataFormatterInterface::class
         );
 
-        $this->app->singleton('debugbar', function ($app) {
-                $debugbar = new LaravelDebugbar($app);
+        $this->app->singleton(LaravelDebugbar::class, function () {
+                $debugbar = new LaravelDebugbar($this->app);
 
-                if ($app->bound(SessionManager::class)) {
-                    $sessionManager = $app->make(SessionManager::class);
+                if ($this->app->bound(SessionManager::class)) {
+                    $sessionManager = $this->app->make(SessionManager::class);
                     $httpDriver = new SymfonyHttpDriver($sessionManager);
                     $debugbar->setHttpDriver($httpDriver);
                 }
@@ -40,9 +45,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             }
         );
 
-        $this->app->alias('debugbar', 'Barryvdh\Debugbar\LaravelDebugbar');
+        $this->app->alias(LaravelDebugbar::class, 'debugbar');
 
-        $this->app['command.debugbar.clear'] = $this->app->share(
+        $this->app->singleton('command.debugbar.clear',
             function ($app) {
                 return new Console\ClearCommand($app['debugbar']);
             }
@@ -58,25 +63,14 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function boot()
     {
-        $app = $this->app;
-
         $configPath = __DIR__ . '/../config/debugbar.php';
         $this->publishes([$configPath => $this->getConfigPath()], 'config');
-
-        // If enabled is null, set from the app.debug value
-        $enabled = $this->app['config']->get('debugbar.enabled');
-
-        if (is_null($enabled)) {
-            $enabled = $this->checkAppDebug();
-        }
-
-        if (! $enabled) {
-            return;
-        }
 
         $routeConfig = [
             'namespace' => 'Barryvdh\Debugbar\Controllers',
             'prefix' => $this->app['config']->get('debugbar.route_prefix'),
+            'domain' => $this->app['config']->get('debugbar.route_domain'),
+            'middleware' => [DebugbarEnabled::class],
         ];
 
         $this->getRouter()->group($routeConfig, function($router) {
@@ -99,18 +93,14 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 'uses' => 'AssetController@js',
                 'as' => 'debugbar.assets.js',
             ]);
+
+            $router->delete('cache/{key}/{tags?}', [
+                'uses' => 'CacheController@delete',
+                'as' => 'debugbar.cache.delete',
+            ]);
         });
 
-        if ($app->runningInConsole() || $app->environment('testing')) {
-            return;
-        }
-
-        /** @var LaravelDebugbar $debugbar */
-        $debugbar = $this->app['debugbar'];
-        $debugbar->enable();
-        $debugbar->boot();
-
-        $this->registerMiddleware('Barryvdh\Debugbar\Middleware\Debugbar');
+        $this->registerMiddleware(InjectDebugbar::class);
     }
 
     /**
@@ -150,16 +140,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function registerMiddleware($middleware)
     {
-        $kernel = $this->app['Illuminate\Contracts\Http\Kernel'];
+        $kernel = $this->app[Kernel::class];
         $kernel->pushMiddleware($middleware);
-    }
-
-    /**
-     * Check the App Debug status
-     */
-    protected function checkAppDebug()
-    {
-        return $this->app['config']->get('app.debug');
     }
 
     /**
@@ -169,6 +151,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function provides()
     {
-        return ['debugbar', 'command.debugbar.clear'];
+        return ['debugbar', 'command.debugbar.clear', DataFormatterInterface::class, LaravelDebugbar::class];
     }
 }

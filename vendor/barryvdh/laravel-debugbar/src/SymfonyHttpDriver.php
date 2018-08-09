@@ -11,8 +11,9 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 class SymfonyHttpDriver implements HttpDriverInterface
 {
-    /** @var \Symfony\Component\HttpFoundation\Session\Session */
+    /** @var \Illuminate\Contracts\Session\Session|\Illuminate\Session\SessionManager */
     protected $session;
+
     /** @var \Symfony\Component\HttpFoundation\Response */
     protected $response;
 
@@ -40,6 +41,7 @@ class SymfonyHttpDriver implements HttpDriverInterface
         if (!$this->session->isStarted()) {
             $this->session->start();
         }
+
         return $this->session->isStarted();
     }
 
@@ -48,7 +50,7 @@ class SymfonyHttpDriver implements HttpDriverInterface
      */
     public function setSessionValue($name, $value)
     {
-        $this->session->set($name, $value);
+        $this->session->put($name, $value);
     }
 
     /**

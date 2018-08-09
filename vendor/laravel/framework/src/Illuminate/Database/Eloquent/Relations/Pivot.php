@@ -2,6 +2,7 @@
 
 namespace Illuminate\Database\Eloquent\Relations;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -12,7 +13,7 @@ class Pivot extends Model
      *
      * @var \Illuminate\Database\Eloquent\Model
      */
-    protected $parent;
+    public $pivotParent;
 
     /**
      * The name of the foreign key column.
@@ -26,7 +27,7 @@ class Pivot extends Model
      *
      * @var string
      */
-    protected $otherKey;
+    protected $relatedKey;
 
     /**
      * The attributes that aren't mass assignable.
@@ -42,31 +43,30 @@ class Pivot extends Model
      * @param  array   $attributes
      * @param  string  $table
      * @param  bool    $exists
-     * @return void
+     * @return static
      */
-    public function __construct(Model $parent, $attributes, $table, $exists = false)
+    public static function fromAttributes(Model $parent, $attributes, $table, $exists = false)
     {
-        parent::__construct();
+        $instance = new static;
 
         // The pivot model is a "dynamic" model since we will set the tables dynamically
         // for the instance. This allows it work for any intermediate tables for the
         // many to many relationship that are defined by this developer's classes.
-        $this->setTable($table);
-
-        $this->setConnection($parent->getConnectionName());
-
-        $this->forceFill($attributes);
-
-        $this->syncOriginal();
+        $instance->setConnection($parent->getConnectionName())
+                ->setTable($table)
+                ->forceFill($attributes)
+                ->syncOriginal();
 
         // We store off the parent instance so we will access the timestamp column names
         // for the model, since the pivot model timestamps aren't easily configurable
         // from the developer's point of view. We can use the parents to get these.
-        $this->parent = $parent;
+        $instance->pivotParent = $parent;
 
-        $this->exists = $exists;
+        $instance->exists = $exists;
 
-        $this->timestamps = $this->hasTimestampAttributes();
+        $instance->timestamps = $instance->hasTimestampAttributes();
+
+        return $instance;
     }
 
     /**
@@ -80,7 +80,7 @@ class Pivot extends Model
      */
     public static function fromRawAttributes(Model $parent, $attributes, $table, $exists = false)
     {
-        $instance = new static($parent, $attributes, $table, $exists);
+        $instance = static::fromAttributes($parent, [], $table, $exists);
 
         $instance->setRawAttributes($attributes, true);
 
@@ -95,9 +95,17 @@ class Pivot extends Model
      */
     protected function setKeysForSaveQuery(Builder $query)
     {
-        $query->where($this->foreignKey, $this->getAttribute($this->foreignKey));
+        if (isset($this->attributes[$this->getKeyName()])) {
+            return parent::setKeysForSaveQuery($query);
+        }
 
-        return $query->where($this->otherKey, $this->getAttribute($this->otherKey));
+        $query->where($this->foreignKey, $this->getOriginal(
+            $this->foreignKey, $this->getAttribute($this->foreignKey)
+        ));
+
+        return $query->where($this->relatedKey, $this->getOriginal(
+            $this->relatedKey, $this->getAttribute($this->relatedKey)
+        ));
     }
 
     /**
@@ -107,6 +115,10 @@ class Pivot extends Model
      */
     public function delete()
     {
+        if (isset($this->attributes[$this->getKeyName()])) {
+            return parent::delete();
+        }
+
         return $this->getDeleteQuery()->delete();
     }
 
@@ -117,11 +129,26 @@ class Pivot extends Model
      */
     protected function getDeleteQuery()
     {
-        $foreign = $this->getAttribute($this->foreignKey);
+        return $this->newQuery()->where([
+            $this->foreignKey => $this->getOriginal($this->foreignKey, $this->getAttribute($this->foreignKey)),
+            $this->relatedKey => $this->getOriginal($this->relatedKey, $this->getAttribute($this->relatedKey)),
+        ]);
+    }
 
-        $query = $this->newQuery()->where($this->foreignKey, $foreign);
+    /**
+     * Get the table associated with the model.
+     *
+     * @return string
+     */
+    public function getTable()
+    {
+        if (! isset($this->table)) {
+            $this->setTable(str_replace(
+                '\\', '', Str::snake(Str::singular(class_basename($this)))
+            ));
+        }
 
-        return $query->where($this->otherKey, $this->getAttribute($this->otherKey));
+        return $this->table;
     }
 
     /**
@@ -135,27 +162,37 @@ class Pivot extends Model
     }
 
     /**
-     * Get the "other key" column name.
+     * Get the "related key" column name.
+     *
+     * @return string
+     */
+    public function getRelatedKey()
+    {
+        return $this->relatedKey;
+    }
+
+    /**
+     * Get the "related key" column name.
      *
      * @return string
      */
     public function getOtherKey()
     {
-        return $this->otherKey;
+        return $this->getRelatedKey();
     }
 
     /**
      * Set the key names for the pivot model instance.
      *
      * @param  string  $foreignKey
-     * @param  string  $otherKey
+     * @param  string  $relatedKey
      * @return $this
      */
-    public function setPivotKeys($foreignKey, $otherKey)
+    public function setPivotKeys($foreignKey, $relatedKey)
     {
         $this->foreignKey = $foreignKey;
 
-        $this->otherKey = $otherKey;
+        $this->relatedKey = $relatedKey;
 
         return $this;
     }
@@ -177,7 +214,7 @@ class Pivot extends Model
      */
     public function getCreatedAtColumn()
     {
-        return $this->parent->getCreatedAtColumn();
+        return $this->pivotParent->getCreatedAtColumn();
     }
 
     /**
@@ -187,6 +224,73 @@ class Pivot extends Model
      */
     public function getUpdatedAtColumn()
     {
-        return $this->parent->getUpdatedAtColumn();
+        return $this->pivotParent->getUpdatedAtColumn();
+    }
+
+    /**
+     * Get the queueable identity for the entity.
+     *
+     * @return mixed
+     */
+    public function getQueueableId()
+    {
+        if (isset($this->attributes[$this->getKeyName()])) {
+            return $this->getKey();
+        }
+
+        return sprintf(
+            '%s:%s:%s:%s',
+            $this->foreignKey, $this->getAttribute($this->foreignKey),
+            $this->relatedKey, $this->getAttribute($this->relatedKey)
+        );
+    }
+
+    /**
+     * Get a new query to restore one or more models by their queueable IDs.
+     *
+     * @param  array|int  $ids
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function newQueryForRestoration($ids)
+    {
+        if (is_array($ids)) {
+            return $this->newQueryForCollectionRestoration($ids);
+        }
+
+        if (! Str::contains($ids, ':')) {
+            return parent::newQueryForRestoration($ids);
+        }
+
+        $segments = explode(':', $ids);
+
+        return $this->newQueryWithoutScopes()
+                        ->where($segments[0], $segments[1])
+                        ->where($segments[2], $segments[3]);
+    }
+
+    /**
+     * Get a new query to restore multiple models by their queueable IDs.
+     *
+     * @param  array|int  $ids
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function newQueryForCollectionRestoration(array $ids)
+    {
+        if (! Str::contains($ids[0], ':')) {
+            return parent::newQueryForRestoration($ids);
+        }
+
+        $query = $this->newQueryWithoutScopes();
+
+        foreach ($ids as $id) {
+            $segments = explode(':', $id);
+
+            $query->orWhere(function ($query) use ($segments) {
+                return $query->where($segments[0], $segments[1])
+                             ->where($segments[2], $segments[3]);
+            });
+        }
+
+        return $query;
     }
 }

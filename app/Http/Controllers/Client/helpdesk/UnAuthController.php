@@ -15,10 +15,12 @@ use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Ticket\TicketToken;
 use App\User;
-use Hash;
+
 // classes
+use Hash;
 use Illuminate\Http\Request;
 use Lang;
+
 
 /**
  * GuestController.
@@ -328,16 +330,8 @@ class UnAuthController extends Controller
      */
     public static function changeLanguage($lang)
     {
-        //if(Cache::has('language'))
-        //{
-        //  return Cache::get('language');
-        //} else return 'false';
-        // Cache::put('language',$)
         $path = base_path('resources/lang');  // Path to check available language packages
         if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
-            // dd(array_key_exists($lang, Config::get('languages')));
-            // app()->setLocale($lang);
-
             \Cache::forever('language', $lang);
         // dd(Cache::get('language'));
             // dd()
@@ -405,6 +399,7 @@ class UnAuthController extends Controller
                 if ($current_time > $ck) {
                     $ticket->follow_up = 1;
                     $ticket->save();
+
                     //  Tickets::where('id', '=',$id)
              // ->update(['follow_up' => 1]);
 
