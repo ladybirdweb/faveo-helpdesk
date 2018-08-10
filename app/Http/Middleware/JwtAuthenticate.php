@@ -15,9 +15,10 @@ use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
 /**
  * Middleware to handle JWT Authentication for the API call which requires
- * a valid token
- * 
+ * a valid token.
+ *
  * @author Manish Verma <manish.verma@ladybirdweb.com>
+ *
  * @since  v1.10
  */
 class JwtAuthenticate extends BaseMiddleware
@@ -25,8 +26,8 @@ class JwtAuthenticate extends BaseMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request 
-     * @param \Closure                 $next 
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
      *
      * @throws \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException
      *
@@ -39,7 +40,6 @@ class JwtAuthenticate extends BaseMiddleware
 
             return $next($request);
         } catch (\Exception $e) {
-
             return response(
                 ['success' => false, 'message' => $e->getMessage()],
                 $e->getStatusCode()
