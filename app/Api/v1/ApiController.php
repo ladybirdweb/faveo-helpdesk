@@ -59,7 +59,7 @@ class ApiController extends Controller
     {
         $this->request = $request;
 
-        $this->middleware('jwt.auth');
+        $this->middleware('jwt.authOveride');
         $this->middleware('api', ['except' => 'GenerateApiKey']);
 
         try {
