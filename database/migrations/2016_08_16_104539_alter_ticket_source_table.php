@@ -14,7 +14,7 @@ class AlterTicketSourceTable extends Migration
     {
         if (!Schema::hasColumn('ticket_source', 'css_class')) {
             Schema::table(
-                'ticket_source', 
+                'ticket_source',
                 function (Blueprint $table) {
                     $table->string('css_class');
                 }

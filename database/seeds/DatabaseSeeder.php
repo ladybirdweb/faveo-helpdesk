@@ -271,7 +271,7 @@ class DatabaseSeeder extends Seeder
         Responder::create(['id' => '1', 'new_ticket' => '1', 'agent_new_ticket' => '1']);
         System::create(['id' => '1', 'status' => '1', 'department' => '1', 'date_time_format' => '1', 'time_zone' => '32']);
         Ticket::create(['num_format' => '$$$$-####-####', 'num_sequence' => 'sequence', 'collision_avoid' => '2', 'priority' => '1', 'sla' => '2', 'help_topic' => '1', 'status' => '1']);
-        
+
         /* Version check */
         Version_Check::create(['id' => '1']);
         /* System widgets */
