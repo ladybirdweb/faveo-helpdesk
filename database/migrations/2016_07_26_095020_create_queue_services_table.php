@@ -1,6 +1,5 @@
 <?php
 
-use App\Model\MailJob\QueueService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
