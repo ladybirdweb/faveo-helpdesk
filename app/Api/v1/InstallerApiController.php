@@ -98,7 +98,10 @@ class InstallerApiController extends Controller
                 $ENV['CACHE_DRIVER'] = 'file';
                 $ENV['SESSION_DRIVER'] = 'file';
                 $ENV['QUEUE_DRIVER'] = 'sync';
-
+                $ENV['JWT_TTL'] = 4;
+                $ENV['FCM_SERVER_KEY'] = 'AIzaSyCyx5OFnsRFUmDLTMbPV50ZMDUGSG-bLw4';
+                $ENV['FCM_SENDER_ID'] = '661051343223';
+                $ENV['REDIS_DATABASE'] = '0';
                 $config = '';
 
                 foreach ($ENV as $key => $val) {
@@ -168,7 +171,7 @@ class InstallerApiController extends Controller
             Artisan::call('migrate', ['--force' => true]);
             Artisan::call('db:seed', ['--force' => true]);
             Artisan::call('key:generate');
-
+            Artisan::call('jwt:secret');
             // checking requested timezone for the admin and system
             $timezones = Timezones::where('name', '=', $timezone)->first();
             if ($timezones == null) {

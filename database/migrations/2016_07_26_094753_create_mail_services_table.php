@@ -13,21 +13,15 @@ class CreateMailServicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('mail_services', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('short_name');
-            $table->timestamps();
-        });
-
-        $mail = new MailService();
-        $services = ['smtp'=>'SMTP', 'mail'=>'Php Mail', 'sendmail'=>'Send Mail', 'mailgun'=>'Mailgun', 'mandrill'=>'Mandrill', 'log'=>'Log file'];
-        foreach ($services as $key=>$value) {
-            $mail->create([
-            'name'      => $value,
-            'short_name'=> $key,
-        ]);
-        }
+        Schema::create(
+            'mail_services', 
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('name');
+                $table->string('short_name');
+                $table->timestamps();
+            }
+        );
     }
 
     /**

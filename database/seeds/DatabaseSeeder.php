@@ -20,7 +20,6 @@ use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Settings\Ticket;
 use App\Model\helpdesk\Theme\Widgets;
 use App\Model\helpdesk\Ticket\Ticket_Priority;
-use App\Model\helpdesk\Ticket\Ticket_source;
 use App\Model\helpdesk\Ticket\Ticket_Status;
 use App\Model\helpdesk\Utility\CountryCode;
 use App\Model\helpdesk\Utility\Date_format;
@@ -272,10 +271,7 @@ class DatabaseSeeder extends Seeder
         Responder::create(['id' => '1', 'new_ticket' => '1', 'agent_new_ticket' => '1']);
         System::create(['id' => '1', 'status' => '1', 'department' => '1', 'date_time_format' => '1', 'time_zone' => '32']);
         Ticket::create(['num_format' => '$$$$-####-####', 'num_sequence' => 'sequence', 'collision_avoid' => '2', 'priority' => '1', 'sla' => '2', 'help_topic' => '1', 'status' => '1']);
-        /* Ticket source */
-        Ticket_source::create(['name' => 'web', 'value' => 'Web']);
-        Ticket_source::create(['name' => 'email', 'value' => 'E-mail']);
-        Ticket_source::create(['name' => 'agent', 'value' => 'Agent Panel']);
+        
         /* Version check */
         Version_Check::create(['id' => '1']);
         /* System widgets */
@@ -2029,5 +2025,7 @@ class DatabaseSeeder extends Seeder
 
         Limit_Login::create(['id' => '1']);
         $this->call(UserSeeder::class);
+        $this->call(TicketSourceSeeder::class);
+        $this->call(OutboundMailSeeder::class);
     }
 }
