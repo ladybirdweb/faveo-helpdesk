@@ -253,10 +253,10 @@ class EmailsController extends Controller
 
         $this->emailService($driver, $service_request);
         $this->setMailConfig($driver, $address, $name, $username, $password, $enc, $host, $port);
-        $transport = \Swift_SmtpTransport::newInstance($host, $port, $enc);
+        $transport = (new \Swift_SmtpTransport($host, $port, $enc));
         $transport->setUsername($username);
         $transport->setPassword($password);
-        $mailer = \Swift_Mailer::newInstance($transport);
+        $mailer = (new \Swift_Mailer($transport));
         $mailer->getTransport()->start();
 
         return 1;
@@ -459,10 +459,13 @@ class EmailsController extends Controller
         $service = $request->input('fetching_protocol');
         $encryption = $request->input('fetching_encryption');
         $validate = $request->input('imap_validate');
-        $username = $request->input('user_name');
+        $username = $request->input('email_address');
         $password = $request->input('password');
         $server = new Fetch($host, $port, $service);
         //$server->setFlag('novalidate-cert');
+        if ($request->filled('user_name')) {
+            $username = $request->input('user_name');
+        }
         if ($encryption != '') {
             $server->setFlag($encryption);
         }
