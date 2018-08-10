@@ -374,7 +374,22 @@
 
                 <!-- Main content -->
                 <section class="content">
-
+                    @if (!$is_mail_conigured)
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="callout callout-warning lead">
+                                <h4><i class="fa fa-exclamation-triangle"></i>&nbsp;{{Lang::get('Alert')}}</h4>
+                                <p style="font-size:0.8em">
+                                @if (\Auth::user()->role == 'admin')
+                                    {{Lang::get('lang.system-outgoing-incoming-mail-not-configured')}}&nbsp;<a href="{{URL::route('emails.create')}}">{{Lang::get('lang.confihure-the-mail-now')}}</a>
+                                @else
+                                    {{Lang::get('lang.system-mail-not-configured-agent-message')}}
+                                @endif
+                                </p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                     @yield('content')
                 </section><!-- /.content -->
                 <!-- /.content-wrapper -->

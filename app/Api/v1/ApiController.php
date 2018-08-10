@@ -316,9 +316,9 @@ class ApiController extends Controller
                     ->groupby('tickets.id')
                     ->distinct()
                     ->paginate(10)
-                    ->toJson();
+                    ->toArray();
 
-            return $result;
+            return response($result);
         } catch (\Exception $e) {
             $error = $e->getMessage();
             $line = $e->getLine();
@@ -370,9 +370,9 @@ class ApiController extends Controller
                     ->groupby('tickets.id')
                     ->distinct()
                     ->paginate(10)
-                    ->toJson();
+                    ->toArray();
 
-            return $unassigned;
+            return response($unassigned);
         } catch (\Exception $e) {
             $error = $e->getMessage();
             $line = $e->getLine();
@@ -423,9 +423,9 @@ class ApiController extends Controller
                     ->groupby('tickets.id')
                     ->distinct()
                     ->paginate(10)
-                    ->toJson();
+                    ->toArray();
 
-            return $result;
+            return response($result);
         } catch (\Exception $e) {
             $error = $e->getMessage();
             $line = $e->getLine();
@@ -988,9 +988,8 @@ class ApiController extends Controller
                     ->groupby('tickets.id')
                     ->distinct()
                     ->paginate(10)
-                    ->toJson();
-
-            return $inbox;
+                    ->toArray();
+            return response($inbox);
         } catch (\Exception $ex) {
             $error = $ex->getMessage();
             $line = $ex->getLine();
@@ -1072,9 +1071,9 @@ class ApiController extends Controller
                     ->groupby('tickets.id')
                     ->distinct()
                     ->paginate(10)
-                    ->toJson();
+                    ->toArray();
 
-            return $trash;
+            return response($trash);
         } catch (\Exception $e) {
             $error = $e->getMessage();
             $line = $e->getLine();
@@ -1129,9 +1128,9 @@ class ApiController extends Controller
                     ->groupby('tickets.id')
                     ->distinct()
                     ->paginate(10)
-                    ->toJson();
+                    ->toArray();
 
-            return $result;
+            return response($result);
         } catch (\Exception $e) {
             $error = $e->getMessage();
             $line = $e->getLine();
