@@ -50,16 +50,16 @@ class AgentLayout
     {
         $notifications = \App\Http\Controllers\Common\NotificationController::getNotifications();
         $view->with([
-            'company'         => $this->company,
-            'notifications'   => $notifications,
-            'myticket'        => $this->myTicket(),
-            'unassigned'      => $this->unassigned(),
-            'followup_ticket' => $this->followupTicket(),
-            'deleted'         => $this->deleted(),
-            'tickets'         => $this->inbox(),
-            'department'      => $this->departments(),
-            'overdues'        => $this->overdues(),
-            'due_today'       => $this->getDueToday(),
+            'company'           => $this->company,
+            'notifications'     => $notifications,
+            'myticket'          => $this->myTicket(),
+            'unassigned'        => $this->unassigned(),
+            'followup_ticket'   => $this->followupTicket(),
+            'deleted'           => $this->deleted(),
+            'tickets'           => $this->inbox(),
+            'department'        => $this->departments(),
+            'overdues'          => $this->overdues(),
+            'due_today'         => $this->getDueToday(),
             'is_mail_conigured' => $this->getEmailConfig(),
         ]);
     }
@@ -201,7 +201,7 @@ class AgentLayout
     /**
      * @category function to check configured mails
      *
-     * @var $emails
+     * @var
      *
      * @return bool true/false
      */
