@@ -989,6 +989,7 @@ class ApiController extends Controller
                     ->distinct()
                     ->paginate(10)
                     ->toArray();
+
             return response($inbox);
         } catch (\Exception $ex) {
             $error = $ex->getMessage();
