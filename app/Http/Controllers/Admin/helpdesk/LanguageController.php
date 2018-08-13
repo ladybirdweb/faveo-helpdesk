@@ -89,9 +89,9 @@ class LanguageController extends Controller
         return \Datatable::collection(new Collection($values))
                         ->addColumn('language', function ($model) {
                             if ($model == Config::get('app.fallback_locale')) {
-                                return Config::get('languages.'.$model).' ('.Lang::get('lang.default').')';
+                                return Config::get('languages.'.$model)[1].' ('.Lang::get('lang.default').')';
                             } else {
-                                return Config::get('languages.'.$model);
+                                return Config::get('languages.'.$model)[1];
                             }
                         })
                         ->addColumn('id', function ($model) {
