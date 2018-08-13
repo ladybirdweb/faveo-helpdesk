@@ -90,7 +90,7 @@ class LanguageController extends Controller
                         ->addColumn('language', function ($model) {
                             $img_src = 'lb-faveo/flags/'.$model.'.png';
                             if ($model == Config::get('app.fallback_locale')) {
-                                return '<img src="'.asset($img_src).'"/>&nbsp;'.Config::get('languages.'.$model)[0].' ('.Lang::get('lang.default').')';
+                                return '<img src="'.asset($img_src).'"/>&nbsp;'.Config::get('languages.'.$model)[0].' ('.Lang::get('lang.default-fallback').')';
                             } else {
                                 return '<img src="'.asset($img_src).'"/>&nbsp;'.Config::get('languages.'.$model)[0];
                             }

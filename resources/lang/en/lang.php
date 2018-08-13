@@ -1592,4 +1592,20 @@ return [
      'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
      //updated 15-5-2017
      'session-expired'     => 'Session expired or invalid, please try again.',
+    
+    //update since v1.10
+    'your_helpdesk_is_ready'                            => 'Your Helpdesk is Ready!',
+    'all_right_sparky_you_have_made_it'                 => 'All right, sparky! You’ve made it through the installation.',
+    'next_step'                                         => 'Next Step',
+    'login_to_faveo'                                    => 'Login to Faveo',
+    'learn_more'                                        => 'Learn More',
+    'video_walk_through'                                => 'Video walk through',
+    'email_support'                                     => 'Email Support',
+    'not-answered'                                      => 'Not answered',
+    'default-fallback'                                  => 'Fallback language',
+    'system-language'                                   => 'System\'s default language',
+    'set_as_sys_lang'                                   => 'Make default',
+    'system-outgoing-incoming-mail-not-configured'      => 'You have not configured system mail. Faveo can\'t fetch tickets from mail or send mail to users without it.',
+    'confihure-the-mail-now'                            => 'Click here to configure the mail.',
+    'system-mail-not-configured-agent-message'          => 'System incoming and outgoing email settings are not configured. Please contct your system\'s admin and report the problem.',
 ];

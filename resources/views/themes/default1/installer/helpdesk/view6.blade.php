@@ -56,7 +56,7 @@ active
                 <ul>
                     <li class="video-walkthrough"><a target="_blank" href="https://www.youtube.com/channel/UC-eqh-h241b1janp6sU7Iiw">{!! Lang::get('lang.video_walk_through') !!}</a>
                     </li>
-                    <li class="sidekick"><a target="_blank" href="http://www.ladybirdweb.com/support/knowledgebase">{!! Lang::get('lang.knowledge_base') !!}</a>
+                    <li class="sidekick"><a target="_blank" href="https://www.support.faveohelpdesk.com/knowledgebase">{!! Lang::get('lang.knowledge_base') !!}</a>
                     </li>
 
                     <li class="newsletter"><a href="mailto:support@ladybirdweb.com">{!! Lang::get('lang.email_support') !!}</a>
@@ -71,5 +71,4 @@ active
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
     <script src="{{asset("lb-faveo/js/index.js")}}"></script>
-
   @stop
