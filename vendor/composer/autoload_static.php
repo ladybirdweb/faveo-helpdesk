@@ -686,6 +686,7 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         'AddForeignKeysToUserAssignOrganizationTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140454_add_foreign_keys_to_user_assign_organization_table.php',
         'AddForeignKeysToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140454_add_foreign_keys_to_users_table.php',
         'Adobe_Font_Metrics' => __DIR__ . '/..' . '/phenx/php-font-lib/classes/Adobe_Font_Metrics.php',
+        'AlterEmailsTableMakeUsernameColumnNullable' => __DIR__ . '/../..' . '/database/migrations/2018_08_13_075015_alter_emails_table_make_username_column_nullable.php',
         'AlterTicketSourceTable' => __DIR__ . '/../..' . '/database/migrations/2016_08_16_104539_alter_ticket_source_table.php',
         'AlterUsersTableAddUserLanguageColumn' => __DIR__ . '/../..' . '/database/migrations/2018_08_08_094653_alter_users_table_add_user_language_column.php',
         'Attribute_Translator' => __DIR__ . '/..' . '/dompdf/dompdf/include/attribute_translator.cls.php',
