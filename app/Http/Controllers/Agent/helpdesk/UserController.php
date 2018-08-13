@@ -614,12 +614,13 @@ class UserController extends Controller
     {
         try {
             $users = User::where('id', '=', $id)->first();
-            if (count($users) > 0) {
+            if ($users && $users->count() > 0) {
                 return view('themes.default1.agent.helpdesk.user.show', compact('users'));
             } else {
                 return redirect()->back()->with('fails', Lang::get('lang.user-not-found'));
             }
         } catch (Exception $e) {
+            dd($e);
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }
