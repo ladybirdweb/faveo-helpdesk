@@ -9,6 +9,6 @@ class ExampleTest extends TestCase
      */
     public function testBasicExample()
     {
-        $this->assertEquals(1, 55-54);
+        $this->assertEquals(1, 55 - 54);
     }
 }
