@@ -88,11 +88,11 @@ class LanguageController extends Controller
 
         return \Datatable::collection(new Collection($values))
                         ->addColumn('language', function ($model) {
-                            $img_src = 'lb-faveo/flags/' . $model . '.png';
+                            $img_src = 'lb-faveo/flags/'.$model.'.png';
                             if ($model == Config::get('app.fallback_locale')) {
-                                return '<img src="' . asset($img_src) . '"/>&nbsp;' . Config::get('languages.'.$model)[0].' ('.Lang::get('lang.default').')';
+                                return '<img src="'.asset($img_src).'"/>&nbsp;'.Config::get('languages.'.$model)[0].' ('.Lang::get('lang.default').')';
                             } else {
-                                return '<img src="' . asset($img_src) . '"/>&nbsp;' . Config::get('languages.'.$model)[0];
+                                return '<img src="'.asset($img_src).'"/>&nbsp;'.Config::get('languages.'.$model)[0];
                             }
                         })
                         ->addColumn('name', function ($model) {
