@@ -1,5 +1,6 @@
 # Please try and keep this file organized by alphabetical order. Single files first, then directories.
 .env
+.phpunit.result.cache
 Homestead.yaml
 Homestead.json
 /config/lfm.php
