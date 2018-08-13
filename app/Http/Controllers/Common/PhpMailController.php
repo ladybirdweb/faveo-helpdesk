@@ -19,12 +19,11 @@ class PhpMailController extends Controller
     /**
      *@var variable to instantiate common mailer class
      */
-    
     public function __construct()
     {
-        $this->commonMailer = new CommonMailer;
+        $this->commonMailer = new CommonMailer();
     }
-    
+
     public function fetch_smtp_details($id)
     {
         $emails = Emails::where('id', '=', $id)->first();
