@@ -1605,6 +1605,8 @@ return [
     'default-fallback'                                  => 'Fallback language',
     'system-language'                                   => 'System\'s default language',
     'set_as_sys_lang'                                   => 'Make default',
+    'filtered-results'                                  => 'Filtered results',
+    'methon_not_allowed'                                => 'Method not allowed',
     'system-outgoing-incoming-mail-not-configured'      => 'You have not configured system mail. Faveo can\'t fetch tickets from mail or send mail to users without it.',
     'confihure-the-mail-now'                            => 'Click here to configure the mail.',
     'system-mail-not-configured-agent-message'          => 'System incoming and outgoing email settings are not configured. Please contct your system\'s admin and report the problem.',
