@@ -1592,7 +1592,7 @@ return [
      'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
      //updated 15-5-2017
      'session-expired'     => 'Session expired or invalid, please try again.',
-    
+
     //update since v1.10
     'your_helpdesk_is_ready'                            => 'Your Helpdesk is Ready!',
     'all_right_sparky_you_have_made_it'                 => 'All right, sparky! You’ve made it through the installation.',
