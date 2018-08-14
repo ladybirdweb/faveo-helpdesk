@@ -124,6 +124,7 @@ class Handler extends ExceptionHandler
             if ($e instanceof ValidationException) {
                 return $this->invalidJson($request, $e);
             }
+
             return response()->json(['error' => $e->getMessage()], 500);
         }
         if (config('app.debug') == true) {
