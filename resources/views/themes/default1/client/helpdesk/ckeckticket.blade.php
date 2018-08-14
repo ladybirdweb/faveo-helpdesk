@@ -225,42 +225,25 @@ foreach ($conversations as $conversation) {
                 </footer><!-- .comment-meta -->
                 <div class="comment-content">
                    @if($conversation->firstContent()=='yes')
-                                             <div class="embed-responsive embed-responsive-16by9">
-                                            <iframe id="loader_frame{{$conversation->id}}" class="embed-responsive-item">Body of html email here</iframe>
-<script type="text/javascript">
-jQuery(document).ready(function () {
-/*          setInterval(function(){
-            var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
-            var h     = mydiv.height();
-alert(h+20);
-            }, 2000);*/
-                jQuery('.embed-responsive-16by9').css('height','auto');
-            jQuery('.embed-responsive-16by9').css('padding','0');
-            jQuery('#loader_frame{{$conversation->id}}').css('width','100%');
-            jQuery('#loader_frame{{$conversation->id}}').css('position','static');
-            jQuery('#loader_frame{{$conversation->id}}').css('border','none');
-            var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
-            var h     = mydiv.height();
-            jQuery('#loader_frame{{$conversation->id}}').css('height', h+20);
-            setInterval(function(){
-            //var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
-            //alert(mydiv.height());
-                h = jQuery('#loader_frame{{$conversation->id}}').height();
-                if (!!navigator.userAgent.match(/Trident\/7\./)){
-                    jQuery('#loader_frame{{$conversation->id}}').css('height', h);
-                }else {
-                    jQuery('#loader_frame{{$conversation->id}}').css('height', h);
-                }
-            }, 2000);
-        });
-</script>
-                                            </div>
+                                        <div class="embed-responsive{{$conversation->id}} embed-responsive-16by9 "></div>
                                             <script>
-                                                 setTimeout(function(){ 
-                                                       $('#loader_frame{{$conversation->id}}')[0].contentDocument.body.innerHTML = '<body><style>body{display:inline-block;}</style>{!!$conversation->purify()!!}<body>';   }, 1000);
-                                                
-                                            </script>
-                                            @else 
+                                            setTimeout(function(){
+                                                var $iframe="Id{{$conversation->id}}";
+                                                $('<iframe src="javascript:void(0)" id='+$iframe+' class="iframe" frameborder="0"  scrolling="no" width="100%" style="height:1px"></iframe>').appendTo(".embed-responsive{{$conversation->id}}");
+                                                setTimeout(function(){
+                                                  $('#'+$iframe).contents().find('body').append('<body><style>body{display:inline-block;}</style>{!!$conversation->purify(true)!!}<body>');
+                                                   },100)
+                                                setTimeout(function(){
+                                                    var frameid=document.getElementById($iframe);
+                                                    if(parseInt($("#"+$iframe).contents().find('img').css('width'))>700){
+                                                        $("#"+$iframe).contents().find('img').css('width','96%');
+                                                    }
+                                                    frameid.contentWindow.document.body.style.width="100%";      
+                                                    var iframe_height=frameid.contentWindow.document.body.scrollHeight;
+                                                    frameid.style.height=iframe_height+"px";
+                                                }, 1000);
+                                            }, 0);
+                                            </script>                                            @else 
                                             {!! $conversation->body !!}
                                             @endif
                                             
