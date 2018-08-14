@@ -50,7 +50,7 @@
         
         <div class="alert  alert-dismissable" style="background: #F3F3F3">
             <i class="fa  fa-info-circle"></i>&nbsp;{!!Lang::get('lang.crone-url-message')!!}
-            <a href="http://ladybirdweb.com/support/show/cron-job-scheduling" style="color:black" target="blank">{!!Lang::get('lang.click')!!}</a> {!!Lang::get('lang.check-cron-set')!!}
+            <a href="https://www.support.faveohelpdesk.com/show/cron-job-scheduling" style="color:black" target="blank">{!!Lang::get('lang.click')!!}</a> {!!Lang::get('lang.check-cron-set')!!}
         </div>
         <div class="col-md-6">
             <div class="info-box">

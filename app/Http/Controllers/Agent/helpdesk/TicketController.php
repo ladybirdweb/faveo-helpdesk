@@ -242,11 +242,11 @@ class TicketController extends Controller
 
     public function size()
     {
+        $size = 0;
         $files = Input::file('attachment');
         if (!$files) {
-            throw new \Exception('file size exceeded');
+            return $size;
         }
-        $size = 0;
         if (count($files) > 0) {
             foreach ($files as $file) {
                 $size += $file->getSize();

@@ -305,12 +305,16 @@ var filterClick = 0;
             $('#assign-form').on('submit', function() {
                 var t_id = "";
                 $("input[name='select_all[]']:checked:enabled").each(function() {
-                    t_id = $(this).val() + "," + t_id;
+                    if(t_id == "") {
+                        t_id = $(this).val();
+                    } else {
+                        t_id = $(this).val() + "," + t_id;
+                    }
                 });
                 //var t_id = $("input[name='select_all[]']").val();
                 $.ajax({
                     type: "PATCH",
-                    url: "{{url('ticket/assign')}}",
+                    url: "{{url('ticket/assign')}}/"+t_id,
                     dataType: "html",
                     data: $(this).serialize() + '&ticket_id=' + t_id,
                     beforeSend: function() {
