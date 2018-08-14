@@ -4,7 +4,6 @@ namespace App\Exceptions;
 
 // controller
 use Bugsnag;
-//use Illuminate\Validation\ValidationException;
 use Bugsnag\BugsnagLaravel\BugsnagExceptionHandler as ExceptionHandler;
 use Config;
 use Exception;
@@ -77,7 +76,7 @@ class Handler extends ExceptionHandler
      */
     protected function invalidJson($request, ValidationException $exception)
     {
-        return response()->json($exception->errors(), $exception->status);
+        return response()->json(['success' => false, 'errors' => $exception->errors()], $exception->status);
     }
 
     /**
@@ -120,9 +119,16 @@ class Handler extends ExceptionHandler
      */
     public function render500($request, $e)
     {
+        $seg = $request->segments();
+        if (in_array('api', $seg)) {
+            if ($e instanceof ValidationException) {
+                return $this->invalidJson($request, $e);
+            }
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
         if (config('app.debug') == true) {
             return parent::render($request, $e);
-        } elseif ($e instanceof foundation) {
+        } elseif ($e instanceof ValidationException) {
             return parent::render($request, $e);
         } elseif ($e instanceof \Illuminate\Validation\ValidationException) {
             return parent::render($request, $e);
@@ -144,7 +150,7 @@ class Handler extends ExceptionHandler
     {
         $seg = $request->segments();
         if (in_array('api', $seg)) {
-            return response()->json(['success' => false, 'message' => trans('lang.invalid_attempt')], 404);
+            return response()->json(['success' => false, 'message' => 'not-found'], 404);
         }
         if (config('app.debug') == true) {
             if ($e->getStatusCode() == '404') {
