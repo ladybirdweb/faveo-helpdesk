@@ -1727,6 +1727,8 @@ class TicketController extends Controller
                     $this->delete($delete, new Tickets());
                 } elseif ($value == 'Close') {
                     $this->close($delete, new Tickets());
+                } elseif ($value == 'Resolve') {
+                    $this->resolve($delete, new Tickets());
                 } elseif ($value == 'Open') {
                     $this->open($delete, new Tickets());
                 } elseif ($value == 'Delete forever') {

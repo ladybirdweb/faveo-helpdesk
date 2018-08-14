@@ -64,13 +64,16 @@ var filterClick = 0;
                     $("#myModal").css("display", "none");
                 } else {
                     $("#myModal").css("display", "none");
-                    if (c_status != 'hard-delete'){
-                        var url = '{{url("ticket/change-status/")}}/' + values + '/' + c_status;
+                    if (c_status != 'hard-delete') {
+                        var url = '{{url("select_all")}}/';
                         $.ajax({
-                            type: "GET",
-                            url: url,
+                            type: "POST",
+                            url: "{{url('select_all')}}",
                             dataType: "html",
-                            data: $(this).serialize(),
+                            data: {
+                                "submit": c_status,
+                                "select_all": values 
+                            },
                             beforeSend: function() {
                                 $('.loader1').css('display','block');
                                 $('.loader').css('display','block');
@@ -122,17 +125,24 @@ var filterClick = 0;
             function changeStatus(id, name) {
                 $('#myModalLabel').html('{{Lang::get("lang.change-ticket-status-to")}}' + name);
                 var msg = "{{Lang::get('lang.confirm-to-proceed')}}";
-                    var values = getValues();
-                    if (values == "") {
-            msg = "{{Lang::get('lang.select-ticket')}}";
+                var values = getValues();
+                if (values == "") {
+                    msg = "{{Lang::get('lang.select-ticket')}}";
                     $('.yes').html("{{Lang::get('lang.ok')}}");
                     $('#myModalLabel').html("{{Lang::get('lang.alert')}}");
-            } else {
-            c_status = id;
+                } else {
+                    c_status = "Open";
+                    if(id == 2){
+                        c_status = "Resolve";
+                    } else if (id == 3) {
+                        c_status = "Close";
+                    } else if(id == 5) {
+                        c_status = "Delete";
+                    }
                     $('.yes').html("Yes");
-            }
-            $('#custom-alert-body').html(msg);
-                    $("#myModal").css("display", "block");
+                }
+                $('#custom-alert-body').html(msg);
+                $("#myModal").css("display", "block");
             }
 
             $('#modalpopup').on('submit', function(e){
