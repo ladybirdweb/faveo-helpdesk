@@ -102,11 +102,10 @@ class PasswordController extends Controller
     {
         $this->validate(
             $request,
-            $this->getResetValidationRules(),
-            $this->getResetValidationMessages(),
-            $this->getResetValidationCustomAttributes()
+            $this->rules(),
+            $this->validationErrorMessages()
         );
-        $credentials = $this->getResetCredentials($request);
+        $credentials = $this->credentials($request);
         // dd($credentials);
         $email = $credentials['email'];
         $password = $credentials['password'];

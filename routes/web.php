@@ -15,6 +15,7 @@ Route::group(['middleware' => ['web']], function () {
         Auth::routes();
         Route::post('login', ['uses' => 'Auth\AuthController@postLogin', 'as' => 'post.login']);
         Route::post('auth/register', ['uses' => 'Auth\AuthController@postRegister', 'as' => 'post.register']);
+        Route::post('password/reset', ['uses' => 'Auth\PasswordController@reset', 'as' => 'post.reset']);
         Route::get('auth/logout', ['uses' => 'Auth\AuthController@getLogout', 'as' => 'get.logout']);
         Route::get('social/login/redirect/{provider}/{redirect?}', ['uses' => 'Auth\AuthController@redirectToProvider', 'as' => 'social.login']);
         Route::get('social/login/{provider}', ['as'=>'social.login.callback', 'uses'=>'Auth\AuthController@handleProviderCallback']);
