@@ -76,6 +76,12 @@ abstract class AbstractLocation implements HeaderInterface
                     $e->getCode(),
                     $e
                 );
+            } catch (UriException\InvalidArgumentException $e) {
+                throw new Exception\InvalidArgumentException(
+                    sprintf('Invalid URI passed as string (%s)', (string) $uri),
+                    $e->getCode(),
+                    $e
+                );
             }
         } elseif (! ($uri instanceof UriInterface)) {
             throw new Exception\InvalidArgumentException('URI must be an instance of Zend\Uri\Http or a string');

@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.8.2 - 2018-08-13
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- [#153](https://github.com/zendframework/zend-diactoros/pull/153) changes the reason phrase associated with the status code 425
+  from "Unordered Collection" to "Too Early", corresponding to a new definition
+  of the code as specified by the IANA.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#151](https://github.com/zendframework/zend-http/pull/151) fixes how Referer and other location-based headers report problems with
+  invalid URLs provided in the header value, raising a `Zend\Http\Exception\InvalidArgumentException`
+  in such cases. This change ensures the behavior is consistent with behavior
+  prior to the 2.8.0 release.
+
 ## 2.8.1 - 2018-08-01
 
 ### Added

@@ -156,9 +156,8 @@ class Proxy extends Socket
         // Build request headers
         if ($this->negotiated) {
             $path = $uri->getPath();
-            if ($uri->getQuery()) {
-                $path .= '?' . $uri->getQuery();
-            }
+            $query = $uri->getQuery();
+            $path .= $query ? '?' . $query : '';
             $request = sprintf('%s %s HTTP/%s%s', $method, $path, $httpVer, "\r\n");
         } else {
             $request = sprintf('%s %s HTTP/%s%s', $method, $uri, $httpVer, "\r\n");

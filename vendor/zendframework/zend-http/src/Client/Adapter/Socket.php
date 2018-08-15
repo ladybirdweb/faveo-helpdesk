@@ -376,9 +376,8 @@ class Socket implements HttpAdapter, StreamInterface
 
         // Build request headers
         $path = $uri->getPath();
-        if ($uri->getQuery()) {
-            $path .= '?' . $uri->getQuery();
-        }
+        $query = $uri->getQuery();
+        $path .= $query ? '?' . $query : '';
         $request = $method . ' ' . $path . ' HTTP/' . $httpVer . "\r\n";
         foreach ($headers as $k => $v) {
             if (is_string($k)) {

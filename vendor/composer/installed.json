@@ -1,17 +1,17 @@
 [
     {
         "name": "aws/aws-sdk-php",
-        "version": "3.64.5",
-        "version_normalized": "3.64.5.0",
+        "version": "3.64.12",
+        "version_normalized": "3.64.12.0",
         "source": {
             "type": "git",
             "url": "https://github.com/aws/aws-sdk-php.git",
-            "reference": "c1292388910063803cfd7aa73d48ad4df42a526c"
+            "reference": "1006a0bfacb1e1cd69cee92f53a80143cd59dd5e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c1292388910063803cfd7aa73d48ad4df42a526c",
-            "reference": "c1292388910063803cfd7aa73d48ad4df42a526c",
+            "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/1006a0bfacb1e1cd69cee92f53a80143cd59dd5e",
+            "reference": "1006a0bfacb1e1cd69cee92f53a80143cd59dd5e",
             "shasum": ""
         },
         "require": {
@@ -42,7 +42,7 @@
             "ext-curl": "To send requests using cURL",
             "ext-openssl": "Allows working with CloudFront private distributions and verifying received SNS messages"
         },
-        "time": "2018-08-03T18:10:54+00:00",
+        "time": "2018-08-14T22:18:41+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1978,17 +1978,17 @@
     },
     {
         "name": "laravel/dusk",
-        "version": "v3.0.9",
-        "version_normalized": "3.0.9.0",
+        "version": "v3.0.10",
+        "version_normalized": "3.0.10.0",
         "source": {
             "type": "git",
             "url": "https://github.com/laravel/dusk.git",
-            "reference": "48215ab0028d759e5fd7cc8989f4b6c58050841d"
+            "reference": "8bfb9f01ae09d1d9ca3ce53e36b1f020c0f8dc8f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/laravel/dusk/zipball/48215ab0028d759e5fd7cc8989f4b6c58050841d",
-            "reference": "48215ab0028d759e5fd7cc8989f4b6c58050841d",
+            "url": "https://api.github.com/repos/laravel/dusk/zipball/8bfb9f01ae09d1d9ca3ce53e36b1f020c0f8dc8f",
+            "reference": "8bfb9f01ae09d1d9ca3ce53e36b1f020c0f8dc8f",
             "shasum": ""
         },
         "require": {
@@ -2004,7 +2004,7 @@
             "mockery/mockery": "~1.0",
             "phpunit/phpunit": "~7.0"
         },
-        "time": "2018-06-20T13:47:27+00:00",
+        "time": "2018-08-06T20:22:46+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2041,17 +2041,17 @@
     },
     {
         "name": "laravel/framework",
-        "version": "v5.6.29",
-        "version_normalized": "5.6.29.0",
+        "version": "v5.6.33",
+        "version_normalized": "5.6.33.0",
         "source": {
             "type": "git",
             "url": "https://github.com/laravel/framework.git",
-            "reference": "acc6b5c54ab196d3358f60acc5f55d9ebaaccc02"
+            "reference": "8a708b989adc320c451ee639d812af81f884666b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/laravel/framework/zipball/acc6b5c54ab196d3358f60acc5f55d9ebaaccc02",
-            "reference": "acc6b5c54ab196d3358f60acc5f55d9ebaaccc02",
+            "url": "https://api.github.com/repos/laravel/framework/zipball/8a708b989adc320c451ee639d812af81f884666b",
+            "reference": "8a708b989adc320c451ee639d812af81f884666b",
             "shasum": ""
         },
         "require": {
@@ -2146,7 +2146,7 @@
             "symfony/dom-crawler": "Required to use most of the crawler integration testing tools (~4.0).",
             "symfony/psr-http-message-bridge": "Required to psr7 bridging features (~1.0)."
         },
-        "time": "2018-07-26T16:01:26+00:00",
+        "time": "2018-08-09T20:36:39+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2308,17 +2308,17 @@
     },
     {
         "name": "lcobucci/jwt",
-        "version": "3.2.3",
-        "version_normalized": "3.2.3.0",
+        "version": "3.2.4",
+        "version_normalized": "3.2.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/lcobucci/jwt.git",
-            "reference": "01da822b3c2982ca9f2a1234f802a3ec001527ec"
+            "reference": "c9704b751315d21735dc98d78d4f37bd73596da7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/lcobucci/jwt/zipball/01da822b3c2982ca9f2a1234f802a3ec001527ec",
-            "reference": "01da822b3c2982ca9f2a1234f802a3ec001527ec",
+            "url": "https://api.github.com/repos/lcobucci/jwt/zipball/c9704b751315d21735dc98d78d4f37bd73596da7",
+            "reference": "c9704b751315d21735dc98d78d4f37bd73596da7",
             "shasum": ""
         },
         "require": {
@@ -2336,7 +2336,7 @@
         "suggest": {
             "mdanter/ecc": "Required to use Elliptic Curves based algorithms."
         },
-        "time": "2018-07-29T14:38:43+00:00",
+        "time": "2018-08-03T11:23:50+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -3116,17 +3116,17 @@
     },
     {
         "name": "nicolaslopezj/searchable",
-        "version": "1.10.2",
-        "version_normalized": "1.10.2.0",
+        "version": "1.10.3",
+        "version_normalized": "1.10.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/nicolaslopezj/searchable.git",
-            "reference": "ca3630ec2786368d96b484562b42ca6c6b0a2586"
+            "reference": "cfd888bbe7b57fa52d81037bb73ef3d689683b22"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/nicolaslopezj/searchable/zipball/ca3630ec2786368d96b484562b42ca6c6b0a2586",
-            "reference": "ca3630ec2786368d96b484562b42ca6c6b0a2586",
+            "url": "https://api.github.com/repos/nicolaslopezj/searchable/zipball/cfd888bbe7b57fa52d81037bb73ef3d689683b22",
+            "reference": "cfd888bbe7b57fa52d81037bb73ef3d689683b22",
             "shasum": ""
         },
         "require": {
@@ -3134,7 +3134,7 @@
             "illuminate/database": "4.2.x|~5.0",
             "php": ">=5.4.0"
         },
-        "time": "2018-07-09T14:25:04+00:00",
+        "time": "2018-08-10T16:07:36+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -4071,17 +4071,17 @@
     },
     {
         "name": "phpunit/phpunit",
-        "version": "7.3.0",
-        "version_normalized": "7.3.0.0",
+        "version": "7.3.1",
+        "version_normalized": "7.3.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/sebastianbergmann/phpunit.git",
-            "reference": "0b6b29faf95c03fd7867e866438b78d5692b6f03"
+            "reference": "f9b14c17860eccb440a0352a117a81eb754cff5a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0b6b29faf95c03fd7867e866438b78d5692b6f03",
-            "reference": "0b6b29faf95c03fd7867e866438b78d5692b6f03",
+            "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/f9b14c17860eccb440a0352a117a81eb754cff5a",
+            "reference": "f9b14c17860eccb440a0352a117a81eb754cff5a",
             "shasum": ""
         },
         "require": {
@@ -4120,7 +4120,7 @@
             "ext-xdebug": "*",
             "phpunit/php-invoker": "^2.0"
         },
-        "time": "2018-08-03T06:02:45+00:00",
+        "time": "2018-08-07T06:44:28+00:00",
         "bin": [
             "phpunit"
         ],
@@ -5887,27 +5887,30 @@
     },
     {
         "name": "symfony/polyfill-ctype",
-        "version": "v1.8.0",
-        "version_normalized": "1.8.0.0",
+        "version": "v1.9.0",
+        "version_normalized": "1.9.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-ctype.git",
-            "reference": "7cc359f1b7b80fc25ed7796be7d96adc9b354bae"
+            "reference": "e3d826245268269cd66f8326bd8bc066687b4a19"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/7cc359f1b7b80fc25ed7796be7d96adc9b354bae",
-            "reference": "7cc359f1b7b80fc25ed7796be7d96adc9b354bae",
+            "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/e3d826245268269cd66f8326bd8bc066687b4a19",
+            "reference": "e3d826245268269cd66f8326bd8bc066687b4a19",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.3"
         },
-        "time": "2018-04-30T19:57:29+00:00",
+        "suggest": {
+            "ext-ctype": "For best performance"
+        },
+        "time": "2018-08-06T14:22:27+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.8-dev"
+                "dev-master": "1.9-dev"
             }
         },
         "installation-source": "dist",
@@ -5944,17 +5947,17 @@
     },
     {
         "name": "symfony/polyfill-mbstring",
-        "version": "v1.8.0",
-        "version_normalized": "1.8.0.0",
+        "version": "v1.9.0",
+        "version_normalized": "1.9.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-mbstring.git",
-            "reference": "3296adf6a6454a050679cde90f95350ad604b171"
+            "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/3296adf6a6454a050679cde90f95350ad604b171",
-            "reference": "3296adf6a6454a050679cde90f95350ad604b171",
+            "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/d0cd638f4634c16d8df4508e847f14e9e43168b8",
+            "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8",
             "shasum": ""
         },
         "require": {
@@ -5963,11 +5966,11 @@
         "suggest": {
             "ext-mbstring": "For best performance"
         },
-        "time": "2018-04-26T10:06:28+00:00",
+        "time": "2018-08-06T14:22:27+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.8-dev"
+                "dev-master": "1.9-dev"
             }
         },
         "installation-source": "dist",
@@ -6005,28 +6008,28 @@
     },
     {
         "name": "symfony/polyfill-php56",
-        "version": "v1.8.0",
-        "version_normalized": "1.8.0.0",
+        "version": "v1.9.0",
+        "version_normalized": "1.9.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-php56.git",
-            "reference": "af98553c84912459db3f636329567809d639a8f6"
+            "reference": "7b4fc009172cc0196535b0328bd1226284a28000"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-php56/zipball/af98553c84912459db3f636329567809d639a8f6",
-            "reference": "af98553c84912459db3f636329567809d639a8f6",
+            "url": "https://api.github.com/repos/symfony/polyfill-php56/zipball/7b4fc009172cc0196535b0328bd1226284a28000",
+            "reference": "7b4fc009172cc0196535b0328bd1226284a28000",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.3",
             "symfony/polyfill-util": "~1.0"
         },
-        "time": "2018-04-26T10:06:28+00:00",
+        "time": "2018-08-06T14:22:27+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.8-dev"
+                "dev-master": "1.9-dev"
             }
         },
         "installation-source": "dist",
@@ -6063,27 +6066,27 @@
     },
     {
         "name": "symfony/polyfill-php72",
-        "version": "v1.8.0",
-        "version_normalized": "1.8.0.0",
+        "version": "v1.9.0",
+        "version_normalized": "1.9.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-php72.git",
-            "reference": "a4576e282d782ad82397f3e4ec1df8e0f0cafb46"
+            "reference": "95c50420b0baed23852452a7f0c7b527303ed5ae"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/a4576e282d782ad82397f3e4ec1df8e0f0cafb46",
-            "reference": "a4576e282d782ad82397f3e4ec1df8e0f0cafb46",
+            "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/95c50420b0baed23852452a7f0c7b527303ed5ae",
+            "reference": "95c50420b0baed23852452a7f0c7b527303ed5ae",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.3"
         },
-        "time": "2018-04-26T10:06:28+00:00",
+        "time": "2018-08-06T14:22:27+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.8-dev"
+                "dev-master": "1.9-dev"
             }
         },
         "installation-source": "dist",
@@ -6120,27 +6123,27 @@
     },
     {
         "name": "symfony/polyfill-util",
-        "version": "v1.8.0",
-        "version_normalized": "1.8.0.0",
+        "version": "v1.9.0",
+        "version_normalized": "1.9.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-util.git",
-            "reference": "1a5ad95d9436cbff3296034fe9f8d586dce3fb3a"
+            "reference": "8e15d04ba3440984d23e7964b2ee1d25c8de1581"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-util/zipball/1a5ad95d9436cbff3296034fe9f8d586dce3fb3a",
-            "reference": "1a5ad95d9436cbff3296034fe9f8d586dce3fb3a",
+            "url": "https://api.github.com/repos/symfony/polyfill-util/zipball/8e15d04ba3440984d23e7964b2ee1d25c8de1581",
+            "reference": "8e15d04ba3440984d23e7964b2ee1d25c8de1581",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.3"
         },
-        "time": "2018-04-26T10:06:28+00:00",
+        "time": "2018-08-06T14:22:27+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.8-dev"
+                "dev-master": "1.9-dev"
             }
         },
         "installation-source": "dist",
@@ -7323,17 +7326,17 @@
     },
     {
         "name": "zendframework/zend-http",
-        "version": "2.8.1",
-        "version_normalized": "2.8.1.0",
+        "version": "2.8.2",
+        "version_normalized": "2.8.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/zendframework/zend-http.git",
-            "reference": "44197164a270259116162a442f639085ea24094a"
+            "reference": "2c8aed3d25522618573194e7cc51351f8cd4a45b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/zendframework/zend-http/zipball/44197164a270259116162a442f639085ea24094a",
-            "reference": "44197164a270259116162a442f639085ea24094a",
+            "url": "https://api.github.com/repos/zendframework/zend-http/zipball/2c8aed3d25522618573194e7cc51351f8cd4a45b",
+            "reference": "2c8aed3d25522618573194e7cc51351f8cd4a45b",
             "shasum": ""
         },
         "require": {
@@ -7351,7 +7354,7 @@
         "suggest": {
             "paragonie/certainty": "For automated management of cacert.pem"
         },
-        "time": "2018-08-01T13:50:48+00:00",
+        "time": "2018-08-13T18:47:03+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
