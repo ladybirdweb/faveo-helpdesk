@@ -279,8 +279,8 @@ class DatabaseSeeder extends Seeder
         Widgets::create(['id' => '2', 'name' => 'footer2']);
         Widgets::create(['id' => '3', 'name' => 'footer3']);
         Widgets::create(['id' => '4', 'name' => 'footer4']);
-        Widgets::create(['id' => '5', 'name' => 'side1']);
-        Widgets::create(['id' => '6', 'name' => 'side2']);
+//        Widgets::create(['id' => '5', 'name' => 'side1']);
+//        Widgets::create(['id' => '6', 'name' => 'side2']);
         Widgets::create(['id' => '7', 'name' => 'linkedin']);
         Widgets::create(['id' => '8', 'name' => 'stumble']);
         Widgets::create(['id' => '9', 'name' => 'google']);

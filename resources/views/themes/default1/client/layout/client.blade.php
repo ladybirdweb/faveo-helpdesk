@@ -411,6 +411,21 @@
                                 <li><a href="{{$social->value}}" class="btn btn-social btn-rss" target="_blank"><i class="fa fa-rss fa-fw"></i></a></li>
                                 @endif
                                 @endif
+                                @if($social->name == "skype")
+                                @if($social->value)
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-twitter" target="_blank"><i class="fa fa-skype fa-fw"></i></a></li>
+                                @endif
+                                @endif
+                                @if($social->name == "stumble")
+                                @if($social->value)
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-google-plus" target="_blank"><i class="fa fa-stumbleupon fa-fw"></i></a></li>
+                                @endif
+                                @endif
+                                @if($social->name == "deviantart")
+                                @if($social->value)
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-success" target="_blank"><i class="fa fa-deviantart fa-fw"></i></a></li>
+                                @endif
+                                @endif
                                 @endforeach
                             </ul>
                         </div>
