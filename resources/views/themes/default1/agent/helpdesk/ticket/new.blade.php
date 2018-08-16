@@ -187,6 +187,10 @@ class="active"
                 </div>
                 <div id="response" class="col-md-6 form-group"></div>
             </div>
+            <div class="row">
+            {{-- Event fire --}}
+            <?php Event::fire(new App\Events\ClientTicketForm()); ?>
+            </div>
         </div>
     </div>
     <div class="box-header with-border">

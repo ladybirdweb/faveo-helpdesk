@@ -186,7 +186,6 @@ class TicketController extends Controller
                 return Redirect('newticket')->with('fails', Lang::get('lang.failed-to-create-user-tcket-as-mobile-has-been-taken'))->withInput($request->except('password'));
             }
         } catch (Exception $e) {
-            dd($e);
             if ($api != false) {
                 return response()->json(['error' => $e->getMessage()], 500);
             }
