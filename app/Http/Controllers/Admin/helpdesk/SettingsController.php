@@ -1071,15 +1071,19 @@ class SettingsController extends Controller
 
     /**
      * @category function to handle clean dummy data ajax request
+     *
      * @param null
+     *
      * @return json
      */
-    public function postCleanDummyData(Request $request) {
+    public function postCleanDummyData(Request $request)
+    {
         $result = 'failed';
         $system_check = CommonSettings::select('status')->where('option_name', '=', 'dummy_data_installation')->first();
         if ($system_check->status == 1 || $system_check->status == '1') {
             $result = Self::cleanDatabase();
         }
+
         return response()->json(compact('result'));
     }
 
