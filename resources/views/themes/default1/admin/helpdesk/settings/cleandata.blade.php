@@ -70,12 +70,11 @@ class="active"
 @stop
 @section('FooterInclude')
 <script type="text/javascript">
-    $('#clean-confirm').click(function() {
-        if($(this). prop("checked") == true){
-            document.getElementById("clean-btn").disabled = false;
-        } else {
-            document.getElementById("clean-btn").disabled = true;
-        }
+    $('#clean-confirm').on('ifChecked', function () {
+        document.getElementById("clean-btn").disabled = false;
+    });
+    $('#clean-confirm').on('ifUnchecked', function () {
+        document.getElementById("clean-btn").disabled = true;
     });
 
     $('#clean-btn').on('click', function(){

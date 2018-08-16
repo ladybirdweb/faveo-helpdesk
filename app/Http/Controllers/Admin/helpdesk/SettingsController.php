@@ -1070,6 +1070,20 @@ class SettingsController extends Controller
     }
 
     /**
+     * @category function to handle clean dummy data ajax request
+     * @param null
+     * @return json
+     */
+    public function postCleanDummyData(Request $request) {
+        $result = 'failed';
+        $system_check = CommonSettings::select('status')->where('option_name', '=', 'dummy_data_installation')->first();
+        if ($system_check->status == 1 || $system_check->status == '1') {
+            $result = Self::cleanDatabase();
+        }
+        return response()->json(compact('result'));
+    }
+
+    /**
      * @category function to clean dummy database and reseed tables with default options
      *
      * @param null
@@ -1118,12 +1132,6 @@ class SettingsController extends Controller
             $system2->time_zone = $system->time_zone;
             $system2->date_time_format = $system->date_time_format;
             $system2->save();
-
-            // updating business hours
-            $bhours = BusinessHours::where('id', '=', 1)->first();
-            $bhours->timezone = $system2->time_zone;
-            $bhours->save();
-
             $response = 'success';
 
             return $response;
