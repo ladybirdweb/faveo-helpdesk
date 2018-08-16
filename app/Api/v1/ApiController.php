@@ -1015,7 +1015,7 @@ class ApiController extends Controller
             $v = \Validator::make($this->request->all(), [
                         'user_id'   => 'required|exists:users,id',
                         'ticket_id' => 'required|exists:tickets,id',
-                        'body'     => 'required',
+                        'body'      => 'required',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -1239,8 +1239,8 @@ class ApiController extends Controller
             $result = $result->toArray();
             $result['title'] = utfEncoding(Ticket_Thread::where('ticket_id', $id)->orderBy('id')->first()->value('title'));
             $assigned = Tickets::where('id', $id)->select('assigned_to', 'team_id')->first()->toArray();
-            if(!empty($assigned)){
-                if($assigned['assigned_to'] != null){
+            if (!empty($assigned)) {
+                if ($assigned['assigned_to'] != null) {
                     $result['assignee'] = User::where('id', $assigned['assigned_to'])->first()->name();
                 } elseif ($assigned['team_id'] != null) {
                     $result['assignee'] = Teams::where('id', $assigned['team_id'])->first()->value('name');
@@ -1248,6 +1248,7 @@ class ApiController extends Controller
                     $result['assignee'] = null;
                 }
             }
+
             return response()->json(compact('result'));
         } catch (\Exception $e) {
             $error = $e->getMessage();
