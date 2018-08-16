@@ -67,7 +67,7 @@ class="active"
             <div class="col-xs-6 form-group {!! $errors->has('password') ? 'has-error' : ''!!}" id="password_error">
                 {!! Form::label('password',Lang::get('lang.password')) !!} <span class="text-red"> *</span>
                 {!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
-                <input type="password" name="password" class="form-control" id="password" value={!! $emails->password !!} >
+                <input type="password" name="password" class="form-control" id="password">
             </div>
         </div>
     </div>
