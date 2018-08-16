@@ -187,7 +187,7 @@ class ApiController extends Controller
         //dd($this->request->all());
         try {
             $v = \Validator::make($this->request->all(), [
-                        'ticket_ID'     => 'required|exists:tickets,id',
+                        'ticket_id'     => 'required|exists:tickets,id',
                         'reply_content' => 'required',
             ]);
             if ($v->fails()) {
@@ -1013,8 +1013,8 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'userid'   => 'required|exists:users,id',
-                        'ticketid' => 'required|exists:tickets,id',
+                        'user_id'   => 'required|exists:users,id',
+                        'ticket_id' => 'required|exists:tickets,id',
                         'body'     => 'required',
             ]);
             if ($v->fails()) {
@@ -1022,8 +1022,8 @@ class ApiController extends Controller
 
                 return response()->json(compact('error'));
             }
-            $userid = $this->request->input('userid');
-            $ticketid = $this->request->input('ticketid');
+            $userid = $this->request->input('user_id');
+            $ticketid = $this->request->input('ticket_id');
 
             $body = preg_replace('/[ ](?=[^>]*(?:<|$))/', '&nbsp;', nl2br($this->request->input('body')));
             $thread = $this->thread->create(['ticket_id' => $ticketid, 'user_id' => $userid, 'is_internal' => 1, 'body' => $body]);
@@ -1206,14 +1206,14 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'id' => 'required|exists:tickets,id',
+                        'ticket_id' => 'required|exists:tickets,id',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
-            $id = $this->request->input('id');
+            $id = $this->request->input('ticket_id');
             if (!$this->model->where('id', $id)->first()) {
                 $error = 'There is no Ticket as ticket id: '.$id;
 
@@ -1229,12 +1229,25 @@ class ApiController extends Controller
                     ->leftJoin('ticket_priority', 'tickets.priority_id', '=', 'ticket_priority.priority_id')
                     ->leftJoin('ticket_status', 'tickets.status', '=', 'ticket_status.id')
                     ->leftJoin('sla_plan', 'tickets.sla', '=', 'sla_plan.id')
-                    ->leftJoin('ticket_source', 'tickets.source', '=', 'ticket_source.id');
+                    ->leftJoin('ticket_source', 'tickets.source', '=', 'ticket_source.id')
+                    ->leftJoin('help_topic', 'tickets.help_topic_id', '=', 'help_topic.id');
             //$select = 'users.email','users.user_name','users.first_name','users.last_name','tickets.id','ticket_number','num_sequence','user_id','priority_id','sla','max_open_ticket','captcha','status','lock_by','lock_at','source','isoverdue','reopened','isanswered','is_deleted', 'closed','is_transfer','transfer_at','reopened_at','duedate','closed_at','last_message_at';
 
             $result = $response->addSelect(
-                            'users.email', 'users.user_name', 'users.first_name', 'users.last_name', 'tickets.id', 'ticket_number', 'user_id', 'ticket_priority.priority_id', 'ticket_priority.priority as priority_name', 'department.name as dept_name', 'ticket_status.name as status_name', 'sla_plan.name as sla_name', 'ticket_source.name as source_name', 'sla_plan.id as sla', 'ticket_status.id as status', 'lock_by', 'lock_at', 'ticket_source.id as source', 'isoverdue', 'reopened', 'isanswered', 'is_deleted', 'closed', 'reopened_at', 'duedate', 'closed_at', 'tickets.created_at', 'tickets.updated_at')->first();
-
+                            'users.email', 'users.user_name', 'users.first_name', 'users.last_name', 'tickets.id', 'ticket_number', 'user_id', 'ticket_priority.priority_id', 'ticket_priority.priority as priority_name', 'department.name as dept_name', 'ticket_status.name as status_name', 'sla_plan.name as sla_name', 'ticket_source.name as source_name', 'sla_plan.id as sla', 'ticket_status.id as status', 'lock_by', 'lock_at', 'ticket_source.id as source', 'isoverdue', 'reopened', 'isanswered', 'is_deleted', 'closed', 'reopened_at', 'duedate', 'closed_at', 'tickets.created_at', 'tickets.updated_at', 'ticket_priority.priority_color as priority_color', 'help_topic.id as helptopic_id', 'help_topic.topic as helptopic_name')->first();
+//            $resultticket_source
+            $result = $result->toArray();
+            $result['title'] = utfEncoding(Ticket_Thread::where('ticket_id', $id)->orderBy('id')->first()->value('title'));
+            $assigned = Tickets::where('id', $id)->select('assigned_to', 'team_id')->first()->toArray();
+            if(!empty($assigned)){
+                if($assigned['assigned_to'] != null){
+                    $result['assignee'] = User::where('id', $assigned['assigned_to'])->first()->name();
+                } elseif ($assigned['team_id'] != null) {
+                    $result['assignee'] = Teams::where('id', $assigned['team_id'])->first()->value('name');
+                } else {
+                    $result['assignee'] = null;
+                }
+            }
             return response()->json(compact('result'));
         } catch (\Exception $e) {
             $error = $e->getMessage();
@@ -1422,7 +1435,7 @@ class ApiController extends Controller
                 $tickets = $tickets->whereIn('tickets.dept_id', $dept)->orWhere('assigned_to', '=', $user->id);
             }
             $department = $this->department->select('name', 'id')->get()->toArray();
-            $sla = $this->slaPlan->select('name', 'id')->get()->toArray();
+            $sla = $this->slaPlan->select('name', 'id', 'grace_period as sla_duration')->get()->toArray();
             $staff = $this->user->where('role', 'agent')->select('email', 'id')->get()->toArray();
             $team = $this->team->select('name', 'id')->get()->toArray();
             $priority = \DB::table('ticket_priority')->select('priority', 'priority_id')->get();

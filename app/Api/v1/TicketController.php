@@ -266,7 +266,7 @@ class TicketController extends Controller
     {
         try {
             $check_attachment = null;
-            $eventthread = $thread->where('ticket_id', $request->input('ticket_ID'))->first();
+            $eventthread = $thread->where('ticket_id', $request->input('ticket_id'))->first();
             //dd($request->input('ticket_ID'));
             //dd($eventthread);
             $eventuserid = $eventthread->user_id;
@@ -276,13 +276,12 @@ class TicketController extends Controller
 
             $form_data = $request->except('reply_content', 'ticket_ID', 'attachment');
             \Event::fire(new \App\Events\ClientTicketFormPost($form_data, $emailadd, $source));
-            //dd('yes');
             $reply_content = $request->input('reply_content');
-            $thread->ticket_id = $request->input('ticket_ID');
+            $thread->ticket_id = $request->input('ticket_id');
             $thread->poster = 'support';
             $thread->body = $request->input('reply_content');
             $thread->user_id = Auth::user()->id;
-            $ticket_id = $request->input('ticket_ID');
+            $ticket_id = $request->input('ticket_id');
             $tickets = Tickets::where('id', '=', $ticket_id)->first();
             $tickets->isanswered = '1';
             $tickets->save();
@@ -377,7 +376,6 @@ class TicketController extends Controller
 
             return $thread;
         } catch (\Exception $e) {
-            //dd($e);
             return $e->getMessage();
         }
     }
