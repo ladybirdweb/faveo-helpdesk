@@ -400,7 +400,16 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                 </section>
                 <!-- Main content -->
                 <section class="content">
-                    @if (!$is_mail_conigured)
+                @if($dummy_installation == 1 || $dummy_installation == '1')
+                    <div class="alert alert-info alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <i class="icon fa  fa-exclamation-triangle"></i> @if (\Auth::user()->role == 'admin')
+                            {{Lang::get('lang.dummy_data_installation_message')}} <a href="{{route('clean-database')}}">{{Lang::get('lang.click')}}</a> {{Lang::get('lang.clear-dummy-data')}}
+                        @else
+                            {{Lang::get('lang.clear-dummy-data-agent-message')}}
+                        @endif
+                    </div>
+                @elseif (!$is_mail_conigured)
                     <div class="row">
                         <div class="col-md-12">
                             <div class="callout callout-warning lead">
@@ -415,7 +424,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                             </div>
                         </div>
                     </div>
-                    @endif
+                @endif
                     @yield('content')
                 </section><!-- /.content -->
             </div>

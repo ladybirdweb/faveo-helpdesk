@@ -374,7 +374,12 @@
 
                 <!-- Main content -->
                 <section class="content">
-                    @if (!$is_mail_conigured)
+                    @if($dummy_installation == 1 || $dummy_installation == '1')
+                    <div class="alert alert-info alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <i class="icon fa  fa-exclamation-triangle"></i> {{Lang::get('lang.dummy_data_installation_message')}} <a href="{{route('clean-database')}}">{{Lang::get('lang.click')}}</a> {{Lang::get('lang.clear-dummy-data')}}
+                    </div>
+                    @elseif (!$is_mail_conigured)
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="callout callout-warning lead">

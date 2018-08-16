@@ -6,6 +6,7 @@ use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Ticket\Tickets;
+use App\Model\helpdesk\Settings\CommonSettings;
 use App\User;
 use Auth;
 use Illuminate\View\View;
@@ -29,7 +30,7 @@ class AgentLayout
      *
      * @return void
      */
-    public function __construct(Company $company, User $users, Tickets $tickets, Department $department, Emails $emails)
+    public function __construct(Company $company, User $users, Tickets $tickets, Department $department, Emails $emails, CommonSettings $common_settings)
     {
         $this->company = $company;
         $this->auth = Auth::user();
@@ -37,6 +38,7 @@ class AgentLayout
         $this->tickets = $tickets;
         $this->department = $department;
         $this->emails = $emails;
+        $this->common_settings = $common_settings;
     }
 
     /**
@@ -50,17 +52,18 @@ class AgentLayout
     {
         $notifications = \App\Http\Controllers\Common\NotificationController::getNotifications();
         $view->with([
-            'company'           => $this->company,
-            'notifications'     => $notifications,
-            'myticket'          => $this->myTicket(),
-            'unassigned'        => $this->unassigned(),
-            'followup_ticket'   => $this->followupTicket(),
-            'deleted'           => $this->deleted(),
-            'tickets'           => $this->inbox(),
-            'department'        => $this->departments(),
-            'overdues'          => $this->overdues(),
-            'due_today'         => $this->getDueToday(),
-            'is_mail_conigured' => $this->getEmailConfig(),
+            'company'            => $this->company,
+            'notifications'      => $notifications,
+            'myticket'           => $this->myTicket(),
+            'unassigned'         => $this->unassigned(),
+            'followup_ticket'    => $this->followupTicket(),
+            'deleted'            => $this->deleted(),
+            'tickets'            => $this->inbox(),
+            'department'         => $this->departments(),
+            'overdues'           => $this->overdues(),
+            'due_today'          => $this->getDueToday(),
+            'is_mail_conigured'  => $this->getEmailConfig(),
+            'dummy_installation' => $this->getDummyDataInstallation(),
         ]);
     }
 
@@ -213,5 +216,20 @@ class AgentLayout
         }
 
         return false;
+    }
+
+    /**
+     * @category function to check if dummy data is installed in the system or not
+     * @param null
+     * @return builder
+     */
+    public function getDummyDataInstallation() {
+        $return_collection = $this->common_settings->select('status')->where('option_name', '=', 'dummy_data_installation')->first();
+        if (!$return_collection) {
+            $return_collection = collect(['status' => 0]);
+            return $return_collection['status'];
+        }
+
+        return $return_collection->status;
     }
 }
