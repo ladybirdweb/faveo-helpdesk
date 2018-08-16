@@ -1102,6 +1102,7 @@ class SettingsController extends Controller
                             'user_name', 'first_name', 'last_name', 'email', 'password', 'agent_tzone'
                     )->where('id', '=', 1)->first();
             $system = System::where('id', '=', 1)->first();
+            \Schema::disableForeignKeyConstraints();
             $tableNames = \Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
             foreach ($tableNames as $name) {
                 //if you don't want to truncate migrations
@@ -1118,6 +1119,7 @@ class SettingsController extends Controller
                 }
                 DB::table($name)->truncate();
             }
+            \Schema::enableForeignKeyConstraints();
             DB::commit();
             \Artisan::call('db:seed', ['--force' => true]);
             $user2 = \App\User::updateOrCreate(['id' => 1], [
