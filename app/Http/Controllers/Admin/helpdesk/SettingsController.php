@@ -1049,4 +1049,79 @@ class SettingsController extends Controller
 
         return $char;
     }
+
+    /**
+     * @category function to return clean data view
+     * @param null
+     * @return respone/view
+     */
+    public function getCleanUpView() {
+        $system_check = CommonSettings::select('status')->where('option_name', '=', 'dummy_data_installation')->first();
+        if ($system_check) {
+            if ($system_check->status == 1 || $system_check->status == '1') {
+                return View('themes.default1.admin.helpdesk.settings.cleandata');
+            }
+        }
+        return redirect()->route('error404')->with('fails', Lang::get('lang.no-dummy-data'));
+    }
+
+    /**
+     * @category function to clean dummy database and reseed tables with default options
+     * @param null
+     * @return
+     * Very dangerous function should be call by admin only
+     */
+    private function cleanDatabase() {
+        try {
+            $user = \App\User::select(
+                            'user_name', 'first_name', 'last_name', 'email', 'password', 'agent_tzone'
+                    )->where('id', '=', 1)->first();
+            $system = System::where('id', '=', 1)->first();
+            $tableNames = \Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
+            foreach ($tableNames as $name) {
+                //if you don't want to truncate migrations
+                if ($name == 'migrations' ||
+                        $name == 'sd_attachment_types' ||
+                        $name == 'sd_change_priorities' ||
+                        $name == 'sd_change_status' ||
+                        $name == 'sd_change_types' ||
+                        $name == 'sd_release_priorities' ||
+                        $name == 'sd_release_status' ||
+                        $name == 'sd_release_types' ||
+                        $name == 'pro_serial_key') {
+                    continue;
+                }
+                DB::table($name)->truncate();
+            }
+            DB::commit();
+            \Artisan::call('db:seed', ['--force' => true]);
+            $user2 = \App\User::updateOrCreate(['id' => 1], [
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                        'email' => $user->email,
+                        'user_name' => $user->user_name,
+                        'password' => $user->password,
+                        'assign_group' => 1,
+                        'primary_dpt' => 1,
+                        'active' => 1,
+                        'agent_tzone' => $user->agent_tzone,
+                        'role' => 'admin',
+            ]);
+            $system2 = System::find(1);
+            $system2->time_zone = $system->time_zone;
+            $system2->date_time_format = $system->date_time_format;
+            $system2->save();
+
+            // updating business hours
+            $bhours = BusinessHours::where('id', '=', 1)->first();
+            $bhours->timezone = $system2->time_zone;
+            $bhours->save();
+
+            $response = 'success';
+            return $response;
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+            return $error;
+        }
+    }
 }

@@ -278,6 +278,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::resource('labels', 'Admin\helpdesk\Label\LabelController');
         Route::get('labels-ajax', ['as'=>'labels.ajax', 'uses'=>'Admin\helpdesk\Label\LabelController@ajaxTable']);
         Route::get('labels/delete/{id}', ['as' => 'labels.destroy', 'uses' => 'Admin\helpdesk\Label\LabelController@destroy']);
+
+        Route::get('clean-dummy-data', ['as' => 'clean-database', 'uses' => 'Admin\helpdesk\SettingsController@getCleanUpView']);
+        Route::post('post-clean-dummy-data', ['as' => 'post-clean-database', 'uses' => 'Admin\helpdesk\SettingsController@postCleanDummyData']);
     });
     /*
       |------------------------------------------------------------------
