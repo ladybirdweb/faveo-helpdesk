@@ -126,7 +126,7 @@ class TicketController extends Controller
             $source = Ticket_source::where('name', '=', 'agent')->first();
             $headers = null;
             $help = Help_topic::where('id', '=', $helptopic)->first();
-            $form_data = null;
+            $form_data = $request->except('name', 'phone', 'email', 'subject', 'body', 'helptopic', '_wysihtml5_mode', '_token', 'mobile', 'code', 'priority', 'attachment', 'first_name', 'last_name', 'sla', 'duedate', 'assignto');
             $auto_response = 0;
             $status = 1;
             if ($phone != null || $mobile_number != null) {

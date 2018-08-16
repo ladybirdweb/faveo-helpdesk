@@ -752,10 +752,10 @@ if ($thread->title != "") {
                                             @endif
                                            
                    
-                                            
 
                                             @if($conversation->id == $ij->id)
-        <?php $ticket_form_datas = App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $tickets->ticket_id)->select('id')->get(); ?>
+        <?php $ticket_form_datas = App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $tickets->id)->get();
+        ?>
                                         @if(isset($ticket_form_datas))
                                         
                                             <br/>
