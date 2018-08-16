@@ -4,9 +4,9 @@ namespace App\Http\ViewComposers;
 
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
+use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Ticket\Tickets;
-use App\Model\helpdesk\Settings\CommonSettings;
 use App\User;
 use Auth;
 use Illuminate\View\View;
@@ -220,13 +220,17 @@ class AgentLayout
 
     /**
      * @category function to check if dummy data is installed in the system or not
+     *
      * @param null
+     *
      * @return builder
      */
-    public function getDummyDataInstallation() {
+    public function getDummyDataInstallation()
+    {
         $return_collection = $this->common_settings->select('status')->where('option_name', '=', 'dummy_data_installation')->first();
         if (!$return_collection) {
             $return_collection = collect(['status' => 0]);
+
             return $return_collection['status'];
         }
 
