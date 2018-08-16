@@ -28,7 +28,7 @@
         "predis/predis": "~1.0",
         "mremi/url-shortener": "^1.0",
         "maatwebsite/excel": "~2.1.0",
-        "laravel/socialite": "3.0.0",
+        "laravel/socialite": "3.0.11",
         "tedivm/fetch": "0.6.*",
         "unisharp/laravel-filemanager": "^1.6",
         "unisharp/laravel-ckeditor": "^4.5",
