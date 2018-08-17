@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'env' => env('APP_ENV', 'testing'),
+    'env' => env('APP_ENV', 'production'),
     /*
       |--------------------------------------------------------------------------
       | Application Debug Mode
@@ -33,7 +33,7 @@ return [
       | This tells about aplication current version.
       |
      */
-    'version' => 'Community 1.10-BETA',
+    'version' => 'Community 1.10',
     /*
       |--------------------------------------------------------------------------
       | Application Name
@@ -42,7 +42,7 @@ return [
       | This Applocation name is used for installation and update checking
       |
      */
-        'name' => 'Faveo Helpdesk Community',
+    'name' => 'Faveo Helpdesk Community',
     /*
       |--------------------------------------------------------------------------
       | Application URL
@@ -120,7 +120,7 @@ return [
       |to FAVEO team when any exception/error occurs or not. True value of this variable will
       |allow application to send error reports to FAVEO team's bugsnag log.
      */
-    'bugsnag_reporting' => env('APP_BUGSNAG', false),
+    'bugsnag_reporting' => env('APP_BUGSNAG', true),
     /*
       |--------------------------------------------------------------------------
       | Autoloaded Service Providers

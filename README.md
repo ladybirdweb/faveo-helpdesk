@@ -18,8 +18,8 @@ Flavors of Faveo
 
 Faveo Documentation
 --------------------------
-  * <a href="http://www.ladybirdweb.com/support/knowledgebase" target="_blank">Faveo user Manual</a>
-  * <a href="https://docs.google.com/document/d/1-ZQ9pueqBNPSD-FZ24sLO_2fgoifKLorN_ocCEYZ1hM/" target="_blank">Faveo API Documentation</a>
+  * <a href="https://www.support.faveohelpdesk.com/knowledgebase" target="_blank">Faveo user Manual</a>
+  * <a href="https://docs.google.com/document/d/1WjpxazjUjbI8Hs5GYbbEE0ESDvpp_mVicfRbsoysH1A/edit?usp=sharing" target="_blank">Faveo API Documentation</a>
   * <a href="https://docs.google.com/document/d/1pXpsQKcTyX5x6H4xA8unYxd5Duw2k94xt7wevTdoF_E/" target="_blank">Faveo Event List</a>
   * <a href="https://docs.google.com/document/d/1PGcpB19Vr42rM_DrCzC3snujzEL8N9Ocy0yewfPNWqU/" target="_blank">Faveo Plugin creation guide</a>
 
@@ -27,7 +27,7 @@ Requirements
 --------------------------
 To run Faveo your host just needs a couple of things:
 
-  * PHP Version: 5.6+
+  * PHP Version: 7.1.3+
   * Database: MySQL 5.0+
   * Web Server: Apache / IIS / Nginx
   * PHP Extensions: Imap, Mbstring, Mcrypt, OpenSSL, PDO, Tokenizer, XML, Zip

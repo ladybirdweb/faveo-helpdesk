@@ -22,6 +22,21 @@
 | '--------------' || '--------------' || '--------------' || '--------------' || '--------------' || '--------------' || '--------------' || '--------------' |
  '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------' 
 |=====================================================
+| v1.10 Laravel Framework update
+|=====================================================
+Faveo helpdesk v1.10 introduces some backward non compatible changes due to framework updates and introduces some refinement patches for existing functionalities.
+
+* v1.10 updates the Laravel framework version to 5.6.33 requires php7.1.3 or greater version to run.
+* CLI commands for installation has been added.
+* Better language control access for users
+* Check for system email configuration
+* Email sending out department wise
+
+To know more please follow the links below
+https://github.com/ladybirdweb/faveo-helpdesk/releases
+https://github.com/ladybirdweb/faveo-helpdesk/wiki 
+
+|=====================================================
 | v1.9.6 Facebook login bug fix patch
 |=====================================================
 ## Bug Fixed
