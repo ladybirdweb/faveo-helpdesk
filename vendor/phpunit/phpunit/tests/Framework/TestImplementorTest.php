@@ -7,23 +7,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Framework;
 
-/**
- * @since      Class available since Release 2.0.0
- */
-class Framework_TestImplementorTest extends PHPUnit_Framework_TestCase
+class TestImplementorTest extends TestCase
 {
-    /**
-     * @covers PHPUnit_Framework_TestCase
-     */
-    public function testSuccessfulRun()
+    public function testSuccessfulRun(): void
     {
-        $result = new PHPUnit_Framework_TestResult;
+        $result = new TestResult;
 
-        $test = new DoubleTestCase(new Success);
+        $test = new \DoubleTestCase(new \Success);
         $test->run($result);
 
-        $this->assertEquals(count($test), count($result));
+        $this->assertCount(\count($test), $result);
         $this->assertEquals(0, $result->errorCount());
         $this->assertEquals(0, $result->failureCount());
     }

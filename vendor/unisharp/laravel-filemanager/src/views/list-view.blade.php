@@ -1,5 +1,5 @@
-@if((sizeof($file_info) > 0) || (sizeof($directories) > 0))
-<table class="table table-condensed table-striped">
+@if((sizeof($files) > 0) || (sizeof($directories) > 0))
+<table class="table table-responsive table-condensed table-striped hidden-xs table-list-view">
   <thead>
     <th style='width:50%;'>{{ Lang::get('laravel-filemanager::lfm.title-item') }}</th>
     <th>{{ Lang::get('laravel-filemanager::lfm.title-size') }}</th>
@@ -8,62 +8,76 @@
     <th>{{ Lang::get('laravel-filemanager::lfm.title-action') }}</th>
   </thead>
   <tbody>
-    @foreach($directories as $key => $dir_name)
+    @foreach($items as $item)
     <tr>
       <td>
-        <i class="fa fa-folder-o"></i>
-        <a class="folder-item pointer" data-id="{{ $dir_name['long'] }}">
-          {{ $dir_name['short'] }}
+        <i class="fa {{ $item->icon }}"></i>
+        <a class="{{ $item->is_file ? 'file' : 'folder'}}-item clickable" data-id="{{ $item->is_file ? $item->url : $item->path }}" title="{{$item->name}}">
+          {{ str_limit($item->name, $limit = 40, $end = '...') }}
         </a>
       </td>
-      <td></td>
-      <td>{{ Lang::get('laravel-filemanager::lfm.type-folder') }}</td>
-      <td></td>
-      <td></td>
-    </tr>
-    @endforeach
-
-    @foreach($file_info as $file)
-    <tr>
-      <td>
-        @if($type == 'Images')
-        <i class="fa fa-image"></i>
-        @else
-        <i class="fa {{ $file['icon'] }}"></i>
+      <td>{{ $item->size }}</td>
+      <td>{{ $item->type }}</td>
+      <td>{{ $item->time }}</td>
+      <td class="actions">
+        @if($item->is_file)
+          <a href="javascript:download('{{ $item->name }}')" title="{{ Lang::get('laravel-filemanager::lfm.menu-download') }}">
+            <i class="fa fa-download fa-fw"></i>
+          </a>
+          @if($item->thumb)
+            <a href="javascript:fileView('{{ $item->url }}', '{{ $item->updated }}')" title="{{ Lang::get('laravel-filemanager::lfm.menu-view') }}">
+              <i class="fa fa-image fa-fw"></i>
+            </a>
+            <a href="javascript:cropImage('{{ $item->name }}')" title="{{ Lang::get('laravel-filemanager::lfm.menu-crop') }}">
+              <i class="fa fa-crop fa-fw"></i>
+            </a>
+            <a href="javascript:resizeImage('{{ $item->name }}')" title="{{ Lang::get('laravel-filemanager::lfm.menu-resize') }}">
+              <i class="fa fa-arrows fa-fw"></i>
+            </a>
+          @endif
         @endif
-        <?php $file_name = $file['name'];?>
-        <a href="javascript:useFile('{{ $file_name }}')">
-          {{ $file_name }}
+        <a href="javascript:rename('{{ $item->name }}')" title="{{ Lang::get('laravel-filemanager::lfm.menu-rename') }}">
+          <i class="fa fa-edit fa-fw"></i>
         </a>
-        &nbsp;&nbsp;
-        <a href="javascript:rename('{{ $file_name }}')">
-          <i class="fa fa-edit"></i>
-        </a>
-      </td>
-      <td>
-        {{ $file['size'] }}
-      </td>
-      <td>
-        {{ $file['type'] }}
-      </td>
-      <td>
-        {{ date("Y-m-d h:m", $file['created']) }}
-      </td>
-      <td>
-        <a href="javascript:trash('{{ $file_name }}')">
+        <a href="javascript:trash('{{ $item->name }}')" title="{{ Lang::get('laravel-filemanager::lfm.menu-delete') }}">
           <i class="fa fa-trash fa-fw"></i>
         </a>
-        @if($type == 'Images')
-        <a href="javascript:cropImage('{{ $file_name }}')">
-          <i class="fa fa-crop fa-fw"></i>
-        </a>
-        <a href="javascript:resizeImage('{{ $file_name }}')">
-          <i class="fa fa-arrows fa-fw"></i>
-        </a>
-        {{--<a href="javascript:notImp()">--}}
-        {{--<i class="fa fa-rotate-left fa-fw"></i>--}}
-        {{--</a>--}}
-        @endif
+      </td>
+    </tr>
+    @endforeach
+  </tbody>
+</table>
+
+<table class="table visible-xs">
+  <tbody>
+    @foreach($items as $item)
+    <tr>
+      <td>
+        <div class="media" style="height: 70px;">
+          <div class="media-left">
+            <div class="square {{ $item->is_file ? 'file' : 'folder'}}-item clickable"  data-id="{{ $item->is_file ? $item->url : $item->path }}">
+              @if($item->thumb)
+              <img src="{{ $item->thumb }}">
+              @else
+              <i class="fa {{ $item->icon }} fa-5x"></i>
+              @endif
+            </div>
+          </div>
+          <div class="media-body" style="padding-top: 10px;">
+            <div class="media-heading">
+              <p>
+                <a class="{{ $item->is_file ? 'file' : 'folder'}}-item clickable" data-id="{{ $item->is_file ? $item->url : $item->path }}">
+                  {{ str_limit($item->name, $limit = 20, $end = '...') }}
+                </a>
+                &nbsp;&nbsp;
+                {{-- <a href="javascript:rename('{{ $item->name }}')">
+                  <i class="fa fa-edit"></i>
+                </a> --}}
+              </p>
+            </div>
+            <p style="color: #aaa;font-weight: 400">{{ $item->time }}</p>
+          </div>
+        </div>
       </td>
     </tr>
     @endforeach
@@ -71,9 +85,5 @@
 </table>
 
 @else
-<div class="row">
-  <div class="col-md-12">
-    <p>{{ Lang::get('laravel-filemanager::lfm.message-empty') }}</p>
-  </div>
-</div>
+<p>{{ trans('laravel-filemanager::lfm.message-empty') }}</p>
 @endif

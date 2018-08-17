@@ -50,7 +50,7 @@ class="active"
         </div>
         @endif
         {!! Datatable::table()
-        ->addColumn(Lang::get('lang.language'),Lang::get('lang.iso-code'),Lang::get('lang.status'),Lang::get('lang.Action'))       // these are the column headings to be shown
+        ->addColumn(Lang::get('lang.language'),Lang::get('lang.native-name'),Lang::get('lang.iso-code'),Lang::get('lang.system-language'),Lang::get('lang.Action'))       // these are the column headings to be shown
         ->setUrl(route('getAllLanguages'))   // this is the route where data will be retrieved
         ->render()  !!}
     </div>

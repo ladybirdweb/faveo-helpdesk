@@ -22,7 +22,7 @@ use Auth;
 use DateTime;
 use DB;
 use Hash;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
 use Lang;
 use Socialite;
 
@@ -38,7 +38,6 @@ use Socialite;
  */
 class AuthController extends Controller
 {
-    use AuthenticatesAndRegistersUsers;
     /* to redirect after login */
 
     // if auth is agent
@@ -643,5 +642,28 @@ class AuthController extends Controller
         \Session::set('provider', $provider);
         \Session::set($provider.'redirect', $url);
         $this->changeRedirect();
+    }
+
+    /**
+     * Log the user out of the application.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getLogout(Request $request)
+    {
+        \Event::fire('user.logout', []);
+        $login = new LoginController();
+
+        return $login->logout($request);
+    }
+
+    public function redirectPath()
+    {
+        $auth = Auth::user();
+        if ($auth && $auth->role != 'user') {
+            return 'dashboard';
+        } else {
+            return '/';
+        }
     }
 }

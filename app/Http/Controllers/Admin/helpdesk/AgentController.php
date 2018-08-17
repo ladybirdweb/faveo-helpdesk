@@ -87,7 +87,7 @@ class AgentController extends Controller
             // get all department
             $departments = $department->get();
             // list all the teams in a single variable
-            $teams = $team->lists('id', 'name')->toArray();
+            $teams = $team->pluck('id', 'name')->toArray();
             $location = GeoIP::getLocation();
             $phonecode = $code->where('iso', '=', $location->iso_code)->first();
             // returns to the page with all the variables and their datas
@@ -187,13 +187,13 @@ class AgentController extends Controller
             $phonecode = $code->where('iso', '=', $location->iso_code)->first();
             $user = $user->whereId($id)->first();
             $team = $team->where('status', '=', 1)->get();
-            $teams1 = $team->lists('name', 'id');
+            $teams1 = $team->pluck('name', 'id');
             $timezones = $timezone->get();
             $groups = $group->where('group_status', '=', 1)->get();
             $departments = $department->get();
             $table = $team_assign_agent->where('agent_id', $id)->first();
-            $teams = $team->lists('id', 'name')->toArray();
-            $assign = $team_assign_agent->where('agent_id', $id)->lists('team_id')->toArray();
+            $teams = $team->pluck('id', 'name')->toArray();
+            $assign = $team_assign_agent->where('agent_id', $id)->pluck('team_id')->toArray();
 
             return view('themes.default1.admin.helpdesk.agent.agents.edit', compact('teams', 'assign', 'table', 'teams1', 'selectedTeams', 'user', 'timezones', 'groups', 'departments', 'team', 'exp', 'counted'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {

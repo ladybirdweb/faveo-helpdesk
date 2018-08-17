@@ -7,17 +7,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the BankAccount class.
- *
- * @since      Class available since Release 2.3.0
  */
-class BankAccountWithCustomExtensionTest extends PHPUnit_Framework_TestCase
+class BankAccountWithCustomExtensionTest extends TestCase
 {
     protected $ba;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ba = new BankAccount;
     }
@@ -27,7 +26,7 @@ class BankAccountWithCustomExtensionTest extends PHPUnit_Framework_TestCase
      * @group balanceIsInitiallyZero
      * @group specification
      */
-    public function testBalanceIsInitiallyZero()
+    public function testBalanceIsInitiallyZero(): void
     {
         $this->assertEquals(0, $this->ba->getBalance());
     }
@@ -37,7 +36,7 @@ class BankAccountWithCustomExtensionTest extends PHPUnit_Framework_TestCase
      * @group balanceCannotBecomeNegative
      * @group specification
      */
-    public function testBalanceCannotBecomeNegative()
+    public function testBalanceCannotBecomeNegative(): void
     {
         try {
             $this->ba->withdrawMoney(1);
@@ -55,7 +54,7 @@ class BankAccountWithCustomExtensionTest extends PHPUnit_Framework_TestCase
      * @group balanceCannotBecomeNegative
      * @group specification
      */
-    public function testBalanceCannotBecomeNegative2()
+    public function testBalanceCannotBecomeNegative2(): void
     {
         try {
             $this->ba->depositMoney(-1);

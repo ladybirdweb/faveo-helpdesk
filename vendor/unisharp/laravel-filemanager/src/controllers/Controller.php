@@ -1,4 +1,6 @@
-<?php namespace Unisharp\Laravelfilemanager\controllers;
+<?php
+
+namespace UniSharp\LaravelFilemanager\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;

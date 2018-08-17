@@ -1,29 +1,40 @@
 <?php
-class Issue1351Test extends PHPUnit_Framework_TestCase
+/*
+ * This file is part of PHPUnit.
+ *
+ * (c) Sebastian Bergmann <sebastian@phpunit.de>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+use PHPUnit\Framework\TestCase;
+
+class Issue1351Test extends TestCase
 {
     protected $instance;
 
     /**
      * @runInSeparateProcess
      */
-    public function testFailurePre()
+    public function testFailurePre(): void
     {
         $this->instance = new ChildProcessClass1351();
         $this->assertFalse(true, 'Expected failure.');
     }
 
-    public function testFailurePost()
+    public function testFailurePost(): void
     {
         $this->assertNull($this->instance);
-        $this->assertFalse(class_exists('ChildProcessClass1351', false), 'ChildProcessClass1351 is not loaded.');
+        $this->assertFalse(\class_exists(ChildProcessClass1351::class, false), 'ChildProcessClass1351 is not loaded.');
     }
 
     /**
      * @runInSeparateProcess
      */
-    public function testExceptionPre()
+    public function testExceptionPre(): void
     {
         $this->instance = new ChildProcessClass1351();
+
         try {
             throw new LogicException('Expected exception.');
         } catch (LogicException $e) {
@@ -31,13 +42,13 @@ class Issue1351Test extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testExceptionPost()
+    public function testExceptionPost(): void
     {
         $this->assertNull($this->instance);
-        $this->assertFalse(class_exists('ChildProcessClass1351', false), 'ChildProcessClass1351 is not loaded.');
+        $this->assertFalse(\class_exists(ChildProcessClass1351::class, false), 'ChildProcessClass1351 is not loaded.');
     }
 
-    public function testPhpCoreLanguageException()
+    public function testPhpCoreLanguageException(): void
     {
         // User-space code cannot instantiate a PDOException with a string code,
         // so trigger a real one.

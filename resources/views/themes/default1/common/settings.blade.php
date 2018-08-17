@@ -254,7 +254,7 @@
                             <div class="form-group {{ $errors->has('welcome_mail') ? 'has-error' : '' }}">
 
 
-                                {!! Form::select('welcome_mail',['Templates'=>$template->where('type',1)->lists('name','id')->toArray()],null,['class'=>'form-control']) !!}
+                                {!! Form::select('welcome_mail',['Templates'=>$template->where('type',1)->pluck('name','id')->toArray()],null,['class'=>'form-control']) !!}
                                 <p><i> {{Lang::get('message.choose-welcome-mail-template')}}</i> </p>
 
 
@@ -270,7 +270,7 @@
                             <div class="form-group {{ $errors->has('order_mail') ? 'has-error' : '' }}">
 
 
-                                {!! Form::select('order_mail',['Templates'=>$template->where('type',7)->lists('name','id')->toArray()],null,['class'=>'form-control']) !!}
+                                {!! Form::select('order_mail',['Templates'=>$template->where('type',7)->pluck('name','id')->toArray()],null,['class'=>'form-control']) !!}
                                 <p><i> {{Lang::get('message.choose-order-mail-template')}}</i> </p>
 
 
@@ -285,7 +285,7 @@
                             <div class="form-group {{ $errors->has('forgot_password') ? 'has-error' : '' }}">
 
 
-                                {!! Form::select('forgot_password',['Templates'=>$template->where('type',2)->lists('name','id')->toArray()],null,['class'=>'form-control']) !!}
+                                {!! Form::select('forgot_password',['Templates'=>$template->where('type',2)->pluck('name','id')->toArray()],null,['class'=>'form-control']) !!}
                                 <p><i> {{Lang::get('message.choose-forgot-password-mail-template')}}</i> </p>
 
 
@@ -300,7 +300,7 @@
                             <div class="form-group {{ $errors->has('subscription_going_to_end') ? 'has-error' : '' }}">
 
 
-                                {!! Form::select('subscription_going_to_end',['Templates'=>$template->where('type',4)->lists('name','id')->toArray()],null,['class'=>'form-control']) !!}
+                                {!! Form::select('subscription_going_to_end',['Templates'=>$template->where('type',4)->pluck('name','id')->toArray()],null,['class'=>'form-control']) !!}
                                 <p><i> {{Lang::get('message.choose-subscription-going-to-end-notification-email-template')}}</i> </p>
 
 
@@ -315,7 +315,7 @@
                             <div class="form-group {{ $errors->has('subscription_over') ? 'has-error' : '' }}">
 
 
-                                {!! Form::select('subscription_over',['Templates'=>$template->where('type',5)->lists('name','id')->toArray()],null,['class'=>'form-control']) !!}
+                                {!! Form::select('subscription_over',['Templates'=>$template->where('type',5)->pluck('name','id')->toArray()],null,['class'=>'form-control']) !!}
                                 <p><i> {{Lang::get('message.choose-mail-template-to-notify-subscription-has-over')}}</i> </p>
 
 
@@ -330,7 +330,7 @@
                             <div class="form-group {{ $errors->has('cart') ? 'has-error' : '' }}">
 
 
-                                {!! Form::select('cart',['Templates'=>$template->where('type',3)->lists('name','id')->toArray()],null,['class'=>'form-control']) !!}
+                                {!! Form::select('cart',['Templates'=>$template->where('type',3)->pluck('name','id')->toArray()],null,['class'=>'form-control']) !!}
                                 <p><i> {{Lang::get('message.choose-shoping-cart-template')}}</i> </p>
 
 

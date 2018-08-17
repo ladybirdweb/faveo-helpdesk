@@ -15,7 +15,7 @@ namespace PhpSpec\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
-final class FileCreationEvent extends Event implements EventInterface
+final class FileCreationEvent extends Event implements PhpSpecEvent
 {
     /**
      * @var string
@@ -31,7 +31,7 @@ final class FileCreationEvent extends Event implements EventInterface
     /**
      * @return string
      */
-    public function getFilePath()
+    public function getFilePath(): string
     {
         return $this->filepath;
     }

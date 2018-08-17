@@ -49,11 +49,18 @@ class ApplicationContext implements Context
 
         $this->application = new Application('2.1-dev');
         $this->application->setAutoExit(false);
+        $this->setFixedTerminalDimensions();
 
         $this->tester = new ApplicationTester($this->application);
 
         $this->setupReRunner();
         $this->setupPrompter();
+    }
+
+    private function setFixedTerminalDimensions()
+    {
+        putenv('COLUMNS=130');
+        putenv('LINES=30');
     }
 
     private function setupPrompter()
@@ -119,28 +126,34 @@ class ApplicationContext implements Context
      */
     public function iRunPhpspecAndAnswerWhenAskedIfIWantToGenerateTheCode($answer, $option=null)
     {
+        $this->runPhpSpecAndAnswerQuestions($answer, 1, $option);
+    }
+
+    /**
+     * @When I run phpspec and answer :answer to (the) :amount questions
+     */
+    public function iRunPhpspecAndAnswerToBothQuestions($amount, $answer)
+    {
+        $this->runPhpSpecAndAnswerQuestions($answer, ($amount === 'both' ? 2 : 3));
+    }
+
+    /**
+     * @param string  $answer
+     * @param integer $times
+     * @param string  $option
+     */
+    private function runPhpSpecAndAnswerQuestions($answer, $times, $option = null)
+    {
         $arguments = array (
             'command' => 'run'
         );
 
         $this->addOptionToArguments($option, $arguments);
 
-        $this->prompter->setAnswer($answer=='y');
-
-        $this->lastExitCode = $this->tester->run($arguments, array('interactive' => true));
-    }
-
-    /**
-     * @When I run phpspec and answer :answer to both questions
-     */
-    public function iRunPhpspecAndAnswerToBothQuestions($answer)
-    {
-        $arguments = array (
-            'command' => 'run'
-        );
-
-        $this->prompter->setAnswer($answer=='y');
-        $this->prompter->setAnswer($answer=='y');
+        $i = 0;
+        while ($i++ < $times) {
+            $this->prompter->setAnswer($answer=='y');
+        }
 
         $this->lastExitCode = $this->tester->run($arguments, array('interactive' => true));
     }
@@ -300,6 +313,18 @@ class ApplicationContext implements Context
     }
 
     /**
+     * @Given there is a PSR-:namespaceType namespace :namespace configured for the :source folder
+     */
+    public function thereIsAPsrNamespaceConfiguredForTheFolder($namespaceType, $namespace, $source)
+    {
+        if (!is_dir(__DIR__ . '/src')) {
+            mkdir(__DIR__ . '/src');
+        }
+        require_once __DIR__ .'/autoloader/fake_autoload.php';
+    }
+
+
+    /**
      * @When I run phpspec with the :config (custom) config and answer :answer when asked if I want to generate the code
      */
     public function iRunPhpspecWithConfigAndAnswerIfIWantToGenerateTheCode($config, $answer)
@@ -357,7 +382,31 @@ class ApplicationContext implements Context
     private function normalize($string)
     {
         $string = preg_replace('/\([0-9]+ms\)/', '', $string);
+        $string = str_replace("\r", '', $string);
+        $string = preg_replace('#(Double\\\\.+?\\\\P)\d+#u', '$1', $string);
 
         return $string;
     }
+
+    /**
+     * @Then I should not be prompted for more questions
+     */
+    public function iShouldNotBePromptedForMoreQuestions()
+    {
+        if ($this->prompter->hasUnansweredQuestions()) {
+            throw new \Exception(
+                'Not all questions were answered. This might lead into further code generation not reflected in the scenario.'
+            );
+        }
+    }
+
+    /**
+     * @Then I should an error about invalid class name :className to generate spec for
+     */
+    public function iShouldAnErrorAboutImpossibleSpecGenerationForClass($className)
+    {
+        $this->checkApplicationOutput("I cannot generate spec for '$className' because class");
+        $this->checkApplicationOutput('name contains reserved keyword');
+    }
+
 }

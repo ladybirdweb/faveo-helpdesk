@@ -41,7 +41,39 @@ trait FormAccessible
             return $this->mutateFormAttribute($key, $value);
         }
 
-        return $value;
+        $keys = explode('.', $key);
+
+        if ($this->isNestedModel($keys[0])) {
+            $relatedModel = $this->getRelation($keys[0]);
+
+            unset($keys[0]);
+            $key = implode('.', $keys);
+
+            if (method_exists($relatedModel, 'hasFormMutator') && $key !== '' && $relatedModel->hasFormMutator($key)) {
+                return $relatedModel->getFormValue($key);
+            }
+
+            return data_get($relatedModel, empty($key)? null: $key);
+        }
+
+        // No form mutator, let the model resolve this
+        return data_get($this, $key);
+    }
+
+    /**
+     * Check for a nested model.
+     *
+     * @param  string  $key
+     *
+     * @return bool
+     */
+    public function isNestedModel($key)
+    {
+        if (in_array($key, array_keys($this->getRelations()))) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -49,13 +81,13 @@ trait FormAccessible
      *
      * @return bool
      */
-    protected function hasFormMutator($key)
+    public function hasFormMutator($key)
     {
         $methods = $this->getReflection()->getMethods(ReflectionMethod::IS_PUBLIC);
 
         $mutator = collect($methods)
-          ->first(function ($index, ReflectionMethod $method) use ($key) {
-              return $method->getName() == 'form' . Str::studly($key) . 'Attribute';
+          ->first(function (ReflectionMethod $method) use ($key) {
+              return $method->getName() === 'form' . Str::studly($key) . 'Attribute';
           });
 
         return (bool) $mutator;

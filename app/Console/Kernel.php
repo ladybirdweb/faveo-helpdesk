@@ -18,6 +18,10 @@ class Kernel extends ConsoleKernel
         'App\Console\Commands\SendReport',
         'App\Console\Commands\CloseWork',
         'App\Console\Commands\TicketFetch',
+        'App\Console\Commands\UpdateEncryption',
+        \App\Console\Commands\DropTables::class,
+        \App\Console\Commands\Install::class,
+        \App\Console\Commands\InstallDB::class,
     ];
 
     /**
@@ -30,12 +34,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         if (env('DB_INSTALL') == 1) {
-            if ($this->getCurrentQueue() != 'sync') {
-                $schedule->command('queue:listen '.$this->getCurrentQueue().' --sleep 60')->everyMinute();
-            }
             $this->execute($schedule, 'fetching');
             $this->execute($schedule, 'notification');
             $this->execute($schedule, 'work');
+            $schedule->command('sla-escalate')->everyThirtyMinutes();
+            if ($this->getCurrentQueue() != 'sync') {
+                $schedule->command('queue:listen '.$this->getCurrentQueue().' --sleep 60')->everyMinute();
+            }
         }
     }
 
@@ -113,5 +118,15 @@ class Kernel extends ConsoleKernel
         }
 
         return $queue;
+    }
+
+    /**
+     * Register the Closure based commands for the application.
+     *
+     * @return void
+     */
+    protected function commands()
+    {
+        require base_path('routes/console.php');
     }
 }

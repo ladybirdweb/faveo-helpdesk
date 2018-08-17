@@ -83,9 +83,9 @@ class Diff_Renderer_Html_SideBySide extends Diff_Renderer_Html_Array
 						$toLine = $change['changed']['offset'] + $no + 1;
 						$html .= '<tr>';
 						$html .= '<th>'.$fromLine.'</th>';
-						$html .= '<td class="Left"><span>'.$line.'</span>&nbsp;</span></td>';
+						$html .= '<td class="Left"><span>'.$line.'</span>&nbsp;</td>';
 						$html .= '<th>'.$toLine.'</th>';
-						$html .= '<td class="Right"><span>'.$line.'</span>&nbsp;</span></td>';
+						$html .= '<td class="Right"><span>'.$line.'</span>&nbsp;</td>';
 						$html .= '</tr>';
 					}
 				}

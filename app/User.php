@@ -7,8 +7,9 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
+use Tymon\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
 
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract, AuthenticatableUserContract
 {
     use Authenticatable,
         CanResetPassword;
@@ -125,7 +126,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $id = $this->attributes['id'];
         }
         $info = new UserAdditionalInfo();
-        $infos = $info->where('owner', $id)->lists('value', 'key')->toArray();
+        $infos = $info->where('owner', $id)->pluck('value', 'key')->toArray();
 
         return $infos;
     }
@@ -175,13 +176,23 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->name();
     }
 
-//    public function save() {
-//        dd($this->id);
-//        parent::save();
-//    }
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
 
-//    public function save(array $options = array()) {
-//        parent::save($options);
-//        dd($this->where('id',$this->id)->select('first_name','last_name','user_name','email')->get()->toJson());
-//    }
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 }

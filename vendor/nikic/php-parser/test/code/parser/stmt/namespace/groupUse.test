@@ -10,7 +10,7 @@ use A\B\{C\D, function b\c, const D};
 -----
 array(
     0: Stmt_GroupUse(
-        type: 0
+        type: TYPE_UNKNOWN (0)
         prefix: Name(
             parts: array(
                 0: A
@@ -18,18 +18,18 @@ array(
         )
         uses: array(
             0: Stmt_UseUse(
-                type: 1
+                type: TYPE_NORMAL (1)
                 name: Name(
                     parts: array(
                         0: B
                     )
                 )
-                alias: B
+                alias: null
             )
         )
     )
     1: Stmt_GroupUse(
-        type: 0
+        type: TYPE_UNKNOWN (0)
         prefix: Name(
             parts: array(
                 0: A
@@ -37,28 +37,28 @@ array(
         )
         uses: array(
             0: Stmt_UseUse(
-                type: 1
+                type: TYPE_NORMAL (1)
                 name: Name(
                     parts: array(
                         0: B
                         1: C
                     )
                 )
-                alias: C
+                alias: null
             )
             1: Stmt_UseUse(
-                type: 1
+                type: TYPE_NORMAL (1)
                 name: Name(
                     parts: array(
                         0: D
                     )
                 )
-                alias: D
+                alias: null
             )
         )
     )
     2: Stmt_GroupUse(
-        type: 0
+        type: TYPE_UNKNOWN (0)
         prefix: Name(
             parts: array(
                 0: A
@@ -67,28 +67,28 @@ array(
         )
         uses: array(
             0: Stmt_UseUse(
-                type: 1
+                type: TYPE_NORMAL (1)
                 name: Name(
                     parts: array(
                         0: C
                         1: D
                     )
                 )
-                alias: D
+                alias: null
             )
             1: Stmt_UseUse(
-                type: 1
+                type: TYPE_NORMAL (1)
                 name: Name(
                     parts: array(
                         0: E
                     )
                 )
-                alias: E
+                alias: null
             )
         )
     )
     3: Stmt_GroupUse(
-        type: 2
+        type: TYPE_FUNCTION (2)
         prefix: Name(
             parts: array(
                 0: A
@@ -96,28 +96,28 @@ array(
         )
         uses: array(
             0: Stmt_UseUse(
-                type: 0
+                type: TYPE_UNKNOWN (0)
                 name: Name(
                     parts: array(
                         0: b
                         1: c
                     )
                 )
-                alias: c
+                alias: null
             )
             1: Stmt_UseUse(
-                type: 0
+                type: TYPE_UNKNOWN (0)
                 name: Name(
                     parts: array(
                         0: d
                     )
                 )
-                alias: d
+                alias: null
             )
         )
     )
     4: Stmt_GroupUse(
-        type: 3
+        type: TYPE_CONSTANT (3)
         prefix: Name(
             parts: array(
                 0: A
@@ -125,28 +125,28 @@ array(
         )
         uses: array(
             0: Stmt_UseUse(
-                type: 0
+                type: TYPE_UNKNOWN (0)
                 name: Name(
                     parts: array(
                         0: B
                         1: C
                     )
                 )
-                alias: C
+                alias: null
             )
             1: Stmt_UseUse(
-                type: 0
+                type: TYPE_UNKNOWN (0)
                 name: Name(
                     parts: array(
                         0: D
                     )
                 )
-                alias: D
+                alias: null
             )
         )
     )
     5: Stmt_GroupUse(
-        type: 0
+        type: TYPE_UNKNOWN (0)
         prefix: Name(
             parts: array(
                 0: A
@@ -155,33 +155,33 @@ array(
         )
         uses: array(
             0: Stmt_UseUse(
-                type: 1
+                type: TYPE_NORMAL (1)
                 name: Name(
                     parts: array(
                         0: C
                         1: D
                     )
                 )
-                alias: D
+                alias: null
             )
             1: Stmt_UseUse(
-                type: 2
+                type: TYPE_FUNCTION (2)
                 name: Name(
                     parts: array(
                         0: b
                         1: c
                     )
                 )
-                alias: c
+                alias: null
             )
             2: Stmt_UseUse(
-                type: 3
+                type: TYPE_CONSTANT (3)
                 name: Name(
                     parts: array(
                         0: D
                     )
                 )
-                alias: D
+                alias: null
             )
         )
     )

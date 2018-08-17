@@ -131,15 +131,15 @@ class GeoIP
      */
     private function find($ip = null)
     {
+        // If IP not set, user remote IP
+        $ip = $ip ?: $this->remote_ip;
+        
         // Check cache for location
         if ($this->config('cache', 'none') !== 'none' && $location = $this->getCache()->get($ip)) {
             $location->cached = true;
 
             return $location;
         }
-
-        // If IP not set, user remote IP
-        $ip = $ip ?: $this->remote_ip;
 
         // Check if the ip is not local or empty
         if ($this->isValid($ip)) {
@@ -206,7 +206,7 @@ class GeoIP
             }
 
             // Create service instance
-            $this->service = app($class, [$config]);
+            $this->service = new $class($config);
         }
 
         return $this->service;

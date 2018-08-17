@@ -693,55 +693,69 @@ if ($thread->title != "") {
                                             </div><!-- /.user-block -->
                                            
                                         </h3>
-                                        <div class="timeline-body" style="padding-left:30px;margin-bottom:-20px">
-                                            
-                                          
-                                            
-                                           @if($conversation->poster=='client')
-                                             <div class="embed-responsive embed-responsive-16by9">
-                                            <iframe id="loader_frame{{$conversation->id}}" class="embed-responsive-item">Body of html email here</iframe>
-<script type="text/javascript">
-jQuery(document).ready(function () {
-/*   setInterval(function(){
-   var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
-   var h     = mydiv.height();
-alert(h+20);
-   }, 2000);*/
-             jQuery('.embed-responsive-16by9').css('height','auto');
-   jQuery('.embed-responsive-16by9').css('padding','0');
-   jQuery('#loader_frame{{$conversation->id}}').css('width','100%');
-   jQuery('#loader_frame{{$conversation->id}}').css('position','static');
-   jQuery('#loader_frame{{$conversation->id}}').css('border','none');
-   var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
-   var h     = mydiv.height();
-   jQuery('#loader_frame{{$conversation->id}}').css('height', h+20);
-   setInterval(function(){
-   //var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
-   //alert(mydiv.height());
-    h = jQuery('#loader_frame{{$conversation->id}}').height();
-    if (!!navigator.userAgent.match(/Trident\/7\./)){
-     jQuery('#loader_frame{{$conversation->id}}').css('height', h);
-    }else {
-     jQuery('#loader_frame{{$conversation->id}}').css('height', h);
-    }
-   }, 2000);
-  });
-</script>
-                                            </div>
+                                        @if(\Lang::getLocale()=='ar')
+                                        <div class="timeline-body{{$conversation -> id}} arindam"   style="padding-right:30px !important;margin-bottom:-20px;margin-top: 15px;">
+                                        @else
+                                        <div class="timeline-body{{$conversation -> id}} arindam"   style="padding-left:30px;margin-bottom:-20px;margin-top: 15px;">
+                                        @endif
+
+
+
+                                            @if($conversation->poster=='client')
+
+
                                             <script>
-                                                 setTimeout(function(){ 
-                                                       $('#loader_frame{{$conversation->id}}')[0].contentDocument.body.innerHTML = '<body><style>body{display:inline-block;height:auto;}</style>{!!$conversation->purify()!!}<body>';   }, 1000);
-                                                
+                                                                if ('{{Lang::getLocale()}}' != 'ar'){
+                                                        $('body').css('display', 'block');
+                                                                setTimeout(function(){
+                                                                var $iframe = "Id{{$conversation->id}}";
+                                                                        $('<iframe src="javascript:void(0)" id=' + $iframe + ' class="iframe" frameborder="0"  scrolling="no" width="100%" style="height:1px"></iframe>').appendTo(".timeline-body{{$conversation->id}}");
+                                                                        setTimeout(function(){
+                                                                        $('#' + $iframe).contents().find('body').append('<body><style>body{display:inline-block;}</style>{!!$conversation->purify(true)!!}<body>');
+                                                                        }, 100);
+                                                                        setTimeout(function(){
+                                                                        var frameid = document.getElementById($iframe);
+                                                                                $("#" + $iframe).contents().find('a').attr('target', '_blank')
+                                                                                if (parseInt($("#" + $iframe).contents().find('img').css('width')) > 700){
+                                                                        $("#" + $iframe).contents().find('img').css('width', '96%');
+                                                                        }
+                                                                        frameid.contentWindow.document.body.style.width = "96%";
+                                                                                var iframe_height = frameid.contentWindow.document.body.scrollHeight;
+                                                                                frameid.style.height = iframe_height + "px";
+                                                                        }, 1000);
+                                                                }, 0);
+                                                        }
+                                                        else{
+
+                                                        setTimeout(function(){
+                                                        $('body').css('display', 'block');
+                                                                var $iframe = "Id{{$conversation->id}}";
+                                                                $('<iframe src="javascript:void(0)" id=' + $iframe + ' class="iframe" frameborder="0"  scrolling="no" width="100%" style="height:1px"></iframe>').appendTo(".timeline-body{{$conversation->id}}");
+                                                                setTimeout(function(){
+                                                                $('#' + $iframe).contents().find('body').append('<body><style>body{display:inline-block;}</style>{!!$conversation->purify(true)!!}<body>');
+                                                                }, 100);
+                                                                setTimeout(function(){
+                                                                var frameid = document.getElementById($iframe);
+                                                                        $("#" + $iframe).contents().find('a').attr('target', '_blank')
+                                                                        if (parseInt($("#" + $iframe).contents().find('img').css('width')) > 700){
+                                                                $("#" + $iframe).contents().find('img').css('width', '96%');
+                                                                }
+                                                                frameid.contentWindow.document.body.style.width = "100%";
+                                                                        var iframe_height = frameid.contentWindow.document.body.scrollHeight;
+                                                                        frameid.style.height = iframe_height + "px";
+                                                                }, 1000);
+                                                        }, 0);
+                                                        }
                                             </script>
                                             @else 
                                             {!! $conversation->body !!}
                                             @endif
                                            
                    
-                                            
 
                                             @if($conversation->id == $ij->id)
-        <?php $ticket_form_datas = App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $tickets->ticket_id)->select('id')->get(); ?>
+        <?php $ticket_form_datas = App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $tickets->id)->get();
+        ?>
                                         @if(isset($ticket_form_datas))
                                         
                                             <br/>

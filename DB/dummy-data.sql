@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.4
+-- version 4.6.6deb5
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jan 03, 2017 at 06:22 AM
--- Server version: 5.7.14
--- PHP Version: 5.6.25
+-- Host: localhost:3306
+-- Generation Time: Aug 16, 2018 at 04:58 PM
+-- Server version: 5.7.22-0ubuntu0.17.10.1
+-- PHP Version: 7.2.7-1+ubuntu17.10.1+deb.sury.org+1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `final`
+-- Database: `test`
 --
 
 -- --------------------------------------------------------
@@ -68,7 +68,7 @@ CREATE TABLE `bar_notifications` (
 --
 
 INSERT INTO `bar_notifications` (`id`, `key`, `value`, `created_at`, `updated_at`) VALUES
-(1, 'new-version', '', '2016-12-13 03:20:32', '2016-12-13 03:20:32');
+(2, 'new-version', '', '2018-08-16 05:58:15', '2018-08-16 05:58:15');
 
 -- --------------------------------------------------------
 
@@ -112,7 +112,8 @@ INSERT INTO `common_settings` (`id`, `option_name`, `option_value`, `status`, `o
 (4, 'user_set_ticket_status', '', '1', '', '2016-12-13 03:19:52', '2016-12-13 03:19:52'),
 (5, 'send_otp', '', '0', '', '2016-12-13 03:19:52', '2016-12-13 03:19:52'),
 (6, 'email_mandatory', '', '1', '', '2016-12-13 03:19:52', '2016-12-13 03:19:52'),
-(7, 'user_priority', '', '0', '', '2016-12-13 03:19:52', '2016-12-13 03:19:52');
+(7, 'user_priority', '', '0', '', '2016-12-13 03:19:52', '2016-12-13 03:19:52'),
+(8, 'dummy_data_installation', '', '1', '', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -521,7 +522,7 @@ CREATE TABLE `emails` (
   `department` int(10) UNSIGNED DEFAULT NULL,
   `priority` int(10) UNSIGNED DEFAULT NULL,
   `help_topic` int(10) UNSIGNED DEFAULT NULL,
-  `user_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `user_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `fetching_host` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `fetching_port` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -737,7 +738,7 @@ CREATE TABLE `kb_article` (
 INSERT INTO `kb_article` (`id`, `name`, `slug`, `description`, `status`, `type`, `publish_time`, `created_at`, `updated_at`) VALUES
 (1, 'DISCLAIMERS', 'disclaimers', '<p>ABC clothing.com does not promise that the site will be inoffensive, error-free or uninterrupted, or that it will provide specific information from use of the site or any content, search, or link on it. The site and its content are delivered on an “as-is” and “as-available” basis. ABC clothing.com cannot ensure that files you download from the site will be free of viruses or contamination or destructive features.</p>\r\n\r\n<p>Thebclothing.com disclaims all warranties, express or implied, including any implied warranties of merchantability and fitness for a particular purpose. ABC clothing.com will not be liable for any damages of any kind arising from the use of this site, including, without limitation, direct, indirect, incidental, and punitive and consequential damages.</p>\r\n\r\n<p>ABC clothing.com disclaims any and all liability for the acts, omissions, and conduct of any third-party users, ABC clothing.com users, advertisers, and/or sponsors on the Site, in connection with the Site, or other-wise related to your use of the Site. ABC clothing.com is not responsible for the products, services, actions, or failure to act of any third party in connection with or referenced on the Site. Without limiting the fore-going, you may report the misconduct of users and/or third-party advertisers or service and/or product providers referenced on or included in the Site to ABC clothing.com at Support@abcclothing.com</p>\r\n\r\n<p>ABC clothing.com may investigate the claim and take appropriate action, at its sole discretion.</p>\r\n\r\n<p>For any query kindly drop mail us on  Support@abcclothing.com.</p>\r\n', 1, 1, '2016-12-13 08:54:00', '2016-12-13 03:25:28', '2016-12-13 03:25:28'),
 (2, 'CUSTOM ORDER', 'custom-order', '<p>You saw, you liked but couldn’t see your size? We will custom make it for you.</p>\r\n\r\n<p><strong>How it works:</strong></p>\r\n\r\n<ol><li>You liked something and want to modify a little or have something else on mind, do pen it down and share it with us on Support@abcclothing.com</li>\r\n  <li>We’ll work out the price depending on how detailed or intricate you want your garment.</li>\r\n <li>An advance would be required for any customized orders.</li>\r\n  <li>Once you’ve placed a deposit, we’ll make you a sketch of the garment.</li>\r\n  <li>We can complete your order in 15-20 days depending on the workload.</li>\r\n  <li>We will also share some updates on the garment in case something needs to be changed.</li>\r\n  <li>We finally ship it to your given address.</li>\r\n</ol><p><strong>Note:</strong> No returns and refunds.</p>\r\n', 1, 1, '2016-12-13 08:56:00', '2016-12-13 03:26:24', '2016-12-13 03:26:24'),
-(3, 'TROUSER SKIRTS', 'trouser-skirts', '<p>Paris takes its fashion very, very seriously. So seriously, in fact, that wearing the wrong thing has actually caused a riot.</p>\r\n\r\n<p>In 1911, two rival Parisian couture houses launched their "trouser skirts," an innovation in fashion that trod the very fixed line between the genders and seemed to promise greater flexibility for women in general. There were two different versions of the trouser skirt: One was a sort of baggy pant with a very low hanging crotch, described as "a sack with holes made for the legs to go through," not unlike the fashions on high streets today, and the other a pair of the same kind of pants topped with an over-skirt, again, not unlike high street fashions of today. Both versions were launched by models at the opening day of racing season to general revulsion and disgust, but thankfully, no violence.</p>\r\n\r\n<p>It wasn\'t until the ladies attempted to promenade their future fashions on the boulevards that the fisticuffs started—at the Place de l\'Opera, the poor models were attacked by a jeering mob of fashion Philistines, who pulled their hair, trampled their hats, and reduced them to tears. A squad of police officers on bicycles were dispatched to rescue the girls and escort them to safety.</p>\r\n', 1, 1, '2016-12-13 08:56:00', '2016-12-13 03:27:02', '2016-12-13 03:27:02'),
+(3, 'TROUSER SKIRTS', 'trouser-skirts', '<p>Paris takes its fashion very, very seriously. So seriously, in fact, that wearing the wrong thing has actually caused a riot.</p>\r\n\r\n<p>In 1911, two rival Parisian couture houses launched their \"trouser skirts,\" an innovation in fashion that trod the very fixed line between the genders and seemed to promise greater flexibility for women in general. There were two different versions of the trouser skirt: One was a sort of baggy pant with a very low hanging crotch, described as \"a sack with holes made for the legs to go through,\" not unlike the fashions on high streets today, and the other a pair of the same kind of pants topped with an over-skirt, again, not unlike high street fashions of today. Both versions were launched by models at the opening day of racing season to general revulsion and disgust, but thankfully, no violence.</p>\r\n\r\n<p>It wasn\'t until the ladies attempted to promenade their future fashions on the boulevards that the fisticuffs started—at the Place de l\'Opera, the poor models were attacked by a jeering mob of fashion Philistines, who pulled their hair, trampled their hats, and reduced them to tears. A squad of police officers on bicycles were dispatched to rescue the girls and escort them to safety.</p>\r\n', 1, 1, '2016-12-13 08:56:00', '2016-12-13 03:27:02', '2016-12-13 03:27:02'),
 (4, 'SECURE SHOPPING GUARANTEE', 'secure-shopping-guarantee', '<p>We accept all major Indian and International Credit/ Debit Cards, and Net Banking with over 40 Banks.</p>\r\n\r\n<p>NO Cash on Delivery (as random people order and share false addresses for fun)</p>\r\n\r\n<p>Yes, shopping at our e-store is 100% safe. All payment requests are directed to the secured PayU Payment Gateway. This gives you the highest level of protection possible whenever you use credit cards or make other financial or confidential transactions over the Internet.</p>\r\n\r\n<p>You can be assured that our e-store offers you the highest standards of security currently available on the net so as to ensure that your shopping experience is private, safe and secure.</p>\r\n', 1, 1, '2016-12-13 08:57:00', '2016-12-13 03:27:42', '2016-12-13 03:27:42'),
 (5, 'PRIVACY POLICY', 'privacy-policy', '<p>The ABC Clothing collects your basic information to service your requests. This basic information is gathered when you purchase products/Gift card vouchers or when you sign up for e-mail notifications. Information gathered from you includes your name, mailing address, e-mail and phone number. Only when you place an order, your card information is requested and is submitted via the highest level of encryption to make sure of the greatest amount of safety and security. Reason why we gather this information:</p>\r\n\r\n<p><strong>To process your order</strong>.<br />\r\nShipping and Customer Service.<br />\r\nWe also use the information to upgrade our products, customer services, website content and navigation.</p>\r\n\r\n<p><br /><strong>Internal Record Keeping</strong>.<br />\r\nWe at The ABC Clothing respect that you do not want your personal information shared with other companies. The information you provide shall, therefore, be only used to process your order and customer support. The ABC Clothing does not share, sell or rent customer information to any other company.</p>\r\n', 1, 1, '2016-12-13 08:58:00', '2016-12-13 03:28:31', '2016-12-13 03:28:31'),
 (6, ' SHIPPING POLICY', 'shipping-policy', '<p>We ship worldwide. We use FedEx/DTDC for shipping.</p>\r\n\r\n<p>Standard Shipping is usually 3-7 Working days for orders within India and 12-15 Working days for International Orders, but usually faster. IF your order doesn’t reach you in time, you may write to us at support@abcclothing.com</p>\r\n\r\n<p><strong>International Orders</strong></p>\r\n\r\n<p>For international orders, please note, your shipping will be calculated at the time of Check out only, this is a System Generated amount, based on your Zip Code, Region and Order Weight. (Approx Costs Rs.1250-1500 for 500 gms – International Shipment, subject to region)</p>\r\n\r\n<p><strong>Tracking</strong></p>\r\n\r\n<p>For tracking your order go to the following website, it will require your tracking ID which is sent via mail in your invoice.</p>\r\n', 1, 1, '2016-12-13 08:58:00', '2016-12-13 03:29:34', '2016-12-13 03:29:34'),
@@ -976,112 +977,113 @@ INSERT INTO `mail_services` (`id`, `name`, `short_name`, `created_at`, `updated_
 
 CREATE TABLE `migrations` (
   `migration` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `batch` int(11) NOT NULL
+  `batch` int(11) NOT NULL,
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
 --
 
-INSERT INTO `migrations` (`migration`, `batch`) VALUES
-('2016_02_16_140450_create_banlist_table', 1),
-('2016_02_16_140450_create_canned_response_table', 1),
-('2016_02_16_140450_create_custom_form_fields_table', 1),
-('2016_02_16_140450_create_custom_forms_table', 1),
-('2016_02_16_140450_create_date_format_table', 1),
-('2016_02_16_140450_create_date_time_format_table', 1),
-('2016_02_16_140450_create_department_table', 1),
-('2016_02_16_140450_create_emails_table', 1),
-('2016_02_16_140450_create_group_assign_department_table', 1),
-('2016_02_16_140450_create_groups_table', 1),
-('2016_02_16_140450_create_help_topic_table', 1),
-('2016_02_16_140450_create_kb_article_relationship_table', 1),
-('2016_02_16_140450_create_kb_article_table', 1),
-('2016_02_16_140450_create_kb_category_table', 1),
-('2016_02_16_140450_create_kb_comment_table', 1),
-('2016_02_16_140450_create_kb_pages_table', 1),
-('2016_02_16_140450_create_kb_settings_table', 1),
-('2016_02_16_140450_create_languages_table', 1),
-('2016_02_16_140450_create_log_notification_table', 1),
-('2016_02_16_140450_create_mailbox_protocol_table', 1),
-('2016_02_16_140450_create_organization_table', 1),
-('2016_02_16_140450_create_password_resets_table', 1),
-('2016_02_16_140450_create_plugins_table', 1),
-('2016_02_16_140450_create_settings_alert_notice_table', 1),
-('2016_02_16_140450_create_settings_auto_response_table', 1),
-('2016_02_16_140450_create_settings_company_table', 1),
-('2016_02_16_140450_create_settings_email_table', 1),
-('2016_02_16_140450_create_settings_ratings_table', 1),
-('2016_02_16_140450_create_settings_system_table', 1),
-('2016_02_16_140450_create_settings_ticket_table', 1),
-('2016_02_16_140450_create_sla_plan_table', 1),
-('2016_02_16_140450_create_team_assign_agent_table', 1),
-('2016_02_16_140450_create_teams_table', 1),
-('2016_02_16_140450_create_template_table', 1),
-('2016_02_16_140450_create_ticket_attachment_table', 1),
-('2016_02_16_140450_create_ticket_collaborator_table', 1),
-('2016_02_16_140450_create_ticket_form_data_table', 1),
-('2016_02_16_140450_create_ticket_priority_table', 1),
-('2016_02_16_140450_create_ticket_source_table', 1),
-('2016_02_16_140450_create_ticket_status_table', 1),
-('2016_02_16_140450_create_ticket_thread_table', 1),
-('2016_02_16_140450_create_tickets_table', 1),
-('2016_02_16_140450_create_time_format_table', 1),
-('2016_02_16_140450_create_timezone_table', 1),
-('2016_02_16_140450_create_user_assign_organization_table', 1),
-('2016_02_16_140450_create_users_table', 1),
-('2016_02_16_140450_create_version_check_table', 1),
-('2016_02_16_140450_create_widgets_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_canned_response_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_department_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_emails_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_group_assign_department_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_help_topic_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_kb_article_relationship_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_kb_comment_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_organization_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_settings_system_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_team_assign_agent_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_teams_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_ticket_attachment_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_ticket_collaborator_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_ticket_form_data_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_ticket_thread_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_tickets_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_user_assign_organization_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_users_table', 1),
-('2016_03_31_061239_create_notifications_table', 1),
-('2016_03_31_061534_create_notification_types_table', 1),
-('2016_03_31_061740_create_user_notification_table', 1),
-('2016_04_18_115852_create_workflow_name_table', 1),
-('2016_04_18_115900_create_workflow_rule_table', 1),
-('2016_04_18_115908_create_workflow_action_table', 1),
-('2016_05_10_102423_create_country_code_table', 1),
-('2016_05_10_102604_create_bar_notifications_table', 1),
-('2016_05_11_105244_create_api_settings_table', 1),
-('2016_05_19_055008_create_workflow_close_table', 1),
-('2016_06_02_072210_create_common_settings_table', 1),
-('2016_06_02_074913_create_login_attempts_table', 1),
-('2016_06_02_080005_create_ratings_table', 1),
-('2016_06_02_081020_create_rating_ref_table', 1),
-('2016_06_02_090225_create_settings_security_table', 1),
-('2016_06_02_090628_create_templates_table', 1),
-('2016_06_02_094409_create_template_sets_table', 1),
-('2016_06_02_094420_create_template_types_table', 1),
-('2016_06_02_095357_create_ticket_token_table', 1),
-('2016_06_28_141613_version1079table', 1),
-('2016_07_02_051247_create_jobs_table', 1),
-('2016_07_02_051439_create_failed_jobs_table', 1),
-('2016_07_19_071910_create_field_values_table', 1),
-('2016_07_26_084458_create_faveo_mails_table', 1),
-('2016_07_26_090201_create_faveo_queues_table', 1),
-('2016_07_26_094753_create_mail_services_table', 1),
-('2016_07_26_095020_create_queue_services_table', 1),
-('2016_07_29_113012_create_conditions_table', 1),
-('2016_08_08_095744_create_social_media_table', 1),
-('2016_08_12_104410_create_user_additional_infos_table', 1),
-('2016_08_16_104539_alter_ticket_source_table', 1),
-('2016_11_30_122809_alter_attachment_table', 2);
+INSERT INTO `migrations` (`migration`, `batch`, `id`) VALUES
+('2016_02_16_140450_create_banlist_table', 1, 1),
+('2016_02_16_140450_create_canned_response_table', 1, 2),
+('2016_02_16_140450_create_custom_form_fields_table', 1, 3),
+('2016_02_16_140450_create_custom_forms_table', 1, 4),
+('2016_02_16_140450_create_date_format_table', 1, 5),
+('2016_02_16_140450_create_date_time_format_table', 1, 6),
+('2016_02_16_140450_create_department_table', 1, 7),
+('2016_02_16_140450_create_emails_table', 1, 8),
+('2016_02_16_140450_create_group_assign_department_table', 1, 9),
+('2016_02_16_140450_create_groups_table', 1, 10),
+('2016_02_16_140450_create_help_topic_table', 1, 11),
+('2016_02_16_140450_create_kb_article_relationship_table', 1, 12),
+('2016_02_16_140450_create_kb_article_table', 1, 13),
+('2016_02_16_140450_create_kb_category_table', 1, 14),
+('2016_02_16_140450_create_kb_comment_table', 1, 15),
+('2016_02_16_140450_create_kb_pages_table', 1, 16),
+('2016_02_16_140450_create_kb_settings_table', 1, 17),
+('2016_02_16_140450_create_languages_table', 1, 18),
+('2016_02_16_140450_create_log_notification_table', 1, 19),
+('2016_02_16_140450_create_mailbox_protocol_table', 1, 20),
+('2016_02_16_140450_create_organization_table', 1, 21),
+('2016_02_16_140450_create_password_resets_table', 1, 22),
+('2016_02_16_140450_create_plugins_table', 1, 23),
+('2016_02_16_140450_create_settings_alert_notice_table', 1, 24),
+('2016_02_16_140450_create_settings_auto_response_table', 1, 25),
+('2016_02_16_140450_create_settings_company_table', 1, 26),
+('2016_02_16_140450_create_settings_email_table', 1, 27),
+('2016_02_16_140450_create_settings_ratings_table', 1, 28),
+('2016_02_16_140450_create_settings_system_table', 1, 29),
+('2016_02_16_140450_create_settings_ticket_table', 1, 30),
+('2016_02_16_140450_create_sla_plan_table', 1, 31),
+('2016_02_16_140450_create_team_assign_agent_table', 1, 32),
+('2016_02_16_140450_create_teams_table', 1, 33),
+('2016_02_16_140450_create_template_table', 1, 34),
+('2016_02_16_140450_create_ticket_attachment_table', 1, 35),
+('2016_02_16_140450_create_ticket_collaborator_table', 1, 36),
+('2016_02_16_140450_create_ticket_form_data_table', 1, 37),
+('2016_02_16_140450_create_ticket_priority_table', 1, 38),
+('2016_02_16_140450_create_ticket_source_table', 1, 39),
+('2016_02_16_140450_create_ticket_status_table', 1, 40),
+('2016_02_16_140450_create_ticket_thread_table', 1, 41),
+('2016_02_16_140450_create_tickets_table', 1, 42),
+('2016_02_16_140450_create_time_format_table', 1, 43),
+('2016_02_16_140450_create_timezone_table', 1, 44),
+('2016_02_16_140450_create_user_assign_organization_table', 1, 45),
+('2016_02_16_140450_create_users_table', 1, 46),
+('2016_02_16_140450_create_version_check_table', 1, 47),
+('2016_02_16_140450_create_widgets_table', 1, 48),
+('2016_02_16_140454_add_foreign_keys_to_canned_response_table', 1, 49),
+('2016_02_16_140454_add_foreign_keys_to_department_table', 1, 50),
+('2016_02_16_140454_add_foreign_keys_to_emails_table', 1, 51),
+('2016_02_16_140454_add_foreign_keys_to_group_assign_department_table', 1, 52),
+('2016_02_16_140454_add_foreign_keys_to_help_topic_table', 1, 53),
+('2016_02_16_140454_add_foreign_keys_to_kb_article_relationship_table', 1, 54),
+('2016_02_16_140454_add_foreign_keys_to_kb_comment_table', 1, 55),
+('2016_02_16_140454_add_foreign_keys_to_organization_table', 1, 56),
+('2016_02_16_140454_add_foreign_keys_to_settings_system_table', 1, 57),
+('2016_02_16_140454_add_foreign_keys_to_team_assign_agent_table', 1, 58),
+('2016_02_16_140454_add_foreign_keys_to_teams_table', 1, 59),
+('2016_02_16_140454_add_foreign_keys_to_ticket_attachment_table', 1, 60),
+('2016_02_16_140454_add_foreign_keys_to_ticket_collaborator_table', 1, 61),
+('2016_02_16_140454_add_foreign_keys_to_ticket_form_data_table', 1, 62),
+('2016_02_16_140454_add_foreign_keys_to_ticket_thread_table', 1, 63),
+('2016_02_16_140454_add_foreign_keys_to_tickets_table', 1, 64),
+('2016_02_16_140454_add_foreign_keys_to_user_assign_organization_table', 1, 65),
+('2016_02_16_140454_add_foreign_keys_to_users_table', 1, 66),
+('2016_03_31_061239_create_notifications_table', 1, 67),
+('2016_03_31_061534_create_notification_types_table', 1, 68),
+('2016_03_31_061740_create_user_notification_table', 1, 69),
+('2016_04_18_115852_create_workflow_name_table', 1, 70),
+('2016_04_18_115900_create_workflow_rule_table', 1, 71),
+('2016_04_18_115908_create_workflow_action_table', 1, 72),
+('2016_05_10_102423_create_country_code_table', 1, 73),
+('2016_05_10_102604_create_bar_notifications_table', 1, 74),
+('2016_05_11_105244_create_api_settings_table', 1, 75),
+('2016_05_19_055008_create_workflow_close_table', 1, 76),
+('2016_06_02_072210_create_common_settings_table', 1, 77),
+('2016_06_02_074913_create_login_attempts_table', 1, 78),
+('2016_06_02_080005_create_ratings_table', 1, 79),
+('2016_06_02_081020_create_rating_ref_table', 1, 80),
+('2016_06_02_090225_create_settings_security_table', 1, 81),
+('2016_06_02_090628_create_templates_table', 1, 82),
+('2016_06_02_094409_create_template_sets_table', 1, 83),
+('2016_06_02_094420_create_template_types_table', 1, 84),
+('2016_06_02_095357_create_ticket_token_table', 1, 85),
+('2016_06_28_141613_version1079table', 1, 86),
+('2016_07_02_051247_create_jobs_table', 1, 87),
+('2016_07_02_051439_create_failed_jobs_table', 1, 88),
+('2016_07_19_071910_create_field_values_table', 1, 89),
+('2016_07_26_084458_create_faveo_mails_table', 1, 90),
+('2016_07_26_090201_create_faveo_queues_table', 1, 91),
+('2016_07_26_094753_create_mail_services_table', 1, 92),
+('2016_07_26_095020_create_queue_services_table', 1, 93),
+('2016_07_29_113012_create_conditions_table', 1, 94),
+('2016_08_08_095744_create_social_media_table', 1, 95),
+('2016_08_12_104410_create_user_additional_infos_table', 1, 96),
+('2016_08_16_104539_alter_ticket_source_table', 1, 97),
+('2016_11_30_122809_alter_attachment_table', 2, 98);
 
 -- --------------------------------------------------------
 
@@ -1628,7 +1630,7 @@ CREATE TABLE `templates` (
 INSERT INTO `templates` (`id`, `name`, `variable`, `type`, `subject`, `message`, `description`, `set_id`, `created_at`, `updated_at`) VALUES
 (1, 'This template is for sending notice to agent when ticket is assigned to them', '0', 1, '', '<div>Hello {!!$ticket_agent_name!!},<br /><br /><b>Ticket No:</b> {!!$ticket_number!!}<br />Has been assigned to you by {!!$ticket_assigner!!} <br /> Please check and resppond on the ticket.<br /> Link: {!!$ticket_link!!}<br /><br />Thank You<br />Kind Regards,<br /> {!!$system_from!!}</div>', '', 1, '2016-12-13 03:19:50', '2016-12-13 03:19:50'),
 (2, 'This template is for sending notice to client with ticket link to check ticket without logging in to system', '1', 2, 'Check your Ticket', '<div>Hello {!!$user!!},<br /><br />Click the link below to view your requested ticket<br /> {!!$ticket_link_with_number!!}<br /><br />Kind Regards,<br /> {!!$system_from!!}</div>', '', 1, '2016-12-13 03:19:50', '2016-12-13 03:19:50'),
-(3, 'This template is for sending notice to client when ticket status is changed to close', '0', 3, '', '<div>Hello,<br /><br />This message is regarding your ticket ID {!!$ticket_number!!}. We are changing the status of this ticket to "Closed" as the issue appears to be resolved.<br /><br />Thank you<br />Kind regards,<br /> {!!$system_from!!}</div>', '', 1, '2016-12-13 03:19:50', '2016-12-13 03:19:50'),
+(3, 'This template is for sending notice to client when ticket status is changed to close', '0', 3, '', '<div>Hello,<br /><br />This message is regarding your ticket ID {!!$ticket_number!!}. We are changing the status of this ticket to \"Closed\" as the issue appears to be resolved.<br /><br />Thank you<br />Kind regards,<br /> {!!$system_from!!}</div>', '', 1, '2016-12-13 03:19:50', '2016-12-13 03:19:50'),
 (4, 'This template is for sending notice to client on successful ticket creation', '0', 4, '', '<div><span>Hello {!!$user!!}<br /><br /></span><span>Thank you for contacting us. This is an automated response confirming the receipt of your ticket. Our team will get back to you as soon as possible. When replying, please make sure that the ticket ID is kept in the subject so that we can track your replies.<br /><br /></span><span><b>Ticket ID:</b> {!!$ticket_number!!} <br /><br /></span><span> {!!$department_sign!!}<br /></span>You can check the status of or update this ticket online at: {!!$system_link!!}</div>', '', 1, '2016-12-13 03:19:51', '2016-12-13 03:19:51'),
 (5, 'This template is for sending notice to agent on new ticket creation', '0', 5, '', '<div>Hello {!!$ticket_agent_name!!},<br /><br />New ticket {!!$ticket_number!!}created <br /><br /><b>From</b><br /><b>Name:</b> {!!$ticket_client_name!!}   <br /><b>E-mail:</b> {!!$ticket_client_email!!}<br /><br /> {!!$content!!}<br /><br />Kind Regards,<br /> {!!$system_from!!}</div>', '', 1, '2016-12-13 03:19:51', '2016-12-13 03:19:51'),
 (6, 'This template is for sending notice to client on new ticket created by agent in name of client', '0', 6, '', '<div> {!!$content!!}<br /><br /> {!!$agent_sign!!}<br /><br />You can check the status of or update this ticket online at: {!!$system_link!!}</div>', '', 1, '2016-12-13 03:19:51', '2016-12-13 03:19:51'),
@@ -1639,7 +1641,7 @@ INSERT INTO `templates` (`id`, `name`, `variable`, `type`, `subject`, `message`,
 (11, 'This template is for sending notice to client about registration confirmation link', '1', 11, 'Verify your email address', '<p>Hello {!!$user!!}, </p><p>This email is confirmation that you are now registered at our helpdesk.</p><p><b>Registered Email:</b> {!!$email_address!!}</p><p>Please click on the below link to activate your account and Login to the system {!!$password_reset_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p> {!!$system_from!!} </p>', '', 1, '2016-12-13 03:19:52', '2016-12-13 03:19:52'),
 (12, 'This template is for sending notice to team when ticket is assigned to team', '1', 12, '', '<div>Hello {!!$ticket_agent_name!!},<br /><br /><b>Ticket No:</b> {!!$ticket_number!!}<br />Has been assigned to your team : {!!$team!!} by {!!$ticket_assigner!!} <br /><br />Thank You<br />Kind Regards,<br />{!!$system_from!!}</div>', '', 1, '2016-12-13 03:19:52', '2016-12-13 03:19:52'),
 (13, 'This template is for sending notice to client when password is changed', '1', 13, 'Verify your email address', 'Hello {!!$user!!},<br /><br />Your password is successfully changed.Your new password is : {!!$user_password!!}<br /><br />Thank You.<br /><br />Kind Regards,<br /> {!!$system_from!!}', '', 1, '2016-12-13 03:19:52', '2016-12-13 03:19:52'),
-(14, 'This template is to notify users when their tickets are merged.', '1', 14, 'Your tickets have been merged.', '<p>Hello {!!$user!!},<br />&nbsp;</p><p>Your ticket(s) with ticket number {!!$merged_ticket_numbers!!} have been closed and&nbsp;merged with <a href="{!!$ticket_link!!}">{!!$ticket_number!!}</a>.&nbsp;</p><p>Possible reasons for merging tickets</p><ul><li>Tickets are duplicate</li<li>Tickets state&nbsp;the same issue</li><li>Another member from your organization has created a ticket for the same issue</li></ul><p><a href="{!!$system_link!!}">Click here</a> to login to your account and check your tickets.</p><p>Regards,</p><p>{!!$system_from!!}</p>', '', 1, '2017-01-02 00:20:12', '2017-01-02 00:31:50');
+(14, 'This template is to notify users when their tickets are merged.', '1', 14, 'Your tickets have been merged.', '<p>Hello {!!$user!!},<br />&nbsp;</p><p>Your ticket(s) with ticket number {!!$merged_ticket_numbers!!} have been closed and&nbsp;merged with <a href=\"{!!$ticket_link!!}\">{!!$ticket_number!!}</a>.&nbsp;</p><p>Possible reasons for merging tickets</p><ul><li>Tickets are duplicate</li<li>Tickets state&nbsp;the same issue</li><li>Another member from your organization has created a ticket for the same issue</li></ul><p><a href=\"{!!$system_link!!}\">Click here</a> to login to your account and check your tickets.</p><p>Regards,</p><p>{!!$system_from!!}</p>', '', 1, '2017-01-02 00:20:12', '2017-01-02 00:31:50');
 
 -- --------------------------------------------------------
 
@@ -2134,21 +2136,22 @@ CREATE TABLE `users` (
   `profile_pic` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `user_language` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `user_name`, `first_name`, `last_name`, `gender`, `email`, `ban`, `password`, `active`, `is_delete`, `ext`, `country_code`, `phone_number`, `mobile`, `agent_sign`, `account_type`, `account_status`, `assign_group`, `primary_dpt`, `agent_tzone`, `daylight_save`, `limit_access`, `directory_listing`, `vacation_mode`, `company`, `role`, `internal_note`, `profile_pic`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'demo_admin', 'Demo', 'Admin', 0, NULL, 0, '$2y$10$ZkHOJeJCKFzLtL4yWXZ3suVZlG.fJwD9oUI3nM5FGESmIkQV1hMXC', 1, 0, '', 0, '', NULL, '', '', '', 1, 1, '', '', '', '', '', '', 'admin', '', '', NULL, '2016-12-13 03:19:53', '2016-12-13 03:19:53'),
-(2, 'demo_agent', 'Abhrakasin', 'KK', 0, NULL, 0, '$2y$10$nrMZMd72/HZbnzjBAi0RX.UQrNTtFeZFEK9aq.chDPZZ07rOC/6Ie', 1, 0, '', 0, '', NULL, '', '', '', 1, 1, '79', '', '', '', '', '', 'agent', '', '', NULL, '2016-12-13 03:32:41', '2016-12-13 03:32:42'),
-(3, 'Johan', 'Johan', 'Malhotra', 0, NULL, 0, '$2y$10$Eq8SHKUEXCkW5vqiWvA0Iu1UJmzZ.e5.Q3hI2tkxey5HZ2Lmbxb1C', 1, 0, '', 0, '', NULL, '', '', '', 2, 2, '7', '', '', '', '', '', 'agent', '', '', NULL, '2016-12-13 03:35:29', '2016-12-13 03:35:30'),
-(4, 'demo_client', 'Fidel Martin', '', 0, NULL, 0, '$2y$10$wHupGhJqz2p4rcdS4eq4ZO.NQ65b0JjVsqhJwEEzOCl3vMKwzh9/S', 1, 0, '', 0, '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', 'PXj6d2s7rOqoh53gHdyPbiHOVvBmDoR5CnXg9kl7fRolIC92Y20UnFPSOryw', '2016-12-13 03:45:19', '2016-12-13 03:45:19'),
-(5, 'joseph2321@gmail.com', 'Joseph Rossignol', '', 0, NULL, 0, '$2y$10$7eQ0nFxQpQkWaKwUbzTsQ.ufQpRN1rwUGY5ER1KsoXoLd6KbMIHnG', 1, 0, '', 0, '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', 'nv7Z37jhwAVdt87WCVzsqweY6wUbic7ll44FNmygMmwcnErafCrVpnw6Krys', '2016-12-13 03:50:55', '2016-12-13 03:50:55'),
-(6, 'ichae1212@gmail.com', 'Ichae Semos', '', 0, NULL, 0, '$2y$10$aITz4IUuaxb0VHwF2V2CPefwf/Ft0VXpmHDC9feEfNXkW90GdjCFm', 1, 0, '', 0, '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', 'egq0NWPaxEkwkXmV3L0BJ4j4O6aKlgjzNZxea0XpYvCAeVvZLbXsjkKmWyBZ', '2016-12-13 03:55:54', '2016-12-13 03:55:54'),
-(7, 'kusti09@yahoo.com', 'Kusti Franti', '', 0, NULL, 0, '$2y$10$yNHebbyWfr6m1t4srRlYbuj2JN706ZBpyMI.gSJmuY9czJ3OzuQpq', 1, 0, '', 0, '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', '4JPKOO9UUjZ2yX1GI7WYaeljcdyFATmguwNGuUD9chDodCVfJVGBJvbepgOt', '2016-12-13 03:58:40', '2016-12-13 03:58:40');
+INSERT INTO `users` (`id`, `user_name`, `first_name`, `last_name`, `gender`, `email`, `ban`, `password`, `active`, `is_delete`, `ext`, `country_code`, `phone_number`, `mobile`, `agent_sign`, `account_type`, `account_status`, `assign_group`, `primary_dpt`, `agent_tzone`, `daylight_save`, `limit_access`, `directory_listing`, `vacation_mode`, `company`, `role`, `internal_note`, `profile_pic`, `remember_token`, `created_at`, `updated_at`, `user_language`) VALUES
+(1, 'demo_admin', 'Demo', 'Admin', 0, NULL, 0, '$2y$10$ZkHOJeJCKFzLtL4yWXZ3suVZlG.fJwD9oUI3nM5FGESmIkQV1hMXC', 1, 0, '', 0, '', NULL, '', '', '', 1, 1, '', '', '', '', '', '', 'admin', '', '', NULL, '2016-12-13 03:19:53', '2016-12-13 03:19:53', NULL),
+(2, 'demo_agent', 'Abhrakasin', 'KK', 0, NULL, 0, '$2y$10$nrMZMd72/HZbnzjBAi0RX.UQrNTtFeZFEK9aq.chDPZZ07rOC/6Ie', 1, 0, '', 0, '', NULL, '', '', '', 1, 1, '79', '', '', '', '', '', 'agent', '', '', NULL, '2016-12-13 03:32:41', '2016-12-13 03:32:42', NULL),
+(3, 'Johan', 'Johan', 'Malhotra', 0, NULL, 0, '$2y$10$Eq8SHKUEXCkW5vqiWvA0Iu1UJmzZ.e5.Q3hI2tkxey5HZ2Lmbxb1C', 1, 0, '', 0, '', NULL, '', '', '', 2, 2, '7', '', '', '', '', '', 'agent', '', '', NULL, '2016-12-13 03:35:29', '2016-12-13 03:35:30', NULL),
+(4, 'demo_client', 'Fidel Martin', '', 0, NULL, 0, '$2y$10$wHupGhJqz2p4rcdS4eq4ZO.NQ65b0JjVsqhJwEEzOCl3vMKwzh9/S', 1, 0, '', 0, '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', 'PXj6d2s7rOqoh53gHdyPbiHOVvBmDoR5CnXg9kl7fRolIC92Y20UnFPSOryw', '2016-12-13 03:45:19', '2016-12-13 03:45:19', NULL),
+(5, 'joseph2321@gmail.com', 'Joseph Rossignol', '', 0, NULL, 0, '$2y$10$7eQ0nFxQpQkWaKwUbzTsQ.ufQpRN1rwUGY5ER1KsoXoLd6KbMIHnG', 1, 0, '', 0, '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', 'nv7Z37jhwAVdt87WCVzsqweY6wUbic7ll44FNmygMmwcnErafCrVpnw6Krys', '2016-12-13 03:50:55', '2016-12-13 03:50:55', NULL),
+(6, 'ichae1212@gmail.com', 'Ichae Semos', '', 0, NULL, 0, '$2y$10$aITz4IUuaxb0VHwF2V2CPefwf/Ft0VXpmHDC9feEfNXkW90GdjCFm', 1, 0, '', 0, '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', 'egq0NWPaxEkwkXmV3L0BJ4j4O6aKlgjzNZxea0XpYvCAeVvZLbXsjkKmWyBZ', '2016-12-13 03:55:54', '2016-12-13 03:55:54', NULL),
+(7, 'kusti09@yahoo.com', 'Kusti Franti', '', 0, NULL, 0, '$2y$10$yNHebbyWfr6m1t4srRlYbuj2JN706ZBpyMI.gSJmuY9czJ3OzuQpq', 1, 0, '', 0, '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', '4JPKOO9UUjZ2yX1GI7WYaeljcdyFATmguwNGuUD9chDodCVfJVGBJvbepgOt', '2016-12-13 03:58:40', '2016-12-13 03:58:40', NULL);
 
 -- --------------------------------------------------------
 
@@ -2260,8 +2263,6 @@ INSERT INTO `widgets` (`id`, `name`, `title`, `value`, `created_at`, `updated_at
 (2, 'footer2', 'Company', '<ul><li>About Us</li><li>Road Map</li><li>Privacy Policy</li><li>Cancellation &amp; Refund Policy<br /></li><li>Term &amp; Condition</li></ul>', '2016-12-13 03:19:30', '2016-12-13 03:21:40'),
 (3, 'footer3', 'Find out More', '<ul><li>Forums</li><li>News</li><li>Blog</li><li>Partner NOC Directory</li></ul>', '2016-12-13 03:19:30', '2016-12-13 03:22:06'),
 (4, 'footer4', 'Contact Us', '<div>\r\n                                        <p><i>BTM Layout, No: #28<br />9th Cross First Stage BTM Layout Near Water Tank<br /></i><i>Bangalore – 560 029</i><br /><i>Karnataka – India<br /></i><i>Telephone: </i><i>+91 9999999999<br /></i><i>Email: </i><a><i>   support@abcclothing.com</i></a></p></div>', '2016-12-13 03:19:30', '2016-12-13 03:22:34'),
-(5, 'side1', NULL, NULL, '2016-12-13 03:19:30', '2016-12-13 03:19:30'),
-(6, 'side2', NULL, NULL, '2016-12-13 03:19:30', '2016-12-13 03:19:30'),
 (7, 'linkedin', NULL, NULL, '2016-12-13 03:19:31', '2016-12-13 03:19:31'),
 (8, 'stumble', NULL, NULL, '2016-12-13 03:19:31', '2016-12-13 03:19:31'),
 (9, 'google', NULL, NULL, '2016-12-13 03:19:31', '2016-12-13 03:19:31'),
@@ -2563,6 +2564,12 @@ ALTER TABLE `mailbox_protocol`
 -- Indexes for table `mail_services`
 --
 ALTER TABLE `mail_services`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `migrations`
+--
+ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2887,7 +2894,7 @@ ALTER TABLE `banlist`
 -- AUTO_INCREMENT for table `bar_notifications`
 --
 ALTER TABLE `bar_notifications`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `canned_response`
 --
@@ -2897,7 +2904,7 @@ ALTER TABLE `canned_response`
 -- AUTO_INCREMENT for table `common_settings`
 --
 ALTER TABLE `common_settings`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `conditions`
 --
@@ -3033,6 +3040,11 @@ ALTER TABLE `mailbox_protocol`
 --
 ALTER TABLE `mail_services`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT for table `migrations`
+--
+ALTER TABLE `migrations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 --
 -- AUTO_INCREMENT for table `notifications`
 --

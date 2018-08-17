@@ -30,16 +30,6 @@ class TaggedCache extends Repository
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function fireCacheEvent($event, $payload)
-    {
-        $payload[] = $this->tags->getNames();
-
-        parent::fireCacheEvent($event, $payload);
-    }
-
-    /**
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
@@ -52,7 +42,7 @@ class TaggedCache extends Repository
     }
 
     /**
-     * Increment the value of an item in the cache.
+     * Decrement the value of an item in the cache.
      *
      * @param  string  $key
      * @param  mixed   $value
@@ -90,5 +80,16 @@ class TaggedCache extends Repository
     public function taggedItemKey($key)
     {
         return sha1($this->tags->getNamespace()).':'.$key;
+    }
+
+    /**
+     * Fire an event for this cache instance.
+     *
+     * @param  string  $event
+     * @return void
+     */
+    protected function event($event)
+    {
+        parent::event($event->setTags($this->tags->getNames()));
     }
 }

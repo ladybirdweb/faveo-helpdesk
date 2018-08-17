@@ -28,8 +28,8 @@ class WordCount extends AbstractValidator
      * @var array Error message templates
      */
     protected $messageTemplates = [
-        self::TOO_MUCH => "Too many words, maximum '%max%' are allowed but '%count%' were counted",
-        self::TOO_LESS => "Too few words, minimum '%min%' are expected but '%count%' were counted",
+        self::TOO_MUCH  => "Too many words, maximum '%max%' are allowed but '%count%' were counted",
+        self::TOO_LESS  => "Too few words, minimum '%min%' are expected but '%count%' were counted",
         self::NOT_FOUND => "File is not readable or does not exist",
     ];
 
@@ -75,7 +75,7 @@ class WordCount extends AbstractValidator
     public function __construct($options = null)
     {
         if (1 < func_num_args()) {
-            $args = func_get_args();
+            $args    = func_get_args();
             $options = [
                 'min' => array_shift($args),
                 'max' => array_shift($args),
@@ -103,8 +103,8 @@ class WordCount extends AbstractValidator
      * Sets the minimum word count
      *
      * @param  int|array $min The minimum word count
-     * @return WordCount Provides a fluent interface
      * @throws Exception\InvalidArgumentException When min is greater than max
+     * @return self Provides a fluent interface
      */
     public function setMin($min)
     {
@@ -141,8 +141,8 @@ class WordCount extends AbstractValidator
      * Sets the maximum file count
      *
      * @param  int|array $max The maximum word count
-     * @return WordCount Provides a fluent interface
      * @throws Exception\InvalidArgumentException When max is smaller than min
+     * @return self Provides a fluent interface
      */
     public function setMax($max)
     {
@@ -180,7 +180,7 @@ class WordCount extends AbstractValidator
             $filename = $file['name'];
             $file     = $file['tmp_name'];
         } elseif (is_array($value)) {
-            if (!isset($value['tmp_name']) || !isset($value['name'])) {
+            if (! isset($value['tmp_name']) || ! isset($value['name'])) {
                 throw new Exception\InvalidArgumentException(
                     'Value array must be in $_FILES format'
                 );
@@ -194,7 +194,7 @@ class WordCount extends AbstractValidator
         $this->setValue($filename);
 
         // Is file readable ?
-        if (empty($file) || false === stream_resolve_include_path($file)) {
+        if (empty($file) || false === is_readable($file)) {
             $this->error(self::NOT_FOUND);
             return false;
         }

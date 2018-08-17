@@ -43,10 +43,12 @@ class Service extends AbstractModel
         ], $defaultMeta = [
             'apiVersion'       => null,
             'serviceFullName'  => null,
+            'serviceId'        => null,
             'endpointPrefix'   => null,
             'signingName'      => null,
             'signatureVersion' => null,
-            'protocol'         => null
+            'protocol'         => null,
+            'uid'              => null
         ];
 
         $definition += $defaults;
@@ -86,7 +88,9 @@ class Service extends AbstractModel
 
         if (isset($mapping[$proto])) {
             return new $mapping[$proto]($api, $endpoint);
-        } elseif ($proto == 'ec2') {
+        }
+
+        if ($proto == 'ec2') {
             return new QuerySerializer($api, $endpoint, new Ec2ParamBuilder());
         }
 
@@ -139,7 +143,9 @@ class Service extends AbstractModel
         $proto = $api->getProtocol();
         if (isset($mapping[$proto])) {
             return new $mapping[$proto]($api);
-        } elseif ($proto == 'ec2') {
+        }
+
+        if ($proto == 'ec2') {
             return new QueryParser($api, null, false);
         }
 
@@ -156,6 +162,16 @@ class Service extends AbstractModel
     public function getServiceFullName()
     {
         return $this->definition['metadata']['serviceFullName'];
+    }
+
+    /**
+     * Get the service id
+     *
+     * @return string
+     */
+    public function getServiceId()
+    {
+        return $this->definition['metadata']['serviceId'];
     }
 
     /**
@@ -222,6 +238,16 @@ class Service extends AbstractModel
     }
 
     /**
+     * Get the uid string used by the service
+     *
+     * @return string
+     */
+    public function getUid()
+    {
+        return $this->definition['metadata']['uid'];
+    }
+
+    /**
      * Check if the description has a specific operation by name.
      *
      * @param string $name Operation to check by name
@@ -282,7 +308,9 @@ class Service extends AbstractModel
     {
         if (!$key) {
             return $this['metadata'];
-        } elseif (isset($this->definition['metadata'][$key])) {
+        }
+
+        if (isset($this->definition['metadata'][$key])) {
             return $this->definition['metadata'][$key];
         }
 

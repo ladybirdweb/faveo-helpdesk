@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\Translation\Tests\Dumper;
 
-use Symfony\Component\Translation\MessageCatalogue;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Dumper\JsonFileDumper;
+use Symfony\Component\Translation\MessageCatalogue;
 
-class JsonFileDumperTest extends \PHPUnit_Framework_TestCase
+class JsonFileDumperTest extends TestCase
 {
     public function testFormatCatalogue()
     {

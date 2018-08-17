@@ -6,15 +6,15 @@
     "authors": [
         {
             "name": "Taylor Otwell",
-            "email": "taylorotwell@gmail.com"
+            "email": "taylor@laravel.com"
         }
     ],
     "require": {
         "php": ">=5.4.0",
-        "guzzlehttp/guzzle": "~5.0|~6.0",
-        "illuminate/contracts": "~5.0",
-        "illuminate/http": "~5.0",
-        "illuminate/support": "~5.0",
+        "guzzlehttp/guzzle": "~6.0",
+        "illuminate/contracts": "~5.4",
+        "illuminate/http": "~5.4",
+        "illuminate/support": "~5.4",
         "league/oauth1-client": "~1.0"
     },
     "require-dev": {
@@ -34,6 +34,19 @@
     "extra": {
         "branch-alias": {
             "dev-master": "3.0-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Laravel\\Socialite\\SocialiteServiceProvider"
+            ],
+            "aliases": {
+                "Socialite": "Laravel\\Socialite\\Facades\\Socialite"
+            }
         }
-    }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

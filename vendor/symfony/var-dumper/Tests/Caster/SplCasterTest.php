@@ -11,12 +11,13 @@
 
 namespace Symfony\Component\VarDumper\Tests\Caster;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\VarDumper\Test\VarDumperTestTrait;
 
 /**
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  */
-class SplCasterTest extends \PHPUnit_Framework_TestCase
+class SplCasterTest extends TestCase
 {
     use VarDumperTestTrait;
 
@@ -96,10 +97,10 @@ SplFileObject {
   file: true
   dir: false
   link: false
-%AcsvControl: array:2 [
+%AcsvControl: array:%d [
     0 => ","
     1 => """
-  ]
+%A]
   flags: DROP_NEW_LINE|SKIP_EMPTY
   maxLineLen: 0
   fstat: array:26 [
@@ -117,4 +118,90 @@ SplFileObject {
 EOTXT;
         $this->assertDumpMatchesFormat($dump, $var);
     }
+
+    /**
+     * @dataProvider provideCastSplDoublyLinkedList
+     */
+    public function testCastSplDoublyLinkedList($modeValue, $modeDump)
+    {
+        $var = new \SplDoublyLinkedList();
+        $var->setIteratorMode($modeValue);
+        $dump = <<<EOTXT
+SplDoublyLinkedList {
+%Amode: $modeDump
+  dllist: []
+}
+EOTXT;
+        $this->assertDumpMatchesFormat($dump, $var);
+    }
+
+    public function provideCastSplDoublyLinkedList()
+    {
+        return array(
+            array(\SplDoublyLinkedList::IT_MODE_FIFO, 'IT_MODE_FIFO | IT_MODE_KEEP'),
+            array(\SplDoublyLinkedList::IT_MODE_LIFO, 'IT_MODE_LIFO | IT_MODE_KEEP'),
+            array(\SplDoublyLinkedList::IT_MODE_FIFO | \SplDoublyLinkedList::IT_MODE_DELETE, 'IT_MODE_FIFO | IT_MODE_DELETE'),
+            array(\SplDoublyLinkedList::IT_MODE_LIFO | \SplDoublyLinkedList::IT_MODE_DELETE, 'IT_MODE_LIFO | IT_MODE_DELETE'),
+        );
+    }
+
+    public function testCastObjectStorageIsntModified()
+    {
+        $var = new \SplObjectStorage();
+        $var->attach(new \stdClass());
+        $var->rewind();
+        $current = $var->current();
+
+        $this->assertDumpMatchesFormat('%A', $var);
+        $this->assertSame($current, $var->current());
+    }
+
+    public function testCastObjectStorageDumpsInfo()
+    {
+        $var = new \SplObjectStorage();
+        $var->attach(new \stdClass(), new \DateTime());
+
+        $this->assertDumpMatchesFormat('%ADateTime%A', $var);
+    }
+
+    public function testCastArrayObject()
+    {
+        $var = new \ArrayObject(array(123));
+        $var->foo = 234;
+
+        $expected = <<<EOTXT
+ArrayObject {
+  +"foo": 234
+  flag::STD_PROP_LIST: false
+  flag::ARRAY_AS_PROPS: false
+  iteratorClass: "ArrayIterator"
+  storage: array:1 [
+    0 => 123
+  ]
+}
+EOTXT;
+        $this->assertDumpEquals($expected, $var);
+    }
+
+    public function testArrayIterator()
+    {
+        $var = new MyArrayIterator(array(234));
+
+        $expected = <<<EOTXT
+Symfony\Component\VarDumper\Tests\Caster\MyArrayIterator {
+  -foo: 123
+  flag::STD_PROP_LIST: false
+  flag::ARRAY_AS_PROPS: false
+  storage: array:1 [
+    0 => 234
+  ]
+}
+EOTXT;
+        $this->assertDumpEquals($expected, $var);
+    }
+}
+
+class MyArrayIterator extends \ArrayIterator
+{
+    private $foo = 123;
 }

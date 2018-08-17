@@ -125,7 +125,7 @@ class="active"
         </div>
 
         <?php
-        $user_orga_relation_id = "";
+        $user_orga_relation_id = [];
         $user_orga_relations = App\Model\helpdesk\Agent_panel\User_org::where('org_id', '=', $orgs->id)->get();
         foreach ($user_orga_relations as $user_orga_relation) {
             $user_orga_relation_id[] = $user_orga_relation->user_id;
@@ -327,7 +327,8 @@ class="active"
                                         $string = strip_tags($title->title);
                                         // check atatchments
                                         $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $title->id)->first();
-                                        $attach = count($attachments);
+                                        // dd($attachments);
+                                        $attach = ($attachments) ? count($attachments->toArray()): 0;
 
                                         if (strlen($string) > 40) {
                                             $stringCut = substr($string, 0, 40);

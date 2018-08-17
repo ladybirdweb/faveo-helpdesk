@@ -53,7 +53,7 @@ active
             <td>
                 <div class="side-by-side clearfix moveleftthre">
                     <div>
-                        <select name="default" data-placeholder="Choose a SQL format..." class="chosen-select" style="width:290px;" tabindex="2">
+                        <select name="default" data-placeholder="Choose a SQL format..." class="chosen-select" style="width:288px;" tabindex="2">
                             <option value="mysql">MySQL</option>
                         </select>
                     </div>
@@ -126,9 +126,15 @@ active
         </tr>
     </table>
     <br>
+    <p ng-controller="MainController">
+        <input id="dummy-data" class="input-checkbox" type="checkbox" name="dummy-data">
+            <label for="dummy-data" style="color:#3AA7D9">Install dummy data</label>
+            <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{DummyDataTitle}}" data-content="@{{DummyDataContent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                            </button>
+    </p>
     <p class="setup-actions step">
         <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue">
-        <a href="{!! route('prerequisites') !!}" class="button button-large button-next" style="float: left">Previous</a>
+        <a href="{!! route('licence') !!}" class="button button-large button-next" style="float: left">Previous</a>
     </p>
     <br>
 </form>
@@ -169,16 +175,22 @@ active
     @endif
 
     $('#databaseform').on('submit', function(e){
+        var empty_field = 0;
         $("#databaseform input[type=text]").each(function(){
             if($(this).attr('name') == 'host' || $(this).attr('name') == 'databasename' || $(this).attr('name') == 'username'){
                 if ($(this).val() == '') {
                     $(this).css('border-color','red')
                     $(this).css('border-width','1px');
-                    e.preventDefault();
-                    alert('Please fill all required values.');
+                    empty_field = 1;
+                } else {
+                    empty_field = 0;
                 }
             }
         });
+        if (empty_field != 0) {
+            e.preventDefault();
+            alert('Please fill all required values.');
+        }
     });
 
     $('input[type=text]').on('blur', function(){

@@ -1,52 +1,52 @@
-<?php namespace Unisharp\Laravelfilemanager\controllers;
+<?php
 
-use Unisharp\Laravelfilemanager\controllers\Controller;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\View;
+namespace UniSharp\LaravelFilemanager\Controllers;
+
 use Intervention\Image\Facades\Image;
+use UniSharp\LaravelFilemanager\Events\ImageIsResizing;
+use UniSharp\LaravelFilemanager\Events\ImageWasResized;
 
 /**
- * Class ResizeController
- * @package Unisharp\Laravelfilemanager\controllers
+ * Class ResizeController.
  */
-class ResizeController extends LfmController {
-
+class ResizeController extends LfmController
+{
     /**
-     * Dipsplay image for resizing
+     * Dipsplay image for resizing.
      *
      * @return mixed
      */
     public function getResize()
     {
         $ratio = 1.0;
-        $image = Input::get('img');
+        $image = request('img');
 
-        $path_to_image   = parent::getPath('directory') . $image;
-        $original_width  = Image::make($path_to_image)->width();
-        $original_height = Image::make($path_to_image)->height();
+        $original_image = Image::make(parent::getCurrentPath($image));
+        $original_width = $original_image->width();
+        $original_height = $original_image->height();
 
         $scaled = false;
 
+        // FIXME size should be configurable
         if ($original_width > 600) {
-            $ratio  = 600 / $original_width;
-            $width  = $original_width  * $ratio;
+            $ratio = 600 / $original_width;
+            $width = $original_width * $ratio;
             $height = $original_height * $ratio;
             $scaled = true;
         } else {
-            $width  = $original_width;
+            $width = $original_width;
             $height = $original_height;
         }
 
         if ($height > 400) {
-            $ratio  = 400 / $original_height;
-            $width  = $original_width  * $ratio;
+            $ratio = 400 / $original_height;
+            $width = $original_width * $ratio;
             $height = $original_height * $ratio;
             $scaled = true;
         }
 
-        return View::make('laravel-filemanager::resize')
-            ->with('img', parent::getUrl('directory') . $image)
+        return view('laravel-filemanager::resize')
+            ->with('img', parent::objectPresenter(parent::getCurrentPath($image)))
             ->with('height', number_format($height, 0))
             ->with('width', $width)
             ->with('original_height', $original_height)
@@ -55,23 +55,18 @@ class ResizeController extends LfmController {
             ->with('ratio', $ratio);
     }
 
-
     public function performResize()
     {
-        $img    = Input::get('img');
-        $dataX  = Input::get('dataX');
-        $dataY  = Input::get('dataY');
-        $height = Input::get('dataHeight');
-        $width  = Input::get('dataWidth');
+        $dataX = request('dataX');
+        $dataY = request('dataY');
+        $height = request('dataHeight');
+        $width = request('dataWidth');
+        $image_path = parent::getCurrentPath(request('img'));
 
-        try {
-            Image::make(public_path() . $img)->resize($width, $height)->save();
-            return "OK";
-        } catch (Exception $e) {
-            return "width : " . $width . " height: " . $height;
-            return $e;
-        }
+        event(new ImageIsResizing($image_path));
+        Image::make($image_path)->resize($width, $height)->save();
+        event(new ImageWasResized($image_path));
 
+        return parent::$success_response;
     }
-
 }

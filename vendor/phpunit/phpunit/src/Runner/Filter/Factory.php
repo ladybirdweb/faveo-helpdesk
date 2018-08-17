@@ -7,43 +7,43 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Runner\Filter;
 
-/**
- * @since Class available since Release 4.0.0
- */
-class PHPUnit_Runner_Filter_Factory
+use FilterIterator;
+use InvalidArgumentException;
+use Iterator;
+use PHPUnit\Framework\TestSuite;
+use ReflectionClass;
+
+class Factory
 {
     /**
      * @var array
      */
-    private $filters = array();
+    private $filters = [];
 
     /**
-     * @param ReflectionClass $filter
-     * @param mixed           $args
+     * @throws InvalidArgumentException
      */
-    public function addFilter(ReflectionClass $filter, $args)
+    public function addFilter(ReflectionClass $filter, $args): void
     {
-        if (!$filter->isSubclassOf('RecursiveFilterIterator')) {
+        if (!$filter->isSubclassOf(\RecursiveFilterIterator::class)) {
             throw new InvalidArgumentException(
-                sprintf(
+                \sprintf(
                     'Class "%s" does not extend RecursiveFilterIterator',
                     $filter->name
                 )
             );
         }
 
-        $this->filters[] = array($filter, $args);
+        $this->filters[] = [$filter, $args];
     }
 
-    /**
-     * @return FilterIterator
-     */
-    public function factory(Iterator $iterator, PHPUnit_Framework_TestSuite $suite)
+    public function factory(Iterator $iterator, TestSuite $suite): FilterIterator
     {
         foreach ($this->filters as $filter) {
-            list($class, $args) = $filter;
-            $iterator           = $class->newInstance($iterator, $args, $suite);
+            [$class, $args] = $filter;
+            $iterator       = $class->newInstance($iterator, $args, $suite);
         }
 
         return $iterator;

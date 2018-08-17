@@ -57,9 +57,9 @@ class FastPriorityQueue implements Iterator, Countable, Serializable
     /**
      * Max priority
      *
-     * @var integer
+     * @var integer|null
      */
-    protected $maxPriority = 0;
+    protected $maxPriority = null;
 
     /**
      * Total number of elements in the queue
@@ -86,7 +86,7 @@ class FastPriorityQueue implements Iterator, Countable, Serializable
      * Insert an element in the queue with a specified priority
      *
      * @param mixed $value
-     * @param integer $priority a positive integer
+     * @param integer $priority
      */
     public function insert($value, $priority)
     {
@@ -96,7 +96,7 @@ class FastPriorityQueue implements Iterator, Countable, Serializable
         $this->values[$priority][] = $value;
         if (! isset($this->priorities[$priority])) {
             $this->priorities[$priority] = $priority;
-            $this->maxPriority           = max($priority, $this->maxPriority);
+            $this->maxPriority           = $this->maxPriority === null ? $priority : max($priority, $this->maxPriority);
         }
         ++$this->count;
     }
@@ -132,11 +132,35 @@ class FastPriorityQueue implements Iterator, Countable, Serializable
      */
     public function remove($datum)
     {
+        $currentIndex    = $this->index;
+        $currentSubIndex = $this->subIndex;
+        $currentPriority = $this->maxPriority;
+
         $this->rewind();
         while ($this->valid()) {
             if (current($this->values[$this->maxPriority]) === $datum) {
                 $index = key($this->values[$this->maxPriority]);
                 unset($this->values[$this->maxPriority][$index]);
+
+                // The `next()` method advances the internal array pointer, so we need to use the `reset()` function,
+                // otherwise we would lose all elements before the place the pointer points.
+                reset($this->values[$this->maxPriority]);
+
+                $this->index    = $currentIndex;
+                $this->subIndex = $currentSubIndex;
+
+                // If the array is empty we need to destroy the unnecessary priority,
+                // otherwise we would end up with an incorrect value of `$this->count`
+                // {@see \Zend\Stdlib\FastPriorityQueue::nextAndRemove()}.
+                if (empty($this->values[$this->maxPriority])) {
+                    unset($this->values[$this->maxPriority]);
+                    unset($this->priorities[$this->maxPriority]);
+                    if ($this->maxPriority === $currentPriority) {
+                        $this->subIndex = 0;
+                    }
+                }
+
+                $this->maxPriority = empty($this->priorities) ? null : max($this->priorities);
                 --$this->count;
                 return true;
             }
@@ -191,11 +215,15 @@ class FastPriorityQueue implements Iterator, Countable, Serializable
      */
     protected function nextAndRemove()
     {
+        $key = key($this->values[$this->maxPriority]);
+
         if (false === next($this->values[$this->maxPriority])) {
             unset($this->priorities[$this->maxPriority]);
             unset($this->values[$this->maxPriority]);
-            $this->maxPriority = empty($this->priorities) ? 0 : max($this->priorities);
+            $this->maxPriority = empty($this->priorities) ? null : max($this->priorities);
             $this->subIndex    = -1;
+        } else {
+            unset($this->values[$this->maxPriority][$key]);
         }
         ++$this->index;
         ++$this->subIndex;
@@ -211,7 +239,7 @@ class FastPriorityQueue implements Iterator, Countable, Serializable
         if (false === next($this->values[$this->maxPriority])) {
             unset($this->subPriorities[$this->maxPriority]);
             reset($this->values[$this->maxPriority]);
-            $this->maxPriority = empty($this->subPriorities) ? 0 : max($this->subPriorities);
+            $this->maxPriority = empty($this->subPriorities) ? null : max($this->subPriorities);
             $this->subIndex    = -1;
         }
         ++$this->index;

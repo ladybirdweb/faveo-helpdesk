@@ -48,7 +48,7 @@ class GroupController extends Controller
     {
         try {
             $groups = $group->get();
-            $departments = $department->lists('id');
+            $departments = $department->pluck('id');
 
             return view('themes.default1.admin.helpdesk.agent.groups.index', compact('departments', 'group_assign_department', 'groups'));
         } catch (Exception $e) {

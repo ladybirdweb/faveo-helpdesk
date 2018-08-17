@@ -1,52 +1,71 @@
 # Laravel Filemanager
+[![Latest Stable Version](https://poser.pugx.org/unisharp/laravel-filemanager/v/stable)](https://packagist.org/packages/unisharp/laravel-filemanager)
+[![Total Downloads](https://poser.pugx.org/unisharp/laravel-filemanager/downloads)](https://packagist.org/packages/unisharp/laravel-filemanager)
+[![License](https://poser.pugx.org/unisharp/laravel-filemanager/license)](https://packagist.org/packages/unisharp/laravel-filemanager)
 
-[![Latest Stable Version](https://poser.pugx.org/unisharp/laravel-filemanager/v/stable)](https://packagist.org/packages/unisharp/laravel-filemanager) [![Total Downloads](https://poser.pugx.org/unisharp/laravel-filemanager/downloads)](https://packagist.org/packages/unisharp/laravel-filemanager) [![Latest Unstable Version](https://poser.pugx.org/unisharp/laravel-filemanager/v/unstable)](https://packagist.org/packages/unisharp/laravel-filemanager) [![License](https://poser.pugx.org/unisharp/laravel-filemanager/license)](https://packagist.org/packages/unisharp/laravel-filemanager)
+ * Document : [unisharp.github.io/laravel-filemanager](http://unisharp.github.io/laravel-filemanager/)
+   * [Installation](http://unisharp.github.io/laravel-filemanager/installation)
+   * [Integration](http://unisharp.github.io/laravel-filemanager/integration)
+   * [Config](http://unisharp.github.io/laravel-filemanager/config)
+   * [Customization](http://unisharp.github.io/laravel-filemanager/customization)
+   * [Events](http://unisharp.github.io/laravel-filemanager/events)
+   * [Upgrade](http://unisharp.github.io/laravel-filemanager/upgrade)
+ * Demo : [Laravel Filemanager container](https://github.com/UniSharp/laravel-filemanager-example-5.3)
 
-A files and images management user interface with file uploading support. (Works well with CKEditor and TinyMCE)
+## v1.8 released
+ * Please follow the intructions in [upgrade document](https://unisharp.github.io/laravel-filemanager/upgrade).
+ * Important changes :
+   * Fix Windows compatibility (utf-8 file names and folder names).
+   * New feature : Copy & Crop. Thanks [gwleuverink](https://github.com/gwleuverink).
+   * [Config document](https://unisharp.github.io/laravel-filemanager/config) is refactored.
 
-PR is welcome!
+## Security
 
-## Overview
+It is important to note that if you use your own routes **you must protect your routes to Laravel-Filemanager in order to prevent unauthorized uploads to your server**. Fortunately, Laravel makes this very easy.
 
- * The project was forked from [tsawler/laravel-filemanager](http://packalyst.com/packages/package/tsawler/laravel-filemanager)
- * Customizable routes and middlewares
- * Supported locales : en, fr, bg, tr, fa, es, pt-BR, tr, zh-CN, zh-TW, ar
- * Supports public and private folders for multi users
- * Supports multi-level folders
- * Supports using independently(see integration doc)
+If, for example, you want to ensure that only logged in users have the ability to access the Laravel-Filemanager, simply wrap the routes in a group, perhaps like this:
 
-## Documents
+```php
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/laravel-filemanager', '\UniSharp\LaravelFilemanager\controllers\LfmController@show');
+    Route::post('/laravel-filemanager/upload', '\UniSharp\LaravelFilemanager\controllers\UploadController@upload');
+    // list all lfm routes here...
+});
+```
 
-  1. [Installation](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/installation.md)
-  1. [Integration](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/integration.md)
-  1. [Config](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/config.md)
-  1. [Customization](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/customization.md)
-  1. [Events](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/events.md)
-  1. [Upgrade](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/upgrade.md)
+This approach ensures that only authenticated users have access to the Laravel-Filemanager. If you are using Middleware or some other approach to enforce security, modify as needed.
 
-## Screenshots
-  * Independent usage example :
+**If you use the laravel-filemanager default route, make sure the `auth` middleware (set in config/lfm.php) is enabled and functional**.
 
-![Independent usage example](https://raw.githubusercontent.com/UniSharp/laravel-filemanager/gh_pages/images/lfm01.png)
+## v2.0 progress
+* [x] (done) Unit test
+* [x] (done) Integrate with Laravel Storage
+* [x] (done) Multiple selection
+* [ ] Configurable disk of storage
+* [ ] (in progress) Responsive design
+* [ ] (in progress) Config refactoring
+* [x] (done) JSON APIs
+* [ ] Move to folder function
+* [ ] Applying MIME icon generator
+* [x] (done) Bootstrap 4 support
 
-  * List view :
 
-![FileManager screenshot 1](https://raw.githubusercontent.com/UniSharp/laravel-filemanager/gh_pages/images/lfm02.png)
+## Contributors & Credits
 
-  * Grid view :
+### Developers / Maintainers
 
-![FileManager screenshot 2](https://raw.githubusercontent.com/UniSharp/laravel-filemanager/gh_pages/images/lfm03.png)
+ * [Stream](https://github.com/g0110280)
+ * [@gwleuverink](https://github.com/gwleuverink)
+ * All [@UniSharp](https://github.com/UniSharp) members
 
-## Credits
+### Contributors
+
  * [All contibutors](https://github.com/UniSharp/laravel-filemanager/graphs/contributors) from GitHub. (issues / PR)
- * Special thanks to
-   * [@taswler](https://github.com/tsawler) the original author.
-   * [@olivervogel](https://github.com/olivervogel) for the awesome [image library](https://github.com/Intervention/image)
-   * [@welcoMattic](https://github.com/welcoMattic) providing fr translations and lots of bugfixes.
-   * [@fraterblack](https://github.com/fraterblack) TinyMCE 4 support and pt-BR translations.
-   * [@1dot44mb](https://github.com/1dot44mb) tr translations.
-   * [@Nikita240](https://github.com/Nikita240) fixing controller extending errors.
-   * [@amin101](https://github.com/amin101) guide for independent use and fixes for url/directory error on Windows
-   * [@nasirkhan](https://github.com/nasirkhan) bug fixes and alphanumeric filename check
-   * [@petyots](https://github.com/petyots) Bulgarian translation
-   * All [@UniSharp](https://github.com/UniSharp) members
+ * [@taswler](https://github.com/tsawler) the original author of this package.
+ * Nathan for providing security suggestions.
+
+### Credits
+
+ * [@olivervogel](https://github.com/olivervogel) for the awesome [image library](https://github.com/Intervention/image).
+ * SVG Loaders by [Sam](http://samherbert.net/svg-loaders/) (Licensed MIT)
+

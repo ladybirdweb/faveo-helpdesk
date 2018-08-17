@@ -599,7 +599,7 @@ class SettingsController extends Controller
             $plug->status = 1;
 
             $app = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'app.php';
-            $str = "\n'App\\Plugins\\$slug"."\\ServiceProvider',";
+            $str = "\n        'App\\Plugins\\$slug"."\\ServiceProvider',";
             $line_i_am_looking_for = 190;
             $lines = file($app, FILE_IGNORE_NEW_LINES);
             $lines[$line_i_am_looking_for] = $str;

@@ -1,24 +1,30 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace PhpParser\Builder;
 
 use PhpParser;
+use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 
-class Param extends PhpParser\BuilderAbstract
+class Param implements PhpParser\Builder
 {
     protected $name;
 
     protected $default = null;
+
+    /** @var string|Node\Name|Node\NullableType|null */
     protected $type = null;
+
     protected $byRef = false;
+
+    protected $variadic = false;
 
     /**
      * Creates a parameter builder.
      *
      * @param string $name Name of the parameter
      */
-    public function __construct($name) {
+    public function __construct(string $name) {
         $this->name = $name;
     }
 
@@ -30,7 +36,7 @@ class Param extends PhpParser\BuilderAbstract
      * @return $this The builder instance (for fluid interface)
      */
     public function setDefault($value) {
-        $this->default = $this->normalizeValue($value);
+        $this->default = BuilderHelpers::normalizeValue($value);
 
         return $this;
     }
@@ -38,15 +44,14 @@ class Param extends PhpParser\BuilderAbstract
     /**
      * Sets type hint for the parameter.
      *
-     * @param string|Node\Name $type Type hint to use
+     * @param string|Node\Name|Node\NullableType $type Type hint to use
      *
      * @return $this The builder instance (for fluid interface)
      */
     public function setTypeHint($type) {
-        if (in_array($type, array('array', 'callable', 'string', 'int', 'float', 'bool'))) {
-            $this->type = $type;
-        } else {
-            $this->type = $this->normalizeName($type);
+        $this->type = BuilderHelpers::normalizeType($type);
+        if ($this->type == 'void') {
+            throw new \LogicException('Parameter type cannot be void');
         }
 
         return $this;
@@ -64,13 +69,25 @@ class Param extends PhpParser\BuilderAbstract
     }
 
     /**
+     * Make the parameter variadic
+     *
+     * @return $this The builder instance (for fluid interface)
+     */
+    public function makeVariadic() {
+        $this->variadic = true;
+
+        return $this;
+    }
+
+    /**
      * Returns the built parameter node.
      *
      * @return Node\Param The built parameter node
      */
-    public function getNode() {
+    public function getNode() : Node {
         return new Node\Param(
-            $this->name, $this->default, $this->type, $this->byRef
+            new Node\Expr\Variable($this->name),
+            $this->default, $this->type, $this->byRef, $this->variadic
         );
     }
 }

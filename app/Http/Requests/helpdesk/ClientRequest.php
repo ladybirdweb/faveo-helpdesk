@@ -31,7 +31,6 @@ class ClientRequest extends Request
     {
         $check = $this->check(new CommonSettings());
         if ($check != 0) {
-            return $check;
             $custom_rule = $this->getCustomRule();
             $rules = array_merge($check, $custom_rule);
 

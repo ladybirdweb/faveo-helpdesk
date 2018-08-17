@@ -156,6 +156,20 @@
                             </li>
                         </ul>
                         </li>
+                        <li class="dropdown">
+                            <?php $src = Lang::getLocale().'.png'; ?>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><img src="{{asset("lb-faveo/flags/$src")}}"></img> &nbsp;<span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                @foreach($langs as $key => $value)
+                                            <?php $src = $key.".png"; ?>
+                                            <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}"></img>&nbsp;{{$value[0]}}&nbsp;
+                                            @if(Lang::getLocale() == "ar")
+                                            &rlm;
+                                            @endif
+                                            ({{$value[1]}})</a></li>
+                                @endforeach       
+                            </ul>
+                        </li>
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 @if(Auth::user())
@@ -360,7 +374,27 @@
 
                 <!-- Main content -->
                 <section class="content">
-
+                    @if($dummy_installation == 1 || $dummy_installation == '1')
+                    <div class="alert alert-info alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <i class="icon fa  fa-exclamation-triangle"></i> {{Lang::get('lang.dummy_data_installation_message')}} <a href="{{route('clean-database')}}">{{Lang::get('lang.click')}}</a> {{Lang::get('lang.clear-dummy-data')}}
+                    </div>
+                    @elseif (!$is_mail_conigured)
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="callout callout-warning lead">
+                                <h4><i class="fa fa-exclamation-triangle"></i>&nbsp;{{Lang::get('Alert')}}</h4>
+                                <p style="font-size:0.8em">
+                                @if (\Auth::user()->role == 'admin')
+                                    {{Lang::get('lang.system-outgoing-incoming-mail-not-configured')}}&nbsp;<a href="{{URL::route('emails.create')}}">{{Lang::get('lang.confihure-the-mail-now')}}</a>
+                                @else
+                                    {{Lang::get('lang.system-mail-not-configured-agent-message')}}
+                                @endif
+                                </p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                     @yield('content')
                 </section><!-- /.content -->
                 <!-- /.content-wrapper -->
@@ -443,7 +477,7 @@
     <script src="{{asset("lb-faveo/js/tabby.js")}}"></script>
     <!-- CK Editor -->
     <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
-
+    <script src="{{asset("lb-faveo/js/languagechanger.js")}}" type="text/javascript"></script>
     @yield('FooterInclude')
 </body>
 <script>

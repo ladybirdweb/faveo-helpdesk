@@ -11,12 +11,12 @@
 
 namespace Symfony\Component\HttpKernel\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\UriSigner;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Handles content fragments represented by special URIs.
@@ -35,12 +35,10 @@ class FragmentListener implements EventSubscriberInterface
     private $fragmentPath;
 
     /**
-     * Constructor.
-     *
      * @param UriSigner $signer       A UriSigner instance
      * @param string    $fragmentPath The path that triggers this listener
      */
-    public function __construct(UriSigner $signer, $fragmentPath = '/_fragment')
+    public function __construct(UriSigner $signer, string $fragmentPath = '/_fragment')
     {
         $this->signer = $signer;
         $this->fragmentPath = $fragmentPath;
@@ -49,9 +47,7 @@ class FragmentListener implements EventSubscriberInterface
     /**
      * Fixes request attributes when the path is '/_fragment'.
      *
-     * @param GetResponseEvent $event A GetResponseEvent instance
-     *
-     * @throws AccessDeniedHttpException if the request does not come from a trusted IP.
+     * @throws AccessDeniedHttpException if the request does not come from a trusted IP
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
@@ -81,7 +77,7 @@ class FragmentListener implements EventSubscriberInterface
     protected function validateRequest(Request $request)
     {
         // is the Request safe?
-        if (!$request->isMethodSafe()) {
+        if (!$request->isMethodSafe(false)) {
             throw new AccessDeniedHttpException();
         }
 

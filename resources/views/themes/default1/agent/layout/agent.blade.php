@@ -56,6 +56,18 @@
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
 
         @yield('HeadInclude')
+        <style type="text/css">
+            #bar {
+                border-right: 1px solid rgba(204, 204, 204, 0.41);
+            }
+            #bar a{
+                color: #FFF;
+            }
+            #bar a:hover, #bar a:focus{
+                background-color: #357CA5;
+            }
+
+        </style>
     </head>
     <body class="skin-blue fixed">
         <div class="wrapper">
@@ -173,6 +185,20 @@
                             </li>
                         </ul>
                         </li>
+                        <li class="dropdown">
+                            <?php $src = Lang::getLocale().'.png'; ?>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><img src="{{asset("lb-faveo/flags/$src")}}"></img> &nbsp;<span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                @foreach($langs as $key => $value)
+                                            <?php $src = $key.".png"; ?>
+                                            <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}"></img>&nbsp;{{$value[0]}}&nbsp;
+                                            @if(Lang::getLocale() == "ar")
+                                            &rlm;
+                                            @endif
+                                            ({{$value[1]}})</a></li>
+                                @endforeach      
+                            </ul>
+                        </li>
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -244,31 +270,31 @@
                         <li class="header">{!! Lang::get('lang.Tickets') !!}</li>
 
                         <li @yield('inbox')>
-                             <a href="{{ url('/ticket/inbox')}}" id="load-inbox">
+                             <a href="{{ url('tickets')}}" id="load-inbox">
                                 <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green">{{$tickets -> count()}}</small>
                             </a>
                         </li>
                         <li @yield('myticket')>
-                             <a href="{{url('ticket/myticket')}}" id="load-myticket">
+                             <a href="{{url('/tickets?show=mytickets')}}" id="load-myticket">
                                 <i class="fa fa-user"></i> <span>{!! Lang::get('lang.my_tickets') !!} </span>
                                 <small class="label pull-right bg-green">{{$myticket -> count()}}</small>
                             </a>
                         </li>
                         <li @yield('unassigned')>
-                             <a href="{{url('unassigned')}}" id="load-unassigned">
+                             <a href="{{url('/tickets?assigned[]=0')}}" id="load-unassigned">
                                 <i class="fa fa-th"></i> <span>{!! Lang::get('lang.unassigned') !!}</span>
                                 <small class="label pull-right bg-green">{{$unassigned -> count()}}</small>
                             </a>
                         </li>
                         <li @yield('overdue')>
-                             <a href="{{url('ticket/overdue')}}" id="load-unassigned">
+                             <a href="{{url('/tickets?show=overdue')}}" id="load-unassigned">
                                 <i class="fa fa-calendar-times-o"></i> <span>{!! Lang::get('lang.overdue') !!}</span>
                                 <small class="label pull-right bg-green">{{$overdues->count()}}</small>
                             </a>
                         </li>
 
                         <li @yield('trash')>
-                             <a href="{{url('trash')}}">
+                             <a href="{{url('/tickets?show=trash')}}">
                                 <i class="fa fa-trash-o"></i> <span>{!! Lang::get('lang.trash') !!}</span>
                                 <small class="label pull-right bg-green">{{$deleted -> count()}}</small>
                             </a>
@@ -303,7 +329,7 @@
                            @foreach($statuses as $status)
                            @if($dept->get($status))
                            <ul class="treeview-menu">
-                                <li @if($status2 == $dept->get($status)->status && $dept2 === $name) @yield('inbox') @endif><a href="{{url('tickets/'.$name.'/'.$dept->get($status)->status)}}"><i class="fa fa-circle-o"></i> {!!$dept->get($status)->status !!}<small class="label pull-right bg-green">{{$dept->get($status)->count}}</small></a></li>
+                                <li @if($status2 == $dept->get($status)->status && $dept2 === $name) @yield('inbox') @endif><a href="{!! url('tickets?departments='.$name.'&status='.$dept->get($status)->status) !!}"><i class="fa fa-circle-o"></i> {!!$dept->get($status)->status !!}<small class="label pull-right bg-green">{{$dept->get($status)->count}}</small></a></li>
                             </ul>
                            @endif
                             @endforeach
@@ -325,7 +351,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
             <!-- Right side column. Contains the navbar and content of the page -->
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
-                <div class="tab-content" style="background-color: white;padding: 0 0px 0 20px">
+                <div class="tab-content" style="background-color: #80B5D3; position: fixed; width:100% ;padding: 0 0px 0 0px; z-index:999">
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         <div class="tabs-content">
                             @if($replacetop==0)
@@ -342,10 +368,10 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                             </div>
                             <div class="tabs-pane @yield('ticket-bar')" id="tabC">
                                 <ul class="nav navbar-nav">
-                                    <li id="bar" @yield('open')><a href="{{ url('/ticket/open')}}" id="load-open">{!! Lang::get('lang.open') !!}</a></li>
-                                    <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered')}}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
-                                    <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned')}}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
-                                    <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed')}}" >{!! Lang::get('lang.closed') !!}</a></li>
+                                    <li id="bar" @yield('open')><a href="{{ url('/tickets?last-response-by[]=Client') }}" id="load-open">{!! Lang::get('lang.not-answered') !!}</a></li>
+                                    <li id="bar" @yield('answered')><a href="{{ url('/tickets?last-response-by[]=Agent')}}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
+                                    <li id="bar" @yield('assigned')><a href="{{ url('/tickets?assigned[]=1') }}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
+                                    <li id="bar" @yield('closed')><a href="{{ url('/tickets?show=closed') }}" >{!! Lang::get('lang.closed') !!}</a></li>
 <?php if ($group->can_create_ticket == 1) { ?>
                                         <li id="bar" @yield('newticket')><a href="{{ url('/newticket')}}" >{!! Lang::get('lang.create_ticket') !!}</a></li>
                                     <?php } ?>
@@ -374,6 +400,31 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                 </section>
                 <!-- Main content -->
                 <section class="content">
+                @if($dummy_installation == 1 || $dummy_installation == '1')
+                    <div class="alert alert-info alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <i class="icon fa  fa-exclamation-triangle"></i> @if (\Auth::user()->role == 'admin')
+                            {{Lang::get('lang.dummy_data_installation_message')}} <a href="{{route('clean-database')}}">{{Lang::get('lang.click')}}</a> {{Lang::get('lang.clear-dummy-data')}}
+                        @else
+                            {{Lang::get('lang.clear-dummy-data-agent-message')}}
+                        @endif
+                    </div>
+                @elseif (!$is_mail_conigured)
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="callout callout-warning lead">
+                                <h4><i class="fa fa-exclamation-triangle"></i>&nbsp;{{Lang::get('Alert')}}</h4>
+                                <p style="font-size:0.8em">
+                                @if (\Auth::user()->role == 'admin')
+                                    {{Lang::get('lang.system-outgoing-incoming-mail-not-configured')}}&nbsp;<a href="{{URL::route('emails.create')}}">{{Lang::get('lang.confihure-the-mail-now')}}</a>
+                                @else
+                                    {{Lang::get('lang.system-mail-not-configured-agent-message')}}
+                                @endif
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
                     @yield('content')
                 </section><!-- /.content -->
             </div>
@@ -495,7 +546,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                     });</script>
 
         <script src="{{asset("lb-faveo/js/tabby.js")}}" type="text/javascript"></script>
-
+        <script src="{{asset("lb-faveo/js/languagechanger.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" type="text/javascript"></script>
 
         <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>

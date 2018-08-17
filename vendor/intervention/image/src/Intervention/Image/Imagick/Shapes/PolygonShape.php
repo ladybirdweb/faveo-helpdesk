@@ -28,8 +28,8 @@ class PolygonShape extends \Intervention\Image\AbstractShape
      * Draw polygon on given image
      *
      * @param  Image   $image
-     * @param  integer $x
-     * @param  integer $y
+     * @param  int     $x
+     * @param  int     $y
      * @return boolean
      */
     public function applyToImage(Image $image, $x = 0, $y = 0)
@@ -62,13 +62,13 @@ class PolygonShape extends \Intervention\Image\AbstractShape
      */
     private function formatPoints($points)
     {
-        $ipoints = array();
+        $ipoints = [];
         $count = 1;
 
         foreach ($points as $key => $value) {
             if ($count%2 === 0) {
                 $y = $value;
-                $ipoints[] = array('x' => $x, 'y' => $y);
+                $ipoints[] = ['x' => $x, 'y' => $y];
             } else {
                 $x = $value;
             }

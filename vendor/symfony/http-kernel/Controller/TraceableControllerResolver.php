@@ -11,12 +11,10 @@
 
 namespace Symfony\Component\HttpKernel\Controller;
 
-use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
- * TraceableControllerResolver.
- *
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class TraceableControllerResolver implements ControllerResolverInterface
@@ -24,12 +22,6 @@ class TraceableControllerResolver implements ControllerResolverInterface
     private $resolver;
     private $stopwatch;
 
-    /**
-     * Constructor.
-     *
-     * @param ControllerResolverInterface $resolver  A ControllerResolverInterface instance
-     * @param Stopwatch                   $stopwatch A Stopwatch instance
-     */
     public function __construct(ControllerResolverInterface $resolver, Stopwatch $stopwatch)
     {
         $this->resolver = $resolver;
@@ -44,20 +36,6 @@ class TraceableControllerResolver implements ControllerResolverInterface
         $e = $this->stopwatch->start('controller.get_callable');
 
         $ret = $this->resolver->getController($request);
-
-        $e->stop();
-
-        return $ret;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getArguments(Request $request, $controller)
-    {
-        $e = $this->stopwatch->start('controller.get_arguments');
-
-        $ret = $this->resolver->getArguments($request, $controller);
 
         $e->stop();
 

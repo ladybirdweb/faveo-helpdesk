@@ -5,14 +5,25 @@ namespace Illuminate\Hashing;
 use RuntimeException;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 
-class BcryptHasher implements HasherContract
+class BcryptHasher extends AbstractHasher implements HasherContract
 {
     /**
-     * Default crypt cost factor.
+     * The default cost factor.
      *
      * @var int
      */
     protected $rounds = 10;
+
+    /**
+     * Create a new hasher instance.
+     *
+     * @param  array  $options
+     * @return void
+     */
+    public function __construct(array $options = [])
+    {
+        $this->rounds = $options['rounds'] ?? $this->rounds;
+    }
 
     /**
      * Hash the given value.
@@ -25,32 +36,15 @@ class BcryptHasher implements HasherContract
      */
     public function make($value, array $options = [])
     {
-        $cost = isset($options['rounds']) ? $options['rounds'] : $this->rounds;
-
-        $hash = password_hash($value, PASSWORD_BCRYPT, ['cost' => $cost]);
+        $hash = password_hash($value, PASSWORD_BCRYPT, [
+            'cost' => $this->cost($options),
+        ]);
 
         if ($hash === false) {
             throw new RuntimeException('Bcrypt hashing not supported.');
         }
 
         return $hash;
-    }
-
-    /**
-     * Check the given plain value against a hash.
-     *
-     * @param  string  $value
-     * @param  string  $hashedValue
-     * @param  array   $options
-     * @return bool
-     */
-    public function check($value, $hashedValue, array $options = [])
-    {
-        if (strlen($hashedValue) === 0) {
-            return false;
-        }
-
-        return password_verify($value, $hashedValue);
     }
 
     /**
@@ -62,9 +56,9 @@ class BcryptHasher implements HasherContract
      */
     public function needsRehash($hashedValue, array $options = [])
     {
-        $cost = isset($options['rounds']) ? $options['rounds'] : $this->rounds;
-
-        return password_needs_rehash($hashedValue, PASSWORD_BCRYPT, ['cost' => $cost]);
+        return password_needs_rehash($hashedValue, PASSWORD_BCRYPT, [
+            'cost' => $this->cost($options),
+        ]);
     }
 
     /**
@@ -78,5 +72,16 @@ class BcryptHasher implements HasherContract
         $this->rounds = (int) $rounds;
 
         return $this;
+    }
+
+    /**
+     * Extract the cost value from the options array.
+     *
+     * @param  array  $options
+     * @return int
+     */
+    protected function cost(array $options = [])
+    {
+        return $options['rounds'] ?? $this->rounds;
     }
 }

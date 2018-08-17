@@ -54,7 +54,7 @@ class="active"
                 <td>{{$Canned->title }}</td>
                 <td> 
                     {!! Form::open(['route'=>['canned.destroy', $Canned->id],'method'=>'DELETE']) !!}
-                    <a data-toggle="modal" data-target="#view{!! $Canned->id !!}" href="#" class="btn btn-info btn-xs btn-flat">{!! Lang::get('lang.view') !!}</a>
+                    <a data-toggle="modal" data-target="#view{!! $Canned->id !!}" href="#" class="btn btn-info btn-xs btn-flat" onClick="updateModelTitle('{{$Canned->title}}')">{!! Lang::get('lang.view') !!}</a>
                     <a href="{!! URL::route('canned.edit',$Canned->id) !!}" class="btn btn-primary btn-xs btn-flat">{!! Lang::get('lang.edit') !!}</a>
                     {!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> '.Lang::get('lang.delete'),
                     ['type' => 'submit',
@@ -70,7 +70,7 @@ class="active"
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">{!! Lang::get('lang.surrender') !!}</h4>
+                            <h4 class="modal-title"></h4>
                         </div>
                         <div class="modal-body">
                             <p><pre>{!! $Canned->message !!}</pre></p>
@@ -86,6 +86,9 @@ class="active"
     </div>
 </div>
 <script>
+    function updateModelTitle(title){
+        $('.modal-title').html(title);
+    }
     $(function() {
         $("#example1").DataTable();
         $('#example2').DataTable({

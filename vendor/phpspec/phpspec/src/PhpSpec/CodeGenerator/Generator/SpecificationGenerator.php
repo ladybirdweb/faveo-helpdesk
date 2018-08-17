@@ -13,41 +13,31 @@
 
 namespace PhpSpec\CodeGenerator\Generator;
 
-use PhpSpec\Locator\ResourceInterface;
+use PhpSpec\Locator\Resource;
 
 /**
  * Generates spec classes from resources and puts them into the appropriate
  * folder using the appropriate template.
  */
-class SpecificationGenerator extends PromptingGenerator
+final class SpecificationGenerator extends PromptingGenerator
 {
-    /**
-     * @param ResourceInterface $resource
-     * @param string            $generation
-     * @param array             $data
-     *
-     * @return bool
-     */
-    public function supports(ResourceInterface $resource, $generation, array $data)
+    public function supports(Resource $resource, string $generation, array $data) : bool
     {
         return 'specification' === $generation;
     }
 
-    /**
-     * @return int
-     */
-    public function getPriority()
+    public function getPriority() : int
     {
         return 0;
     }
 
     /**
-     * @param ResourceInterface $resource
+     * @param Resource $resource
      * @param string            $filepath
      *
      * @return string
      */
-    protected function renderTemplate(ResourceInterface $resource, $filepath)
+    protected function renderTemplate(Resource $resource, string $filepath) : string
     {
         $values = array(
             '%filepath%'      => $filepath,
@@ -64,30 +54,17 @@ class SpecificationGenerator extends PromptingGenerator
         return $content;
     }
 
-    /**
-     * @return string
-     */
-    protected function getTemplate()
+    protected function getTemplate() : string
     {
         return file_get_contents(__DIR__.'/templates/specification.template');
     }
 
-    /**
-     * @param  ResourceInterface $resource
-     * @return mixed
-     */
-    protected function getFilePath(ResourceInterface $resource)
+    protected function getFilePath(Resource $resource) : string
     {
         return $resource->getSpecFilename();
     }
 
-    /**
-     * @param ResourceInterface $resource
-     * @param string            $filepath
-     *
-     * @return string
-     */
-    protected function getGeneratedMessage(ResourceInterface $resource, $filepath)
+    protected function getGeneratedMessage(Resource $resource, string $filepath) : string
     {
         return sprintf(
             "<info>Specification for <value>%s</value> created in <value>%s</value>.</info>\n",

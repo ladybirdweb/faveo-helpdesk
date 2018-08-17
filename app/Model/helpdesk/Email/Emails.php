@@ -60,8 +60,12 @@ class Emails extends BaseModel
 
     public function getPasswordAttribute($value)
     {
-        if ($value) {
-            return \Crypt::decrypt($value);
+        try {
+            if ($value) {
+                return \Crypt::decrypt($value);
+            }
+        } catch (\Exception $e) {
+            return;
         }
 
         return $value;

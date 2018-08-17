@@ -17,19 +17,22 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * Command line command responsible to signal to generators we will need to
  * generate a new spec
+ *
+ * @Internal
  */
-class DescribeCommand extends Command
+final class DescribeCommand extends Command
 {
     protected function configure()
     {
         $this
             ->setName('describe')
             ->setDefinition(array(
-                    new InputArgument('class', InputArgument::REQUIRED, 'Class to describe'),
+                    new InputArgument('class', InputArgument::OPTIONAL, 'Class to describe'),
                 ))
             ->setDescription('Creates a specification for a class')
             ->setHelp(<<<EOF
@@ -62,9 +65,36 @@ EOF
         $container = $this->getApplication()->getContainer();
         $container->configure();
 
-        $classname = $input->getArgument('class');
-        $resource  = $container->get('locator.resource_manager')->createResource($classname);
+        if ($input->getArgument('class')) {
+            $classname = $input->getArgument('class');
+        } else {
+            $questionHelper = $this->getApplication()->getHelperSet()->get('question');
+            $question = new Question('<info>Enter class to describe: </info>');
+
+            $question->setAutocompleterValues(array_map([$this, 'escapePathForTerminal'], $this->getNamespaces()));
+            $classname = $questionHelper->ask($input, $output, $question);
+        }
+
+        $resource = $container->get('locator.resource_manager')->createResource($classname);
 
         $container->get('code_generator')->generate($resource, 'specification');
+    }
+
+    /**
+     * Get suites namespaces.
+     *
+     * @return array
+     */
+    private function getNamespaces()
+    {
+        return $this->getApplication()->getContainer()->get('console.autocomplete_provider')->getNamespaces();
+    }
+
+    /**
+     * Make path safe to echo to the terminal (to get around symfony/console issue #24652)
+     */
+    private function escapePathForTerminal(string $path) : string
+    {
+        return str_replace('\\', '/', $path);
     }
 }

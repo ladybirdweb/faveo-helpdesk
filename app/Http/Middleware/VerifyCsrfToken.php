@@ -13,8 +13,11 @@ class VerifyCsrfToken extends BaseVerifier
      * @var array
      */
     protected $except = [
-        'CheckSerial',
         'api/v1/*',
+        'chunk/upload',
+        'chunk/upload/public',
+        'media/files/public',
+        'media/files',
     ];
 
     /**

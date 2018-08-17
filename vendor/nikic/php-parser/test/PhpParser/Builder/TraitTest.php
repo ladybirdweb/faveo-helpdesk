@@ -1,13 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace PhpParser\Builder;
 
 use PhpParser\Comment;
-use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
+use PHPUnit\Framework\TestCase;
 
-class TraitTest extends \PHPUnit_Framework_TestCase
+class TraitTest extends TestCase
 {
     protected function createTraitBuilder($class) {
         return new Trait_($class);
@@ -17,22 +17,24 @@ class TraitTest extends \PHPUnit_Framework_TestCase
         $method1 = new Stmt\ClassMethod('test1');
         $method2 = new Stmt\ClassMethod('test2');
         $method3 = new Stmt\ClassMethod('test3');
-        $prop = new Stmt\Property(Stmt\Class_::MODIFIER_PUBLIC, array(
+        $prop = new Stmt\Property(Stmt\Class_::MODIFIER_PUBLIC, [
             new Stmt\PropertyProperty('test')
-        ));
+        ]);
+        $use = new Stmt\TraitUse([new Name('OtherTrait')]);
         $trait = $this->createTraitBuilder('TestTrait')
             ->setDocComment('/** Nice trait */')
             ->addStmt($method1)
-            ->addStmts(array($method2, $method3))
+            ->addStmts([$method2, $method3])
             ->addStmt($prop)
+            ->addStmt($use)
             ->getNode();
-        $this->assertEquals(new Stmt\Trait_('TestTrait', array(
-            $prop, $method1, $method2, $method3
-        ), array(
-            'comments' => array(
+        $this->assertEquals(new Stmt\Trait_('TestTrait', [
+            'stmts' => [$use, $prop, $method1, $method2, $method3]
+        ], [
+            'comments' => [
                 new Comment\Doc('/** Nice trait */')
-            )
-        )), $trait);
+            ]
+        ]), $trait);
     }
 
     /**
@@ -41,7 +43,7 @@ class TraitTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidStmtError() {
         $this->createTraitBuilder('Test')
-            ->addStmt(new Stmt\Echo_(array()))
+            ->addStmt(new Stmt\Echo_([]))
         ;
     }
 }

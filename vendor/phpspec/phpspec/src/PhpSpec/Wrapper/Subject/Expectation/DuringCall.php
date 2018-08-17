@@ -14,14 +14,14 @@
 namespace PhpSpec\Wrapper\Subject\Expectation;
 
 use PhpSpec\Exception\Example\MatcherException;
-use PhpSpec\Matcher\MatcherInterface;
+use PhpSpec\Matcher\Matcher;
 use PhpSpec\Util\Instantiator;
 use PhpSpec\Wrapper\Subject\WrappedObject;
 
 abstract class DuringCall
 {
     /**
-     * @var MatcherInterface
+     * @var Matcher
      */
     private $matcher;
     /**
@@ -38,9 +38,9 @@ abstract class DuringCall
     private $wrappedObject;
 
     /**
-     * @param MatcherInterface $matcher
+     * @param Matcher $matcher
      */
-    public function __construct(MatcherInterface $matcher)
+    public function __construct(Matcher $matcher)
     {
         $this->matcher = $matcher;
     }
@@ -54,7 +54,7 @@ abstract class DuringCall
      *
      * @return $this
      */
-    public function match($alias, $subject, array $arguments = array(), $wrappedObject = null)
+    public function match(string $alias, $subject, array $arguments = array(), $wrappedObject = null)
     {
         $this->subject = $subject;
         $this->arguments = $arguments;
@@ -69,10 +69,10 @@ abstract class DuringCall
      *
      * @return mixed
      */
-    public function during($method, array $arguments = array())
+    public function during(string $method, array $arguments = array())
     {
         if ($method === '__construct') {
-            $this->subject->beAnInstanceOf($this->wrappedObject->getClassname(), $arguments);
+            $this->subject->beAnInstanceOf($this->wrappedObject->getClassName(), $arguments);
 
             return $this->duringInstantiation();
         }
@@ -88,12 +88,12 @@ abstract class DuringCall
     public function duringInstantiation()
     {
         if ($factoryMethod = $this->wrappedObject->getFactoryMethod()) {
-            $method = is_array($factoryMethod) ? $factoryMethod[1] : $factoryMethod;
+            $method = \is_array($factoryMethod) ? $factoryMethod[1] : $factoryMethod;
         } else {
             $method = '__construct';
         }
         $instantiator = new Instantiator();
-        $object = $instantiator->instantiate($this->wrappedObject->getClassname());
+        $object = $instantiator->instantiate($this->wrappedObject->getClassName());
 
         return $this->runDuring($object, $method, $this->wrappedObject->getArguments());
     }
@@ -106,7 +106,7 @@ abstract class DuringCall
      *
      * @throws MatcherException
      */
-    public function __call($method, array $arguments = array())
+    public function __call(string $method, array $arguments = array())
     {
         if (preg_match('/^during(.+)$/', $method, $matches)) {
             return $this->during(lcfirst($matches[1]), $arguments);
@@ -123,15 +123,15 @@ abstract class DuringCall
     /**
      * @return array
      */
-    protected function getArguments()
+    protected function getArguments(): array
     {
         return $this->arguments;
     }
 
     /**
-     * @return MatcherInterface
+     * @return Matcher
      */
-    protected function getMatcher()
+    protected function getMatcher(): Matcher
     {
         return $this->matcher;
     }

@@ -16,6 +16,14 @@ use Mail;
 
 class PhpMailController extends Controller
 {
+    /**
+     *@var variable to instantiate common mailer class
+     */
+    public function __construct()
+    {
+        $this->commonMailer = new CommonMailer();
+    }
+
     public function fetch_smtp_details($id)
     {
         $emails = Emails::where('id', '=', $id)->first();
@@ -161,52 +169,49 @@ class PhpMailController extends Controller
                 $content = $messagebody;
             }
         }
-        $send = $this->laravelMail($recipants, $recipantname, $subject, $content, $cc, $attachment);
+        $send = $this->laravelMail($recipants, $recipantname, $subject, $content, $from_address, $cc, $attachment);
 
         return $send;
     }
 
-    public function setMailConfig($from_address)
+    public function setMailConfig($mail)
     {
-        $username = $from_address->email_address;
-        $fromname = $from_address->email_name;
-        $password = $from_address->password;
-        $smtpsecure = $from_address->sending_encryption;
-        $host = $from_address->sending_host;
-        $port = $from_address->sending_port;
-        $protocol = $from_address->sending_protocol;
-        $this->setServices($from_address->id, $protocol);
-        if ($protocol == 'mail') {
-            $username = '';
-            $fromname = '';
-            $host = '';
-            $smtpsecure = '';
-            $port = '';
-        }
-        $configs = [
-            'username'   => $username,
-            'from'       => ['address' => $username, 'name' => $fromname],
-            'password'   => $password,
-            'encryption' => $smtpsecure,
-            'host'       => $host,
-            'port'       => $port,
-            'driver'     => $protocol,
-        ];
-        foreach ($configs as $key => $config) {
-            if (is_array($config)) {
-                foreach ($config as $from) {
-                    \Config::set('mail.'.$key, $config);
+        switch ($mail->sending_protocol) {
+            case 'smtp':
+                $config = ['host'      => $mail->sending_host,
+                            'port'     => $mail->sending_port,
+                            'security' => $mail->sending_encryption,
+                            'username' => $mail->email_address,
+                            'password' => $mail->password,
+                        ];
+                if (!$this->commonMailer->setSmtpDriver($config)) {
+                    \Log::info('Invaid configuration :- '.$config);
+
+                    return 'invalid mail configuration';
                 }
-            } else {
-                \Config::set('mail.'.$key, $config);
-            }
+                break;
+            case 'send_mail':
+                $config = [
+                            'host'     => \Config::get('mail.host'),
+                            'port'     => \Config::get('mail.port'),
+                            'security' => \Config::get('mail.encryption'),
+                            'username' => \Config::get('mail.username'),
+                            'password' => \Config::get('mail.password'),
+                        ];
+                $this->commonMailer->setSmtpDriver($config);
+                break;
+            case 'mailgun':
+                $this->commonMailer->setMailGunDriver(null);
+                break;
+            default:
+                return 'Mail driver not supported';
         }
     }
 
     public function setServices($emailid, $protocol)
     {
         $service = new \App\Model\MailJob\FaveoMail();
-        $services = $service->where('email_id', $emailid)->lists('value', 'key')->toArray();
+        $services = $service->where('email_id', $emailid)->pluck('value', 'key')->toArray();
         $controller = new \App\Http\Controllers\Admin\helpdesk\EmailsController();
         $controller->setServiceConfig($protocol, $services);
     }
@@ -223,14 +228,14 @@ class PhpMailController extends Controller
         return $value;
     }
 
-    public function laravelMail($to, $toname, $subject, $data, $cc, $attach)
+    public function laravelMail($to, $toname, $subject, $data, $from_address, $cc, $attach)
     {
         //dd($to, $toname, $subject, $data, $cc, $attach);
         //dd(\Config::get('mail'));
         //dd($attach);
-        $mail = Mail::send('emails.mail', ['data' => $data], function ($m) use ($to, $subject, $toname, $cc, $attach) {
+        $mail = Mail::send('emails.mail', ['data' => $data], function ($m) use ($to, $subject, $toname, $cc, $attach, $from_address) {
             $m->to($to, $toname)->subject($subject);
-
+            $m->from($from_address->email_address, $from_address->email_name);
             if ($cc != null) {
                 foreach ($cc as $collaborator) {
                     //mail to collaborators
@@ -242,7 +247,7 @@ class PhpMailController extends Controller
             }
 
             //            $mail->addBCC($bc);
-            $size = count($attach);
+            $size = ($attach) ? count($attach) : 0;
             if ($size > 0) {
                 for ($i = 0; $i < $size; $i++) {
                     if (is_array($attach) && array_key_exists($i, $attach)) {
@@ -279,7 +284,7 @@ class PhpMailController extends Controller
         if ($active_queue) {
             $short = $active_queue->short_name;
             $fields = new \App\Model\MailJob\FaveoQueue();
-            $field = $fields->where('service_id', $active_queue->id)->lists('value', 'key')->toArray();
+            $field = $fields->where('service_id', $active_queue->id)->pluck('value', 'key')->toArray();
         }
         $this->setQueueConfig($short, $field);
     }

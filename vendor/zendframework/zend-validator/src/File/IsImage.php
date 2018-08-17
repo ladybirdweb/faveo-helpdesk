@@ -109,7 +109,7 @@ class IsImage extends MimeType
 
         parent::__construct($options);
 
-        if (!$this->getMimeType()) {
+        if (! $this->getMimeType()) {
             $this->setMimeType($default);
         }
     }

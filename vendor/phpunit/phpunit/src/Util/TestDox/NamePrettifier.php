@@ -7,103 +7,136 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Util\TestDox;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Prettifies class and method names for use in TestDox documentation.
- *
- * @since Class available since Release 2.1.0
  */
-class PHPUnit_Util_TestDox_NamePrettifier
+final class NamePrettifier
 {
-    /**
-     * @var string
-     */
-    protected $prefix = 'Test';
-
-    /**
-     * @var string
-     */
-    protected $suffix = 'Test';
-
     /**
      * @var array
      */
-    protected $strings = array();
+    private $strings = [];
 
     /**
      * Prettifies the name of a test class.
-     *
-     * @param string $name
-     *
-     * @return string
      */
-    public function prettifyTestClass($name)
+    public function prettifyTestClass(string $className): string
     {
-        $title = $name;
+        try {
+            $annotations = \PHPUnit\Util\Test::parseTestMethodAnnotations($className);
 
-        if ($this->suffix !== null &&
-            $this->suffix == substr($name, -1 * strlen($this->suffix))) {
-            $title = substr($title, 0, strripos($title, $this->suffix));
+            if (isset($annotations['class']['testdox'][0])) {
+                return $annotations['class']['testdox'][0];
+            }
+        } catch (\ReflectionException $e) {
         }
 
-        if ($this->prefix !== null &&
-            $this->prefix == substr($name, 0, strlen($this->prefix))) {
-            $title = substr($title, strlen($this->prefix));
+        $result = $className;
+
+        if (\substr($className, -1 * \strlen('Test')) === 'Test') {
+            $result = \substr($result, 0, \strripos($result, 'Test'));
         }
 
-        if (substr($title, 0, 1) == '\\') {
-            $title = substr($title, 1);
+        if (\strpos($className, 'Tests') === 0) {
+            $result = \substr($result, \strlen('Tests'));
+        } elseif (\strpos($className, 'Test') === 0) {
+            $result = \substr($result, \strlen('Test'));
         }
 
-        return $title;
+        if ($result[0] === '\\') {
+            $result = \substr($result, 1);
+        }
+
+        return $result;
+    }
+
+    public function prettifyTestCase(TestCase $test): string
+    {
+        $annotations                = $test->getAnnotations();
+        $annotationWithPlaceholders = false;
+
+        if (isset($annotations['method']['testdox'][0])) {
+            $result = $annotations['method']['testdox'][0];
+
+            if (\strpos($result, '$') !== false) {
+                $annotation = $annotations['method']['testdox'][0];
+                $result     = '';
+
+                $providedData = $this->mapTestMethodParameterNamesToProvidedDataValues($test);
+
+                foreach (\explode(' ', $annotation) as $word) {
+                    if (\strpos($word, '$') === 0) {
+                        $result .= $providedData[$word] . ' ';
+                    } else {
+                        $result .= $word . ' ';
+                    }
+                }
+
+                $result = \trim($result);
+
+                $annotationWithPlaceholders = true;
+            }
+        } else {
+            $result = $this->prettifyTestMethod($test->getName(false));
+        }
+
+        if ($test->usesDataProvider() && !$annotationWithPlaceholders) {
+            $result .= ' data set "' . $test->dataDescription() . '"';
+        }
+
+        return $result;
     }
 
     /**
      * Prettifies the name of a test method.
-     *
-     * @param string $name
-     *
-     * @return string
      */
-    public function prettifyTestMethod($name)
+    public function prettifyTestMethod(string $name): string
     {
         $buffer = '';
 
-        if (!is_string($name) || strlen($name) == 0) {
+        if (!\is_string($name) || $name === '') {
             return $buffer;
         }
 
-        $string = preg_replace('#\d+$#', '', $name, -1, $count);
+        $string = \preg_replace('#\d+$#', '', $name, -1, $count);
 
-        if (in_array($string, $this->strings)) {
+        if (\in_array($string, $this->strings)) {
             $name = $string;
-        } elseif ($count == 0) {
+        } elseif ($count === 0) {
             $this->strings[] = $string;
         }
 
-        if (substr($name, 0, 4) == 'test') {
-            $name = substr($name, 4);
+        if (\strpos($name, 'test_') === 0) {
+            $name = \substr($name, 5);
+        } elseif (\strpos($name, 'test') === 0) {
+            $name = \substr($name, 4);
         }
 
-        $name[0] = strtoupper($name[0]);
-
-        if (strpos($name, '_') !== false) {
-            return trim(str_replace('_', ' ', $name));
+        if ($name === '') {
+            return $buffer;
         }
 
-        $max        = strlen($name);
+        $name[0] = \strtoupper($name[0]);
+
+        if (\strpos($name, '_') !== false) {
+            return \trim(\str_replace('_', ' ', $name));
+        }
+
+        $max        = \strlen($name);
         $wasNumeric = false;
 
         for ($i = 0; $i < $max; $i++) {
-            if ($i > 0 &&
-                ord($name[$i]) >= 65 &&
-                ord($name[$i]) <= 90) {
-                $buffer .= ' ' . strtolower($name[$i]);
+            if ($i > 0 && \ord($name[$i]) >= 65 && \ord($name[$i]) <= 90) {
+                $buffer .= ' ' . \strtolower($name[$i]);
             } else {
-                $isNumeric = is_numeric($name[$i]);
+                $isNumeric = \is_numeric($name[$i]);
 
                 if (!$wasNumeric && $isNumeric) {
-                    $buffer    .= ' ';
+                    $buffer .= ' ';
                     $wasNumeric = true;
                 }
 
@@ -118,23 +151,17 @@ class PHPUnit_Util_TestDox_NamePrettifier
         return $buffer;
     }
 
-    /**
-     * Sets the prefix of test names.
-     *
-     * @param string $prefix
-     */
-    public function setPrefix($prefix)
+    private function mapTestMethodParameterNamesToProvidedDataValues(TestCase $test): array
     {
-        $this->prefix = $prefix;
-    }
+        $reflector          = new \ReflectionMethod(\get_class($test), $test->getName(false));
+        $providedData       = [];
+        $providedDataValues = $test->getProvidedData();
+        $i                  = 0;
 
-    /**
-     * Sets the suffix of test names.
-     *
-     * @param string $suffix
-     */
-    public function setSuffix($suffix)
-    {
-        $this->suffix = $suffix;
+        foreach ($reflector->getParameters() as $parameter) {
+            $providedData['$' . $parameter->getName()] = $providedDataValues[$i++];
+        }
+
+        return $providedData;
     }
 }

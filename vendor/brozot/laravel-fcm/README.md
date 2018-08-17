@@ -29,7 +29,7 @@ Or you can add it directly in your composer.json file:
 
 	{
     	"require": {
-        	"brozot/laravel-fcm": "^1.2.0"
+        	"brozot/laravel-fcm": "1.2.*"
     	}
 	}
 
@@ -124,8 +124,8 @@ use FCM;
 #### Sending a Downstream Message to a Device
 
 ```php
-$optionBuiler = new OptionsBuilder();
-$optionBuiler->setTimeToLive(60*20);
+$optionBuilder = new OptionsBuilder();
+$optionBuilder->setTimeToLive(60*20);
 
 $notificationBuilder = new PayloadNotificationBuilder('my title');
 $notificationBuilder->setBody('Hello world')
@@ -134,7 +134,7 @@ $notificationBuilder->setBody('Hello world')
 $dataBuilder = new PayloadDataBuilder();
 $dataBuilder->addData(['a_data' => 'my_data']);
 
-$option = $optionBuiler->build();
+$option = $optionBuilder->build();
 $notification = $notificationBuilder->build();
 $data = $dataBuilder->build();
 
@@ -161,8 +161,8 @@ $downstreamResponse->tokensToRetry();
 #### Sending a Downstream Message to Multiple Devices
 
 ```php
-$optionBuiler = new OptionsBuilder();
-$optionBuiler->setTimeToLive(60*20);
+$optionBuilder = new OptionsBuilder();
+$optionBuilder->setTimeToLive(60*20);
 
 $notificationBuilder = new PayloadNotificationBuilder('my title');
 $notificationBuilder->setBody('Hello world')
@@ -171,7 +171,7 @@ $notificationBuilder->setBody('Hello world')
 $dataBuilder = new PayloadDataBuilder();
 $dataBuilder->addData(['a_data' => 'my_data']);
 
-$option = $optionBuiler->build();
+$option = $optionBuilder->build();
 $notification = $notificationBuilder->build();
 $data = $dataBuilder->build();
 
@@ -202,6 +202,12 @@ $downstreamResponse->tokensWithError();
 A topics message is a notification message, data message, or both, that you send to all the devices registered to this topic.
 
 > Note: Topic names must be managed by your app and known by your server. The Laravel-FCM package or fcm doesn't provide an easy way to do that.
+
+The following use statement is required for the examples below:
+
+```php
+use LaravelFCM\Message\Topics;
+```
 
 #### Sending a Message to a Topic
 
@@ -243,9 +249,9 @@ $topic->topic('news')->andTopic(function($condition) {
 
 	$condition->topic('economic')->orTopic('cultural');
 	
-})
+});
 
-$topicResponse = FCM::sendToTopic($topic, null, $notification, null)
+$topicResponse = FCM::sendToTopic($topic, null, $notification, null);
 
 $topicResponse->isSuccess();
 $topicResponse->shouldRetry();

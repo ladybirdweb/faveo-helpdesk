@@ -25,7 +25,7 @@ $validator->isValid('10.10.2000'); // returns false
 
 `Zend\Validator\Date` also supports custom date formats. When you want to
 validate such a date, use the `format` option. This option accepts any format
-allowed by the PHP [date()](http://php.net/date) function.
+allowed by the PHP [DateTime::createFromFormat()](http://php.net/manual/en/datetime.createfromformat.php#refsect1-datetime.createfromformat-parameters) method.
 
 ```php
 $validator = new Zend\Validator\Date(['format' => 'Y']);

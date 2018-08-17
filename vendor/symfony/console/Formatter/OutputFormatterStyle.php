@@ -61,7 +61,7 @@ class OutputFormatterStyle implements OutputFormatterStyleInterface
      * @param string|null $background The style background color name
      * @param array       $options    The style options
      */
-    public function __construct($foreground = null, $background = null, array $options = array())
+    public function __construct(string $foreground = null, string $background = null, array $options = array())
     {
         if (null !== $foreground) {
             $this->setForeground($foreground);
@@ -69,7 +69,7 @@ class OutputFormatterStyle implements OutputFormatterStyleInterface
         if (null !== $background) {
             $this->setBackground($background);
         }
-        if (count($options)) {
+        if (\count($options)) {
             $this->setOptions($options);
         }
     }
@@ -143,7 +143,7 @@ class OutputFormatterStyle implements OutputFormatterStyleInterface
             ));
         }
 
-        if (!in_array(static::$availableOptions[$option], $this->options)) {
+        if (!\in_array(static::$availableOptions[$option], $this->options)) {
             $this->options[] = static::$availableOptions[$option];
         }
     }
@@ -172,9 +172,7 @@ class OutputFormatterStyle implements OutputFormatterStyleInterface
     }
 
     /**
-     * Sets multiple style options at once.
-     *
-     * @param array $options
+     * {@inheritdoc}
      */
     public function setOptions(array $options)
     {
@@ -205,14 +203,14 @@ class OutputFormatterStyle implements OutputFormatterStyleInterface
             $setCodes[] = $this->background['set'];
             $unsetCodes[] = $this->background['unset'];
         }
-        if (count($this->options)) {
+        if (\count($this->options)) {
             foreach ($this->options as $option) {
                 $setCodes[] = $option['set'];
                 $unsetCodes[] = $option['unset'];
             }
         }
 
-        if (0 === count($setCodes)) {
+        if (0 === \count($setCodes)) {
             return $text;
         }
 

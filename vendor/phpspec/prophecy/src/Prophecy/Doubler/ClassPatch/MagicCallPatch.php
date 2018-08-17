@@ -51,23 +51,32 @@ class MagicCallPatch implements ClassPatchInterface
      */
     public function apply(ClassNode $node)
     {
-        $parentClass = $node->getParentClass();
-        $reflectionClass = new \ReflectionClass($parentClass);
+        $types = array_filter($node->getInterfaces(), function ($interface) {
+            return 0 !== strpos($interface, 'Prophecy\\');
+        });
+        $types[] = $node->getParentClass();
 
-        $tagList = $this->tagRetriever->getTagList($reflectionClass);
+        foreach ($types as $type) {
+            $reflectionClass = new \ReflectionClass($type);
 
-        foreach($tagList as $tag) {
-            $methodName = $tag->getMethodName();
+            while ($reflectionClass) {
+                $tagList = $this->tagRetriever->getTagList($reflectionClass);
 
-            if (empty($methodName)) {
-                continue;
-            }
+                foreach ($tagList as $tag) {
+                    $methodName = $tag->getMethodName();
 
-            if (!$reflectionClass->hasMethod($methodName)) {
-                $methodNode = new MethodNode($methodName);
-                $methodNode->setStatic($tag->isStatic());
+                    if (empty($methodName)) {
+                        continue;
+                    }
 
-                $node->addMethod($methodNode);
+                    if (!$reflectionClass->hasMethod($methodName)) {
+                        $methodNode = new MethodNode($methodName);
+                        $methodNode->setStatic($tag->isStatic());
+                        $node->addMethod($methodNode);
+                    }
+                }
+
+                $reflectionClass = $reflectionClass->getParentClass();
             }
         }
     }

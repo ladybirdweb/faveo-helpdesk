@@ -17,6 +17,7 @@ pages:
             - "Db\\RecordExists and Db\\NoRecordExists": validators/db.md
             - Digits: validators/digits.md
             - EmailAddress: validators/email-address.md
+            - Explode: validators/explode.md
             - GreaterThan: validators/greater-than.md
             - Hex: validators/hex.md
             - Hostname: validators/hostname.md
@@ -25,10 +26,10 @@ pages:
             - InArray: validators/in-array.md
             - Ip: validators/ip.md
             - Isbn: validators/isbn.md
+            - IsCountable: validators/is-countable.md
             - IsInstanceOf: validators/isinstanceof.md
             - LessThan: validators/less-than.md
             - NotEmpty: validators/not-empty.md
-            - PostCode: validators/post-code.md
             - Regex: validators/regex.md
             - Sitemap: validators/sitemap.md
             - Step: validators/step.md

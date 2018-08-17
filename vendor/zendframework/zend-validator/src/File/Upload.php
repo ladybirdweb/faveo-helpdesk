@@ -9,6 +9,7 @@
 
 namespace Zend\Validator\File;
 
+use Countable;
 use Zend\Validator\AbstractValidator;
 use Zend\Validator\Exception;
 
@@ -63,7 +64,7 @@ class Upload extends AbstractValidator
      */
     public function __construct($options = [])
     {
-        if (is_array($options) && !array_key_exists('files', $options)) {
+        if (is_array($options) && ! array_key_exists('files', $options)) {
             $options = ['files' => $options];
         }
 
@@ -109,7 +110,10 @@ class Upload extends AbstractValidator
      */
     public function setFiles($files = [])
     {
-        if (count($files) === 0) {
+        if (null === $files
+            || ((is_array($files) || $files instanceof Countable)
+                && count($files) === 0)
+        ) {
             $this->options['files'] = $_FILES;
         } else {
             $this->options['files'] = $files;
@@ -120,7 +124,7 @@ class Upload extends AbstractValidator
         }
 
         foreach ($this->options['files'] as $file => $content) {
-            if (!isset($content['error'])) {
+            if (! isset($content['error'])) {
                 unset($this->options['files'][$file]);
             }
         }
@@ -162,7 +166,7 @@ class Upload extends AbstractValidator
             $this->value = $file;
             switch ($content['error']) {
                 case 0:
-                    if (!is_uploaded_file($content['tmp_name'])) {
+                    if (! is_uploaded_file($content['tmp_name'])) {
                         $this->throwError($content, self::ATTACK);
                     }
                     break;

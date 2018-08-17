@@ -8,7 +8,9 @@ interface A extends C, D {
 -----
 array(
     0: Stmt_Interface(
-        name: A
+        name: Identifier(
+            name: A
+        )
         extends: array(
             0: Name(
                 parts: array(
@@ -23,9 +25,11 @@ array(
         )
         stmts: array(
             0: Stmt_ClassMethod(
-                type: 1
+                flags: MODIFIER_PUBLIC (1)
                 byRef: false
-                name: a
+                name: Identifier(
+                    name: a
+                )
                 params: array(
                 )
                 returnType: null

@@ -47,7 +47,7 @@ class ExcludeMimeType extends MimeType
             $filetype = $file['type'];
             $file     = $file['tmp_name'];
         } elseif (is_array($value)) {
-            if (!isset($value['tmp_name']) || !isset($value['name']) || !isset($value['type'])) {
+            if (! isset($value['tmp_name']) || ! isset($value['name']) || ! isset($value['type'])) {
                 throw new Exception\InvalidArgumentException(
                     'Value array must be in $_FILES format'
                 );
@@ -63,14 +63,14 @@ class ExcludeMimeType extends MimeType
         $this->setValue($filename);
 
         // Is file readable ?
-        if (empty($file) || false === stream_resolve_include_path($file)) {
+        if (empty($file) || false === is_readable($file)) {
             $this->error(self::NOT_READABLE);
             return false;
         }
 
         $mimefile = $this->getMagicFile();
         if (class_exists('finfo', false)) {
-            if (!$this->isMagicFileDisabled() && (!empty($mimefile) && empty($this->finfo))) {
+            if (! $this->isMagicFileDisabled() && (! empty($mimefile) && empty($this->finfo))) {
                 $this->finfo = finfo_open(FILEINFO_MIME_TYPE, $mimefile);
             }
 
@@ -79,7 +79,7 @@ class ExcludeMimeType extends MimeType
             }
 
             $this->type = null;
-            if (!empty($this->finfo)) {
+            if (! empty($this->finfo)) {
                 $this->type = finfo_file($this->finfo, $file);
             }
         }

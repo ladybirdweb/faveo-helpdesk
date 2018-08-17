@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\Translation\Tests\Dumper;
 
-use Symfony\Component\Translation\MessageCatalogue;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Dumper\IcuResFileDumper;
+use Symfony\Component\Translation\MessageCatalogue;
 
-class IcuResFileDumperTest extends \PHPUnit_Framework_TestCase
+class IcuResFileDumperTest extends TestCase
 {
     public function testFormatCatalogue()
     {

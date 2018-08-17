@@ -1,10 +1,20 @@
 <?php
-class Issue1021Test extends PHPUnit_Framework_TestCase
+/*
+ * This file is part of PHPUnit.
+ *
+ * (c) Sebastian Bergmann <sebastian@phpunit.de>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+use PHPUnit\Framework\TestCase;
+
+class Issue1021Test extends TestCase
 {
     /**
      * @dataProvider provider
      */
-    public function testSomething($data)
+    public function testSomething($data): void
     {
         $this->assertTrue($data);
     }
@@ -12,12 +22,13 @@ class Issue1021Test extends PHPUnit_Framework_TestCase
     /**
      * @depends testSomething
      */
-    public function testSomethingElse()
+    public function testSomethingElse(): void
     {
+        $this->assertTrue(true);
     }
 
     public function provider()
     {
-        return array(array(true));
+        return [[true]];
     }
 }

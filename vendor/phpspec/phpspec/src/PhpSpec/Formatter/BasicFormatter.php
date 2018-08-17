@@ -13,8 +13,8 @@
 
 namespace PhpSpec\Formatter;
 
-use PhpSpec\IO\IOInterface as IO;
-use PhpSpec\Formatter\Presenter\PresenterInterface;
+use PhpSpec\Formatter\Presenter\Presenter;
+use PhpSpec\IO\IO;
 use PhpSpec\Listener\StatisticsCollector;
 use PhpSpec\Event\SuiteEvent;
 use PhpSpec\Event\SpecificationEvent;
@@ -29,7 +29,7 @@ abstract class BasicFormatter implements EventSubscriberInterface
     private $io;
 
     /**
-     * @var PresenterInterface
+     * @var Presenter
      */
     private $presenter;
 
@@ -38,7 +38,7 @@ abstract class BasicFormatter implements EventSubscriberInterface
      */
     private $stats;
 
-    public function __construct(PresenterInterface $presenter, IO $io, StatisticsCollector $stats)
+    public function __construct(Presenter $presenter, IO $io, StatisticsCollector $stats)
     {
         $this->presenter = $presenter;
         $this->io = $io;
@@ -48,7 +48,7 @@ abstract class BasicFormatter implements EventSubscriberInterface
     /**
      * @return array
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         $events = array(
             'beforeSuite', 'afterSuite',
@@ -62,15 +62,15 @@ abstract class BasicFormatter implements EventSubscriberInterface
     /**
      * @return IO
      */
-    protected function getIO()
+    protected function getIO(): IO
     {
         return $this->io;
     }
 
     /**
-     * @return PresenterInterface
+     * @return Presenter
      */
-    protected function getPresenter()
+    protected function getPresenter(): Presenter
     {
         return $this->presenter;
     }
@@ -78,7 +78,7 @@ abstract class BasicFormatter implements EventSubscriberInterface
     /**
      * @return StatisticsCollector
      */
-    protected function getStatisticsCollector()
+    protected function getStatisticsCollector(): StatisticsCollector
     {
         return $this->stats;
     }

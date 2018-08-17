@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\Translation\Tests\Loader;
 
-use Symfony\Component\Translation\Loader\MoFileLoader;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\Translation\Loader\MoFileLoader;
 
-class MoFileLoaderTest extends \PHPUnit_Framework_TestCase
+class MoFileLoaderTest extends TestCase
 {
     public function testLoad()
     {

@@ -76,7 +76,7 @@ class="active"
 		<div class="form-group {{ $errors->has('template_set_to_clone') ? 'has-error' : '' }}">
 			{!! Form::label('template_set_to_clone',Lang::get('lang.template_set_to_clone')) !!}
 			{!! $errors->first('template_set_to_clone', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('template_set_to_clone', [''=>'Select a Template','Templates'=>$templates->lists('name','name')],1,['class' => 'form-control']) !!}
+			{!!Form::select('template_set_to_clone', [''=>'Select a Template','Templates'=>$templates->pluck('name','name')],1,['class' => 'form-control']) !!}
 			</div>
 		</div>
 
@@ -85,7 +85,7 @@ class="active"
 		<div class="form-group {{ $errors->has('language') ? 'has-error' : '' }}">
 			{!! Form::label('language',Lang::get('lang.language')) !!}
 			{!! $errors->first('language', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('language', [''=>'Select a Language','Languages'=>$languages->lists('name','name')],null,['class' => 'form-control']) !!}
+			{!!Form::select('language', [''=>'Select a Language','Languages'=>$languages->pluck('name','name')],null,['class' => 'form-control']) !!}
 			</div>
 		</div>
 

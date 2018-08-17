@@ -257,7 +257,7 @@ class UserController extends Controller
             $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
             $location = GeoIP::getLocation();
             $phonecode = $code->where('iso', '=', $location->iso_code)->first();
-            $org = Organization::lists('name', 'id')->toArray();
+            $org = Organization::pluck('name', 'id')->toArray();
 
             return view('themes.default1.agent.helpdesk.user.create', compact('org', 'settings', 'email_mandatory'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
@@ -614,12 +614,14 @@ class UserController extends Controller
     {
         try {
             $users = User::where('id', '=', $id)->first();
-            if (count($users) > 0) {
+            if ($users && $users->count() > 0) {
                 return view('themes.default1.agent.helpdesk.user.show', compact('users'));
             } else {
                 return redirect()->back()->with('fails', Lang::get('lang.user-not-found'));
             }
         } catch (Exception $e) {
+            dd($e);
+
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }
@@ -647,9 +649,9 @@ class UserController extends Controller
             $phonecode = $code->where('iso', '=', $location->iso_code)->first();
             $orgs = Organization::all();
             // dd($org);
-            $organization_id = User_org::where('user_id', '=', $id)->lists('org_id')->first();
+            $organization_id = User_org::where('user_id', '=', $id)->pluck('org_id')->first();
 
-            // $org_name=Organization::where('id','=',$org_id)->lists('name')->first();
+            // $org_name=Organization::where('id','=',$org_id)->pluck('name')->first();
             // dd($org_name);
 
             return view('themes.default1.agent.helpdesk.user.edit', compact('users', 'orgs', '$settings', '$email_mandatory', 'organization_id'))->with('phonecode', $phonecode->phonecode);
@@ -833,7 +835,7 @@ class UserController extends Controller
         $org_name = Input::get('org');
 
         if ($org_name) {
-            $org = Organization::where('name', '=', $org_name)->lists('id')->first();
+            $org = Organization::where('name', '=', $org_name)->pluck('id')->first();
             if ($org) {
                 $user_org = new User_org();
                 $user_org->org_id = $org;
@@ -854,7 +856,7 @@ class UserController extends Controller
         $org_name = Input::get('org');
 
         if ($org_name) {
-            $org = Organization::where('name', '=', $org_name)->lists('id')->first();
+            $org = Organization::where('name', '=', $org_name)->pluck('id')->first();
             if ($org) {
                 $user_org = User_org::where('user_id', '=', $id)->first();
                 $user_org->org_id = $org;

@@ -28,7 +28,7 @@ abstract class AbstractEncoder
     /**
      * Output quality of encoder instance
      *
-     * @var integer
+     * @var int
      */
     public $quality;
     
@@ -75,11 +75,18 @@ abstract class AbstractEncoder
     abstract protected function processIco();
 
     /**
+     * Processes and returns image as WebP encoded string
+     *
+     * @return string
+     */
+    abstract protected function processWebp();
+
+    /**
      * Process a given image
      *
      * @param  Image   $image
      * @param  string  $format
-     * @param  integer $quality
+     * @param  int     $quality
      * @return Image
      */
     public function process(Image $image, $format = null, $quality = null)
@@ -123,7 +130,14 @@ abstract class AbstractEncoder
                 break;
 
             case 'bmp':
-            case 'image/bmp':
+            case 'bmp':
+            case 'ms-bmp':
+            case 'x-bitmap':
+            case 'x-bmp':
+            case 'x-ms-bmp':
+            case 'x-win-bitmap':
+            case 'x-windows-bmp':
+            case 'x-xbitmap':
             case 'image/ms-bmp':
             case 'image/x-bitmap':
             case 'image/x-bmp':
@@ -144,6 +158,12 @@ abstract class AbstractEncoder
             case 'psd':
             case 'image/vnd.adobe.photoshop':
                 $this->result = $this->processPsd();
+                break;
+
+            case 'webp':
+            case 'image/webp':
+            case 'image/x-webp':
+                $this->result = $this->processWebp();
                 break;
                 
             default:
@@ -201,7 +221,7 @@ abstract class AbstractEncoder
     /**
      * Determines output quality
      *
-     * @param integer $quality
+     * @param int $quality
      */
     protected function setQuality($quality)
     {

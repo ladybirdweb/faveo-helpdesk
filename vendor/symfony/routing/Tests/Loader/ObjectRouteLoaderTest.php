@@ -11,13 +11,18 @@
 
 namespace Symfony\Component\Routing\Tests\Loader;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Loader\ObjectRouteLoader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-class ObjectRouteLoaderTest extends \PHPUnit_Framework_TestCase
+class ObjectRouteLoaderTest extends TestCase
 {
-    public function testLoadCallsServiceAndReturnsCollection()
+    /**
+     * @group legacy
+     * @expectedDeprecation Referencing service route loaders with a single colon is deprecated since Symfony 4.1. Use my_route_provider_service::loadRoutes instead.
+     */
+    public function testLoadCallsServiceAndReturnsCollectionWithLegacyNotation()
     {
         $loader = new ObjectRouteLoaderForTest();
 
@@ -31,6 +36,28 @@ class ObjectRouteLoaderTest extends \PHPUnit_Framework_TestCase
 
         $actualRoutes = $loader->load(
             'my_route_provider_service:loadRoutes',
+            'service'
+        );
+
+        $this->assertSame($collection, $actualRoutes);
+        // the service file should be listed as a resource
+        $this->assertNotEmpty($actualRoutes->getResources());
+    }
+
+    public function testLoadCallsServiceAndReturnsCollection()
+    {
+        $loader = new ObjectRouteLoaderForTest();
+
+        // create a basic collection that will be returned
+        $collection = new RouteCollection();
+        $collection->add('foo', new Route('/foo'));
+
+        $loader->loaderMap = array(
+            'my_route_provider_service' => new RouteService($collection),
+        );
+
+        $actualRoutes = $loader->load(
+            'my_route_provider_service::loadRoutes',
             'service'
         );
 
@@ -53,7 +80,6 @@ class ObjectRouteLoaderTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array('Foo'),
-            array('Bar::baz'),
             array('Foo:Bar:baz'),
         );
     }
@@ -65,7 +91,7 @@ class ObjectRouteLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $loader = new ObjectRouteLoaderForTest();
         $loader->loaderMap = array('my_service' => 'NOT_AN_OBJECT');
-        $loader->load('my_service:method');
+        $loader->load('my_service::method');
     }
 
     /**
@@ -75,7 +101,7 @@ class ObjectRouteLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $loader = new ObjectRouteLoaderForTest();
         $loader->loaderMap = array('my_service' => new \stdClass());
-        $loader->load('my_service:method');
+        $loader->load('my_service::method');
     }
 
     /**
@@ -92,7 +118,7 @@ class ObjectRouteLoaderTest extends \PHPUnit_Framework_TestCase
 
         $loader = new ObjectRouteLoaderForTest();
         $loader->loaderMap = array('my_service' => $service);
-        $loader->load('my_service:loadRoutes');
+        $loader->load('my_service::loadRoutes');
     }
 }
 

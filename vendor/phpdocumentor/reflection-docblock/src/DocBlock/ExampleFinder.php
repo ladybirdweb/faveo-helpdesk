@@ -10,7 +10,7 @@
  * @link      http://phpdoc.org
  */
 
-namespace phpDocumentor\Reflection;
+namespace phpDocumentor\Reflection\DocBlock;
 
 use phpDocumentor\Reflection\DocBlock\Tags\Example;
 
@@ -23,7 +23,7 @@ class ExampleFinder
     private $sourceDirectory = '';
 
     /** @var string[] */
-    private $exampleDirectories = array();
+    private $exampleDirectories = [];
 
     /**
      * Attempts to find the example contents for the given descriptor.

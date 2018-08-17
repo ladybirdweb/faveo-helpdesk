@@ -11,9 +11,10 @@
 
 namespace Symfony\Component\HttpFoundation\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\AcceptHeaderItem;
 
-class AcceptHeaderItemTest extends \PHPUnit_Framework_TestCase
+class AcceptHeaderItemTest extends TestCase
 {
     /**
      * @dataProvider provideFromStringData
@@ -65,7 +66,7 @@ class AcceptHeaderItemTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 'text/plain', array('charset' => 'utf-8', 'param' => 'this;should,not=matter', 'footnotes' => 'true'),
-                'text/plain;charset=utf-8;param="this;should,not=matter";footnotes=true',
+                'text/plain; charset=utf-8; param="this;should,not=matter"; footnotes=true',
             ),
         );
     }

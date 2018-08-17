@@ -7,20 +7,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Framework;
 
 /**
  * Thrown when an assertion failed.
- *
- * @since Class available since Release 2.0.0
  */
-class PHPUnit_Framework_AssertionFailedError extends PHPUnit_Framework_Exception implements PHPUnit_Framework_SelfDescribing
+class AssertionFailedError extends Exception implements SelfDescribing
 {
     /**
      * Wrapper for getMessage() which is declared as final.
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return $this->getMessage();
     }

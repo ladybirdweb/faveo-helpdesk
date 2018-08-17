@@ -7,6 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Framework;
+
+use PHPUnit\Util\Filter;
 
 /**
  * Base class for all PHPUnit Framework exceptions.
@@ -27,51 +30,49 @@
  * the parent would break the intended encapsulation of process isolation.
  *
  * @see http://fabien.potencier.org/article/9/php-serialization-stack-traces-and-exceptions
- * @since Class available since Release 3.4.0
  */
-class PHPUnit_Framework_Exception extends RuntimeException implements PHPUnit_Exception
+class Exception extends \RuntimeException implements \PHPUnit\Exception
 {
     /**
      * @var array
      */
     protected $serializableTrace;
 
-    public function __construct($message = '', $code = 0, Exception $previous = null)
+    public function __construct($message = '', $code = 0, \Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
 
         $this->serializableTrace = $this->getTrace();
+
         foreach ($this->serializableTrace as $i => $call) {
             unset($this->serializableTrace[$i]['args']);
         }
     }
 
     /**
-     * Returns the serializable trace (without 'args').
-     *
-     * @return array
+     * @throws \InvalidArgumentException
      */
-    public function getSerializableTrace()
+    public function __toString(): string
     {
-        return $this->serializableTrace;
-    }
+        $string = TestFailure::exceptionToString($this);
 
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        $string = PHPUnit_Framework_TestFailure::exceptionToString($this);
-
-        if ($trace = PHPUnit_Util_Filter::getFilteredStacktrace($this)) {
+        if ($trace = Filter::getFilteredStacktrace($this)) {
             $string .= "\n" . $trace;
         }
 
         return $string;
     }
 
-    public function __sleep()
+    public function __sleep(): array
     {
-        return array_keys(get_object_vars($this));
+        return \array_keys(\get_object_vars($this));
+    }
+
+    /**
+     * Returns the serializable trace (without 'args').
+     */
+    public function getSerializableTrace(): array
+    {
+        return $this->serializableTrace;
     }
 }

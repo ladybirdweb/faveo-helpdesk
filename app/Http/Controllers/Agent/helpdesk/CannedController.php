@@ -156,7 +156,7 @@ class CannedController extends Controller
             /* Check whether function success or not */
             $canned->delete();
             /* redirect to Index page with Success Message */
-            return redirect()->route('canned.list')->with('success', Lang::get('lang.user_deleted_successfully'));
+            return redirect()->route('canned.list')->with('success', Lang::get('lang.canned_response_deleted'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
             return redirect()->route('canned.list')->with('fails', $e->getMessage());

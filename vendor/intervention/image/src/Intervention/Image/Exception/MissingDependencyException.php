@@ -2,7 +2,7 @@
 
 namespace Intervention\Image\Exception;
 
-class MissingDependencyException extends \RuntimeException
+class MissingDependencyException extends ImageException
 {
     # nothing to override
 }

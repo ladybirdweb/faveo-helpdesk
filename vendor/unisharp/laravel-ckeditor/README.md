@@ -1,6 +1,8 @@
 CKEditor Package
 =====================
 
+p.s. Instead of using this package, I recommend just follow [the official CKEditor installation instructions with package managers](http://docs.ckeditor.com/#!/guide/dev_package_managers)
+
 ## Installation
 ### Set up package
 
@@ -40,6 +42,6 @@ Or if you want to initiate by jQuery selector :
     </script>
 ```
 
-## File Uplader Integration
+## File Uploader Integration
 
  Instead of using KCFinder, we recommend [laravel-filemanager](https://github.com/UniSharp/laravel-filemanager) for the file uploader integration for better laravel user access control and specific per user folders.

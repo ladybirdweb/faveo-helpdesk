@@ -4,15 +4,17 @@ namespace App\Exceptions;
 
 // controller
 use Bugsnag;
-//use Illuminate\Validation\ValidationException;
 use Bugsnag\BugsnagLaravel\BugsnagExceptionHandler as ExceptionHandler;
+use Config;
 use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
 // use Symfony\Component\HttpKernel\Exception\HttpException;
 // use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Foundation\Validation\ValidationException;
+use Illuminate\Foundation\Validation\ValidationException as foundation;
 use Illuminate\Session\TokenMismatchException;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
@@ -25,11 +27,13 @@ class Handler extends ExceptionHandler
     protected $dontReport = [
 //        'Symfony\Component\HttpKernel\Exception\HttpException',
         \Illuminate\Http\Exception\HttpResponseException::class,
-        ValidationException::class,
+        foundation::class,
         AuthorizationException::class,
         HttpResponseException::class,
         ModelNotFoundException::class,
         \Symfony\Component\HttpKernel\Exception\HttpException::class,
+        ValidationException::class,
+        \DaveJamesMiller\Breadcrumbs\Exception::class,
     ];
 
     /**
@@ -43,18 +47,35 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
-        $debug = \Config::get('app.bugsnag_reporting');
-        $debug = ($debug) ? 'true' : 'false';
-        if ($debug == 'false') {
-            Bugsnag::setBeforeNotifyFunction(function ($error) {
-                return false;
-            });
-        } else {
-            $version = \Config::get('app.version');
-            Bugsnag::setAppVersion($version);
+        Bugsnag::setBeforeNotifyFunction(function ($error) { //set bugsnag
+            return false;
+        });
+        // check if system is running in production environment
+        if (\App::environment() == 'production') {
+            $debug = Config::get('app.bugsnag_reporting'); //get bugsang reporting preference
+            if ($debug) { //if preference is true for reporting
+                $version = Config::get('app.version'); //set app version in report
+                Bugsnag::setAppVersion($version);
+                Bugsnag::setBeforeNotifyFunction(function ($error) { //set bugsnag
+                    return true;
+                }); //set bugsnag reporting as true
+            }
         }
 
         return parent::report($e);
+    }
+
+    /**
+     * Convert a validation exception into a JSON response.
+     *
+     * @param \Illuminate\Http\Request                   $request
+     * @param \Illuminate\Validation\ValidationException $exception
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function invalidJson($request, ValidationException $exception)
+    {
+        return response()->json(['success' => false, 'errors' => $exception->errors()], $exception->status);
     }
 
     /**
@@ -74,6 +95,14 @@ class Handler extends ExceptionHandler
                 return response()->json(['message' => $e->getMessage(), 'code' => $e->getStatusCode()]);
             case $e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException:
                 return response()->json(['message' => $e->getMessage(), 'code' => $e->getStatusCode()]);
+            case $e instanceof TokenMismatchException:
+                if ($request->ajax() || $request->wantsJson()) {
+                    $result = ['fails' => \Lang::get('lang.session-expired')];
+
+                    return response()->json(compact('result'), 402);
+                }
+
+                return redirect()->back()->with('fails', \Lang::get('lang.session-expired'));
             default:
                 return $this->common($request, $e);
         }
@@ -89,13 +118,23 @@ class Handler extends ExceptionHandler
      */
     public function render500($request, $e)
     {
+        $seg = $request->segments();
+        if (in_array('api', $seg)) {
+            if ($e instanceof ValidationException) {
+                return $this->invalidJson($request, $e);
+            }
+
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
         if (config('app.debug') == true) {
             return parent::render($request, $e);
         } elseif ($e instanceof ValidationException) {
             return parent::render($request, $e);
+        } elseif ($e instanceof \Illuminate\Validation\ValidationException) {
+            return parent::render($request, $e);
         }
 
-        return  response()->view('errors.500');
+        return response()->view('errors.500');
         //return redirect()->route('error500', []);
     }
 
@@ -111,7 +150,7 @@ class Handler extends ExceptionHandler
     {
         $seg = $request->segments();
         if (in_array('api', $seg)) {
-            return response()->json(['status' => '404']);
+            return response()->json(['success' => false, 'message' => 'not-found'], 404);
         }
         if (config('app.debug') == true) {
             if ($e->getStatusCode() == '404') {
@@ -173,7 +212,22 @@ class Handler extends ExceptionHandler
 //                    return parent::render($request, $e);
 //                }
             case $e instanceof TokenMismatchException:
+                if ($request->ajax() || $request->wantsJson()) {
+                    $result = ['fails' => \Lang::get('lang.session-expired')];
+
+                    return response()->json(compact('result'), 402);
+                }
+
                 return redirect()->back()->with('fails', \Lang::get('lang.session-expired'));
+            case $e instanceof AuthorizationException:
+                return redirect('/')->with('fails', \Lang::get('lang.access-denied'));
+            case $e instanceof MethodNotAllowedHttpException:
+                if (stripos($request->url(), 'api')) {
+                    $result = ['message' => \Lang::get('lang.methon_not_allowed'), 'success' => false];
+
+                    return response()->json($result, 405);
+                }
+                $this->render500($request, $e);
             default:
                 return $this->render500($request, $e);
         }

@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\HttpFoundation\Tests\Session\Attribute;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag;
 
 /**
@@ -18,12 +19,9 @@ use Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag;
  *
  * @author Drak <drak@zikula.org>
  */
-class NamespacedAttributeBagTest extends \PHPUnit_Framework_TestCase
+class NamespacedAttributeBagTest extends TestCase
 {
-    /**
-     * @var array
-     */
-    private $array;
+    private $array = array();
 
     /**
      * @var NamespacedAttributeBag
@@ -87,6 +85,17 @@ class NamespacedAttributeBagTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider attributesProvider
      */
+    public function testHasNoSideEffect($key, $value, $expected)
+    {
+        $expected = json_encode($this->bag->all());
+        $this->bag->has($key);
+
+        $this->assertEquals($expected, json_encode($this->bag->all()));
+    }
+
+    /**
+     * @dataProvider attributesProvider
+     */
     public function testGet($key, $value, $expected)
     {
         $this->assertEquals($value, $this->bag->get($key));
@@ -96,6 +105,17 @@ class NamespacedAttributeBagTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNull($this->bag->get('user2.login'));
         $this->assertEquals('default', $this->bag->get('user2.login', 'default'));
+    }
+
+    /**
+     * @dataProvider attributesProvider
+     */
+    public function testGetNoSideEffect($key, $value, $expected)
+    {
+        $expected = json_encode($this->bag->all());
+        $this->bag->get($key);
+
+        $this->assertEquals($expected, json_encode($this->bag->all()));
     }
 
     /**

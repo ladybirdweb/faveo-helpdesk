@@ -7,49 +7,47 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Framework\Constraint;
 
 /**
  * Constraint that asserts that the value it is evaluated for is greater
  * than a given value.
- *
- * @since Class available since Release 3.0.0
  */
-class PHPUnit_Framework_Constraint_GreaterThan extends PHPUnit_Framework_Constraint
+class GreaterThan extends Constraint
 {
     /**
-     * @var numeric
+     * @var float|int
      */
-    protected $value;
+    private $value;
 
     /**
-     * @param numeric $value
+     * @param float|int $value
      */
     public function __construct($value)
     {
         parent::__construct();
+
         $this->value = $value;
+    }
+
+    /**
+     * Returns a string representation of the constraint.
+     *
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function toString(): string
+    {
+        return 'is greater than ' . $this->exporter->export($this->value);
     }
 
     /**
      * Evaluates the constraint for parameter $other. Returns true if the
      * constraint is met, false otherwise.
      *
-     * @param mixed $other Value or object to evaluate.
-     *
-     * @return bool
+     * @param mixed $other value or object to evaluate
      */
-    protected function matches($other)
+    protected function matches($other): bool
     {
         return $this->value < $other;
-    }
-
-    /**
-     * Returns a string representation of the constraint.
-     *
-     * @return string
-     */
-    public function toString()
-    {
-        return 'is greater than ' . $this->exporter->export($this->value);
     }
 }

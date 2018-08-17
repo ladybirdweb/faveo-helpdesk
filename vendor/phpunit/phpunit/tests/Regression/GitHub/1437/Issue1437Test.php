@@ -1,9 +1,19 @@
 <?php
-class Issue1437Test extends PHPUnit_Framework_TestCase
+/*
+ * This file is part of PHPUnit.
+ *
+ * (c) Sebastian Bergmann <sebastian@phpunit.de>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+use PHPUnit\Framework\TestCase;
+
+class Issue1437Test extends TestCase
 {
-    public function testFailure()
+    public function testFailure(): void
     {
-        ob_start();
+        \ob_start();
         $this->assertTrue(false);
     }
 }

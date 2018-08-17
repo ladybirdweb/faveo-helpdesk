@@ -15,11 +15,12 @@ The following options are supported for `Zend\Validator\StringLength`:
 - `encoding`: Sets the `ICONV` encoding to use with the string.
 - `min`: Sets the minimum allowed length for a string.
 - `max`: Sets the maximum allowed length for a string.
+- `length`: Holds the actual length of the string.
 
 ## Default behaviour
 
 By default, this validator checks if a value is between `min` and `max` using a
-default`min` value of `0` and default `max` value of `NULL` (meaning unlimited).
+default `min` value of `0` and default `max` value of `NULL` (meaning unlimited).
 
 As such, without any options, the validator only checks that the input is a
 string.
@@ -116,3 +117,11 @@ $validator2->isValid("Ärger"); // returns true
 
 When your installation and your application are using different encodings, then
 you should always set an encoding manually.
+
+## Validation Messages
+Using the setMessage() method you can set another message to be returned in case of the specified failure.
+
+```php
+$validator = new Zend\Validator\StringLength(['min' => 3, 'max' => 30]);
+$validator->setMessage('Youre string is too long. You typed '%length%' chars.', Zend\Validator\StringLength::TOO_LONG);
+```
