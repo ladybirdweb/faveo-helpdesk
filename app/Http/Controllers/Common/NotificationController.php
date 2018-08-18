@@ -111,6 +111,7 @@ class NotificationController extends Controller
     public function show()
     {
         $notifications = $this->getNotifications();
+
         return view('notifications-all', compact('notifications'));
     }
 
