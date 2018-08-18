@@ -115,7 +115,7 @@ class="active"
                             <!-- /.box-header -->
                             <div class="box-body">
                                 <ul class="todo-list">
-                                    @if(count($notifications))
+                                    @if($notifications)
                            
                                     @foreach($notifications->orderBy('created_at', 'desc')->paginate(10) as $notification)
                                     @if($notification->notification && $notification->notification->type && $notification->notification->type->type == 'registration')
