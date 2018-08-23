@@ -61,3 +61,19 @@
          */
         Route::post('fcmtoken', ['as' => 'fcmtoken', 'uses' => 'Common\PushNotificationController@fcmToken']);
     });
+    /*
+     * ================================================================================================
+     * @version v1
+     * @access public
+     * @copyright (c) 2016, Ladybird web solution
+     * @author Manish Verma<manish.verma@ladybirdweb.com>
+     * @name Faveo
+     */
+    Route::group(['prefix' => 'api/v2'], function () {
+        /*
+         * Helpdesk
+         */
+        Route::group(['prefix' => 'helpdesk'], function () {
+            Route::get('tickets', '\App\Api\v2\TicketController@getTickets');
+        });
+    });
