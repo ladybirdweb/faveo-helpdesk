@@ -5,13 +5,14 @@ namespace App\Api\v2;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Lang;
+
 class TicketController extends Controller
 {
     public function __construct()
     {
         $this->middleware('jwt.authOveride');
     }
-    
+
     protected function getTickets(Request $request)
     {
         try {
@@ -50,13 +51,11 @@ class TicketController extends Controller
                         // $result = json_encode($result[0]);
 
                         foreach ($result as $value) {
-
                             if ($value->profile_pic == '') {
                                 $value->profile_pic = \Gravatar::src($value->c_email);
                             } else {
-                                $value->profile_pic = url('/') . '/uploads/profilepic/' . $value->profile_pic;
+                                $value->profile_pic = url('/').'/uploads/profilepic/'.$value->profile_pic;
                             }
-
 
                             $value['from'] = ['id' => $value['c_uid'], 'first_name' => $value['c_fname'], 'last_name' => $value['c_lname'], 'user_name' => $value['c_uname'], 'email' => $value['c_email'], 'profile_pic' => $value['profile_pic']];
 
@@ -71,7 +70,6 @@ class TicketController extends Controller
                             unset($value['assigned_to'], $value['profile_pic'], $value['created_at2'], $value['updated_at2'], $value['dept_id'], $value['css'], $value['name'], $value['color'], $value['due'], $value['countattachment'], $value['countthread'], $value['ticket_status_name'], $value['ticket_title']);
                         }
 
-
                         // $result = json_encode($result);
                         return successResponse('', $result);
                     } else {
@@ -83,6 +81,7 @@ class TicketController extends Controller
             } else {
                 $error = Lang::get('lang.missing_requre_parameters');
             }
+
             return errorResponse($error, $responseCode = 400);
             // return response()->json(compact('error'));
         } catch (\Exception $ex) {
@@ -90,9 +89,11 @@ class TicketController extends Controller
             $line = $ex->getLine();
             $file = $ex->getFile();
             dd($e);
+
             return errorResponse(compact('error', 'file', 'line'), $responseCode = 400);
         } catch (\TokenExpiredException $e) {
             dd($e);
+
             return errorResponse($e->getMessage(), $responseCode = 400);
         }
     }
