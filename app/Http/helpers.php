@@ -225,39 +225,48 @@ function timezone()
 
 // For API response
 /**
- * formats the error message into json error response
- * @param  string/array  $errorMsg     errorMsg can be an array of errors or string
- * @param  integer $responseCode 
+ * formats the error message into json error response.
+ *
+ * @param string/array $errorMsg     errorMsg can be an array of errors or string
+ * @param int          $responseCode
+ *
  * @return json
  */
-function errorResponse($errorMsg, $responseCode = 400){
-   $response = ['success'=>false, 'message'=>$errorMsg];
+function errorResponse($errorMsg, $responseCode = 400)
+{
+    $response = ['success'=>false, 'message'=>$errorMsg];
+
     return response()->json($response, $responseCode);
 }
 
 /**
- * formats success message/data into json success response
- * @param  string  $successMsg   
- * @param  array/string  $data   data of the response
- * @param  integer $responseCode 
+ * formats success message/data into json success response.
+ *
+ * @param string       $successMsg
+ * @param array/string $data         data of the response
+ * @param int          $responseCode
+ *
  * @return json
  */
-function successResponse($successMsg='', $data='', $responseCode=200){
+function successResponse($successMsg = '', $data = '', $responseCode = 200)
+{
     $response = !$successMsg ? ['success'=>true, 'data'=>$data] : (!$data ? ['success'=>true, 'message'=>$successMsg] : ['success'=>true, 'message'=>$successMsg, 'data'=>$data]);
+
     return response()->json($response);
 }
 
-
-
 /**
- * formats exception response by giving enough information for debugginh
- * @param  \Exception  $exception       exception object
- * @return Response                     with json response content
+ * formats exception response by giving enough information for debugginh.
+ *
+ * @param \Exception $exception exception object
+ *
+ * @return Response with json response content
  */
-function exceptionResponse(\Exception $exception){
+function exceptionResponse(\Exception $exception)
+{
     return errorResponse([
-            'file'=>$exception->getFile(),
-            'line_number'=>$exception->getLine(),
-            'exception'=>$exception->getMessage(),
+            'file'       => $exception->getFile(),
+            'line_number'=> $exception->getLine(),
+            'exception'  => $exception->getMessage(),
         ], 500);
 }
