@@ -21,10 +21,6 @@ Artisan::command('mac-update', function () {
     $emails = new App\Model\helpdesk\Email\Emails();
     $emails->update(['password'=>encrypt('')]);
 })->describe('Updating encrypted value to null');
-Artisan::command('sla-escalate', function () {
-    $noti = new \App\Http\Controllers\Agent\helpdesk\Notifications\NotificationController();
-    $noti->notificationSla();
-})->describe('to send notification for sla due');
 
 /*
  * Command for pre install check
