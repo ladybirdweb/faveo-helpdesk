@@ -21,7 +21,7 @@ Faveo Documentation
   * <a href="https://github.com/ladybirdweb/faveo-helpdesk/wiki" target="_blank">Faveo user Manual</a>
   * <a href="https://github.com/ladybirdweb/faveo-helpdesk/wiki/API-Documentation" target="_blank">Faveo API Documentation</a>
   * <a href="https://docs.google.com/document/d/1pXpsQKcTyX5x6H4xA8unYxd5Duw2k94xt7wevTdoF_E/" target="_blank">Faveo Event List</a>
-  * <a href="https://docs.google.com/document/d/1PGcpB19Vr42rM_DrCzC3snujzEL8N9Ocy0yewfPNWqU/" target="_blank">Faveo Plugin creation guide</a>
+  * <a href="https://github.com/ladybirdweb/faveo-helpdesk/wiki/Faveo-Plugin-creation-guide" target="_blank">Faveo Plugin creation guide</a>
 
 Requirements
 --------------------------
