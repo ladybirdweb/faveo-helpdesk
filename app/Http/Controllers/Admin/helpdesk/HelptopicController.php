@@ -187,10 +187,13 @@ class HelptopicController extends Controller
             $topics->custom_form = $custom_form;
             $topics->auto_assign = $auto_assign;
             $topics->save();
+
             if ($request->input('sys_help_tpoic') == 'on') {
                 \DB::table('settings_ticket')
                     ->where('id', '=', 1)
                     ->update(['help_topic' => $id]);
+            Help_topic::where('id', $id)->update(['status'=>1,'type'=>1]);
+
             }
             /* redirect to Index page with Success Message */
             return redirect('helptopic')->with('success', Lang::get('lang.helptopic_updated_successfully'));
@@ -210,7 +213,7 @@ class HelptopicController extends Controller
      */
     public function destroy($id, Help_topic $topic, Ticket $ticket_setting)
     {
-        $ticket_settings = $ticket_setting->where('id', '=', '1')->first();
+       $ticket_settings = $ticket_setting->where('id', '=', '1')->first();
         if ($ticket_settings->help_topic == $id) {
             return redirect('departments')->with('fails', Lang::get('lang.you_cannot_delete_default_department'));
         } else {

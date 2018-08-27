@@ -33,7 +33,7 @@ class="active"
         <h3 class="box-title">{{Lang::get('lang.help_topic')}}</h3>
         <a href="{{route('helptopic.create')}}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> &nbsp;{{Lang::get('lang.create_help_topic')}}</a>
     </div>
-    <div class="box-body table-responsive">
+    <div class="box-body">
         <!-- check whether success or not -->
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
@@ -51,7 +51,8 @@ class="active"
             {!! Session::get('fails') !!}
         </div>
         @endif
-        <table class="table table-bordered dataTable">
+        <table class="table table-bordered dataTable" id="myTable">
+             <thead>
             <tr>
                 <th width="100px">{{Lang::get('lang.topic')}}</th>
                 <th width="100px">{{Lang::get('lang.status')}}</th>
@@ -61,10 +62,12 @@ class="active"
                 <th width="100px">{{Lang::get('lang.last_updated')}}</th>
                 <th width="100px">{{Lang::get('lang.action')}}</th>
             </tr>
+        </thead>
             <?php
-            $default_helptopic = App\Model\helpdesk\Settings\Ticket::where('id', '=', '1')->first();
+            $default_helptopic = App\Model\helpdesk\Settings\Ticket::where('id','1')->first();
             $default_helptopic = $default_helptopic->help_topic;
             ?>
+              <tbody>
             <!-- Foreach @var$topics as @var topic -->
             @foreach($topics as $topic)
             <tr style="padding-bottom:-30px">
@@ -104,35 +107,55 @@ class="active"
                 <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $topic->priority)->first(); ?>
                 <td>{!! $priority->priority_desc !!}</td>
                 <!-- Department -->
-                @if($topic->department != null)
-                <?php
-                $dept = App\Model\helpdesk\Agent\Department::where('id', '=', $topic->department)->first();
-                $dept = $dept->name;
+
+                <?php   
+                $dept = ($topic->department != null) ? App\Model\helpdesk\Agent\Department::where('id', $topic->department)->value('name') : "";
+
                 ?>
-                @elseif($topic->department == null)
-                <?php $dept = ""; ?>
-                @endif
+                
                 <td> {!! $dept !!} </td>
                 <!-- Last Updated -->
                 <td> {!! UTC::usertimezone($topic->updated_at) !!} </td>
                 <!-- Deleting Fields -->
                 <td>
-                    {!! Form::open(['route'=>['helptopic.destroy', $topic->id],'method'=>'DELETE']) !!}
-                    <a href="{{route('helptopic.edit',$topic->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-trash" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a>
+                 <?php
+                      $defaultHelpTopicId = \DB::table('settings_ticket')->select('help_topic')->where('id', 1)->value('help_topic');
+                 ?>
+               @if($defaultHelpTopicId == $topic->id)
+                   <a href="{{route('helptopic.edit',$topic->id)}}" class="btn btn-info btn-xs "><i class="fa fa-edit" style="color:black;">&nbsp;</i>
+                         {!! Lang::get('lang.edit') !!}</a>&nbsp;
+                   <a href='#' class='btn btn-primary btn-warning btn-xs' disabled='disabled' ><i class='fa fa-trash' style='color:black;'>&nbsp;</i>&nbsp;{!! Lang::get('lang.delete') !!} </a>
+                </div>
+            @else
+                  {!! Form::open(['route'=>['helptopic.destroy', $topic->id],'method'=>'DELETE']) !!}
+                    <a href="{{route('helptopic.edit',$topic->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a>
                     <!-- To pop up a confirm Message -->
                     {!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> '.Lang::get('lang.delete'),
                     ['type' => 'submit',
                     'class'=> 'btn btn-warning btn-xs btn-flat '.$disable,
                     'onclick'=>'return confirm("Are you sure?")'])
                     !!}
-                    </div>
+                    
                     {!! Form::close() !!}
+            @endif
+
                 </td>
-                @endforeach
+               
             </tr>
+             @endforeach
             <!-- Set a link to Create Page -->
+        </tbody>
 
         </table>
     </div>
 </div>
+<script type="text/javascript">
+$(function() {
+     $('#myTable').DataTable({
+         
+    });
+   
+});
+
+</script>
 @stop
