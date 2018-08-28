@@ -475,8 +475,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/ticket/get-followup', ['as' => 'get.followup.ticket', 'uses' => 'Agent\helpdesk\TicketController@getFollowup']);  // Get tickets in datatable /
             Route::get('/ticket/close/get-approval/{id}', ['as' => 'get.close.approval.ticket', 'uses' => 'Agent\helpdesk\TicketController@getCloseapproval']);  // Get tickets in datatable /
             Route::get('filter', ['as'=>'filter', 'uses'=>'Agent\helpdesk\Filter\FilterControllerOld@getFilter']);
-        Route::get('ticket/form/requester', ['as'   => 'api.requester','uses' => 'Utility\FormController@requester']);
-
+        Route::get('ticket/form/requester', ['as'   => 'api.requester', 'uses' => 'Utility\FormController@requester']);
 
         /*
          *=======================================================================
@@ -805,8 +804,4 @@ Route::group(['middleware' => ['web']], function () {
     //     $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.open'), route('open.ticket'));
     // });
     Route::get('swtich-language/{id}', ['as' => 'switch-user-lang', 'uses' => 'Client\helpdesk\UnAuthController@changeUserLanguage']);
-
-            
-            
-        
 });

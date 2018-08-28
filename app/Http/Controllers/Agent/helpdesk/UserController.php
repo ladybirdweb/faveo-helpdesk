@@ -19,6 +19,8 @@ use App\Http\Requests\helpdesk\Sys_userRequest;
 use App\Http\Requests\helpdesk\Sys_userUpdate;
 // models
 use App\Model\helpdesk\Agent\Assign_team_agent;
+use App\Model\helpdesk\Agent\Department;
+use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Agent_panel\Organization;
 use App\Model\helpdesk\Agent_panel\User_org;
 use App\Model\helpdesk\Notification\Notification;
@@ -28,9 +30,9 @@ use App\Model\helpdesk\Settings\Email;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Utility\CountryCode;
+// classes
 use App\Model\helpdesk\Utility\Otp;
 use App\User;
-// classes
 use Auth;
 use Datatables;
 use DateTime;
@@ -42,8 +44,6 @@ use Illuminate\Http\Request;
 use Input;
 use Lang;
 use Redirect;
-use App\Model\helpdesk\Agent\Teams;
-use App\Model\helpdesk\Agent\Department;
 
 /**
  * UserController
@@ -213,16 +213,12 @@ class UserController extends Controller
                             return $role;
                         })
 
-           
-
-
                         /* column actions */
                         ->addColumn('Actions', function ($model) {
                             if ($model->is_delete == 0) {
                                 return '<a href="'.route('user.edit', $model->id).'" class="btn btn-primary btn-xs"><i class="fa fa-edit" style="color:white;"> </i>&nbsp;'.\Lang::get('lang.edit').'</a>&nbsp; <a href="'.route('user.show', $model->id).'" class="btn btn-primary btn-xs"><i class="fa fa-eye" style="color:white;"> </i>&nbsp;'.\Lang::get('lang.view').'</a>';
                             } else {
                                 if (Auth::user()->role == 'admin') {
-                                    
                                     return '<a href="'.route('user.show', $model->id).'" class="btn btn-primary btn-xs"><i class="fa fa-eye" style="color:white;"> </i>'.\Lang::get('lang.view').'</a>';
                                 }
 
@@ -447,8 +443,10 @@ class UserController extends Controller
     }
 
     /**
-     * this method change role to user
+     * this method change role to user.
+     *
      * @param type $userId of user
+     *
      * @return type string
      */
     public function changeRoleUser($id)
@@ -456,7 +454,7 @@ class UserController extends Controller
         try {
             $ticket = Tickets::where('assigned_to', $id)->where('status', '1')->get();
             if ($ticket) {
-                $ticket = Tickets::where('assigned_to',$id)->update(['assigned_to' => null]);
+                $ticket = Tickets::where('assigned_to', $id)->update(['assigned_to' => null]);
             }
             $user = User::whereId($id)->first();
             $user->role = 'user';
@@ -464,7 +462,8 @@ class UserController extends Controller
             $user->primary_dpt = null;
             $user->remember_token = null;
             $user->save();
-             Teams::where('team_lead','$id')->update(['team_lead'=>null]);
+            Teams::where('team_lead', '$id')->update(['team_lead'=>null]);
+
             return redirect('user')->with('success', Lang::get('lang.role_change_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
@@ -473,29 +472,28 @@ class UserController extends Controller
         // return 'Agent Role Successfully Change to User';
     }
 
-
-
-     /**
-     * This method deactivate user or agent
+    /**
+     * This method deactivate user or agent.
+     *
      * @param intiger $id of User
+     *
      * @return type string
      */
     public function deactivateUser($userId)
     {
         try {
-
             $deleteAll = Input::get('delete_all');
             $authUser = \Auth::user();
             $users = User::where('id', $userId)->first();
 
             Teams::where('team_lead', $userId)->update(['team_lead' => null]);
-            Department::where('manager', $userId)->update(array('manager' => NULL));
+            Department::where('manager', $userId)->update(['manager' => null]);
             if ($users->role == 'user' && \Auth::check() && $authUser->role != 'user') {
                 $deleteAllUser = Input::get('delete_all_user');
                 if (!$deleteAllUser) {
                     $assignUserEmail = Input::get('assign_to_user');
 
-                   if ($assignUserEmail) {
+                    if ($assignUserEmail) {
                         $userEmail = explode('_', $assignUserEmail);
 
                         if ($users->id == $userEmail[1]) {
@@ -505,48 +503,46 @@ class UserController extends Controller
                         if ($tickets) {
                             foreach ($tickets as $ticketId) {
                                 Tickets::where('id', $ticketId)->update(['user_id' => $userEmail[1]]);
-                                 //use name helper function
-                                $assignee = User::where('id',Auth::user()->id)->first();
-                                Ticket_Thread::create(['ticket_id'=>$ticketId,'user_id'=>Auth::user()->id,'is_internal'=>1,'body'=>'This Ticket owner changed by' . $assignee->fullName]);
-
+                                //use name helper function
+                                $assignee = User::where('id', Auth::user()->id)->first();
+                                Ticket_Thread::create(['ticket_id'=>$ticketId, 'user_id'=>Auth::user()->id, 'is_internal'=>1, 'body'=>'This Ticket owner changed by'.$assignee->fullName]);
                             }
                         }
                     }
                 } else {
-
                     $tickets = Tickets::where('user_id', $userId)->pluck('id')->toArray();
 
                     if ($tickets) {
                         $status = Ticket_Status::select('id')->where('purpose_of_status', 2)->orderBy('order')->min('id');
-                         foreach ($tickets as $ticketId) {
+                        foreach ($tickets as $ticketId) {
                             Tickets::where('id', $ticketId)->update(['status' => $status]);
                             //use name helper function
-                            $assignee = User::where('id',Auth::user()->id)->first();
+                            $assignee = User::where('id', Auth::user()->id)->first();
 
-                            Ticket_Thread::create(['ticket_id'=>$ticketId,'user_id'=>Auth::user()->id,'is_internal'=>1,'body'=>'This Ticket has been close by ' . $assignee->fullName]);
+                            Ticket_Thread::create(['ticket_id'=>$ticketId, 'user_id'=>Auth::user()->id, 'is_internal'=>1, 'body'=>'This Ticket has been close by '.$assignee->fullName]);
                         }
                     }
                 }
-                User::where('id', $users->id)->update(['is_delete' => "1"]);
+                User::where('id', $users->id)->update(['is_delete' => '1']);
+
                 return redirect()->back()->with('success1', Lang::get('lang.user_deactivated_successfully'));
             }
 
             if (($users->role != 'user' && \Auth::check() && $authUser->role == 'admin' && $authUser->id != $users->id)) {
                 if ($deleteAll == 1) {
-
                     $ticketIds = Tickets::where('assigned_to', $userId)->where('status', 1)->pluck('id')->toArray();
                     if (count($ticketIds)) {
                         foreach ($ticketIds as $ticketId) {
                             Tickets::where('id', $ticketId)->update(['assigned_to' => null]);
 
-                            Ticket_Thread::create(['ticket_id'=>$ticketId,'user_id'=>Auth::user()->id,'is_internal'=>1,'body'=>'This Ticket has been unassigned']);
+                            Ticket_Thread::create(['ticket_id'=>$ticketId, 'user_id'=>Auth::user()->id, 'is_internal'=>1, 'body'=>'This Ticket has been unassigned']);
                         }
                     }
 
-                    User::where('id', $users->id)->update(['is_delete' => "1"]);
+                    User::where('id', $users->id)->update(['is_delete' => '1']);
+
                     return redirect()->back()->with('success1', Lang::get('lang.agent_deactivated_successfully'));
                 } else {
-
                     $userEmail = Input::get('assign_to');
                     $assignTo = explode('_', $userEmail);
                     if ($assignTo[0] == 'user') {
@@ -558,28 +554,27 @@ class UserController extends Controller
                         if (count($ticketIds)) {
                             foreach ($ticketIds as $ticketId) {
                                 Tickets::where('id', $ticketId)->update(['assigned_to' => $assignTo[1]]);
-                                 //use name helper function
+                                //use name helper function
 
-                                $assignee = User::where('id',Auth::user()->id)->first();
+                                $assignee = User::where('id', Auth::user()->id)->first();
 
-                                
-                                Ticket_Thread::create(['ticket_id'=>$ticketId,'user_id'=>Auth::user()->id,'is_internal'=>1,'body'=>'This Ticket has been assigned to ' . $assignee->fullName]);
+                                Ticket_Thread::create(['ticket_id'=>$ticketId, 'user_id'=>Auth::user()->id, 'is_internal'=>1, 'body'=>'This Ticket has been assigned to '.$assignee->fullName]);
                             }
                         }
 
-                        User::where('id', $users->id)->update(['is_delete' => "1"]);
-                     
+                        User::where('id', $users->id)->update(['is_delete' => '1']);
 
                         return redirect()->back()->with('success1', Lang::get('lang.agent_deactivated_successfully_and_ticket_assign_to_another_agent'));
                     }
 
-                    User::where('id', $users->id)->update(['is_delete' => "1"]);
+                    User::where('id', $users->id)->update(['is_delete' => '1']);
+
                     return redirect()->back()->with('success1', Lang::get('lang.agent_deactivated_successfully'));
                 }
             }
         } catch (Exception $e) {
 
-            // redirect to Index page with Fails Message 
+            // redirect to Index page with Fails Message
             return redirect('user')->with('fails', $e->getMessage());
         }
     }
