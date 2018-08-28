@@ -475,6 +475,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/ticket/get-followup', ['as' => 'get.followup.ticket', 'uses' => 'Agent\helpdesk\TicketController@getFollowup']);  // Get tickets in datatable /
             Route::get('/ticket/close/get-approval/{id}', ['as' => 'get.close.approval.ticket', 'uses' => 'Agent\helpdesk\TicketController@getCloseapproval']);  // Get tickets in datatable /
             Route::get('filter', ['as'=>'filter', 'uses'=>'Agent\helpdesk\Filter\FilterControllerOld@getFilter']);
+        Route::get('ticket/form/requester', ['as'   => 'api.requester','uses' => 'Utility\FormController@requester']);
+
 
         /*
          *=======================================================================
@@ -791,7 +793,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('rolechangeuser/{id}', ['as' => 'user.post.rolechangeuser',  'uses' =>'Agent\helpdesk\UserController@changeRoleUser']);
     Route::get('password', ['as' => 'user.changepassword',  'uses' =>'Agent\helpdesk\UserController@randomPassword']);
     Route::post('changepassword/{id}', ['as' => 'user.post.changepassword',  'uses' =>'Agent\helpdesk\UserController@randomPostPassword']);
-    Route::post('delete/{id}', ['as' => 'user.post.delete',  'uses' =>'Agent\helpdesk\UserController@deleteAgent']);
+    Route::post('deactivate/user/{id}', ['as' => 'user.post.deactivate',  'uses' =>'Agent\helpdesk\UserController@deactivateUser']);
 
     // deleted user list
     Route::get('deleted/user', ['as' => 'user.deleted', 'uses' => 'Agent\helpdesk\UserController@deletedUser']);
@@ -803,4 +805,8 @@ Route::group(['middleware' => ['web']], function () {
     //     $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.open'), route('open.ticket'));
     // });
     Route::get('swtich-language/{id}', ['as' => 'switch-user-lang', 'uses' => 'Client\helpdesk\UnAuthController@changeUserLanguage']);
+
+            
+            
+        
 });

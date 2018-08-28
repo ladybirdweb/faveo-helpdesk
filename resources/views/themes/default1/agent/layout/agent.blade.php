@@ -576,9 +576,9 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
     $(function() {
 
 
-        $('input[type="checkbox"]').iCheck({
-            checkboxClass: 'icheckbox_flat-blue'
-        });
+        // $('input[type="checkbox"]').iCheck({
+        //     checkboxClass: 'icheckbox_flat-blue'
+        // });
         $('input[type="radio"]:not(.not-apply)').iCheck({
             radioClass: 'iradio_flat-blue'
         });

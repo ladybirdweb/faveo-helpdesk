@@ -102,9 +102,10 @@ class="active"
                 {{-- <td>{{$use->Lastlogin_at}}</td> --}}
                 <td>
                     {!! Form::open(['route'=>['agents.destroy', $use->id],'method'=>'DELETE']) !!}
-                    <a href="{{route('agents.edit', $use->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!} </a>
+                    <a href="{{route('agents.edit', $use->id)}}" class="btn btn-primary btn-xs btn-flat"><i class="fa fa-edit" style="color:white;"> </i>&nbsp; {!! Lang::get('lang.edit') !!} </a>
+
+                    <!-- <a href="{{route('user.show', $use->id)}}" class="btn btn-primary btn-xs btn-flat"><i class="fa fa-eye" style="color:white;"> </i> &nbsp;{!! Lang::get('lang.view') !!} </a> -->
                     <!-- To pop up a confirm Message -->
-                    {{-- {!! Form::button(' <i class="fa fa-trash" style="color:black;"> </i> '  . Lang::get('lang.delete') ,['type' => 'submit', 'class'=> 'btn btn-warning btn-xs btn-flat','onclick'=>'return confirm("Are you sure?")']) !!} --}}
                     {!! Form::close() !!}
                 </td>
             </tr>

@@ -58,7 +58,7 @@ class="active"
                             <li><a href="#" class="users">{{Lang::get('lang.only-users')}}</a></li>
                             <li><a href="#" class="active-users">{{Lang::get('lang.active-users')}}</a></li>
                             <li><a href="#" class="inactive">{{Lang::get('lang.inactive-users')}}</a></li>
-                            <li><a href="#" class="deleted">{{Lang::get('lang.deleted-users')}}</a></li>
+                            <li><a href="#" class="deleted">{{Lang::get('lang.deactivated-users')}}</a></li>
                             <li><a href="#" class="banned">{{Lang::get('lang.banned-users')}}</a></li>
                         </ul>
                     </div>

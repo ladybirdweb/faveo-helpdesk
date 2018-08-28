@@ -38,6 +38,8 @@ class="active"
     visibility: visible;
 }
 </style>
+<link href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}" rel="stylesheet" type="text/css" media="none" onload="this.media='all';" />
+
 @stop
 <!-- header -->
 @section('PageHeader')
@@ -54,6 +56,7 @@ class="active"
 @section('breadcrumbs')
 
 @stop
+
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
@@ -227,10 +230,9 @@ class="active"
     </div>
     <div class="col-md-9" style="margin-left:-10px;">
 
-
-        <!-- Delete -->
-        <form action="{!!URL::route('user.post.delete', $users->id)!!}" method="post" role="form">
-        {{ csrf_field() }}
+ <!-- Delete -->
+        <form action="{!!URL::route('user.post.deactivate', $users->id)!!}" method="post" role="form">
+            {{ csrf_field() }}
             <div class="modal fade" id="addNewCategoryModal3" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -239,92 +241,80 @@ class="active"
                                     aria-hidden="true">&times;</span>
                             </button>
                             @if($users->role=='user')
-                            <h4 class="modal-title" id="titleLabel">{{Lang::get('lang.delete_user')}}</h4>
+                            <h4 class="modal-title" id="titleLabel">{{Lang::get('lang.deactivate')}} {{ucfirst($users->role)}}</h4>
                             @endif 
-                            @if($users->role=='agent')
-                            <h4 class="modal-title" id="titleLabel">{{Lang::get('lang.delete_agent')}}</h4>
+                            @if($users->role!='user')
+                            <h4 class="modal-title" id="titleLabel">{{Lang::get('lang.deactivate')}} {{ucfirst($users->role)}}</h4>
                             @endif
-
-
                         </div>
 
                         <div class="modal-body">
-                            What should be done with content owned by this user?</br>
-
-                            <!-- <select name="type_of_delete" class="form-control">
-                            <option value="ban_delete">Ban and delete </option>
-                            <option value="delete">Delete</option>
-                            </select>
-        }
-        }
- -->
-
-
-
-
-
-                            <?php $user = App\User::where('id', $users->id)->first(); ?>
-                            @if($user->role == 'agent')
-                            {!! Form::label('delete_all_content',Lang::get('lang.delete_all_content')) !!} <span class="text-red"> *</span>
-                            <?php
-                            $open = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->get();
-                            ?>
-                            <?php $user = App\User::where('id', $users->id)->first(); ?>
-                            <?php
-                            $open = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->get());
-                            ?>
-
-                            @if(!$open)
                             
-                            @elseif($open)
-                            <input type="checkbox" id="delete_checkbox" name="delete_all" value="1">
+                              @if($users->role != 'user')
+                              <?php
+                            $open = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to',  $users->id)->whereIn('status', getStatusArray('open'))->get());
+                            $user = App\User::where('id', $users->id)->first();
+                         ?>
 
+                        @if($open > 0)
+                     
+                    {!! Form::label('delete_all_content',Lang::get('lang.unassign_all_open_tickets')) !!} <span class="text-red"> *</span>
+                           
+                          <input type="checkbox" id="delete_checkbox" name="delete_all" value="1" checked="checked">
+                      </br>
+                           
+                        
+                          <div id="delete_assign_body">
+                            {{Lang::get('lang.do_you_want_change_the_assignee_of_these_tickets?')}}
+                             </br>
+                            <p>{!! Lang::get('lang.whome_do_you_want_to_assign_ticket') !!}?</p>
+
+
+                             {!!Form::select('assign_to',[Lang::get('lang.agents')=>''],null,['class' => 'form-control select2','id'=>'assign-agent','style'=>'width:100%;display: block; max-height: 200px; overflow-y: auto;','multiple'=>'true']) !!}
+
+                            </div>
+                           @else
+                            {!! Lang::get('lang.are_you_sure_to_deactive_this_') !!} {{ucfirst($users->role)}}?
                             @endif
                             @endif
-                            <!--    Hi Admin 
-                                @if($users->role=='agent')  
-                                Assign  tickets of the agent will delete?
-                                Create ticket By agent Will Delete?
-                                @elseif($users->role=='user')
-                                Crete ticket by user Will Delete?
-                                @endif -->
-                            <!--  -->
-                            <?php $user = App\User::where('id', $users->id)->first(); ?>
-                            <?php
-                            $open = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->get());
-                            $counted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '3')->get());
-                            $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '5')->get());
-                            ?>
-                            @if($open>0 && $user->role == 'agent')  
-                            <div id="delete_assign_body">
-                                <p>{!! Lang::get('lang.whome_do_you_want_to_assign_ticket') !!}?</p>
-                                <select id="asssign" class="form-control" name="assign_to">
+
+                          @if($users->role == 'user')
+                           <?php
+                           $open = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', $users->id)->whereIn('status', getStatusArray('open'))->get());
+                           ?>
+
+                           @if($open>0)
+                            
+                    
+                            {!! Form::label('delete_all_content',Lang::get('lang.close_all_open_tickets')) !!} <span class="text-red"> *</span>
+                           <input type="checkbox" id="delete_checkbox1" name="delete_all_user" value="1" checked="checked">
+                           </br>
+                            {{Lang::get('lang.do_you_want_to_change_the_owner_of_all_the_open_tickets?')}}
+                            <div id="delete_assign_body1">
+                                <p>{!! Lang::get('lang.assign_another_user?') !!}</p>
+                                <select id="asssign" class="form-control" name="assign_to_user">
                                     <?php
-                                    $assign = App\User::where('role', '!=', 'user')->get();
-                                    $count_assign = count($assign);
-                                    $teams = App\Model\helpdesk\Agent\Teams::all();
-                                    $count_teams = count($teams);
-                                    ?>
-                                    <!--    <optgroup label="Teams ( {!! $count_teams !!} )">
-                                           @foreach($teams as $team)
-                                           <option  value="team_{{$team->id}}">{!! $team->name !!}</option>
-                                           @endforeach
-                                       </optgroup> -->
-                                    <optgroup label="Agents ( {!! $count_assign !!} )">
-                                        @foreach($assign as $user)
-                                        <option  value="user_{{$user->id}}">{{$user->first_name." ".$user->last_name}}</option>
+                                        $assignUsers = App\User::where('role','user')->where('active', '1')->where('ban', '0')->where('id','!=', $users->id)->get();
+                                     ?>
+
+                                    <optgroup label="User">
+                                        @foreach($assignUsers as $assignUser)
+                                        <option  value="user_{{$assignUser->id}}">{{$assignUser->user_name}}</option>
                                         @endforeach
                                     </optgroup>
                                 </select>
                             </div>
-                            @endif
 
+                               @else
+                            {!! Lang::get('lang.are_you_sure_to_deactive_this_user?') !!}
+                            @endif
+                         @endif
                         </div>
 
                     </div>
 
                     <div class="box-footer">
-                        {!! Form::submit(Lang::get('lang.confirm_deletion'),['class'=>'btn btn-primary'])!!}
+                         {!!Form::button('<i class="fa fa-floppy-o" aria-hidden="true">&nbsp;&nbsp;</i>'.Lang::get('lang.confirm'),['type' => 'submit', 'class' =>'btn btn-primary','id'=>'submit'])!!}
                     </div>
 
                 </div>
@@ -510,17 +500,8 @@ class="active"
             </div>
         </div>
     </form>
-    <script>
-$(document).ready(function(){ 
-        $("#delete_checkbox").click(function() {
-            // alert('ok');
+   
 
-            $("#delete_assign_body").toggle();
-
-        });
-        });
-
-    </script>
 
     <script>
         function validateForm() {
@@ -604,7 +585,7 @@ $(document).ready(function(){
                             @if(Auth::user()->role == 'admin')
                             <a href="{{route('user.edit', $users->id)}}"><button type="button"  href="{{route('user.edit', $users->id)}}" class="btn btn-primary btn-sm">{{Lang::get('lang.edit')}}</button></a>
                             <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal">{{Lang::get('lang.change_password')}}</button>
-                            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal3">{{Lang::get('lang.delete')}}</button>
+                            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal3">{{Lang::get('lang.deactivate')}}</button>
                            
                             @endif
 
@@ -612,7 +593,7 @@ $(document).ready(function(){
                             @if($users->role == 'user')
                             <a href="{{route('user.edit', $users->id)}}"><button type="button"  href="{{route('user.edit', $users->id)}}" class="btn btn-primary btn-sm">{{Lang::get('lang.edit')}}</button></a>
                             <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal">{{Lang::get('lang.change_password')}}</button>
-                            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal3">{{Lang::get('lang.delete')}}</button>
+                            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal3">{{Lang::get('lang.deactivate')}}</button>
                             
                             @endif
                             @endif
@@ -621,7 +602,7 @@ $(document).ready(function(){
                             <div id="page" class="hfeed site">
     <article class="hentry error404 text-center">
         <h1 class="error-title"><i class="fa fa-trash text-info" style="color: grey"></i><span class="visible-print text-danger">0</span></h1>
-        <h2 class="entry-title text-muted">{!! Lang::get('lang.user-account-is-deleted') !!}</h2>
+        <h2 class="entry-title text-muted">{!! Lang::get('lang.user-account-is-deactivated') !!}</h2>
         <div class="entry-content clearfix">
             <p class="lead">{!! Lang::get('lang.delete-account-caution-info') !!}</p>
             <p><button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addNewCategoryModal8">{{Lang::get('lang.restore-user')}}</button></a></p>
@@ -1024,7 +1005,79 @@ $(document).ready(function(){
     @endif
     @endif
     {!! $table->script('vendor.Chumper.tuser-javascript') !!}
+    <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" type="text/javascript" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
+
     <script type="text/javascript">
+           $('#assign-agent').select2({
+       
+        maximumSelectionLength: 1,
+        minimumInputLength: 1,
+        ajax: {
+            url: '{{route("api.requester")}}',
+            dataType: 'json',
+            data: function(params) {
+                // alert(params);
+                return {
+                    term: $.trim(params.term)
+                };
+            },
+             processResults: function(data) {
+                return{
+                 results: $.map(data, function (value) {
+                    return {
+                        image:value.profile_pic,
+                        text:value.first_name+" "+value.last_name,
+                        id: "user_"+value.id,
+                        email:value.email,
+                    }
+                })
+               }
+            },
+            cache: true
+        },
+         templateResult: formatState,
+    });
+           function formatState (state) { 
+       
+       var $state = $( '<div><div style="width: 8%;display: inline-block;"><img src='+state.image+' width="35px" height="35px" style="vertical-align:inherit"></div><div style="width: 90%;display: inline-block;"><div>'+state.text+'</div><div>'+state.email+'</div></div></div>');
+        return $state;
+  }
+
+
+           $(document).ready(function() {
+
+            var checkedValue = $('#delete_checkbox:checked').val();
+
+            if(checkedValue == 1){
+                $("#delete_assign_body").hide();
+            }
+            else{
+                 $("#delete_assign_body").show();
+            }
+
+
+            var checkedValue = $('#delete_checkbox1:checked').val();
+
+            if(checkedValue == 1){
+                $("#delete_assign_body1").hide();
+            }
+            else{
+                 $("#delete_assign_body1").show();
+            }
+
+
+
+            $("#delete_checkbox").click(function() {
+                // alert('ok');
+                $("#delete_assign_body").toggle();
+            });
+                 $("#delete_checkbox1").click(function() {
+                // alert('ok');
+                $("#delete_assign_body1").toggle();
+            });
+        });
         // Assign a ticket
         jQuery(document).ready(function($) {
             // create org
@@ -1513,6 +1566,5 @@ $(document).ready(function(){
             });
         });
     </script>
-    <script src="{{asset("lb-faveo/plugins/moment-develop/moment.js")}}" type="text/javascript"></script>
-    <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
+    
     @stop
