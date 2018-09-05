@@ -38,7 +38,7 @@
         $('[data-toggle="popover"]').ggpopover();
     </script>
 
-    <script src="{{asset("lb-faveo/js/chosen.jquery.js")}}" type="text/javascript"></script>
+    <script src="{{asset("lb-faveo/js/chosen/chosen.jquery.js")}}" type="text/javascript"></script>
 
     <script src="{{asset("lb-faveo/js/prism.js")}}" type="text/javascript"></script>
 
