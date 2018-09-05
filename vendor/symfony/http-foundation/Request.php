@@ -1941,10 +1941,16 @@ class Request
             $forwardedValues = array();
             $param = self::$forwardedParams[$type];
             foreach ($parts as $subParts) {
-                $assoc = HeaderUtils::combine($subParts);
-                if (isset($assoc[$param])) {
-                    $forwardedValues[] = self::HEADER_X_FORWARDED_PORT === $type ? substr_replace($assoc[$param], '0.0.0.0', 0, strrpos($assoc[$param], ':')) : $assoc[$param];
+                if (null === $v = HeaderUtils::combine($subParts)[$param] ?? null) {
+                    continue;
                 }
+                if (self::HEADER_X_FORWARDED_PORT === $type) {
+                    if (']' === substr($v, -1) || false === $v = strrchr($v, ':')) {
+                        $v = $this->isSecure() ? ':443' : ':80';
+                    }
+                    $v = '0.0.0.0'.$v;
+                }
+                $forwardedValues[] = $v;
             }
         }
 
@@ -1985,7 +1991,7 @@ class Request
                 if ($i) {
                     $clientIps[$key] = $clientIp = substr($clientIp, 0, $i);
                 }
-            } elseif ('[' == $clientIp[0]) {
+            } elseif (0 === strpos($clientIp, '[')) {
                 // Strip brackets and :port from IPv6 addresses.
                 $i = strpos($clientIp, ']', 1);
                 $clientIps[$key] = $clientIp = substr($clientIp, 1, $i - 1);

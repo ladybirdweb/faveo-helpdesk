@@ -9,14 +9,23 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="Application Test Suite">
+        <testsuite name="all">
             <directory>./tests/</directory>
+        </testsuite>
+        <testsuite name="unit">
+            <directory>./tests/unit</directory>
         </testsuite>
     </testsuites>
     <php>
-        <env name="APP_ENV" value="testing"/>
+        <env name="APP_ENV" value="testing"/> 
+        <env name="DB_CONNECTION" value="testing"/>
+        <env name="DB_DATABASE" value="testing_db"/>
         <env name="CACHE_DRIVER" value="array"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_DRIVER" value="sync"/>
+        <env name="MAIL_DRIVER" value="mail"/>
+        <env name="APP_URL" value="http://localhost:8000"/>
+        <env name="DB_DATABASE" value="testing_db"/>
+        <env name="DB_INSTALL" value="1"/>
     </php>
 </phpunit>

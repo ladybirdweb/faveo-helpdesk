@@ -1,30 +1,34 @@
 <?php
-/*
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * This software consists of voluntary contributions made by many individuals
- * and is licensed under the MIT license. For more information, see
- * <http://www.doctrine-project.org>.
- */
 
 namespace Doctrine\Common\Cache;
 
+use const DIRECTORY_SEPARATOR;
+use const PATHINFO_DIRNAME;
+use function bin2hex;
+use function chmod;
+use function defined;
+use function disk_free_space;
+use function file_exists;
+use function file_put_contents;
+use function gettype;
+use function hash;
+use function is_dir;
+use function is_int;
+use function is_writable;
+use function mkdir;
+use function pathinfo;
+use function realpath;
+use function rename;
+use function rmdir;
+use function sprintf;
+use function strlen;
+use function strrpos;
+use function substr;
+use function tempnam;
+use function unlink;
+
 /**
  * Base file cache driver.
- *
- * @since  2.3
- * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
- * @author Tobias Schultze <http://tobion.de>
  */
 abstract class FileCache extends CacheProvider
 {
@@ -42,29 +46,19 @@ abstract class FileCache extends CacheProvider
      */
     private $extension;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $umask;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $directoryStringLength;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $extensionStringLength;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isRunningOnWindows;
 
     /**
-     * Constructor.
-     *
      * @param string $directory The cache directory.
      * @param string $extension The cache file extension.
      *
@@ -73,7 +67,7 @@ abstract class FileCache extends CacheProvider
     public function __construct($directory, $extension = '', $umask = 0002)
     {
         // YES, this needs to be *before* createPathIfNeeded()
-        if ( ! is_int($umask)) {
+        if (! is_int($umask)) {
             throw new \InvalidArgumentException(sprintf(
                 'The umask parameter is required to be integer, was: %s',
                 gettype($umask)
@@ -81,14 +75,14 @@ abstract class FileCache extends CacheProvider
         }
         $this->umask = $umask;
 
-        if ( ! $this->createPathIfNeeded($directory)) {
+        if (! $this->createPathIfNeeded($directory)) {
             throw new \InvalidArgumentException(sprintf(
                 'The directory "%s" does not exist and could not be created.',
                 $directory
             ));
         }
 
-        if ( ! is_writable($directory)) {
+        if (! is_writable($directory)) {
             throw new \InvalidArgumentException(sprintf(
                 'The directory "%s" is not writable.',
                 $directory
@@ -134,8 +128,7 @@ abstract class FileCache extends CacheProvider
         $hash = hash('sha256', $id);
 
         // This ensures that the filename is unique and that there are no invalid chars in it.
-        if (
-            '' === $id
+        if ($id === ''
             || ((strlen($id) * 2 + $this->extensionStringLength) > 255)
             || ($this->isRunningOnWindows && ($this->directoryStringLength + 4 + strlen($id) * 2 + $this->extensionStringLength) > 258)
         ) {
@@ -195,9 +188,11 @@ abstract class FileCache extends CacheProvider
     {
         $usage = 0;
         foreach ($this->getIterator() as $name => $file) {
-            if (! $file->isDir() && $this->isFilenameEndingWithExtension($name)) {
-                $usage += $file->getSize();
+            if ($file->isDir() || ! $this->isFilenameEndingWithExtension($name)) {
+                continue;
             }
+
+            $usage += $file->getSize();
         }
 
         $free = disk_free_space($this->directory);
@@ -214,13 +209,12 @@ abstract class FileCache extends CacheProvider
     /**
      * Create path if needed.
      *
-     * @param string $path
      * @return bool TRUE on success or if path already exists, FALSE if path cannot be created.
      */
     private function createPathIfNeeded(string $path) : bool
     {
-        if ( ! is_dir($path)) {
-            if (false === @mkdir($path, 0777 & (~$this->umask), true) && !is_dir($path)) {
+        if (! is_dir($path)) {
+            if (@mkdir($path, 0777 & (~$this->umask), true) === false && ! is_dir($path)) {
                 return false;
             }
         }
@@ -240,11 +234,11 @@ abstract class FileCache extends CacheProvider
     {
         $filepath = pathinfo($filename, PATHINFO_DIRNAME);
 
-        if ( ! $this->createPathIfNeeded($filepath)) {
+        if (! $this->createPathIfNeeded($filepath)) {
             return false;
         }
 
-        if ( ! is_writable($filepath)) {
+        if (! is_writable($filepath)) {
             return false;
         }
 
@@ -263,9 +257,6 @@ abstract class FileCache extends CacheProvider
         return false;
     }
 
-    /**
-     * @return \Iterator
-     */
     private function getIterator() : \Iterator
     {
         return new \RecursiveIteratorIterator(
@@ -276,12 +267,10 @@ abstract class FileCache extends CacheProvider
 
     /**
      * @param string $name The filename
-     *
-     * @return bool
      */
     private function isFilenameEndingWithExtension(string $name) : bool
     {
-        return '' === $this->extension
+        return $this->extension === ''
             || strrpos($name, $this->extension) === (strlen($name) - $this->extensionStringLength);
     }
 }

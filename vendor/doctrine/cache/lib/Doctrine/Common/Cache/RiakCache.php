@@ -1,49 +1,32 @@
 <?php
-/*
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * This software consists of voluntary contributions made by many individuals
- * and is licensed under the MIT license. For more information, see
- * <http://www.doctrine-project.org>.
- */
 
 namespace Doctrine\Common\Cache;
 
 use Riak\Bucket;
-use Riak\Input;
 use Riak\Exception;
+use Riak\Input;
 use Riak\Object;
+use function count;
+use function serialize;
+use function time;
+use function unserialize;
 
 /**
  * Riak cache provider.
  *
  * @link   www.doctrine-project.org
- * @since  1.1
- * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
+ *
+ * @deprecated
  */
 class RiakCache extends CacheProvider
 {
-    const EXPIRES_HEADER = 'X-Riak-Meta-Expires';
+    public const EXPIRES_HEADER = 'X-Riak-Meta-Expires';
 
-    /**
-     * @var \Riak\Bucket
-     */
+    /** @var Bucket */
     private $bucket;
 
     /**
      * Sets the riak bucket instance to use.
-     *
-     * @param \Riak\Bucket $bucket
      */
     public function __construct(Bucket $bucket)
     {
@@ -59,7 +42,7 @@ class RiakCache extends CacheProvider
             $response = $this->bucket->get($id);
 
             // No objects found
-            if ( ! $response->hasObject()) {
+            if (! $response->hasObject()) {
                 return false;
             }
 
@@ -101,7 +84,7 @@ class RiakCache extends CacheProvider
             $response = $this->bucket->get($id, $input);
 
             // No objects found
-            if ( ! $response->hasObject()) {
+            if (! $response->hasObject()) {
                 return false;
             }
 
@@ -198,10 +181,6 @@ class RiakCache extends CacheProvider
 
     /**
      * Check if a given Riak Object have expired.
-     *
-     * @param \Riak\Object $object
-     *
-     * @return bool
      */
     private function isExpired(Object $object) : bool
     {
@@ -229,12 +208,12 @@ class RiakCache extends CacheProvider
      * @param string $vClock
      * @param array  $objectList
      *
-     * @return \Riak\Object
+     * @return Object
      */
     protected function resolveConflict($id, $vClock, array $objectList)
     {
         // Our approach here is last-write wins
-        $winner = $objectList[count($objectList)];
+        $winner = $objectList[count($objectList) - 1];
 
         $putInput = new Input\PutInput();
         $putInput->setVClock($vClock);

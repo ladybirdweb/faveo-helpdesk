@@ -84,7 +84,9 @@ class SplPriorityQueue extends \SplPriorityQueue implements Serializable
      */
     public function unserialize($data)
     {
+        $this->serial = PHP_INT_MAX;
         foreach (unserialize($data) as $item) {
+            $this->serial--;
             $this->insert($item['data'], $item['priority']);
         }
     }
