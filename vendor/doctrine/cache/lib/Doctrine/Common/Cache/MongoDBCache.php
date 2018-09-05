@@ -1,39 +1,21 @@
 <?php
-/*
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * This software consists of voluntary contributions made by many individuals
- * and is licensed under the MIT license. For more information, see
- * <http://www.doctrine-project.org>.
- */
 
 namespace Doctrine\Common\Cache;
 
 use MongoCollection;
 use MongoDB\Collection;
+use const E_USER_DEPRECATED;
+use function trigger_error;
 
 /**
  * MongoDB cache provider.
- *
- * @since  1.1
- * @author Jeremy Mikola <jmikola@gmail.com>
  */
 class MongoDBCache extends CacheProvider
 {
     /**
      * The data field will store the serialized PHP value.
      */
-    const DATA_FIELD = 'd';
+    public const DATA_FIELD = 'd';
 
     /**
      * The expiration field will store a MongoDate value indicating when the
@@ -50,16 +32,12 @@ class MongoDBCache extends CacheProvider
      *
      * @see http://docs.mongodb.org/manual/tutorial/expire-data/
      */
-    const EXPIRATION_FIELD = 'e';
+    public const EXPIRATION_FIELD = 'e';
 
-    /**
-     * @var CacheProvider
-     */
+    /** @var CacheProvider */
     private $provider;
 
     /**
-     * Constructor.
-     *
      * This provider will default to the write concern and read preference
      * options set on the collection instance (or inherited from MongoDB or
      * MongoClient). Using an unacknowledged write concern (< 1) may make the

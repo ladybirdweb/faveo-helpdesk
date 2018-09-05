@@ -38,7 +38,7 @@
         "doctrine/dbal": "^2.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "~7.0",
+        "phpunit/phpunit": "^7",
         "phpspec/phpspec": "^4.0",
         "symfony/dom-crawler": "3.1.*",
         "symfony/css-selector": "3.1.*",
