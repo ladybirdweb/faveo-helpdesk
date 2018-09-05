@@ -208,8 +208,8 @@ class="active"
                                         $title = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
                                         $string = strip_tags($title->title);
                                         // check atatchments
-                                        $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $title->id)->first();
-                                        $attach = count($attachments);
+                                        $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $title->id)->count();
+                                        $attach = $attachments;
 
                                         if (strlen($string) > 40) {
                                             $stringCut = substr($string, 0, 40);
@@ -449,8 +449,8 @@ class="active"
                                         $title = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
                                         $string = strip_tags($title->title);
                                         // check atatchments
-                                        $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $title->id)->first();
-                                        $attach = count($attachments);
+                                        $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $title->id)->count();
+                                        $attach = $attachments;
 
                                         if (strlen($string) > 40) {
                                             $stringCut = substr($string, 0, 40);
