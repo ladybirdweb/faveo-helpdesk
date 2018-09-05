@@ -1634,4 +1634,12 @@ return [
     'do-not-refresh'                               => '(Please do not use "Refresh" or "Back" button)',
     'cleaning-in-progress'                         => 'Cleaning in progress, please wait while we are cleaning your database',
     'cleaning-database'                            => 'Cleaning dummy data from database.',
+    'native-name'                                  => 'Native name',
+    'choose'                                       => 'Choose',
+    'going-overdue-today'                          => 'This ticket will become overdue today.',
+    'ticket_has_attachments'                       => 'This ticket contains attachment(s)',
+    'is_overdue'                                   => 'This ticket is marked as overdue',
+    'ticket_has_collaborator'                      => 'This ticket has collaborator(s)',
+    'ticket_created_source'                        => 'This ticket is created via :source',
+    'ticket-has-x-priority'                        => 'This ticket has :priority priority',
 ];
