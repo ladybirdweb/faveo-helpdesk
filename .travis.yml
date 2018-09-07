@@ -25,3 +25,4 @@ matrix:
 notifications:
     on_success: never
     on_failure: always
+    slack: faveohelpdesk:MxVioJBPLDmxiddgzp8PXBqv
