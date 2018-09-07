@@ -310,7 +310,7 @@ class OrganizationController extends Controller
         for ($i = $date1; $i <= $date2; $i = $i + 86400) {
             $thisDate = date('Y-m-d', $i);
 
-            $user_orga_relation_id = '';
+            $user_orga_relation_id = [];
             $user_orga_relations = User_org::where('org_id', '=', $id)->get();
             foreach ($user_orga_relations as $user_orga_relation) {
                 $user_orga_relation_id[] = $user_orga_relation->user_id;
