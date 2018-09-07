@@ -52,9 +52,58 @@ $extensions = [
     <body>
         <div style="height: auto; width: 500; margin: auto;">
             <h1 style="text-align: center; color: #9DD1DE">FAVEO PROBE</h1>
+<?php
+$basePath = str_replace('public', '', __DIR__);
+$storagePermission = substr(sprintf("%o",fileperms($basePath.DIRECTORY_SEPARATOR."storage")),-3);
+$bootstrapPermission = substr(sprintf("%o",fileperms($basePath.DIRECTORY_SEPARATOR."bootstrap")),-3);
+?>
+
+      <table class="t01">
+          <tr>
+            <th>Directory permissions</th>
+            <th></th>
+          </tr>
+          <tr>
+            <td>storage</td>
+            <?php if ($storagePermission >= 755) { ?>
+              <td style='color:green'><?= $storagePermission; ?></td>
+            <?php } else { ?>
+              <td style='color:red'><?= $storagePermission; ?>&nbsp; (Directory should be writable by your web server or Faveo will not run. Give preferred permissions as 755 for directory and 644 for files.)</td>
+            <?php } ?>
+          </tr>
+          <tr>
+            <td>bootstrap/cache</td>
+            <?php if ($bootstrapPermission >= 755) { ?>
+              <td style='color:green'><?= $bootstrapPermission; ?></td>
+            <?php } else { ?>
+              <td style='color:red'><?= $bootstrapPermission; ?>&nbsp; (Directory should be writable by your web server or Faveo will not run. Give preferred permissions as 755 for directory and 644 for files.)</td>
+            <?php } ?>
+          </tr>
+      </table>
+      <br/>
+      <table class="t01">
+         <tr>
+             <th>PHP Extensions</th>
+             <th>Status</th>
+         </tr>
+         <?php
+         foreach ($extensions as $extension) {
+             echo '<tr>';
+             if (!extension_loaded($extension)) {
+                 echo '<td>'.$extension."</td>  <td style='color:red'>Not Enabled"
+                 ."<p>To enable this, please open '".php_ini_loaded_file()."' and add 'extension = ".$extension."'</p>"
+                 .'</td>';
+             } else {
+                 echo '<td>'.$extension."</td>  <td style='color:green'>Enabled</td>";
+             }
+             echo '</tr>';
+         }
+        ?>
+     </table>
+     <br/>
             <table class="t01">
                 <tr>
-                    <th>Requirements</th>
+                    <th>Server Requirements</th>
                     <th>Status</th>
                 </tr>
                 <?php
@@ -83,27 +132,9 @@ $extensions = [
                 echo '</tr>';
                 ?>
             </table>
-            <br/>
-             <table class="t01">
-                <tr>
-                    <th>PHP Extensions</th>
-                    <th>Status</th>
-                </tr>
-                <?php
-                foreach ($extensions as $extension) {
-                    echo '<tr>';
-                    if (!extension_loaded($extension)) {
-                        echo '<td>'.$extension."</td>  <td style='color:red'>Not Enabled"
-                        ."<p>To enable this, please open '".php_ini_loaded_file()."' and add 'extension = ".$extension."'</p>"
-                        .'</td>';
-                    } else {
-                        echo '<td>'.$extension."</td>  <td style='color:green'>Enabled</td>";
-                    }
-                    echo '</tr>';
-                }
-               ?>
-            </table>
             <p style='color:red;'>NOTE: Please delete the file 'probe.php' once you have fixed all the issues.</p>
         </div>
+<?php echo whoami(); ?>
+asdsnad,msan,mndda,mnd
     </body>
 </html>

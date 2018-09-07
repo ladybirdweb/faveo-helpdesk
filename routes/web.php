@@ -311,7 +311,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('org-list', ['as' => 'org.list', 'uses' => 'Agent\helpdesk\OrganizationController@org_list']);
         Route::get('organization-autofill', ['as' => 'post.organization.autofill', 'uses' => 'Agent\helpdesk\OrganizationController@organizationAutofill']); //auto fill organization name
         Route::get('org/delete/{id}', ['as' => 'org.delete', 'uses' => 'Agent\helpdesk\OrganizationController@destroy']);
-        Route::get('org-chart/{id}', 'Agent\helpdesk\OrganizationController@orgChartData');
+        Route::get('org-chart/{id}', 'Agent\helpdesk\OrganizationController@orgChartData')->name('org-chart-data');
 //    Route::post('org-chart-range', ['as' => 'post.org.chart', 'uses' => 'Agent\helpdesk\OrganizationController@orgChartData']);
         Route::post('org-chart-range/{id}/{date1}/{date2}', ['as' => 'post.org.chart', 'uses' => 'Agent\helpdesk\OrganizationController@orgChartData']);
         Route::get('profile', ['as' => 'profile', 'uses' => 'Agent\helpdesk\UserController@getProfile']); /*  User profile get  */
@@ -512,7 +512,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('postedform', ['as'=>'client.form.post', 'uses'=>'Client\helpdesk\FormController@postedForm']); /* post the form to store the value */
     //Route::get('check', 'CheckController@getcheck'); //testing checkbox auto-populate
     //Route::post('postcheck/{id}', 'CheckController@postcheck');
-    Route::get('get-helptopic-form', 'Client\helpdesk\FormController@getCustomForm');
+    Route::get('get-helptopic-form', 'Client\helpdesk\FormController@getCustomForm')->name('get-helptopic-form');
 
     Route::get('home', ['as' => 'home', 'uses' => 'Client\helpdesk\WelcomepageController@index']); //guest layout
 
