@@ -54,8 +54,8 @@ $extensions = [
             <h1 style="text-align: center; color: #9DD1DE">FAVEO PROBE</h1>
 <?php
 $basePath = str_replace('public', '', __DIR__);
-$storagePermission = substr(sprintf("%o",fileperms($basePath.DIRECTORY_SEPARATOR."storage")),-3);
-$bootstrapPermission = substr(sprintf("%o",fileperms($basePath.DIRECTORY_SEPARATOR."bootstrap")),-3);
+$storagePermission = substr(sprintf('%o', fileperms($basePath.DIRECTORY_SEPARATOR.'storage')), -3);
+$bootstrapPermission = substr(sprintf('%o', fileperms($basePath.DIRECTORY_SEPARATOR.'bootstrap')), -3);
 ?>
 
       <table class="t01">
@@ -65,19 +65,27 @@ $bootstrapPermission = substr(sprintf("%o",fileperms($basePath.DIRECTORY_SEPARAT
           </tr>
           <tr>
             <td>storage</td>
-            <?php if ($storagePermission >= 755) { ?>
+            <?php if ($storagePermission >= 755) {
+    ?>
               <td style='color:green'><?= $storagePermission; ?></td>
-            <?php } else { ?>
+            <?php
+} else {
+        ?>
               <td style='color:red'><?= $storagePermission; ?>&nbsp; (Directory should be writable by your web server or Faveo will not run. Give preferred permissions as 755 for directory and 644 for files.)</td>
-            <?php } ?>
+            <?php
+    } ?>
           </tr>
           <tr>
             <td>bootstrap/cache</td>
-            <?php if ($bootstrapPermission >= 755) { ?>
+            <?php if ($bootstrapPermission >= 755) {
+        ?>
               <td style='color:green'><?= $bootstrapPermission; ?></td>
-            <?php } else { ?>
+            <?php
+    } else {
+        ?>
               <td style='color:red'><?= $bootstrapPermission; ?>&nbsp; (Directory should be writable by your web server or Faveo will not run. Give preferred permissions as 755 for directory and 644 for files.)</td>
-            <?php } ?>
+            <?php
+    } ?>
           </tr>
       </table>
       <br/>
