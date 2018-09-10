@@ -91,9 +91,9 @@ class ReportController extends Controller
         $return = '';
         $last = '';
         $j = 0;
-        $created1 = '';
-        $closed1 = '';
-        $reopened1 = '';
+        $created1 = 0;
+        $closed1 = 0;
+        $reopened1 = 0;
         $in_progress = \DB::table('tickets')->where('help_topic_id', '=', $help_topic)->where('status', '=', 1)->count();
 
         for ($i = $date1; $i <= $date2; $i = $i + 86400) {
