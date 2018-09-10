@@ -23,6 +23,6 @@ matrix:
 
 # Customize when the notification emails are sent.
 notifications:
-    on_success: never
+    on_success: always
     on_failure: always
     slack: faveohelpdesk:MxVioJBPLDmxiddgzp8PXBqv
