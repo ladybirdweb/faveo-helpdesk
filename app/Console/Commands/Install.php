@@ -41,6 +41,16 @@ class Install extends Command
     public function handle()
     {
         try {
+            $this->line("
+ ______                      _    _      _           _           _    
+|  ____|                    | |  | |    | |         | |         | |   
+| |__ __ ___   _____  ___   | |__| | ___| |_ __   __| | ___  ___| | __
+|  __/ _` \ \ / / _ \/ _ \  |  __  |/ _ \ | '_ \ / _` |/ _ \/ __| |/ /
+| | | (_| |\ V /  __/ (_) | | |  | |  __/ | |_) | (_| |  __/\__ \   < 
+|_|  \__,_| \_/ \___|\___/  |_|  |_|\___|_| .__/ \__,_|\___||___/_|\_\
+                                          | |                         
+                                          |_|                         
+");
             $this->appEnv();
             if ($this->confirm('Do you want to intall faveo?')) {
                 $default = $this->choice(
