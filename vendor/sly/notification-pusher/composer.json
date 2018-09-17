@@ -49,8 +49,8 @@
     "np"
   ],
   "autoload": {
-    "psr-0": {
-      "Sly": "src/"
+    "psr-4": {
+      "Sly\\": "src/Sly/"
     }
   }
 }

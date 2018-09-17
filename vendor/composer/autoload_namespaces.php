@@ -7,13 +7,14 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'thomaswelton\\GravatarLib\\' => array($vendorDir . '/thomaswelton/gravatarlib'),
-    'Sly' => array($vendorDir . '/sly/notification-pusher/src'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
     'PhpSpec' => array($vendorDir . '/phpspec/phpspec/src'),
     'Parsedown' => array($vendorDir . '/erusev/parsedown'),
     'PHPExcel' => array($vendorDir . '/phpoffice/phpexcel/Classes'),
     'Mremi\\UrlShortener' => array($vendorDir . '/mremi/url-shortener/src'),
     'Maatwebsite\\Excel\\' => array($vendorDir . '/maatwebsite/excel/src'),
+    'JakubOnderka\\PhpConsoleHighlighter' => array($vendorDir . '/jakub-onderka/php-console-highlighter/src'),
+    'JakubOnderka\\PhpConsoleColor' => array($vendorDir . '/jakub-onderka/php-console-color/src'),
     'Guzzle\\Tests' => array($vendorDir . '/guzzle/guzzle/tests'),
     'Guzzle' => array($vendorDir . '/guzzle/guzzle/src'),
     'ForceUTF8\\' => array($vendorDir . '/neitanod/forceutf8/src'),

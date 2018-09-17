@@ -189,6 +189,7 @@ class Apns extends BaseAdapter implements FeedbackAdapterInterface
 
         $sound            = $message->getOption('sound');
         $contentAvailable = $message->getOption('content-available');
+        $mutableContent   = $message->getOption('mutable-content');
         $category         = $message->getOption('category');
         $urlArgs          = $message->getOption('urlArgs');
         $expire           = $message->getOption('expire');
@@ -240,6 +241,10 @@ class Apns extends BaseAdapter implements FeedbackAdapterInterface
 
         if (null !== $contentAvailable) {
             $serviceMessage->setContentAvailable($contentAvailable);
+        }
+
+        if (null !== $mutableContent) {
+            $serviceMessage->setMutableContent($mutableContent);
         }
 
         if (null !== $category) {
