@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\DropTables::class,
         \App\Console\Commands\Install::class,
         \App\Console\Commands\InstallDB::class,
+        \App\Console\Commands\SetupTestEnv::class,
     ];
 
     /**
