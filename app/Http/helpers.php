@@ -272,17 +272,19 @@ function exceptionResponse(\Exception $exception)
 }
 
 /**
- * Creates an empty DB with given name
- * @param string $dbName    name of the DB
- * @return null 
+ * Creates an empty DB with given name.
+ *
+ * @param string $dbName name of the DB
+ *
+ * @return null
  */
 function createDB(string $dbName)
 {
     \DB::purge('mysql');
     // removing old db
     \DB::connection('mysql')->getPdo()->exec("DROP DATABASE IF EXISTS `{$dbName}`");
-    
-    // Creating testing_db 
+
+    // Creating testing_db
     \DB::connection('mysql')->getPdo()->exec("CREATE DATABASE `{$dbName}`");
     //disconnecting it will remove database config from the memory so that new database name can be
     // populated
