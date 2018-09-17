@@ -1,6 +1,10 @@
 # Required to run your project under the correct environment.
 language: php
 
+#Use Mysql service for DB to run testcases
+services:
+  - mysql
+
 # Versions of PHP you want your project run with.
 php:
   - 7.1
@@ -10,6 +14,7 @@ php:
 before_script:
   - composer self-update
   - composer install --prefer-source --no-interaction --dev
+  - php artisan testing-setup
 
 # Commands you want to run that will verify your build.
 script: phpunit
