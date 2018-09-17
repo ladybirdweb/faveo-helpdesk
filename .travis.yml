@@ -14,7 +14,7 @@ php:
 before_script:
   - composer self-update
   - composer install --prefer-source --no-interaction --dev
-  - php artisan testing-setup
+  - php artisan testing-setup --username=root
 
 # Commands you want to run that will verify your build.
 script: phpunit
