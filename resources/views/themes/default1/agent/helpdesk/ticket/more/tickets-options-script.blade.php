@@ -138,7 +138,10 @@ var filterClick = 0;
                         c_status = "Close";
                     } else if(id == 5) {
                         c_status = "Delete";
+                    } else if(id == 'hard-delete') {
+                        c_status = "Delete forever";
                     }
+
                     $('.yes').html("Yes");
                 }
                 $('#custom-alert-body').html(msg);
@@ -148,7 +151,7 @@ var filterClick = 0;
             $('#modalpopup').on('submit', function(e){
                 if (submit_form == 0) {
                     e.preventDefault();
-                    changeStatus('hard-delete', '{{Lang::get("lang.clean-")}}');
+                    changeStatus('hard-delete', '{{Lang::get("lang.clean-forever")}}');
                 }
                 $('#hard-delete').val('Delete forever')
             });
