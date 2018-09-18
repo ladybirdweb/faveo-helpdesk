@@ -2052,8 +2052,7 @@ class TicketController extends Controller
             }
         }
         $user = User::where('email', '=', $email)->first();
-        $count = count($user);
-        if ($count === 1) {
+        if ($user) {
             $user_id = $user->id;
             $ticket = Tickets::where('id', '=', $id)->first();
             if ($user_id === (int) $ticket->user_id) {
