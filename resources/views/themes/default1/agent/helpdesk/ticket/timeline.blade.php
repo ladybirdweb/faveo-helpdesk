@@ -1398,7 +1398,7 @@ if ($thread->title != "") {
     // Close a ticket
     $('#close').on('click', function(e) {
     $.ajax({
-    type: "GET",
+    type: "POST",
             url: "../ticket/close/{{$tickets->id}}",
             beforeSend: function() {
             $("#hidespin").hide();
@@ -1428,7 +1428,7 @@ if ($thread->title != "") {
  $('#approval_close').on('click', function(e) {
      
     $.ajax({
-    type: "GET",
+    type: "POST",
             url: "../ticket/close/get-approval/{{$tickets->id}}",//route 600
             beforeSend: function() {
             $("#hidespin").hide();
@@ -1463,7 +1463,7 @@ if ($thread->title != "") {
             // Resolved  a ticket
             $('#resolved').on('click', function(e) {
     $.ajax({
-    type: "GET",
+    type: "POST",
             url: "../ticket/resolve/{{$tickets->id}}",
             beforeSend: function() {
             $("#hide2").hide();
@@ -1493,7 +1493,7 @@ if ($thread->title != "") {
             // Open a ticket
             $('#open').on('click', function(e) {
     $.ajax({
-    type: "GET",
+    type: "POST",
             url: "../ticket/open/{{$tickets->id}}",
             beforeSend: function() {
             $("#hide2").hide();
@@ -1515,7 +1515,7 @@ if ($thread->title != "") {
             // delete a ticket
             $('#delete').on('click', function(e) {
     $.ajax({
-    type: "GET",
+    type: "POST",
             url: "../ticket/delete/{{$tickets->id}}",
             beforeSend: function() {
             $("#hide2").hide();
