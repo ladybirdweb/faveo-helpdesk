@@ -399,7 +399,7 @@ class FilterController extends Controller
     {
         if (Auth::user()->role == 'agent') {
             $id = Auth::user()->id;
-            $dept = DepartmentAssignAgents::where('agent_id', '=', $id)->pluck('department_id')->toArray();
+            $dept[] =Auth::user()->primary_dpt;
             $table = $table->where(function ($query) use ($dept) {
                 $query->whereIn('tickets.dept_id', $dept)
                         ->orWhere('assigned_to', '=', Auth::user()->id);
