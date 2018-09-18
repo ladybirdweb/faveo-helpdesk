@@ -8,6 +8,33 @@
                                           | |                         
                                           |_|                         
 |=====================================================
+| v1.10.1 Laravel Framework update
+|=====================================================
+### PHP7.2 compatibility patch
+
+As we mentioned in last release that the application is now compatible with PHP7.2 but as has not been tested completely there are number of issues which occurrs while using the application with PHP7.2. This release fixes the issues logged by the application in our issue track manager.
+
+#### Bugs fixed
+- PHP7.2 compatibility issues mentioned in this [GitHub issue](https://github.com/ladybirdweb/faveo-helpdesk/issues/681)
+- Agents are not able to view tickets in ticket pages
+- Delete Forever button does not work
+- Fixed loging method in CommonmailController
+- Fixed mail config file
+- Fixed attachment variable initalization in MailController
+- Fixed sendEmail() method in PhpMailController passing empty array as default value for $template_variables
+- Fixed Bugsnag reported issue for sendmail() which is happening for reports
+- Changes status change url method to post for preventing CSRF attacks for ticket status manipluation
+- Removed sla-escalate atrisan command from kernal as the functionality is not working and which is causing the issue while running cron command in v1.10
+
+#### Change log
+- Updated Laravel version to v5.6.38
+- Initial commit for Unit testin using PHP unit. We are starting with TDD and every module and class will be tested using unit testcases.
+- Updated Artful log in Readme.md, release notes and CLI installer
+- Added phpunit.bat for running unit tests on windows machines
+- Integrated slack channel for travis build notifications
+- Updated Bugsnag API key
+
+|=====================================================
 | v1.10 Laravel Framework update
 |=====================================================
 Faveo helpdesk v1.10 introduces some backward non compatible changes due to framework updates and introduces some refinement patches for existing functionalities.

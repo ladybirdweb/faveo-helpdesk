@@ -2109,8 +2109,7 @@ class TicketController extends Controller
                         ]
         );
         $user = User::where('email', '=', $email)->first();
-        $count = count($user);
-        if ($count === 1) {
+        if ($user) {
             return 0;
         } elseif ($validator->fails()) {
             return 2;
