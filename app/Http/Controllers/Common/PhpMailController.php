@@ -78,7 +78,7 @@ class PhpMailController extends Controller
         $this->dispatch($job);
     }
 
-    public function sendEmail($from, $to, $message, $template_variables)
+    public function sendEmail($from, $to, $message, $template_variables = [])
     {
         $from_address = $this->fetch_smtp_details($from);
         if ($from_address == null) {
