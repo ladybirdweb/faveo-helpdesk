@@ -26,7 +26,7 @@ class CommonMailer
 
             return true;
         } catch (Exception $e) {
-            loging($e->getMessage());
+            loging('mail-config', $e->getMessage());
 
             return $e->getMessage();
         }

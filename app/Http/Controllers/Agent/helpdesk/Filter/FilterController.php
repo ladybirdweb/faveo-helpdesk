@@ -1043,7 +1043,7 @@ class FilterController extends Controller
         $tz = explode(')', substr($location, stripos($location, 'T')
                             + 1));
 
-        return $tz[0];
+        return ($tz[0] != "") ? $tz[0] : "+00:00";
     }
 
     /**
