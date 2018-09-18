@@ -200,7 +200,7 @@ class MailController extends Controller
             $address = $message->getAddresses('from');
         }
         $collaborators = $this->collaburators($message, $email);
-        $attachments = (!$message->getAttachments()) ? []: $message->getAttachments();
+        $attachments = (!$message->getAttachments()) ? [] : $message->getAttachments();
         //dd(['body' => $body, 'subject' => $subject, 'address' => $address, 'cc' => $collaborator, 'attachments' => $attachments]);
         $this->workflow($address, $subject, $body, $collaborators, $attachments, $email);
     }
