@@ -615,7 +615,7 @@ class FormController extends Controller
     {
         $form = self::getSession();
         $form++;
-        \Session::set('fromid', $form);
+        \Session::put('fromid', $form);
     }
 
     public static function getSession()
