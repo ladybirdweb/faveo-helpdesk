@@ -1642,4 +1642,5 @@ return [
     'ticket_has_collaborator'                      => 'This ticket has collaborator(s)',
     'ticket_created_source'                        => 'This ticket is created via :source',
     'ticket-has-x-priority'                        => 'This ticket has :priority priority',
+    'clean-forever'                                => 'delete permanently',
 ];
