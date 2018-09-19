@@ -12,31 +12,31 @@
 |=====================================================
 ### PHP7.2 compatibility patch
 
-As we mentioned in last release that the application is now compatible with PHP7.2 but as has not been tested completely there are number of issues which occurrs while using the application with PHP7.2. This release fixes the issues logged by the application in our issue track manager.
+As we mentioned in the last release that the application is now compatible with PHP7.2 but as has not been tested completely there is the number of issues which occurred while using the application with PHP7.2. This release fixes the issues logged by the application in our issue track manager.
 
 #### Bugs fixed
 - PHP7.2 compatibility issues mentioned in this [GitHub issue](https://github.com/ladybirdweb/faveo-helpdesk/issues/681)
 - Agents are not able to view tickets in ticket pages
 - Delete Forever button does not work
-- Fixed loging method in CommonmailController
+- Fixed logging method in CommonmailController
 - Fixed mail config file
-- Fixed attachment variable initalization in MailController
+- Fixed attachment variable initialization in MailController
 - Fixed sendEmail() method in PhpMailController passing empty array as default value for $template_variables
-- Fixed Bugsnag reported issue for sendmail() which is happening for reports
-- Changes status change url method to post for preventing CSRF attacks for ticket status manipluation
-- Removed sla-escalate atrisan command from kernal as the functionality is not working and which is causing the issue while running cron command in v1.10
+- Fixed Bugsnag reported an issue for sendmail() which is happening for reports
+- Changes status change URL method to post for preventing CSRF attacks for ticket status manipulation
+- Removed sla-escalate atrisan command from the kernel as the functionality is not working and which is causing the issue while running cron command in v1.10
 
-#### Change log
+#### Changelog
 - Updated Laravel version to v5.6.38
-- Initial commit for Unit testin using PHP unit. We are starting with TDD and every module and class will be tested using unit testcases.
+- Initial commit for Unit testing using PHP unit. We are starting with TDD and every module and class will be tested using unit test cases.
 - Updated Artful log in Readme.md, release notes and CLI installer
 - Added phpunit.bat for running unit tests on windows machines
-- Integrated slack channel for travis build notifications
+- Integrated slack channel for Travis build notifications
 - Updated Bugsnag API key
 
 Error Reporting
 --------------------------
-Faveo uses [Bugsnag](https://www.bugsnag.com/) to monitor application stability in production enviroment. It helps us to provide bug fixes and feature updates after analyzing the logs and crash reports for the application. **If you are customizing the application under development environment, we request you to disable this error reporting.** It will allow us to ignore the errors occurred during your development cycle and we can focus more on the exceptions/bugs occuring in live system of other users of Faveo community. It can be easily disabled from "Error logs and debugging" option in admin panel or by updating your app environment to development in `.env`.
+Faveo uses [Bugsnag](https://www.bugsnag.com/) to monitor application stability in the production environment. It helps us to provide bug fixes and feature updates after analyzing the logs and crash reports for the application. **If you are customizing the application under the development environment, we request you to disable this error reporting.** It will allow us to ignore the errors occurred during your development cycle and we can focus more on the exceptions/bugs occurring in the live system of other users of the Faveo community. It can be easily disabled from "Error logs and debugging" option in the admin panel or by updating your app environment to development in `.env`.
 
 You can still report the issues on our [Github Issue page](https://github.com/ladybirdweb/faveo-helpdesk/issues) by providing proper information about the changes you are trying to implement. We assure you that Faveo community will help you and your customization can be a part of Faveo application if it follows our contributing guidelines.
 
