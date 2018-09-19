@@ -359,7 +359,7 @@ class ApiController extends Controller
                     ->leftJoin('ticket_attachment', 'ticket_attachment.thread_id', '=', 'ticket_thread.id');
             if ($user->role == 'agent') {
                 $id = $user->id;
-                $dept = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
+                $dept[] = $user->primary_dpt;
                 $unassigned = $unassigned->where(function ($query) use ($dept, $id) {
                     $query->whereIn('tickets.dept_id', $dept)
                             ->orWhere('assigned_to', '=', $id);
@@ -412,7 +412,7 @@ class ApiController extends Controller
                     ->leftJoin('ticket_attachment', 'ticket_attachment.thread_id', '=', 'ticket_thread.id');
             if ($user->role == 'agent') {
                 $id = $user->id;
-                $dept = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
+                $dept[] = $user->primary_dpt;
                 $result = $result->where(function ($query) use ($dept, $id) {
                     $query->whereIn('tickets.dept_id', $dept)
                             ->orWhere('assigned_to', '=', $id);
@@ -977,7 +977,7 @@ class ApiController extends Controller
                     ->where('ticket_status.name', 'Open');
             if ($user->role == 'agent') {
                 $id = $user->id;
-                $dept = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
+                $dept[] = $user->primary_dpt;
                 $inbox = $inbox->where(function ($query) use ($dept, $id) {
                     $query->whereIn('tickets.dept_id', $dept)
                             ->orWhere('assigned_to', '=', $id);
@@ -1061,7 +1061,7 @@ class ApiController extends Controller
                     ->leftJoin('ticket_attachment', 'ticket_attachment.thread_id', '=', 'ticket_thread.id');
             if ($user->role == 'agent') {
                 $id = $user->id;
-                $dept = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
+                $dept[] = $user->primary_dpt;
                 $trash = $trash->where(function ($query) use ($dept, $id) {
                     $query->whereIn('tickets.dept_id', $dept)
                             ->orWhere('assigned_to', '=', $id);
@@ -1432,7 +1432,7 @@ class ApiController extends Controller
             $tickets = \DB::table('tickets');
             if ($user->role == 'agent') {
                 $id = $user->id;
-                $dept = DepartmentAssignAgents::where('agent_id', '=', $id)->pluck('department_id')->toArray();
+                $dept[] = $user->primary_dpt;
                 $tickets = $tickets->whereIn('tickets.dept_id', $dept)->orWhere('assigned_to', '=', $user->id);
             }
             $department = $this->department->select('name', 'id')->get()->toArray();
