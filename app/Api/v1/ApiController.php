@@ -1236,7 +1236,7 @@ class ApiController extends Controller
             $result = $response->addSelect(
                             'users.email', 'users.user_name', 'users.first_name', 'users.last_name', 'tickets.id', 'ticket_number', 'user_id', 'ticket_priority.priority_id', 'ticket_priority.priority as priority_name', 'department.name as dept_name', 'ticket_status.name as status_name', 'sla_plan.name as sla_name', 'ticket_source.name as source_name', 'sla_plan.id as sla', 'ticket_status.id as status', 'lock_by', 'lock_at', 'ticket_source.id as source', 'isoverdue', 'reopened', 'isanswered', 'is_deleted', 'closed', 'reopened_at', 'duedate', 'closed_at', 'tickets.created_at', 'tickets.updated_at', 'ticket_priority.priority_color as priority_color', 'help_topic.id as helptopic_id', 'help_topic.topic as helptopic_name', 'sla_plan.grace_period as grace_period')->first();
 //            $resultticket_source
-            $result2 = $result; 
+            $result2 = $result;
             $result = $result->toArray();
             $result['duedate'] = date_add($result2->created_at, date_interval_create_from_date_string($result2->grace_period))->format('Y:m:d H:i:s');
             $result['title'] = utfEncoding(Ticket_Thread::where('ticket_id', $id)->orderBy('id')->first()->title);
