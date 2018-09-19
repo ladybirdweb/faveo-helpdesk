@@ -766,7 +766,6 @@ return array(
     'Table_Row_Group_Frame_Reflower' => $vendorDir . '/dompdf/dompdf/include/table_row_group_frame_reflower.cls.php',
     'Table_Row_Group_Renderer' => $vendorDir . '/dompdf/dompdf/include/table_row_group_renderer.cls.php',
     'Table_Row_Positioner' => $vendorDir . '/dompdf/dompdf/include/table_row_positioner.cls.php',
-    'TestCase' => $baseDir . '/tests/TestCase.php',
     'Text_Frame_Decorator' => $vendorDir . '/dompdf/dompdf/include/text_frame_decorator.cls.php',
     'Text_Frame_Reflower' => $vendorDir . '/dompdf/dompdf/include/text_frame_reflower.cls.php',
     'Text_Renderer' => $vendorDir . '/dompdf/dompdf/include/text_renderer.cls.php',
