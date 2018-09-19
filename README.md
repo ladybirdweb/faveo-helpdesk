@@ -87,6 +87,12 @@ Contributing
 --------------------------
 Create your own fork of Faveo master repositoray and use <a href="https://github.com/nvie/gitflow">git-flow</a> to create a new feature. Once the feature is published in your fork, send a pull request to begin the conversation of integrating your new feature into Faveo. Please see the <a href="https://github.com/ladybirdweb/faveo-helpdesk/blob/master/CONTRIBUTING.md">contributing guidelines</a> before sending pull requests.
 
+Error Reporting
+--------------------------
+Faveo uses [Bugsnag](https://www.bugsnag.com/) to monitor application stability in production enviroment. It helps us to provide bug fixes and feature updates after analyzing the logs and crash reports for the application. **If you are customizing the application under development environment, we request you to disable this error reporting.** It will allow us to ignore the errors occurred during your development cycle and we can focus more on the exceptions/bugs occuring in live system of other users of Faveo community. It can be easily disabled from "Error logs and debugging" option in admin panel or by updating your app environment to development in `.env`.
+
+You can still report the issues on our [Github Issue page](https://github.com/ladybirdweb/faveo-helpdesk/issues) by providing proper information about the changes you are trying to implement. We assure you that Faveo community will help you and your customization can be a part of Faveo application if it follows our contributing guidelines.
+
 Help
 --------------------------
 Visit the <a href="https://github.com/ladybirdweb/faveo-helpdesk/issues">issue</a> page. And if you'd like professional help commercial support is available, email us through the <a href="http://www.faveohelpdesk.com/contact-us/">contact form</a>.
