@@ -1457,9 +1457,7 @@ CREATE TABLE `settings_system` (
 --
 
 INSERT INTO `settings_system` (`id`, `status`, `url`, `name`, `department`, `page_size`, `log_level`, `purge_log`, `api_enable`, `api_key_mandatory`, `api_key`, `name_format`, `time_farmat`, `date_format`, `date_time_format`, `day_date_time`, `time_zone`, `content`, `version`, `created_at`, `updated_at`) VALUES
-(1, 1, '', '', '1', '', '', '', 0, 0, '', '', NULL, NULL, 1, '', 32, '', '', '2016-12-13 03:19:29', '2016-12-13 03:19:29'),
-(2, 1, '', '', '1', '', '', '', 0, 0, '', '', NULL, NULL, 1, '', 79, '', '1.0.8.0', '2016-12-13 03:19:53', '2016-12-13 03:19:53'),
-(3, 1, '', '', '1', '', '', '', 0, 0, '', '', NULL, NULL, 1, '', 14, '', '1.9.2', '2017-01-03 06:17:47', '2017-01-03 06:17:47');
+(1, 1, '', '', '1', '', '', '', 0, 0, '', '', NULL, NULL, 1, '', 32, '', '1.10.1', '2016-12-13 03:19:29', '2016-12-13 03:19:29');
 
 -- --------------------------------------------------------
 
