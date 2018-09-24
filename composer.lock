@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1c83afecf8a566439811bd8da82f233c",
+    "content-hash": "c0fbac9fb98d546fe8254af2e7a8b574",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -511,12 +511,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/davibennun/laravel-push-notification.git",
-                "reference": "6970bbe4f1e1744677208f895bc08032f4baf3be"
+                "reference": "7b129a18ecec7368a0de27ac0039d414aa596936"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/davibennun/laravel-push-notification/zipball/6970bbe4f1e1744677208f895bc08032f4baf3be",
-                "reference": "6970bbe4f1e1744677208f895bc08032f4baf3be",
+                "url": "https://api.github.com/repos/davibennun/laravel-push-notification/zipball/7b129a18ecec7368a0de27ac0039d414aa596936",
+                "reference": "7b129a18ecec7368a0de27ac0039d414aa596936",
                 "shasum": ""
             },
             "require": {
@@ -525,6 +525,16 @@
                 "sly/notification-pusher": "2.*"
             },
             "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Davibennun\\LaravelPushNotification\\LaravelPushNotificationServiceProvider"
+                    ],
+                    "aliases": {
+                        "PushNotification": "Davibennun\\LaravelPushNotification\\Facades\\PushNotification"
+                    }
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Davibennun\\LaravelPushNotification": "src/"
@@ -545,7 +555,7 @@
                 "notification",
                 "push"
             ],
-            "time": "2017-01-31T10:24:01+00:00"
+            "time": "2018-09-21T00:02:18+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -4533,16 +4543,16 @@
         },
         {
             "name": "tedivm/fetch",
-            "version": "v0.6.1",
+            "version": "v0.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tedious/Fetch.git",
-                "reference": "154a84fdfa0d045c2871dd9f8708362fb9ea4acf"
+                "reference": "ea3f1bbde6bd6388488105240640642dc82c06a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tedious/Fetch/zipball/154a84fdfa0d045c2871dd9f8708362fb9ea4acf",
-                "reference": "154a84fdfa0d045c2871dd9f8708362fb9ea4acf",
+                "url": "https://api.github.com/repos/tedious/Fetch/zipball/ea3f1bbde6bd6388488105240640642dc82c06a6",
+                "reference": "ea3f1bbde6bd6388488105240640642dc82c06a6",
                 "shasum": ""
             },
             "require": {
@@ -4578,7 +4588,7 @@
                 "imap",
                 "pop3"
             ],
-            "time": "2015-01-08T03:22:20+00:00"
+            "time": "2015-08-02T03:38:12+00:00"
         },
         {
             "name": "thomaswelton/gravatarlib",
