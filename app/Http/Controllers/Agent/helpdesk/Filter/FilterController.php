@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Model\helpdesk\Agent\Department;
 //models
-use App\Model\helpdesk\Agent\DepartmentAssignAgents;
 use App\Model\helpdesk\Filters\Filter;
 use App\Model\helpdesk\Filters\Label;
 use App\Model\helpdesk\Manage\Help_topic;
@@ -454,7 +453,7 @@ class FilterController extends Controller
         if (Auth::user()->role == 'admin') {
             return [true, $requested_dept];
         } else {
-            $agent_dept = DepartmentAssignAgents::where('agent_id', '=', Auth::user()->id)->pluck('department_id')->toArray();
+            $agent_dept = [Auth::user()->primary_dpt];
             if (count($requested_dept) > 0 && count($agent_dept) > 0) {
                 return [count(array_intersect($requested_dept, $agent_dept)) == count($requested_dept), $requested_dept];
             }
