@@ -162,7 +162,7 @@ return [
     'email_deleted_sucessfully'                                                        => 'Email deleted sucessfully',
     'email_can_not_delete'                                                             => 'Email can not delete',
     'outgoing_email_failed'                                                            => 'Outgoing email failed',
-    'system-email-not-configured'                                                      => 'We are unable to process email request as the system has no configured email for sending mails. Please contact and report system admin.',
+    'system-email-not-configured'                                                      => 'System could not send emails to users as it does not have the email configured to send outgoing mails. Please contact and report system admin.',
     /*
       |--------------------------------------
       |  Ban Emails Create Page
@@ -1565,7 +1565,7 @@ return [
      'created-at'                   => 'Created at',
      'or'                           => 'OR',
      'activate'                     => 'Activate',
-     'system-email-not-configured'  => 'We are unable to process email request as the system has no configured email for sending mails. Please contact and report system admin.',
+     'system-email-not-configured'  => 'System could not send emails to users as it does not have the email configured to send outgoing mails. Please contact and report system admin.',
      'assign-ticket'                => 'Assign tickets',
      'can-not-inactive-group'       => 'Can not make the group inactive as it has agents assigned in it. Please assign those agents to another group and try again.',
      'internal-note-has-been-added' => 'Internal note added to the ticket',
@@ -1643,4 +1643,5 @@ return [
     'ticket_created_source'                        => 'This ticket is created via :source',
     'ticket-has-x-priority'                        => 'This ticket has :priority priority',
     'clean-forever'                                => 'delete permanently',
+    'mail-sent-to-job-for-process'                 => 'Mail has been sent to job for process, it will appear in your mailbox once it gets processed by your selected queue service. If you don\'t recieve the mail check logs for errors or warnings.',
 ];

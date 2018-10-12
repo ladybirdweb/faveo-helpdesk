@@ -8,6 +8,15 @@
                                           | |                         
                                           |_|                         
 |=====================================================
+| v1.10.2 Bug Fix Patch
+|=====================================================
+### Bugs Fixed
+- Fixed #702, agents are unable to view their tickets
+- Fixed #701, turning off outgoing mails does not stop outgoing sending emails.
+- Fixed email edit/create page does not show proper error messages
+
+
+|=====================================================
 | v1.10.1 Laravel Framework update
 |=====================================================
 ### PHP7.2 compatibility patch

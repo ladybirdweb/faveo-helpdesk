@@ -26,7 +26,10 @@ class PhpMailController extends Controller
 
     public function fetch_smtp_details($id)
     {
-        $emails = Emails::where('id', '=', $id)->first();
+        $emails = Emails::where(
+            [['id', '=', $id],
+            ['sending_status', '=', 1]])
+        ->first();
 
         return $emails;
     }
