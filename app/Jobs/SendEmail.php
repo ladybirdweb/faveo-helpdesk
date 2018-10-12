@@ -36,11 +36,11 @@ class SendEmail extends Job implements ShouldQueue
      */
     public function handle(PhpMailController $PhpMailController)
     {
-        try{
+        try {
             $p = $PhpMailController->sendEmail($this->from, $this->to, $this->message, $this->template);
 
             return $p;
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             \Log::warning($e->getMessage());
             \Session::flash('fails', $e->getMessage());
         }
