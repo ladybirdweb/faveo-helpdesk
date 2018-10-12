@@ -26,7 +26,10 @@ class PhpMailController extends Controller
 
     public function fetch_smtp_details($id)
     {
-        $emails = Emails::where('id', '=', $id)->first();
+        $emails = Emails::where([
+            ['id', '=', $id],
+            ['sending_status', '=', 1]
+        ])->first();
 
         return $emails;
     }
@@ -79,7 +82,7 @@ class PhpMailController extends Controller
     }
 
     public function sendEmail($from, $to, $message, $template_variables = [])
-    {
+    {   
         $from_address = $this->fetch_smtp_details($from);
         if ($from_address == null) {
             throw new Exception(Lang::get('lang.system-email-not-configured'));

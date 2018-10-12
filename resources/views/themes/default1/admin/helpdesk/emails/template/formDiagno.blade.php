@@ -29,7 +29,7 @@ class="active"
             <h4 class="box-title">{{Lang::get('lang.send-mail-to-diagnos')}}</h4>	
         </div>
         <div class="box-body">
-            @if(Session::has('success'))
+            @if(Session::has('success') && !Session::has('fails'))
             <div class="alert alert-success alert-dismissable">
                 <i class="fa  fa-check-circle"></i>
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -38,7 +38,7 @@ class="active"
             @endif
             <!-- failure message -->
             @if(Session::has('fails'))
-            <div class="alert alert-danger alert-dismissable">
+            <div class="alert alert-warning alert-dismissable">
                 <i class="fa fa-ban"></i>
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 <b>{!! Lang::get('lang.alert') !!} !</b><br/>

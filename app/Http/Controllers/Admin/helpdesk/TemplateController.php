@@ -339,7 +339,7 @@ class TemplateController extends Controller
 
             $this->PhpMailController->sendmail($from, $to_address, $message, [], []);
 
-            return redirect()->back()->with('success', 'Mail has send successfully');
+            return redirect()->back()->with('success', trans('lang.mail-sent-to-job-for-process'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
