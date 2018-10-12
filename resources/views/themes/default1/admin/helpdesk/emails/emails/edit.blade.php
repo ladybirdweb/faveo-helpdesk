@@ -307,7 +307,7 @@ class="active"
             error: function (json) {
                 $("#close").trigger("click");
                 var res = "";
-                $.each(json.responseJSON, function (idx, topic) {
+                $.each(json.responseJSON.errors, function (idx, topic) {
                     res += "<li>" + topic + "</li>";
                 });
                 $("#head").html("<div class='alert alert-danger'><strong>Whoops!</strong> There were some problems with your input.<br><br><ul>" + res + "</ul></div>");
