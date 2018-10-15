@@ -71,8 +71,9 @@ Helps verify whether your server can run Faveo or not.
 
 Faveo Community
 --------------------------
-Join Faveo discussion group and stay tuned to latest updates. 
-<a href="https://www.linkedin.com/groups/8429668" target="_blank">Join here</a>
+Join Faveo discussion group and stay tuned to latest updates.<br/>
+<li><a href="https://www.linkedin.com/groups/8429668" target="_blank">Join us on LinkedIn</a></li>
+<li><a href="https://join.slack.com/t/faveocommunity/shared_invite/enQtNDU0NTcxNTA0ODIwLTAzN2VkNDhjMDFmNGJmNmUwYTkxYzE4OGI3ZDUyZGQ2ZDY5NjU2YmY4ZjU3YWNlNTA3N2JkOTk1ZmNiM2ZlY2U" target="_blank">Join us on Slack</a></li>
 
 Support the community edition
 --------------------------
