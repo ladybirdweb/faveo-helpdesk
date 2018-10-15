@@ -28,7 +28,7 @@ class PhpMailController extends Controller
     {
         $emails = Emails::where(
             [['id', '=', $id],
-            ['sending_status', '=', 1]])
+            ['sending_status', '=', 1], ])
         ->first();
 
         return $emails;
