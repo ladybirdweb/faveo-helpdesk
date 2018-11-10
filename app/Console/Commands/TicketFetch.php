@@ -40,7 +40,7 @@ class TicketFetch extends Command
      */
     public function handle()
     {
-        if (env('DB_INSTALL') == 1) {
+        if (isInstall()) {
             $controller = $this->mailController();
             $emails = new \App\Model\helpdesk\Email\Emails();
             $settings_email = new \App\Model\helpdesk\Settings\Email();

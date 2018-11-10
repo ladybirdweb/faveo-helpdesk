@@ -124,7 +124,7 @@ function isInstall()
 {
     $check = false;
     $env = base_path('.env');
-    if (\File::exists($env) && env('DB_INSTALL') == 1) {
+    if (\File::exists($env) && \Config::get('database.install') == 1) {
         $check = true;
     }
 
