@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Model\Update\BarNotification;
-use App\Model\helpdesk\Settings\Plugin;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -59,7 +58,7 @@ class AppServiceProvider extends ServiceProvider
         $activePlugins = \DB::table('plugins')->select('name', 'path')->where('status', 1)->get();
         foreach ($activePlugins as $activePlugin) {
             if ($this->isPluginDir($activePlugin->name)) {
-                $class =  '\App\Plugins\\'.$activePlugin->name.'\ServiceProvider';
+                $class = '\App\Plugins\\'.$activePlugin->name.'\ServiceProvider';
                 $this->app->register($class);
             }
         }
