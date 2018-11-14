@@ -406,18 +406,6 @@ class SettingsController extends Controller
                      */
                     $faveoconfig = config_path().DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$filename.'.php';
                     if ($faveoconfig) {
-
-                        //copy($config, $faveoconfig);
-                        /*
-                         * write provider list in app.php line 128
-                         */
-                        $app = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'app.php';
-                        chmod($app, 0644);
-                        $str = "\n\n\t\t\t'App\\Plugins\\$filename"."\\ServiceProvider',";
-                        $line_i_am_looking_for = 190;
-                        $lines = file($app, FILE_IGNORE_NEW_LINES);
-                        $lines[$line_i_am_looking_for] = $str;
-                        file_put_contents($app, implode("\n", $lines));
                         $plug->create(['name' => $filename, 'path' => $filename, 'status' => 1]);
 
                         return redirect()->back()->with('success', Lang::get('lang.plugin-installed'));
@@ -584,12 +572,6 @@ class SettingsController extends Controller
         $plugs = new Plugin();
         $plug = $plugs->where('name', $slug)->first();
         if (!$plug) {
-            $app = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'app.php';
-            $str = "\n'App\\Plugins\\$slug"."\\ServiceProvider',";
-            $line_i_am_looking_for = 190;
-            $lines = file($app, FILE_IGNORE_NEW_LINES);
-            $lines[$line_i_am_looking_for] = $str;
-            file_put_contents($app, implode("\n", $lines));
             $plugs->create(['name' => $slug, 'path' => $slug, 'status' => 1]);
 
             return redirect()->back()->with('success', 'Status has changed');
@@ -597,25 +579,9 @@ class SettingsController extends Controller
         $status = $plug->status;
         if ($status == 0) {
             $plug->status = 1;
-
-            $app = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'app.php';
-            $str = "\n        'App\\Plugins\\$slug"."\\ServiceProvider',";
-            $line_i_am_looking_for = 190;
-            $lines = file($app, FILE_IGNORE_NEW_LINES);
-            $lines[$line_i_am_looking_for] = $str;
-            file_put_contents($app, implode("\n", $lines));
         }
         if ($status == 1) {
             $plug->status = 0;
-            /*
-             * remove service provider from app.php
-             */
-            $str = "\n'App\\Plugins\\$slug"."\\ServiceProvider',";
-            $path_to_file = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'app.php';
-
-            $file_contents = file_get_contents($path_to_file);
-            $file_contents = str_replace($str, '//', $file_contents);
-            file_put_contents($path_to_file, $file_contents);
         }
         $plug->save();
 

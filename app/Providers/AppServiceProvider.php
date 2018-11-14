@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Model\Update\BarNotification;
+use App\Model\helpdesk\Settings\Plugin;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -28,9 +29,9 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('local', 'testing')) {
             $this->app->register(DuskServiceProvider::class);
         }
-        // if (isInstall()) {
-        //     $this->plugin();
-        // }
+        if (isInstall()) {
+            $this->registerPlugin();
+        }
     }
 
     public function boot()
@@ -53,49 +54,14 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    public function plugin()
+    public function registerPlugin()
     {
-        if (isPlugin('Ldap') && $this->isPluginDir('Ldap')) {
-            $this->app->register(\App\Plugins\Ldap\ServiceProvider::class);
-        }
-        if (isPlugin('Chat') && $this->isPluginDir('Chat')) {
-            $this->app->register(\App\Plugins\Chat\ServiceProvider::class);
-        }
-        if (isPlugin('Envato') && $this->isPluginDir('Envato')) {
-            $this->app->register(\App\Plugins\Envato\ServiceProvider::class);
-        }
-        if (isPlugin('Htrunk') && $this->isPluginDir('Htrunk')) {
-            $this->app->register(\App\Plugins\Htrunk\ServiceProvider::class);
-        }
-        if (isPlugin('HtrunkDocs') && $this->isPluginDir('HtrunkDocs')) {
-            $this->app->register(\App\Plugins\HtrunkDocs\ServiceProvider::class);
-        }
-        if (isPlugin('Licenses') && $this->isPluginDir('Licenses')) {
-            $this->app->register(\App\Plugins\Licenses\ServiceProvider::class);
-        }
-        if (isPlugin('Migration') && $this->isPluginDir('Migration')) {
-            $this->app->register(\App\Plugins\Migration\ServiceProvider::class);
-        }
-        if (isPlugin('Reseller') && $this->isPluginDir('Reseller')) {
-            $this->app->register(\App\Plugins\Reseller\ServiceProvider::class);
-        }
-        if (isPlugin('SMS') && $this->isPluginDir('SMS')) {
-            $this->app->register(\App\Plugins\SMS\ServiceProvider::class);
-        }
-        if (isPlugin('ServiceDesk') && $this->isPluginDir('ServiceDesk')) {
-            $this->app->register(\App\Plugins\ServiceDesk\ServiceProvider::class);
-        }
-        if (isPlugin('Social') && $this->isPluginDir('Social')) {
-            $this->app->register(\App\Plugins\Social\ServiceProvider::class);
-        }
-        if (isPlugin('Telephony') && $this->isPluginDir('Telephony')) {
-            $this->app->register(\App\Plugins\Telephony\ServiceProvider::class);
-        }
-        if (isPlugin('Zapier') && $this->isPluginDir('Zapier')) {
-            $this->app->register(\App\Plugins\Zapier\ServiceProvider::class);
-        }
-        if ($this->isModuleDir('Location')) {
-            $this->app->register(\App\Location\LocationServiceProvider::class);
+        $activePlugins = \DB::table('plugins')->select('name', 'path')->where('status', 1)->get();
+        foreach ($activePlugins as $activePlugin) {
+            if ($this->isPluginDir($activePlugin->name)) {
+                $class =  '\App\Plugins\\'.$activePlugin->name.'\ServiceProvider';
+                $this->app->register($class);
+            }
         }
     }
 
