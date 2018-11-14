@@ -675,7 +675,7 @@ class TicketController extends Controller
             $token = str_random(60);
             $user->remember_token = $token;
             // mail user his/her password
-            \Event::fire(new \App\Events\ClientTicketFormPost($from_data, $emailadd, $source));
+            //\Event::fire(new \App\Events\ClientTicketFormPost($from_data, $emailadd, $source));
             if ($user->save()) {
                 $user_id = $user->id;
                 $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
@@ -708,6 +708,7 @@ class TicketController extends Controller
             $username = $checkemail->first_name;
             $user_id = $checkemail->id;
         }
+        \Event::fire(new \App\Events\ClientTicketFormPost($from_data, $emailadd, $source));
         $ticket_number = $this->check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $status);
 
         $ticket_number2 = $ticket_number[0];
