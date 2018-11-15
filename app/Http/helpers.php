@@ -191,21 +191,21 @@ function faveoDate($date = '', $format = '', $tz = '')
     if (!is_object($date)) {
         $date = carbon($date);
     }
+
     if (!$format || !$tz) {
         $system = App\Model\helpdesk\Settings\System::select('time_zone', 'date_time_format')->first();
     }
     if (!$format) {
-        $format = $system->date_time_format;
+        $format = is_numeric($system->date_time_format) ? DB::table('date_time_format')->where('id', $system->date_time_format)->value('format') :  $system->date_time_format;
     }
     if (!$tz) {
-        $tz = $system->time_zone;
+        $tz = is_numeric($system->time_zone) ? DB::table('timezone')->where('id', $system->time_zone)->value('name') : $system->time_zone;
     }
 
     try {
         if ($format == 'human-read') {
             return $date->tz($tz)->diffForHumans();
         }
-
         return $date->tz($tz)->format($format);
     } catch (\Exception $ex) {
         return 'invalid';
@@ -289,4 +289,14 @@ function createDB(string $dbName)
     //disconnecting it will remove database config from the memory so that new database name can be
     // populated
     \DB::disconnect('mysql');
+}
+
+/**
+ * parse the carbon
+ * @param string $date
+ * @return \Carbon\Carbon
+ */
+function carbon($date)
+{
+    return \Carbon\Carbon::parse($date);
 }

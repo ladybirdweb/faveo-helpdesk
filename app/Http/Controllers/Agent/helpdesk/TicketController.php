@@ -1048,6 +1048,8 @@ class TicketController extends Controller
                 }
             }
         }
+        \Event::fire('after.ticket.created', array(['ticket' => $ticket, 'form_data' => $form_data]));
+
         // store collaborators
         $this->storeCollaborators($headers, $id);
         if ($this->ticketThread($subject, $body, $id, $user_id) == true) {
