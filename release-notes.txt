@@ -8,6 +8,19 @@
                                           | |                         
                                           |_|                         
 |=====================================================
+| v1.10.3 Bug Fix patch with plugin working update
+|=====================================================
+- Changed plugin settings to activate and deactivate plugin by removing the update process for the config/app.php file.
+- Changed plugin ServiceProvider registration technique by removing the hard-coded code AppServiceProvider.php file. Now We are registering all plugins' ServiceProvider classes available for active plugins with status as 1 in plugins table in the database. It provides more dynamicity to developers so they need not worry about registering their custom plugin's ServiceProvider.
+- Added new event "after.ticket.created" which gets fired after tickets get created and contain ticket data. It can be useful for developers for creating new plugins which need to perform a certain action after the ticket is created.
+- Updated helpers.php added new method carbon() to parse string date into carbon date object.
+- Added Spanish language translation (translates system up to 60% in Spanish)
+- Forget password validation exception removed dd() statement
+- Updated isInstall() method get installation value from Config instead of directly calling from .env
+- SLA deletion issue fixed #714
+- Updates for Plugin working
+
+|=====================================================
 | v1.10.2 Bug Fix Patch
 |=====================================================
 ### Bugs Fixed
