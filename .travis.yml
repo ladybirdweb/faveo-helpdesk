@@ -1,33 +1,20 @@
-# Required to run your project under the correct environment.
 language: php
-
-#Use Mysql service for DB to run testcases
 services:
-  - mysql
-
-# Versions of PHP you want your project run with.
+- mysql
 php:
-  - 7.1
-  - 7.2
-
-# Commands to be run before your environment runs.
+- 7.1
+- 7.2
 before_script:
-  - composer self-update
-  - composer install --prefer-source --no-interaction --dev
-  - php artisan testing-setup --username="root"
-
-# Commands you want to run that will verify your build.
+- composer self-update
+- composer install --prefer-source --no-interaction --dev
+- php artisan testing-setup --username="root"
 script: phpunit
-
-# allow_failures: Allow this build to fail under the specified environments.
-# fast_finish: If your build fails do not continue trying to build, just stop.
 matrix:
   allow_failures:
-    - php: 5.5
+  - php: 5.5
   fast_finish: true
-
-# Customize when the notification emails are sent.
 notifications:
-    on_success: always
-    on_failure: always
-    slack: faveohelpdesk:MxVioJBPLDmxiddgzp8PXBqv
+  on_success: always
+  on_failure: always
+  slack:
+    secure: djoFp1ZxlHrNFjG0z8Tjvclcq6sHNhLE9dAThZvt9auh8dy5tr1WTeslhbnvvI+71jzg6OhhXXOGuuRxgDs8hFkSoo0yn0sRJsnSXBg2ABzxWqZkmz8IPAbYRxWJC7hSi2/OC6+W93o7/xJ54+kda7UJtkkzIuKz2BUkU77ZBubk6nh7s7vwInsS7GUGDAvhnCflkChEyLZzI5iII/xAwUMCz1o6GZv3TK28M+vXbqTZr28p7lrTwOxhTM4zeC4aICZbzHFMabMKDttyZppT4Hm1+dyoMFzHMhB+Xp2Uj9oFSewZiXSFOnJzm7v++OKnx1r6h7Ztl0E6yoLYtcSvUnKnbokMG3aeJzOE6Lh70bzFBMBDF08iVnCtRKCRwQz8dHBNob2JxZKXmSzvcwNAqYQF4ItnvmUqEy4MN7ua3b8nrImk5IXeeTtLzvlXovMOzaXE0f4InFC8jnBlWIr8mze59Gf9rVbH6yJ+A7rqc/PeVOPjp7Wk4XYxAGzD4tizIBr8LOz0fpq+HoZkVVbAMCiBBRNr2CN7nCq7M8upojwetXo5LVkFdXy+6CEIX493J1asXaBq6nEHi0UVDnw4kT9+wThvnF2isveLdREzjHmC6w0ivY62M8HG0mnlc7fPKmzDsTuEmf2U/lkcNla+sJ1f16dUQr8whi7XFufGZZM=
