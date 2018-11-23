@@ -8,6 +8,11 @@
                                           | |                         
                                           |_|                         
 |=====================================================
+| v1.10.4 Security patch for Slack channel
+|=====================================================
+While integrating slack notifications in Travis for builds and PRs token for SLACK channel was not encrypted allowing anyone to use the credentials and post in the Slack channel as a Travis user. This update encrypts the slack token to fix the issue.
+
+|=====================================================
 | v1.10.3 Bug Fix patch with plugin working update
 |=====================================================
 - Changed plugin settings to activate and deactivate plugin by removing the update process for the config/app.php file.
