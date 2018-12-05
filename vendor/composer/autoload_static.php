@@ -9,6 +9,7 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
@@ -87,6 +88,7 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
             'Symfony\\Polyfill\\Php56\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
+            'Symfony\\Contracts\\' => 18,
             'Symfony\\Component\\Yaml\\' => 23,
             'Symfony\\Component\\VarDumper\\' => 28,
             'Symfony\\Component\\Translation\\' => 30,
@@ -144,6 +146,8 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         'J' => 
         array (
             'JmesPath\\' => 9,
+            'JakubOnderka\\PhpConsoleHighlighter\\' => 35,
+            'JakubOnderka\\PhpConsoleColor\\' => 29,
         ),
         'I' => 
         array (
@@ -157,6 +161,7 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
+            'Gitonomy\\Git\\' => 13,
             'Giggsey\\Locale\\' => 15,
         ),
         'F' => 
@@ -172,6 +177,7 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         array (
             'Dotenv\\' => 7,
             'Doctrine\\Instantiator\\' => 22,
+            'Doctrine\\DBAL\\' => 14,
             'Doctrine\\Common\\Inflector\\' => 26,
             'Doctrine\\Common\\Cache\\' => 22,
             'Doctrine\\Common\\' => 16,
@@ -315,6 +321,10 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         'Symfony\\Polyfill\\Ctype\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
+        ),
+        'Symfony\\Contracts\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/contracts',
         ),
         'Symfony\\Component\\Yaml\\' => 
         array (
@@ -472,6 +482,14 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         array (
             0 => __DIR__ . '/..' . '/mtdowling/jmespath.php/src',
         ),
+        'JakubOnderka\\PhpConsoleHighlighter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jakub-onderka/php-console-highlighter/src',
+        ),
+        'JakubOnderka\\PhpConsoleColor\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src',
+        ),
         'Iso3166\\' => 
         array (
             0 => __DIR__ . '/..' . '/julien-c/iso3166/src',
@@ -500,6 +518,10 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
+        'Gitonomy\\Git\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/gitonomy/gitlib/src/Gitonomy/Git',
+        ),
         'Giggsey\\Locale\\' => 
         array (
             0 => __DIR__ . '/..' . '/giggsey/locale/src',
@@ -523,6 +545,10 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         'Doctrine\\Instantiator\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
+        ),
+        'Doctrine\\DBAL\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL',
         ),
         'Doctrine\\Common\\Inflector\\' => 
         array (
@@ -616,17 +642,6 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
                 0 => __DIR__ . '/..' . '/maatwebsite/excel/src',
             ),
         ),
-        'J' => 
-        array (
-            'JakubOnderka\\PhpConsoleHighlighter' => 
-            array (
-                0 => __DIR__ . '/..' . '/jakub-onderka/php-console-highlighter/src',
-            ),
-            'JakubOnderka\\PhpConsoleColor' => 
-            array (
-                0 => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src',
-            ),
-        ),
         'G' => 
         array (
             'Guzzle\\Tests' => 
@@ -655,10 +670,6 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         ),
         'D' => 
         array (
-            'Doctrine\\DBAL\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/doctrine/dbal/lib',
-            ),
             'Doctrine\\Common\\Lexer\\' => 
             array (
                 0 => __DIR__ . '/..' . '/doctrine/lexer/lib',
@@ -728,6 +739,18 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         'Canvas' => __DIR__ . '/..' . '/dompdf/dompdf/include/canvas.cls.php',
         'Canvas_Factory' => __DIR__ . '/..' . '/dompdf/dompdf/include/canvas_factory.cls.php',
         'Cellmap' => __DIR__ . '/..' . '/dompdf/dompdf/include/cellmap.cls.php',
+        'Codacy\\Coverage\\Application' => __DIR__ . '/..' . '/codacy/coverage/src/Codacy/Coverage/Application.php',
+        'Codacy\\Coverage\\Command\\Clover' => __DIR__ . '/..' . '/codacy/coverage/src/Codacy/Coverage/Command/Clover.php',
+        'Codacy\\Coverage\\Command\\Phpunit' => __DIR__ . '/..' . '/codacy/coverage/src/Codacy/Coverage/Command/Phpunit.php',
+        'Codacy\\Coverage\\Parser\\CloverParser' => __DIR__ . '/..' . '/codacy/coverage/src/Codacy/Coverage/Parser/CloverParser.php',
+        'Codacy\\Coverage\\Parser\\IParser' => __DIR__ . '/..' . '/codacy/coverage/src/Codacy/Coverage/Parser/Parser.php',
+        'Codacy\\Coverage\\Parser\\PhpUnitXmlParser' => __DIR__ . '/..' . '/codacy/coverage/src/Codacy/Coverage/Parser/PhpUnitXmlParser.php',
+        'Codacy\\Coverage\\Parser\\XMLParser' => __DIR__ . '/..' . '/codacy/coverage/src/Codacy/Coverage/Parser/Parser.php',
+        'Codacy\\Coverage\\Report\\CoverageReport' => __DIR__ . '/..' . '/codacy/coverage/src/Codacy/Coverage/Report/CoverageReport.php',
+        'Codacy\\Coverage\\Report\\FileReport' => __DIR__ . '/..' . '/codacy/coverage/src/Codacy/Coverage/Report/FileReport.php',
+        'Codacy\\Coverage\\Util\\CodacyApiClient' => __DIR__ . '/..' . '/codacy/coverage/src/Codacy/Coverage/Util/CodacyApiClient.php',
+        'Codacy\\Coverage\\Util\\GitClient' => __DIR__ . '/..' . '/codacy/coverage/src/Codacy/Coverage/Util/GitClient.php',
+        'Codacy\\Coverage\\Util\\JsonProducer' => __DIR__ . '/..' . '/codacy/coverage/src/Codacy/Coverage/Util/JsonProducer.php',
         'CreateApiSettingsTable' => __DIR__ . '/../..' . '/database/migrations/2016_05_11_105244_create_api_settings_table.php',
         'CreateBanlistTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_banlist_table.php',
         'CreateBarNotificationsTable' => __DIR__ . '/../..' . '/database/migrations/2016_05_10_102604_create_bar_notifications_table.php',
@@ -998,6 +1021,8 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         'PHPUnit\\Framework\\MockObject\\Matcher\\Parameters' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/Matcher/Parameters.php',
         'PHPUnit\\Framework\\MockObject\\Matcher\\StatelessInvocation' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/Matcher/StatelessInvocation.php',
         'PHPUnit\\Framework\\MockObject\\MockBuilder' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/MockBuilder.php',
+        'PHPUnit\\Framework\\MockObject\\MockMethod' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/MockMethod.php',
+        'PHPUnit\\Framework\\MockObject\\MockMethodSet' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/MockMethodSet.php',
         'PHPUnit\\Framework\\MockObject\\MockObject' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/ForwardCompatibility/MockObject.php',
         'PHPUnit\\Framework\\MockObject\\RuntimeException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/Exception/RuntimeException.php',
         'PHPUnit\\Framework\\MockObject\\Stub' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/Stub.php',
@@ -1091,6 +1116,7 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         'PHPUnit\\Util\\TestDox\\XmlResultPrinter' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TestDox/XmlResultPrinter.php',
         'PHPUnit\\Util\\TextTestListRenderer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TextTestListRenderer.php',
         'PHPUnit\\Util\\Type' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Type.php',
+        'PHPUnit\\Util\\XdebugFilterScriptGenerator' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XdebugFilterScriptGenerator.php',
         'PHPUnit\\Util\\Xml' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Xml.php',
         'PHPUnit\\Util\\XmlTestListRenderer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XmlTestListRenderer.php',
         'PHPUnit_Framework_MockObject_MockObject' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/MockObject.php',
@@ -1453,6 +1479,7 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         'Table_Row_Group_Frame_Reflower' => __DIR__ . '/..' . '/dompdf/dompdf/include/table_row_group_frame_reflower.cls.php',
         'Table_Row_Group_Renderer' => __DIR__ . '/..' . '/dompdf/dompdf/include/table_row_group_renderer.cls.php',
         'Table_Row_Positioner' => __DIR__ . '/..' . '/dompdf/dompdf/include/table_row_positioner.cls.php',
+        'TestCase' => __DIR__ . '/../..' . '/tests/TestCase.php',
         'Text_Frame_Decorator' => __DIR__ . '/..' . '/dompdf/dompdf/include/text_frame_decorator.cls.php',
         'Text_Frame_Reflower' => __DIR__ . '/..' . '/dompdf/dompdf/include/text_frame_reflower.cls.php',
         'Text_Renderer' => __DIR__ . '/..' . '/dompdf/dompdf/include/text_renderer.cls.php',

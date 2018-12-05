@@ -28,12 +28,11 @@ return array (
   ),
   'fixedLine' => 
   array (
-    'NationalNumberPattern' => '(?:2[13]|3(?:0\\d|[14])|[5-7][14]|41|8[1468])\\d{6}',
+    'NationalNumberPattern' => '(?:2[13]|[35-7][14]|41|8[1468])\\d{6}',
     'ExampleNumber' => '21212862',
     'PossibleLength' => 
     array (
       0 => 8,
-      1 => 9,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -114,9 +113,11 @@ return array (
   ),
   'uan' => 
   array (
+    'NationalNumberPattern' => '30\\d{7}',
+    'ExampleNumber' => '301234567',
     'PossibleLength' => 
     array (
-      0 => -1,
+      0 => 9,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -152,19 +153,7 @@ return array (
   array (
     0 => 
     array (
-      'pattern' => '(20)(\\d{2})(\\d{3})(\\d{3})',
-      'format' => '$1 $2 $3 $4',
-      'leadingDigitsPatterns' => 
-      array (
-        0 => '20',
-      ),
-      'nationalPrefixFormattingRule' => '0$1',
-      'domesticCarrierCodeFormattingRule' => '',
-      'nationalPrefixOptionalWhenFormatting' => false,
-    ),
-    1 => 
-    array (
-      'pattern' => '([2-8]\\d)(\\d{3})(\\d{3})',
+      'pattern' => '(\\d{2})(\\d{3})(\\d{3})',
       'format' => '$1 $2 $3',
       'leadingDigitsPatterns' => 
       array (
@@ -174,13 +163,25 @@ return array (
       'domesticCarrierCodeFormattingRule' => '',
       'nationalPrefixOptionalWhenFormatting' => false,
     ),
-    2 => 
+    1 => 
     array (
-      'pattern' => '(30)(\\d{2})(\\d{2})(\\d{3})',
+      'pattern' => '(\\d{2})(\\d{2})(\\d{2})(\\d{3})',
       'format' => '$1 $2 $3 $4',
       'leadingDigitsPatterns' => 
       array (
-        0 => '30',
+        0 => '3',
+      ),
+      'nationalPrefixFormattingRule' => '0$1',
+      'domesticCarrierCodeFormattingRule' => '',
+      'nationalPrefixOptionalWhenFormatting' => false,
+    ),
+    2 => 
+    array (
+      'pattern' => '(\\d{2})(\\d{2})(\\d{3})(\\d{3})',
+      'format' => '$1 $2 $3 $4',
+      'leadingDigitsPatterns' => 
+      array (
+        0 => '2',
       ),
       'nationalPrefixFormattingRule' => '0$1',
       'domesticCarrierCodeFormattingRule' => '',

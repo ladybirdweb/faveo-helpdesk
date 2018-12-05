@@ -1,0 +1,26 @@
+machine:
+  php:
+    version: 7.1.6
+
+dependencies:
+  pre:
+    - curl -s http://getcomposer.org/installer | php
+    - php composer.phar install -n
+    - go get github.com/aktau/github-release
+    - wget -O box.phar https://github.com/box-project/box2/releases/download/2.7.5/box-2.7.5.phar
+
+test:
+  post:
+    - php vendor/bin/phpunit --coverage-clover build/coverage/xml tests
+
+deployment:
+  master:
+    branch: master
+    commands:
+      - php bin/codacycoverage clover build/coverage/xml
+  release:
+    tag: /[0-9]+(\.[0-9]+)*/
+    commands:
+      - php -d phar.readonly=0 box.phar build
+      - git config user.name $CIRCLE_PROJECT_USERNAME
+      - github-release upload --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag $CIRCLE_TAG --name codacy-coverage.phar --file build/codacy-coverage.phar

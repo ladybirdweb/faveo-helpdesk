@@ -51,12 +51,25 @@ class RetryMiddleware
     /**
      * Creates a default AWS retry decider function.
      *
-     * @param int $maxRetries
+     * The optional $additionalRetryConfig parameter is an associative array
+     * that specifies additional retry conditions on top of the ones specified
+     * by default by the Aws\RetryMiddleware class, with the following keys:
      *
+     * - errorCodes: (string[]) An indexed array of AWS exception codes to retry.
+     *   Optional.
+     * - statusCodes: (int[]) An indexed array of HTTP status codes to retry.
+     *   Optional.
+     * - curlErrors: (int[]) An indexed array of Curl error codes to retry. Note
+     *   these should be valid Curl constants. Optional.
+     *
+     * @param int $maxRetries
+     * @param array $additionalRetryConfig
      * @return callable
      */
-    public static function createDefaultDecider($maxRetries = 3)
-    {
+    public static function createDefaultDecider(
+        $maxRetries = 3,
+        $additionalRetryConfig = []
+    ) {
         $retryCurlErrors = [];
         if (extension_loaded('curl')) {
             $retryCurlErrors[CURLE_RECV_ERROR] = true;
@@ -68,56 +81,104 @@ class RetryMiddleware
             RequestInterface $request,
             ResultInterface $result = null,
             $error = null
-        ) use ($maxRetries, $retryCurlErrors) {
+        ) use ($maxRetries, $retryCurlErrors, $additionalRetryConfig) {
             // Allow command-level options to override this value
             $maxRetries = null !== $command['@retries'] ?
                 $command['@retries']
                 : $maxRetries;
 
+            $isRetryable = self::isRetryable(
+                $result,
+                $error,
+                $retryCurlErrors,
+                $additionalRetryConfig
+            );
+
             if ($retries >= $maxRetries) {
+                if (!empty($error)
+                    && $error instanceof AwsException
+                    && $isRetryable
+                ) {
+                    $error->setMaxRetriesExceeded();
+                }
                 return false;
             }
 
-            if (!$error) {
-                return isset(self::$retryStatusCodes[$result['@metadata']['statusCode']]);
-            }
-
-            if (!($error instanceof AwsException)) {
-                return false;
-            }
-
-            if ($error->isConnectionError()) {
-                return true;
-            }
-
-            if (isset(self::$retryCodes[$error->getAwsErrorCode()])) {
-                return true;
-            }
-
-            if (isset(self::$retryStatusCodes[$error->getStatusCode()])) {
-                return true;
-            }
-
-            if (count($retryCurlErrors)
-                && ($previous = $error->getPrevious())
-                && $previous instanceof RequestException
-            ) {
-                if (method_exists($previous, 'getHandlerContext')) {
-                    $context = $previous->getHandlerContext();
-                    return !empty($context['errno'])
-                        && isset($retryCurlErrors[$context['errno']]);
-                }
-
-                $message = $previous->getMessage();
-                foreach (array_keys($retryCurlErrors) as $curlError) {
-                    if (strpos($message, 'cURL error ' . $curlError . ':') === 0) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
+            return $isRetryable;
         };
+    }
+
+    private static function isRetryable(
+        $result,
+        $error,
+        $retryCurlErrors,
+        $additionalRetryConfig = []
+    ) {
+        $errorCodes = self::$retryCodes;
+        if (!empty($additionalRetryConfig['errorCodes'])
+            && is_array($additionalRetryConfig['errorCodes'])
+        ) {
+            foreach($additionalRetryConfig['errorCodes'] as $code) {
+                $errorCodes[$code] = true;
+            }
+        }
+
+        $statusCodes = self::$retryStatusCodes;
+        if (!empty($additionalRetryConfig['statusCodes'])
+            && is_array($additionalRetryConfig['statusCodes'])
+        ) {
+            foreach($additionalRetryConfig['statusCodes'] as $code) {
+                $statusCodes[$code] = true;
+            }
+        }
+
+        if (!empty($additionalRetryConfig['curlErrors'])
+            && is_array($additionalRetryConfig['curlErrors'])
+        ) {
+            foreach($additionalRetryConfig['curlErrors'] as $code) {
+                $retryCurlErrors[$code] = true;
+            }
+        }
+
+        if (!$error) {
+            return isset($statusCodes[$result['@metadata']['statusCode']]);
+        }
+
+        if (!($error instanceof AwsException)) {
+            return false;
+        }
+
+        if ($error->isConnectionError()) {
+            return true;
+        }
+
+        if (isset($errorCodes[$error->getAwsErrorCode()])) {
+            return true;
+        }
+
+        if (isset($statusCodes[$error->getStatusCode()])) {
+            return true;
+        }
+
+        if (count($retryCurlErrors)
+            && ($previous = $error->getPrevious())
+            && $previous instanceof RequestException
+        ) {
+            if (method_exists($previous, 'getHandlerContext')) {
+                $context = $previous->getHandlerContext();
+                return !empty($context['errno'])
+                    && isset($retryCurlErrors[$context['errno']]);
+            }
+
+            $message = $previous->getMessage();
+            foreach (array_keys($retryCurlErrors) as $curlError) {
+                if (strpos($message, 'cURL error ' . $curlError . ':') === 0) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -148,6 +209,7 @@ class RetryMiddleware
     ) {
         $retries = 0;
         $requestStats = [];
+        $monitoringEvents = [];
         $handler = $this->nextHandler;
         $decider = $this->decider;
         $delay = $this->delay;
@@ -162,10 +224,18 @@ class RetryMiddleware
             $request,
             &$retries,
             &$requestStats,
+            &$monitoringEvents,
             &$g
         ) {
             $this->updateHttpStats($value, $requestStats);
 
+            if ($value instanceof MonitoringEventsInterface) {
+                $reversedEvents = array_reverse($monitoringEvents);
+                $monitoringEvents = array_merge($monitoringEvents, $value->getMonitoringEvents());
+                foreach ($reversedEvents as $event) {
+                    $value->prependMonitoringEvent($event);
+                }
+            }
             if ($value instanceof \Exception || $value instanceof \Throwable) {
                 if (!$decider($retries, $command, $request, null, $value)) {
                     return Promise\rejection_for(

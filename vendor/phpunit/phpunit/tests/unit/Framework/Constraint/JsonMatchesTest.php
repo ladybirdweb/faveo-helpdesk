@@ -14,7 +14,7 @@ use PHPUnit\Util\Json;
 
 class JsonMatchesTest extends ConstraintTestCase
 {
-    public static function evaluateDataprovider()
+    public static function evaluateDataprovider(): array
     {
         return [
             'valid JSON'                              => [true, \json_encode(['Mascott'                           => 'Tux']), \json_encode(['Mascott'                           => 'Tux'])],
@@ -31,11 +31,11 @@ class JsonMatchesTest extends ConstraintTestCase
             'single boolean valid json'               => [true, 'true', 'true'],
             'single number valid json'                => [true, '5.3', '5.3'],
             'single null valid json'                  => [true, 'null', 'null'],
-            'objects are not arrays'                  => [false, '{}', '[]']
+            'objects are not arrays'                  => [false, '{}', '[]'],
         ];
     }
 
-    public static function evaluateThrowsExpectationFailedExceptionWhenJsonIsValidButDoesNotMatchDataprovider()
+    public static function evaluateThrowsExpectationFailedExceptionWhenJsonIsValidButDoesNotMatchDataprovider(): array
     {
         return [
             'error UTF-8'                             => [\json_encode('\xB1\x31'), \json_encode(['Mascott' => 'Tux'])],
@@ -43,7 +43,7 @@ class JsonMatchesTest extends ConstraintTestCase
             'string type not equals boolean'          => ['{"age": "true"}', '{"age": true}'],
             'string type not equals null'             => ['{"age": "null"}', '{"age": null}'],
             'null field different from missing field' => ['{"present": true, "missing": null}', '{"present": true}'],
-            'array elements are ordered'              => ['["first", "second"]', '["second", "first"]']
+            'array elements are ordered'              => ['["first", "second"]', '["second", "first"]'],
         ];
     }
 

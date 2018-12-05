@@ -174,7 +174,7 @@ return array (
       'format' => '$1 $2-$3-$4',
       'leadingDigitsPatterns' => 
       array (
-        0 => '13|[2-5]',
+        0 => '[1-5]',
       ),
       'nationalPrefixFormattingRule' => '(8 $1)',
       'domesticCarrierCodeFormattingRule' => '',

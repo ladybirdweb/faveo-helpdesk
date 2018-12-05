@@ -63,20 +63,19 @@ final class NamePrettifier
         $annotations                = $test->getAnnotations();
         $annotationWithPlaceholders = false;
 
+        $callback = static function (string $variable): string {
+            return \sprintf('/%s(?=\b)/', \preg_quote($variable, '/'));
+        };
+
         if (isset($annotations['method']['testdox'][0])) {
             $result = $annotations['method']['testdox'][0];
 
             if (\strpos($result, '$') !== false) {
                 $annotation   = $annotations['method']['testdox'][0];
                 $providedData = $this->mapTestMethodParameterNamesToProvidedDataValues($test);
+                $variables    = \array_map($callback, \array_keys($providedData));
 
-                $result = \trim(
-                    \str_replace(
-                        \array_keys($providedData),
-                        $providedData,
-                        $annotation
-                    )
-                );
+                $result = \trim(\preg_replace($variables, $providedData, $annotation));
 
                 $annotationWithPlaceholders = true;
             }
@@ -85,7 +84,7 @@ final class NamePrettifier
         }
 
         if ($test->usesDataProvider() && !$annotationWithPlaceholders) {
-            $result .= ' data set "' . $test->dataDescription() . '"';
+            $result .= $test->getDataSetAsString(false);
         }
 
         return $result;
@@ -158,11 +157,15 @@ final class NamePrettifier
     {
         $reflector          = new \ReflectionMethod(\get_class($test), $test->getName(false));
         $providedData       = [];
-        $providedDataValues = $test->getProvidedData();
+        $providedDataValues = \array_values($test->getProvidedData());
         $i                  = 0;
 
         foreach ($reflector->getParameters() as $parameter) {
-            $value = $providedDataValues[$i++];
+            if (!\array_key_exists($i, $providedDataValues) && $parameter->isDefaultValueAvailable()) {
+                $providedDataValues[$i] = $parameter->getDefaultValue();
+            }
+
+            $value = $providedDataValues[$i++] ?? null;
 
             if (\is_object($value)) {
                 $reflector = new \ReflectionObject($value);
@@ -176,7 +179,7 @@ final class NamePrettifier
                 $value = \gettype($value);
             }
 
-            if (\is_bool($value) || \is_numeric($value)) {
+            if (\is_bool($value) || \is_int($value) || \is_float($value)) {
                 $exporter = new Exporter;
 
                 $value = $exporter->export($value);

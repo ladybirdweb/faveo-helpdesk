@@ -455,6 +455,9 @@ class UrlMatcherTest extends TestCase
     {
         $coll = new RouteCollection();
         $route = new Route('/foo/{bar}');
+        $route->setCondition('request.getBaseUrl() == "/bar"');
+        $coll->add('bar', $route);
+        $route = new Route('/foo/{bar}');
         $route->setCondition('request.getBaseUrl() == "/sub/front.php" and request.getPathInfo() == "/foo/bar"');
         $coll->add('foo', $route);
         $matcher = $this->getUrlMatcher($coll, new RequestContext('/sub/front.php'));
@@ -678,6 +681,15 @@ class UrlMatcherTest extends TestCase
 
         $matcher = $this->getUrlMatcher($coll);
         $this->assertEquals('b', $matcher->match('/bar/abc.123')['_route']);
+    }
+
+    public function testSlashVariant()
+    {
+        $coll = new RouteCollection();
+        $coll->add('a', new Route('/foo/{bar}', array(), array('bar' => '.*')));
+
+        $matcher = $this->getUrlMatcher($coll);
+        $this->assertEquals('a', $matcher->match('/foo/')['_route']);
     }
 
     protected function getUrlMatcher(RouteCollection $routes, RequestContext $context = null)
