@@ -268,8 +268,8 @@ class PhpMailController extends Controller
                 }
             });
 
-            if(Mail::failures() > 0){
-                throw new \Exception('There are errors: '. Mail::failures());
+            if(count(Mail::failures()) > 0){
+                throw new \Exception('There are errors: '. count(Mail::failures()));
             }
 
             return $mail;
