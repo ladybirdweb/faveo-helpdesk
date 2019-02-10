@@ -39,7 +39,8 @@ class Kernel extends ConsoleKernel
             $this->execute($schedule, 'notification');
             $this->execute($schedule, 'work');
             if ($this->getCurrentQueue() != 'sync') {
-                $schedule->command('queue:listen '.$this->getCurrentQueue().' --sleep 60')->everyMinute();
+                //TODO remove this. Use supervisord.
+                //$schedule->command('queue:listen '.$this->getCurrentQueue().' --sleep 60')->everyMinute();
             }
         }
     }
