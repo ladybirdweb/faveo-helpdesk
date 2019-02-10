@@ -16,7 +16,8 @@ return [
       |
      */
 
-    'default' => 'sync',
+    'default' => env('QUEUE_DRIVER', 'sync'),
+
     /*
       |--------------------------------------------------------------------------
       | Queue Connections
