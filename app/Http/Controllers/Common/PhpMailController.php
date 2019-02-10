@@ -236,47 +236,42 @@ class PhpMailController extends Controller
         //dd($to, $toname, $subject, $data, $cc, $attach);
         //dd(\Config::get('mail'));
         //dd($attach);
-        try{
-            $mail = Mail::send('emails.mail', ['data' => $data], function ($m) use ($to, $subject, $toname, $cc, $attach, $from_address) {
-                $m->to($to, $toname)->subject($subject);
-                $m->from($from_address->email_address, $from_address->email_name);
-                if ($cc != null) {
-                    foreach ($cc as $collaborator) {
-                        //mail to collaborators
-                        $collab_user_id = $collaborator->user_id;
-                        $user_id_collab = User::where('id', '=', $collab_user_id)->first();
-                        $collab_email = $user_id_collab->email;
-                        $m->cc($collab_email);
-                    }
+        $mail = Mail::send('emails.mail', ['data' => $data], function ($m) use ($to, $subject, $toname, $cc, $attach, $from_address) {
+            $m->to($to, $toname)->subject($subject);
+            $m->from($from_address->email_address, $from_address->email_name);
+            if ($cc != null) {
+                foreach ($cc as $collaborator) {
+                    //mail to collaborators
+                    $collab_user_id = $collaborator->user_id;
+                    $user_id_collab = User::where('id', '=', $collab_user_id)->first();
+                    $collab_email = $user_id_collab->email;
+                    $m->cc($collab_email);
                 }
-
-                //            $mail->addBCC($bc);
-                $size = ($attach) ? count($attach) : 0;
-                if ($size > 0) {
-                    for ($i = 0; $i < $size; $i++) {
-                        if (is_array($attach) && array_key_exists($i, $attach)) {
-                            $mode = 'normal';
-                            if (is_array($attach[$i]) && array_key_exists('mode', $attach[$i])) {
-                                $mode = $attach[$i]['mode'];
-                            }
-                            $file = $attach[$i]['file_path'];
-                            $name = $attach[$i]['file_name'];
-                            $mime = $attach[$i]['mime'];
-                            $this->attachmentMode($m, $file, $name, $mime, $mode);
-                        }
-                    }
-                }
-            });
-
-            if(count(Mail::failures()) > 0){
-                throw new \Exception('There are errors: '. count(Mail::failures()));
             }
 
-            return $mail;
+            //            $mail->addBCC($bc);
+            $size = ($attach) ? count($attach) : 0;
+            if ($size > 0) {
+                for ($i = 0; $i < $size; $i++) {
+                    if (is_array($attach) && array_key_exists($i, $attach)) {
+                        $mode = 'normal';
+                        if (is_array($attach[$i]) && array_key_exists('mode', $attach[$i])) {
+                            $mode = $attach[$i]['mode'];
+                        }
+                        $file = $attach[$i]['file_path'];
+                        $name = $attach[$i]['file_name'];
+                        $mime = $attach[$i]['mime'];
+                        $this->attachmentMode($m, $file, $name, $mime, $mode);
+                    }
+                }
+            }
+        });
+
+        if (is_object($mail) || (is_object($mail) && $mail->getStatusCode() == 200)) {
+            $mail = 1;
         }
-        catch (\Exception $exception){
-            loging('mail', $exception, 'error');
-        }
+
+        return $mail;
     }
 
     public function setQueue()
