@@ -60,9 +60,10 @@ return [
             'encrypt' => true,
         ],
         'redis' => [
-            'driver' => '',
-            'queue'  => '',
-            'expire' => 60,
+            'driver' => 'redis',
+            'connection' => 'default',
+            'queue' => 'support',
+            'retry_after' => 90,
         ],
     ],
     /*
