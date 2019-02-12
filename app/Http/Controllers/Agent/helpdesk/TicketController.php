@@ -86,7 +86,7 @@ class TicketController extends Controller
         $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
         $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
 
-        return view('themes.default1.agent.helpdesk.ticket.new', compact('email_mandatory', 'settings'))->with('phonecode', $pcode);
+        return view('agent.helpdesk.ticket.new', compact('email_mandatory', 'settings'))->with('phonecode', $pcode);
     }
 
     /**
@@ -236,7 +236,7 @@ class TicketController extends Controller
         $max_size_in_actual = $fileupload[1];
         $tickets_approval = Tickets::where('id', '=', $id)->first();
 
-        return view('themes.default1.agent.helpdesk.ticket.timeline', compact('tickets', 'max_size_in_bytes', 'max_size_in_actual', 'tickets_approval'), compact('thread', 'avg_rating'));
+        return view('agent.helpdesk.ticket.timeline', compact('tickets', 'max_size_in_bytes', 'max_size_in_actual', 'tickets_approval'), compact('thread', 'avg_rating'));
     }
 
     public function size()
@@ -497,7 +497,7 @@ class TicketController extends Controller
                 ->select('ticket_thread.title', 'tickets.ticket_number', 'department.name as department', 'help_topic.topic as helptopic')
                 ->first();
         $ticket = Tickets::where('tickets.id', '=', $id)->first();
-        $html = view('themes.default1.agent.helpdesk.ticket.pdf', compact('id', 'ticket', 'tickets'))->render();
+        $html = view('agent.helpdesk.ticket.pdf', compact('id', 'ticket', 'tickets'))->render();
         $html1 = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 
         return PDF::load($html1)->show();
@@ -1480,7 +1480,7 @@ class TicketController extends Controller
     public function stores($ticket_number)
     {
         $this->layout->header = $ticket_number;
-        $content = View::make('themes.default1.admin.tickets.ticketsearch', with(new Tickets()))
+        $content = View::make('admin.tickets.ticketsearch', with(new Tickets()))
                 ->with('header', $this->layout->header)
                 ->with('ticket_number', \App\Model\Tickets::stores($ticket_number));
         if (Request::header('X-PJAX')) {
@@ -1860,12 +1860,12 @@ class TicketController extends Controller
         $dept = Department::where('name', '=', $id)->first();
         if (Auth::user()->role == 'agent') {
             if (Auth::user()->primary_dpt == $dept->id) {
-                return view('themes.default1.agent.helpdesk.dept-ticket.closed', compact('id'));
+                return view('agent.helpdesk.dept-ticket.closed', compact('id'));
             } else {
                 return redirect()->back()->with('fails', 'Unauthorised!');
             }
         } else {
-            return view('themes.default1.agent.helpdesk.dept-ticket.closed', compact('id'));
+            return view('agent.helpdesk.dept-ticket.closed', compact('id'));
         }
     }
 
@@ -1879,12 +1879,12 @@ class TicketController extends Controller
         $dept = Department::where('name', '=', $id)->first();
         if (Auth::user()->role == 'agent') {
             if (Auth::user()->primary_dpt == $dept->id) {
-                return view('themes.default1.agent.helpdesk.dept-ticket.inprogress', compact('id'));
+                return view('agent.helpdesk.dept-ticket.inprogress', compact('id'));
             } else {
                 return redirect()->back()->with('fails', 'Unauthorised!');
             }
         } else {
-            return view('themes.default1.agent.helpdesk.dept-ticket.inprogress', compact('id'));
+            return view('agent.helpdesk.dept-ticket.inprogress', compact('id'));
         }
     }
 
@@ -2395,7 +2395,7 @@ class TicketController extends Controller
      */
     public function autofill()
     {
-        return view('themes.default1.agent.helpdesk.ticket.getautocomplete');
+        return view('agent.helpdesk.ticket.getautocomplete');
     }
 
     public function pdfThread($threadid)
@@ -2413,7 +2413,7 @@ class TicketController extends Controller
             $company = \App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
             $system = \App\Model\helpdesk\Settings\System::where('id', '=', '1')->first();
             $ticket = Tickets::where('id', $thread->ticket_id)->first();
-            $html = view('themes.default1.agent.helpdesk.ticket.thread-pdf', compact('thread', 'system', 'company', 'ticket'))->render();
+            $html = view('agent.helpdesk.ticket.thread-pdf', compact('thread', 'system', 'company', 'ticket'))->render();
             $html1 = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 
             return PDF::load($html1)->show();
@@ -2679,7 +2679,7 @@ class TicketController extends Controller
     {
         $table = $this->getTableFormat();
 
-        return view('themes.default1.agent.helpdesk.ticket.tickets', compact('table'));
+        return view('agent.helpdesk.ticket.tickets', compact('table'));
     }
 
     /**
@@ -2816,7 +2816,7 @@ class TicketController extends Controller
                         '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
                 ->noScript();
 
-        return view('themes.default1.agent.helpdesk.ticket.inbox', compact('table'));
+        return view('agent.helpdesk.ticket.inbox', compact('table'));
     }
 
     /**
@@ -2831,7 +2831,7 @@ class TicketController extends Controller
                         '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
                 ->noScript();
 
-        return view('themes.default1.agent.helpdesk.ticket.open', compact('table'));
+        return view('agent.helpdesk.ticket.open', compact('table'));
     }
 
     /**
@@ -2846,7 +2846,7 @@ class TicketController extends Controller
                         '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
                 ->noScript();
 
-        return view('themes.default1.agent.helpdesk.ticket.answered', compact('table'));
+        return view('agent.helpdesk.ticket.answered', compact('table'));
     }
 
     /**
@@ -2861,7 +2861,7 @@ class TicketController extends Controller
                         '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
                 ->noScript();
 
-        return view('themes.default1.agent.helpdesk.ticket.myticket', compact('table'));
+        return view('agent.helpdesk.ticket.myticket', compact('table'));
     }
 
     /**
@@ -2876,7 +2876,7 @@ class TicketController extends Controller
                         '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
                 ->noScript();
 
-        return view('themes.default1.agent.helpdesk.ticket.overdue', compact('table'));
+        return view('agent.helpdesk.ticket.overdue', compact('table'));
     }
 
     /**
@@ -2891,7 +2891,7 @@ class TicketController extends Controller
                         '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
                 ->noScript();
 
-        return view('themes.default1.agent.helpdesk.ticket.duetodayticket', compact('table'));
+        return view('agent.helpdesk.ticket.duetodayticket', compact('table'));
     }
 
     /**
@@ -2906,7 +2906,7 @@ class TicketController extends Controller
                         '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
                 ->noScript();
 
-        return view('themes.default1.agent.helpdesk.ticket.closed', compact('table'));
+        return view('agent.helpdesk.ticket.closed', compact('table'));
     }
 
     /**
@@ -2921,7 +2921,7 @@ class TicketController extends Controller
                         '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
                 ->noScript();
 
-        return view('themes.default1.agent.helpdesk.ticket.assigned', compact('table'));
+        return view('agent.helpdesk.ticket.assigned', compact('table'));
     }
 
     /**
@@ -2934,12 +2934,12 @@ class TicketController extends Controller
         $dept = Department::where('name', '=', $id)->first();
         if (Auth::user()->role == 'agent') {
             if (Auth::user()->primary_dpt == $dept->id) {
-                return view('themes.default1.agent.helpdesk.dept-ticket.tickets', compact('id'));
+                return view('agent.helpdesk.dept-ticket.tickets', compact('id'));
             } else {
                 return redirect()->back()->with('fails', 'Unauthorised!');
             }
         } else {
-            return view('themes.default1.agent.helpdesk.dept-ticket.tickets', compact('id'));
+            return view('agent.helpdesk.dept-ticket.tickets', compact('id'));
         }
     }
 
@@ -2956,7 +2956,7 @@ class TicketController extends Controller
                         '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
                 ->noScript();
 
-        return view('themes.default1.agent.helpdesk.dept-ticket.tickets', compact('dept', 'status', 'table'));
+        return view('agent.helpdesk.dept-ticket.tickets', compact('dept', 'status', 'table'));
     }
 
     /**
@@ -2971,7 +2971,7 @@ class TicketController extends Controller
                         '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
                 ->noScript();
 
-        return view('themes.default1.agent.helpdesk.ticket.trash', compact('table'));
+        return view('agent.helpdesk.ticket.trash', compact('table'));
     }
 
     /**
@@ -2986,7 +2986,7 @@ class TicketController extends Controller
                         '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
                 ->noScript();
 
-        return view('themes.default1.agent.helpdesk.ticket.unassigned', compact('table'));
+        return view('agent.helpdesk.ticket.unassigned', compact('table'));
     }
 
     /**
@@ -3001,7 +3001,7 @@ class TicketController extends Controller
                         '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
                 ->noScript();
 
-        return view('themes.default1.agent.helpdesk.ticket.myticket', compact('table'));
+        return view('agent.helpdesk.ticket.myticket', compact('table'));
     }
 
     /**
@@ -3015,7 +3015,7 @@ class TicketController extends Controller
                             '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
                     ->noScript();
 
-            return view('themes.default1.agent.helpdesk.followup.followup', compact('table'));
+            return view('agent.helpdesk.followup.followup', compact('table'));
         } catch (Exception $e) {
             return Redirect()->back()->with('fails', $e->getMessage());
         }

@@ -35,7 +35,7 @@ class HomeController extends Controller
     public function index()
     {
         // ksjdckjdsnc
-        return view('themes/default1/admin/dashboard');
+        return view('admin/dashboard');
     }
 
     public function getdata()

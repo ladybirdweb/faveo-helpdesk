@@ -46,7 +46,7 @@ class SlaController extends Controller
             /* Declare a Variable $slas to store all Values From Sla_plan Table */
             $slas = $sla->get();
             /* Listing the values From Sla_plan Table */
-            return view('themes.default1.admin.helpdesk.manage.sla.index', compact('slas'));
+            return view('admin.helpdesk.manage.sla.index', compact('slas'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -61,7 +61,7 @@ class SlaController extends Controller
     {
         try {
             /* Direct to Create Page */
-            return view('themes.default1.admin.helpdesk.manage.sla.create');
+            return view('admin.helpdesk.manage.sla.create');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -105,7 +105,7 @@ class SlaController extends Controller
             $slas->get();
             $sla = \DB::table('settings_ticket')->select('sla')->where('id', '=', 1)->first();
 
-            return view('themes.default1.admin.helpdesk.manage.sla.edit', compact('slas', 'sla'));
+            return view('admin.helpdesk.manage.sla.edit', compact('slas', 'sla'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }

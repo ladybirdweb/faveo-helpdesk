@@ -55,7 +55,7 @@ class CategoryController extends Controller
         /*  get the view of index of the catogorys with all attributes
           of category model */
         try {
-            return view('themes.default1.agent.kb.category.index');
+            return view('agent.kb.category.index');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -125,7 +125,7 @@ class CategoryController extends Controller
         /* get the view page to create new category with all attributes
           of category model */
         try {
-            return view('themes.default1.agent.kb.category.create', compact('category'));
+            return view('agent.kb.category.create', compact('category'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -169,7 +169,7 @@ class CategoryController extends Controller
         $category = Category::whereId($id)->first();
         $categories = Category::pluck('name', 'id')->toArray();
         /* get the Edit page the selected category via id */
-        return view('themes.default1.agent.kb.category.edit', compact('category', 'categories'));
+        return view('agent.kb.category.edit', compact('category', 'categories'));
     }
 
     /**

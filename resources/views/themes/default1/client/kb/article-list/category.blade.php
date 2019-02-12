@@ -1,4 +1,4 @@
-@extends('themes.default1.client.layout.client')
+@extends('client.layout.client')
 
 <?php $category = App\Model\kb\Category::where('id', '=', $id)->first(); ?>
 @section('title')

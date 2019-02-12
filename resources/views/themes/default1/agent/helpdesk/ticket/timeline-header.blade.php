@@ -33,6 +33,6 @@
     </table>
 </div>
 @endforeach
-@include('themes.default1.agent.helpdesk.filters.tags')
+@include('agent.helpdesk.filters.tags')
 <?php Event::fire(new App\Events\TicketDetailTable($TicketData)); ?>
         

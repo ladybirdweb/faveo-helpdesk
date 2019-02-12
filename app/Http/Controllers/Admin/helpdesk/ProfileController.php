@@ -43,7 +43,7 @@ class ProfileController extends Controller
         try {
             $user = Auth::user();
             if ($user) {
-                return view('themes.default1.agent.helpdesk.user.profile', compact('user'));
+                return view('agent.helpdesk.user.profile', compact('user'));
             } else {
                 return redirect('404');
             }
@@ -62,7 +62,7 @@ class ProfileController extends Controller
         try {
             $user = Auth::user();
             if ($user) {
-                return view('themes.default1.agent.helpdesk.user.profile-edit', compact('user'));
+                return view('agent.helpdesk.user.profile-edit', compact('user'));
             } else {
                 return redirect('404');
             }

@@ -1,4 +1,4 @@
-@extends('themes.default1.layouts.master')
+@extends('layouts.master')
 @section('head')
 <!-- DATA TABLES -->
 <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet" type="text/css" />
@@ -59,7 +59,7 @@
                                                     <h4 class="modal-title">Edit Song</h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    @include('themes.default1.admin.songs.form')
+                                                    @include('admin.songs.form')
                                                 </div>
                                                 <div class="modal-footer">
                                                     <div class="form-group">

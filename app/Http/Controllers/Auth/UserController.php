@@ -65,7 +65,7 @@ class UserController extends Controller
     {
         try {
             /* get all values in Sys_user */
-            return view('themes.default1.agent.helpdesk.user.index');
+            return view('agent.helpdesk.user.index');
         } catch (Exception $e) {
             return view('404');
         }
@@ -150,7 +150,7 @@ class UserController extends Controller
     public function create()
     {
         try {
-            return view('themes.default1.agent.helpdesk.user.create');
+            return view('agent.helpdesk.user.create');
         } catch (Exception $e) {
             return view('404');
         }
@@ -204,7 +204,7 @@ class UserController extends Controller
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
 
-            return view('themes.default1.agent.helpdesk.user.show', compact('users'));
+            return view('agent.helpdesk.user.show', compact('users'));
         } catch (Exception $e) {
             return view('404');
         }
@@ -224,7 +224,7 @@ class UserController extends Controller
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
 
-            return view('themes.default1.agent.helpdesk.user.edit', compact('users'));
+            return view('agent.helpdesk.user.edit', compact('users'));
         } catch (Exception $e) {
             return view('404');
         }
@@ -296,7 +296,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        return view('themes.default1.agent.helpdesk.user.profile', compact('user'));
+        return view('agent.helpdesk.user.profile', compact('user'));
     }
 
     /**
@@ -308,7 +308,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        return view('themes.default1.agent.helpdesk.user.profile-edit', compact('user'));
+        return view('agent.helpdesk.user.profile-edit', compact('user'));
     }
 
     /**

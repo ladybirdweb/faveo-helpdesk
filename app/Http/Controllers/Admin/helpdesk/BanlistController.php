@@ -49,7 +49,7 @@ class BanlistController extends Controller
         try {
             $bans = User::where('ban', '=', 1)->get();
 
-            return view('themes.default1.admin.helpdesk.emails.banlist.index', compact('bans'));
+            return view('admin.helpdesk.emails.banlist.index', compact('bans'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -63,7 +63,7 @@ class BanlistController extends Controller
     public function create()
     {
         try {
-            return view('themes.default1.admin.helpdesk.emails.banlist.create');
+            return view('admin.helpdesk.emails.banlist.create');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -117,7 +117,7 @@ class BanlistController extends Controller
         try {
             $bans = $ban->whereId($id)->first();
 
-            return view('themes.default1.admin.helpdesk.emails.banlist.edit', compact('bans'));
+            return view('admin.helpdesk.emails.banlist.edit', compact('bans'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }

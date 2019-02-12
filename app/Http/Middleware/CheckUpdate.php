@@ -50,7 +50,7 @@ class CheckUpdate
         if (!\Schema::hasTable('bar_notifications')) {
             $url = url('database-upgrade');
             //$string = "Your Database is outdated please upgrade <a href=$url>Now !</a>";
-            echo view('themes.default1.update.database', compact('url'));
+            echo view('update.database', compact('url'));
             exit;
         }
         $not = $notify->get();

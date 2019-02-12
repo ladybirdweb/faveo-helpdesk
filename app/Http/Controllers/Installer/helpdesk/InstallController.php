@@ -46,7 +46,7 @@ class InstallController extends Controller
     public function licence()
     {
         if (Cache::get('step1') == 'step1') {
-            return View::make('themes/default1/installer/helpdesk/view1');
+            return View::make('installer/helpdesk/view1');
         } else {
             return Redirect::route('prerequisites');
         }
@@ -87,7 +87,7 @@ class InstallController extends Controller
             Cache::flush();
             Artisan::call('config:clear');
 
-            return view('themes/default1/installer/helpdesk/view2');
+            return view('installer/helpdesk/view2');
         }
     }
 
@@ -114,7 +114,7 @@ class InstallController extends Controller
     {
         // checking if the installation is running for the first time or not
         if (Cache::get('step2') == 'step2') {
-            return View::make('themes/default1/installer/helpdesk/view3');
+            return View::make('installer/helpdesk/view3');
         } else {
             return Redirect::route('prerequisites');
         }
@@ -149,7 +149,7 @@ class InstallController extends Controller
     {
         // checking if the installation is running for the first time or not
         if (Cache::get('step2') == 'step2') {
-            return View::make('themes/default1/installer/helpdesk/view3');
+            return View::make('installer/helpdesk/view3');
         } else {
             return Redirect::route('prerequisites');
         }
@@ -190,7 +190,7 @@ class InstallController extends Controller
     {
         // checking if the installation is running for the first time or not
         if (Cache::get('step4') == 'step4') {
-            return View::make('themes/default1/installer/helpdesk/view4');
+            return View::make('installer/helpdesk/view4');
         } else {
             return Redirect::route('configuration');
         }
@@ -208,7 +208,7 @@ class InstallController extends Controller
         if (Cache::get('step4') == 'step4') {
             $request->session()->put('step5', $request->input('step5'));
 
-            return View::make('themes/default1/installer/helpdesk/view5');
+            return View::make('installer/helpdesk/view5');
         } else {
             return Redirect::route('configuration');
         }
@@ -322,7 +322,7 @@ class InstallController extends Controller
                 \Cache::forever('language', $language);
                 $this->updateInstalEnv();
 
-                return View::make('themes/default1/installer/helpdesk/view6');
+                return View::make('installer/helpdesk/view6');
             } catch (Exception $e) {
                 return Redirect::route('account')->with('fails', $e->getMessage());
             }
@@ -373,7 +373,7 @@ class InstallController extends Controller
 
     public function jsDisabled()
     {
-        return view('themes/default1/installer/helpdesk/check-js')->with('url', 'step1');
+        return view('installer/helpdesk/check-js')->with('url', 'step1');
     }
 
     public function createEnv($api = true)

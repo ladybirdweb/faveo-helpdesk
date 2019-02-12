@@ -1,4 +1,4 @@
-@extends('themes.default1.installer.layout.installer')
+@extends('installer.layout.installer')
 @section('environment')
 done
 @stop

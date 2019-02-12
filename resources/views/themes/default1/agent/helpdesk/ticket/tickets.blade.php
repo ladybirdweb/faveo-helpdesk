@@ -1,4 +1,4 @@
-@extends('themes.default1.agent.layout.agent')
+@extends('agent.layout.agent')
 
 @section('Tickets')
 class="active"
@@ -192,10 +192,10 @@ if (\Input::has('assigned'))
 
 
 <!-- Modal -->   
-@include('themes.default1.agent.helpdesk.ticket.more.tickets-model')
+@include('agent.helpdesk.ticket.more.tickets-model')
 
 {!! $table->script('vendor.Chumper.tickets-javascript') !!}
-@include('themes.default1.agent.helpdesk.ticket.more.tickets-options-script')
+@include('agent.helpdesk.ticket.more.tickets-options-script')
 <script>
     $(document).ready(function () { /// Wait till page is loaded
             var date_options = '<option value="any-time">{{Lang::get("lang.any-time")}}</option><option value="5-minutes">{{Lang::get("lang.5-minutes")}}</option><option value="10-minutes">{{Lang::get("lang.10-minutes")}}</option><option value="15-minutes">{{Lang::get("lang.15-minutes")}}</option><option value="30-minutes">{{Lang::get("lang.30-minutes")}}</option><option value="1-hour">{{Lang::get("lang.1-hour")}}</option><option value="4-hours">{{Lang::get("lang.4-hours")}}</option><option value="8-hours">{{Lang::get("lang.8-hours")}}</option><option value="12-hours">{{Lang::get("lang.12-hours")}}</option><option value="24-hours">{{Lang::get("lang.24-hours")}}</option><option value="today">{{Lang::get("lang.today")}}</option><option value="yesterday">{{Lang::get("lang.yesterday")}}</option><option value="this-week">{{Lang::get("lang.this-week")}}</option><option value="last-week">{{Lang::get("lang.last-week")}}</option><option value="15-days">{{Lang::get("lang.15-days")}}</option><option value="30-days">{{Lang::get("lang.30-days")}}</option><option value="this-month">{{Lang::get("lang.this-month")}}</option><option value="last-month">{{Lang::get("lang.last-month")}}</option><option value="last-2-months">{{Lang::get("lang.last-2-months")}}</option><option value="last-3-months">{{Lang::get("lang.last-3-months")}}</option><option value="last-6-months">{{Lang::get("lang.last-6-months")}}</option><option value="last-year">{{Lang::get("lang.last-year")}}</option>';
@@ -260,7 +260,7 @@ if (\Input::has('assigned'))
     }
 
 </script>
-@include('themes.default1.agent.helpdesk.selectlists.selectlistjavascript')
+@include('agent.helpdesk.selectlists.selectlistjavascript')
 <script type="text/javascript">
     var $dept_list = $("#departments-filter").addSelectlist({maximumSelectionLength : 5});
             valueSelected($dept_list);

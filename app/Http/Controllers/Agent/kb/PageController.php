@@ -53,7 +53,7 @@ class PageController extends Controller
         $pages->setPath('page');
 
         try {
-            return view('themes.default1.agent.kb.pages.index', compact('pages'));
+            return view('agent.kb.pages.index', compact('pages'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -114,7 +114,7 @@ class PageController extends Controller
      */
     public function create()
     {
-        return view('themes.default1.agent.kb.pages.create');
+        return view('agent.kb.pages.create');
     }
 
     /**
@@ -151,7 +151,7 @@ class PageController extends Controller
         try {
             $page = $this->page->where('slug', $slug)->first();
 
-            return view('themes.default1.agent.kb.pages.edit', compact('page'));
+            return view('agent.kb.pages.edit', compact('page'));
         } catch (Exception $e) {
             return redirect('page')->with('fails', $e->getMessage());
         }

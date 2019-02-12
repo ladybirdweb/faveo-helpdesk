@@ -40,7 +40,7 @@ class ApiSettings extends Controller
                 $ticket_detail = $details['ticket_detail'];
             }
 
-            return view('themes.default1.common.api.settings', compact('ticket_detail', 'systems'));
+            return view('common.api.settings', compact('ticket_detail', 'systems'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }

@@ -1,4 +1,4 @@
-@extends('themes.default1.agent.layout.agent')
+@extends('agent.layout.agent')
 
 @section('Tickets')
 class="active"
@@ -10,7 +10,7 @@ active
 
 @section('PageHeader')
 <h1>{{Lang::get('lang.ticket-details')}}</h1>
-@include('themes.default1.agent.helpdesk.ticket.response-messages')
+@include('agent.helpdesk.ticket.response-messages')
 @stop
 <?php
 $user = App\User::where('id', '=', $tickets->user_id)->first();

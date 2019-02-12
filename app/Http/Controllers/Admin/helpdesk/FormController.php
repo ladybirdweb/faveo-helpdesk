@@ -68,7 +68,7 @@ class FormController extends Controller
     public function index(Forms $forms)
     {
         try {
-            return view('themes.default1.admin.helpdesk.manage.form.index', compact('forms'));
+            return view('admin.helpdesk.manage.form.index', compact('forms'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -82,7 +82,7 @@ class FormController extends Controller
     public function create()
     {
         try {
-            return view('themes.default1.admin.helpdesk.manage.form.form');
+            return view('admin.helpdesk.manage.form.form');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -104,7 +104,7 @@ class FormController extends Controller
             if ($form) {
                 $fields = $form->fields();
 
-                return view('themes.default1.admin.helpdesk.manage.form.preview', compact('form', 'fields'));
+                return view('admin.helpdesk.manage.form.preview', compact('form', 'fields'));
             }
 
             throw new Exception("Sorry we can't find your request");
@@ -195,7 +195,7 @@ class FormController extends Controller
             if ($form) {
                 $fields = $form->fields();
                 //dd($fields);
-                return view('themes.default1.admin.helpdesk.manage.form.edit', compact('form', 'fields', 'select_forms'));
+                return view('admin.helpdesk.manage.form.edit', compact('form', 'fields', 'select_forms'));
             }
 
             throw new Exception("Sorry we can't find your request");
@@ -214,7 +214,7 @@ class FormController extends Controller
             if ($form) {
                 $fields = $form->fields();
                 //dd($fields);
-                return view('themes.default1.admin.helpdesk.manage.form.add-child', compact('form', 'fields', 'select_forms'));
+                return view('admin.helpdesk.manage.form.add-child', compact('form', 'fields', 'select_forms'));
             }
 
             throw new Exception("Sorry we can't find your request");

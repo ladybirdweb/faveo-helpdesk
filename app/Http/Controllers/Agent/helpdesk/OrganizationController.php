@@ -55,7 +55,7 @@ class OrganizationController extends Controller
     {
         try {
             /* get all values of table organization */
-            return view('themes.default1.agent.helpdesk.organization.index');
+            return view('agent.helpdesk.organization.index');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -132,7 +132,7 @@ class OrganizationController extends Controller
     public function create()
     {
         try {
-            return view('themes.default1.agent.helpdesk.organization.create');
+            return view('agent.helpdesk.organization.create');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -178,7 +178,7 @@ class OrganizationController extends Controller
             /* select the field by id  */
             $orgs = $org->whereId($id)->first();
             /* To view page */
-            return view('themes.default1.agent.helpdesk.organization.show', compact('orgs'));
+            return view('agent.helpdesk.organization.show', compact('orgs'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -198,7 +198,7 @@ class OrganizationController extends Controller
             /* select the field by id  */
             $orgs = $org->whereId($id)->first();
             /* To view page */
-            return view('themes.default1.agent.helpdesk.organization.edit', compact('orgs'));
+            return view('agent.helpdesk.organization.edit', compact('orgs'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -349,6 +349,6 @@ class OrganizationController extends Controller
      */
     public function organizationAutofill()
     {
-        return view('themes.default1.agent.helpdesk.organization.getautocomplete');
+        return view('agent.helpdesk.organization.getautocomplete');
     }
 }

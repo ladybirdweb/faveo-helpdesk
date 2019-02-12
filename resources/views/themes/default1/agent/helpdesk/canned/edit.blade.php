@@ -1,5 +1,5 @@
 
-@extends('themes.default1.agent.layout.agent')
+@extends('agent.layout.agent')
 
 @section('Tools')
 class="active"

@@ -1,4 +1,4 @@
-@extends('themes.default1.client.layout.logclient')
+@extends('client.layout.logclient')
 
 @section('home')
     class = "active"
@@ -177,7 +177,7 @@
 
 </div>
             <div class="col-md-12">
-                @include('themes.default1.client.layout.social-login')
+                @include('client.layout.social-login')
             </div>
 
 <!-- /.login-page -->

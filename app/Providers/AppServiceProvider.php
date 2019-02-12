@@ -40,11 +40,28 @@ class AppServiceProvider extends ServiceProvider
         });
         Route::singularResourceParameters(false);
         $this->composer();
+
+        // predefined fallback theme default1
+        $fallbackTheme = fallback_theme();
+
+        // active theme
+        $activeTheme = theme_path();
+
+        // we set active theme but only if it differs from fallback theme
+        // active theme is defined in theme.php config
+        if ($fallbackTheme !== $activeTheme) {
+            if (file_exists($activeTheme)) {
+                View::addLocation($activeTheme);
+            }
+        }
+
+        // set default theme as fallback theme
+        View::addLocation($fallbackTheme);
     }
 
     public function composer()
     {
-        \View::composer('themes.default1.update.notification', function () {
+        \View::composer('update.notification', function () {
             $notification = new BarNotification();
             $not = [
                 'notification' => $notification->where('value', '!=', '')->get(),

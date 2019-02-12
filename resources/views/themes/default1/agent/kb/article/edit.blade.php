@@ -1,6 +1,6 @@
-@extends('themes.default1.agent.layout.agent')
+@extends('agent.layout.agent')
 
-@extends('themes.default1.agent.layout.sidebar')    
+@extends('agent.layout.sidebar')
 
 @section('article')
 active
@@ -219,7 +219,7 @@ class="active"
                                                     <h4 class="modal-title">{{Lang::get('lang.addcategory')}}</h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    @include('themes.default1.agent.kb.category.form')
+                                                    @include('agent.kb.category.form')
                                                 </div>
                                                 <div class="modal-footer">
                                                     <div class="form-group">

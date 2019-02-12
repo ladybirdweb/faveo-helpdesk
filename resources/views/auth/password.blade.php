@@ -1,4 +1,4 @@
-@extends('themes.default1.client.layout.logclient')
+@extends('client.layout.logclient')
 
 @section('home')
     class = "active"

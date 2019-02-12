@@ -78,7 +78,7 @@ class FormController extends Controller
                 $phonecode = '';
             }
 
-            return view('themes.default1.client.helpdesk.form', compact('topics', 'codes', 'email_mandatory'))->with('phonecode', $phonecode);
+            return view('client.helpdesk.form', compact('topics', 'codes', 'email_mandatory'))->with('phonecode', $phonecode);
         } else {
             return \Redirect::route('home');
         }

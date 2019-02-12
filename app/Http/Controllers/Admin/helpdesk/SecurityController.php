@@ -40,7 +40,7 @@ class SecurityController extends Controller
         try {
             $security = $securitys->whereId('1')->first();
 
-            return view('themes.default1.admin.helpdesk.settings.security.index', compact('security'));
+            return view('admin.helpdesk.settings.security.index', compact('security'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -53,7 +53,7 @@ class SecurityController extends Controller
      */
     public function create()
     {
-        return view('themes.default1.admin.helpdesk.setting.security.security');
+        return view('admin.helpdesk.setting.security.security');
     }
 
     /**
@@ -65,7 +65,7 @@ class SecurityController extends Controller
      */
 //    public function show($id)
 //    {
-//        return view('themes.default1.admin.helpdesk.setting.security.preview', compact('id'));
+//        return view('admin.helpdesk.setting.security.preview', compact('id'));
 //    }
 
     /**

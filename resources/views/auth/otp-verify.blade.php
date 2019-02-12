@@ -1,4 +1,4 @@
-@extends('themes.default1.layouts.login')
+@extends('layouts.login')
 
 @section('body')
 <h4  id="otp-screen" class="login-box-msg">

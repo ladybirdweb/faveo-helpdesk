@@ -54,7 +54,7 @@ class DepartmentController extends Controller
         try {
             $departments = $department->get();
 
-            return view('themes.default1.admin.helpdesk.agent.departments.index', compact('departments'));
+            return view('admin.helpdesk.agent.departments.index', compact('departments'));
         } catch (Exception $e) {
             return view('404');
         }
@@ -86,7 +86,7 @@ class DepartmentController extends Controller
             $department = $department->get();
             $groups = $group->pluck('id', 'name');
 
-            return view('themes.default1.admin.helpdesk.agent.departments.create', compact('department', 'templates', 'slas', 'user', 'emails', 'groups'));
+            return view('admin.helpdesk.agent.departments.create', compact('department', 'templates', 'slas', 'user', 'emails', 'groups'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -167,7 +167,7 @@ class DepartmentController extends Controller
             //$groups = $group->pluck('id', 'name');
             $assign = $group_assign_department->where('department_id', $id)->pluck('group_id');
 
-            return view('themes.default1.admin.helpdesk.agent.departments.edit', compact('assign', 'team', 'templates', 'departments', 'slas', 'user', 'emails', 'sys_department'));
+            return view('admin.helpdesk.agent.departments.edit', compact('assign', 'team', 'templates', 'departments', 'slas', 'user', 'emails', 'sys_department'));
         } catch (Exception $e) {
             return redirect('departments')->with('fails', $e->getMessage());
         }

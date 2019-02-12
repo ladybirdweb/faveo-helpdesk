@@ -20,7 +20,7 @@ class UrlSettingController extends Controller
         $https = $this->checkHTTP($url);
         //dd($www, $https);
         try {
-            return view('themes.default1.admin.helpdesk.settings.url.settings', compact('www', 'https'));
+            return view('admin.helpdesk.settings.url.settings', compact('www', 'https'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }

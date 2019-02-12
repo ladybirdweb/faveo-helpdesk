@@ -37,14 +37,14 @@ class WelcomepageController extends Controller
             $content = $note->content;
         }
 
-        return view('themes.default1.client.guest-user.guest', compact('heading', 'content'));
+        return view('client.guest-user.guest', compact('heading', 'content'));
     }
 
     public function index()
     {
         $directory = base_path();
         if (file_exists($directory.DIRECTORY_SEPARATOR.'.env')) {
-            return view('themes.default1.client.helpdesk.guest-user.index');
+            return view('client.helpdesk.guest-user.index');
         } else {
             return Redirect::route('licence');
         }

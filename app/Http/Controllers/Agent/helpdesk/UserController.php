@@ -91,7 +91,7 @@ class UserController extends Controller
                 Lang::get('lang.action'))  // these are the column headings to be shown
                 ->noScript();
 
-            return view('themes.default1.agent.helpdesk.user.index', compact('table'));
+            return view('agent.helpdesk.user.index', compact('table'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -102,7 +102,7 @@ class UserController extends Controller
         try {
             // dd('here');
             /* get all values in Sys_user */
-            return view('themes.default1.agent.helpdesk.user.deleteduser');
+            return view('agent.helpdesk.user.deleteduser');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -259,7 +259,7 @@ class UserController extends Controller
             $phonecode = $code->where('iso', '=', $location->iso_code)->first();
             $org = Organization::pluck('name', 'id')->toArray();
 
-            return view('themes.default1.agent.helpdesk.user.create', compact('org', 'settings', 'email_mandatory'))->with('phonecode', $phonecode->phonecode);
+            return view('agent.helpdesk.user.create', compact('org', 'settings', 'email_mandatory'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->errorInfo[2]);
         }
@@ -615,7 +615,7 @@ class UserController extends Controller
         try {
             $users = User::where('id', '=', $id)->first();
             if ($users && $users->count() > 0) {
-                return view('themes.default1.agent.helpdesk.user.show', compact('users'));
+                return view('agent.helpdesk.user.show', compact('users'));
             } else {
                 return redirect()->back()->with('fails', Lang::get('lang.user-not-found'));
             }
@@ -654,7 +654,7 @@ class UserController extends Controller
             // $org_name=Organization::where('id','=',$org_id)->pluck('name')->first();
             // dd($org_name);
 
-            return view('themes.default1.agent.helpdesk.user.edit', compact('users', 'orgs', '$settings', '$email_mandatory', 'organization_id'))->with('phonecode', $phonecode->phonecode);
+            return view('agent.helpdesk.user.edit', compact('users', 'orgs', '$settings', '$email_mandatory', 'organization_id'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -713,7 +713,7 @@ class UserController extends Controller
         $user = Auth::user();
 
         try {
-            return view('themes.default1.agent.helpdesk.user.profile', compact('user'));
+            return view('agent.helpdesk.user.profile', compact('user'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -733,7 +733,7 @@ class UserController extends Controller
         $status = $settings->status;
 
         try {
-            return view('themes.default1.agent.helpdesk.user.profile-edit', compact('user'))
+            return view('agent.helpdesk.user.profile-edit', compact('user'))
                             ->with(['phonecode' => $phonecode->phonecode,
                                 'verify'        => $status, ]);
         } catch (Exception $e) {
@@ -974,7 +974,7 @@ class UserController extends Controller
     public function getExportUser()
     {
         try {
-            return view('themes.default1.agent.helpdesk.user.export');
+            return view('agent.helpdesk.user.export');
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }

@@ -53,7 +53,7 @@ class EmailsController extends Controller
             // fetch all the emails from emails table
             $emails = $email->get();
 
-            return view('themes.default1.admin.helpdesk.emails.emails.index', compact('emails'));
+            return view('admin.helpdesk.emails.emails.index', compact('emails'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -85,7 +85,7 @@ class EmailsController extends Controller
             $services = $service->pluck('name', 'id')->toArray();
 
             // return with all the table data
-            return view('themes.default1.admin.helpdesk.emails.emails.create', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'services'));
+            return view('admin.helpdesk.emails.emails.create', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'services'));
         } catch (Exception $e) {
             // return error messages if any
             return redirect()->back()->with('fails', $e->getMessage());
@@ -354,7 +354,7 @@ class EmailsController extends Controller
             $services = $service->pluck('name', 'id')->toArray();
 
             // return if the execution is succeeded
-            return view('themes.default1.admin.helpdesk.emails.emails.edit', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'emails', 'sys_email', 'services'))->with('count', $count);
+            return view('admin.helpdesk.emails.emails.edit', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'emails', 'sys_email', 'services'))->with('count', $count);
         } catch (Exception $e) {
             // return if try fails
             return redirect()->back()->with('fails', $e->getMessage());

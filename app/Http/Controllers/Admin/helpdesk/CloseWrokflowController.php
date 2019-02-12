@@ -34,7 +34,7 @@ class CloseWrokflowController extends Controller
         try {
             $security = $securitys->whereId('1')->first();
 
-            return view('themes.default1.admin.helpdesk.settings.close-workflow.index', compact('security'));
+            return view('admin.helpdesk.settings.close-workflow.index', compact('security'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }

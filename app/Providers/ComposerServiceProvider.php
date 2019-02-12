@@ -21,29 +21,29 @@ class ComposerServiceProvider extends ServiceProvider
         // }
         view()->composer(
             [
-                'themes.default1.agent.layout.agent',
-                'themes.default1.agent.helpdesk.dashboard.dashboard',
-                'themes.default1.admin.layout.admin',
-                'themes.default1.admin.helpdesk.setting',
+                'agent.layout.agent',
+                'agent.helpdesk.dashboard.dashboard',
+                'admin.layout.admin',
+                'admin.helpdesk.setting',
                 $service_desk,
             ], 'App\Http\ViewComposers\AgentLayout'
         );
         view()->composer(
             [
-               'themes.default1.update.notification',
+               'update.notification',
             ], 'App\Http\ViewComposers\UpdateNotification'
         );
         view()->composer(
             [
-               'themes.default1.agent.layout.agent',
-                'themes.default1.admin.layout.admin',
+               'agent.layout.agent',
+                'admin.layout.admin',
             ], 'App\Http\ViewComposers\AuthUser'
         );
         view()->composer(
             [
-                'themes.default1.admin.layout.admin',
-                'themes.default1.agent.layout.agent',
-                'themes.default1.client.layout.client',
+                'admin.layout.admin',
+                'agent.layout.agent',
+                'client.layout.client',
             ], 'App\Http\ViewComposers\UserLanguage'
         );
     }

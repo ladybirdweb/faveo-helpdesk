@@ -1,4 +1,4 @@
-@extends('themes.default1.client.layout.client')
+@extends('client.layout.client')
 
 @section('title')
 {!! Lang::get('lang.submit_a_ticket') !!} -

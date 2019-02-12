@@ -52,7 +52,7 @@ class ArticleController extends Controller
     public function test()
     {
         //$table = $this->setDatatable();
-        return view('themes.default1.agent.kb.article.test');
+        return view('agent.kb.article.test');
     }
 
     /**
@@ -118,7 +118,7 @@ class ArticleController extends Controller
     {
         /* show article list */
         try {
-            return view('themes.default1.agent.kb.article.index');
+            return view('agent.kb.article.index');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -137,7 +137,7 @@ class ArticleController extends Controller
         $category = $category->pluck('id', 'name');
         /* get the create page  */
         try {
-            return view('themes.default1.agent.kb.article.create', compact('category'));
+            return view('agent.kb.article.create', compact('category'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -204,7 +204,7 @@ class ArticleController extends Controller
         $article = $article->whereId($id)->first();
         /* send to the edit page */
         try {
-            return view('themes.default1.agent.kb.article.edit', compact('assign', 'article', 'category'));
+            return view('agent.kb.article.edit', compact('assign', 'article', 'category'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }

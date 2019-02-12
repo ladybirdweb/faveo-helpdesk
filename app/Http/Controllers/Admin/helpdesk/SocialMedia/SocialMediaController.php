@@ -19,7 +19,7 @@ class SocialMediaController extends Controller
         try {
             $social = new SocialMedia();
 
-            return view('themes.default1.admin.helpdesk.settings.social-media.settings', compact('social', 'provider'));
+            return view('admin.helpdesk.settings.social-media.settings', compact('social', 'provider'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -76,7 +76,7 @@ class SocialMediaController extends Controller
         try {
             $social = new SocialMedia();
 
-            return view('themes.default1.admin.helpdesk.settings.social-media.index', compact('social'));
+            return view('admin.helpdesk.settings.social-media.index', compact('social'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }

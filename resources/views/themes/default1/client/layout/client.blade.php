@@ -191,7 +191,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        @include('themes.default1.client.layout.social-login')
+                                        @include('client.layout.social-login')
                                     </div>
                                 </div>
                             </div><!-- #login-form -->

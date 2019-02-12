@@ -1,4 +1,4 @@
-@extends('themes.default1.client.layout.client')
+@extends('client.layout.client')
 @section('content')  
 <div id="page" class="hfeed site">
     <article class="hentry error404 text-center">

@@ -1,4 +1,4 @@
-@extends('themes.default1.article.layout')
+@extends('article.layout')
 @section('content')
     <link href="{{asset('dist/css/bootstrap.css')}}" rel="stylesheet">
     <link href="{{asset('dist/css/dataTables.bootstrap.css')}}" rel="stylesheet">

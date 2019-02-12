@@ -1,4 +1,4 @@
-@extends('themes.default1.layouts.installer')
+@extends('layouts.installer')
 @section('content')
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->

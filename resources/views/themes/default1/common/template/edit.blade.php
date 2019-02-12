@@ -1,4 +1,4 @@
-@extends('themes.default1.admin.layout.admin')
+@extends('admin.layout.admin')
 
 @section('PageHeader')
 <h1>{!! Lang::get('lang.templates') !!}</h1>

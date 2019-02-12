@@ -1,4 +1,4 @@
-@extends('themes.default1.admin.layout.admin')
+@extends('admin.layout.admin')
 
 @section('Settings')
 active
@@ -30,8 +30,8 @@ class="active"
 <!-- open a form -->
 
 @if($warn!=="")
-@include('themes.default1.admin.helpdesk.settings.cron.cron-new')
+@include('admin.helpdesk.settings.cron.cron-new')
 @else 
-@include('themes.default1.admin.helpdesk.settings.cron.cron-new')
+@include('admin.helpdesk.settings.cron.cron-new')
 @endif
 @stop

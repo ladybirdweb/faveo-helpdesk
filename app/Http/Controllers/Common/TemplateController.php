@@ -41,7 +41,7 @@ class TemplateController extends Controller
     public function index()
     {
         try {
-            return view('themes.default1.common.template.inbox');
+            return view('common.template.inbox');
         } catch (\Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -60,7 +60,7 @@ class TemplateController extends Controller
         try {
             $templates = Template::where('set_id', '=', $id)->get();
 
-            return view('themes.default1.common.template.list-templates', compact('templates'));
+            return view('common.template.list-templates', compact('templates'));
         } catch (\Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -99,7 +99,7 @@ class TemplateController extends Controller
             $i = $this->template->orderBy('created_at', 'desc')->first()->id + 1;
             $type = $this->type->pluck('name', 'id')->toArray();
 
-            return view('themes.default1.common.template.create', compact('type'));
+            return view('common.template.create', compact('type'));
         } catch (\Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -137,7 +137,7 @@ class TemplateController extends Controller
             $template = $this->template->where('id', $id)->first();
             $type = $this->type->pluck('name', 'id')->toArray();
 
-            return view('themes.default1.common.template.edit', compact('type', 'template'));
+            return view('common.template.edit', compact('type', 'template'));
         } catch (\Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -261,11 +261,11 @@ class TemplateController extends Controller
                     }
 
                     //dd($template);
-                    return view('themes.default1.common.template.shoppingcart', compact('template'));
+                    return view('common.template.shoppingcart', compact('template'));
                 } else {
                     $template = '<p>No Products</p>';
 
-                    return view('themes.default1.common.template.shoppingcart', compact('template'));
+                    return view('common.template.shoppingcart', compact('template'));
                 }
             } else {
                 return redirect('/')->with('fails', 'no such record');

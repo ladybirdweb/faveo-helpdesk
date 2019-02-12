@@ -46,7 +46,7 @@ class SettingsController extends Controller
      */
     public function widgets()
     {
-        return view('themes.default1.admin.helpdesk.theme.widgets');
+        return view('admin.helpdesk.theme.widgets');
     }
 
     /**
@@ -137,7 +137,7 @@ class SettingsController extends Controller
      */
     public function social_buttons()
     {
-        return view('themes.default1.admin.helpdesk.theme.social');
+        return view('admin.helpdesk.theme.social');
     }
 
     /**
@@ -218,7 +218,7 @@ class SettingsController extends Controller
     {
         $settings = Smtp::where('id', '=', '1')->first();
 
-        return view('themes.default1.admin.helpdesk.emails.smtp', compact('settings'));
+        return view('admin.helpdesk.emails.smtp', compact('settings'));
     }
 
     /**
@@ -286,7 +286,7 @@ class SettingsController extends Controller
 
     public function Plugins()
     {
-        return view('themes.default1.admin.helpdesk.settings.plugins');
+        return view('admin.helpdesk.settings.plugins');
     }
 
     public function GetPlugin()

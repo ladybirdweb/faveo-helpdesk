@@ -1,4 +1,4 @@
-@extends('themes.default1.admin.layout.kb')
+@extends('admin.layout.kb')
 @section('widget')
     active
 @stop
