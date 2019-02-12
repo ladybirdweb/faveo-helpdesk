@@ -35,7 +35,7 @@
         <!-- Colorpicker -->
 
         <link href="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.css")}}" rel="stylesheet" type="text/css" />
-        
+
         <script src="{{asset("lb-faveo/js/jquery-2.1.4.js")}}" type="text/javascript"></script>
 
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
@@ -473,10 +473,9 @@
         });</script>
 
     <script src="{{asset("lb-faveo/js/tabby.js")}}"></script>
-    <!-- CK Editor
-    <script src="{{asset("//cdn.ckeditor.com/4.4.3/standard/ckeditor.js")}}"></script>
+    <!-- CK Editor -->
     <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
-    <script src="{{asset("lb-faveo/js/languagechanger.js")}}" type="text/javascript"></script> -->
+    <script src="{{asset("lb-faveo/js/languagechanger.js")}}" type="text/javascript"></script>
     @yield('FooterInclude')
 </body>
 <script>
