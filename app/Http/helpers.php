@@ -327,5 +327,5 @@ function theme_path($path = null)
 {
     $activeTheme = config('theme.default');
 
-    return realpath(trim(config('theme.themes.'.$activeTheme . '.path').'/'.$path, '/'));
+    return realpath(trim(config('theme.themes.'.$activeTheme.'.path').'/'.$path, '/'));
 }
