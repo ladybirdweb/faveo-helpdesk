@@ -41,6 +41,9 @@
         <script src="{{asset("lb-faveo/js/jquery-2.1.4.js")}}" type="text/javascript"></script>
 
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("//cdn.ckeditor.com/4.4.3/standard/ckeditor.js")}}"></script>
+        <script src="{{asset("//cdn.ckeditor.com/4.4.3/full/ckeditor.js")}}"></script>
+        <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>

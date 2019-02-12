@@ -781,10 +781,7 @@ class TicketController extends Controller
                     $agents = User::where('role', '=', 'agent')->active()->get();
                     foreach ($agents as $agent) {
 
-                        loging('email_problem', 'ticketdata dept_id'.$ticketdata->dept_id);
-
                         if ($ticketdata->dept_id == $agent->primary_dpt) {
-                            loging('email_send_to', 'Send mail to agent: '. $agent->first_name, 'info');
                             $to_email = $agent->email;
                             $to_user = $agent->first_name;
                             $to_user_name = $agent->first_name;
