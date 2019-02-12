@@ -10,6 +10,6 @@ return [
         'default1' => [
             'title' => 'Default',
             'path'  => resource_path('views/themes/default1'),
-        ]
+        ],
     ],
 ];
