@@ -305,7 +305,7 @@ function carbon($date)
 }
 
 /**
- * Obtains default fallback theme path
+ * Obtains default fallback theme path.
  *
  * @return string
  */
@@ -313,11 +313,11 @@ function fallback_theme()
 {
     $fallbackTheme = config('theme.fallback');
 
-    return realpath(trim(config('theme.themes.' . $fallbackTheme . '.path')));
+    return realpath(trim(config('theme.themes.'.$fallbackTheme.'.path')));
 }
 
 /**
- * Obtains currently active theme path
+ * Obtains currently active theme path.
  *
  * @param string|null $path
  *
@@ -327,5 +327,5 @@ function theme_path($path = null)
 {
     $activeTheme = config('theme.default');
 
-    return realpath(trim(config('theme.themes.' . $activeTheme . '.path') . '/' . $path, '/'));
+    return realpath(trim(config('theme.themes.'.$activeTheme . '.path').'/'.$path, '/'));
 }
