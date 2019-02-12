@@ -439,11 +439,24 @@
 @if (trim($__env->yieldContent('no-toolbar')))
     <h1>@yield('no-toolbar')</h1>
 @else
+    <script src="{{asset('vendor/unisharp/laravel-ckeditor/ckeditor.js')}}"></script>
     <script>
-    $(function () {
-    //Add text editor
-        $("textarea").wysihtml5();
-    });
+        CKEDITOR.replace( textarea, {
+            toolbarGroups: [
+                {"name":"basicstyles","groups":["basicstyles"]},
+                {"name":"links","groups":["links"]},
+                {"name":"paragraph","groups":["list","blocks"]},
+                {"name":"document","groups":["mode"]},
+                {"name":"insert","groups":["insert"]},
+                {"name":"styles","groups":["styles"]},
+                {"name":"about","groups":["about"]}
+            ],
+            filebrowserImageBrowseUrl: "{{url('laravel-filemanager?type=Images')}}",
+            filebrowserImageUploadUrl: "{{url('laravel-filemanager/upload?type=Images')}}",
+            filebrowserBrowseUrl: "{{url('laravel-filemanager?type=Files')}}",
+            filebrowserUploadUrl: "{{url('laravel-filemanager/upload?type=Files')}}",
+            removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+        });
     </script>
 @endif
     <script>
