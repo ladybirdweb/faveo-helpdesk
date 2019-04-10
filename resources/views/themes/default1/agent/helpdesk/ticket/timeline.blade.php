@@ -709,7 +709,7 @@ if ($thread->title != "") {
                                                         $('body').css('display', 'block');
                                                                 setTimeout(function(){
                                                                 var $iframe = "Id{{$conversation->id}}";
-                                                                        $('<iframe src="javascript:void(0)" id=' + $iframe + ' class="iframe" frameborder="0"  scrolling="no" width="100%" style="height:1px"></iframe>').appendTo(".timeline-body{{$conversation->id}}");
+                                                                        $('<iframe src="about:blank" id=' + $iframe + ' class="iframe" frameborder="0"  scrolling="no" width="100%" style="height:1px"></iframe>').appendTo(".timeline-body{{$conversation->id}}");
                                                                         setTimeout(function(){
                                                                         $('#' + $iframe).contents().find('body').append('<body><style>body{display:inline-block;}</style>{!!$conversation->purify(true)!!}<body>');
                                                                         }, 100);
@@ -730,7 +730,7 @@ if ($thread->title != "") {
                                                         setTimeout(function(){
                                                         $('body').css('display', 'block');
                                                                 var $iframe = "Id{{$conversation->id}}";
-                                                                $('<iframe src="javascript:void(0)" id=' + $iframe + ' class="iframe" frameborder="0"  scrolling="no" width="100%" style="height:1px"></iframe>').appendTo(".timeline-body{{$conversation->id}}");
+                                                                $('<iframe src="about:blank" id=' + $iframe + ' class="iframe" frameborder="0"  scrolling="no" width="100%" style="height:1px"></iframe>').appendTo(".timeline-body{{$conversation->id}}");
                                                                 setTimeout(function(){
                                                                 $('#' + $iframe).contents().find('body').append('<body><style>body{display:inline-block;}</style>{!!$conversation->purify(true)!!}<body>');
                                                                 }, 100);
