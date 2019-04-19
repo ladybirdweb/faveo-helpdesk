@@ -1,4 +1,4 @@
--- phpMyAdmin SQL Dump
+Community v1.10.6 04/19/2019-- phpMyAdmin SQL Dump
 -- version 4.6.6deb5
 -- https://www.phpmyadmin.net/
 --
@@ -1457,7 +1457,7 @@ CREATE TABLE `settings_system` (
 --
 
 INSERT INTO `settings_system` (`id`, `status`, `url`, `name`, `department`, `page_size`, `log_level`, `purge_log`, `api_enable`, `api_key_mandatory`, `api_key`, `name_format`, `time_farmat`, `date_format`, `date_time_format`, `day_date_time`, `time_zone`, `content`, `version`, `created_at`, `updated_at`) VALUES
-(1, 1, '', '', '1', '', '', '', 0, 0, '', '', NULL, NULL, 1, '', 32, '', '1.10.5', '2016-12-13 03:19:29', '2016-12-13 03:19:29');
+(1, 1, '', '', '1', '', '', '', 0, 0, '', '', NULL, NULL, 1, '', 32, '', '1.10.6', '2016-12-13 03:19:29', '2016-12-13 03:19:29');
 
 -- --------------------------------------------------------
 
