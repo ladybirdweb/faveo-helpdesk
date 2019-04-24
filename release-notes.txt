@@ -8,6 +8,24 @@
                                           | |                         
                                           |_|                         
 |=====================================================
+| v1.10.6 Chrome UI issue fix patch
+|=====================================================
+Issue #1665 fix patch
+
+Recent updates of Chrome browser introduced an issue in ticket timeline page where the reply threads from users were not visible in chrome browser's latest version. 
+
+The last release fixed the issue for agent/admin view. However, the issue persisted for client view in Chrome browser. Check out [the issue](https://github.com/ladybirdweb/faveo-helpdesk/issues/1665) raised for the same.
+
+Issue Reported by: [@n3zsistemas](https://github.com/n3zsistemas)
+
+We would like to thank the Faveo community users who report their issues with the system and help us to make Faveo Helpdesk better for other users.
+
+|=====================================================
+| v1.10.5 Chrome UI issue fix patch
+|=====================================================
+Recent updates of Chrome browser introduced an issue in ticket timeline page where the reply threads from users were not visible in chrome browser's latest version. 
+
+|=====================================================
 | v1.10.4 Security patch for Slack channel
 |=====================================================
 While integrating slack notifications in Travis for builds and PRs token for SLACK channel was not encrypted allowing anyone to use the credentials and post in the Slack channel as a Travis user. This update encrypts the slack token to fix the issue.
