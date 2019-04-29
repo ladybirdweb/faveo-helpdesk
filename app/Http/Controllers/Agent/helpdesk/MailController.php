@@ -203,6 +203,7 @@ class MailController extends Controller
         $attachments = (!$message->getAttachments()) ? [] : $message->getAttachments();
         //dd(['body' => $body, 'subject' => $subject, 'address' => $address, 'cc' => $collaborator, 'attachments' => $attachments]);
         $this->workflow($address, $subject, $body, $collaborators, $attachments, $email);
+        $message->setFlag('Seen');
     }
 
     public function workflow($address, $subject, $body, $collaborator, $attachments, $email)
