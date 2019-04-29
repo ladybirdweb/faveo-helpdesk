@@ -26,7 +26,7 @@ return array (
   ),
   'fixedLine' => 
   array (
-    'NationalNumberPattern' => '441(?:2(?:02|23|61|[3479]\\d)|[46]\\d{2}|5(?:4\\d|60|89)|824)\\d{4}',
+    'NationalNumberPattern' => '441(?:2(?:02|23|[3479]\\d|61)|[46]\\d\\d|5(?:4\\d|60|89)|824)\\d{4}',
     'ExampleNumber' => '4412345678',
     'PossibleLength' => 
     array (
@@ -145,7 +145,8 @@ return array (
   'countryCode' => 1,
   'internationalPrefix' => '011',
   'nationalPrefix' => '1',
-  'nationalPrefixForParsing' => '1',
+  'nationalPrefixForParsing' => '1|([2-8]\\d{6})$',
+  'nationalPrefixTransformRule' => '441$1',
   'sameMobileAndFixedLinePattern' => false,
   'numberFormat' => 
   array (

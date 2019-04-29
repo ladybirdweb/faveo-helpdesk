@@ -33,7 +33,7 @@ final class Chunk
     private $endRange;
 
     /**
-     * @var array
+     * @var Line[]
      */
     private $lines;
 
@@ -66,13 +66,25 @@ final class Chunk
         return $this->endRange;
     }
 
+    /**
+     * @return Line[]
+     */
     public function getLines(): array
     {
         return $this->lines;
     }
 
+    /**
+     * @param Line[] $lines
+     */
     public function setLines(array $lines): void
     {
+        foreach ($lines as $line) {
+            if (!$line instanceof Line) {
+                throw new InvalidArgumentException;
+            }
+        }
+
         $this->lines = $lines;
     }
 }

@@ -71,7 +71,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     private $pdo;
 
     /**
-     * @var string|null|false DSN string or null for session.save_path or false when lazy connection disabled
+     * @var string|false|null DSN string or null for session.save_path or false when lazy connection disabled
      */
     private $dsn = false;
 
@@ -118,7 +118,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     /**
      * @var array Connection options when lazy-connect
      */
-    private $connectionOptions = array();
+    private $connectionOptions = [];
 
     /**
      * @var int The strategy for locking, see constants
@@ -130,7 +130,7 @@ class PdoSessionHandler extends AbstractSessionHandler
      *
      * @var \PDOStatement[] An array of statements to release advisory locks
      */
-    private $unlockStatements = array();
+    private $unlockStatements = [];
 
     /**
      * @var bool True when the current session exists but expired according to session.gc_maxlifetime
@@ -161,7 +161,7 @@ class PdoSessionHandler extends AbstractSessionHandler
      *  * db_time_col: The column where to store the timestamp [default: sess_time]
      *  * db_username: The username when lazy-connect [default: '']
      *  * db_password: The password when lazy-connect [default: '']
-     *  * db_connection_options: An array of driver-specific connection options [default: array()]
+     *  * db_connection_options: An array of driver-specific connection options [default: []]
      *  * lock_mode: The strategy for locking, see constants [default: LOCK_TRANSACTIONAL]
      *
      * @param \PDO|string|null $pdoOrDsn A \PDO instance or DSN string or URL string or null
@@ -169,7 +169,7 @@ class PdoSessionHandler extends AbstractSessionHandler
      *
      * @throws \InvalidArgumentException When PDO error mode is not PDO::ERRMODE_EXCEPTION
      */
-    public function __construct($pdoOrDsn = null, array $options = array())
+    public function __construct($pdoOrDsn = null, array $options = [])
     {
         if ($pdoOrDsn instanceof \PDO) {
             if (\PDO::ERRMODE_EXCEPTION !== $pdoOrDsn->getAttribute(\PDO::ATTR_ERRMODE)) {
@@ -468,13 +468,13 @@ class PdoSessionHandler extends AbstractSessionHandler
             throw new \InvalidArgumentException('URLs without scheme are not supported to configure the PdoSessionHandler');
         }
 
-        $driverAliasMap = array(
+        $driverAliasMap = [
             'mssql' => 'sqlsrv',
             'mysql2' => 'mysql', // Amazon RDS, for some weird reason
             'postgres' => 'pgsql',
             'postgresql' => 'pgsql',
             'sqlite3' => 'sqlite',
-        );
+        ];
 
         $driver = isset($driverAliasMap[$params['scheme']]) ? $driverAliasMap[$params['scheme']] : $params['scheme'];
 
@@ -637,7 +637,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                 throw new \RuntimeException('Failed to read session: INSERT reported a duplicate id but next SELECT did not return any data.');
             }
 
-            if (!ini_get('session.use_strict_mode') && self::LOCK_TRANSACTIONAL === $this->lockMode && 'sqlite' !== $this->driver) {
+            if (!filter_var(ini_get('session.use_strict_mode'), FILTER_VALIDATE_BOOLEAN) && self::LOCK_TRANSACTIONAL === $this->lockMode && 'sqlite' !== $this->driver) {
                 // In strict mode, session fixation is not possible: new sessions always start with a unique
                 // random id, so that concurrency is not possible and this code path can be skipped.
                 // Exclusive-reading of non-existent rows does not block, so we need to do an insert to block

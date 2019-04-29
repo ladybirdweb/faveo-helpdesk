@@ -84,6 +84,16 @@ EOF;
         $this->testCase   = null;
     }
 
+    public function testAlwaysReportsNumberOfAssertionsIsOne(): void
+    {
+        $this->assertSame(1, $this->testCase->getNumAssertions());
+    }
+
+    public function testAlwaysReportsItDoesNotUseADataprovider(): void
+    {
+        $this->assertSame(false, $this->testCase->usesDataProvider());
+    }
+
     public function testShouldRunFileSectionAsTest(): void
     {
         $this->setPhpContent($this->ensureCorrectEndOfLine(self::EXPECT_CONTENT));
@@ -198,39 +208,38 @@ EOF
         $this->testCase->run();
     }
 
-    public function testShouldThrowsAnExceptionWhenPhptFileIsEmpty(): void
+    public function testShouldSkipTestWhenPhptFileIsEmpty(): void
     {
         $this->setPhpContent('');
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Invalid PHPT file');
-
-        $this->testCase->run();
+        $result = $this->testCase->run();
+        $this->assertCount(1, $result->skipped());
+        $this->assertSame('Invalid PHPT file', $result->skipped()[0]->thrownException()->getMessage());
     }
 
-    public function testShouldThrowsAnExceptionWhenFileSectionIsMissing(): void
+    public function testShouldSkipTestWhenFileSectionIsMissing(): void
     {
         $this->setPhpContent(
             <<<EOF
 --TEST--
-Something to decribe it
+Something to describe it
 --EXPECT--
 Something
 EOF
         );
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Invalid PHPT file');
+        $result = $this->testCase->run();
 
-        $this->testCase->run();
+        $this->assertCount(1, $result->skipped());
+        $this->assertSame('Invalid PHPT file', $result->skipped()[0]->thrownException()->getMessage());
     }
 
-    public function testShouldThrowsAnExceptionWhenThereIsNoExpecOrExpectifOrExpecregexSectionInPhptFile(): void
+    public function testShouldSkipTestWhenThereIsNoExpecOrExpectifOrExpecregexSectionInPhptFile(): void
     {
         $this->setPhpContent(
             <<<EOF
 --TEST--
-Something to decribe it
+Something to describe it
 --FILE--
 <?php
 echo "Hello world!\n";
@@ -238,10 +247,30 @@ echo "Hello world!\n";
 EOF
         );
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Invalid PHPT file');
+        $result = $this->testCase->run();
 
-        $this->testCase->run();
+        $this->assertCount(1, $result->skipped());
+        $skipMessage = $result->skipped()[0]->thrownException()->getMessage();
+        $this->assertSame('Invalid PHPT file', $skipMessage);
+    }
+
+    public function testShouldSkipTestWhenSectionHeaderIsMalformed(): void
+    {
+        $this->setPhpContent(
+            <<<EOF
+----
+--TEST--
+This is not going to work out
+--EXPECT--
+Tears and misery
+EOF
+        );
+
+        $result = $this->testCase->run();
+
+        $this->assertCount(1, $result->skipped());
+        $skipMessage = $result->skipped()[0]->thrownException()->getMessage();
+        $this->assertSame('Invalid PHPT file: empty section header', $skipMessage);
     }
 
     public function testShouldValidateExpectSession(): void
@@ -313,7 +342,7 @@ EOF
             [
                 "\r\n" => \PHP_EOL,
                 "\r"   => \PHP_EOL,
-                "\n"   => \PHP_EOL
+                "\n"   => \PHP_EOL,
             ]
         );
     }

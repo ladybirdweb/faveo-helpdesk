@@ -2,6 +2,15 @@
 
 `Zend\Validator\Digits` validates if a given value contains only digits.
 
+> ### Installation requirements
+>
+> `Zend\Validator\Digits` depends on the zend-filter component, so be sure to
+> have it installed before getting started:
+>
+> ```bash
+> $ composer require zendframework/zend-filter`
+> ```
+
 ## Supported options
 
 There are no additional options for `Zend\Validator\Digits`:

@@ -1,7 +1,74 @@
-Version 4.0.4-dev
+Version 4.2.2-dev
 -----------------
 
 Nothing yet.
+
+Version 4.2.1 (2019-02-16)
+--------------------------
+
+### Added
+
+* [PHP 7.4] Add support for `??=` operator through a new `AssignOp\Coalesce` node. (#575)
+
+Version 4.2.0 (2019-01-12)
+--------------------------
+
+### Added
+
+* [PHP 7.4] Add support for typed properties through a new `type` subnode of `Stmt\Property`.
+  Additionally `Builder\Property` now has a `setType()` method. (#567)
+* Add `kind` attribute to `Cast\Double_`, which allows to distinguish between `(float)`,
+  `(double)` and `(real)`. The form of the cast will be preserved by the pretty printer. (#565)
+
+### Fixed
+
+* Remove assertion when pretty printing anonymous class with a name (#554).
+
+Version 4.1.1 (2018-12-26)
+--------------------------
+
+### Fixed
+
+* Fix "undefined offset" notice when parsing specific malformed code (#551).
+
+### Added
+
+* Support error recovery for missing return type (`function foo() : {}`) (#544).
+
+Version 4.1.0 (2018-10-10)
+--------------------------
+
+### Added
+
+* Added support for PHP 7.3 flexible heredoc/nowdoc strings, completing support for PHP 7.3. There
+  are two caveats for this feature:
+   * In some rare, pathological cases flexible heredoc/nowdoc strings change the interpretation of
+     existing doc strings. PHP-Parser will now use the new interpretation.
+   * Flexible heredoc/nowdoc strings require special support from the lexer. Because this is not
+     available on PHP versions before 7.3, support has to be emulated. This emulation is not perfect
+     and some cases which we do not expect to occur in practice (such as flexible doc strings being
+     nested within each other through abuse of variable-variable interpolation syntax) may not be
+     recognized correctly.
+* Added `DONT_TRAVERSE_CURRENT_AND_CHILDREN` to `NodeTraverser` to skip both traversal of child
+  nodes, and prevent subsequent visitors from visiting the current node.
+
+Version 4.0.4 (2018-09-18)
+--------------------------
+
+### Added
+
+* The following methods have been added to `BuilderFactory`:
+  * `useTrait()` (fluent builder)
+  * `traitUseAdaptation()` (fluent builder)
+  * `useFunction()` (fluent builder)
+  * `useConst()` (fluent builder)
+  * `var()`
+  * `propertyFetch()`
+  
+### Deprecated
+
+* `Builder\Param::setTypeHint()` has been deprecated in favor of the newly introduced
+  `Builder\Param::setType()`.
 
 Version 4.0.3 (2018-07-15)
 --------------------------

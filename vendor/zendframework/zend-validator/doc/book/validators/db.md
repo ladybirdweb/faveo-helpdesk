@@ -4,6 +4,16 @@
 a means to test whether a record exists in a given table of a database, with a
 given value.
 
+> ### Installation requirements
+>
+> `Zend\Validator\Db\NoRecordExists` and `Zend\Validator\Db\RecordExists` 
+> depends on the zend-db component, so be sure to have it installed before
+> getting started:
+>
+> ```bash
+> $ composer require zendframework/zend-db`
+> ```
+
 ## Supported options
 
 The following options are supported for `Zend\Validator\Db\NoRecordExists` and

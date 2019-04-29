@@ -14,7 +14,7 @@ use PHPUnit\Runner\BaseTestRunner;
 
 class TestCaseTest extends TestCase
 {
-    protected static $testStatic      = 0;
+    protected static $testStatic      = 456;
 
     protected $backupGlobalsBlacklist = ['i', 'singleton'];
 
@@ -175,6 +175,7 @@ class TestCaseTest extends TestCase
         $this->assertTrue($test->assertPostConditions);
         $this->assertTrue($test->tearDown);
         $this->assertEquals(BaseTestRunner::STATUS_ERROR, $test->getStatus());
+        $this->assertSame('throw Exception in tearDown()', $test->getStatusMessage());
     }
 
     public function testExceptionInTestIsDetectedInTeardown(): void
@@ -418,6 +419,9 @@ class TestCaseTest extends TestCase
     public function testStaticAttributesBackupPre(): void
     {
         $GLOBALS['singleton'] = \Singleton::getInstance();
+        $GLOBALS['i']         = 'not reset by backup';
+
+        $GLOBALS['j']         = 'reset by backup';
         self::$testStatic     = 123;
     }
 
@@ -426,8 +430,15 @@ class TestCaseTest extends TestCase
      */
     public function testStaticAttributesBackupPost(): void
     {
-        $this->assertNotSame($GLOBALS['singleton'], \Singleton::getInstance());
-        $this->assertSame(0, self::$testStatic);
+        // Snapshots made by @backupGlobals
+        $this->assertSame(\Singleton::getInstance(), $GLOBALS['singleton']);
+        $this->assertSame('not reset by backup', $GLOBALS['i']);
+
+        // Reset global
+        $this->assertArrayNotHasKey('j', $GLOBALS);
+
+        // Static reset to original state by @backupStaticAttributes
+        $this->assertSame(456, self::$testStatic);
     }
 
     public function testIsInIsolationReturnsFalse(): void
@@ -577,10 +588,10 @@ class TestCaseTest extends TestCase
             'PHPUnit >= 9-dev is required.' . \PHP_EOL .
             'Operating system matching /DOESNOTEXIST/i is required.' . \PHP_EOL .
             'Function testFuncOne is required.' . \PHP_EOL .
-            'Function testFuncTwo is required.' . \PHP_EOL .
+            'Function testFunc2 is required.' . \PHP_EOL .
             'Setting "not_a_setting" must be "Off".' . \PHP_EOL .
             'Extension testExtOne is required.' . \PHP_EOL .
-            'Extension testExtTwo is required.' . \PHP_EOL .
+            'Extension testExt2 is required.' . \PHP_EOL .
             'Extension testExtThree >= 2.0 is required.',
             $test->getStatusMessage()
         );
@@ -644,11 +655,13 @@ class TestCaseTest extends TestCase
 
     /**
      * @requires PHP 7
-     * @expectedException \TypeError
      */
     public function testTypeErrorCanBeExpected(): void
     {
         $o = new \ClassWithScalarTypeDeclarations;
+
+        $this->expectException(\TypeError::class);
+
         $o->foo(null, null);
     }
 
@@ -710,7 +723,7 @@ class TestCaseTest extends TestCase
         $mock = $this->createConfiguredMock(
             \Mockable::class,
             [
-                'mockableMethod' => false
+                'mockableMethod' => false,
             ]
         );
 
@@ -723,7 +736,7 @@ class TestCaseTest extends TestCase
         $test = new \TestAutoreferenced('testJsonEncodeException', $this->getAutoreferencedArray());
         $test->runBare();
 
-        $this->assertInternalType('array', $test->myTestData);
+        $this->assertIsArray($test->myTestData);
         $this->assertArrayHasKey('data', $test->myTestData);
         $this->assertEquals($test->myTestData['data'][0], $test->myTestData['data']);
     }
@@ -739,13 +752,13 @@ class TestCaseTest extends TestCase
         $test = new \TestAutoreferenced('testJsonEncodeException', [$data]);
         $test->runBare();
 
-        $this->assertInternalType('array', $test->myTestData);
+        $this->assertIsArray($test->myTestData);
         $this->assertSame($data, $test->myTestData);
     }
 
     public function testGettingNullTestResultObject(): void
     {
-        $test = new \Success();
+        $test = new \Success;
         $this->assertNull($test->getTestResultObject());
     }
 
@@ -759,8 +772,8 @@ class TestCaseTest extends TestCase
 
         return [
             'RECURSION' => [
-                'data' => $recursionData
-            ]
+                'data' => $recursionData,
+            ],
         ];
     }
 }

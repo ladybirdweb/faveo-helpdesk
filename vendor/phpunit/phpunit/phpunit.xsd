@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:annotation>
         <xs:documentation source="https://phpunit.de/documentation.html">
-            This Schema file defines the rules by which the XML configuration file of PHPUnit 7.3 may be structured.
+            This Schema file defines the rules by which the XML configuration file of PHPUnit 7.5 may be structured.
         </xs:documentation>
         <xs:appinfo source="https://phpunit.de/documentation.html"/>
     </xs:annotation>
@@ -176,12 +176,14 @@
         <xs:restriction base="xs:string">
             <xs:enumeration value="default"/>
             <xs:enumeration value="defects"/>
+            <xs:enumeration value="duration"/>
             <xs:enumeration value="depends"/>
             <xs:enumeration value="depends,defects"/>
             <xs:enumeration value="random"/>
             <xs:enumeration value="reverse"/>
             <xs:enumeration value="depends,random"/>
             <xs:enumeration value="depends,reverse"/>
+            <xs:enumeration value="depends,duration"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="fileFilterType">
@@ -258,6 +260,7 @@
         <xs:attribute name="beStrictAboutTestsThatDoNotTestAnything" type="xs:boolean" default="true"/>
         <xs:attribute name="beStrictAboutTodoAnnotatedTests" type="xs:boolean" default="false"/>
         <xs:attribute name="beStrictAboutCoversAnnotation" type="xs:boolean" default="false"/>
+        <xs:attribute name="defaultTimeLimit" type="xs:integer" default="0"/>
         <xs:attribute name="enforceTimeLimit" type="xs:boolean" default="false"/>
         <xs:attribute name="ignoreDeprecatedCodeUnitsFromCodeCoverage" type="xs:boolean" default="false"/>
         <xs:attribute name="timeoutForSmallTests" type="xs:integer" default="1"/>

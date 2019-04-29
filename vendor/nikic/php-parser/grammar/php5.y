@@ -579,6 +579,7 @@ expr:
     | variable T_SL_EQUAL expr                              { $$ = Expr\AssignOp\ShiftLeft [$1, $3]; }
     | variable T_SR_EQUAL expr                              { $$ = Expr\AssignOp\ShiftRight[$1, $3]; }
     | variable T_POW_EQUAL expr                             { $$ = Expr\AssignOp\Pow       [$1, $3]; }
+    | variable T_COALESCE_EQUAL expr                        { $$ = Expr\AssignOp\Coalesce  [$1, $3]; }
     | variable T_INC                                        { $$ = Expr\PostInc[$1]; }
     | T_INC variable                                        { $$ = Expr\PreInc [$2]; }
     | variable T_DEC                                        { $$ = Expr\PostDec[$1]; }
@@ -628,7 +629,10 @@ expr:
     | T_REQUIRE expr                                        { $$ = Expr\Include_[$2, Expr\Include_::TYPE_REQUIRE]; }
     | T_REQUIRE_ONCE expr                                   { $$ = Expr\Include_[$2, Expr\Include_::TYPE_REQUIRE_ONCE]; }
     | T_INT_CAST expr                                       { $$ = Expr\Cast\Int_    [$2]; }
-    | T_DOUBLE_CAST expr                                    { $$ = Expr\Cast\Double  [$2]; }
+    | T_DOUBLE_CAST expr
+          { $attrs = attributes();
+            $attrs['kind'] = $this->getFloatCastKind($1);
+            $$ = new Expr\Cast\Double($2, $attrs); }
     | T_STRING_CAST expr                                    { $$ = Expr\Cast\String_ [$2]; }
     | T_ARRAY_CAST expr                                     { $$ = Expr\Cast\Array_  [$2]; }
     | T_OBJECT_CAST expr                                    { $$ = Expr\Cast\Object_ [$2]; }
@@ -791,11 +795,9 @@ common_scalar:
     | T_FUNC_C                                              { $$ = Scalar\MagicConst\Function_[]; }
     | T_NS_C                                                { $$ = Scalar\MagicConst\Namespace_[]; }
     | T_START_HEREDOC T_ENCAPSED_AND_WHITESPACE T_END_HEREDOC
-          { $attrs = attributes(); setDocStringAttrs($attrs, $1);
-            $$ = new Scalar\String_(Scalar\String_::parseDocString($1, $2, false), $attrs); }
+          { $$ = $this->parseDocString($1, $2, $3, attributes(), stackAttributes(#3), false); }
     | T_START_HEREDOC T_END_HEREDOC
-          { $attrs = attributes(); setDocStringAttrs($attrs, $1);
-            $$ = new Scalar\String_('', $attrs); }
+          { $$ = $this->parseDocString($1, '', $2, attributes(), stackAttributes(#2), false); }
 ;
 
 static_scalar:
@@ -856,8 +858,7 @@ scalar:
           { $attrs = attributes(); $attrs['kind'] = Scalar\String_::KIND_DOUBLE_QUOTED;
             parseEncapsed($2, '"', true); $$ = new Scalar\Encapsed($2, $attrs); }
     | T_START_HEREDOC encaps_list T_END_HEREDOC
-          { $attrs = attributes(); setDocStringAttrs($attrs, $1);
-            parseEncapsedDoc($2, true); $$ = new Scalar\Encapsed($2, $attrs); }
+          { $$ = $this->parseDocString($1, $2, $3, attributes(), stackAttributes(#3), true); }
 ;
 
 static_array_pair_list:

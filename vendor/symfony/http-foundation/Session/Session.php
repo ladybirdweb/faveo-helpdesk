@@ -28,7 +28,7 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
 
     private $flashName;
     private $attributeName;
-    private $data = array();
+    private $data = [];
     private $usageIndex = 0;
 
     /**
@@ -193,7 +193,9 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
      */
     public function save()
     {
-        $this->storage->save();
+        if ($this->isStarted()) {
+            $this->storage->save();
+        }
     }
 
     /**
@@ -209,7 +211,9 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
      */
     public function setId($id)
     {
-        $this->storage->setId($id);
+        if ($this->storage->getId() !== $id) {
+            $this->storage->setId($id);
+        }
     }
 
     /**

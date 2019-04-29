@@ -14,11 +14,14 @@
     },
     "require": {
         "php": "^5.6 || ^7.0",
-        "zendframework/zend-stdlib": "^2.7.6 || ^3.1",
+        "zendframework/zend-stdlib": "^3.2.1",
         "container-interop/container-interop": "^1.1"
     },
     "require-dev": {
+        "phpunit/PHPUnit": "^6.0.8 || ^5.7.15",
+        "psr/http-message": "^1.0",
         "zendframework/zend-cache": "^2.6.1",
+        "zendframework/zend-coding-standard": "~1.0.0",
         "zendframework/zend-config": "^2.6",
         "zendframework/zend-db": "^2.7",
         "zendframework/zend-filter": "^2.6",
@@ -27,11 +30,10 @@
         "zendframework/zend-math": "^2.6",
         "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3",
         "zendframework/zend-session": "^2.8",
-        "zendframework/zend-uri": "^2.5",
-        "phpunit/PHPUnit": "^6.0.8 || ^5.7.15",
-        "zendframework/zend-coding-standard": "~1.0.0"
+        "zendframework/zend-uri": "^2.5"
     },
     "suggest": {
+        "psr/http-message": "psr/http-message, required when validating PSR-7 UploadedFileInterface instances via the Upload and UploadFile validators",
         "zendframework/zend-db": "Zend\\Db component, required by the (No)RecordExists validator",
         "zendframework/zend-filter": "Zend\\Filter component, required by the Digits validator",
         "zendframework/zend-i18n": "Zend\\I18n component to allow translation of validation error messages",
@@ -45,8 +47,8 @@
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
-            "dev-master": "2.10.x-dev",
-            "dev-develop": "2.11.x-dev"
+            "dev-master": "2.12.x-dev",
+            "dev-develop": "2.13.x-dev"
         },
         "zf": {
             "component": "Zend\\Validator",

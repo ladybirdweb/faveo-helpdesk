@@ -249,7 +249,7 @@ class Response extends AbstractMessage implements ResponseInterface
      */
     protected function parseStatusLine($line)
     {
-        $regex   = '/^HTTP\/(?P<version>1\.[01]) (?P<status>\d{3})(?:[ ]+(?P<reason>.*))?$/';
+        $regex   = '/^HTTP\/(?P<version>1\.[01]|2) (?P<status>\d{3})(?:[ ]+(?P<reason>.*))?$/';
         $matches = [];
         if (! preg_match($regex, $line, $matches)) {
             throw new Exception\InvalidArgumentException(
@@ -564,6 +564,11 @@ class Response extends AbstractMessage implements ResponseInterface
             );
         }
 
+        if ($this->getHeaders()->has('content-length')
+            && 0 === (int) $this->getHeaders()->get('content-length')->getFieldValue()) {
+            return '';
+        }
+
         ErrorHandler::start();
         $return = gzinflate(substr($body, 10));
         $test = ErrorHandler::stop();
@@ -592,6 +597,11 @@ class Response extends AbstractMessage implements ResponseInterface
             throw new Exception\RuntimeException(
                 'zlib extension is required in order to decode "deflate" encoding'
             );
+        }
+
+        if ($this->getHeaders()->has('content-length')
+            && 0 === (int) $this->getHeaders()->get('content-length')->getFieldValue()) {
+            return '';
         }
 
         /**

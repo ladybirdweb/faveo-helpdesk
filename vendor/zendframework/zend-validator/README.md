@@ -8,4 +8,4 @@ simple validator chaining mechanism by which multiple validators may be applied
 to a single datum in a user-defined order.
 
 - File issues at https://github.com/zendframework/zend-validator/issues
-- Documentation is at https://zendframework.github.io/zend-validator/
+- Documentation is at https://docs.zendframework.com/zend-validator/

@@ -33,12 +33,12 @@ class FlattenException
     private $file;
     private $line;
 
-    public static function create(\Exception $exception, $statusCode = null, array $headers = array())
+    public static function create(\Exception $exception, $statusCode = null, array $headers = [])
     {
         return static::createFromThrowable($exception, $statusCode, $headers);
     }
 
-    public static function createFromThrowable(\Throwable $exception, ?int $statusCode = null, array $headers = array()): self
+    public static function createFromThrowable(\Throwable $exception, ?int $statusCode = null, array $headers = []): self
     {
         $e = new static();
         $e->setMessage($exception->getMessage());
@@ -73,13 +73,13 @@ class FlattenException
 
     public function toArray()
     {
-        $exceptions = array();
-        foreach (array_merge(array($this), $this->getAllPrevious()) as $exception) {
-            $exceptions[] = array(
+        $exceptions = [];
+        foreach (array_merge([$this], $this->getAllPrevious()) as $exception) {
+            $exceptions[] = [
                 'message' => $exception->getMessage(),
                 'class' => $exception->getClass(),
                 'trace' => $exception->getTrace(),
-            );
+            ];
         }
 
         return $exceptions;
@@ -90,9 +90,14 @@ class FlattenException
         return $this->statusCode;
     }
 
+    /**
+     * @return $this
+     */
     public function setStatusCode($code)
     {
         $this->statusCode = $code;
+
+        return $this;
     }
 
     public function getHeaders()
@@ -100,9 +105,14 @@ class FlattenException
         return $this->headers;
     }
 
+    /**
+     * @return $this
+     */
     public function setHeaders(array $headers)
     {
         $this->headers = $headers;
+
+        return $this;
     }
 
     public function getClass()
@@ -110,9 +120,14 @@ class FlattenException
         return $this->class;
     }
 
+    /**
+     * @return $this
+     */
     public function setClass($class)
     {
-        $this->class = $class;
+        $this->class = 'c' === $class[0] && 0 === strpos($class, "class@anonymous\0") ? get_parent_class($class).'@anonymous' : $class;
+
+        return $this;
     }
 
     public function getFile()
@@ -120,9 +135,14 @@ class FlattenException
         return $this->file;
     }
 
+    /**
+     * @return $this
+     */
     public function setFile($file)
     {
         $this->file = $file;
+
+        return $this;
     }
 
     public function getLine()
@@ -130,9 +150,14 @@ class FlattenException
         return $this->line;
     }
 
+    /**
+     * @return $this
+     */
     public function setLine($line)
     {
         $this->line = $line;
+
+        return $this;
     }
 
     public function getMessage()
@@ -140,9 +165,20 @@ class FlattenException
         return $this->message;
     }
 
+    /**
+     * @return $this
+     */
     public function setMessage($message)
     {
+        if (false !== strpos($message, "class@anonymous\0")) {
+            $message = preg_replace_callback('/class@anonymous\x00.*?\.php0x?[0-9a-fA-F]++/', function ($m) {
+                return \class_exists($m[0], false) ? get_parent_class($m[0]).'@anonymous' : $m[0];
+            }, $message);
+        }
+
         $this->message = $message;
+
+        return $this;
     }
 
     public function getCode()
@@ -150,9 +186,14 @@ class FlattenException
         return $this->code;
     }
 
+    /**
+     * @return $this
+     */
     public function setCode($code)
     {
         $this->code = $code;
+
+        return $this;
     }
 
     public function getPrevious()
@@ -160,14 +201,19 @@ class FlattenException
         return $this->previous;
     }
 
+    /**
+     * @return $this
+     */
     public function setPrevious(self $previous)
     {
         $this->previous = $previous;
+
+        return $this;
     }
 
     public function getAllPrevious()
     {
-        $exceptions = array();
+        $exceptions = [];
         $e = $this;
         while ($e = $e->getPrevious()) {
             $exceptions[] = $e;
@@ -191,15 +237,18 @@ class FlattenException
         $this->setTraceFromThrowable($exception);
     }
 
-    public function setTraceFromThrowable(\Throwable $throwable): void
+    public function setTraceFromThrowable(\Throwable $throwable)
     {
-        $this->setTrace($throwable->getTrace(), $throwable->getFile(), $throwable->getLine());
+        return $this->setTrace($throwable->getTrace(), $throwable->getFile(), $throwable->getLine());
     }
 
+    /**
+     * @return $this
+     */
     public function setTrace($trace, $file, $line)
     {
-        $this->trace = array();
-        $this->trace[] = array(
+        $this->trace = [];
+        $this->trace[] = [
             'namespace' => '',
             'short_class' => '',
             'class' => '',
@@ -207,8 +256,8 @@ class FlattenException
             'function' => '',
             'file' => $file,
             'line' => $line,
-            'args' => array(),
-        );
+            'args' => [],
+        ];
         foreach ($trace as $entry) {
             $class = '';
             $namespace = '';
@@ -218,7 +267,7 @@ class FlattenException
                 $namespace = implode('\\', $parts);
             }
 
-            $this->trace[] = array(
+            $this->trace[] = [
                 'namespace' => $namespace,
                 'short_class' => $class,
                 'class' => isset($entry['class']) ? $entry['class'] : '',
@@ -226,41 +275,43 @@ class FlattenException
                 'function' => isset($entry['function']) ? $entry['function'] : null,
                 'file' => isset($entry['file']) ? $entry['file'] : null,
                 'line' => isset($entry['line']) ? $entry['line'] : null,
-                'args' => isset($entry['args']) ? $this->flattenArgs($entry['args']) : array(),
-            );
+                'args' => isset($entry['args']) ? $this->flattenArgs($entry['args']) : [],
+            ];
         }
+
+        return $this;
     }
 
     private function flattenArgs($args, $level = 0, &$count = 0)
     {
-        $result = array();
+        $result = [];
         foreach ($args as $key => $value) {
             if (++$count > 1e4) {
-                return array('array', '*SKIPPED over 10000 entries*');
+                return ['array', '*SKIPPED over 10000 entries*'];
             }
             if ($value instanceof \__PHP_Incomplete_Class) {
                 // is_object() returns false on PHP<=7.1
-                $result[$key] = array('incomplete-object', $this->getClassNameFromIncomplete($value));
+                $result[$key] = ['incomplete-object', $this->getClassNameFromIncomplete($value)];
             } elseif (\is_object($value)) {
-                $result[$key] = array('object', \get_class($value));
+                $result[$key] = ['object', \get_class($value)];
             } elseif (\is_array($value)) {
                 if ($level > 10) {
-                    $result[$key] = array('array', '*DEEP NESTED ARRAY*');
+                    $result[$key] = ['array', '*DEEP NESTED ARRAY*'];
                 } else {
-                    $result[$key] = array('array', $this->flattenArgs($value, $level + 1, $count));
+                    $result[$key] = ['array', $this->flattenArgs($value, $level + 1, $count)];
                 }
             } elseif (null === $value) {
-                $result[$key] = array('null', null);
+                $result[$key] = ['null', null];
             } elseif (\is_bool($value)) {
-                $result[$key] = array('boolean', $value);
+                $result[$key] = ['boolean', $value];
             } elseif (\is_int($value)) {
-                $result[$key] = array('integer', $value);
+                $result[$key] = ['integer', $value];
             } elseif (\is_float($value)) {
-                $result[$key] = array('float', $value);
+                $result[$key] = ['float', $value];
             } elseif (\is_resource($value)) {
-                $result[$key] = array('resource', get_resource_type($value));
+                $result[$key] = ['resource', get_resource_type($value)];
             } else {
-                $result[$key] = array('string', (string) $value);
+                $result[$key] = ['string', (string) $value];
             }
         }
 

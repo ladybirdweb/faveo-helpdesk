@@ -14,7 +14,7 @@
 return array (
   'generalDesc' => 
   array (
-    'NationalNumberPattern' => '(?:[25]\\d|33|77|88)\\d{7}|(?:2\\d|[45])\\d{6}',
+    'NationalNumberPattern' => '(?:2|33|5\\d|77|88)\\d{7}|[45]\\d{6}',
     'PossibleLength' => 
     array (
       0 => 7,
@@ -40,7 +40,7 @@ return array (
   ),
   'mobile' => 
   array (
-    'NationalNumberPattern' => '(?:20\\d{2}|330\\d|4[67]|5(?:55)?\\d|77\\d{2}|88\\d{2})\\d{5}',
+    'NationalNumberPattern' => '(?:(?:330|555|(?:77|88)\\d)\\d|4[67])\\d{5}|5\\d{6}',
     'ExampleNumber' => '770123456',
     'PossibleLength' => 
     array (
@@ -63,7 +63,7 @@ return array (
   ),
   'premiumRate' => 
   array (
-    'NationalNumberPattern' => '332(?:02|[2-5]\\d)\\d{4}',
+    'NationalNumberPattern' => '332(?:02|[34]\\d)\\d{4}',
     'ExampleNumber' => '332021234',
     'PossibleLength' => 
     array (
@@ -153,11 +153,11 @@ return array (
   array (
     0 => 
     array (
-      'pattern' => '(2\\d)(\\d{3})(\\d{3})',
+      'pattern' => '(\\d)(\\d{3})(\\d{3})',
       'format' => '$1 $2 $3',
       'leadingDigitsPatterns' => 
       array (
-        0 => '2',
+        0 => '[45]',
       ),
       'nationalPrefixFormattingRule' => '0$1',
       'domesticCarrierCodeFormattingRule' => '',
@@ -165,11 +165,11 @@ return array (
     ),
     1 => 
     array (
-      'pattern' => '([4-5])(\\d{3})(\\d{3})',
+      'pattern' => '(\\d{2})(\\d{3})(\\d{3})',
       'format' => '$1 $2 $3',
       'leadingDigitsPatterns' => 
       array (
-        0 => '[45]',
+        0 => '2',
       ),
       'nationalPrefixFormattingRule' => '0$1',
       'domesticCarrierCodeFormattingRule' => '',
@@ -181,7 +181,7 @@ return array (
       'format' => '$1 $2 $3',
       'leadingDigitsPatterns' => 
       array (
-        0 => '[23578]',
+        0 => '[3578]',
       ),
       'nationalPrefixFormattingRule' => '0$1',
       'domesticCarrierCodeFormattingRule' => '',

@@ -9,6 +9,9 @@
  */
 namespace PHPUnit\Runner;
 
+use PHPUnit\Framework\Test;
+use PHPUnit\Util\Filesystem;
+
 class TestResultCache implements \Serializable, TestResultCacheInterface
 {
     /**
@@ -27,7 +30,7 @@ class TestResultCache implements \Serializable, TestResultCacheInterface
         BaseTestRunner::STATUS_FAILURE,
         BaseTestRunner::STATUS_ERROR,
         BaseTestRunner::STATUS_RISKY,
-        BaseTestRunner::STATUS_WARNING
+        BaseTestRunner::STATUS_WARNING,
     ];
 
     /**
@@ -75,6 +78,15 @@ class TestResultCache implements \Serializable, TestResultCacheInterface
     {
         if (\defined('PHPUNIT_TESTSUITE_RESULTCACHE')) {
             return;
+        }
+
+        if (!Filesystem::createDirectory(\dirname($this->cacheFilename))) {
+            throw new Exception(
+                \sprintf(
+                    'Cannot create directory "%s" for result cache file',
+                    $this->cacheFilename
+                )
+            );
         }
 
         \file_put_contents(
@@ -154,7 +166,7 @@ class TestResultCache implements \Serializable, TestResultCacheInterface
     {
         return \serialize([
             'defects' => $this->defects,
-            'times'   => $this->times
+            'times'   => $this->times,
         ]);
     }
 

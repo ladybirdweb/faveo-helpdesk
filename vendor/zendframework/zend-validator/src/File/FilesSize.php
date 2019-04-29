@@ -151,7 +151,7 @@ class FilesSize extends Size
             }
         }
 
-        if (count($this->getMessages()) > 0) {
+        if ($this->getMessages()) {
             return false;
         }
 

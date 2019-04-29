@@ -8,9 +8,8 @@ use PhpParser\Node\Expr\Print_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
-use PHPUnit\Framework\TestCase;
 
-class FunctionTest extends TestCase
+class FunctionTest extends \PHPUnit\Framework\TestCase
 {
     public function createFunctionBuilder($name) {
         return new Function_($name);
@@ -92,29 +91,23 @@ class FunctionTest extends TestCase
         ], []), $node);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage void type cannot be nullable
-     */
     public function testInvalidNullableVoidType() {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('void type cannot be nullable');
         $this->createFunctionBuilder('test')->setReturnType('?void');
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Expected parameter node, got "Name"
-     */
     public function testInvalidParamError() {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Expected parameter node, got "Name"');
         $this->createFunctionBuilder('test')
             ->addParam(new Node\Name('foo'))
         ;
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Expected statement or expression node
-     */
     public function testAddNonStmt() {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Expected statement or expression node');
         $this->createFunctionBuilder('test')
             ->addStmt(new Node\Name('Test'));
     }

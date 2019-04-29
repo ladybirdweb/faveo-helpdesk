@@ -86,6 +86,11 @@ class SetCookie implements MultipleHeaderInterface
     protected $httponly;
 
     /**
+     * @var bool
+     */
+    protected $encodeValue = true;
+
+    /**
      * @static
      * @throws Exception\InvalidArgumentException
      * @param  $headerLine
@@ -99,6 +104,7 @@ class SetCookie implements MultipleHeaderInterface
         if ($setCookieProcessor === null) {
             $setCookieClass = get_called_class();
             $setCookieProcessor = function ($headerLine) use ($setCookieClass) {
+                /** @var SetCookie $header */
                 $header = new $setCookieClass();
                 $keyValuePairs = preg_split('#;\s*#', $headerLine);
 
@@ -115,6 +121,11 @@ class SetCookie implements MultipleHeaderInterface
                     if ($header->getName() === null) {
                         $header->setName($headerKey);
                         $header->setValue(urldecode($headerValue));
+
+                        // set no encode value if raw and encoded values are the same
+                        if (urldecode($headerValue) === $headerValue) {
+                            $header->setEncodeValue(false);
+                        }
                         continue;
                     }
 
@@ -214,6 +225,22 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
+     * @return bool
+     */
+    public function getEncodeValue()
+    {
+        return $this->encodeValue;
+    }
+
+    /**
+     * @param bool $encodeValue
+     */
+    public function setEncodeValue($encodeValue)
+    {
+        $this->encodeValue = (bool) $encodeValue;
+    }
+
+    /**
      * @return string 'Set-Cookie'
      */
     public function getFieldName()
@@ -231,7 +258,7 @@ class SetCookie implements MultipleHeaderInterface
             return '';
         }
 
-        $value = urlencode($this->getValue());
+        $value = $this->encodeValue ? urlencode($this->getValue()) : $this->getValue();
         if ($this->hasQuoteFieldValue()) {
             $value = '"' . $value . '"';
         }

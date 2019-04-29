@@ -12,8 +12,6 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\PrettyPrinter\Standard;
 
-require_once __DIR__ . '/CodeTestAbstract.php';
-
 class PrettyPrinterTest extends CodeTestAbstract
 {
     protected function doTestPrettyPrintMethod($method, $name, $code, $expected, $modeLine) {
@@ -184,11 +182,9 @@ class PrettyPrinterTest extends CodeTestAbstract
         ];
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Cannot pretty-print AST with Error nodes
-     */
     public function testPrettyPrintWithError() {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Cannot pretty-print AST with Error nodes');
         $stmts = [new Stmt\Expression(
             new Expr\PropertyFetch(new Expr\Variable('a'), new Expr\Error())
         )];
@@ -196,11 +192,9 @@ class PrettyPrinterTest extends CodeTestAbstract
         $prettyPrinter->prettyPrint($stmts);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Cannot pretty-print AST with Error nodes
-     */
     public function testPrettyPrintWithErrorInClassConstFetch() {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Cannot pretty-print AST with Error nodes');
         $stmts = [new Stmt\Expression(
             new Expr\ClassConstFetch(new Name('Foo'), new Expr\Error())
         )];
@@ -208,11 +202,9 @@ class PrettyPrinterTest extends CodeTestAbstract
         $prettyPrinter->prettyPrint($stmts);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Cannot directly print EncapsedStringPart
-     */
     public function testPrettyPrintEncapsedStringPart() {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Cannot directly print EncapsedStringPart');
         $expr = new Node\Scalar\EncapsedStringPart('foo');
         $prettyPrinter = new PrettyPrinter\Standard;
         $prettyPrinter->prettyPrintExpr($expr);

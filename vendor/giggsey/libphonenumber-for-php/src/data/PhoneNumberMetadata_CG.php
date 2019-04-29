@@ -14,7 +14,7 @@
 return array (
   'generalDesc' => 
   array (
-    'NationalNumberPattern' => '(?:(?:0\\d|80)\\d|222)\\d{6}',
+    'NationalNumberPattern' => '222\\d{6}|(?:0\\d|80)\\d{7}',
     'PossibleLength' => 
     array (
       0 => 9,
@@ -57,7 +57,7 @@ return array (
   ),
   'premiumRate' => 
   array (
-    'NationalNumberPattern' => '80(?:0\\d{2}|11[0-4])\\d{4}',
+    'NationalNumberPattern' => '80(?:0\\d\\d|11[0-4])\\d{4}',
     'ExampleNumber' => '800123456',
     'PossibleLength' => 
     array (
@@ -156,11 +156,11 @@ return array (
     ),
     1 => 
     array (
-      'pattern' => '(\\d{2})(\\d{3})(\\d{4})',
+      'pattern' => '(\\d)(\\d{4})(\\d{4})',
       'format' => '$1 $2 $3',
       'leadingDigitsPatterns' => 
       array (
-        0 => '[02]',
+        0 => '8',
       ),
       'nationalPrefixFormattingRule' => '',
       'domesticCarrierCodeFormattingRule' => '',
@@ -168,11 +168,11 @@ return array (
     ),
     2 => 
     array (
-      'pattern' => '(\\d)(\\d{4})(\\d{4})',
+      'pattern' => '(\\d{2})(\\d{3})(\\d{4})',
       'format' => '$1 $2 $3',
       'leadingDigitsPatterns' => 
       array (
-        0 => '800',
+        0 => '[02]',
       ),
       'nationalPrefixFormattingRule' => '',
       'domesticCarrierCodeFormattingRule' => '',

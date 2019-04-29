@@ -23,6 +23,19 @@ use Symfony\Component\Console\Output\StreamOutput;
  */
 class ProgressBarTest extends TestCase
 {
+    private $colSize;
+
+    protected function setUp()
+    {
+        $this->colSize = getenv('COLUMNS');
+        putenv('COLUMNS=120');
+    }
+
+    protected function tearDown()
+    {
+        putenv($this->colSize ? 'COLUMNS='.$this->colSize : 'COLUMNS');
+    }
+
     public function testMultipleStart()
     {
         $bar = new ProgressBar($output = $this->getOutputStream());
@@ -314,7 +327,7 @@ class ProgressBarTest extends TestCase
 
     public function testOverwriteWithSectionOutput()
     {
-        $sections = array();
+        $sections = [];
         $stream = $this->getOutputStream(true);
         $output = new ConsoleSectionOutput($stream->getStream(), $sections, $stream->getVerbosity(), $stream->isDecorated(), new OutputFormatter());
 
@@ -336,7 +349,7 @@ class ProgressBarTest extends TestCase
 
     public function testOverwriteMultipleProgressBarsWithSectionOutputs()
     {
-        $sections = array();
+        $sections = [];
         $stream = $this->getOutputStream(true);
         $output1 = new ConsoleSectionOutput($stream->getStream(), $sections, $stream->getVerbosity(), $stream->isDecorated(), new OutputFormatter());
         $output2 = new ConsoleSectionOutput($stream->getStream(), $sections, $stream->getVerbosity(), $stream->isDecorated(), new OutputFormatter());
@@ -365,7 +378,7 @@ class ProgressBarTest extends TestCase
 
     public function testMultipleSectionsWithCustomFormat()
     {
-        $sections = array();
+        $sections = [];
         $stream = $this->getOutputStream(true);
         $output1 = new ConsoleSectionOutput($stream->getStream(), $sections, $stream->getVerbosity(), $stream->isDecorated(), new OutputFormatter());
         $output2 = new ConsoleSectionOutput($stream->getStream(), $sections, $stream->getVerbosity(), $stream->isDecorated(), new OutputFormatter());
@@ -859,12 +872,12 @@ class ProgressBarTest extends TestCase
      */
     public function provideFormat()
     {
-        return array(
-            array('normal'),
-            array('verbose'),
-            array('very_verbose'),
-            array('debug'),
-        );
+        return [
+            ['normal'],
+            ['verbose'],
+            ['very_verbose'],
+            ['debug'],
+        ];
     }
 
     protected function getOutputStream($decorated = true, $verbosity = StreamOutput::VERBOSITY_NORMAL)

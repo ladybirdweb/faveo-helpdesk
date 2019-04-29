@@ -34,11 +34,11 @@ using `setOptions()`. The following options are supported:
   in conjunction with the hostnameValidator option to set the hostname validator. 
   Possible values of this option defined in [Hostname](hostname.md) validator's 
   `ALLOW_*` constants:
-  - `ALLOW_DNS` (default) - Allows Internet domain names _(e.g. example.com)_
-  - `ALLOW_IP` - Allows IP addresses _(e.g. 192.168.0.1)_
-  - `ALLOW_LOCAL` - Allows local network such as _localhost_ or _www.localdomain_
-  - `ALLOW_URI`  - Allows hostnames in URI generic syntax. See [RFC 3986](https://www.ietf.org/rfc/rfc3986.txt)
-  - `ALLOW_ALL` - Allows all types of hostnames
+    - `ALLOW_DNS` (default) - Allows Internet domain names _(e.g. example.com)_
+    - `ALLOW_IP` - Allows IP addresses _(e.g. 192.168.0.1)_
+    - `ALLOW_LOCAL` - Allows local network such as _localhost_ or _www.localdomain_
+    - `ALLOW_URI`  - Allows hostnames in URI generic syntax. See [RFC 3986](https://www.ietf.org/rfc/rfc3986.txt)
+    - `ALLOW_ALL` - Allows all types of hostnames
     
 - `useDeepMxCheck`: Defines if the servers MX records should be verified by a deep check.
   When this option is set to `true` then additionally to MX records also the `A`,

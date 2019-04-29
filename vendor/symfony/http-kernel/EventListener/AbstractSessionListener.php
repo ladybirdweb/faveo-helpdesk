@@ -38,7 +38,7 @@ abstract class AbstractSessionListener implements EventSubscriberInterface
     const NO_AUTO_CACHE_CONTROL_HEADER = 'Symfony-Session-NoAutoCacheControl';
 
     protected $container;
-    private $sessionUsageStack = array();
+    private $sessionUsageStack = [];
 
     public function __construct(ContainerInterface $container = null)
     {
@@ -71,23 +71,23 @@ abstract class AbstractSessionListener implements EventSubscriberInterface
             return;
         }
 
+        $response = $event->getResponse();
+        $autoCacheControl = !$response->headers->has(self::NO_AUTO_CACHE_CONTROL_HEADER);
+        // Always remove the internal header if present
+        $response->headers->remove(self::NO_AUTO_CACHE_CONTROL_HEADER);
+
         if (!$session = $this->container && $this->container->has('initialized_session') ? $this->container->get('initialized_session') : $event->getRequest()->getSession()) {
             return;
         }
 
-        $response = $event->getResponse();
-
         if ($session instanceof Session ? $session->getUsageIndex() !== end($this->sessionUsageStack) : $session->isStarted()) {
-            if (!$response->headers->has(self::NO_AUTO_CACHE_CONTROL_HEADER)) {
+            if ($autoCacheControl) {
                 $response
                     ->setPrivate()
                     ->setMaxAge(0)
                     ->headers->addCacheControlDirective('must-revalidate');
             }
         }
-
-        // Always remove the internal header if present
-        $response->headers->remove(self::NO_AUTO_CACHE_CONTROL_HEADER);
 
         if ($session->isStarted()) {
             /*
@@ -131,12 +131,12 @@ abstract class AbstractSessionListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
-            KernelEvents::REQUEST => array('onKernelRequest', 128),
+        return [
+            KernelEvents::REQUEST => ['onKernelRequest', 128],
             // low priority to come after regular response listeners, but higher than StreamedResponseListener
-            KernelEvents::RESPONSE => array('onKernelResponse', -1000),
-            KernelEvents::FINISH_REQUEST => array('onFinishRequest'),
-        );
+            KernelEvents::RESPONSE => ['onKernelResponse', -1000],
+            KernelEvents::FINISH_REQUEST => ['onFinishRequest'],
+        ];
     }
 
     /**

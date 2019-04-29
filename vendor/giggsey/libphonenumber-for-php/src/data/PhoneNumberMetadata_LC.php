@@ -26,7 +26,7 @@ return array (
   ),
   'fixedLine' => 
   array (
-    'NationalNumberPattern' => '758(?:4(?:30|5[0-9]|6[2-9]|8[0-2])|57[0-2]|638)\\d{4}',
+    'NationalNumberPattern' => '758(?:4(?:30|5\\d|6[2-9]|8[0-2])|57[0-2]|638)\\d{4}',
     'ExampleNumber' => '7584305678',
     'PossibleLength' => 
     array (
@@ -145,7 +145,8 @@ return array (
   'countryCode' => 1,
   'internationalPrefix' => '011',
   'nationalPrefix' => '1',
-  'nationalPrefixForParsing' => '1',
+  'nationalPrefixForParsing' => '1|([2-7]\\d{6})$',
+  'nationalPrefixTransformRule' => '758$1',
   'sameMobileAndFixedLinePattern' => false,
   'numberFormat' => 
   array (

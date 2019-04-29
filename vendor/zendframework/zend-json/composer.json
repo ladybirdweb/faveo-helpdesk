@@ -3,32 +3,29 @@
     "description": "provides convenience methods for serializing native PHP to JSON and decoding JSON to native PHP",
     "license": "BSD-3-Clause",
     "keywords": [
-        "zf2",
+        "zf",
+        "zendframework",
         "json"
     ],
-    "homepage": "https://github.com/zendframework/zend-json",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.6-dev",
-            "dev-develop": "2.7-dev"
-        }
+    "support": {
+        "docs": "https://docs.zendframework.com/zend-json/",
+        "issues": "https://github.com/zendframework/zend-json/issues",
+        "source": "https://github.com/zendframework/zend-json",
+        "rss": "https://github.com/zendframework/zend-json/releases.atom",
+        "slack": "https://zendframework-slack.herokuapp.com",
+        "forum": "https://discourse.zendframework.com/c/questions/components"
     },
     "require": {
-        "php": "^5.5 || ^7.0"
+        "php": "^5.6 || ^7.0"
     },
     "require-dev": {
-        "zendframework/zend-http": "^2.5.4",
-        "zendframework/zend-server": "^2.6.1",
-        "zendframework/zend-stdlib": "^2.5 || ^3.0",
-        "zendframework/zendxml": "^1.0.2",
-        "fabpot/php-cs-fixer": "1.7.*",
-        "phpunit/PHPUnit": "~4.0"
+        "phpunit/phpunit": "^5.7.23 || ^6.4.3",
+        "zendframework/zend-coding-standard": "~1.0.0",
+        "zendframework/zend-stdlib": "^2.7.7 || ^3.1"
     },
     "suggest": {
-        "zendframework/zend-http": "Zend\\Http component, required to use Zend\\Json\\Server",
-        "zendframework/zend-server": "Zend\\Server component, required to use Zend\\Json\\Server",
-        "zendframework/zend-stdlib": "Zend\\Stdlib component, for use with caching Zend\\Json\\Server responses",
-        "zendframework/zendxml": "To support Zend\\Json\\Json::fromXml() usage"
+        "zendframework/zend-json-server": "For implementing JSON-RPC servers",
+        "zendframework/zend-xml2json": "For converting XML documents to JSON"
     },
     "autoload": {
         "psr-4": {
@@ -39,5 +36,24 @@
         "psr-4": {
             "ZendTest\\Json\\": "test/"
         }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.1.x-dev",
+            "dev-develop": "3.2.x-dev"
+        }
+    },
+    "scripts": {
+        "check": [
+            "@cs-check",
+            "@test"
+        ],
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
     }
 }

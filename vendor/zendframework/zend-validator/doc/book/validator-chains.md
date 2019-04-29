@@ -11,9 +11,9 @@ use Zend\Validator\StringLength;
 use Zend\Validator\ValidatorChain;
 
 // Create a validator chain and add validators to it
-$chain = new ValidatorChain();
-$chain->attach(new StringLength(['min' => 6, 'max' => 12]));
-$chain->attach(new Alnum());
+$validatorChain = new ValidatorChain();
+$validatorChain->attach(new StringLength(['min' => 6, 'max' => 12]));
+$validatorChain->attach(new Alnum());
 
 // Validate the username
 if ($validatorChain->isValid($username)) {
@@ -43,7 +43,7 @@ written as follows, then the alphanumeric validation would not occur if the
 string length validation fails:
 
 ```php
-$chain->attach(new StringLength(['min' => 6, 'max' => 12], true));
+$chain->attach(new StringLength(['min' => 6, 'max' => 12]), true);
 $chain->attach(new Alnum());
 ```
 
@@ -69,13 +69,13 @@ use Zend\Validator\ValidatorChain;
 $username = 'ABCDFE';
 
 // Create a validator chain and add validators to it
-$chain = new ValidatorChain();
-$chain->attach(
+$validatorChain = new ValidatorChain();
+$validatorChain->attach(
     new StringLength(['min' => 3, 'max' => 5]),
     true, // break chain on failure
     1
 );
-$chain->attach(
+$validatorChain->attach(
     new StringLength(['min' => 7, 'max' => 9]),
     true, // break chain on failure
     2     // higher priority!

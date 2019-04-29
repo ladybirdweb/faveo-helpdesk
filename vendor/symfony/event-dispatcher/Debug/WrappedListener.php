@@ -29,12 +29,12 @@ class WrappedListener
     private $dispatcher;
     private $pretty;
     private $stub;
+    private $priority;
     private static $hasClassStub;
 
     public function __construct($listener, $name, Stopwatch $stopwatch, EventDispatcherInterface $dispatcher = null)
     {
         $this->listener = $listener;
-        $this->name = $name;
         $this->stopwatch = $stopwatch;
         $this->dispatcher = $dispatcher;
         $this->called = false;
@@ -44,7 +44,15 @@ class WrappedListener
             $this->name = \is_object($listener[0]) ? \get_class($listener[0]) : $listener[0];
             $this->pretty = $this->name.'::'.$listener[1];
         } elseif ($listener instanceof \Closure) {
-            $this->pretty = $this->name = 'closure';
+            $r = new \ReflectionFunction($listener);
+            if (false !== strpos($r->name, '{closure}')) {
+                $this->pretty = $this->name = 'closure';
+            } elseif ($class = $r->getClosureScopeClass()) {
+                $this->name = $class->name;
+                $this->pretty = $this->name.'::'.$r->name;
+            } else {
+                $this->pretty = $this->name = $r->name;
+            }
         } elseif (\is_string($listener)) {
             $this->pretty = $this->name = $listener;
         } else {
@@ -87,21 +95,24 @@ class WrappedListener
             $this->stub = self::$hasClassStub ? new ClassStub($this->pretty.'()', $this->listener) : $this->pretty.'()';
         }
 
-        return array(
+        return [
             'event' => $eventName,
-            'priority' => null !== $this->dispatcher ? $this->dispatcher->getListenerPriority($eventName, $this->listener) : null,
+            'priority' => null !== $this->priority ? $this->priority : (null !== $this->dispatcher ? $this->dispatcher->getListenerPriority($eventName, $this->listener) : null),
             'pretty' => $this->pretty,
             'stub' => $this->stub,
-        );
+        ];
     }
 
     public function __invoke(Event $event, $eventName, EventDispatcherInterface $dispatcher)
     {
+        $dispatcher = $this->dispatcher ?: $dispatcher;
+
         $this->called = true;
+        $this->priority = $dispatcher->getListenerPriority($eventName, $this->listener);
 
         $e = $this->stopwatch->start($this->name, 'event_listener');
 
-        \call_user_func($this->listener, $event, $eventName, $this->dispatcher ?: $dispatcher);
+        ($this->listener)($event, $eventName, $dispatcher);
 
         if ($e->isStarted()) {
             $e->stop();

@@ -2,10 +2,14 @@
 namespace Aws\Lambda;
 
 use Aws\AwsClient;
+use Aws\CommandInterface;
+use Aws\Middleware;
 
 /**
  * This client is used to interact with AWS Lambda
  *
+ * @method \Aws\Result addLayerVersionPermission(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise addLayerVersionPermissionAsync(array $args = [])
  * @method \Aws\Result addPermission(array $args = [])
  * @method \GuzzleHttp\Promise\Promise addPermissionAsync(array $args = [])
  * @method \Aws\Result createAlias(array $args = [])
@@ -22,6 +26,8 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise deleteFunctionAsync(array $args = [])
  * @method \Aws\Result deleteFunctionConcurrency(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteFunctionConcurrencyAsync(array $args = [])
+ * @method \Aws\Result deleteLayerVersion(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteLayerVersionAsync(array $args = [])
  * @method \Aws\Result getAccountSettings(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getAccountSettingsAsync(array $args = [])
  * @method \Aws\Result getAlias(array $args = [])
@@ -32,6 +38,12 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise getFunctionAsync(array $args = [])
  * @method \Aws\Result getFunctionConfiguration(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getFunctionConfigurationAsync(array $args = [])
+ * @method \Aws\Result getLayerVersion(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getLayerVersionAsync(array $args = [])
+ * @method \Aws\Result getLayerVersionByArn(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getLayerVersionByArnAsync(array $args = [])
+ * @method \Aws\Result getLayerVersionPolicy(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getLayerVersionPolicyAsync(array $args = [])
  * @method \Aws\Result getPolicy(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getPolicyAsync(array $args = [])
  * @method \Aws\Result invoke(array $args = [])
@@ -44,14 +56,22 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise listEventSourceMappingsAsync(array $args = [])
  * @method \Aws\Result listFunctions(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listFunctionsAsync(array $args = [])
+ * @method \Aws\Result listLayerVersions(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise listLayerVersionsAsync(array $args = [])
+ * @method \Aws\Result listLayers(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise listLayersAsync(array $args = [])
  * @method \Aws\Result listTags(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listTagsAsync(array $args = [])
  * @method \Aws\Result listVersionsByFunction(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listVersionsByFunctionAsync(array $args = [])
+ * @method \Aws\Result publishLayerVersion(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise publishLayerVersionAsync(array $args = [])
  * @method \Aws\Result publishVersion(array $args = [])
  * @method \GuzzleHttp\Promise\Promise publishVersionAsync(array $args = [])
  * @method \Aws\Result putFunctionConcurrency(array $args = [])
  * @method \GuzzleHttp\Promise\Promise putFunctionConcurrencyAsync(array $args = [])
+ * @method \Aws\Result removeLayerVersionPermission(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise removeLayerVersionPermissionAsync(array $args = [])
  * @method \Aws\Result removePermission(array $args = [])
  * @method \GuzzleHttp\Promise\Promise removePermissionAsync(array $args = [])
  * @method \Aws\Result tagResource(array $args = [])
@@ -67,4 +87,37 @@ use Aws\AwsClient;
  * @method \Aws\Result updateFunctionConfiguration(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateFunctionConfigurationAsync(array $args = [])
  */
-class LambdaClient extends AwsClient {}
+class LambdaClient extends AwsClient
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(array $args)
+    {
+        parent::__construct($args);
+        $list = $this->getHandlerList();
+        if (extension_loaded('curl')) {
+            $list->appendInit($this->getDefaultCurlOptionsMiddleware());
+        }
+    }
+
+    /**
+     * Provides a middleware that sets default Curl options for the command
+     *
+     * @return callable
+     */
+    public function getDefaultCurlOptionsMiddleware()
+    {
+        return Middleware::mapCommand(function (CommandInterface $cmd) {
+            $defaultCurlOptions = [
+                CURLOPT_TCP_KEEPALIVE => 1,
+            ];
+            if (!isset($cmd['@http']['curl'])) {
+                $cmd['@http']['curl'] = $defaultCurlOptions;
+            } else {
+                $cmd['@http']['curl'] += $defaultCurlOptions;
+            }
+            return $cmd;
+        });
+    }
+}

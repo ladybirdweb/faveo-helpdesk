@@ -324,14 +324,18 @@ class Client implements Stdlib\DispatchableInterface
                 $this->clearAuth();
             }
 
+            $uri = $this->getUri();
+            $user = $uri->getUser();
+            $password = $uri->getPassword();
+
             // Set auth if username and password has been specified in the uri
-            if ($this->getUri()->getUser() && $this->getUri()->getPassword()) {
-                $this->setAuth($this->getUri()->getUser(), $this->getUri()->getPassword());
+            if ($user && $password) {
+                $this->setAuth($user, $password);
             }
 
             // We have no ports, set the defaults
-            if (! $this->getUri()->getPort()) {
-                $this->getUri()->setPort(($this->getUri()->getScheme() == 'https' ? 443 : 80));
+            if (! $uri->getPort() && $uri->isAbsolute()) {
+                $uri->setPort($uri->getScheme() === 'https' ? 443 : 80);
             }
         }
         return $this;
@@ -901,8 +905,8 @@ class Client implements Stdlib\DispatchableInterface
                 }
             }
             // If we have no ports, set the defaults
-            if (! $uri->getPort()) {
-                $uri->setPort($uri->getScheme() == 'https' ? 443 : 80);
+            if (! $uri->getPort() && $uri->isAbsolute()) {
+                $uri->setPort($uri->getScheme() === 'https' ? 443 : 80);
             }
 
             // method

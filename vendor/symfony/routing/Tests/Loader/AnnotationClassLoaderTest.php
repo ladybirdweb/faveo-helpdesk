@@ -33,6 +33,7 @@ use Symfony\Component\Routing\Tests\Fixtures\AnnotationFixtures\MissingRouteName
 use Symfony\Component\Routing\Tests\Fixtures\AnnotationFixtures\NothingButNameController;
 use Symfony\Component\Routing\Tests\Fixtures\AnnotationFixtures\PrefixedActionLocalizedRouteController;
 use Symfony\Component\Routing\Tests\Fixtures\AnnotationFixtures\PrefixedActionPathController;
+use Symfony\Component\Routing\Tests\Fixtures\AnnotationFixtures\RequirementsWithoutPlaceholderNameController;
 use Symfony\Component\Routing\Tests\Fixtures\AnnotationFixtures\RouteWithPrefixController;
 
 class AnnotationClassLoaderTest extends AbstractAnnotationLoaderTest
@@ -63,15 +64,15 @@ class AnnotationClassLoaderTest extends AbstractAnnotationLoaderTest
 
     public function provideTestSupportsChecksResource()
     {
-        return array(
-            array('class', true),
-            array('\fully\qualified\class\name', true),
-            array('namespaced\class\without\leading\slash', true),
-            array('ÿClassWithLegalSpecialCharacters', true),
-            array('5', false),
-            array('foo.foo', false),
-            array(null, false),
-        );
+        return [
+            ['class', true],
+            ['\fully\qualified\class\name', true],
+            ['namespaced\class\without\leading\slash', true],
+            ['ÿClassWithLegalSpecialCharacters', true],
+            ['5', false],
+            ['foo.foo', false],
+            [null, false],
+        ];
     }
 
     public function testSupportsChecksTypeIfSpecified()
@@ -87,11 +88,25 @@ class AnnotationClassLoaderTest extends AbstractAnnotationLoaderTest
         $this->assertEquals('/path', $routes->get('action')->getPath());
     }
 
+    /**
+     * @group legacy
+     * @expectedDeprecation A placeholder name must be a string (0 given). Did you forget to specify the placeholder key for the requirement "foo" in "Symfony\Component\Routing\Tests\Fixtures\AnnotationFixtures\RequirementsWithoutPlaceholderNameController"?
+     * @expectedDeprecation A placeholder name must be a string (1 given). Did you forget to specify the placeholder key for the requirement "\d+" in "Symfony\Component\Routing\Tests\Fixtures\AnnotationFixtures\RequirementsWithoutPlaceholderNameController"?
+     * @expectedDeprecation A placeholder name must be a string (0 given). Did you forget to specify the placeholder key for the requirement "foo" of route "foo" in "Symfony\Component\Routing\Tests\Fixtures\AnnotationFixtures\RequirementsWithoutPlaceholderNameController::foo()"?
+     * @expectedDeprecation A placeholder name must be a string (1 given). Did you forget to specify the placeholder key for the requirement "\d+" of route "foo" in "Symfony\Component\Routing\Tests\Fixtures\AnnotationFixtures\RequirementsWithoutPlaceholderNameController::foo()"?
+     */
+    public function testRequirementsWithoutPlaceholderName()
+    {
+        $this->loader->load(RequirementsWithoutPlaceholderNameController::class);
+    }
+
     public function testInvokableControllerLoader()
     {
         $routes = $this->loader->load(InvokableController::class);
         $this->assertCount(1, $routes);
         $this->assertEquals('/here', $routes->get('lol')->getPath());
+        $this->assertEquals(['GET', 'POST'], $routes->get('lol')->getMethods());
+        $this->assertEquals(['https'], $routes->get('lol')->getSchemes());
     }
 
     public function testInvokableLocalizedControllerLoading()
@@ -121,9 +136,11 @@ class AnnotationClassLoaderTest extends AbstractAnnotationLoaderTest
     public function testDefaultValuesForMethods()
     {
         $routes = $this->loader->load(DefaultValueController::class);
-        $this->assertCount(1, $routes);
+        $this->assertCount(3, $routes);
         $this->assertEquals('/{default}/path', $routes->get('action')->getPath());
         $this->assertEquals('value', $routes->get('action')->getDefault('default'));
+        $this->assertEquals('Symfony', $routes->get('hello_with_default')->getDefault('name'));
+        $this->assertEquals('World', $routes->get('hello_without_default')->getDefault('name'));
     }
 
     public function testMethodActionControllers()
@@ -134,7 +151,7 @@ class AnnotationClassLoaderTest extends AbstractAnnotationLoaderTest
         $this->assertEquals('/the/path', $routes->get('post')->getPath());
     }
 
-    public function testLocalizedMethodActionControllers()
+    public function testInvokableClassRouteLoadWithMethodAnnotation()
     {
         $routes = $this->loader->load(LocalizedMethodActionControllers::class);
         $this->assertCount(4, $routes);
@@ -170,30 +187,30 @@ class AnnotationClassLoaderTest extends AbstractAnnotationLoaderTest
 
     public function testInvokableClassMultipleRouteLoad()
     {
-        $classRouteData1 = array(
+        $classRouteData1 = [
             'name' => 'route1',
             'path' => '/1',
-            'schemes' => array('https'),
-            'methods' => array('GET'),
-        );
+            'schemes' => ['https'],
+            'methods' => ['GET'],
+        ];
 
-        $classRouteData2 = array(
+        $classRouteData2 = [
             'name' => 'route2',
             'path' => '/2',
-            'schemes' => array('https'),
-            'methods' => array('GET'),
-        );
+            'schemes' => ['https'],
+            'methods' => ['GET'],
+        ];
 
         $reader = $this->getReader();
         $reader
             ->expects($this->exactly(1))
             ->method('getClassAnnotations')
-            ->will($this->returnValue(array(new RouteAnnotation($classRouteData1), new RouteAnnotation($classRouteData2))))
+            ->will($this->returnValue([new RouteAnnotation($classRouteData1), new RouteAnnotation($classRouteData2)]))
         ;
         $reader
             ->expects($this->once())
             ->method('getMethodAnnotations')
-            ->will($this->returnValue(array()))
+            ->will($this->returnValue([]))
         ;
         $loader = new class($reader) extends AnnotationClassLoader {
             protected function configureRoute(Route $route, \ReflectionClass $class, \ReflectionMethod $method, $annot)

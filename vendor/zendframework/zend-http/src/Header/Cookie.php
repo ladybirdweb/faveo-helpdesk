@@ -75,12 +75,20 @@ class Cookie extends ArrayObject implements HeaderInterface
         parent::__construct($array, ArrayObject::ARRAY_AS_PROPS);
     }
 
+    /**
+     * @param bool $encodeValue
+     *
+     * @return $this
+     */
     public function setEncodeValue($encodeValue)
     {
         $this->encodeValue = (bool) $encodeValue;
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getEncodeValue()
     {
         return $this->encodeValue;

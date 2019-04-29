@@ -47,7 +47,7 @@ this validator.
 zend-validator is shipped with more than 45 different validators with more than
 200 failure messages. It can be a tedious task to translate all of these
 messages. For your convenience, pre-translated messages are provided in the
-[zendframework/zend-i18n-resources](https://zendframework.github.io/zend-i18n-resources/)
+[zendframework/zend-i18n-resources](https://docs.zendframework.com/zend-i18n-resources/)
 package:
 
 ```bash

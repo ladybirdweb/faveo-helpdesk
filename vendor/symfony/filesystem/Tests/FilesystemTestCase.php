@@ -18,7 +18,7 @@ class FilesystemTestCase extends TestCase
 {
     private $umask;
 
-    protected $longPathNamesWindows = array();
+    protected $longPathNamesWindows = [];
 
     /**
      * @var \Symfony\Component\Filesystem\Filesystem
@@ -31,12 +31,12 @@ class FilesystemTestCase extends TestCase
     protected $workspace = null;
 
     /**
-     * @var null|bool Flag for hard links on Windows
+     * @var bool|null Flag for hard links on Windows
      */
     private static $linkOnWindows = null;
 
     /**
-     * @var null|bool Flag for symbolic links on Windows
+     * @var bool|null Flag for symbolic links on Windows
      */
     private static $symlinkOnWindows = null;
 
@@ -84,7 +84,7 @@ class FilesystemTestCase extends TestCase
             foreach ($this->longPathNamesWindows as $path) {
                 exec('DEL '.$path);
             }
-            $this->longPathNamesWindows = array();
+            $this->longPathNamesWindows = [];
         }
 
         $this->filesystem->remove($this->workspace);

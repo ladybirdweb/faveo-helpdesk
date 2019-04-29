@@ -489,6 +489,11 @@ class Request extends HttpRequest
             // Backtrack up the SCRIPT_FILENAME to find the portion
             // matching PHP_SELF.
 
+            $argv = $this->getServer()->get('argv', []);
+            if (isset($argv[0]) && strpos($filename, $argv[0]) === 0) {
+                $filename = substr($filename, strlen($argv[0]));
+            }
+
             $baseUrl  = '/';
             $basename = basename($filename);
             if ($basename) {

@@ -26,7 +26,7 @@ return array (
   ),
   'fixedLine' => 
   array (
-    'NationalNumberPattern' => '(?:1(?:06|17|28|39)|3[012]\\d)\\d{3}',
+    'NationalNumberPattern' => '(?:1(?:06|17|28|39)|3[0-2]\\d)\\d{3}',
     'ExampleNumber' => '106609',
     'PossibleLength' => 
     array (
@@ -141,6 +141,8 @@ return array (
   'id' => 'NF',
   'countryCode' => 672,
   'internationalPrefix' => '00',
+  'nationalPrefixForParsing' => '([0-258]\\d{4})$',
+  'nationalPrefixTransformRule' => '3$1',
   'sameMobileAndFixedLinePattern' => false,
   'numberFormat' => 
   array (

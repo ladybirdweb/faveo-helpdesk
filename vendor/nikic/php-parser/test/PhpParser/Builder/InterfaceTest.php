@@ -6,9 +6,8 @@ use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Stmt;
-use PHPUnit\Framework\TestCase;
 
-class InterfaceTest extends TestCase
+class InterfaceTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Interface_ */
     protected $builder;
@@ -79,11 +78,9 @@ class InterfaceTest extends TestCase
         ]), $node);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unexpected node of type "Stmt_PropertyProperty"
-     */
     public function testInvalidStmtError() {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Unexpected node of type "Stmt_PropertyProperty"');
         $this->builder->addStmt(new Stmt\PropertyProperty('invalid'));
     }
 
