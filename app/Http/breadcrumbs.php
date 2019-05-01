@@ -394,10 +394,6 @@ Breadcrumbs::register('closed.ticket', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
     $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.closed'), route('closed.ticket'));
 });
-Breadcrumbs::register('assigned.ticket', function ($breadcrumbs) {
-    $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.assigned'), route('assigned.ticket'));
-});
 Breadcrumbs::register('newticket', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
 
