@@ -312,7 +312,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('organization-autofill', ['as' => 'post.organization.autofill', 'uses' => 'Agent\helpdesk\OrganizationController@organizationAutofill']); //auto fill organization name
         Route::get('org/delete/{id}', ['as' => 'org.delete', 'uses' => 'Agent\helpdesk\OrganizationController@destroy']);
         Route::get('org-chart/{id}', 'Agent\helpdesk\OrganizationController@orgChartData')->name('org-chart-data');
-//    Route::post('org-chart-range', ['as' => 'post.org.chart', 'uses' => 'Agent\helpdesk\OrganizationController@orgChartData']);
+        //    Route::post('org-chart-range', ['as' => 'post.org.chart', 'uses' => 'Agent\helpdesk\OrganizationController@orgChartData']);
         Route::post('org-chart-range/{id}/{date1}/{date2}', ['as' => 'post.org.chart', 'uses' => 'Agent\helpdesk\OrganizationController@orgChartData']);
         Route::get('profile', ['as' => 'profile', 'uses' => 'Agent\helpdesk\UserController@getProfile']); /*  User profile get  */
 
@@ -461,10 +461,10 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('/ticket/unassigned', ['as' => 'get.unassigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_unassigned']);  /* Get tickets in datatable */
         // Department ticket
-            Route::get('/{dept}/open', ['as' => 'dept.open.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptopen']); // Open
-            Route::get('tickets/{dept}/{status}', ['as' => 'dept.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptTicket']); // Open
+        Route::get('/{dept}/open', ['as' => 'dept.open.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptopen']); // Open
+        Route::get('tickets/{dept}/{status}', ['as' => 'dept.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptTicket']); // Open
 
-            Route::get('/{dept}/assigned', ['as' => 'dept.inprogress.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptinprogress']); // Inprogress
+        Route::get('/{dept}/assigned', ['as' => 'dept.inprogress.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptinprogress']); // Inprogress
 
         Route::get('/{dept}/closed', ['as' => 'dept.closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptclose']); // Closed
         /*
@@ -473,8 +473,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/ticket/followup', ['as' => 'followup.ticket', 'uses' => 'Agent\helpdesk\TicketController@followupTicketList']); //  Get Closed Ticket /
 
         Route::get('/ticket/get-followup', ['as' => 'get.followup.ticket', 'uses' => 'Agent\helpdesk\TicketController@getFollowup']);  // Get tickets in datatable /
-            Route::get('/ticket/close/get-approval/{id}', ['as' => 'get.close.approval.ticket', 'uses' => 'Agent\helpdesk\TicketController@getCloseapproval']);  // Get tickets in datatable /
-            Route::get('filter', ['as'=>'filter', 'uses'=>'Agent\helpdesk\Filter\FilterControllerOld@getFilter']);
+        Route::get('/ticket/close/get-approval/{id}', ['as' => 'get.close.approval.ticket', 'uses' => 'Agent\helpdesk\TicketController@getCloseapproval']);  // Get tickets in datatable /
+        Route::get('filter', ['as'=>'filter', 'uses'=>'Agent\helpdesk\Filter\FilterControllerOld@getFilter']);
 
         /*
          *=======================================================================
@@ -492,12 +492,12 @@ Route::group(['middleware' => ['web']], function () {
       |
      */
     // seasrch
-//    Route::POST('tickets/search/', function () {
-//        $keyword = Illuminate\Support\Str::lower(Input::get('auto'));
-//        $models = App\Model\Ticket\Tickets::where('ticket_number', '=', $keyword)->orderby('ticket_number')->take(10)->skip(0)->get();
-//        $count = count($models);
-//        return Illuminate\Support\Facades\Redirect::back()->with('contents', $models)->with('counts', $count);
-//    });
+    //    Route::POST('tickets/search/', function () {
+    //        $keyword = Illuminate\Support\Str::lower(Input::get('auto'));
+    //        $models = App\Model\Ticket\Tickets::where('ticket_number', '=', $keyword)->orderby('ticket_number')->take(10)->skip(0)->get();
+    //        $count = count($models);
+    //        return Illuminate\Support\Facades\Redirect::back()->with('contents', $models)->with('counts', $count);
+    //    });
     Route::any('getdata', function () {
         $term = Illuminate\Support\Str::lower(Input::get('term'));
         $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term.'%')->groupBy('ticket_number')->take(10)->get();
@@ -527,7 +527,7 @@ Route::group(['middleware' => ['web']], function () {
     // show ticket via have a ticket
     Route::get('show-ticket/{id}/{code}', ['as' => 'show.ticket', 'uses' => 'Client\helpdesk\UnAuthController@showTicketCode']); //detail ticket information
 
-//testing ckeditor
+    //testing ckeditor
     //===================================================================================
     Route::group(['middleware' => 'role.user', 'middleware' => 'auth'], function () {
         Route::get('client-profile', ['as' => 'client.profile', 'uses' => 'Client\helpdesk\GuestController@getProfile']); /*  User profile get  */
@@ -589,23 +589,41 @@ Route::group(['middleware' => ['web']], function () {
       |  View all the Routes
       |=============================================================
      */
-    Route::get('/aaa', function () {
-        $routeCollection = Route::getRoutes();
+    Route::get('aaa', function () {
+
         echo "<table style='width:100%'>";
         echo '<tr>';
-        echo "<td width='10%'><h4>HTTP Method</h4></td>";
+        echo "<td width='15%'><h4>HTTP Method</h4></td>";
         echo "<td width='10%'><h4>Route</h4></td>";
         echo "<td width='10%'><h4>Url</h4></td>";
-        echo "<td width='80%'><h4>Corresponding Action</h4></td>";
+        echo "<td width='75%'><h4>Corresponding Action</h4></td>";
         echo '</tr>';
-        foreach ($routeCollection as $value) {
+
+        foreach (Route::getRoutes()->getRoutes() as $route) {
+            if(is_array($route->methods)){
+                $methods = '';
+                $keys = array_keys($route->methods);
+                $last = array_pop($keys);
+                foreach ($route->methods as $key => $method) {
+                    if($key != $last){
+                        $methods .= $method. ', ';
+                    }
+                    else{
+                        $methods .= $method;
+                    }
+                }
+            }
+            else{
+                $methods = $route->methods;
+            }
             echo '<tr>';
-            echo '<td>'.$value->getMethods()[0].'</td>';
-            echo '<td>'.$value->getName().'</td>';
-            echo '<td>'.$value->getPath().'</td>';
-            echo '<td>'.$value->getActionName().'</td>';
+            echo '<td>'. $methods .'</td>';
+            echo '<td>'. (isset($route->action['as']) ? $route->action['as'] : 'No name given') .'</td>';
+            echo '<td>'. $route->uri.'</td>';
+            echo "<td>". (isset($route->action['controller']) ? $route->action['controller'] : 'No controller given') ."</td>";
             echo '</tr>';
         }
+
         echo '</table>';
     });
     /*
@@ -638,13 +656,13 @@ Route::group(['middleware' => ['web']], function () {
       |  Test mail Routes
       |=============================================================
      */
-//    Route::get('testmail', function () {
-//        $e = 'hello';
-//        Config::set('mail.host', 'smtp.gmail.com');
-//        \Mail::send('errors.report', ['e' => $e], function ($message) {
-//            $message->to('sujitprasad4567@gmail.com', 'sujit prasad')->subject('Error');
-//        });
-//    });
+    //    Route::get('testmail', function () {
+    //        $e = 'hello';
+    //        Config::set('mail.host', 'smtp.gmail.com');
+    //        \Mail::send('errors.report', ['e' => $e], function ($message) {
+    //            $message->to('sujitprasad4567@gmail.com', 'sujit prasad')->subject('Error');
+    //        });
+    //    });
     /*  For the crud of catogory  */
     Route::resource('category', 'Agent\kb\CategoryController');
 
@@ -725,8 +743,8 @@ Route::group(['middleware' => ['web']], function () {
     // Route::patch('client-profile-edit',['as' => 'client-profile-edit', 'uses' => 'Client\kb\UserController@postClientProfile']);
     // Route::patch('client-profile-password/{id}',['as' => 'client-profile-password', 'uses' => 'Client\kb\UserController@postClientProfilePassword']);
     Route::get('/inbox/data', ['as' => 'api.inbox', 'uses' => 'Agent\helpdesk\TicketController@get_inbox']);
-//    Route::get('/report', 'HomeController@getreport');
-//    Route::get('/reportdata', 'HomeController@pushdata');
+    //    Route::get('/report', 'HomeController@getreport');
+    //    Route::get('/reportdata', 'HomeController@pushdata');
 
     /*
      * Update module
