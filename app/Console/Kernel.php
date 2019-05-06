@@ -49,15 +49,16 @@ class Kernel extends ConsoleKernel
     {
         $condition = new Condition();
         $command = $condition->getConditionValue($task);
+        $overlapping = $condition->getWithoutOverlappingState($task);
         switch ($task) {
             case 'fetching':
-                $this->getCondition($schedule->command('ticket:fetch'), $command);
+                $this->getOverlapping($this->getCondition($schedule->command('ticket:fetch'), $command), $overlapping);
                 break;
             case 'notification':
-                $this->getCondition($schedule->command('report:send'), $command);
+                $this->getOverlapping($this->getCondition($schedule->command('report:send'), $command), $overlapping);
                 break;
             case 'work':
-                $this->getCondition($schedule->command('ticket:close'), $command);
+                $this->getOverlapping($this->getCondition($schedule->command('ticket:close'), $command), $overlapping);
                 break;
         }
     }
@@ -68,35 +69,37 @@ class Kernel extends ConsoleKernel
         $at = $command['at'];
         switch ($condition) {
             case 'everyMinute':
-                $schedule->everyMinute();
+                return $schedule->everyMinute();
                 break;
             case 'everyFiveMinutes':
-                $schedule->everyFiveMinutes();
+                return $schedule->everyFiveMinutes();
                 break;
             case 'everyTenMinutes':
-                $schedule->everyTenMinutes();
+                return $schedule->everyTenMinutes();
                 break;
             case 'everyThirtyMinutes':
-                $schedule->everyThirtyMinutes();
+                return $schedule->everyThirtyMinutes();
                 break;
             case 'hourly':
-                $schedule->hourly();
+                return $schedule->hourly();
                 break;
             case 'daily':
-                $schedule->daily();
+                return $schedule->daily();
                 break;
             case 'dailyAt':
-                $this->getConditionWithOption($schedule, $condition, $at);
+                return $this->getConditionWithOption($schedule, $condition, $at);
                 break;
             case 'weekly':
-                $schedule->weekly();
+                return $schedule->weekly();
                 break;
             case 'monthly':
-                $schedule->monthly();
+                return $schedule->monthly();
                 break;
             case 'yearly':
-                $schedule->yearly();
+                return $schedule->yearly();
                 break;
+            default :
+                return $schedule;
         }
     }
 
@@ -119,6 +122,19 @@ class Kernel extends ConsoleKernel
         }
 
         return $queue;
+    }
+
+    /**
+     * Check if the command must run with or without overlapping.
+     *
+     * @param $schedule
+     * @param $overlapping
+     */
+    public function getOverlapping($schedule, $overlapping)
+    {
+        if($overlapping){
+            $schedule->withoutOverlapping();
+        }
     }
 
     /**

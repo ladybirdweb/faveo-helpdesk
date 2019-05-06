@@ -24,6 +24,14 @@ class Condition extends Model
         return $value;
     }
 
+    public function getWithoutOverlappingState($job)
+    {
+        $condition = $this->where('job', $job)->first();
+        if($condition){
+            return $condition->no_overlapping;
+        }
+    }
+
     public function checkArray($key, $array)
     {
         $value = '';
