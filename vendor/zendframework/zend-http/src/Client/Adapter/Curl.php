@@ -208,6 +208,18 @@ class Curl implements HttpAdapter, StreamInterface
         } else {
             $connectTimeout = null;
         }
+
+        if ($connectTimeout !== null && ! is_numeric($connectTimeout)) {
+            throw new AdapterException\InvalidArgumentException(sprintf(
+                'integer or numeric string expected, got %s',
+                gettype($connectTimeout)
+            ));
+        }
+
+        if ($connectTimeout !== null) {
+            $connectTimeout = (int) $connectTimeout;
+        }
+
         if ($connectTimeout !== null) {
             if (defined('CURLOPT_CONNECTTIMEOUT_MS')) {
                 curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT_MS, $connectTimeout * 1000);

@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+4.2.0
+-----
+
+ * added the `Process::fromShellCommandline()` to run commands in a shell wrapper
+ * deprecated passing a command as string when creating a `Process` instance
+ * deprecated the `Process::setCommandline()` and the `PhpProcess::setPhpBinary()` methods
+ * added the `Process::waitUntil()` method to wait for the process only for a
+   specific output, then continue the normal execution of your application
+
 4.1.0
 -----
 
@@ -12,9 +21,9 @@ CHANGELOG
 -----
 
  * environment variables will always be inherited
- * added a second `array $env = array()` argument to the `start()`, `run()`,
+ * added a second `array $env = []` argument to the `start()`, `run()`,
    `mustRun()`, and `restart()` methods of the `Process` class
- * added a second `array $env = array()` argument to the `start()` method of the
+ * added a second `array $env = []` argument to the `start()` method of the
    `PhpProcess` class
  * the `ProcessUtils::escapeArgument()` method has been removed
  * the `areEnvironmentVariablesInherited()`, `getOptions()`, and `setOptions()`

@@ -11,6 +11,15 @@ class FinalMethod
     {
     }
 
+    /**
+     * @final
+     *
+     * @return int
+     */
+    public function finalMethod2()
+    {
+    }
+
     public function anotherMethod()
     {
     }

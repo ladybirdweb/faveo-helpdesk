@@ -63,7 +63,9 @@
                             {!! Form::label('email_fetching',Lang::get('lang.email_fetch')) !!}<br>
                             {!! Form::checkbox('email_fetching',1,$condition->checkActiveJob()['fetching'],['id'=>'email_fetching']) !!}&nbsp;{{Lang::get('lang.fetch_auto-corn')}}
                         </div>
-
+                        <div class="form-group">
+                            {!! Form::checkbox('email_fetching_overlapping',1,$condition->getWithoutOverlappingState('fetching'),['id'=>'email_fetching_overlapping']) !!}&nbsp;{{Lang::get('lang.cron_overlapping')}}
+                        </div>
                     </div>
                     <div class="col-md-6" id="fetching">
                         {!! Form::select('fetching-commands',$commands,$condition->getConditionValue('fetching')['condition'],['class'=>'form-control','id'=>'fetching-command']) !!}
@@ -83,8 +85,11 @@
                 <div class="info-box-content">
                     <div class="col-md-6">
                         <div class="form-group">
-                            {!! Form::label('notification_cron',Lang::get('lang.notification-email')) !!}<br>
+                            {!! Form::label('notification_cron',Lang::get('lang.notification-email')) !!}<br />
                             {!! Form::checkbox('notification_cron',1,$condition->checkActiveJob()['notification'],['id'=>'notification_cron']) !!}&nbsp;{{Lang::get('lang.cron_notification')}}
+                        </div>
+                        <div class="form-group">
+                            {!! Form::checkbox('notification_overlapping',1,$condition->getWithoutOverlappingState('notification'),['id'=>'notification_overlapping']) !!}&nbsp;{{Lang::get('lang.cron_overlapping')}}
                         </div>
                     </div>
                     <div class="col-md-6" id="notification">
@@ -106,6 +111,9 @@
                             {!! Form::label('condition',Lang::get('lang.auto_close_workflow')) !!}<br>
                             {!! Form::checkbox('condition',1,$condition->checkActiveJob()['work'],['id'=>'auto_close']) !!}
                                    {{Lang::get('lang.enable_workflow')}}
+                        </div>
+                        <div class="form-group">
+                            {!! Form::checkbox('workflow_overlapping',1,$condition->getWithoutOverlappingState('work'),['id'=>'workflow_overlapping']) !!}&nbsp;{{Lang::get('lang.cron_overlapping')}}
                         </div>
                     </div>
                     <div class="col-md-6" id="workflow">

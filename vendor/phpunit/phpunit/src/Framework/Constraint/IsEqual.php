@@ -117,7 +117,7 @@ class IsEqual extends Constraint
     /**
      * Returns a string representation of the constraint.
      *
-     * @throws SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function toString(): string
     {
@@ -129,7 +129,7 @@ class IsEqual extends Constraint
             }
 
             return \sprintf(
-                'is equal to "%s"',
+                "is equal to '%s'",
                 $this->value
             );
         }

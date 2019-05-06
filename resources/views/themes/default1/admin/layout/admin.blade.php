@@ -36,8 +36,6 @@
 
         <link href="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.css")}}" rel="stylesheet" type="text/css" />
 
-        <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" type="text/javascript"></script>
-
         <script src="{{asset("lb-faveo/js/jquery-2.1.4.js")}}" type="text/javascript"></script>
 
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
@@ -441,11 +439,24 @@
 @if (trim($__env->yieldContent('no-toolbar')))
     <h1>@yield('no-toolbar')</h1>
 @else
+    <script src="{{asset('vendor/unisharp/laravel-ckeditor/ckeditor.js')}}"></script>
     <script>
-    $(function () {
-    //Add text editor
-        $("textarea").wysihtml5();
-    });
+        CKEDITOR.replace( textarea, {
+            toolbarGroups: [
+                {"name":"basicstyles","groups":["basicstyles"]},
+                {"name":"links","groups":["links"]},
+                {"name":"paragraph","groups":["list","blocks"]},
+                {"name":"document","groups":["mode"]},
+                {"name":"insert","groups":["insert"]},
+                {"name":"styles","groups":["styles"]},
+                {"name":"about","groups":["about"]}
+            ],
+            filebrowserImageBrowseUrl: "{{url('laravel-filemanager?type=Images')}}",
+            filebrowserImageUploadUrl: "{{url('laravel-filemanager/upload?type=Images')}}",
+            filebrowserBrowseUrl: "{{url('laravel-filemanager?type=Files')}}",
+            filebrowserUploadUrl: "{{url('laravel-filemanager/upload?type=Files')}}",
+            removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+        });
     </script>
 @endif
     <script>

@@ -29,7 +29,7 @@ class StaticInvocation implements Invocation, SelfDescribing
         'sqlite3'   => true,
         'tidy'      => true,
         'xmlwriter' => true,
-        'xsl'       => true
+        'xsl'       => true,
     ];
 
     /**
@@ -42,7 +42,7 @@ class StaticInvocation implements Invocation, SelfDescribing
         'RecursiveIteratorIterator',
         'SplFileObject',
         'PDORow',
-        'ZipArchive'
+        'ZipArchive',
     ];
 
     /**
@@ -69,6 +69,11 @@ class StaticInvocation implements Invocation, SelfDescribing
      * @var bool
      */
     private $isReturnTypeNullable = false;
+
+    /**
+     * @var bool
+     */
+    private $proxiedCall = false;
 
     /**
      * @param string $className
@@ -138,7 +143,7 @@ class StaticInvocation implements Invocation, SelfDescribing
      */
     public function generateReturnValue()
     {
-        if ($this->isReturnTypeNullable) {
+        if ($this->isReturnTypeNullable || $this->proxiedCall) {
             return;
         }
 
@@ -184,6 +189,11 @@ class StaticInvocation implements Invocation, SelfDescribing
 
                 return $generator->getMock($this->returnType, [], [], '', false);
         }
+    }
+
+    public function setProxiedCall(): void
+    {
+        $this->proxiedCall = true;
     }
 
     public function toString(): string

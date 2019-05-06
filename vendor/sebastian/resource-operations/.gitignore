@@ -1,3 +1,5 @@
 /.idea
-/build/arginfo.php
-
+/.php_cs.cache
+/build/FunctionSignatureMap.php
+/composer.lock
+/vendor

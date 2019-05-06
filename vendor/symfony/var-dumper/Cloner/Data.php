@@ -63,7 +63,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
     /**
      * @param bool $recursive Whether values should be resolved recursively or not
      *
-     * @return string|int|float|bool|array|null|Data[] A native representation of the original value
+     * @return string|int|float|bool|array|Data[]|null A native representation of the original value
      */
     public function getValue($recursive = false)
     {
@@ -79,7 +79,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
             return $item->value;
         }
 
-        $children = $item->position ? $this->data[$item->position] : array();
+        $children = $item->position ? $this->data[$item->position] : [];
 
         foreach ($children as $k => $v) {
             if ($recursive && !($v = $this->getStub($v)) instanceof Stub) {
@@ -115,9 +115,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
             throw new \LogicException(sprintf('%s object holds non-iterable type "%s".', self::class, \gettype($value)));
         }
 
-        foreach ($value as $k => $v) {
-            yield $k => $v;
-        }
+        yield from $value;
     }
 
     public function __get($key)
@@ -125,7 +123,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
         if (null !== $data = $this->seek($key)) {
             $item = $this->getStub($data->data[$data->position][$data->key]);
 
-            return $item instanceof Stub || array() === $item ? $data : $item;
+            return $item instanceof Stub || [] === $item ? $data : $item;
         }
     }
 
@@ -227,7 +225,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
         if (!($item = $this->getStub($item)) instanceof Stub || !$item->position) {
             return;
         }
-        $keys = array($key);
+        $keys = [$key];
 
         switch ($item->type) {
             case Stub::TYPE_OBJECT:
@@ -247,7 +245,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
         $children = $this->data[$item->position];
 
         foreach ($keys as $key) {
-            if (isset($children[$key]) || array_key_exists($key, $children)) {
+            if (isset($children[$key]) || \array_key_exists($key, $children)) {
                 $data = clone $this;
                 $data->key = $key;
                 $data->position = $item->position;
@@ -263,7 +261,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function dump(DumperInterface $dumper)
     {
-        $refs = array(0);
+        $refs = [0];
         $this->dumpItem($dumper, new Cursor(), $refs, $this->data[$this->position][$this->key]);
     }
 
@@ -283,7 +281,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
         $firstSeen = true;
 
         if (!$item instanceof Stub) {
-            $cursor->attr = array();
+            $cursor->attr = [];
             $type = \gettype($item);
             if ($item && 'array' === $type) {
                 $item = $this->getStub($item);
@@ -324,10 +322,10 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
                     if ($cut >= 0) {
                         $cut += \count($children);
                     }
-                    $children = array();
+                    $children = [];
                 }
             } else {
-                $children = array();
+                $children = [];
             }
             switch ($item->type) {
                 case Stub::TYPE_STRING:

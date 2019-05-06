@@ -1,5 +1,5 @@
 language: php
-dist: trusty
+dist: xenial
 sudo: false
 
 cache:
@@ -10,6 +10,8 @@ php:
   - 7.0
   - 7.1
   - 7.2
+  - 7.3
+  - 7.4snapshot
   - nightly
 
 install:
@@ -23,7 +25,7 @@ matrix:
 
 script:
   - if [ $TRAVIS_PHP_VERSION = '7.0' ]; then vendor/bin/phpunit --coverage-clover build/logs/clover.xml; else vendor/bin/phpunit; fi
-  - if [ $TRAVIS_PHP_VERSION = '7.1' ]; then test_old/run-php-src.sh; fi
+  - if [ $TRAVIS_PHP_VERSION = '7.2' ]; then test_old/run-php-src.sh; fi
 
 after_success:
   - if [ $TRAVIS_PHP_VERSION = '7.0' ]; then php vendor/bin/coveralls; fi

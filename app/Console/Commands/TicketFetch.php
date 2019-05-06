@@ -48,9 +48,9 @@ class TicketFetch extends Command
             $ticket = new \App\Model\helpdesk\Settings\Ticket();
             $controller->readmails($emails, $settings_email, $system, $ticket);
             Event::fire('ticket.fetch', ['event' => '']);
-            loging('fetching-ticket', 'Ticket has read', 'info');
+            loging('fetching-ticket', 'Checked mail for new tickets', 'info');
             //\Log::info('Ticket has read');
-            $this->info('Ticket has read');
+            $this->info('Checked mail for new tickets');
         }
     }
 

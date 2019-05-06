@@ -19,14 +19,14 @@ class Issue3156Test extends TestCase
     {
         $this->assertStringEndsWith('/', '/');
 
-        return new stdClass();
+        return new stdClass;
     }
 
     public function dataSelectOperatorsProvider(): array
     {
         return [
             ['1'],
-            ['2']
+            ['2'],
         ];
     }
 

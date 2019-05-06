@@ -9,13 +9,15 @@
 
 namespace Zend\Validator\File;
 
-use Zend\Validator\Exception;
+use Zend\Validator\File\FileInformationTrait;
 
 /**
  * Validator for the md5 hash of given files
  */
 class Md5 extends Hash
 {
+    use FileInformationTrait;
+
     /**
      * @const string Error constants
      */
@@ -85,32 +87,18 @@ class Md5 extends Hash
      */
     public function isValid($value, $file = null)
     {
-        if (is_string($value) && is_array($file)) {
-            // Legacy Zend\Transfer API support
-            $filename = $file['name'];
-            $file     = $file['tmp_name'];
-        } elseif (is_array($value)) {
-            if (! isset($value['tmp_name']) || ! isset($value['name'])) {
-                throw new Exception\InvalidArgumentException(
-                    'Value array must be in $_FILES format'
-                );
-            }
-            $file     = $value['tmp_name'];
-            $filename = $value['name'];
-        } else {
-            $file     = $value;
-            $filename = basename($file);
-        }
-        $this->setValue($filename);
+        $fileInfo = $this->getFileInfo($value, $file);
+
+        $this->setValue($fileInfo['filename']);
 
         // Is file readable ?
-        if (empty($file) || false === is_readable($file)) {
+        if (empty($fileInfo['file']) || false === is_readable($fileInfo['file'])) {
             $this->error(self::NOT_FOUND);
             return false;
         }
 
         $hashes   = array_unique(array_keys($this->getHash()));
-        $filehash = hash_file('md5', $file);
+        $filehash = hash_file('md5', $fileInfo['file']);
         if ($filehash === false) {
             $this->error(self::NOT_DETECTED);
             return false;

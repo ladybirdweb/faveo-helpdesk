@@ -311,12 +311,12 @@ your own barcode validator, you need the following information.
 
 - `Length`: The length your barcode must have. It can have one of the following
   values:
-  - `Integer`: A value greater 0, which means that the barcode must have this
-    length.
-  - `-1`: There is no limitation for the length of this barcode.
-  - `"even"`: The length of this barcode must have a even amount of digits.
-  - `"odd"`: The length of this barcode must have a odd amount of digits.
-  - `array`: An array of integer values. The length of this barcode must have
+    - `Integer`: A value greater 0, which means that the barcode must have this
+      length.
+    - `-1`: There is no limitation for the length of this barcode.
+    - `"even"`: The length of this barcode must have a even amount of digits.
+    - `"odd"`: The length of this barcode must have a odd amount of digits.
+    - `array`: An array of integer values. The length of this barcode must have
     one of the set array values.
 - `Characters`: A string which contains all allowed characters for this barcode.
   Also the integer value 128 is allowed, which means the first 128 characters of

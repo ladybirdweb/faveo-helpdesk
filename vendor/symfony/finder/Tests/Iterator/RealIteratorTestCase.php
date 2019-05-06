@@ -20,7 +20,7 @@ abstract class RealIteratorTestCase extends IteratorTestCase
     {
         self::$tmpDir = realpath(sys_get_temp_dir()).\DIRECTORY_SEPARATOR.'symfony_finder';
 
-        self::$files = array(
+        self::$files = [
             '.git/',
             '.foo/',
             '.foo/.bar',
@@ -33,7 +33,16 @@ abstract class RealIteratorTestCase extends IteratorTestCase
             'toto/',
             'toto/.git/',
             'foo bar',
-        );
+            'qux_0_1.php',
+            'qux_2_0.php',
+            'qux_10_2.php',
+            'qux_12_0.php',
+            'qux_1000_1.php',
+            'qux_1002_0.php',
+            'qux/',
+            'qux/baz_1_2.py',
+            'qux/baz_100_1.py',
+        ];
 
         self::$files = self::toAbsolute(self::$files);
 
@@ -88,7 +97,7 @@ abstract class RealIteratorTestCase extends IteratorTestCase
         }
 
         if (\is_array($files)) {
-            $f = array();
+            $f = [];
             foreach ($files as $file) {
                 if (\is_array($file)) {
                     $f[] = self::toAbsolute($file);
@@ -109,7 +118,7 @@ abstract class RealIteratorTestCase extends IteratorTestCase
 
     protected static function toAbsoluteFixtures($files)
     {
-        $f = array();
+        $f = [];
         foreach ($files as $file) {
             $f[] = realpath(__DIR__.\DIRECTORY_SEPARATOR.'..'.\DIRECTORY_SEPARATOR.'Fixtures'.\DIRECTORY_SEPARATOR.$file);
         }

@@ -32,7 +32,7 @@ class DateRangeFilterIteratorTest extends RealIteratorTestCase
 
     public function getAcceptData()
     {
-        $since20YearsAgo = array(
+        $since20YearsAgo = [
             '.git',
             'test.py',
             'foo',
@@ -45,9 +45,18 @@ class DateRangeFilterIteratorTest extends RealIteratorTestCase
             '.foo/.bar',
             'foo bar',
             '.foo/bar',
-        );
+            'qux',
+            'qux/baz_100_1.py',
+            'qux/baz_1_2.py',
+            'qux_0_1.php',
+            'qux_1000_1.php',
+            'qux_1002_0.php',
+            'qux_10_2.php',
+            'qux_12_0.php',
+            'qux_2_0.php',
+        ];
 
-        $since2MonthsAgo = array(
+        $since2MonthsAgo = [
             '.git',
             'test.py',
             'foo',
@@ -58,17 +67,26 @@ class DateRangeFilterIteratorTest extends RealIteratorTestCase
             '.foo/.bar',
             'foo bar',
             '.foo/bar',
-        );
+            'qux',
+            'qux/baz_100_1.py',
+            'qux/baz_1_2.py',
+            'qux_0_1.php',
+            'qux_1000_1.php',
+            'qux_1002_0.php',
+            'qux_10_2.php',
+            'qux_12_0.php',
+            'qux_2_0.php',
+        ];
 
-        $untilLastMonth = array(
+        $untilLastMonth = [
             'foo/bar.tmp',
             'test.php',
-        );
+        ];
 
-        return array(
-            array(array(new DateComparator('since 20 years ago')), $this->toAbsolute($since20YearsAgo)),
-            array(array(new DateComparator('since 2 months ago')), $this->toAbsolute($since2MonthsAgo)),
-            array(array(new DateComparator('until last month')), $this->toAbsolute($untilLastMonth)),
-        );
+        return [
+            [[new DateComparator('since 20 years ago')], $this->toAbsolute($since20YearsAgo)],
+            [[new DateComparator('since 2 months ago')], $this->toAbsolute($since2MonthsAgo)],
+            [[new DateComparator('until last month')], $this->toAbsolute($untilLastMonth)],
+        ];
     }
 }

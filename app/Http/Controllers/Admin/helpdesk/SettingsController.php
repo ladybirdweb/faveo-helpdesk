@@ -404,9 +404,11 @@ class SettingsController extends Controller
     /**
      * Update the specified schedular in storage for cron job.
      *
-     * @param type Email        $email
-     * @param type EmailRequest $request
-     *
+     * @param Email $email
+     * @param Template $template
+     * @param Emails $email1
+     * @param TaskRequest $request
+     * @param WorkflowClose $workflow
      * @return type Response
      */
     public function postSchedular(Email $email, Template $template, Emails $email1, TaskRequest $request, WorkflowClose $workflow)
@@ -889,15 +891,22 @@ class SettingsController extends Controller
         if (\Input::get('fetching-commands') && \Input::get('notification-commands')) {
             $fetching_commands = \Input::get('fetching-commands');
             $fetching_dailyAt = \Input::get('fetching-dailyAt');
+            $fetching_overlapping = \Input::get('email_fetching_overlapping');
+
             $notification_commands = \Input::get('notification-commands');
             $notification_dailyAt = \Input::get('notification-dailyAt');
+            $notification_overlapping = \Input::get('notification_overlapping');
+
             $work_commands = \Input::get('work-commands');
             $workflow_dailyAt = \Input::get('workflow-dailyAt');
-            $fetching_command = $this->getCommand($fetching_commands, $fetching_dailyAt);
-            $notification_command = $this->getCommand($notification_commands, $notification_dailyAt);
-            $work_command = $this->getCommand($work_commands, $workflow_dailyAt);
-            $jobs = ['fetching'=>$fetching_command, 'notification'=>$notification_command, 'work'=>$work_command];
-            $this->storeCommand($jobs);
+            $workflow_overlapping = \Input::get('workflow_overlapping');
+
+
+            $this->storeCommand('fetching', $this->getCommand($fetching_commands, $fetching_dailyAt), $fetching_overlapping);
+
+            $this->storeCommand('notification', $this->getCommand($notification_commands, $notification_dailyAt), $notification_overlapping);
+
+            $this->storeCommand('work', $this->getCommand($work_commands, $workflow_dailyAt), $workflow_overlapping);
         }
     }
 
@@ -910,23 +919,14 @@ class SettingsController extends Controller
         return $command;
     }
 
-    public function storeCommand($array = [])
+    public function storeCommand($job, $time, $overlapping)
     {
         $command = new \App\Model\MailJob\Condition();
-        $commands = $command->get();
-        if ($commands->count() > 0) {
-            foreach ($commands as $condition) {
-                $condition->delete();
-            }
-        }
-        if (count($array) > 0) {
-            foreach ($array as $key=>$save) {
-                $command->create([
-                    'job'  => $key,
-                    'value'=> $save,
-                ]);
-            }
-        }
+        $command = $command->where('job', $job)->firstOrFail();
+
+        $command->value             = $time;
+        $command->no_overlapping    = $overlapping;
+        $command->save();
     }
 
     public function getTicketNumber(Request $request)

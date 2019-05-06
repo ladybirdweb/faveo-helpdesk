@@ -13,7 +13,7 @@ class TestResultTest extends TestCase
 {
     public function testRemoveListenerRemovesOnlyExpectedListener(): void
     {
-        $result         = new TestResult();
+        $result         = new TestResult;
         $firstListener  = $this->getMockBuilder(TestListener::class)->getMock();
         $secondListener = $this->getMockBuilder(TestListener::class)->getMock();
         $thirdListener  = $this->getMockBuilder(TestListener::class)->getMock();
@@ -34,11 +34,11 @@ class TestResultTest extends TestCase
         );
     }
 
-    public function testAddErrorOfTypeIncompleteTest()
+    public function testAddErrorOfTypeIncompleteTest(): void
     {
         $time      = 17;
-        $throwable = new IncompleteTestError();
-        $result    = new TestResult();
+        $throwable = new IncompleteTestError;
+        $result    = new TestResult;
         $test      = $this->getMockBuilder(Test::class)->getMock();
         $listener  = $this->getMockBuilder(TestListener::class)->getMock();
 
@@ -63,7 +63,7 @@ class TestResultTest extends TestCase
         $this->assertAttributeContainsOnly(TestFailure::class, 'notImplemented', $result);
     }
 
-    public function canSkipCoverageProvider()
+    public function canSkipCoverageProvider(): array
     {
         return [
             ['CoverageClassTest', true],
@@ -75,11 +75,11 @@ class TestResultTest extends TestCase
     /**
      * @dataProvider canSkipCoverageProvider
      */
-    public function testCanSkipCoverage($testCase, $expectedCanSkip)
+    public function testCanSkipCoverage($testCase, $expectedCanSkip): void
     {
         require_once TEST_FILES_PATH . $testCase . '.php';
 
-        $test            = new $testCase();
+        $test            = new $testCase;
         $canSkipCoverage = TestResult::isAnyCoverageRequired($test);
         $this->assertEquals($expectedCanSkip, $canSkipCoverage);
     }

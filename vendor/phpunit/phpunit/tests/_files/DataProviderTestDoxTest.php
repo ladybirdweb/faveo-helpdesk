@@ -13,7 +13,7 @@ class DataProviderTestDoxTest extends TestCase
 {
     /**
      * @dataProvider provider
-     * @testdox Does something with
+     * @testdox Does something
      */
     public function testOne(): void
     {
@@ -23,7 +23,15 @@ class DataProviderTestDoxTest extends TestCase
     /**
      * @dataProvider provider
      */
-    public function testDoesSomethingElseWith(): void
+    public function testDoesSomethingElse(): void
+    {
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @dataProvider providerWithIndexedArray
+     */
+    public function testWithProviderWithIndexedArray($value): void
     {
         $this->assertTrue(true);
     }
@@ -41,7 +49,15 @@ class DataProviderTestDoxTest extends TestCase
     {
         return [
             'one' => [1],
-            'two' => [2]
+            'two' => [2],
+        ];
+    }
+
+    public function providerWithIndexedArray()
+    {
+        return [
+            ['first'],
+            ['second'],
         ];
     }
 
@@ -61,7 +77,7 @@ class DataProviderTestDoxTest extends TestCase
                 }
             }],
             'resource'         => [\fopen(__FILE__, 'rb')],
-            'null'             => [null]
+            'null'             => [null],
         ];
     }
 }

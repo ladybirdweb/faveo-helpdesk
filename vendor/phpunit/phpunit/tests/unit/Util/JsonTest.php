@@ -9,6 +9,7 @@
  */
 namespace PHPUnit\Util;
 
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
 class JsonTest extends TestCase
@@ -29,10 +30,7 @@ class JsonTest extends TestCase
         }
     }
 
-    /**
-     * @return array
-     */
-    public function canonicalizeProvider()
+    public function canonicalizeProvider(): array
     {
         return [
             ['{"name":"John","age":"35"}', '{"age":"35","name":"John"}', false],
@@ -53,10 +51,7 @@ class JsonTest extends TestCase
         $this->assertEquals($expected, Json::prettify($actual));
     }
 
-    /**
-     * @return array
-     */
-    public function prettifyProvider()
+    public function prettifyProvider(): array
     {
         return [
             ['{"name":"John","age": "5"}', "{\n    \"name\": \"John\",\n    \"age\": \"5\"\n}"],
@@ -66,18 +61,16 @@ class JsonTest extends TestCase
 
     /**
      * @dataProvider prettifyExceptionProvider
-     * @expectedException \PHPUnit\Framework\Exception
-     * @expectedExceptionMessage Cannot prettify invalid json
      */
     public function testPrettifyException($json): void
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot prettify invalid json');
+
         Json::prettify($json);
     }
 
-    /**
-     * @return array
-     */
-    public function prettifyExceptionProvider()
+    public function prettifyExceptionProvider(): array
     {
         return [
             ['"name":"John","age": "5"}'],

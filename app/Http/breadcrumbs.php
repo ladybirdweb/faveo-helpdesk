@@ -370,11 +370,15 @@ Breadcrumbs::register('inbox.ticket', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
     $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.inbox'), route('inbox.ticket'));
 });
+Breadcrumbs::register('assigned.ticket', function ($breadcrumbs) {
+    $breadcrumbs->parent('dashboard');
+    $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.assigned'), route('assigned.ticket'));
+});
 Breadcrumbs::register('open.ticket', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
     $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.open'), route('open.ticket'));
 });
-Breadcrumbs::register('answered.ticket', function ($breadcrumbs) {
+Breadcrumbs::register('tickets-view', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
     $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.answered'), route('answered.ticket'));
 });
@@ -389,10 +393,6 @@ Breadcrumbs::register('overdue.ticket', function ($breadcrumbs) {
 Breadcrumbs::register('closed.ticket', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
     $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.closed'), route('closed.ticket'));
-});
-Breadcrumbs::register('assigned.ticket', function ($breadcrumbs) {
-    $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.assigned'), route('assigned.ticket'));
 });
 Breadcrumbs::register('newticket', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
@@ -616,4 +616,8 @@ Breadcrumbs::register('labels.edit', function ($breadcrumbs) {
 
 Breadcrumbs::register('readmails', function ($breadcrumbs) {
     $breadcrumbs->push('readmails', 'readmails');
+});
+
+Breadcrumbs::register('aaa', function ($breadcrumbs) {
+    $breadcrumbs->push('aaa', 'aaa');
 });

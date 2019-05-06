@@ -10,6 +10,10 @@ and IMAP protocols.
 
 
 ## Installing
+ > N.b. A note on Ubuntu 14.04 (probably other Debian-based / Apt managed systems), the install of php5-imap does not enable the extension for CLI (possibly others as well), which can cause composer to report fetch requires ext-imap
+ ```
+sudo ln -s /etc/php5/mods-available/imap.ini /etc/php5/cli/conf.d/30-imap.ini
+ ```
 
 ### Composer
 
@@ -22,7 +26,7 @@ backwards compatible.
 
 ```
 "require": {
-  "tedivm/fetch": "0.5.*"
+  "tedivm/fetch": "0.6.*"
 }
 ```
 

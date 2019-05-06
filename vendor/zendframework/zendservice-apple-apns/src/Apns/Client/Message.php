@@ -30,8 +30,8 @@ class Message extends AbstractClient
      * @var array
      */
     protected $uris = [
-        'tls://gateway.sandbox.push.apple.com:2195',
-        'tls://gateway.push.apple.com:2195',
+        'tlsv1.2://gateway.sandbox.push.apple.com:2195',
+        'tlsv1.2://gateway.push.apple.com:2195',
     ];
 
     /**

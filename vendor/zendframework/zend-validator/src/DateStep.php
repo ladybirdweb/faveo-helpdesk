@@ -166,10 +166,10 @@ class DateStep extends Date
         if (strpos($this->format, 'Y-\WW') === 0
             && preg_match('/^([0-9]{4})\-W([0-9]{2})/', $value, $matches)
         ) {
-            $date = new DateTime;
+            $date = new DateTime();
             $date->setISODate($matches[1], $matches[2]);
         } else {
-            $date = DateTime::createFromFormat($this->format, $value, $this->timezone);
+            $date = DateTime::createFromFormat($this->format, $value, new DateTimeZone('UTC'));
         }
 
         // Invalid dates can show up as warnings (ie. "2007-02-99")

@@ -71,6 +71,11 @@ class Blacklist
             return $this->addForever($payload);
         }
 
+        // if we have already added this token to the blacklist
+        if (! empty($this->storage->get($this->getKey($payload)))) {
+            return true;
+        }
+
         $this->storage->add(
             $this->getKey($payload),
             ['valid_until' => $this->getGraceTimestamp()],
@@ -95,7 +100,7 @@ class Blacklist
         // get the latter of the two expiration dates and find
         // the number of minutes until the expiration date,
         // plus 1 minute to avoid overlap
-        return $exp->max($iat->addMinutes($this->refreshTTL))->addMinute()->diffInMinutes();
+        return $exp->max($iat->addMinutes($this->refreshTTL))->addMinute()->diffInRealMinutes();
     }
 
     /**

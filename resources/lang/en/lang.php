@@ -339,6 +339,7 @@ return [
     'attachments'                         => 'Attachments',
     'email_attahment_user'                => 'Email attachments to the user',
     'cron_notification'                   => 'Enable notification cron',
+    'cron_overlapping'                    => 'Enable whitout overlappig option.',
     'cron'                                => 'Job scheduler',
     'cron-jobs'                           => 'Cron jobs',
     'crone-url-message'                   => "These are Faveo's job scheduler (cron job) URL for your system.",

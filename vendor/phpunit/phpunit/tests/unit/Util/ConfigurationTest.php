@@ -116,8 +116,6 @@ class ConfigurationTest extends TestCase
 
     public function configurationRootOptionsProvider(): array
     {
-        $tmpFilePath = \sys_get_temp_dir() . \DIRECTORY_SEPARATOR;
-
         return [
             'executionOrder default'                                        => ['executionOrder', 'default', TestSuiteSorter::ORDER_DEFAULT],
             'executionOrder random'                                         => ['executionOrder', 'random', TestSuiteSorter::ORDER_RANDOMIZED],
@@ -170,7 +168,7 @@ class ConfigurationTest extends TestCase
                                 'path'   => '/path/to/files',
                                 'prefix' => '',
                                 'suffix' => '.php',
-                                'group'  => 'DEFAULT'
+                                'group'  => 'DEFAULT',
                             ],
                         ],
                         'file' => [
@@ -184,7 +182,7 @@ class ConfigurationTest extends TestCase
                                 'path'   => '/path/to/files',
                                 'prefix' => '',
                                 'suffix' => '.php',
-                                'group'  => 'DEFAULT'
+                                'group'  => 'DEFAULT',
                             ],
                         ],
                         'file' => [
@@ -256,7 +254,7 @@ class ConfigurationTest extends TestCase
                 [
                     'class'     => 'IncludePathListener',
                     'file'      => __FILE__,
-                    'arguments' => []
+                    'arguments' => [],
                 ],
                 [
                     'class'     => 'CompactArgumentsListener',
@@ -301,13 +299,13 @@ class ConfigurationTest extends TestCase
                 [
                     'class'     => 'IncludePathExtension',
                     'file'      => __FILE__,
-                    'arguments' => []
+                    'arguments' => [],
                 ],
                 [
                     'class'     => 'CompactArgumentsExtension',
                     'file'      => '/CompactArgumentsExtension.php',
                     'arguments' => [
-                        0 => 42
+                        0 => 42,
                     ],
                 ],
             ],
@@ -336,7 +334,7 @@ class ConfigurationTest extends TestCase
                 'junit'                          => '/tmp/logfile.xml',
                 'testdox-html'                   => '/tmp/testdox.html',
                 'testdox-text'                   => '/tmp/testdox.txt',
-                'testdox-xml'                    => '/tmp/testdox.xml'
+                'testdox-xml'                    => '/tmp/testdox.xml',
             ],
             $this->configuration->getLoggingConfiguration()
         );
@@ -348,7 +346,7 @@ class ConfigurationTest extends TestCase
             [
                 'include_path' => [
                     TEST_FILES_PATH . '.',
-                    '/path/to/lib'
+                    '/path/to/lib',
                 ],
                 'ini'    => ['foo' => ['value' => 'bar'], 'highlight.keyword' => ['value' => '#123456'], 'highlight.string' => ['value' => 'TEST_FILES_PATH']],
                 'const'  => ['FOO' => ['value' => false], 'BAR' => ['value' => true]],
@@ -430,11 +428,19 @@ class ConfigurationTest extends TestCase
      */
     public function testHandlePHPConfigurationDoesNotOverriteVariablesFromPutEnv(): void
     {
+        $backupFoo = \getenv('foo');
+
         \putenv('foo=putenv');
         $this->configuration->handlePHPConfiguration();
 
         $this->assertEquals('putenv', $_ENV['foo']);
         $this->assertEquals('putenv', \getenv('foo'));
+
+        if ($backupFoo === false) {
+            \putenv('foo');     // delete variable from environment
+        } else {
+            \putenv("foo=$backupFoo");
+        }
     }
 
     /**
@@ -473,6 +479,7 @@ class ConfigurationTest extends TestCase
                 'reportUselessTests'                         => false,
                 'strictCoverage'                             => false,
                 'disallowTestOutput'                         => false,
+                'defaultTimeLimit'                           => 123,
                 'enforceTimeLimit'                           => false,
                 'extensionsDirectory'                        => '/tmp',
                 'printerClass'                               => 'PHPUnit\TextUI\ResultPrinter',

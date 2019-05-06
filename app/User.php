@@ -171,6 +171,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $name;
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
+    }
+
     public function getFullNameAttribute()
     {
         return $this->name();

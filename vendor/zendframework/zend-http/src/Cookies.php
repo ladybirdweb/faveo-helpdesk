@@ -78,7 +78,7 @@ class Cookies extends Headers
     {
         throw new Exception\RuntimeException(
             __CLASS__ . '::' . __FUNCTION__ . ' should not be used as a factory, use '
-            . __NAMESPACE__ . '\Headers::fromtString() instead.'
+            . __NAMESPACE__ . '\Headers::fromString() instead.'
         );
     }
 

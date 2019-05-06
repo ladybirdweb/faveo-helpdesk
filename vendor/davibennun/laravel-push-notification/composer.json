@@ -18,5 +18,15 @@
             "Davibennun\\LaravelPushNotification": "src/"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Davibennun\\LaravelPushNotification\\LaravelPushNotificationServiceProvider"
+            ],
+            "aliases": {
+                "PushNotification": "Davibennun\\LaravelPushNotification\\Facades\\PushNotification"
+            }
+        }
+    }
 }

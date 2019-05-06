@@ -10,6 +10,7 @@ The following validators come with the zend-validator distribution.
 - [RecordExists and NoRecordExists (database)](validators/db.md)
 - [Digits](validators/digits.md)
 - [EmailAddress](validators/email-address.md)
+- [Explode](validators/explode.md)
 - [File Validation Classes](validators/file/intro.md)
 - [GreaterThan](validators/greater-than.md)
 - [Hex](validators/hex.md)
@@ -19,6 +20,7 @@ The following validators come with the zend-validator distribution.
 - [InArray](validators/in-array.md)
 - [Ip](validators/ip.md)
 - [Isbn](validators/isbn.md)
+- [IsCountable](validators/is-countable.md)
 - [IsInstanceOf](validators/isinstanceof.md)
 - [LessThan](validators/less-than.md)
 - [NotEmpty](validators/not-empty.md)
@@ -34,7 +36,7 @@ The following validators come with the zend-validator distribution.
 
 Several other components offer validators as well:
 
-- [zend-i18n](http://zendframework.github.io/zend-i18n/validators/)
+- [zend-i18n](https://docs.zendframework.com/zend-i18n/validators/)
 
 ## Deprecated Validators
 

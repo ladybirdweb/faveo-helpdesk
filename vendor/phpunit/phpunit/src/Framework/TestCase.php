@@ -118,12 +118,12 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
     private $expectedException;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $expectedExceptionMessage;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $expectedExceptionMessageRegExp;
 
@@ -569,12 +569,12 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
         return $this->expectedExceptionCode;
     }
 
-    public function getExpectedExceptionMessage(): string
+    public function getExpectedExceptionMessage(): ?string
     {
         return $this->expectedExceptionMessage;
     }
 
-    public function getExpectedExceptionMessageRegExp(): string
+    public function getExpectedExceptionMessageRegExp(): ?string
     {
         return $this->expectedExceptionMessageRegExp;
     }
@@ -686,11 +686,9 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
             return $result;
         }
 
-        $runEntireClass =  $this->runClassInSeparateProcess && !$this->runTestInSeparateProcess;
+        if ($this->runInSeparateProcess()) {
+            $runEntireClass = $this->runClassInSeparateProcess && !$this->runTestInSeparateProcess;
 
-        if (($this->runTestInSeparateProcess === true || $this->runClassInSeparateProcess === true) &&
-            $this->inIsolation !== true &&
-            !$this instanceof PhptTestCase) {
             $class = new ReflectionClass($this);
 
             if ($runEntireClass) {
@@ -1123,6 +1121,11 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
     public function getProvidedData(): array
     {
         return $this->data;
+    }
+
+    public function addWarning(string $warning): void
+    {
+        $this->warnings[] = $warning;
     }
 
     /**
@@ -1720,18 +1723,11 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
                 }
 
                 if (!isset($passedKeys[$dependency])) {
-                    $this->result->startTest($this);
-                    $this->result->addError(
-                        $this,
-                        new SkippedTestError(
-                            \sprintf(
-                                'This test depends on "%s" to pass.',
-                                $dependency
-                            )
-                        ),
-                        0
-                    );
-                    $this->result->endTest($this, 0);
+                    if (!\is_callable($dependency, false, $callableName) || $dependency !== $callableName) {
+                        $this->markWarningForUncallableDependency($dependency);
+                    } else {
+                        $this->markSkippedForMissingDependecy($dependency);
+                    }
 
                     return false;
                 }
@@ -1768,6 +1764,40 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
         }
 
         return true;
+    }
+
+    private function markSkippedForMissingDependecy(string $dependency): void
+    {
+        $this->status = BaseTestRunner::STATUS_SKIPPED;
+        $this->result->startTest($this);
+        $this->result->addError(
+            $this,
+            new SkippedTestError(
+                \sprintf(
+                    'This test depends on "%s" to pass.',
+                    $dependency
+                )
+            ),
+            0
+        );
+        $this->result->endTest($this, 0);
+    }
+
+    private function markWarningForUncallableDependency(string $dependency): void
+    {
+        $this->status = BaseTestRunner::STATUS_WARNING;
+        $this->result->startTest($this);
+        $this->result->addWarning(
+            $this,
+            new Warning(
+                \sprintf(
+                    'This test depends on "%s" which does not exist.',
+                    $dependency
+                )
+            ),
+            0
+        );
+        $this->result->endTest($this, 0);
     }
 
     /**
@@ -1985,13 +2015,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
             return true;
         }
 
-        foreach ($enumerator->enumerate($this->testResult) as $object) {
-            if ($mock === $object) {
-                return false;
-            }
-        }
-
-        return true;
+        return !\in_array($mock, $enumerator->enumerate($this->testResult), true);
     }
 
     /**
@@ -2109,5 +2133,11 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
         }
 
         return $result;
+    }
+
+    private function runInSeparateProcess(): bool
+    {
+        return ($this->runTestInSeparateProcess === true || $this->runClassInSeparateProcess === true) &&
+               $this->inIsolation !== true && !$this instanceof PhptTestCase;
     }
 }

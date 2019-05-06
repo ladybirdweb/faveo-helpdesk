@@ -12,6 +12,7 @@ namespace Zend\Validator\File;
 use Traversable;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Validator\AbstractValidator;
+use Zend\Validator\File\FileInformationTrait;
 use Zend\Validator\Exception;
 
 /**
@@ -19,6 +20,8 @@ use Zend\Validator\Exception;
  */
 class Extension extends AbstractValidator
 {
+    use FileInformationTrait;
+
     /**
      * @const string Error constants
      */
@@ -177,31 +180,17 @@ class Extension extends AbstractValidator
      */
     public function isValid($value, $file = null)
     {
-        if (is_string($value) && is_array($file)) {
-            // Legacy Zend\Transfer API support
-            $filename = $file['name'];
-            $file     = $file['tmp_name'];
-        } elseif (is_array($value)) {
-            if (! isset($value['tmp_name']) || ! isset($value['name'])) {
-                throw new Exception\InvalidArgumentException(
-                    'Value array must be in $_FILES format'
-                );
-            }
-            $file     = $value['tmp_name'];
-            $filename = $value['name'];
-        } else {
-            $file     = $value;
-            $filename = basename($file);
-        }
-        $this->setValue($filename);
+        $fileInfo = $this->getFileInfo($value, $file);
+
+        $this->setValue($fileInfo['filename']);
 
         // Is file readable ?
-        if (empty($file) || false === is_readable($file)) {
+        if (empty($fileInfo['file']) || false === is_readable($fileInfo['file'])) {
             $this->error(self::NOT_FOUND);
             return false;
         }
 
-        $extension  = substr($filename, strrpos($filename, '.') + 1);
+        $extension  = substr($fileInfo['filename'], strrpos($fileInfo['filename'], '.') + 1);
         $extensions = $this->getExtension();
 
         if ($this->getCase() && (in_array($extension, $extensions))) {

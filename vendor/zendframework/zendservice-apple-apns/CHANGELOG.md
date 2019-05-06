@@ -2,6 +2,74 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 1.4.1 - 2019-03-14
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#66](https://github.com/zendframework/ZendService_Apple_Apns/pull/66) fixes the schemes used for feedback notification URLs, to ensure they
+  reference `tlsv1.2` specifically.
+
+## 1.4.0 - 2019-03-13
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- [#65](https://github.com/zendframework/ZendService_Apple_Apns/pull/65) changes the URI schemes used to push messages from `tls` to `tlsv1.2` due
+  to a change in TLS versions supported by the endpoints.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
+## 1.3.1 - 2019-02-07
+
+### Added
+
+- [#64](https://github.com/zendframework/ZendService_Apple_Apns/pull/64) adds support for PHP 7.3.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
 ## 1.3.0 - 2018-05-08
 
 ### Added

@@ -37,7 +37,7 @@ class Command
     private $application;
     private $name;
     private $processTitle;
-    private $aliases = array();
+    private $aliases = [];
     private $definition;
     private $hidden = false;
     private $help;
@@ -46,8 +46,8 @@ class Command
     private $applicationDefinitionMerged = false;
     private $applicationDefinitionMergedWithArgs = false;
     private $code;
-    private $synopsis = array();
-    private $usages = array();
+    private $synopsis = [];
+    private $usages = [];
     private $helperSet;
 
     /**
@@ -150,7 +150,7 @@ class Command
      * execute() method, you set the code to execute by passing
      * a Closure to the setCode() method.
      *
-     * @return null|int null or 0 if everything went fine, or an error code
+     * @return int|null null or 0 if everything went fine, or an error code
      *
      * @throws LogicException When this abstract method is not implemented
      *
@@ -173,10 +173,14 @@ class Command
     }
 
     /**
-     * Initializes the command just after the input has been validated.
+     * Initializes the command after the input has been bound and before the input
+     * is validated.
      *
      * This is mainly useful when a lot of commands extends one main command
      * where some things need to be initialized based on the input arguments and options.
+     *
+     * @see InputInterface::bind()
+     * @see InputInterface::validate()
      */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
@@ -246,7 +250,7 @@ class Command
         $input->validate();
 
         if ($this->code) {
-            $statusCode = \call_user_func($this->code, $input, $output);
+            $statusCode = ($this->code)($input, $output);
         } else {
             $statusCode = $this->execute($input, $output);
         }
@@ -297,14 +301,13 @@ class Command
 
         $this->definition->addOptions($this->application->getDefinition()->getOptions());
 
+        $this->applicationDefinitionMerged = true;
+
         if ($mergeArgs) {
             $currentArguments = $this->definition->getArguments();
             $this->definition->setArguments($this->application->getDefinition()->getArguments());
             $this->definition->addArguments($currentArguments);
-        }
 
-        $this->applicationDefinitionMerged = true;
-        if ($mergeArgs) {
             $this->applicationDefinitionMergedWithArgs = true;
         }
     }
@@ -357,10 +360,12 @@ class Command
     /**
      * Adds an argument.
      *
-     * @param string $name        The argument name
-     * @param int    $mode        The argument mode: InputArgument::REQUIRED or InputArgument::OPTIONAL
-     * @param string $description A description text
-     * @param mixed  $default     The default value (for InputArgument::OPTIONAL mode only)
+     * @param string               $name        The argument name
+     * @param int|null             $mode        The argument mode: InputArgument::REQUIRED or InputArgument::OPTIONAL
+     * @param string               $description A description text
+     * @param string|string[]|null $default     The default value (for InputArgument::OPTIONAL mode only)
+     *
+     * @throws InvalidArgumentException When argument mode is not valid
      *
      * @return $this
      */
@@ -374,11 +379,13 @@ class Command
     /**
      * Adds an option.
      *
-     * @param string $name        The option name
-     * @param string $shortcut    The shortcut (can be null)
-     * @param int    $mode        The option mode: One of the InputOption::VALUE_* constants
-     * @param string $description A description text
-     * @param mixed  $default     The default value (must be null for InputOption::VALUE_NONE)
+     * @param string                        $name        The option name
+     * @param string|array|null             $shortcut    The shortcuts, can be null, a string of shortcuts delimited by | or an array of shortcuts
+     * @param int|null                      $mode        The option mode: One of the InputOption::VALUE_* constants
+     * @param string                        $description A description text
+     * @param string|string[]|int|bool|null $default     The default value (must be null for InputOption::VALUE_NONE)
+     *
+     * @throws InvalidArgumentException If option mode is invalid or incompatible
      *
      * @return $this
      */
@@ -518,15 +525,16 @@ class Command
     public function getProcessedHelp()
     {
         $name = $this->name;
+        $isSingleCommand = $this->application && $this->application->isSingleCommand();
 
-        $placeholders = array(
+        $placeholders = [
             '%command.name%',
             '%command.full_name%',
-        );
-        $replacements = array(
+        ];
+        $replacements = [
             $name,
-            $_SERVER['PHP_SELF'].' '.$name,
-        );
+            $isSingleCommand ? $_SERVER['PHP_SELF'] : $_SERVER['PHP_SELF'].' '.$name,
+        ];
 
         return str_replace($placeholders, $replacements, $this->getHelp() ?: $this->getDescription());
     }

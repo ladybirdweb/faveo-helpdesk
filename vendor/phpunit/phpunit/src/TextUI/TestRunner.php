@@ -14,6 +14,7 @@ use PHPUnit\Framework\Error\Notice;
 use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\Test;
+use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestListener;
 use PHPUnit\Framework\TestResult;
 use PHPUnit\Framework\TestSuite;
@@ -35,12 +36,15 @@ use PHPUnit\Runner\TestSuiteLoader;
 use PHPUnit\Runner\TestSuiteSorter;
 use PHPUnit\Runner\Version;
 use PHPUnit\Util\Configuration;
+use PHPUnit\Util\Filesystem;
 use PHPUnit\Util\Log\JUnit;
 use PHPUnit\Util\Log\TeamCity;
 use PHPUnit\Util\Printer;
+use PHPUnit\Util\TestDox\CliTestDoxPrinter;
 use PHPUnit\Util\TestDox\HtmlResultPrinter;
 use PHPUnit\Util\TestDox\TextResultPrinter;
 use PHPUnit\Util\TestDox\XmlResultPrinter;
+use PHPUnit\Util\XdebugFilterScriptGenerator;
 use ReflectionClass;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Exception as CodeCoverageException;
@@ -53,6 +57,7 @@ use SebastianBergmann\CodeCoverage\Report\Text as TextReport;
 use SebastianBergmann\CodeCoverage\Report\Xml\Facade as XmlReport;
 use SebastianBergmann\Comparator\Comparator;
 use SebastianBergmann\Environment\Runtime;
+use SebastianBergmann\Invoker\Invoker;
 
 /**
  * A TestRunner for the Command Line Interface (CLI)
@@ -155,20 +160,27 @@ class TestRunner extends BaseTestRunner
 
         $this->handleConfiguration($arguments);
 
+        if (\is_int($arguments['columns']) && $arguments['columns'] < 16) {
+            $arguments['columns']   = 16;
+            $tooFewColumnsRequested = true;
+        }
+
         if (isset($arguments['bootstrap'])) {
             $GLOBALS['__PHPUNIT_BOOTSTRAP'] = $arguments['bootstrap'];
         }
 
-        if ($arguments['backupGlobals'] === true) {
-            $suite->setBackupGlobals(true);
-        }
+        if ($suite instanceof TestCase || $suite instanceof TestSuite) {
+            if ($arguments['backupGlobals'] === true) {
+                $suite->setBackupGlobals(true);
+            }
 
-        if ($arguments['backupStaticAttributes'] === true) {
-            $suite->setBackupStaticAttributes(true);
-        }
+            if ($arguments['backupStaticAttributes'] === true) {
+                $suite->setBackupStaticAttributes(true);
+            }
 
-        if ($arguments['beStrictAboutChangesToGlobalState'] === true) {
-            $suite->setBeStrictAboutChangesToGlobalState(true);
+            if ($arguments['beStrictAboutChangesToGlobalState'] === true) {
+                $suite->setBeStrictAboutChangesToGlobalState(true);
+            }
         }
 
         if ($arguments['executionOrder'] === TestSuiteSorter::ORDER_RANDOMIZED) {
@@ -193,6 +205,7 @@ class TestRunner extends BaseTestRunner
             $sorter = new TestSuiteSorter($cache);
 
             $sorter->reorderTestsInSuite($suite, $arguments['executionOrder'], $arguments['resolveDependencies'], $arguments['executionOrderDefects']);
+            $originalExecutionOrder = $sorter->getOriginalExecutionOrder();
 
             unset($sorter);
         }
@@ -299,6 +312,11 @@ class TestRunner extends BaseTestRunner
                     $arguments['columns'],
                     $arguments['reverseList']
                 );
+
+                if (isset($originalExecutionOrder) && ($this->printer instanceof CliTestDoxPrinter)) {
+                    /* @var CliTestDoxPrinter */
+                    $this->printer->setOriginalExecutionOrder($originalExecutionOrder);
+                }
             }
         }
 
@@ -320,13 +338,6 @@ class TestRunner extends BaseTestRunner
 
             $this->writeMessage('Runtime', $runtime);
 
-            if ($arguments['executionOrder'] === TestSuiteSorter::ORDER_RANDOMIZED) {
-                $this->writeMessage(
-                    'Random seed',
-                    $arguments['randomOrderSeed']
-                );
-            }
-
             if (isset($arguments['configuration'])) {
                 $this->writeMessage(
                     'Configuration',
@@ -347,6 +358,17 @@ class TestRunner extends BaseTestRunner
                     $extension
                 );
             }
+        }
+
+        if ($arguments['executionOrder'] === TestSuiteSorter::ORDER_RANDOMIZED) {
+            $this->writeMessage(
+                'Random seed',
+                $arguments['randomOrderSeed']
+            );
+        }
+
+        if (isset($tooFewColumnsRequested)) {
+            $this->writeMessage('Error', 'Less than 16 columns requested, number of columns set to 16');
         }
 
         if ($this->runtime->discardsComments()) {
@@ -455,6 +477,51 @@ class TestRunner extends BaseTestRunner
             $codeCoverageReports = 0;
         }
 
+        if ($codeCoverageReports > 0 || isset($arguments['xdebugFilterFile'])) {
+            $whitelistFromConfigurationFile = false;
+            $whitelistFromOption            = false;
+
+            if (isset($arguments['whitelist'])) {
+                $this->codeCoverageFilter->addDirectoryToWhitelist($arguments['whitelist']);
+
+                $whitelistFromOption = true;
+            }
+
+            if (isset($arguments['configuration'])) {
+                $filterConfiguration = $arguments['configuration']->getFilterConfiguration();
+
+                if (!empty($filterConfiguration['whitelist'])) {
+                    $whitelistFromConfigurationFile = true;
+                }
+
+                if (!empty($filterConfiguration['whitelist'])) {
+                    foreach ($filterConfiguration['whitelist']['include']['directory'] as $dir) {
+                        $this->codeCoverageFilter->addDirectoryToWhitelist(
+                            $dir['path'],
+                            $dir['suffix'],
+                            $dir['prefix']
+                        );
+                    }
+
+                    foreach ($filterConfiguration['whitelist']['include']['file'] as $file) {
+                        $this->codeCoverageFilter->addFileToWhitelist($file);
+                    }
+
+                    foreach ($filterConfiguration['whitelist']['exclude']['directory'] as $dir) {
+                        $this->codeCoverageFilter->removeDirectoryFromWhitelist(
+                            $dir['path'],
+                            $dir['suffix'],
+                            $dir['prefix']
+                        );
+                    }
+
+                    foreach ($filterConfiguration['whitelist']['exclude']['file'] as $file) {
+                        $this->codeCoverageFilter->removeFileFromWhitelist($file);
+                    }
+                }
+            }
+        }
+
         if ($codeCoverageReports > 0) {
             $codeCoverage = new CodeCoverage(
                 null,
@@ -489,55 +556,14 @@ class TestRunner extends BaseTestRunner
                 $codeCoverage->setDisableIgnoredLines(true);
             }
 
-            $whitelistFromConfigurationFile = false;
-            $whitelistFromOption            = false;
+            if (!empty($filterConfiguration['whitelist'])) {
+                $codeCoverage->setAddUncoveredFilesFromWhitelist(
+                    $filterConfiguration['whitelist']['addUncoveredFilesFromWhitelist']
+                );
 
-            if (isset($arguments['whitelist'])) {
-                $this->codeCoverageFilter->addDirectoryToWhitelist($arguments['whitelist']);
-
-                $whitelistFromOption = true;
-            }
-
-            if (isset($arguments['configuration'])) {
-                $filterConfiguration = $arguments['configuration']->getFilterConfiguration();
-
-                if (!empty($filterConfiguration['whitelist'])) {
-                    $whitelistFromConfigurationFile = true;
-                }
-
-                if (!empty($filterConfiguration['whitelist'])) {
-                    $codeCoverage->setAddUncoveredFilesFromWhitelist(
-                        $filterConfiguration['whitelist']['addUncoveredFilesFromWhitelist']
-                    );
-
-                    $codeCoverage->setProcessUncoveredFilesFromWhitelist(
-                        $filterConfiguration['whitelist']['processUncoveredFilesFromWhitelist']
-                    );
-
-                    foreach ($filterConfiguration['whitelist']['include']['directory'] as $dir) {
-                        $this->codeCoverageFilter->addDirectoryToWhitelist(
-                            $dir['path'],
-                            $dir['suffix'],
-                            $dir['prefix']
-                        );
-                    }
-
-                    foreach ($filterConfiguration['whitelist']['include']['file'] as $file) {
-                        $this->codeCoverageFilter->addFileToWhitelist($file);
-                    }
-
-                    foreach ($filterConfiguration['whitelist']['exclude']['directory'] as $dir) {
-                        $this->codeCoverageFilter->removeDirectoryFromWhitelist(
-                            $dir['path'],
-                            $dir['suffix'],
-                            $dir['prefix']
-                        );
-                    }
-
-                    foreach ($filterConfiguration['whitelist']['exclude']['file'] as $file) {
-                        $this->codeCoverageFilter->removeFileFromWhitelist($file);
-                    }
-                }
+                $codeCoverage->setProcessUncoveredFilesFromWhitelist(
+                    $filterConfiguration['whitelist']['processUncoveredFilesFromWhitelist']
+                );
             }
 
             if (!$this->codeCoverageFilter->hasWhitelist()) {
@@ -551,6 +577,24 @@ class TestRunner extends BaseTestRunner
 
                 unset($codeCoverage);
             }
+        }
+
+        if (isset($arguments['xdebugFilterFile'], $filterConfiguration)) {
+            $this->write("\n");
+
+            $script = (new XdebugFilterScriptGenerator)->generate($filterConfiguration['whitelist']);
+
+            if ($arguments['xdebugFilterFile'] !== 'php://stdout' && $arguments['xdebugFilterFile'] !== 'php://stderr' && !Filesystem::createDirectory(\dirname($arguments['xdebugFilterFile']))) {
+                $this->write(\sprintf('Cannot write Xdebug filter script to %s ' . \PHP_EOL, $arguments['xdebugFilterFile']));
+
+                exit(self::EXCEPTION_EXIT);
+            }
+
+            \file_put_contents($arguments['xdebugFilterFile'], $script);
+
+            $this->write(\sprintf('Wrote Xdebug filter script to %s ' . \PHP_EOL, $arguments['xdebugFilterFile']));
+
+            exit(self::SUCCESS_EXIT);
         }
 
         $this->printer->write("\n");
@@ -567,7 +611,18 @@ class TestRunner extends BaseTestRunner
         $result->beStrictAboutOutputDuringTests($arguments['disallowTestOutput']);
         $result->beStrictAboutTodoAnnotatedTests($arguments['disallowTodoAnnotatedTests']);
         $result->beStrictAboutResourceUsageDuringSmallTests($arguments['beStrictAboutResourceUsageDuringSmallTests']);
+
+        if ($arguments['enforceTimeLimit'] === true) {
+            if (!\class_exists(Invoker::class)) {
+                $this->writeMessage('Error', 'Package phpunit/php-invoker is required for enforcing time limits');
+            }
+
+            if (!\extension_loaded('pcntl') || \strpos(\ini_get('disable_functions'), 'pcntl') !== false) {
+                $this->writeMessage('Error', 'PHP extension pcntl is required for enforcing time limits');
+            }
+        }
         $result->enforceTimeLimit($arguments['enforceTimeLimit']);
+        $result->setDefaultTimeLimit($arguments['defaultTimeLimit']);
         $result->setTimeoutForSmallTests($arguments['timeoutForSmallTests']);
         $result->setTimeoutForMediumTests($arguments['timeoutForMediumTests']);
         $result->setTimeoutForLargeTests($arguments['timeoutForLargeTests']);
@@ -719,7 +774,7 @@ class TestRunner extends BaseTestRunner
         }
 
         if ($exit) {
-            if ($result->wasSuccessful()) {
+            if ($result->wasSuccessfulIgnoringWarnings()) {
                 if ($arguments['failOnRisky'] && !$result->allHarmless()) {
                     exit(self::FAILURE_EXIT);
                 }
@@ -928,6 +983,10 @@ class TestRunner extends BaseTestRunner
 
             if (isset($phpunitConfiguration['disallowTestOutput']) && !isset($arguments['disallowTestOutput'])) {
                 $arguments['disallowTestOutput'] = $phpunitConfiguration['disallowTestOutput'];
+            }
+
+            if (isset($phpunitConfiguration['defaultTimeLimit']) && !isset($arguments['defaultTimeLimit'])) {
+                $arguments['defaultTimeLimit'] = $phpunitConfiguration['defaultTimeLimit'];
             }
 
             if (isset($phpunitConfiguration['enforceTimeLimit']) && !isset($arguments['enforceTimeLimit'])) {
@@ -1167,6 +1226,7 @@ class TestRunner extends BaseTestRunner
         $arguments['crap4jThreshold']                                 = $arguments['crap4jThreshold'] ?? 30;
         $arguments['disallowTestOutput']                              = $arguments['disallowTestOutput'] ?? false;
         $arguments['disallowTodoAnnotatedTests']                      = $arguments['disallowTodoAnnotatedTests'] ?? false;
+        $arguments['defaultTimeLimit']                                = $arguments['defaultTimeLimit'] ?? 0;
         $arguments['enforceTimeLimit']                                = $arguments['enforceTimeLimit'] ?? false;
         $arguments['excludeGroups']                                   = $arguments['excludeGroups'] ?? [];
         $arguments['failOnRisky']                                     = $arguments['failOnRisky'] ?? false;

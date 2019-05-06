@@ -111,7 +111,7 @@ class NotificationController extends Controller
         foreach ($depts as $dept) {
             if (isset($dept->manager)) {
                 $dept_name = $dept->name;
-                $users = User::where('id', '=', $dept->manager)->get();
+                $users = User::where('id', '=', $dept->manager)->where('role', '!=', 'admin')->get();
                 foreach ($users as $user) {
                     // Send notification details to manager of a department
                     $email = $user->email;
@@ -147,7 +147,7 @@ class NotificationController extends Controller
         foreach ($teams as $team) {
             if (isset($team->team_lead)) {
                 $team_name = $team->name;
-                $users = User::where('id', '=', $team->team_lead)->get();
+                $users = User::where('id', '=', $team->team_lead)->where('role', '!=', 'admin')->get()->get();
                 foreach ($users as $user) {
                     // Send notification details to team lead
                     $email = $user->email;

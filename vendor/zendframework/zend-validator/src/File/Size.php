@@ -12,12 +12,15 @@ namespace Zend\Validator\File;
 use Zend\Stdlib\ErrorHandler;
 use Zend\Validator\AbstractValidator;
 use Zend\Validator\Exception;
+use Zend\Validator\File\FileInformationTrait;
 
 /**
  * Validator for the maximum size of a file up to a max of 2GB
  */
 class Size extends AbstractValidator
 {
+    use FileInformationTrait;
+
     /**
      * @const string Error constants
      */
@@ -234,33 +237,19 @@ class Size extends AbstractValidator
      */
     public function isValid($value, $file = null)
     {
-        if (is_string($value) && is_array($file)) {
-            // Legacy Zend\Transfer API support
-            $filename = $file['name'];
-            $file     = $file['tmp_name'];
-        } elseif (is_array($value)) {
-            if (! isset($value['tmp_name']) || ! isset($value['name'])) {
-                throw new Exception\InvalidArgumentException(
-                    'Value array must be in $_FILES format'
-                );
-            }
-            $file     = $value['tmp_name'];
-            $filename = $value['name'];
-        } else {
-            $file     = $value;
-            $filename = basename($file);
-        }
-        $this->setValue($filename);
+        $fileInfo = $this->getFileInfo($value, $file);
+
+        $this->setValue($fileInfo['filename']);
 
         // Is file readable ?
-        if (empty($file) || false === is_readable($file)) {
+        if (empty($fileInfo['file']) || false === is_readable($fileInfo['file'])) {
             $this->error(self::NOT_FOUND);
             return false;
         }
 
         // limited to 4GB files
         ErrorHandler::start();
-        $size = sprintf("%u", filesize($file));
+        $size = sprintf("%u", filesize($fileInfo['file']));
         ErrorHandler::stop();
         $this->size = $size;
 
@@ -292,7 +281,7 @@ class Size extends AbstractValidator
             }
         }
 
-        if (count($this->getMessages()) > 0) {
+        if ($this->getMessages()) {
             return false;
         }
 

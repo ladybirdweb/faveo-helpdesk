@@ -52,9 +52,9 @@ The above will validate only ISBN-13 values.
 
 Valid types include:
 
--   `Zend\Validator\Isbn::AUTO` (default)
--   `Zend\Validator\Isbn::ISBN10`
--   `Zend\Validator\Isbn::ISBN13`
+- `Zend\Validator\Isbn::AUTO` (default)
+- `Zend\Validator\Isbn::ISBN10`
+- `Zend\Validator\Isbn::ISBN13`
 
 ## Specifying a separator restriction
 

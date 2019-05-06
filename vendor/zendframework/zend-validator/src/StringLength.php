@@ -226,7 +226,7 @@ class StringLength extends AbstractValidator
             $this->error(self::TOO_LONG);
         }
 
-        if (count($this->getMessages())) {
+        if ($this->getMessages()) {
             return false;
         }
 

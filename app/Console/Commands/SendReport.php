@@ -48,7 +48,7 @@ class SendReport extends Command
                 $report = $this_report->send_notification();
 
                 if ($report !== 0) {
-                    loging('sending-mail-report', 'Report has send', 'info');
+                    loging('sending-mail-report', 'Report was send', 'info');
                     //\Log::info("Report has send");
                     $this->info('Report has send');
                 } else {

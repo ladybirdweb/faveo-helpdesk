@@ -266,6 +266,7 @@ class PhpMailController extends Controller
                 }
             }
         });
+
         if (is_object($mail) || (is_object($mail) && $mail->getStatusCode() == 200)) {
             $mail = 1;
         }

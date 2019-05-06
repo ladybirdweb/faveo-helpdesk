@@ -1,8 +1,8 @@
 docs_dir: doc/book
 site_dir: doc/html
 pages:
-    - index.md
-    - Intro: intro.md
+    - Home: index.md
+    - Introduction: intro.md
     - Reference:
         - "Validator Chains": validator-chains.md
         - "Writing Validators": writing-validators.md
@@ -38,7 +38,7 @@ pages:
             - Uri: validators/uri.md
             - Uuid: validators/uuid.md
         - "File Validators":
-            - Intro: validators/file/intro.md
+            - Introduction: validators/file/intro.md
             - Count: validators/file/count.md
             - Crc32: validators/file/crc32.md
             - ExcludeExtension: validators/file/exclude-extension.md
@@ -59,6 +59,5 @@ pages:
             - UploadFile: validators/file/upload-file.md
             - WordCount: validators/file/word-count.md
 site_name: zend-validator
-site_description: zend-validator
+site_description: "Validation classes for a wide range of domains, and the ability to chain validators to create complex validation criteria."
 repo_url: 'https://github.com/zendframework/zend-validator'
-copyright: 'Copyright (c) 2016 <a href="http://www.zend.com/">Zend Technologies USA Inc.</a>'

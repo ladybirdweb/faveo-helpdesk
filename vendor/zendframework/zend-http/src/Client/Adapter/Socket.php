@@ -262,6 +262,14 @@ class Socket implements HttpAdapter, StreamInterface
             } else {
                 $connectTimeout = $this->config['timeout'];
             }
+
+            if ($connectTimeout !== null && ! is_numeric($connectTimeout)) {
+                throw new AdapterException\InvalidArgumentException(sprintf(
+                    'integer or numeric string expected, got %s',
+                    gettype($connectTimeout)
+                ));
+            }
+
             ErrorHandler::start();
             $this->socket = stream_socket_client(
                 $host . ':' . $port,
@@ -381,7 +389,7 @@ class Socket implements HttpAdapter, StreamInterface
         $request = $method . ' ' . $path . ' HTTP/' . $httpVer . "\r\n";
         foreach ($headers as $k => $v) {
             if (is_string($k)) {
-                $v = ucfirst($k) . ': ' . $v;
+                $v = $k . ': ' . $v;
             }
             $request .= $v . "\r\n";
         }

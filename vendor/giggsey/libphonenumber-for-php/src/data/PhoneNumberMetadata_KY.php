@@ -61,7 +61,7 @@ return array (
   ),
   'premiumRate' => 
   array (
-    'NationalNumberPattern' => '900[2-9]\\d{6}|345976\\d{4}',
+    'NationalNumberPattern' => '(?:345976|900[2-9]\\d\\d)\\d{4}',
     'ExampleNumber' => '9002345678',
     'PossibleLength' => 
     array (
@@ -146,7 +146,8 @@ return array (
   'countryCode' => 1,
   'internationalPrefix' => '011',
   'nationalPrefix' => '1',
-  'nationalPrefixForParsing' => '1',
+  'nationalPrefixForParsing' => '1|([2-9]\\d{6})$',
+  'nationalPrefixTransformRule' => '345$1',
   'sameMobileAndFixedLinePattern' => false,
   'numberFormat' => 
   array (

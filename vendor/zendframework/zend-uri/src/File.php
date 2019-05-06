@@ -67,7 +67,7 @@ class File extends Uri
     public static function fromUnixPath($path)
     {
         $url = new static('file:');
-        if (substr($path, 0, 1) == '/') {
+        if (0 === strpos($path, '/')) {
             $url->setHost('');
         }
 

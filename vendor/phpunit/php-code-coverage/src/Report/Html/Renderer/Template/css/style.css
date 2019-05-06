@@ -6,7 +6,7 @@ body {
  max-width: none;
 }
 
-.glyphicon {
+.octicon {
  margin-right:.25em;
 }
 
@@ -64,7 +64,7 @@ td.small {
 }
 
 td.codeLine {
- font-family: monospace;
+ font-family: "Source Code Pro", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
  white-space: pre;
 }
 

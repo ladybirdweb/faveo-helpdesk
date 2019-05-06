@@ -778,11 +778,10 @@ class TicketController extends Controller
             if ($is_reply == 0) {
                 if (Alert::first() && (Alert::first()->ticket_status == 1 || Alert::first()->ticket_department_member == 1)) {
                     // send email to agents
-                    $agents = User::where('role', '=', 'agent')->get();
+                    $agents = User::where('role', '=', 'agent')->active()->get();
                     foreach ($agents as $agent) {
-                        $department_data = Department::where('id', '=', $ticketdata->dept_id)->first();
 
-                        if ($department_data->name == $agent->primary_dpt) {
+                        if ($ticketdata->dept_id == $agent->primary_dpt) {
                             $to_email = $agent->email;
                             $to_user = $agent->first_name;
                             $to_user_name = $agent->first_name;

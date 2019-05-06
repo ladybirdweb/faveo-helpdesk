@@ -23,8 +23,8 @@ class Feedback extends AbstractClient
      * @var array
      */
     protected $uris = [
-        'tls://feedback.sandbox.push.apple.com:2196',
-        'tls://feedback.push.apple.com:2196'
+        'tlsv1.2://feedback.sandbox.push.apple.com:2196',
+        'tlsv1.2://feedback.push.apple.com:2196'
     ];
 
     /**

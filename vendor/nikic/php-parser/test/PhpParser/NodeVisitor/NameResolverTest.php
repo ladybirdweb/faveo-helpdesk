@@ -7,16 +7,15 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
-use PHPUnit\Framework\TestCase;
 
-class NameResolverTest extends TestCase
+class NameResolverTest extends \PHPUnit\Framework\TestCase
 {
     private function canonicalize($string) {
         return str_replace("\r\n", "\n", $string);
     }
 
     /**
-     * @covers PhpParser\NodeVisitor\NameResolver
+     * @covers \PhpParser\NodeVisitor\NameResolver
      */
     public function testResolveNames() {
         $code = <<<'EOC'
@@ -95,6 +94,13 @@ namespace Baz {
     C;
     E;
     K;
+
+    class ClassWithTypeProperties
+    {
+        public float $php = 7.4;
+        public ?Foo $person;
+        protected static ?bool $probability;
+    }
 }
 EOC;
         $expectedCode = <<<'EOC'
@@ -163,6 +169,12 @@ namespace Baz {
     \Y\T\B\C;
     \Y\T\D\E;
     \Z\T\K;
+    class ClassWithTypeProperties
+    {
+        public float $php = 7.4;
+        public ?\Baz\Foo $person;
+        protected static ?bool $probability;
+    }
 }
 EOC;
 
@@ -181,7 +193,7 @@ EOC;
     }
 
     /**
-     * @covers PhpParser\NodeVisitor\NameResolver
+     * @covers \PhpParser\NodeVisitor\NameResolver
      */
     public function testResolveLocations() {
         $code = <<<'EOC'

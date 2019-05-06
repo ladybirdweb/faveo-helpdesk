@@ -14,7 +14,7 @@
 return array (
   'generalDesc' => 
   array (
-    'NationalNumberPattern' => '1\\d{5,11}|(?:[27]|4\\d)\\d{4,9}|[356]0\\d{6,8}|800\\d{4,7}|[35]0\\d{4,5}',
+    'NationalNumberPattern' => '2\\d{4,9}|35\\d{4,5}|(?:60\\d\\d|800)\\d{4,6}|(?:[147]\\d|3[0-46-9]|50)\\d{4,8}',
     'PossibleLength' => 
     array (
       0 => 5,
@@ -23,8 +23,6 @@ return array (
       3 => 8,
       4 => 9,
       5 => 10,
-      6 => 11,
-      7 => 12,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -32,7 +30,7 @@ return array (
   ),
   'fixedLine' => 
   array (
-    'NationalNumberPattern' => '18[1-8]\\d{3,9}',
+    'NationalNumberPattern' => '18[1-8]\\d{3,6}',
     'ExampleNumber' => '181234567',
     'PossibleLength' => 
     array (
@@ -40,9 +38,6 @@ return array (
       1 => 7,
       2 => 8,
       3 => 9,
-      4 => 10,
-      5 => 11,
-      6 => 12,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -50,7 +45,7 @@ return array (
   ),
   'mobile' => 
   array (
-    'NationalNumberPattern' => '4\\d{5,10}|50\\d{4,8}',
+    'NationalNumberPattern' => '(?:4[0-8]|50)\\d{4,8}',
     'ExampleNumber' => '412345678',
     'PossibleLength' => 
     array (
@@ -59,7 +54,6 @@ return array (
       2 => 8,
       3 => 9,
       4 => 10,
-      5 => 11,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -67,14 +61,13 @@ return array (
   ),
   'tollFree' => 
   array (
-    'NationalNumberPattern' => '800\\d{4,7}',
-    'ExampleNumber' => '8001234567',
+    'NationalNumberPattern' => '800\\d{4,6}',
+    'ExampleNumber' => '800123456',
     'PossibleLength' => 
     array (
       0 => 7,
       1 => 8,
       2 => 9,
-      3 => 10,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -135,16 +128,10 @@ return array (
   ),
   'uan' => 
   array (
-    'NationalNumberPattern' => '[13]0\\d{4,8}|2(?:0(?:[016-8]\\d{3,7}|[2-59]\\d{2,7})|9\\d{4,8})|60(?:[12]\\d{5,6}|6\\d{7})|7(?:1\\d{7}|3\\d{8}|5[03-9]\\d{2,7})',
+    'NationalNumberPattern' => '(?:10|[23][09])\\d{4,8}|60(?:[12]\\d{5,6}|6\\d{7})|7(?:(?:1|3\\d)\\d{7}|5[03-9]\\d{3,7})|20[2-59]\\d\\d',
     'ExampleNumber' => '10112345',
     'PossibleLength' => 
     array (
-      0 => 5,
-      1 => 6,
-      2 => 7,
-      3 => 8,
-      4 => 9,
-      5 => 10,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -162,15 +149,9 @@ return array (
   ),
   'noInternationalDialling' => 
   array (
-    'NationalNumberPattern' => '[13]00\\d{3,7}|2(?:0(?:0\\d{3,7}|2[023]\\d{1,6}|9[89]\\d{1,6}))|60(?:[12]\\d{5,6}|6\\d{7})|7(?:1\\d{7}|3\\d{8}|5[03-9]\\d{3,7})',
     'PossibleLength' => 
     array (
-      0 => 5,
-      1 => 6,
-      2 => 7,
-      3 => 8,
-      4 => 9,
-      5 => 10,
+      0 => -1,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -178,7 +159,7 @@ return array (
   ),
   'id' => 'AX',
   'countryCode' => 358,
-  'internationalPrefix' => '00|99(?:[01469]|5(?:11|3[23]|41|5[59]|77|88|9[09]))',
+  'internationalPrefix' => '00|99(?:[01469]|5(?:[14]1|3[23]|5[59]|77|88|9[09]))',
   'preferredInternationalPrefix' => '00',
   'nationalPrefix' => '0',
   'nationalPrefixForParsing' => '0',
@@ -190,6 +171,7 @@ return array (
   array (
   ),
   'mainCountryForCode' => false,
+  'leadingDigits' => '18',
   'leadingZeroPossible' => false,
   'mobileNumberPortableRegion' => false,
 );

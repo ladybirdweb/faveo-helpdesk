@@ -3,7 +3,7 @@
 This validator allows you to validate if a given string is between a defined
 length.
 
-> Supports only string validation
+> ### Supports only string validation
 >
 > `Zend\Validator\StringLength` supports only the validation of strings.
 > Integers, floats, dates or objects can not be validated with this validator.
@@ -15,7 +15,6 @@ The following options are supported for `Zend\Validator\StringLength`:
 - `encoding`: Sets the `ICONV` encoding to use with the string.
 - `min`: Sets the minimum allowed length for a string.
 - `max`: Sets the maximum allowed length for a string.
-- `length`: Holds the actual length of the string.
 
 ## Default behaviour
 
@@ -85,7 +84,20 @@ $validator->isValid("Test"); // returns true
 $validator->isValid("Testing"); // returns true
 ```
 
-> ### Setting a maximum lower  than the minimum
+## Limiting to a strict length
+
+If you need a strict length, then set the `min` and `max` properties to the same
+value:
+
+```php
+$validator = new Zend\Validator\StringLength(['min' => 4, 'max' => 4]);
+
+$validator->isValid('Tes'); // returns false
+$validator->isValid('Test'); // returns true
+$validator->isValid('Testi'); // returns false
+```
+
+> ### Setting a maximum lower than the minimum
 >
 > When you try to set a lower maximum value than the specified minimum value, or
 > a higher minimum value as the actual maximum value, the validator will raise

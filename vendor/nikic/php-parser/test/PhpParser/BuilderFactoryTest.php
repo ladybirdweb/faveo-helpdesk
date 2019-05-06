@@ -2,7 +2,6 @@
 
 namespace PhpParser;
 
-use PhpParser\Builder;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
@@ -10,10 +9,8 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\Yaml\Tests\A;
 
-class BuilderFactoryTest extends TestCase
+class BuilderFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideTestFactory
@@ -25,15 +22,17 @@ class BuilderFactoryTest extends TestCase
 
     public function provideTestFactory() {
         return [
-            ['namespace', Builder\Namespace_::class],
-            ['class',     Builder\Class_::class],
-            ['interface', Builder\Interface_::class],
-            ['trait',     Builder\Trait_::class],
-            ['method',    Builder\Method::class],
-            ['function',  Builder\Function_::class],
-            ['property',  Builder\Property::class],
-            ['param',     Builder\Param::class],
-            ['use',       Builder\Use_::class],
+            ['namespace',   Builder\Namespace_::class],
+            ['class',       Builder\Class_::class],
+            ['interface',   Builder\Interface_::class],
+            ['trait',       Builder\Trait_::class],
+            ['method',      Builder\Method::class],
+            ['function',    Builder\Function_::class],
+            ['property',    Builder\Property::class],
+            ['param',       Builder\Param::class],
+            ['use',         Builder\Use_::class],
+            ['useFunction', Builder\Use_::class],
+            ['useConst',    Builder\Use_::class],
         ];
     }
 
@@ -67,19 +66,15 @@ class BuilderFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Expected at least two expressions
-     */
     public function testConcatOneError() {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Expected at least two expressions');
         (new BuilderFactory())->concat("a");
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Expected string or Expr
-     */
     public function testConcatInvalidExpr() {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Expected string or Expr');
         (new BuilderFactory())->concat("a", 42);
     }
 
@@ -188,28 +183,56 @@ class BuilderFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Expected string or instance of Node\Identifier
-     */
+    public function testVar() {
+        $factory = new BuilderFactory();
+        $this->assertEquals(
+            new Expr\Variable("foo"),
+            $factory->var("foo")
+        );
+        $this->assertEquals(
+            new Expr\Variable(new Expr\Variable("foo")),
+            $factory->var($factory->var("foo"))
+        );
+    }
+
+    public function testPropertyFetch() {
+        $f = new BuilderFactory();
+        $this->assertEquals(
+            new Expr\PropertyFetch(new Expr\Variable('foo'), 'bar'),
+            $f->propertyFetch($f->var('foo'), 'bar')
+        );
+        $this->assertEquals(
+            new Expr\PropertyFetch(new Expr\Variable('foo'), 'bar'),
+            $f->propertyFetch($f->var('foo'), new Identifier('bar'))
+        );
+        $this->assertEquals(
+            new Expr\PropertyFetch(new Expr\Variable('foo'), new Expr\Variable('bar')),
+            $f->propertyFetch($f->var('foo'), $f->var('bar'))
+        );
+    }
+
     public function testInvalidIdentifier() {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Expected string or instance of Node\Identifier');
         (new BuilderFactory())->classConstFetch('Foo', new Expr\Variable('foo'));
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Expected string or instance of Node\Identifier or Node\Expr
-     */
     public function testInvalidIdentifierOrExpr() {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Expected string or instance of Node\Identifier or Node\Expr');
         (new BuilderFactory())->staticCall('Foo', new Name('bar'));
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Name must be a string or an instance of Node\Name or Node\Expr
-     */
     public function testInvalidNameOrExpr() {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Name must be a string or an instance of Node\Name or Node\Expr');
         (new BuilderFactory())->funcCall(new Node\Stmt\Return_());
+    }
+
+    public function testInvalidVar() {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Variable name must be string or Expr');
+        (new BuilderFactory())->var(new Node\Stmt\Return_());
     }
 
     public function testIntegration() {
@@ -217,18 +240,28 @@ class BuilderFactoryTest extends TestCase
         $node = $factory->namespace('Name\Space')
             ->addStmt($factory->use('Foo\Bar\SomeOtherClass'))
             ->addStmt($factory->use('Foo\Bar')->as('A'))
+            ->addStmt($factory->useFunction('strlen'))
+            ->addStmt($factory->useConst('PHP_VERSION'))
             ->addStmt($factory
                 ->class('SomeClass')
                 ->extend('SomeOtherClass')
                 ->implement('A\Few', '\Interfaces')
                 ->makeAbstract()
 
+                ->addStmt($factory->useTrait('FirstTrait'))
+
+                ->addStmt($factory->useTrait('SecondTrait', 'ThirdTrait')
+                    ->and('AnotherTrait')
+                    ->with($factory->traitUseAdaptation('foo')->as('bar'))
+                    ->with($factory->traitUseAdaptation('AnotherTrait', 'baz')->as('test'))
+                    ->with($factory->traitUseAdaptation('AnotherTrait', 'func')->insteadof('SecondTrait')))
+
                 ->addStmt($factory->method('firstMethod'))
 
                 ->addStmt($factory->method('someMethod')
                     ->makePublic()
                     ->makeAbstract()
-                    ->addParam($factory->param('someParam')->setTypeHint('SomeClass'))
+                    ->addParam($factory->param('someParam')->setType('SomeClass'))
                     ->setDocComment('/**
                                       * This method does something.
                                       *
@@ -254,8 +287,16 @@ namespace Name\Space;
 
 use Foo\Bar\SomeOtherClass;
 use Foo\Bar as A;
+use function strlen;
+use const PHP_VERSION;
 abstract class SomeClass extends SomeOtherClass implements A\Few, \Interfaces
 {
+    use FirstTrait;
+    use SecondTrait, ThirdTrait, AnotherTrait {
+        foo as bar;
+        AnotherTrait::baz as test;
+        AnotherTrait::func insteadof SecondTrait;
+    }
     protected $someProperty;
     private $anotherProperty = array(1, 2, 3);
     function firstMethod()

@@ -171,7 +171,7 @@ class MockObjectTest extends TestCase
 
         $mock->expects($this->any())
              ->method('doSomething')
-             ->will($this->throwException(new \Exception()));
+             ->will($this->throwException(new \Exception));
 
         $this->expectException(\Exception::class);
 
@@ -185,7 +185,7 @@ class MockObjectTest extends TestCase
 
         $mock->expects($this->any())
              ->method('doSomething')
-             ->willThrowException(new \Exception());
+             ->willThrowException(new \Exception);
 
         $this->expectException(\Exception::class);
 
@@ -217,7 +217,7 @@ class MockObjectTest extends TestCase
     {
         $map = [
             ['a', 'b', 'c', 'd'],
-            ['e', 'f', 'g', 'h']
+            ['e', 'f', 'g', 'h'],
         ];
 
         $mock = $this->getMockBuilder(AnInterface::class)
@@ -272,7 +272,7 @@ class MockObjectTest extends TestCase
 
         $mock->expects($this->once())
              ->method('doSomething')
-             ->will($this->returnCallback('functionCallback'));
+             ->will($this->returnCallback('FunctionCallbackWrapper::functionCallback'));
 
         $this->assertEquals('pass', $mock->doSomething('foo', 'bar'));
 
@@ -282,7 +282,7 @@ class MockObjectTest extends TestCase
 
         $mock->expects($this->once())
              ->method('doSomething')
-             ->willReturnCallback('functionCallback');
+             ->willReturnCallback('FunctionCallbackWrapper::functionCallback');
 
         $this->assertEquals('pass', $mock->doSomething('foo', 'bar'));
     }
@@ -435,7 +435,6 @@ class MockObjectTest extends TestCase
 
     public function testGetMockWithFixedClassNameCanProduceTheSameMockTwice(): void
     {
-        $mock = $this->getMockBuilder(stdClass::class)->setMockClassName('FixedName')->getMock();
         $mock = $this->getMockBuilder(stdClass::class)->setMockClassName('FixedName')->getMock();
         $this->assertInstanceOf(stdClass::class, $mock);
     }
@@ -661,7 +660,7 @@ class MockObjectTest extends TestCase
             $this->fail('Expected exception');
         } catch (ExpectationFailedException $e) {
             $this->assertSame(
-                'Expectation failed for method name is equal to "right" when invoked 1 time(s).' . "\n" .
+                "Expectation failed for method name is equal to 'right' when invoked 1 time(s).\n" .
                 'Method was expected to be called 1 times, actually called 0 times.' . "\n",
                 $e->getMessage()
             );
@@ -686,7 +685,7 @@ class MockObjectTest extends TestCase
             $this->fail('Expected exception');
         } catch (ExpectationFailedException $e) {
             $this->assertSame(
-                'Expectation failed for method name is equal to "right" when invoked 1 time(s).' . "\n" .
+                "Expectation failed for method name is equal to 'right' when invoked 1 time(s).\n" .
                 'Method was expected to be called 1 times, actually called 0 times.' . "\n",
                 $e->getMessage()
             );
@@ -709,7 +708,7 @@ class MockObjectTest extends TestCase
             $mock->right(['second']);
         } catch (ExpectationFailedException $e) {
             $this->assertSame(
-                'Expectation failed for method name is equal to "right" when invoked 1 time(s)' . "\n" .
+                "Expectation failed for method name is equal to 'right' when invoked 1 time(s)\n" .
                 'Parameter 0 for invocation SomeClass::right(Array (...)) does not match expected value.' . "\n" .
                 'Failed asserting that two arrays are equal.',
                 $e->getMessage()
@@ -723,7 +722,7 @@ class MockObjectTest extends TestCase
 //            $this->fail('Expected exception');
         } catch (ExpectationFailedException $e) {
             $this->assertSame(
-                'Expectation failed for method name is equal to "right" when invoked 1 time(s).' . "\n" .
+                "Expectation failed for method name is equal to 'right' when invoked 1 time(s).\n" .
                 'Parameter 0 for invocation SomeClass::right(Array (...)) does not match expected value.' . "\n" .
                 'Failed asserting that two arrays are equal.' . "\n" .
                 '--- Expected' . "\n" .
@@ -802,7 +801,7 @@ class MockObjectTest extends TestCase
             $this->fail('Expected exception');
         } catch (ExpectationFailedException $e) {
             $this->assertSame(
-                'Expectation failed for method name is equal to "right" when invoked 1 time(s)' . "\n" .
+                "Expectation failed for method name is equal to 'right' when invoked 1 time(s)\n" .
                 'Parameter count for invocation SomeClass::right() is too low.' . "\n" .
                 'To allow 0 or more parameters with any value, omit ->with() or use ->withAnyParameters() instead.',
                 $e->getMessage()
@@ -946,9 +945,9 @@ class MockObjectTest extends TestCase
      * @ticket   2573
      * @requires extension soap
      */
-    public function testCreateMockOfWsdlFileWithSpecialChars()
+    public function testCreateMockOfWsdlFileWithSpecialChars(): void
     {
-        $mock = $this->getMockFromWsdl(__DIR__ . '/_fixture/Go ogle-Sea.rch.wsdl');
+        $mock = $this->getMockFromWsdl(TEST_FILES_PATH . 'Go ogle-Sea.rch.wsdl');
 
         $this->assertStringStartsWith('Mock_GoogleSearch_', \get_class($mock));
     }
@@ -1001,7 +1000,7 @@ class MockObjectTest extends TestCase
         /** @var PHPUnit\Framework\MockObject\MockObject|StringableClass $mock */
         $mock = $this->getMockBuilder(StringableClass::class)->getMock();
 
-        $this->assertInternalType('string', (string) $mock);
+        $this->assertIsString((string) $mock);
     }
 
     public function testStringableClassCanBeMocked(): void
@@ -1014,7 +1013,7 @@ class MockObjectTest extends TestCase
         $this->assertSame('foo', (string) $mock);
     }
 
-    public function traversableProvider()
+    public function traversableProvider(): array
     {
         return [
             ['Traversable'],
@@ -1022,7 +1021,7 @@ class MockObjectTest extends TestCase
             ['TraversableMockTestInterface'],
             [['Traversable']],
             [['Iterator', 'Traversable']],
-            [['\Iterator', '\Traversable']]
+            [['\Iterator', '\Traversable']],
         ];
     }
 
