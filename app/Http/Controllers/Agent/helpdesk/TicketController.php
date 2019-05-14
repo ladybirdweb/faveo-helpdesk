@@ -898,7 +898,7 @@ class TicketController extends Controller
      */
     public function check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status)
     {
-        $read_ticket_number = explode('[#', $subject);
+        $read_ticket_number = explode('[#', iconv_mime_decode($subject, 0, "UTF-8"));
         if (isset($read_ticket_number[1])) {
             $separate = explode(']', $read_ticket_number[1]);
             $new_subject = substr($separate[0], 0, 20);
