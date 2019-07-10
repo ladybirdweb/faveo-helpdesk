@@ -48,6 +48,7 @@ return [
     'iforgot'                     => 'Я забыл свой пароль',
     'email_address'               => 'E-Mail Address',
     'password'                    => 'Пароль',
+    'password_confirmation'       => 'Подтверждение пароля',
     'woops'                       => 'Упс!',
     'theirisproblem'              => 'Введенные данные не корректны.',
     'e-mail'                      => 'E-mail',
@@ -198,7 +199,7 @@ return [
     'template_set_deleted_successfully' => 'Набор шаблонов успешно удален',
     //Template Description
     'Create ticket agent'       => 'Уведомление по email, которое отправленняется агенту и администратору при создании заявки',
-    'Assign ticket'             => 'Обращение, назначенный агенту',
+    'Assign ticket'             => 'Заявка назначена агенту',
     'Create ticket'             => 'Письмо отправлено клиенту для успешного создания заявки',
     'Check ticket'              => 'Если клиент хочет проверить обращение через портал, то ссылка будет отправлена клиенту. По этой ссылке клиент может просмотреть информацию об обращение без входа в систему',
     'Ticket reply agent'        => 'Уведомление отправляется на электронную почту агента, когда клиент отвечает на заявку',
@@ -251,6 +252,7 @@ return [
      */
     'country-code' => 'Код',
     'company' => 'Компания',
+    'company_settings' => 'Настройки компании',
     'website' => 'Website',
     'phone'   => 'Телефон',
     'address' => 'Адрес',
@@ -353,6 +355,7 @@ return [
       |--------------------------------------
      */
     'ticket'                             => 'Заявка',
+    'ticket-setting'                     => 'Настройки заявки',
     'default_ticket_number_format'       => 'Формат номера заявки по умолчанию',
     'default_ticket_number_sequence'     => 'Последовательность заявок по умолчанию',
     'default_status'                     => 'Статус по умолчанию',
@@ -402,7 +405,7 @@ return [
       |--------------------------------------
      */
     'auto_responce'                 => 'Автоответчик',
-    'auto_responce-settings' => 'Настройки автоответчика',
+    'auto_responce-settings'        => 'Настройки автоответчика',
     'new_ticket'                    => 'Новая заявка',
     'new_ticket_by_agent'           => 'Новая заявка агента',
     'new_message'                   => 'Новое сообщение',
@@ -414,6 +417,7 @@ return [
     'email_attachments_to_the_user' => 'Email вложения  пользователю',
     'auto_response_updated_successfully' => 'Автоответчик успешно обновлен',
     'auto_response_can_not_updated' => 'Автоответчик не может быть обновлен',
+
     /*
       |--------------------------------------
       |   Оповещения И Уведомления Настройки Страницы
@@ -442,12 +446,31 @@ return [
     'excessive_failed_login_attempts'                       => 'Неудачные попытки входа',
     'system_error_reports'                                  => 'Отчет системных ошибок',
     'Send_app_crash_reports_to_help_Ladybird_improve_Faveo' => 'Отправлять отчеты о сбоях приложения, чтобы помочь разработчику улучшить Faveo',
+    'alert_&_notices_updated_successfully'                  => 'Оповещения и уведомления успешно обновлены',
+    'alert_&_notices_can_not_updated'                       => 'Оповещение и уведомления не могут быть обновлены',
+
+    /*
+      |-----------------------------------------------
+      | Ratings Settings
+      |-----------------------------------------------
+     */
+    'current_ratings' => 'Текущие рейтинги',
+    'edit_ratings'    => 'Изменить рейтинги',
+
+    /*
+      |-------------------------------------------------
+      |Social login
+      |--------------------------------------------------
+    */
+    'social-login' => 'Social вход',
+
     /*
       |------------------------------------------------
       |Language page
       |------------------------------------------------
      */
     'default'            => 'По умолчанию',
+    'language-settings'  => 'Языковые настройки',
     'iso-code'           => 'ISO-CODE',
     'download'           => 'Скачать',
     'upload_file'        => 'Загрузить файл',
@@ -616,6 +639,7 @@ return [
     'workflow_created_successfully' => 'Workflow успешно создан',
     'workflow_updated_successfully' => 'Workflow успешно обновлен',
     'workflow_deleted_successfully' => 'Workflow успешно удален',
+
     /*
       |--------------------------------------
       |  Form Create Page
@@ -647,6 +671,31 @@ return [
     'required'                              => 'Требуется',
     'Action'                                => 'Действие',
     'remove'                                => 'Удалить',
+    'form_deleted_successfully'             => 'Форма успешно удалена',
+    'successfully_created_form'             => 'Форма успешно создана',
+    'please_fill_form_name'                 => 'Пожалуйста заполните название формы',
+    'category_inserted_successfully'        => 'Категория успешно добавлена',
+    'category_not_inserted'                 => 'Категория не добавлена',
+    'category_updated_successfully'         => 'Категория успешно обновлена',
+    'category_not_updated'                  => 'Категория не обновлена',
+    'category_deleted_successfully'         => 'Категория успешно удалена',
+    'category_not_deleted'                  => 'Категория не удалена',
+    'article_inserted_successfully'         => 'Статья успешно добавлена',
+    'article_not_inserted'                  => 'Статья не добавлена',
+    'article_updated_successfully'          => 'Статья успешно обновлена',
+    'article_not_updated'                   => 'Статья не обновлена',
+    'article_deleted_successfully'          => 'Статья успешно удалена',
+    'article_not_deleted'                   => 'Статья не удалена',
+    'article_can_not_deleted'               => 'Статья не может быть удалена',
+    'page_created_successfully'             => 'Страница успешно создана',
+    'your_page_updated_successfully'        => 'Ваша страница успешно обновлена',
+    'page_deleted_successfully'             => 'Страница успешно удалена',
+    'settings_updated_successfully'         => 'Настройки успешно обновлены',
+    'settings_can_not_updated'              => 'Настройки не могут быть обновлены',
+    'can_not_process'                       => 'Не возмножно обработать',
+    'comment_published'                     => 'Комментарий опубликован',
+    'comment_deleted'                       => 'Комментарий удален',
+    'publish_time'                          => 'Время публикации',
     /*
       |----------------------------------------------------------------------------------------
       | Theme Pages [English(en)]
@@ -668,6 +717,18 @@ return [
     'footer2' => 'Нижний колонтитул2',
     'footer3' => 'Нижний колонтитул3',
     'footer4' => 'Нижний колонтитул4',
+    /*
+      |--------------------------------------
+      |  Custom alert box
+      |--------------------------------------
+     */
+    'ok'             => 'Ok',
+    'cancel'         => 'Отмена',
+    'select-ticket'  => 'Пожалуйста выберите заявку.',
+    'confirm'        => 'Вы уверены?',
+    'delete-tickets' => 'Удалить заявки',
+    'close-tickets'  => 'Закрыть заявки',
+    'open-tickets'   => 'Открытые заявки',
     /*
       |----------------------------------------------------------------------------------------
       | Staff Pages [English(en)]
@@ -694,7 +755,7 @@ return [
     'edit'         => 'Редактировать',
     'departments'  => 'Отделы',
     'groups'       => 'Группы',
-    'time_zones'    => 'Часовые пояса',
+    'time_zones'   => 'Часовые пояса',
     /*
       |--------------------------------------
       |  Staff Create Page
@@ -719,6 +780,18 @@ return [
     'directory_listing'      => 'Список каталогов',
     'vocation_mode'          => 'Vocation mode',
     'assigned_team'          => 'Назначенная команда',
+    'agent_send_mail_error_on_agent_creation'  => 'Произошла ошибка при отправке email агенту. Пожалуйста, проверьте настройки электронной почты и попробуйте снова',
+    'agent_creation_success'                   => 'Агент успешно создан',
+    'failed_to_create_agent'                   => 'Не удалось создать агента',
+    'failed_to_edit_agent'                     => 'Не удалось изменить агента',
+    'agent_updated_sucessfully'                => 'Агент успешно обновлен',
+    'unable_to_update_agent'                   => 'Невозможно обновить агента',
+    'agent_deleted_sucessfully'                => 'Агент успешно удален',
+    'this_staff_is_related_to_some_tickets'    => 'Сотрудник связан с некоторыми заявками',
+    'list_of_agents'                           => 'Список агентов',
+    'create_an_agent'                          => 'Создать агента',
+    'edit_an_agent'                            => 'Изменить агента',
+
     /*
       |--------------------------------------
       |  Department Create Page
@@ -834,7 +907,8 @@ return [
     'profile'           => 'Профиль',
     'change_password'   => 'Изменить пароль',
     'sign_out'          => 'Выйти',
-    'Tickets'           => 'Заявки',
+    'Tickets'           => 'ЗАЯВКИ',
+    'ticket-details'    => 'Детали заявки',
     'inbox'             => 'Входящие',
     'my_tickets'        => 'Мои заявки',
     'unassigned'        => 'Неназначенные',
@@ -842,17 +916,20 @@ return [
     'Updates'           => 'Обновления',
     'no_new_updates'    => 'Нет новых обновлений',
     'check_for_updates' => 'Проверить обновления',
+    'update-version'    => 'Обновить версию',
     'open'              => 'Открыть',
     'inprogress'        => 'Обрабатывается',
+    'inprogress_tickets' => 'Обрабатываемые заявки',
     'closed'            => 'Закрыто',
     'Departments'       => 'Отделы',
     'tools'             => 'Настройки',
     'canned'            => 'Canned',
     'knowledge_base'    => 'База знаний',
+    'kb-settings'       => 'Настройки базы знаний',
     'loading'           => 'Загрузить',
     'ratings'           => 'Оценки',
     'please_rate'       => 'Оцените пожалуйста:',
-    'ticket_ratings'    => 'Оцените заявку',
+    'ticket_ratings'    => 'РЕЙТИНГ ЗАЯВОК',
     /*
       |-----------------------------------------------
       |  Ticket
@@ -871,7 +948,7 @@ return [
     'for_some_reason_your_reply_was_not_posted_please_try_again_later'   => 'По какой-то причине ваш ответ не был опубликован. Пожалуйста, попробуйте позже',
     'you_have_unassigned_your_ticket'                                    => 'Вы отменили свою заявку',
     'for_some_reason_your_request_failed'                                => 'По какой-то причине ваш запрос не удался',
-    'trash-delete-ticket'                                                => 'Удалить билеты навсегда',
+    'trash-delete-ticket'                                                => 'Удалить заявки навсегда',
     'trash-delete-title-msg'                                             => 'Нажмите здесь, чтобы удалить заявки навсегда.',
     'moved_to_trash'                                                     => 'Выбранные заявки были перемещены в корзину.',
     'tickets_have_been_closed'                                           => 'Выбранные заявки были закрыты.',
@@ -950,8 +1027,9 @@ return [
      */
     'organizations'                 => 'Организации',
     'organization'                  => 'Организация',
-    'create_organization'           => 'Создать организацию',
+    'organization_list'             => 'Список организаций',
     'view_organization_profile'     => 'Посмотреть профиль организации',
+    'create_organization'           => 'Создать организацию',
     'account_manager'               => 'Аккаунт менеджера',
     'update'                        => 'Обновить',
     'please_select_an_organization' => 'Пожалуйста, выберите организацию',
@@ -959,7 +1037,8 @@ return [
     'organization_profile'          => 'Профиль организации',
     'organization-s_head'           => 'Страница руководителя',
     'select_department_manager'     => 'Выберите менеджера отдела',
-    'users_of'                      => 'Пользователи',
+    'select_organization_manager'       => 'Выберите руководителя организации',
+    'users_of'                          => 'Пользователи',
     'organization_created_successfully' => 'Организация успешно создана',
     'organization_can_not_create'       => 'Организация не может быть создана',
     'organization_updated_successfully' => 'Организация успешно обновлена',
@@ -988,6 +1067,7 @@ return [
     'Ticket_Id'                                      => 'ID ЗАЯВКМ',
     'User'                                           => 'ПОЛЬЗОВАТЕЛЬ',
     'Unassigned'                                     => 'НЕНАЗНАЧЕННЫЕ',
+    'unassigned-tickets'                             => 'Неназначенные заявки',
     'generate_pdf'                                   => 'Создать PDF',
     'change_status'                                  => 'Изменить статус',
     'more'                                           => 'Больше',
@@ -1010,7 +1090,7 @@ return [
     'this_ticket_is_under_banned_user'               => 'Эта заявка принадлежит заблокированному пользователю',
     'ticket_source'                                  => 'Источник заявки',
     'are_you_sure_to_ban'                            => 'Вы уверены в бане',
-    'whome_do_you_want_to_assign_ticket'             => 'Кому вы хотите назначить билет',
+    'whome_do_you_want_to_assign_ticket'             => 'Кому вы хотите назначить заявку',
     'are_you_sure_you_want_to_surrender_this_ticket' => 'Вы уверены, что хотите сдать эту заявку',
     'add_collaborator'                               => 'Добавить соисполнителя',
     'search_existing_users'                          => 'Поиск существующих пользователей',
@@ -1030,6 +1110,7 @@ return [
     'ticket_detail'                                  => 'Детали заявки',
     'Assigned_To'                                    => 'НАЗНАЧЕННЫЕ',
     'locked-ticket'                                  => 'Предупреждение! Эта заявка была заняа другим пользователем и в настоящее время в процесс рассмотрения.',
+    'minutes-ago'                                    => 'мин. назад',
     'access-ticket'                                  => 'Предупреждение! Эта заявка была занят, вы на следующий ',
     'minutes'                                        => ' минут',
     'in_minutes'                                     => 'В минутах',
@@ -1059,6 +1140,7 @@ return [
     'overdue'                                        => 'Просроченно',
     'overdue-tickets'                                => 'Просроченная заявка',
     'change_owner_for_ticket'                        => 'Сменить владельца для заявки',
+
     /*
       |------------------------------------------------
       |Инструментальная страница
@@ -1085,14 +1167,15 @@ return [
       |Гостевая-Страница Пользователя
       |------------------------------------------------
      */
-    'issue_summary'        => 'Issue Summary',
-    'issue_details'        => 'Детали вопроса',
+    'issue_summary'        => 'Краткое описание проблемы',
+    'contact'              => 'Контакты',
+    'issue_details'        => 'Детали проблемы',
     'contact_informations' => 'Контактная информация',
-    'contact_details'      => 'Contact Details',
+    'contact_details'      => 'Контактная информация',
     'role'                 => 'Роль',
     'ext'                  => 'Код города',
     'profile_pic'          => 'Изображение профиля',
-    'agent_sign'           => 'Подпись Агента в сообщениях',
+    'agent_sign'           => 'Подпись агента в сообщениях',
     'inactive'             => 'Не активный',
     'male'                 => 'Мужчина',
     'female'               => 'Женщина',
@@ -1102,49 +1185,140 @@ return [
     'gender'               => 'Пол',
     'ticket_number'        => 'Номер заявки',
     'content'              => 'Содержание',
+    'edit_template'             => 'Изменить шаблон',
+    'edit_status'               => 'Изменить статус',
+    'create_status'             => 'Создать статус',
+    'edit_details'              => 'Изменить подробности',
+    'edit_templates'            => 'Изменить шаблоны',
+    'activate_this_set'         => 'Активировать этот набор',
+    'show'                      => 'Показывать',
+    'no_notification_available' => 'Нет доступных уведомлений',
+
+    //auto-close workflow
+    'close-msg1'                                          => 'Количество дней, по истечении которых заявки будут автоматически закрываться.',
+    'no_of_days'                                          => 'Дней до удаления',
+    'close-msg2'                                          => 'Включить автоматическое закрытие workflow?',
+    'enable_workflow'                                     => 'Включить workflow',
+    'send_email_to_user'                                  => 'Отправить email пользователю',
+    'close-msg3'                                          => 'Выберите статус используемый при закрытии заявки.',
+    'close-msg4'                                          => 'Отправить email пользователю при автоматическом закрытии заявки?',
+    'edit_status'                                         => 'Изменить статус',
+    'list_of_status'                                      => 'Список статусов',
+    'status_settings'                                     => 'Настройки статуса',
+    'icon_class'                                          => 'Значок класса',
+    'close_ticket_workflow'                               => 'Закрыть workflow',
+    'ratings_settings'                                    => 'Настройки рейтинга',
+    'notification'                                        => 'Уведомления',
+    'status_has_been_updated_successfully'                => 'Статус был успешно обновлен',
+    'status_has_been_created_successfully'                => 'Статус был успешно создан',
+    'status_has_been_deleted'                             => 'Статус был удален',
+    'you_cannot_delete_this_status'                       => 'Вы не можете удалить этот статус',
+    'you_have_deleted_all_the_read_notifications'         => 'Вы удалили все прочитанные уведомления',
+    'you_have_deleted_all_the_notification_records_since' => 'Вы удалили все записи уведомлений с ',
+    'ratings_updated_successfully'                        => 'Рейтинги успешно обновлены',
+    'ratings_can_not_be_created'                          => 'Рейтинги не могут быть созданы',
+    'successfully_created_this_rating'                    => 'Рейтинг успешно создан',
+    'rating_deleted_successfully'                         => 'Рейтинг успешно удален',
+    //status msg
+
+    'status_msg1'                           => 'Если вы выберите ДА, пользователю будет отправлено email уведомление.',
+    'notify_user'                           => 'Уведомить пользователя об этом статусе?',
+    'deleted_status'                        => 'Это статус удаленной заявки?',
+    'resolved_status'                       => 'Это разрешенный статус заявки?',
+    'status_msg3'                           => 'Если вы выберите ДА, то статус заявки будет установлен как разрешенный.',
+    'status_msg2'                           => 'Если вы выберете ДА, то статус заявки будет установлен как удаленный.',
+    'rating-msg2'                           => 'Выберите отдел, чтобы ограничить этот рейтинг заявками или чатами внутри определенного отдела. Если ни один отдел не выбран, рейтинг будет отображаться во всех отделах.',
+    'rating-msg3'                           => 'Если вы выбираете ДА, пользователь сможет изменять рейтинг.',
+    'rating_restrict'                       => 'Ограничить рейтинг отделом',
+    'rating_change'                         => 'Разрешить пользователю изменять рейтинг?',
+    'security_msg1'                         => 'Сообщение, которое отображается, когда пользователь (хост) заблокирован.',
+    'security_msg2'                         => 'Количество попыток входа пользователя в систему до того, как его хост/пользователь или компьютер будет заблокирован. Установите 0 для записи неудачных попыток входа в систему без блокировки хоста/пользователя.',
+    'security_msg3'                         => 'Продолжительность минут, в течение которых хост или пользователь будут забанены на сайте после превышения лимита неудачных входов.',
+    'max_attempt'                           => 'Максимальное количество попыток входа в систему на хост/пользователя',
+    'rating-msg1'                           => 'Максимальный рейтинг, который можно дать. Например, если выбрано 5, самый низкий возможный рейтинг будет 1, а самый высокий 5.',
+    'enter_no_of_days'                      => 'Введите кол-во дней до удаления',
+    'template-types'                        => 'Типы шаблонов',
+    'close-workflow'                        => 'Закрыть заявку workflow',
+    'template'                              => 'Шаблон',
+    'rating_label'                          => 'Метка рейтинга',
+    'display_order'                         => 'Показывать порядок',
+    'rating_scale'                          => 'Шкала рейтинга',
+    'rating_area'                           => 'Рейтинговая зона',
+
+    'modify'                                => 'Изменить',
+    'rating_name'                           => 'Название рейтинга',
+    'add_user_to_this_organization'         => 'Добавить пользователя в организацию',
+    'Tickets_of'                            => 'Заявки',
+    'security'                              => 'Безопасность',
+    'security_settings'                     => 'Настройки безопасности',
+    'lockouts'                              => 'Время блокировки',
+    'security_settings_saved_successfully'  => 'Настройки безопасности успешно сохранены',
+    'manage_status'                         => 'Управление статусом',
+    'notifications'                         => 'Уведомления',
+
+    'auto_close_workflow'               => 'Автоматическое закрытие workflow',
+    'close_ticket_workflow_settings'    => 'Закрыть настройки рабочего процесса',
+    'successfully_saved_your_settings'  => 'Настройки успешно сохранены',
+
+    /*
+      |------------------------------------------------
+      |   Notification Settings Pages
+      |------------------------------------------------
+     */
+    'notification_settings'                       => 'Настройки уведомлений',
+    'delete_noti'                                 => 'Удалить прочитанные уведомления?',
+    'noti_msg1'                                   => 'Дни до удаления уведомлений в журнале',
+    'noti_msg2'                                   => 'Вы можете ввести количество дней, по истечению которых записи в журнале базы данных и записи истории уведомлений будут удалены.',
+    'del_all_read'                                => 'Удалить все прочитанное',
+    'You_have_deleted_all_the_read_notifications' => 'Вы удалили все прочитанные уведомления',
+    'view_all_notifications'                      => 'Посмотреть все уведомления',
     /*
       |------------------------------------------------
       |   Error Pages
       |------------------------------------------------
      */
-    'not_found'                                       => 'Not Found',
-    'oops_page_not_found'                             => 'Oops! Page not found',
-    'we_could_not_find_the_page_you_were_looking_for' => 'We could not find the page you were looking for',
-    'internal_server_error'                           => 'Internal server Error',
-    'be_right_back'                                   => 'Be right back',
-    'sorry'                                           => 'Sorry',
-    'we_are_working_on_it'                            => 'We are working on it',
-    'category'                                        => 'Category',
-    'addcategory'                                     => 'Add Category',
-    'allcategory'                                     => 'All Category',
-    'article'                                         => 'Article',
-    'articles'                                        => 'Articles',
-    'addarticle'                                      => 'Add Article',
-    'allarticle'                                      => 'All Article',
+    'not_found'                                       => 'Не обнаружено',
+    'oops_page_not_found'                             => 'К сожалению! Страница не найдена',
+    'we_could_not_find_the_page_you_were_looking_for' => 'Мы не смогли найти страницу, которую вы искали',
+    'internal_server_error'                           => 'Внутренняя ошибка сервера',
+    'be_right_back'                                   => 'Возвращайтесь скорее',
+    'sorry'                                           => 'Сожалеем',
+    'we_are_working_on_it'                            => 'Мы работаем над этим',
+    'category'                                        => 'Категория',
+    'addcategory'                                     => 'Добавить категорию',
+    'allcategory'                                     => 'Все категории',
+    'article'                                         => 'Статья',
+    'articles'                                        => 'Статьи',
+    'addarticle'                                      => 'Добавить статью',
+    'allarticle'                                      => 'Все статьи',
     'pages'                                           => 'Страница',
     'addpages'                                        => 'Создать страницу',
     'allpages'                                        => 'Все страницы',
     'widgets'                                         => 'Виджеты',
-    'footer1'                                         => 'Footer 1',
-    'footer2'                                         => 'Footer 2',
-    'footer3'                                         => 'Footer 3',
-    'footer4'                                         => 'Footer 4',
-    'sidewidget1'                                     => 'Side Widget 1',
-    'sidewidget2'                                     => 'Side Widget 2',
+    'widget-settings'                                 => 'Настройки виджета',
+    'footer1'                                         => 'Нижний колонтитул 1',
+    'footer2'                                         => 'Нижний колонтитул 2',
+    'footer3'                                         => 'Нижний колонтитул 3',
+    'footer4'                                         => 'Нижний колонтитул 4',
+    'sidewidget1'                                     => 'Боковой виджет 1',
+    'sidewidget2'                                     => 'Боковой виджет 2',
     'comments'                                        => 'Комментарии',
+    'comments-list'                                   => 'Список комментариев',
     'settings'                                        => 'Настройки',
     'parent'                                          => 'Родитель',
     'description'                                     => 'Описание',
     'enter_the_description'                           => 'Ввести описание',
     'publish'                                         => 'Опубликовать',
+    'publish_immediately'                             => 'Опубликуйте немедленно',
     'published'                                       => 'Опубликовано',
     'draft'                                           => 'Проект',
     'create_a_category'                               => 'Создать категорию',
-    'add'                                             => 'создать',
-    'social'                                          => 'Социальные',
+    'add'                                             => 'Добавить',
+    'social'                                          => 'Social',
+    'social-widget-settings'                          => 'Social настройки виджета',
     'comment'                                         => 'Комментарий',
-    'not_published'                                   => 'Not Published',
-    'numberofelementstodisplay'                       => 'Number of elements to display',
+    'not_published'                                   => 'Не опубликовано',
+    'numberofelementstodisplay'                       => 'Количество элементов для отображения',
     //======================================
     'language'                                                                 => 'Язык',
     'save'                                                                     => 'Сохранить',
@@ -1155,12 +1329,12 @@ return [
     'view_all'                                                                 => 'Смотреть все',
     'categories'                                                               => 'Категории',
     'need_more_support'                                                        => 'Нужна дополнительная поддержка',
-    'if_you_did_not_find_an_answer_please_raise_a_ticket_describing_the_issue' => 'If you did not find an answer, please raise a ticket describing the issue',
-    'have_a_question?_type_your_search_term_here'                              => 'Have a question? Type your search term here...',
+    'if_you_did_not_find_an_answer_please_raise_a_ticket_describing_the_issue' => 'Если вы не нашли ответ, пожалуйста, создайте заявку с описанием проблемы',
+    'have_a_question?_type_your_search_term_here'                              => 'Есть вопрос? Введите поисковый запрос здесь ...',
     'search'                                                                   => 'Поиск',
-    'frequently_asked_questions'                                               => 'Frequently Asked Questions',
-    'leave_a_reply'                                                            => 'Leave a Reply',
-    'post_message'                                                             => 'Почтовое Сообщение',
+    'frequently_asked_questions'                                               => 'Часто задаваемые вопросы (FAQ)',
+    'leave_a_reply'                                                            => 'Оставьте ответ',
+    'post_message'                                                             => 'Отправить сообщение',
     /*
       |--------------------------------------------------------------------------------------
       |  Client Panel [English(en)]
@@ -1171,48 +1345,43 @@ return [
       |
      */
     'home'                => 'Главная',
-    'submit_a_ticket'     => 'Отправить Заявку',
+    'submit_a_ticket'     => 'Отправить заявку',
     'my_profile'          => 'Мой профиль',
     'log_out'             => 'Выйти',
-    'forgot_password'     => 'Забыл Пароль',
-    'create_account'      => 'Создать Учетную запись',
+    'forgot_password'     => 'Забыли пароль',
+    'create_account'      => 'Создать учетную запись',
     'you_are_here'        => 'Вы здесь',
     'have_a_ticket'       => 'Есть заявка',
     'check_ticket_status' => 'Проверить состояние заявки',
     'choose_a_help_topic' => 'Выбрать раздел справки',
     'ticket_status'       => 'Статус заявки',
-    'post_comment'        => 'Отправить Комментарий',
+    'post_comment'        => 'Отправить комментарий',
     'plugin'              => 'Плагин',
-    'end_date'            => 'Конец Даты',
-
-    /***********************************New Updates ******************************************/
-    /*                              Translation reuired                                      */
-    /*****************************************************************************************/
-    'edit_profile'                                                                     => 'Edit profile',
-    'Send'                                                                             => 'SEND',
-    'no_article'                                                                       => 'No article',
-    'profile_settings'                                                                 => 'Profile settings',
-    'please_fill_all_required_feilds'                                                  => 'Please fill all required feilds.',
-    'successfully_replied'                                                             => 'Successfully replied',
-    'please_fill_some_data'                                                            => 'Please fill some data!',
-    'profile_updated_sucessfully'                                                      => 'Profile updated sucessfully',
-    'password_updated_sucessfully'                                                     => 'Password updated sucessfully',
-    'password_was_not_updated_incorrect_old_password'                                  => 'Password was not updated. Incorrect old password',
-    'there_is_no_such_ticket_number'                                                   => 'There is no such ticket number',
-    "email_didn't_match_with_ticket_number"                                            => "Email didn't match with ticket number",
-    'we_have_sent_you_a_link_by_email_please_click_on_that_link_to_view_ticket'        => 'We have sent you a link by email. Please click on that link to view ticket',
-    'no_records_on_publish_time'                                                       => 'No records on publish time',
-    'your_details_send_to_system'                                                      => 'Your details send to the system',
-    'your_details_can_not_send_to_system'                                              => 'Your details can not be sent to the system',
-    'your_comment_posted'                                                              => 'Your comment posted',
-    'sorry_not_processed'                                                              => 'Sorry not processed',
-    'profile_updated_sucessfully'                                                      => 'Profile updated sucessfully',
-    'password_was_not_updated'                                                         => 'Password was not updated',
-    'sorry_your_ticket_token_has_expired_please_try_to_resend_the_ticket_link_request' => 'Sorry your ticket token has expired! Please try to resend the ticket link request',
-    'sorry_you_are_not_allowed_token_expired'                                          => 'Sorry you are not allowed. Token has expired!',
-    'thank_you_for_your_rating'                                                        => 'Thank you for your rating!',
-    'your_ticket_has_been'                                                             => 'Your ticket has been',
-    'failed_to_send_email_contact_administrator'                                       => 'Email sending failed. Please contact system administrator',
+    'edit_profile' => 'Редактировать профиль',
+    'Send' => 'ОТПРАВИТЬ',
+    'no_article' => 'Нет статьи',
+    'profile_settings' => 'Настройки профиля',
+    'please_fill_all_required_feilds' => 'Пожалуйста заполните все обязательные поля.',
+    'successfully_replied' => 'Успешно ответил',
+    'please_fill_some_data' => 'Пожалуйста заполните некоторые данные!',
+    'profile_updated_sucessfully' => 'Профиль успешно обновлен',
+    'password_updated_sucessfully' => 'Пароль успешно обновлен',
+    'password_was_not_updated_incorrect_old_password' => 'Пароль не был обновлен. Неверный старый пароль',
+    'there_is_no_such_ticket_number' => 'Нет такого номера заявки',
+    "email_didn't_match_with_ticket_number" => 'Email не совпадает с номером заявки',
+    'we_have_sent_you_a_link_by_email_please_click_on_that_link_to_view_ticket' => 'Мы отправили вам ссылку по email. Пожалуйста, нажмите на эту ссылку, чтобы посмотреть заявку',
+    'no_records_on_publish_time' => 'Нет записей о времени публикации',
+    'your_details_send_to_system' => 'Ваши данные отправлены в систему',
+    'your_details_can_not_send_to_system' => 'Ваши данные не могут быть отправлены в систему',
+    'your_comment_posted' => 'Ваш комментарий размещен',
+    'sorry_not_processed' => 'Извините, не обработано',
+    'profile_updated_sucessfully' => 'Профиль успешно обновлен',
+    'password_was_not_updated' => 'Пароль не был обновлен',
+    'sorry_your_ticket_token_has_expired_please_try_to_resend_the_ticket_link_request' => 'Извините, срок действия вашей заявки истек! Пожалуйста, попробуйте повторно запросить на ссылку на заявку.',
+    'sorry_you_are_not_allowed_token_expired' => 'Извините, вам не разрешено. Срок действия токена истек!',
+    'thank_you_for_your_rating' => 'Спасибо за вашу оценку!',
+    'your_ticket_has_been' => 'Ваша заявка была',
+    'failed_to_send_email_contact_administrator' => 'Не удалось отправить email. Пожалуйста, свяжитесь с системным администратором',
     /*
      * |---------------------------------------------------------------------------------------
      * |API settings
@@ -1222,206 +1391,257 @@ return [
      * |
      */
     'webhooks'                         => 'Webhooks',
-    'enter_url_to_send_ticket_details' => 'Enter the URL to send the ticket details',
+    'enter_url_to_send_ticket_details' => 'Введите URL для отправки информации о заявке',
     'api'                              => 'API',
-    'api_key'                          => 'API key',
-    'api_key_mandatory'                => 'API key mandatory',
-    'api_configurations'               => 'API configurations',
-    'generate_key'                     => 'Generate key',
-    'api_settings'                     => 'API settings',
+    'api_key'                          => 'API ключ',
+    'api_key_mandatory'                => 'API обязательный ключ',
+    'api_configurations'               => 'API конфигурации',
+    'generate_key'                     => 'Создать ключ',
+    'api_settings'                     => 'API настройки',
     /*
      * -----------------------------------------------------------------------------
      * Error log and debugging settings
      * --------------------------------------------------------------------------
      *
      */
-    'error-debug'                        => 'Error logs and debugging',
-    'debug-options'                      => 'Debugging options',
-    'view-logs'                          => 'View error logs',
-    'not-authorised-error-debug'         => 'You are not authorised to access the URL',
-    'error-debug-settings'               => 'Error and debugging settings',
-    'debugging'                          => 'Debugging mode',
-    'bugsnag-debugging'                  => 'Send app crash reports to help Ladybird improve Faveo',
-    'error-debug-settings-saved-message' => 'Your error and debugging settings have been saved successfully',
-    'error-debug-settings-error-message' => 'You have not made any change in the settings.',
-    'error-logs'                         => 'Error logs',
+    'error-debug'                        => 'Журнал ошибок и отладка',
+    'debug-options'                      => 'Параметры отладки',
+    'view-logs'                          => 'Просмотр журнала ошибок',
+    'not-authorised-error-debug'         => 'Вы не авторизованы для доступа к URL',
+    'error-debug-settings'               => 'Настройки ошибок и отладки',
+    'debugging'                          => 'Режим отладки',
+    'bugsnag-debugging'                  => 'Отправляйте отчеты о сбоях приложений, чтобы помочь Ladybird улучшить Faveo',
+    'error-debug-settings-saved-message' => 'Настройки отладки и ошибок были успешно сохранены',
+    'error-debug-settings-error-message' => 'Вы не внесли никаких изменений в настройки.',
+    'error-logs'                         => 'Журнал ошибок',
     /* ---------------------------------------------------------------------------------------
      * Latest update 16-06-2016
      * -----------------------------------------------------------------------------------
      */
-    'that_email_is not_available_in_this_system' => 'That Email is not available in this System',
-    'use_subject'                                => 'Use Subject',
-    'reopen'                                     => 'Reopen',
-    'invalid_attempt'                            => 'Invalid Attempt',
+    'that_email_is not_available_in_this_system' => 'Эта электронная почта не доступна в этой системе',
+    'use_subject'                                => 'Использовать тему',
+    'reopen'                                     => 'Переоткрыть',
+    'invalid_attempt'                            => 'Неверная попытка',
     /* ---------------------------------------------------------------------------------------
      * Latest update 27-07-2016
      * -----------------------------------------------------------------------------------
      */
-    'queue'  => 'Queue',
-    'queues' => 'Queues',
+    'queue'  => 'Очередь',
+    'queues' => 'Очереди',
     /*     * -------------------------------------------------------------------------------------------------
      * OTP  messages body to send to user while registering, resetting passwords
      * --------------------------------------------------------------------------------------------------
      */
-    'hello'                   => 'Hello',
-    'reset-link-msg'          => ",\r\nHere is the link to reset your password.\r\n",
-    'otp-for-your'            => ",\r\nOTP for your",
-    'account-verification-is' => 'account verification is',
-    'extra-text'              => ".\r\nYou can login to verify your account via OTP or just click on the link we've sent to your email address.",
-    'otp-not-sent'            => 'We faced some problem in sending OTP please try after some time.',
+    'hello'                   => 'Привет',
+    'reset-link-msg'          => ",\r\nСсылка для сброса пароля.\r\n",
+    'otp-for-your'            => ",\r\nOTP код для вашего",
+    'account-verification-is' => 'подтверждение аккаунта',
+    'extra-text'              => ".\r\nВы можете войти в систему, чтобы подтвердить свою учетную запись с помощью OTP кода или нажав на ссылку, которую мы отправили на ваш email адрес.",
+    'otp-not-sent'            => 'Мы столкнулись с проблемой при отправке OTP кода, пожалуйста попробуйте через некоторое время.',
     /*     * -------------------------------------------------------------------------------------------
      * Ticket number settings 03-08-2016
      * ------------------------------------------------------------------------------------------
      */
-    'format'               => 'Format',
-    'ticket-number-format' => 'This setting is used to generate ticket numbers. Use hash signs (`#`) where digits are to be placed & dollar sign(‘$’) where characters are to be placed . Any other text in the number format will be preserved. ',
-    'ticket-number-type'   => 'Choose a sequence from which to derive new ticket numbers. The system has a incrementing sequence and a random sequence by default',
+    'format'               => 'Формат',
+    'ticket-number-format' => 'Этот параметр используется для генерации номеров заявок. Используйте знаки хеша (`#`), где должны быть размещены цифры и знак доллара (‘$’), где должны быть размещены символы. Любой другой текст в числовом формате будет сохранен без изменений. ',
+    'ticket-number-type'   => 'Выберите последовательность, из которой можно получить новые номера заявок. Система имеет "инкрементную" последовательность и "случайную" последовательность по умолчанию',
     /*     * ----------------------------------------------------------------------------------------------------
      * Social media integration
      * ---------------------------------------------------------------------------------------------------------
      */
-    'client_id'     => 'Client id',
-    'client_secret' => 'Client secret',
-    'redirect'      => 'Redirect URL',
-    'details'       => 'Details',
-    'social-media'  => 'Social media',
+    'client_id'     => 'ID клиента',
+    'client_secret' => 'Секрет клиента',
+    'redirect'      => 'URL перенаправления',
+    'details'       => 'Подробности',
+    'social-media'  => 'Социальные медиа',
     /*     * ----------------------------------------------------------------------------------------------
      * Report
      * ----------------------------------------------------------------------------------------------
      */
-    'report'              => 'Report',
-    'Report'              => 'REPORT',
-    'start_date'          => 'Start date',
-    'end_date'            => 'End date',
-    'select'              => 'Select',
-    'generate'            => 'Generate',
-    'day'                 => 'Day',
-    'week'                => 'Week',
-    'month'               => 'Month',
-    'Currnet_In_Progress' => 'CURRENT IN PROGRESS',
-    'Total_Created'       => 'TOTAL CREATED',
-    'Total_Reopened'      => 'TOTAL REOPENED',
-    'Total_Closed'        => 'TOTAL CLOSED',
-    'tabular'             => 'Tabular',
-    'reopened'            => 'Reopened',
+    'report'              => 'Отчет',
+    'Report'              => 'ОТЧЕТ',
+    'start_date'          => 'Дата начала',
+    'end_date'            => 'Дата окончания',
+    'select'              => 'Выбрать',
+    'generate'            => 'Сгенерировать',
+    'day'                 => 'День',
+    'week'                => 'Неделя',
+    'month'               => 'Месяц',
+    'Currnet_In_Progress' => 'Выполняется',
+    'Total_Created'       => 'ВСЕГО СОЗДАНО',
+    'Total_Reopened'      => 'ВСЕГО ОТКРЫТО',
+    'Total_Closed'        => 'ВСЕГО ЗАКРЫТО',
+    'tabular'             => 'Табличный',
+    'reopened'            => 'Переоткрыто',
     /* ---------------------------------------------------------------------------------------
      * Ticket Priority
      * -----------------------------------------------------------------------------------
      */
-    'ticket_priority'                                           => 'Ticket priority',
-    'priority'                                                  => 'Priority',
-    'priority_desc'                                             => 'Priority description',
-    'priority_urgency'                                          => 'Priority urgency',
-    'priority_id'                                               => 'Priority Id',
-    'priority_color'                                            => 'Priority color',
-    'ispublic'                                                  => 'IsPublic',
-    'is_default'                                                => 'By default',
-    'create_ticket_priority'                                    => 'Create ticket priority',
-    'agent_notes'                                               => 'Agent notes',
-    'select_priority'                                           => 'Select priority',
-    'normal'                                                    => 'Normal',
-    'ispublic'                                                  => 'Visibility',
-    'make-default-priority'                                     => 'Make default priority',
-    'priority_successfully_created'                             => 'Priority successfully created',
-    'priority_successfully_updated'                             => 'Priority successfully updated',
-    'delete_successfully'                                       => 'Delete successfully',
-    'user_priority_status'                                      => 'User priority status',
-    'current'                                                   => 'Current:',
-    'active_user_can_select_the_priority_while_creating_ticket' => 'Active user can select the priority while creating ticket',
+    'ticket_priority'                                           => 'Приоритет заявки',
+    'priority'                                                  => 'Приоритет',
+    'priority_desc'                                             => 'Приоритетное описание',
+    'priority_urgency'                                          => 'Приоритет срочности',
+    'priority_id'                                               => 'ID приоритета',
+    'priority_color'                                            => 'Приоритетный цвет',
+    'ispublic'                                                  => 'Публично',
+    'is_default'                                                => 'По умолчанию',
+    'create_ticket_priority'                                    => 'Создать приоритет для заявки',
+    'agent_notes'                                               => 'Применчания агента',
+    'select_priority'                                           => 'Выберите приоритет',
+    'normal'                                                    => 'Нормальный',
+    'ispublic'                                                  => 'Публично',
+    'make-default-priority'                                     => 'Сделать приоритет по умолчанию',
+    'priority_successfully_created'                             => 'Приоритет успешно создан',
+    'priority_successfully_updated'                             => 'Приоритет успешно обновлен',
+    'delete_successfully'                                       => 'Успешно удалено',
+    'user_priority_status'                                      => 'Статус приоритета пользователя',
+    'current'                                                   => 'Текущий:',
+    'active_user_can_select_the_priority_while_creating_ticket' => 'Активный пользователь может выбрать приоритет при создании заявки',
 
     /* --------------------------------------------------------------------------------------------
      * Approval Updated
      * --------------------------------------------------------------------------------------------
      */
-    'approval'             => 'Approval',
-    'approval_tickets'     => 'Approval tickets',
-    'approve'              => 'Approve',
-    'approval_request'     => 'Approval request',
-    'approvel_ticket_list' => 'Approvel ticket list',
+    'approval'             => 'Одобрено',
+    'approval_tickets'     => 'Одобренные заявки',
+    'approve'              => 'Одобрить',
+    'approval_request'     => 'Запросить одобрение',
+    'approvel_ticket_list' => 'Список одобренных заявок',
 
-    'approval_settings'                      => 'Approval settings',
-    'close_all_ticket_for_approval'          => 'Close all tickets for approval',
-    'approval_settings-created-successfully' => 'Approval settings created successfully',
+    'approval_settings'                      => 'Настройки одобрения',
+    'close_all_ticket_for_approval'          => 'Закрыть заявки ожидающие одобрения',
+    'approval_settings-created-successfully' => 'Настройки одобрения созданы успешно',
 
     /* --------------------------------------------------------------------------------------------
      * Followup Updated
      * --------------------------------------------------------------------------------------------
      */
-    'followup'              => 'Followup',
-    'followup_tickets'      => 'Followup tickets',
-    'followup_Notification' => 'Followup notification',
+     'followup'              => 'Подписаться',
+     'followup_tickets'      => 'Завяки по подписке',
+     'followup_Notification' => 'Уведомления по подписке',
 
     /*
       *--------------------------------------------------------------------------------------------
       *Updated 6-9-2016
       *---------------------------------------------------------------------------------------
       */
-    'not-available'  => 'Not available',
-    /* --------------------------------------------------------------------------------------------
+     'not-available'  => 'Недоступен',
+     /* --------------------------------------------------------------------------------------------
      * User Module
      * --------------------------------------------------------------------------------------------
      */
-    'agent_report'                                                 => 'Agent report',
-    'assign_tickets'                                               => 'Assign tickets',
-    'delete_agent'                                                 => 'Delete agent',
-    'delete_user'                                                  => 'Delete user',
-    'confirm_deletion'                                             => 'Confirm deletion',
-    'delete_all_content'                                           => 'Delete all content',
-    'agent_profile'                                                => 'Agent profile',
-    'change_role_to_admin'                                         => 'Change role to admin',
-    'change_role_to_user'                                          => 'Change role to user',
-    'change_role_to_agent'                                         => 'Change role to agent',
-    'change_password'                                              => 'Change password',
-    'role_change'                                                  => 'Role change',
-    'password_generator'                                           => 'Password generator',
-    'depertment'                                                   => 'Depertment',
-    'duetoday'                                                     => 'Due today',
-    'today-due_tickets'                                            => 'Today\'s due ticekts',
-    'password_change_successfully'                                 => 'Password changed successfully',
-    'role_change_successfully'                                     => 'Role changed successfully',
-    'user_delete_successfully'                                     => 'User deleted successfully',
-    'agent_delete_successfully'                                    => 'Agent deleted successfully',
-    'select_another_agent'                                         => 'Select another agent',
-    'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agent deleted successfully and ticket assigned to another agent',
-    'deleted_user'                                                 => 'Deleted User',
-    'deleted_user_directory'                                       => 'Deleted User Directory',
-    'restore'                                                      => 'Restore',
-    'user_restore_successfully'                                    => 'User restore successfully',
+     'agent_report'                                                 => 'Отчет агента',
+     'assign_tickets'                                               => 'Назначить заявки',
+     'delete_agent'                                                 => 'Удалить агента',
+     'delete_user'                                                  => 'Удалить пользователя',
+     'confirm_deletion'                                             => 'Подтвердить удаление',
+     'delete_all_content'                                           => 'Удалить весь контент',
+     'agent_profile'                                                => 'Профиль агента',
+     'change_role_to_admin'                                         => 'Изменить роль на администратора',
+     'change_role_to_user'                                          => 'Изменить роль на пользователя',
+     'change_role_to_agent'                                         => 'Изменить роль на агента',
+     'change_password'                                              => 'Изменить пароль',
+     'role_change'                                                  => 'Изменение роль',
+     'password_generator'                                           => 'Генератор паролей',
+     'depertment'                                                   => 'Отдел',
+     'duetoday'                                                     => 'Сегодня',
+     'today-due_tickets'                                            => 'Сегодняшние заявки',
+     'password_change_successfully'                                 => 'Пароль успешно изменен',
+     'role_change_successfully'                                     => 'Роль успешно изменена',
+     'user_delete_successfully'                                     => 'Пользователь успешно удален',
+     'agent_delete_successfully'                                    => 'Агент успешно удален',
+     'select_another_agent'                                         => 'Выберите другого агента',
+     'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Агент успешно удален, а заявка назначена другому агенту',
+     'deleted_user'                                                 => 'Удаленный пользователь',
+     'deleted_user_directory'                                       => 'Удаленный каталог пользователей',
+     'restore'                                                      => 'Восстановить',
+     'user_restore_successfully'                                    => 'Пользователь успешно восстановлен',
 
     /*** updates 28-11-2016***/
     'apply'              => 'Apply',
 
-    /* updates 2-12-2016 **/
-    'sort-by'                      => 'Sort by',
-    'created-at'                   => 'Created at',
-    'or'                           => 'OR',
-    'activate'                     => 'Activate',
-    'system-email-not-configured'  => 'We are unable to process email request as the system has no configured email for sending mails. Please contact and report system admin.',
-    'assign-ticket'                => 'Assign tickets',
-    'can-not-inactive-group'       => 'Can not make the group inactive as it has agents assigned in it. Please assign those agents to another group and try again.',
-    'internal-note-has-been-added' => 'Internal note added to the ticket',
-    'active-users'                 => 'Active users',
-    'deleted-users'                => 'Deleted users',
-    'view-option'                  => 'View options',
-    'accoutn-not-verified'         => 'User account is not verified',
-    'enabled'                      => 'Enabled',
-    'disabled'                     => 'Disabled',
-    'user-account-is-deleted'      => 'This user account has been deleted.',
-    'restore-user'                 => 'Restore user account',
-    'delete-account-caution-info'  => 'Please note this account may still have  open tickets in the system.',
-    'reply-can-not-be-empty'       => 'Reply can not be blank. Please enter your reply.',
+     /* updates 2-12-2016 **/
+     'sort-by'                      => 'Сортировать по',
+     'created-at'                   => 'Создано',
+     'or'                           => 'ИЛИ',
+     'activate'                     => 'Активировать',
+     'system-email-not-configured'  => 'Система не может отправлять электронные письма пользователям, поскольку она не настроена для отправки исходящих сообщений. Пожалуйста, свяжитесь и сообщите администратору системы.',
+     'assign-ticket'                => 'Назначить заявки',
+     'can-not-inactive-group'       => 'Невозможно сделать группу неактивной, поскольку в ней есть агенты. Пожалуйста, назначьте агентов в другую группу и попробуйте снова.',
+     'internal-note-has-been-added' => 'Внутренняя заметка добавлена в заявку',
+     'active-users'                 => 'Активные пользователи',
+     'deleted-users'                => 'Удаленные пользователи',
+     'view-option'                  => 'Посмотреть опции',
+     'accoutn-not-verified'         => 'Аккаунт пользователя не подтвержден',
+     'enabled'                      => 'Включено',
+     'disabled'                     => 'Отключено',
+     'user-account-is-deleted'      => 'Учетная запись пользователя была удалена.',
+     'restore-user'                 => 'Восстановить учетную запись пользователя',
+     'delete-account-caution-info'  => 'Обратите внимание, что в этой учетной записи все еще могут быть открытые заявки в системе.',
+     'reply-can-not-be-empty'       => 'Ответ не может быть пустым. Пожалуйста, введите ответ.',
 
-    //update 18-12-2016
-    'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Your account has been created successfully. Please contact admin for account activation as we were not able to send you an OPT code.',
+     //update 18-12-2016
+     'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Ваша учетная запись была успешно создана. Пожалуйста, свяжитесь с администратором для активации учетной записи, так как мы не смогли отправить вам OTP код.',
+     //update 19-12-2016
+     'only-agents'         => 'Агенты пользователей',
+     'only-users'          => 'Клиенты пользователей',
+     'banned-users'        => 'Забаненные пользователи',
+     'inactive-users'      => 'Неактивные пользователи',
+     'all-users'           => 'Все пользователи',
+     //update 21-12-2016
+     'selected-user-is-already-the-owner' => 'Выбранный пользователь уже является владельцем заявки.',
+     //updated 15-5-2017
+     'session-expired'     => 'Сессия истекла или недействительна, пожалуйста, попробуйте еще раз.',
 
-    //update 19-12-2016
-    'only-agents'         => 'Agent users',
-    'only-users'          => 'Clients users',
-    'banned-users'        => 'Banned users',
-    'inactive-users'      => 'Inactive users',
-    'all-users'           => 'All users',
-    //update 21-12-2016
-    'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
-    //updated 15-5-2017
-    'session-expired'     => 'Session expired or invalid, please try again.',
+    //update since v1.10
+    'your_helpdesk_is_ready'                       => 'Ваша служба поддержки готова!',
+    'all_right_sparky_you_have_made_it'            => 'Все хорошо! Вы сделали это через установку.',
+    'next_step'                                    => 'Следующий шаг',
+    'login_to_faveo'                               => 'Войти в Faveo',
+    'learn_more'                                   => 'Узнать больше',
+    'video_walk_through'                           => 'Видео инструкция',
+    'email_support'                                => 'Поддержка по email',
+    'not-answered'                                 => 'Не отвечено',
+    'default-fallback'                             => 'Резервный язык',
+    'system-language'                              => 'Язык системы по умолчанию',
+    'set_as_sys_lang'                              => 'Использовать по умолчанию',
+    'filtered-results'                             => 'Отфильтрованные результаты',
+    'methon_not_allowed'                           => 'Метод не разрешен',
+    'confirm-to-proceed'                           => 'Вы уверены?',
+    'change-ticket-status-to'                      => 'Изменить статус заявки на ',
+    'your-ticket-status-changed'                   => 'Статус вашей заявки был изменен.',
+    'reload-be-patient-message'                    => 'Пожалуйста, будьте терпеливы, мы перезагружаем страницу.',
+    'status-changed-successfully'                  => 'Статус успешно изменен.',
+    'system-outgoing-incoming-mail-not-configured' => 'Вы не настроили системную почту. Faveo не может получать заявки по почте или отправлять почту пользователям без настройки.',
+    'confihure-the-mail-now'                       => 'Нажмите здесь, чтобы настроить почту.',
+    'system-mail-not-configured-agent-message'     => 'Параметры входящей и исходящей электронной почты системы не настроены. Пожалуйста, свяжитесь с вашим системным администратором и сообщите о проблеме.',
+    'ticket-assigned-successfully'                 => 'Выбранные заявки были успешно назначены.',
+    'canned_response_deleted'                      => 'Canned ответ успешно удален',
+    'no-dummy-data'                                => 'Ваша система запущена, мы не смогли найти тестовые данные, установленные в ней.',
+    'dummy_data_installation_message'              => 'Вы используете Faveo с тестовыми данными, которые следует использовать только для тестирования. Система не будет получать или отправлять почту, поскольку тестовые данные имеют минимальные настройки конфигурации. Мы рекомендуем не подавать никаких живых данных в систему, пока вы не протестируете ее. По завершении тестирования удалите все фиктивные данные и настройте параметры системы, чтобы начать работу.',
+    'clear-dummy-data-agent-message'               => 'Ваша система Faveo была установлена с тестовыми данными, которые следует использовать только для тестирования. Ваша система не будет получать или отправлять почту, поскольку тестовые данные имеют минимальные настройки конфигурации. Мы рекомендуем не подавать никаких живых данных в систему, пока вы не протестируете ее. По завершении тестирования обратитесь к системному администратору, чтобы очистить фиктивные данные и настроить параметры системы.',
+    'clear-dummy-data'                             => 'очистить тестовые данные.',
+    'delete_dummy_data'                            => 'Удалить тестовые данные',
+    'plugin-with-dummy-data-error-message'         => 'Вы установили Faveo с тестовыми данными для тестирования. Плагины могут использоваться только в режиме реальной production системы. Если вы закончили тестирование удалите фиктивные данные и начните использовать Faveo в production режиме.',
+    'clean-data-box-title'                         => 'Очистка тестовых данных выполнит следующие действия',
+    'clean-dummy-ticket-conversation'              => 'Удаление всех тестовых заявок и диалогов в них.',
+    'clean-dummy-notification'                     => 'Удаление всех тестовых уведомлений.',
+    'clean-dummy-users'                            => 'Удаление всех тестовых пользователей и их данные.',
+    'clean-other-data'                             => 'Удаление отделов, команд, ярлыков, тэгов и т.д.',
+    'clean-user-created-data'                      => 'Удаление всех данных, созданных в процессе тестирования с фиктивными данными.',
+    'clean-data-btn'                               => 'Очистить данные',
+    'clean-confirm'                                => 'Да Я хочу очистить фиктивные данные',
+    'do-not-refresh'                               => '(Пожалуйста, не используйте кнопку «Обновить» или «Назад» в браузере)',
+    'cleaning-in-progress'                         => 'Идет очистка, пожалуйста, подождите, пока мы очищаем базу данных',
+    'cleaning-database'                            => 'Очистка фиктивных данных из базы данных.',
+    'native-name'                                  => 'Оригинальное название',
+    'choose'                                       => 'Выберите',
+    'going-overdue-today'                          => 'Заявка будет просрочена сегодня.',
+    'ticket_has_attachments'                       => 'Заявка содержит вложения',
+    'is_overdue'                                   => 'Заявка помечен как просроченный',
+    'ticket_has_collaborator'                      => 'Заявка имеет соисполнитель(и)',
+    'ticket_created_source'                        => 'Заявка создана через :source',
+    'ticket-has-x-priority'                        => 'Приоритет заявки - :priority',
+    'clean-forever'                                => 'удалить навсегда',
+    'mail-sent-to-job-for-process'                 => 'Почта была отправлена на задание для обработки, она появится в вашем почтовом ящике после обработки выбранной службой очереди. Если вы не получаете почту, проверьте журнал на наличие ошибок или предупреждений.',
 ];
