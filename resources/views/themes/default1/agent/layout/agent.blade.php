@@ -158,7 +158,7 @@
                     
                     @if($auth_user_role == 'admin')
                     <li class="nav-item d-none d-sm-inline-block">
-                        <a href="{{URL::route('report.index')}}" onclick="clickReport(event);" @yield('Report') class="nav-link">Report</a>
+                        <a href="{{URL::route('report.index')}}" onclick="clickReport(event);" @yield('Report') class="nav-link">{!! Lang::get('lang.report') !!}</a>
                     </li>
                     @endif
                     

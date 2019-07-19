@@ -113,14 +113,14 @@ class="nav-link active"
 		<!-- Deleting Fields -->
 		<td>
 			{!! Form::open(['route'=>['sla.destroy', $sla->id],'method'=>'DELETE']) !!}
-			<a href="{{route('sla.edit',$sla->id)}}" class="btn btn-primary btn-xs"><i class="fas fa-edit"> </i> Edit</a>
+			<a href="{{route('sla.edit',$sla->id)}}" class="btn btn-primary btn-xs"><i class="fas fa-edit"> </i> {!! Lang::get('lang.edit') !!}</a>
 			<!-- To pop up a confirm Message -->
 			@if($sla->id == $default_sla)
-				{!! Form::button('<i class="fas fa-trash"> </i> Delete',
+				{!! Form::button('<i class="fas fa-trash"> </i> '.Lang::get('lang.delete'),
 		   		['class'=> 'btn btn-danger btn-xs '.$disable])
 		   	!!}
 			@else
-			{!! Form::button('<i class="fas fa-trash"> </i> Delete',
+			{!! Form::button('<i class="fas fa-trash"> </i> '.Lang::get('lang.delete'),
 	   		['type' => 'submit',
 	   		'class'=> 'btn btn-danger btn-xs',
 	   		'onclick'=>'return confirm("Are you sure?")'])

@@ -103,7 +103,7 @@
                             <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
                             <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
                             @if(Auth::user()->role == 'admin')
-                                <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">Report</a></li>
+                                <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">{!! Lang::get('lang.report') !!}</a></li>
                             @endif
                             <?php \Event::fire('calendar.topbar', array()); ?>
                         </ul>

@@ -210,7 +210,7 @@ class = "nav-item active"
                         <div class="col-md-12 form-group">
                             <label>{!! Lang::get('lang.attachment') !!}</label>
                             <input type="file" name="attachment[]" multiple/><br/>
-                            {!! Lang::get('lang.max') !!}. 10MB
+                            {!! Lang::get('lang.max') !!}. {!! $max_size_in_actual !!}
                         </div>
                         {{-- Event fire --}}
                         <?php Event::fire(new App\Events\ClientTicketForm()); ?>

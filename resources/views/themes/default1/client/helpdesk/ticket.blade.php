@@ -379,11 +379,11 @@ $data = $ConvDate[0];
                                 <?php if($conversation->is_internal) { ?>
                                 <i class="fa fa-tag bg-purple" title="Posted by System"></i>
                                     <?php }else{ if ($role->role == 'agent' || $role->role == 'admin') { ?>
-                                    <i class="fa fa-mail-reply-all bg-yellow" title="Posted by Support Team"></i>
+                                    <i class="fa fa-mail-reply-all bg-yellow" title="<?= Lang::get('lang.posted_by_support_team') ?>"></i>
                                 <?php } elseif ($role->role == 'user') {  ?>
-                                    <i class="fa fa-user bg-aqua" title="Posted by Customer"></i>
+                                    <i class="fa fa-user bg-aqua" title="<?= Lang::get('lang.posted_by_customer') ?>"></i>
                                 <?php } else { ?>
-                                    <i class="fa fa-mail-reply-all bg-purple" title="Posted by System"></i>
+                                    <i class="fa fa-mail-reply-all bg-purple" title="<?= Lang::get('lang.posted_by_system') ?>"></i>
     <?php } }
     $attachment = App\Model\Ticket\Ticket_attachments::where('thread_id','=',$conversation->id)->first();
     if($attachment == null ) {

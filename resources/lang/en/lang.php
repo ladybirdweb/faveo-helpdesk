@@ -1069,6 +1069,7 @@ return [
     'Unassigned'                                     => 'UNASSIGNED',
     'unassigned-tickets'                             => 'Unassigned tickets',
     'generate_pdf'                                   => 'Generate PDF',
+    'generate_pdf_thread'                            => 'generate pdf of this thread',
     'change_status'                                  => 'Change status',
     'more'                                           => 'More',
     'delete_ticket'                                  => 'Delete ticket',
@@ -1140,6 +1141,10 @@ return [
     'overdue'                                        => 'Overdue',
     'overdue-tickets'                                => 'Overdue tickets',
     'change_owner_for_ticket'                        => 'Change owner for ticket',
+    'current_owner'                                  => 'Current owner',
+    'posted_by_support_team'                         => 'Posted by Support Team',
+    'posted_by_customer'                             => 'Posted by Customer',
+    'posted_by_system'                               => 'Posted by System',
 
     /*
       |------------------------------------------------

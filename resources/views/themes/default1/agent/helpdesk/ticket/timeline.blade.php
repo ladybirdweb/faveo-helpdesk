@@ -186,7 +186,7 @@ if ($thread->title != "") {
                         {!! Lang::get('lang.more') !!} <span class="caret"></span>
                     </button>
                     <div  class="dropdown-menu dropdown-menu-right">
-                        <a href="#" data-toggle="modal" data-target="#ChangeOwner" class="dropdown-item"><i class="fas fa-users" style="color:green;"> </i> Change Owner</a>
+                        <a href="#" data-toggle="modal" data-target="#ChangeOwner" class="dropdown-item"><i class="fas fa-users" style="color:green;"> </i>{!! Lang::get('lang.change_owner_for_ticket') !!}</a>
                         @if($tickets->status != 3 && $tickets->status != 2)
                         <a href="#" class="dropdown-item" data-toggle="modal" data-target="#MergeTickets"><i class="fas fa-cogs" style="color:teal;"> </i> {!! Lang::get('lang.merge-ticket') !!}</a>
                         @endif
@@ -566,22 +566,22 @@ if ($thread->title != "") {
 
                                 <div>
                                     <?php if ($conversation->is_internal) { ?>
-                                        <i class="fas fa-tag bg-purple" title="Posted by System"></i>
+                                        <i class="fas fa-tag bg-purple" title="<?= Lang::get('lang.posted_by_system') ?>"></i>
                                     <?php
                                     } else {
                                         if($conversation->user_id != null) {
                                             if ($role->role == 'agent' || $role->role == 'admin') {
                                                 ?>
-                                                <i class="fas fa-reply-all bg-yellow" title="Posted by Support Team"></i>
+                                                <i class="fas fa-reply-all bg-yellow" title="<?= Lang::get('lang.posted_by_support_team') ?>"></i>
                                             <?php } elseif ($role->role == 'user') { ?>
-                                                <i class="fas fa-user bg-aqua" title="Posted by Customer"></i>
+                                                <i class="fas fa-user bg-aqua" title="<?= Lang::get('lang.posted_by_customer') ?>"></i>
                                             <?php } else { ?>
-                                                <i class="fas fa-reply-all bg-purple" title="Posted by System"></i>
+                                                <i class="fas fa-reply-all bg-purple" title="<?= Lang::get('lang.posted_by_system') ?>"></i>
                                                 <?php
                                             }
                                         } else {
                                             ?>
-                                            <i class="fas fa-tag bg-purple" title="Posted by System"></i>
+                                            <i class="fas fa-tag bg-purple" title="<?= Lang::get('lang.posted_by_system')?>"></i>
                                             <?php
                                         }
                                     }
@@ -667,7 +667,7 @@ if ($thread->title != "") {
                                             @endif
 
                                             @if($conversation->id == $ij->id)
-                                            <a href="{{url('genereate-pdf/'.$conversation->id)}}" class= "float-right" title="generate pdf of this thread">
+                                            <a href="{{url('genereate-pdf/'.$conversation->id)}}" class= "float-right" title="{!! Lang::get('lang.generate_pdf_thread') !!}">
                                                 &nbsp;&nbsp;<i class="fas fa-newspaper"></i>
                                             </a>
                                             @endif
