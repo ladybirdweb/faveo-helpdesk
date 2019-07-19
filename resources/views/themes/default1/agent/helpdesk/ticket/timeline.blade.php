@@ -162,7 +162,7 @@ if ($thread->title != "") {
                         {!! Lang::get('lang.more') !!} <span class="caret"></span>
                     </button>
                     <ul  class="dropdown-menu pull-right">
-                        <li data-toggle="modal" data-target="#ChangeOwner"><a href="#"><i class="fa fa-users" style="color:green;"> </i>Change Owner</a></li>
+                        <li data-toggle="modal" data-target="#ChangeOwner"><a href="#"><i class="fa fa-users" style="color:green;"> </i>{!! Lang::get('lang.change_owner_for_ticket') !!}</a></li>
                         @if($tickets->status != 3 && $tickets->status != 2)
                         <li data-toggle="modal" data-target="#MergeTickets"><a href="#"><i class="fa fa-code-fork" style="color:teal;"> </i>{!! Lang::get('lang.merge-ticket') !!}</a></li>
                         @endif
@@ -591,22 +591,22 @@ if ($thread->title != "") {
                                 </li>
                                 <li>
                                     <?php if ($conversation->is_internal) { ?>
-                                        <i class="fa fa-tag bg-purple" title="Posted by System"></i>
+                                        <i class="fa fa-tag bg-purple" title="<?= Lang::get('lang.posted_by_system') ?>"></i>
                                     <?php
                                     } else {
                                         if($conversation->user_id != null) {
                                             if ($role->role == 'agent' || $role->role == 'admin') {
                                                 ?>
-                                                <i class="fa fa-mail-reply-all bg-yellow" title="Posted by Support Team"></i>
+                                                <i class="fa fa-mail-reply-all bg-yellow" title="<?= Lang::get('lang.posted_by_support_team') ?>"></i>
                                             <?php } elseif ($role->role == 'user') { ?>
-                                                <i class="fa fa-user bg-aqua" title="Posted by Customer"></i>
+                                                <i class="fa fa-user bg-aqua" title="<?= Lang::get('lang.posted_by_customer') ?>"></i>
                                             <?php } else { ?>
-                                                <i class="fa fa-mail-reply-all bg-purple" title="Posted by System"></i>
+                                                <i class="fa fa-mail-reply-all bg-purple" title="<?= Lang::get('lang.posted_by_system') ?>"></i>
                                                 <?php
                                             }
                                         } else {
                                             ?>
-                                            <i class="fa fa-tag bg-purple" title="Posted by System"></i>
+                                            <i class="fa fa-tag bg-purple" title="<?= Lang::get('lang.posted_by_system')?>"></i>
                                             <?php
                                         }
                                     }
@@ -687,7 +687,7 @@ if ($thread->title != "") {
                                                 </span>
                                                 <span class="description" style="margin-bottom:4px;margin-top:4px;"><i class="fa fa-clock-o"></i> {{UTC::usertimezone($conversation->created_at)}}</span>
                                                 @if($conversation->id == $ij->id)
-                                                <a href="{{url('genereate-pdf/'.$conversation->id)}}" class= "pull-right fa fa-newspaper-o" title="generate pdf of this thread"></a>
+                                                <a href="{{url('genereate-pdf/'.$conversation->id)}}" class= "pull-right fa fa-newspaper-o" title="{!! Lang::get('lang.generate_pdf_thread') !!}"></a>
                                                 @endif
                                                 
                                             </div><!-- /.user-block -->

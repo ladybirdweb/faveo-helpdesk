@@ -209,7 +209,7 @@ class="active"
 
 <div class="box box-info">
     <div class="box-header with-border">
-        <h3 class="box-title">Tabular</h3>
+        <h3 class="box-title">{!! Lang::get('lang.tabular') !!}</h3>
     </div>
     <div class="box-body">
         <table class="table table-bordered" id="tabular">

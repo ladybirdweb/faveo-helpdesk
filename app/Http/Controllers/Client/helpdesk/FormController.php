@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client\helpdesk;
 
 // controllers
 use App\Http\Controllers\Agent\helpdesk\TicketWorkflowController;
+use App\Http\Controllers\Common\FileuploadController;
 use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\ClientRequest;
@@ -38,16 +39,22 @@ use Redirect;
 class FormController extends Controller
 {
     /**
+     * @var FileuploadController
+     */
+    protected $fileUploadController;
+
+    /**
      * Create a new controller instance.
      * Constructor to check.
      *
      * @return void
      */
-    public function __construct(TicketWorkflowController $TicketWorkflowController)
+    public function __construct(TicketWorkflowController $TicketWorkflowController, FileuploadController $fileUploadController)
     {
         $this->middleware('board');
         // creating a TicketController instance
         $this->TicketWorkflowController = $TicketWorkflowController;
+        $this->fileUploadController = $fileUploadController;
     }
 
     /**
@@ -78,7 +85,9 @@ class FormController extends Controller
                 $phonecode = '';
             }
 
-            return view('themes.default1.client.helpdesk.form', compact('topics', 'codes', 'email_mandatory'))->with('phonecode', $phonecode);
+            list($max_size_in_bytes, $max_size_in_actual) = $this->fileUploadController->file_upload_max_size();
+
+            return view('themes.default1.client.helpdesk.form', compact('topics', 'codes', 'email_mandatory', 'max_size_in_bytes', 'max_size_in_actual'))->with('phonecode', $phonecode);
         } else {
             return \Redirect::route('home');
         }

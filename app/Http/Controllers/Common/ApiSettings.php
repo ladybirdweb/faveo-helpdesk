@@ -10,6 +10,7 @@ use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Input;
+use Lang;
 use Log;
 
 class ApiSettings extends Controller
@@ -69,7 +70,7 @@ class ApiSettings extends Controller
                 $settings->create(['key' => $key, 'value' => $value]);
             }
 
-            return redirect()->back()->with('success', 'Updated Successfully');
+            return redirect()->back()->with('success', Lang::get('lang.updated_successfully'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }

@@ -198,7 +198,7 @@ class = "active"
             </div>
             <div class="col-md-12 form-group">
                 <div class="btn btn-default btn-file"><i class="fa fa-paperclip"> </i> {!! Lang::get('lang.attachment') !!}<input type="file" name="attachment[]" multiple/></div><br/>
-                {!! Lang::get('lang.max') !!}. 10MB
+                {!! Lang::get('lang.max') !!}. {!! $max_size_in_actual !!}
             </div>
             {{-- Event fire --}}
             <?php Event::fire(new App\Events\ClientTicketForm()); ?>

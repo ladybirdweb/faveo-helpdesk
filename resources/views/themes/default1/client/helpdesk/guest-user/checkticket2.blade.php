@@ -327,11 +327,11 @@ class="active"
                                             </li>
                                             <li>
                                             <?php if($conversation->staff_id > 0) { ?>
-                                                <i class="fa fa-group bg-yellow" title="Posted by Support Team"></i>
+                                                <i class="fa fa-group bg-yellow" title="<?= Lang::get('lang.posted_by_support_team') ?>"></i>
                                             <?php } elseif($conversation->user_id > 0) { ?>   
-                                                <i class="fa fa-user bg-aqua" title="Posted by Customer"></i>
+                                                <i class="fa fa-user bg-aqua" title="<?= Lang::get('lang.posted_by_customer') ?>"></i>
                                             <?php } else { ?>   
-                                                <i class="fa fa-mail-reply-all bg-purple" title="Posted by System"></i>
+                                                <i class="fa fa-mail-reply-all bg-purple" title="<?= Lang::get('lang.posted_by_system') ?>"></i>
                                             <?php } ?>
                                                 <div class="timeline-item">
                                                     <span id="date" class="time"><i class="fa fa-clock-o"> </i> {{date_format($conversation->created_at, 'd/m/Y H:i:s')}}</span>

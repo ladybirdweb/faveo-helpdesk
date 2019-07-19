@@ -105,9 +105,9 @@ $default_sla = $default_sla->sla;
 		<!-- Deleting Fields -->
 		<td>
 			{!! Form::open(['route'=>['sla.destroy', $sla->id],'method'=>'DELETE']) !!}
-			<a href="{{route('sla.edit',$sla->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> Edit</a>
+			<a href="{{route('sla.edit',$sla->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a>
 			<!-- To pop up a confirm Message -->
-				{!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> Delete',
+				{!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> '. Lang::get('lang.delete'),
             		['type' => 'submit',
             		'class'=> 'btn btn-warning btn-xs btn-flat '.$disable,
             		'onclick'=>'return confirm("Are you sure?")'])

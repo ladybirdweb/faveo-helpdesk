@@ -2775,7 +2775,7 @@ class TicketController extends Controller
                         })
                         ->editColumn('a_uname', function ($tickets) {
                             if ($tickets->assigned_to == null && $tickets->name == null) {
-                                return "<span style='color:red'>Unassigned</span>";
+                                return "<span style='color:red'>".Lang::get('lang.Unassigned')."</span>";
                             } else {
                                 $assign = $tickets->assign_user_name;
                                 if ($tickets->assigned_to != null) {
@@ -3096,7 +3096,7 @@ class TicketController extends Controller
             })
             ->addColumn('assign_user_name', function ($tickets) {
                 if ($tickets->assigned_to == null) {
-                    return "<span style='color:red'>Unassigned</span>";
+                    return "<span style='color:red'>".Lang::get('lang.Unassigned')."</span>";
                 } else {
                     $assign = $tickets->assign_user_name;
                     $url = route('user.show', $tickets->assigned_to);
