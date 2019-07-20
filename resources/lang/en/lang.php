@@ -1145,6 +1145,8 @@ return [
     'posted_by_support_team'                         => 'Posted by Support Team',
     'posted_by_customer'                             => 'Posted by Customer',
     'posted_by_system'                               => 'Posted by System',
+    'email_not_exist_system'                         => 'This Email does not exist in the system',
+    'user_already_exist'                             => 'This user already Exists',
 
     /*
       |------------------------------------------------

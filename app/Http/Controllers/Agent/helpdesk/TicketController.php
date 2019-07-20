@@ -1643,7 +1643,7 @@ class TicketController extends Controller
             return '<div id="alert11" class="alert alert-warning alert-dismissable">'
                     .'<button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'
                     .'<i class="icon fa fa-ban"></i>'
-                    .'This Email doesnot exist in the system'
+                    .Lang::get('lang.email_not_exist_system')
                     .'</div>'
                     .'</div>';
         }
@@ -1678,12 +1678,12 @@ class TicketController extends Controller
             ['email' => 'required|email']
         );
         if ($validator->fails()) {
-            return 'Invalid email address.';
+            return $validator->messages()->all();
         }
         $ticket_id = Input::get('ticket_id');
         $user_search = User::where('email', '=', $email)->first();
-        if (isset($user_serach)) {
-            return '<div id="alert11" class="alert alert-warning alert-dismissable" ><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-alert"></i>Alert!</h4><div id="message-success1">This user already Exists</div></div>';
+        if (isset($user_search)) {
+            return '<div id="alert11" class="alert alert-warning alert-dismissable" ><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-alert"></i>'.Lang::get('lang.alert').'!</h4><div id="message-success1">'.Lang::get('lang.user_already_exist').'</div></div>';
         } else {
             $company = $this->company();
             $user = new User();
