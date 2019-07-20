@@ -17,9 +17,9 @@ return [
       |   Error
       |--------------------------------------
      */
-    'success' => 'Success',
-    'fails'   => 'Fails',
-    'alert'   => 'Alert',
+    'success' => 'Успех',
+    'fails'   => 'Ошибка',
+    'alert'   => 'Тревога',
     'warning' => 'Предостережение',
     'required-error' => 'Пожалуйста, заполните все обязательные поля',
     'invalid' => 'Неверный email или пароль',
@@ -132,7 +132,7 @@ return [
     'create_email'            => 'Создать Email',
     'email_address'           => 'Email адрес',
     'email_name'              => 'Email имя',
-    'help_topic'              => 'Раздел справки',
+    'help_topic'              => 'Раздел помощи',
     'auto_response'           => 'Автоматический ответ',
     'host_name'               => 'Имя хоста',
     'port_number'             => 'Номер порта',
@@ -527,7 +527,7 @@ return [
       |  Help Topic index Page
       |--------------------------------------
      */
-    'help_topics'       => 'Справки',
+    'help_topics'       => 'Раздел помощи',
     'topic'             => 'Раздел',
     'type'              => 'Тип',
     'priority'          => 'Приоритет',
@@ -563,14 +563,14 @@ return [
     'select_a_sla_plan' => 'Выберите SLA план',
     'sla_plans' => 'SLA планы',
     'select_an_agent' => 'Выберите агента',
-    'helptopic_created_successfully' => 'Раздел справки успешно создан',
-    'helptopic_can_not_create' => 'Раздел справки не может быть создан',
-    'helptopic_updated_successfully' => 'Раздел справки успешно обновлен',
-    'helptopic_can_not_update' => 'Раздел справки не может быть обновлен',
+    'helptopic_created_successfully' => 'Раздел помощи успешно создан',
+    'helptopic_can_not_create' => 'Раздел помощи не может быть создан',
+    'helptopic_updated_successfully' => 'Раздел помощи успешно обновлен',
+    'helptopic_can_not_update' => 'Раздел помощи не может быть обновлен',
     'you_cannot_delete_default_department' => 'Вы не можете удалить отдел по умолчанию',
-    'have_been_moved_to_default_help_topic' => 'перенесено в раздел справки по умолчанию',
-    'helptopic_deleted_successfully' => 'Раздел справки успешно удален',
-    'make-default-helptopic' => 'Сделать как раздел справки по умолчанию',
+    'have_been_moved_to_default_help_topic' => 'перенесено в раздел помощи по умолчанию',
+    'helptopic_deleted_successfully' => 'Раздел помощи успешно удален',
+    'make-default-helptopic' => 'Сделать как раздел помощи по умолчанию',
     /*
       |--------------------------------------
       |  SLA plan Index Page
@@ -594,7 +594,7 @@ return [
     'you_cannot_delete_default_department' => 'Вы не можете удалить отдел по умолчанию',
     'have_been_moved_to_default_sla' => 'были перемещены в SLA план по умолчанию',
     'associated_department_have_been_moved_to_default_sla' => 'Связанный отдел был перенесен в SLA план по умолчанию',
-    'associated_help_topic_have_been_moved_to_default_sla' => 'Связанная тема справки была перемещена в SLA план по умолчанию',
+    'associated_help_topic_have_been_moved_to_default_sla' => 'Связанный раздел помощи был перемещен в SLA план по умолчанию',
     'sla_plan_deleted_successfully' => 'SLA план успешно удален',
     'sla_plan_can_not_delete' => 'SLA план не может быть удален',
     'make-default-sla' => 'Сделать как SLA план по умолчанию',
@@ -634,7 +634,7 @@ return [
     'set_sla_plan'                  => 'Установить SLA план',
     'assign_team'                   => 'Назначить команду',
     'assign_agent'                  => 'Назначить агента',
-    'set_help_topic'                => 'Установить раздел справки',
+    'set_help_topic'                => 'Установить раздел помощи',
     'set_ticket_status'             => 'Установить статус заявки',
     'workflow_created_successfully' => 'Workflow успешно создан',
     'workflow_updated_successfully' => 'Workflow успешно обновлен',
@@ -822,7 +822,7 @@ return [
     'department_not_updated'                           => 'Отдел не может быть обновлен',
     'you_cannot_delete_default_department'             => 'Вы не можете удалить отдел по умолчанию',
     'have_been_moved_to_default_department'            => 'были перемещены в отдел по умолчанию',
-    'the_associated_helptopic_has_been_deactivated'    => 'Соответствующий раздел справки был деактивирован',
+    'the_associated_helptopic_has_been_deactivated'    => 'Соответствующий раздел помощи был деактивирован',
     'department_deleted_sucessfully'                   => 'Отдел успешно удален',
     'department_can_not_delete'                        => 'Отдел не может быть удален',
     'make-default-department'                          => 'Сделать отделом по умолчанию',
@@ -1145,6 +1145,8 @@ return [
     'posted_by_support_team'                         => 'Опубликовано командой поддежрки',
     'posted_by_customer'                             => 'Опубликовано клиентом',
     'posted_by_system'                               => 'Опубликовано системой',
+    'email_not_exist_system'                         => 'Email не существует в системе',
+    'user_already_exist'                             => 'Это пользователь уже существует',
 
     /*
       |------------------------------------------------
@@ -1358,7 +1360,7 @@ return [
     'you_are_here'        => 'Вы здесь',
     'have_a_ticket'       => 'Есть заявка',
     'check_ticket_status' => 'Проверить состояние заявки',
-    'choose_a_help_topic' => 'Выбрать раздел справки',
+    'choose_a_help_topic' => 'Выбрать раздел помощи',
     'ticket_status'       => 'Статус заявки',
     'post_comment'        => 'Отправить комментарий',
     'plugin'              => 'Плагин',
