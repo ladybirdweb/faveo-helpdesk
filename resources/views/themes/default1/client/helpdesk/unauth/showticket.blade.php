@@ -335,7 +335,7 @@ foreach ($conversations as $conversation) {
 <?php }
 ?>
 <div class="pull-right" style="margin-top:-30px;margin-bottom:-30px">
-    <?php echo $conversations->setPath(url('show-ticket/{' . $tickets->id . '}/' . $token))->render(); ?>
+    <?php echo $conversations->setPath(route('show.ticket', ['id' => $tickets->id, 'token' => $token]))->render(); ?>
 </div>
 <br/><br/>
 @if(Session::has('success1'))
