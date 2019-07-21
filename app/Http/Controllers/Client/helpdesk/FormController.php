@@ -270,12 +270,13 @@ class FormController extends Controller
     public function post_ticket_reply($id, Request $request)
     {
         try {
-            if ($comment != null) {
+            $comment = $request->input('comment');
+            if (!empty($comment)) {
                 $tickets = Tickets::where('id', '=', $id)->first();
                 $thread = Ticket_Thread::where('ticket_id', '=', $tickets->id)->first();
 
                 $subject = $thread->title.'[#'.$tickets->ticket_number.']';
-                $body = $request->input('comment');
+                $body = $comment;
 
                 $user_cred = User::where('id', '=', $tickets->user_id)->first();
 

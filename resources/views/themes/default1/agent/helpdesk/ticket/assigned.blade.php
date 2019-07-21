@@ -245,7 +245,7 @@ if (Auth::user()->role == 'agent') {
                 t_id = $('.selectval').map(function() {
                     return $(this).val();
                 }).get();
-                showAssign(t_id)
+                showAssign(t_id);
                 // alert(checkboxValues);
             } else {
                 //Check all checkboxes

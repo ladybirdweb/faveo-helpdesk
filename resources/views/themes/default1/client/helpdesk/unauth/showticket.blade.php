@@ -49,6 +49,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tick
                     <table><tbody>
                             <?php $ratings = App\Model\helpdesk\Ratings\Rating::orderby('display_order')->get(); ?>
                         <form id="foo">
+                            {!! csrf_field() !!}
                             @foreach($ratings as $rating) 
 
                             @if($rating->rating_area == 'Helpdesk Area')
