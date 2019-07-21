@@ -119,12 +119,12 @@ if (Auth::user()->role == 'agent') {
                             <div class="col-md-12">
                                 <div id="merge-succ-alert" class="alert alert-success alert-dismissable" style="display:none;" >
                                     <!--<button id="dismiss-merge" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>-->
-                                    <h4><i class="icon fa fa-check"></i>{!! Lang::get('lag.alert') !!}!</h4>
+                                    <h4><i class="icon fa fa-check"></i>{!! Lang::get('lang.alert') !!}!</h4>
                                     <div id="message-merge-succ"></div>
                                 </div>
                                 <div id="merge-err-alert" class="alert alert-danger alert-dismissable" style="display:none;">
                                     <!--<button id="dismiss-merge2" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>-->
-                                    <h4><i class="icon fa fa-ban"></i>{!! Lang::get('lag.alert') !!}!</h4>
+                                    <h4><i class="icon fa fa-ban"></i>{!! Lang::get('lang.alert') !!}!</h4>
                                     <div id="message-merge-err"></div>
                                 </div>
                             </div>
@@ -147,6 +147,7 @@ if (Auth::user()->role == 'agent') {
                                 <label>{!! Lang::get('lang.merge-reason') !!}</label>
                                 <textarea  name="reason" class="form-control"></textarea>
                             </div>
+
                         </div>
                     </div><!-- mereg-body-form -->
                 </div><!-- merge-body -->
@@ -216,6 +217,7 @@ if (Auth::user()->role == 'agent') {
     </div>
 </div>
 {!! $table->script('vendor.Chumper.ticket-javascript') !!}
+
 <script>
     var t_id = [];
     var option = null;
@@ -238,6 +240,7 @@ if (Auth::user()->role == 'agent') {
 
     $(function() {
         // Enable check and uncheck all functionality
+
         $(".checkbox-toggle").click(function() {
             var clicks = $(this).data('clicks');
             if (clicks) {
@@ -253,12 +256,16 @@ if (Auth::user()->role == 'agent') {
                 //Check all checkboxes
                 $("input[type='checkbox']", ".mailbox-messages").iCheck("check");
                 // alert('Hallo');
-                showAssign(t_id);
                 t_id = [];
+                showAssign(t_id)
             }
             $(this).data("clicks", !clicks);
+
         });
+
+
     });
+
 
     $(document).ready(function() { /// Wait till page is loaded
         $('#click').click(function() {
@@ -267,15 +274,19 @@ if (Auth::user()->role == 'agent') {
             $('#count_refresh').load('inbox #count_refresh');
             $("#show").show();
         });
+
         $(".select2").select2();
+
         $('#delete').on('click', function() {
             option = 0;
             $('#myModalLabel').html("{{Lang::get('lang.delete-tickets')}}");
         });
+
         $('#close').on('click', function() {
             option = 1;
             $('#myModalLabel').html("{{Lang::get('lang.close-tickets')}}");
         });
+
         $("#modalpopup").on('submit', function(e) {
             e.preventDefault();
             var msg = "{{Lang::get('lang.confirm')}}";
@@ -293,6 +304,7 @@ if (Auth::user()->role == 'agent') {
         $(".closemodal, .no").click(function() {
             $("#myModal").css("display", "none");
         });
+
         $('.yes').click(function() {
             var values = getValues();
             if (values == "") {

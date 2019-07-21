@@ -169,7 +169,7 @@ class UnAuthController extends Controller
      */
     public function rating($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref)
     {
-        foreach ($request->all() as $key => $value) {
+        foreach ($request->except(['_token']) as $key => $value) {
             if (strpos($key, '_') !== false) {
                 $ratName = str_replace('_', ' ', $key);
             } else {
