@@ -439,7 +439,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
             ?>
 
             <div class="float-right" style="margin-top:-30px;margin-bottom:-30px">
-                <?php echo $conversations->setPath(url('check_ticket/{' . $id . '}'))->render(); ?>
+                <?php echo $conversations->setPath(route('check_ticket', ['id' => $id]))->render(); ?>
             </div>
             <br/><br/>
             </div>
