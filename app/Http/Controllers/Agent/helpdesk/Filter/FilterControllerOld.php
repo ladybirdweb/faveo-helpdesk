@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Agent\helpdesk\Filter;
 use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
 use App\Model\helpdesk\Filters\Filter;
-use App\Model\helpdesk\Filters\Label;
 use App\Model\helpdesk\Ticket\Tickets;
 use Auth;
 use DB;

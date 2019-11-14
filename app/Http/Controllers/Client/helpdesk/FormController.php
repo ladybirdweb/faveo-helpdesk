@@ -7,7 +7,6 @@ use App\Http\Controllers\Agent\helpdesk\TicketWorkflowController;
 use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\ClientRequest;
-use App\Model\helpdesk\Agent\Department;
 // models
 use App\Model\helpdesk\Form\Fields;
 use App\Model\helpdesk\Manage\Help_topic;
@@ -26,7 +25,6 @@ use Exception;
 use Form;
 use GeoIP;
 use Illuminate\Http\Request;
-use Input;
 use Lang;
 use Redirect;
 

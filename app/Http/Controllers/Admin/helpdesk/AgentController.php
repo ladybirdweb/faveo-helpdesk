@@ -278,6 +278,7 @@ class AgentController extends Controller
             $user->delete();
 
             throw new \Exception($error);
+
             return redirect('agents')->with('success', Lang::get('lang.agent_deleted_sucessfully'));
         } catch (\Exception $e) {
             return redirect('agents')->with('fails', $error);
