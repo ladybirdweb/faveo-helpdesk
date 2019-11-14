@@ -10,10 +10,8 @@ use App\Http\Requests;
 use App\Model\helpdesk\Agent\Department;
 //models
 use App\Model\helpdesk\Filters\Filter;
-use App\Model\helpdesk\Filters\Label;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Ticket\Ticket_Priority;
-use App\Model\helpdesk\Ticket\Ticket_Status;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Ticket\TicketStatusType;
 use App\User;
@@ -21,7 +19,6 @@ use App\User;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
-use UTC;
 
 /**
  * -----------------------------------------------------------------------------

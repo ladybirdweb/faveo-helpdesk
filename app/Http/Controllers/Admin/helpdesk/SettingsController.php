@@ -1081,7 +1081,7 @@ class SettingsController extends Controller
         $result = 'failed';
         $system_check = CommonSettings::select('status')->where('option_name', '=', 'dummy_data_installation')->first();
         if ($system_check->status == 1 || $system_check->status == '1') {
-            $result = Self::cleanDatabase();
+            $result = self::cleanDatabase();
         }
 
         return response()->json(compact('result'));
