@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\helpdesk\BanlistRequest;
 use App\Http\Requests\helpdesk\BanRequest;
 // model
-use App\Model\helpdesk\Email\Banlist;
 use App\User;
 //classes
 use Exception;

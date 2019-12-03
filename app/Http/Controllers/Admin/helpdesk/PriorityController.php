@@ -14,12 +14,10 @@ use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Email;
 use App\Model\helpdesk\Ticket\Ticket_Priority;
-use Auth;
 use DB;
 use Exception;
 // classes
 use Illuminate\Http\Request;
-use Illuminate\support\Collection;
 use Lang;
 
 /**

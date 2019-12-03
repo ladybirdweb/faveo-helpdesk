@@ -14,7 +14,6 @@ use App\User;
 use Artisan;
 // classes
 use Cache;
-use Config;
 use DB;
 use Exception;
 use File;
