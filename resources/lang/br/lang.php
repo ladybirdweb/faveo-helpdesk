@@ -916,9 +916,6 @@ return [
     'moved_to_trash'                                                                => 'Tickets selecionados foram movidos para a lixeira.',
     'tickets_have_been_closed'                                                      => 'Os tickets selecionados foram fechados.',
     'tickets_have_been_opened'                                                      => 'Os tickets selecionados foram abertos.',
-    'load-open'                                                                     => 'Não respondido',
-    
-
     /*
       |-----------------------------------------------
       |  Profile
