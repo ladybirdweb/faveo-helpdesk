@@ -916,6 +916,8 @@ return [
     'moved_to_trash'                                                                => 'Tickets selecionados foram movidos para a lixeira.',
     'tickets_have_been_closed'                                                      => 'Os tickets selecionados foram fechados.',
     'tickets_have_been_opened'                                                      => 'Os tickets selecionados foram abertos.',
+    'load-open'                                                                     => 'Não respondido',
+    
 
     /*
       |-----------------------------------------------
@@ -1077,7 +1079,7 @@ return [
     'user-exists'                                     => 'Usuário já existe. Tente procurar usuários existentes.',
     'valid-email'                                     => 'Informe um endereço de e-mail válido.',
     'search_user'                                     => 'Procurar usuário',
-     'merge-ticket'                                   => 'Vincular ticket',
+    'merge-ticket'                                    => 'Vincular ticket',
     'title'                                           => 'Título',
     'merge'                                           => 'Vincular',
     'select_tickets'                                  => 'Selecione tickets para vincular',

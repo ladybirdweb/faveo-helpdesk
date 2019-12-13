@@ -17,7 +17,7 @@ return [
     'bi'      => ['Bislama', 'Bislama'],
     'bn'      => ['Bengali', 'বাংলা'],
     'bo'      => ['Tibetan', 'བོད་ཡིག'],
-    'br'      => ['Breton', 'brezhoneg'],
+    'br'      => ['Brasil', 'Português'],
     'ca'      => ['Catalan', 'català'],
     'co'      => ['Corsican', 'corsu, lingua corsa'],
     'cs'      => ['Czech', 'čeština, český jazyk'],
