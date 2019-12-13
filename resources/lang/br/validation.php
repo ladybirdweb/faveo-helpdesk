@@ -1,11 +1,11 @@
 <?php
 /*
  |-------------------------------------------------------------------------------------
- |      Dutch translation [for version 1.0.8.0]
+ |      Brazilian Portuguese translation [for version 1.10.6]
  |-------------------------------------------------------------------------------------
- |      Author      : Marcelo A. Fernandes
- |      Email       : marcelo.fernandes@corplantechnologia.com.br
- |  Last translated : 30-11-2016
+ |      Author      : Thiago Alves Cavalcante
+ |      Email       : thiagoalcav@gmail.com
+ |  Last translated : 13-12-2019
  |********************************************************************************
  |      Details of new words added for translation
  |--------------------------------------------------------------------------------
