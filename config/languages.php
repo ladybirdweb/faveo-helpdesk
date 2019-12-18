@@ -92,6 +92,7 @@ return [
     'pl'      => ['Polish', 'Język Polski'],
     'ps'      => ['Pashto', 'پښتو'],
     'pt'      => ['Portuguese', 'Português'],
+    'pt-br'   => ['Brazilian Portuguese', 'Português'],
     'qu'      => ['Quechua', 'Runa Simi'],
     'rm'      => ['Rhaeto-Romance', 'Rumantsch Grischun'],
     'rn'      => ['Kirundi', 'Ikirundi'],
