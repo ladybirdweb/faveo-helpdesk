@@ -25,6 +25,7 @@ Code Coverage Options:
   --whitelist <dir>           Whitelist <dir> for code coverage analysis
   --disable-coverage-ignore   Disable annotations for ignoring code coverage
   --no-coverage               Ignore code coverage configuration
+  --dump-xdebug-filter <file> Generate script to set Xdebug code coverage filter
 
 Logging Options:
 
@@ -56,6 +57,7 @@ Test Execution Options:
   --disallow-test-output      Be strict about output during tests
   --disallow-resource-usage   Be strict about resource usage during small tests
   --enforce-time-limit        Enforce time limit based on test size
+  --default-time-limit=<sec>  Timeout in seconds for tests without @small, @medium or @large
   --disallow-todo-tests       Disallow @todo-annotated tests
 
   --process-isolation         Run each test in a separate PHP process
@@ -93,7 +95,8 @@ Test Execution Options:
 
 Configuration Options:
 
-  --bootstrap <file>          A "bootstrap" PHP file that is run before the tests
+  --prepend <file>            A PHP script that is included as early as possible
+  --bootstrap <file>          A PHP script that is included before the tests run
   -c|--configuration <file>   Read configuration from XML file
   --no-configuration          Ignore default configuration file (phpunit.xml)
   --no-logging                Ignore logging configuration
@@ -101,7 +104,7 @@ Configuration Options:
   --include-path <path(s)>    Prepend PHP's include_path with given path(s)
   -d key[=value]              Sets a php.ini value
   --generate-configuration    Generate configuration file with suggested settings
-  --cache-result-file==<FILE> Specify result cache path and filename
+  --cache-result-file=<file>  Specify result cache path and filename
 
 Miscellaneous Options:
 

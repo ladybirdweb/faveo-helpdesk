@@ -230,7 +230,7 @@ class TraceableEventDispatcher implements TraceableEventDispatcherInterface
      */
     public function __call($method, $arguments)
     {
-        return \call_user_func_array(array($this->dispatcher, $method), $arguments);
+        return $this->dispatcher->{$method}(...$arguments);
     }
 
     /**
@@ -263,7 +263,7 @@ class TraceableEventDispatcher implements TraceableEventDispatcherInterface
 
         foreach ($this->dispatcher->getListeners($eventName) as $listener) {
             $priority = $this->getListenerPriority($eventName, $listener);
-            $wrappedListener = new WrappedListener($listener, null, $this->stopwatch, $this);
+            $wrappedListener = new WrappedListener($listener instanceof WrappedListener ? $listener->getWrappedListener() : $listener, null, $this->stopwatch, $this);
             $this->wrappedListeners[$eventName][] = $wrappedListener;
             $this->dispatcher->removeListener($eventName, $listener);
             $this->dispatcher->addListener($eventName, $wrappedListener, $priority);

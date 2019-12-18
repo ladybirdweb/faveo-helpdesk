@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace SebastianBergmann\CodeCoverage;
 
 use PHPUnit\Framework\TestCase;
@@ -139,12 +138,12 @@ final class CodeCoverage
      */
     public function __construct(Driver $driver = null, Filter $filter = null)
     {
-        if ($driver === null) {
-            $driver = $this->selectDriver();
-        }
-
         if ($filter === null) {
             $filter = new Filter;
+        }
+
+        if ($driver === null) {
+            $driver = $this->selectDriver($filter);
         }
 
         $this->driver = $driver;
@@ -189,7 +188,6 @@ final class CodeCoverage
 
     /**
      * Returns the collected code coverage data.
-     * Set $raw = true to bypass all filters.
      */
     public function getData(bool $raw = false): array
     {
@@ -229,7 +227,6 @@ final class CodeCoverage
      * Start collection of code coverage information.
      *
      * @param PhptTestCase|string|TestCase $id
-     * @param bool                         $clear
      *
      * @throws RuntimeException
      */
@@ -615,6 +612,17 @@ final class CodeCoverage
             return $this->ignoredLines[$fileName];
         }
 
+        try {
+            return $this->getLinesToBeIgnoredInner($fileName);
+        } catch (\OutOfBoundsException $e) {
+            // This can happen with PHP_Token_Stream if the file is syntactically invalid,
+            // and probably affects a file that wasn't executed.
+            return [];
+        }
+    }
+
+    private function getLinesToBeIgnoredInner(string $fileName): array
+    {
         $this->ignoredLines[$fileName] = [];
 
         $lines = \file($fileName);
@@ -881,7 +889,7 @@ final class CodeCoverage
     /**
      * @throws RuntimeException
      */
-    private function selectDriver(): Driver
+    private function selectDriver(Filter $filter): Driver
     {
         $runtime = new Runtime;
 
@@ -894,7 +902,7 @@ final class CodeCoverage
         }
 
         if ($runtime->hasXdebug()) {
-            return new Xdebug;
+            return new Xdebug($filter);
         }
 
         throw new RuntimeException('No code coverage driver available');

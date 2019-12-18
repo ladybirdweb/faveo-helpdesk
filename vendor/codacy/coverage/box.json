@@ -1,0 +1,9 @@
+{
+    "directories": [
+        "src",
+        "vendor"
+    ],
+    "main": "bin/codacycoverage",
+    "output": "build/codacy-coverage.phar",
+    "stub": true
+}

@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace SebastianBergmann\CodeCoverage\Report\Html;
 
 use SebastianBergmann\CodeCoverage\Node\AbstractNode as Node;
@@ -41,7 +40,7 @@ final class Directory extends Renderer
         $template->setVar(
             [
                 'id'    => $node->getId(),
-                'items' => $items
+                'items' => $items,
             ]
         );
 
@@ -62,7 +61,7 @@ final class Directory extends Renderer
             'testedMethodsPercent'         => $node->getTestedFunctionsAndMethodsPercent(false),
             'testedMethodsPercentAsString' => $node->getTestedFunctionsAndMethodsPercent(),
             'testedClassesPercent'         => $node->getTestedClassesAndTraitsPercent(false),
-            'testedClassesPercentAsString' => $node->getTestedClassesAndTraitsPercent()
+            'testedClassesPercentAsString' => $node->getTestedClassesAndTraitsPercent(),
         ];
 
         if ($total) {
@@ -75,7 +74,9 @@ final class Directory extends Renderer
                     $node->getName()
                 );
 
-                $data['icon'] = '<span class="glyphicon glyphicon-folder-open"></span> ';
+                $up = \str_repeat('../', \count($node->getPathAsArray()) - 2);
+
+                $data['icon'] = \sprintf('<img src="%s.icons/file-directory.svg" class="octicon" />', $up);
             } else {
                 $data['name'] = \sprintf(
                     '<a href="%s.html">%s</a>',
@@ -83,7 +84,9 @@ final class Directory extends Renderer
                     $node->getName()
                 );
 
-                $data['icon'] = '<span class="glyphicon glyphicon-file"></span> ';
+                $up = \str_repeat('../', \count($node->getPathAsArray()) - 2);
+
+                $data['icon'] = \sprintf('<img src="%s.icons/file-code.svg" class="octicon" />', $up);
             }
         }
 

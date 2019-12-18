@@ -59,6 +59,7 @@ use SebastianBergmann\FileIterator\Facade as FileIteratorFacade;
  *          beStrictAboutResourceUsageDuringSmallTests="false"
  *          beStrictAboutTestsThatDoNotTestAnything="false"
  *          beStrictAboutTodoAnnotatedTests="false"
+ *          defaultTimeLimit="0"
  *          enforceTimeLimit="false"
  *          ignoreDeprecatedCodeUnitsFromCodeCoverage="false"
  *          timeoutForSmallTests="1"
@@ -275,7 +276,7 @@ final class Configuration
             $result[] = [
                 'class'     => $class,
                 'file'      => $file,
-                'arguments' => $arguments
+                'arguments' => $arguments,
             ];
         }
 
@@ -338,13 +339,13 @@ final class Configuration
                 'processUncoveredFilesFromWhitelist' => $processUncoveredFilesFromWhitelist,
                 'include'                            => [
                     'directory' => $includeDirectory,
-                    'file'      => $includeFile
+                    'file'      => $includeFile,
                 ],
                 'exclude' => [
                     'directory' => $excludeDirectory,
-                    'file'      => $excludeFile
-                ]
-            ]
+                    'file'      => $excludeFile,
+                ],
+            ],
         ];
     }
 
@@ -387,7 +388,7 @@ final class Configuration
             $result[] = [
                 'class'     => $class,
                 'file'      => $file,
-                'arguments' => $arguments
+                'arguments' => $arguments,
             ];
         }
 
@@ -471,7 +472,7 @@ final class Configuration
             'cookie'       => [],
             'server'       => [],
             'files'        => [],
-            'request'      => []
+            'request'      => [],
         ];
 
         foreach ($this->xpath->query('php/includePath') as $includePath) {
@@ -855,6 +856,13 @@ final class Configuration
             );
         }
 
+        if ($root->hasAttribute('defaultTimeLimit')) {
+            $result['defaultTimeLimit'] = $this->getInteger(
+                (string) $root->getAttribute('defaultTimeLimit'),
+                1
+            );
+        }
+
         if ($root->hasAttribute('enforceTimeLimit')) {
             $result['enforceTimeLimit'] = $this->getBoolean(
                 (string) $root->getAttribute('enforceTimeLimit'),
@@ -1104,20 +1112,10 @@ final class Configuration
                 continue;
             }
 
-            $phpVersion         = \PHP_VERSION;
-            $phpVersionOperator = '>=';
-            $prefix             = '';
-            $suffix             = 'Test.php';
+            $prefix = '';
+            $suffix = 'Test.php';
 
-            if ($directoryNode->hasAttribute('phpVersion')) {
-                $phpVersion = (string) $directoryNode->getAttribute('phpVersion');
-            }
-
-            if ($directoryNode->hasAttribute('phpVersionOperator')) {
-                $phpVersionOperator = (string) $directoryNode->getAttribute('phpVersionOperator');
-            }
-
-            if (!\version_compare(\PHP_VERSION, $phpVersion, $phpVersionOperator)) {
+            if (!$this->satisfiesPhpVersion($directoryNode)) {
                 continue;
             }
 
@@ -1159,19 +1157,9 @@ final class Configuration
                 continue;
             }
 
-            $file               = $file[0];
-            $phpVersion         = \PHP_VERSION;
-            $phpVersionOperator = '>=';
+            $file = $file[0];
 
-            if ($fileNode->hasAttribute('phpVersion')) {
-                $phpVersion = (string) $fileNode->getAttribute('phpVersion');
-            }
-
-            if ($fileNode->hasAttribute('phpVersionOperator')) {
-                $phpVersionOperator = (string) $fileNode->getAttribute('phpVersionOperator');
-            }
-
-            if (!\version_compare(\PHP_VERSION, $phpVersion, $phpVersionOperator)) {
+            if (!$this->satisfiesPhpVersion($fileNode)) {
                 continue;
             }
 
@@ -1179,6 +1167,22 @@ final class Configuration
         }
 
         return $suite;
+    }
+
+    private function satisfiesPhpVersion(DOMElement $node): bool
+    {
+        $phpVersion         = \PHP_VERSION;
+        $phpVersionOperator = '>=';
+
+        if ($node->hasAttribute('phpVersion')) {
+            $phpVersion = (string) $node->getAttribute('phpVersion');
+        }
+
+        if ($node->hasAttribute('phpVersionOperator')) {
+            $phpVersionOperator = (string) $node->getAttribute('phpVersionOperator');
+        }
+
+        return \version_compare(\PHP_VERSION, $phpVersion, $phpVersionOperator);
     }
 
     /**
@@ -1244,7 +1248,7 @@ final class Configuration
                 'path'   => $this->toAbsolutePath($directoryPath),
                 'prefix' => $prefix,
                 'suffix' => $suffix,
-                'group'  => $group
+                'group'  => $group,
             ];
         }
 
@@ -1311,7 +1315,7 @@ final class Configuration
     {
         $groups = [
             'include' => [],
-            'exclude' => []
+            'exclude' => [],
         ];
 
         foreach ($this->xpath->query($root . '/include/group') as $group) {
