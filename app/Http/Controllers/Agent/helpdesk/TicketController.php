@@ -27,7 +27,6 @@ use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Ticket\Ticket_attachments;
 use App\Model\helpdesk\Ticket\Ticket_Collaborator;
 use App\Model\helpdesk\Ticket\Ticket_Form_Data;
-use App\Model\helpdesk\Ticket\Ticket_Priority;
 use App\Model\helpdesk\Ticket\Ticket_source;
 use App\Model\helpdesk\Ticket\Ticket_Status;
 use App\Model\helpdesk\Ticket\Ticket_Thread;

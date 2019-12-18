@@ -15,9 +15,7 @@ matrix:
         - php: 7.0
         - php: 7.1
         - php: 7.2
-        # Use the newer stack for HHVM as HHVM does not support Precise
-        - php: hhvm
-          dist: trusty
+        - php: 7.3
 
 before_script:
  - travis_retry composer update --no-interaction $COMPOSER_FLAGS

@@ -12,7 +12,7 @@
 
 return array (
   32455 => 'VOO',
-  32456 => 'JIM Mobile',
+  32456 => 'Mobile Vikings/JIM Mobile',
   32460 => 'Proximus',
   324618 => 'N.M.B.S.',
   324630 => 'TISMI BV',
@@ -44,12 +44,6 @@ return array (
   324687 => 'Premium Routing GmbH',
   324688 => 'Premium Routing GmbH',
   3247 => 'Proximus',
-  32483 => 'Telenet',
-  32484 => 'Telenet',
-  32485 => 'Telenet',
-  32486 => 'Telenet',
-  32487 => 'Telenet',
-  32488 => 'Telenet',
-  32489 => 'Telenet',
+  3248 => 'Telenet',
   3249 => 'Orange',
 );

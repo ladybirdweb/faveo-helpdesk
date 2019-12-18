@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\helpdesk\Ticket\Tickets;
-
 class HomeController extends Controller
 {
     /*

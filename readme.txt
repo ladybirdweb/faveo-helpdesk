@@ -9,7 +9,7 @@ Installation instructions:
 Faveo HELPDESK installation should not take more than 15 minutes to complete.
 Details are provided in this article:
 
-http://ladybirdweb.com/support/knowledgebase
+https://support.faveohelpdesk.com/knowledgebase
 
 Upgrade instructions:
 ---------------------
@@ -17,7 +17,7 @@ Upgrade instructions:
 If you are upgrading your Faveo HELPDESK to the latest stable release, please
 follow the instructions provided in this article:
 
-http://ladybirdweb.com/support/knowledgebase
+https://support.faveohelpdesk.com/knowledgebase
 
 ================================================================================
 

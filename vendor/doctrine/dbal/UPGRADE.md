@@ -1,3 +1,34 @@
+# Upgrade to 2.9
+
+## Deprecated `Statement::fetchColumn()` with an invalid index
+
+Calls to `Statement::fetchColumn()` with an invalid column index currently return `NULL`. In the future, such calls will result in a exception.
+
+## Deprecated `Configuration::getFilterSchemaAssetsExpression()`, `::setFilterSchemaAssetsExpression()` and `AbstractSchemaManager::getFilterSchemaAssetsExpression()`.
+
+Regular expression-based filters are hard to extend by combining together. Instead, you may use callback-based filers via `::getSchemaAssetsFilter()` and `::getSchemaAssetsFilter()`. Callbacks can use regular expressions internally.
+
+## Deprecated `Doctrine\DBAL\Types\Type::getDefaultLength()`
+
+This method was never used by DBAL internally. It is now deprecated and will be removed in DBAL 3.0.
+
+## Deprecated `Doctrine\DBAL\Types\Type::__toString()`
+
+Relying on string representation is discouraged and will be removed in DBAL 3.0.
+
+## Deprecated `NULL` value of `$offset` in LIMIT queries
+
+The `NULL` value of the `$offset` argument in `AbstractPlatform::(do)?ModifyLimitQuery()` methods is deprecated. If explicitly used in the method call, the absence of the offset should be indicated with a `0`.
+
+## Deprecated dbal:import CLI command
+
+The `dbal:import` CLI command has been deprecated since it only works with PDO-based drivers by relying on a non-documented behavior of the extension, and it's impossible to make it work with other drivers.
+Please use other database client applications for import, e.g.:
+
+ * For MySQL and MariaDB: `mysql [dbname] < data.sql`.
+ * For PostgreSQL: `psql [dbname] < data.sql`.
+ * For SQLite: `sqlite3 /path/to/file.db < data.sql`.
+
 # Upgrade to 2.8
 
 ## Deprecated usage of DB-generated UUIDs

@@ -23,8 +23,11 @@ Faveo can be customised according to requirement and we do undertake such reques
 Flavors of Faveo
 --------------------------
   * Faveo Community Edition – Free, Open source edition
+  * Faveo Freelancer - Free version with features available in Faveo Pro Edition for two agents
   * Faveo Pro Edition – Paid version with many advance features and integrations
   * Faveo Service Desk - Paid version for IT Assest management
+  
+[View complete comparision list of all flavors of Faveo to select the most suitable solution for your business](https://www.faveohelpdesk.com/pricing-india/)
 
 Faveo Documentation
 --------------------------
