@@ -15,6 +15,8 @@ use function substr;
 
 /**
  * Conversion Exception is thrown when the database to PHP conversion fails.
+ *
+ * @psalm-immutable
  */
 class ConversionException extends DBALException
 {
@@ -26,11 +28,11 @@ class ConversionException extends DBALException
      *
      * @return \Doctrine\DBAL\Types\ConversionException
      */
-    public static function conversionFailed($value, $toType)
+    public static function conversionFailed($value, $toType, ?Throwable $previous = null)
     {
         $value = strlen($value) > 32 ? substr($value, 0, 20) . '...' : $value;
 
-        return new self('Could not convert database value "' . $value . '" to Doctrine Type ' . $toType);
+        return new self('Could not convert database value "' . $value . '" to Doctrine Type ' . $toType, 0, $previous);
     }
 
     /**
@@ -64,8 +66,12 @@ class ConversionException extends DBALException
      *
      * @return \Doctrine\DBAL\Types\ConversionException
      */
-    public static function conversionFailedInvalidType($value, $toType, array $possibleTypes)
-    {
+    public static function conversionFailedInvalidType(
+        $value,
+        $toType,
+        array $possibleTypes,
+        ?Throwable $previous = null
+    ) {
         $actualType = is_object($value) ? get_class($value) : gettype($value);
 
         if (is_scalar($value)) {
@@ -75,7 +81,7 @@ class ConversionException extends DBALException
                 $actualType,
                 $toType,
                 implode(', ', $possibleTypes)
-            ));
+            ), 0, $previous);
         }
 
         return new self(sprintf(
@@ -83,9 +89,16 @@ class ConversionException extends DBALException
             $actualType,
             $toType,
             implode(', ', $possibleTypes)
-        ));
+        ), 0, $previous);
     }
 
+    /**
+     * @param mixed  $value
+     * @param string $format
+     * @param string $error
+     *
+     * @return ConversionException
+     */
     public static function conversionFailedSerialization($value, $format, $error)
     {
         $actualType = is_object($value) ? get_class($value) : gettype($value);

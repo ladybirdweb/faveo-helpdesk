@@ -11,7 +11,6 @@ use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Traits\Macroable;
 
@@ -1202,7 +1201,13 @@ class FormBuilder
     protected function getRouteAction($options)
     {
         if (is_array($options)) {
-            return $this->url->route($options[0], array_slice($options, 1));
+            $parameters = array_slice($options, 1);
+
+            if (array_keys($options) === [0, 1]) {
+                $parameters = head($parameters);
+            }
+
+            return $this->url->route($options[0], $parameters);
         }
 
         return $this->url->route($options);
@@ -1299,7 +1304,7 @@ class FormBuilder
                 && is_null($old)
                 && is_null($value)
                 && !is_null($this->view->shared('errors'))
-                && count(php_sapi_name() === 'cli' ? [] : $this->view->shared('errors')) > 0
+                && count(is_countable($this->view->shared('errors')) ? $this->view->shared('errors') : []) > 0
             ) {
                 return null;
             }
@@ -1361,7 +1366,7 @@ class FormBuilder
             return $this->model->getFormValue($key);
         }
 
-        return data_get($this->model, $this->transformKey($name));
+        return data_get($this->model, $key);
     }
 
     /**

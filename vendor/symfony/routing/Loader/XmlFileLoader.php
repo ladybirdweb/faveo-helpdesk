@@ -16,6 +16,7 @@ use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Config\Util\XmlUtils;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\RouteCompiler;
 
 /**
  * XmlFileLoader loads XML routing files.
@@ -129,6 +130,7 @@ class XmlFileLoader extends FileLoader
             foreach ($paths as $locale => $p) {
                 $defaults['_locale'] = $locale;
                 $defaults['_canonical_route'] = $id;
+                $requirements['_locale'] = preg_quote($locale, RouteCompiler::REGEX_DELIMITER);
                 $route = new Route($p, $defaults, $requirements, $options, $node->getAttribute('host'), $schemes, $methods, $condition);
                 $collection->add($id.'.'.$locale, $route);
             }
@@ -209,6 +211,7 @@ class XmlFileLoader extends FileLoader
                             $localizedRoute = clone $route;
                             $localizedRoute->setPath($localePrefix.(!$trailingSlashOnRoot && '/' === $route->getPath() ? '' : $route->getPath()));
                             $localizedRoute->setDefault('_locale', $locale);
+                            $localizedRoute->setRequirement('_locale', preg_quote($locale, RouteCompiler::REGEX_DELIMITER));
                             $localizedRoute->setDefault('_canonical_route', $name);
                             $subCollection->add($name.'.'.$locale, $localizedRoute);
                         }
@@ -312,9 +315,9 @@ class XmlFileLoader extends FileLoader
 
         if ($controller = $node->getAttribute('controller')) {
             if (isset($defaults['_controller'])) {
-                $name = $node->hasAttribute('id') ? sprintf('"%s"', $node->getAttribute('id')) : sprintf('the "%s" tag', $node->tagName);
+                $name = $node->hasAttribute('id') ? sprintf('"%s".', $node->getAttribute('id')) : sprintf('the "%s" tag.', $node->tagName);
 
-                throw new \InvalidArgumentException(sprintf('The routing file "%s" must not specify both the "controller" attribute and the defaults key "_controller" for %s.', $path, $name));
+                throw new \InvalidArgumentException(sprintf('The routing file "%s" must not specify both the "controller" attribute and the defaults key "_controller" for ', $path).$name);
             }
 
             $defaults['_controller'] = $controller;

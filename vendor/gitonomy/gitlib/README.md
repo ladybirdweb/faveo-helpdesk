@@ -1,21 +1,20 @@
-Git lib for Gitonomy
-====================
+Gitlib for Gitonomy
+===================
 
-[![Build Status](https://img.shields.io/travis/gitonomy/gitlib/master.svg?style=flat-square)](https://travis-ci.org/gitonomy/gitlib)
+[![Build Status](https://img.shields.io/travis/com/gitonomy/gitlib/master.svg?style=flat-square)](https://travis-ci.com/gitonomy/gitlib)
 [![StyleCI](https://github.styleci.io/repos/5709354/shield?branch=master)](https://github.styleci.io/repos/5709354)
-<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="Software License"></img></a>
+[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-This library provides methods to access Git repository from PHP.
+This library provides methods to access Git repository from PHP 5.6 or 7.
 
 It makes shell calls, which makes it less performant than any solution.
 
 Anyway, it's convenient and don't need to build anything to use it. That's how we love it.
 
-*Documentation*: http://gitonomy.com/doc/gitlib/master/
+Quick Start
+-----------
 
-## Quick Start
-
-You can install git lib using [Composer](https://getcomposer.org/). Simply require the version you need:
+You can install gitlib using [Composer](https://getcomposer.org/). Simply require the version you need:
 
 ```bash
 $ composer require gitonomy/gitlib
@@ -26,12 +25,47 @@ or edit your `composer.json` file by hand:
 ```json
 {
     "require": {
-        "gitonomy/gitlib": "^1.1"
+        "gitonomy/gitlib": "^1.2"
     }
 }
 ```
 
-## For Enterprise
+Example Usage
+-------------
+
+```php
+<?php
+
+use Gitonomy\Git\Repository;
+
+$repository = new Repository('/path/to/repository');
+
+foreach ($repository->getReferences()->getBranches() as $branch) {
+    echo '- '.$branch->getName().PHP_EOL;
+}
+
+$repository->run('fetch', ['--all']);
+```
+
+API Documentation
+-----------------
+
++ [Admin](doc/admin.md)
++ [Blame](doc/blame.md)
++ [Blob](doc/blob.md)
++ [Branch](doc/branch.md)
++ [Commit](doc/commit.md)
++ [Diff](doc/diff.md)
++ [Hooks](doc/hooks.md)
++ [Log](doc/log.md)
++ [References](doc/references.md)
++ [Repository](doc/repository.md)
++ [Revision](doc/revision.md)
++ [Tree](doc/tree.md)
++ [Working Copy](doc/workingcopy.md)
+
+For Enterprise
+--------------
 
 Available as part of the Tidelift Subscription
 

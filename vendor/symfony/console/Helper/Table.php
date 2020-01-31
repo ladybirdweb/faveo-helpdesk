@@ -601,7 +601,9 @@ class Table
             ++$numberOfRows; // Add row for header separator
         }
 
-        ++$numberOfRows; // Add row for footer separator
+        if (\count($this->rows) > 0) {
+            ++$numberOfRows; // Add row for footer separator
+        }
 
         return $numberOfRows;
     }
@@ -616,7 +618,7 @@ class Table
         $unmergedRows = [];
         foreach ($rows[$line] as $column => $cell) {
             if (null !== $cell && !$cell instanceof TableCell && !is_scalar($cell) && !(\is_object($cell) && method_exists($cell, '__toString'))) {
-                throw new InvalidArgumentException(sprintf('A cell must be a TableCell, a scalar or an object implementing __toString, %s given.', \gettype($cell)));
+                throw new InvalidArgumentException(sprintf('A cell must be a TableCell, a scalar or an object implementing "__toString()", "%s" given.', \gettype($cell)));
             }
             if ($cell instanceof TableCell && $cell->getRowspan() > 1) {
                 $nbLines = $cell->getRowspan() - 1;

@@ -1,4 +1,4 @@
-## Datatables Package for Laravel 4|5
+# Laravel DataTables CHANGELOG
 
 [![Latest Stable Version](https://poser.pugx.org/yajra/laravel-datatables-oracle/v/stable.png)](https://packagist.org/packages/yajra/laravel-datatables-oracle)
 [![Total Downloads](https://poser.pugx.org/yajra/laravel-datatables-oracle/downloads.png)](https://packagist.org/packages/yajra/laravel-datatables-oracle)
@@ -6,483 +6,595 @@
 [![Latest Unstable Version](https://poser.pugx.org/yajra/laravel-datatables-oracle/v/unstable.svg)](https://packagist.org/packages/yajra/laravel-datatables-oracle)
 [![License](https://poser.pugx.org/yajra/laravel-datatables-oracle/license.svg)](https://packagist.org/packages/yajra/laravel-datatables-oracle)
 
-##Change Log
-
-### v6.17.0 - 2016-08-10
-- Add setter and getter for table attributes.
-- PR #688, credits to @ssipos90.
-
-### v6.16.1 - 2016-08-03
-- Add orderColumns api helper. PR #679
-- Fix double percent sign in query. PR #678
-
-### v6.16.0 - 2016-07-19
-- Allow global search to work with custom filter callback. #644
-- Transformer instance is kept, otherwise new instance is created. #649
-- Remove unused import and fix cs.
-
-### v6.15.2 - 2016-07-14
-- Fix the issue where a record is being deleted by LDT when column name used is delete.
-- Fix helper doc blocks.
-- Fix #565 and #640.
-- Allow travis-ci failure on HHVM. Mostly due to execution timestamp.
-
-### v6.15.1 - 2016-07-13
-- Decouple fractal for better integration. #636
-- Fractal manager instance can be accessed via app('datatables.fractal').
-
-### v6.15.0 - 2016-07-05
-- Add support for snappy pdf via config.
-- Add laravel-snappy on suggested packages.
-- Add table stripes style.
-- Fix printing template when value is an array.
-- Fix issue when exporting pdf and data can't be decoded.
-- ErrorException in DataTransformer.php line 67: strip_tags() expects parameter 1 to be string, array given
-
-### v6.14.0 - 2016-07-01
-- Add model option to dataTable command. #620
-- Make generator namespace configurable.
-- Add filename in generator with timestamps.
-
-### v6.13.1 - 2016-06-23
-- Add option to manually set the total records.
-    -New method: ->setTotalRecords(int total)
-- Addresses count queries performance issue like #578.
-
-### v6.13.0 - 2016-06-23
-- Add Auto-Index Column. #597
-- Add method 'addIndexColumn()' to compliment PR#597.
-    - Note: addIndexColumn can be used without the builder.
-- Add config file descriptions for reference.
-
-### v6.12.0 - 2016-06-23
-- Add support for ajax data function. #613
-- Update dataTable service query return docblock and stub.
-
-### v6.11.5 - 2016-06-01
-- Fix HasOne relation which uses different methods to get foreign and other key. #585
-
-###v6.11.4 - 2016-05-30
-- Remove media screen to fix styles when printing. #583
-
-###v6.11.3 - 2016-05-20
-- Add export button collection. #568
-- Fix default print preview view path. #569
-
-###v6.11.2 - 2016-05-18
-- Add CAST for Firebird #552.
-
-###v6.11.1 - 2016-05-11
-- Use Str class helper instead of strlen for better unicode support.
-- Change method from private to protected as requested on #544.
-
-###v6.11.0 - 2016-04-30
-- Patch phpdoc to fix #531. PR #534
-- Fix eager loading ordering for belongsToMany relationship. Fix #461, PR #490
-- Add support for responsive extension. Fix #526, PR #533
-- Add option to create a table footer from builder defined via column def. PR #471
-
-###v6.10.1 - 2016-03-22
-- Fix eager loading column search. PR #469.
-- Fix issue #443.
-
-###v6.10.0 - 2016-03-19
-- Add feature to enable/disable smart search via config or during runtime. Fix #423
-- See PR #452 for details.
-
-###v6.9.4 - 2016-03-18
-- Use full namespace in app() helper.
-- PR #465, credits to @ligne13.
-
-###v6.9.3 - 2016-03-17
-- Adds an option to pass parameters to column render.
-- Allows passing instance of Column into Builder columns.
-- Fix security issue as reported in #460.
-- Credits to @vladkucherov for this changes.
-
-###v6.9.2 - 2016-03-16
-- Pull-up isOracleSQL and fix condition using oci8.
-
-###v6.9.1 - 2016-03-11
-- Add default array value when getting columns. Fix #448
-
-###v6.9.0 - 2016-03-11
-- Re-implement facade.
-- Add blacklist and whitelist feature.
-- Fix string casting for object values.
-- Add missing doc block for getSearchKeyword.
-- Fix eloquent engine missing parent constructor.
-- Add/Update class doc blocks.
-
-###v6.8.0 - 2016-03-11
-- Added Closure support for filterColumn method.
-- PR #440. Credits to @codewizz.
-
-###v6.7.3 - 2016-03-02
-- Fix eager load multiple column sorting where other columns are being ignored when join statement already exists.
-- Refactor redundant else order by statement.
-- Call eager loads only when required when filtering and ordering.
-- Extract eager loaded column join statement handler.
-
-###v6.7.2 - 2016-02-28
-- Fix collection engine sorting and sorting function.
-- Fix #413 and #415.
-
-###v6.7.1 - 2016-02-26
-- Fix multiple column sorting when using eager loaded models. Fix #410
-
-###v6.7.0 - 2016-02-26
-- Add support for sorting on eager loaded models.
-- PR #409 - Credits to @ikerasLT.
-
-###v6.6.1 - 2016-02-20
-- Fix eager loading search (SQLSTATE[21000]: Cardinality violation:). Issue #403.
-
-###v6.6.0 - 2016-02-20
-- Add totalCount on contact and remove excess new line.
-- Remove unnecessary abstract function on BaseEngine since we have a contract.
-- Remove engine implementation of contract since BaseEngine already requires it.
-- Improve column name detection for filtering and sorting.
-- Dynamically determine if oracle depending on connection used.
-- Automatic detection of primary key when using Eloquent engine.
-- Use primary key when column name could not be resolve.
-- Update DataTable service doc blocks and refactor render method.
-
-###v6.5.1 - 2016-02-19
-- Fix ordering column name detection. Issue #339.
-- Refactor Builder parameterize method.
-
-###v6.5.0 - 2016-02-18
-- Add support for DataTables valid callbacks.
-- Fix issue #387 & #401.
-
-###v6.4.5 - 2016-02-18
-- Allow edit columns for nested arrays. PR #399 - credits to @ramilexe
-- Fix flag for case insensitive search. PR #400 - credits to @ansient
-
-###v6.4.4 - 2016-02-13
-- Fix filtering in nested columns of Collections. PR #392
-
-###v6.4.3 - 2016-02-11
-- Random cs and doc block fix.
-- Code refactoring to reduce complexity.
-
-###v6.4.2 - 2016-02-11
-- Change how regex code is generated after a column search. #358
-- Fix addColumn fails when order falls at end of array #386
-
-###v6.4.1 - 2016-02-10
-- Fix nested eager loaded relations and column name.
-
-###v6.4.0 - 2016-02-10
-- Add feature to support global search on eager loaded models.
-- PR #381. Credits to @ikerasLT.
-- Fix implementation conflicts when using builder and join statements.
-- Fix cs and doc blocks.
-
-###v6.3.2 - 2016-02-04
-- Add order by and group by on count sql optimization exceptions.
-- Date will now be added on each released version using Y-m-d format.
-
-###v6.3.1
-- Fix artisan datatables:make service stub.
-
-###v6.3.0
-- Add option to override default ordering via `->order(\Closure $callback)` method.
-- Add editor config.
-- Add some new features docs.
-- Remove Laravel 4.2 documentation on 6.0 branch.
-
-###v6.2.4
-- Add git attributes.
-
-###v6.2.3
-- Add setter/getter for filename.
-- Add html_entity_decode when exporting file.
-- Decode column title when exporting.
-
-###v6.2.2
-- Extract data transformation task to own class.
-- Refactor duplicate response mapping code.
-- Increase scrutinizer score.
-
-###v6.2.1
-- Fix data when exporting with html tags.
-- Add filename method in stub.
-- Fix some doc blocks.
-- Scrutinizer refactoring.
-
-###v6.2.0
-- Enhance printing function to match what is displayed in UI.
-- Enhance export function to match what is displayed in UI.
-- Enhance datatables service stub.
-- Address issue #310.
-- Add option to set column as exportable and/or printable.
-- Action and checkbox column is not exportable but printable by default.
-
-###v6.1.3
-- Fix logical bug with totalRecords and filteredRecords. Fix #333
-
-###v6.1.2
-- Fix possible conflict with Laravel helpers.php file auto-loading. Fix #330.
-- Update dataTable service class stub.
-
-###v6.1.1
-- Fix ordering when using basic array response. Fix #322.
-
-###v6.1.0
-- Add support for Lumen.
-- Fixes #317, #318.
-
-###v6.0.0 - DataTable Service implementation.
-- Provides DataTable Service.
-- Provides artisan command for creating a service. php artisan datatables:make UsersDataTable
-- Provides artisan command for creating a DataTable scope. php artisan datatables:scope ActiveUserScope
-- Provides built-in support for server-side buttons. (Formerly TableTools).
-- Available buttons are csv, excel, pdf, print.
-- Built-in support for exporting to CSV, EXCEL and PDF using Laravel-Excel.
-- Built-in printer friendly view or create your own by overriding printPreview() method.
-- Change of namespace from yajra\Datatables to Yajra\Datatables.
-- Deprecated of() method when using DataTable service.
-- Automatic registration of required 3rd party providers.
-    - [Laravel Excel](https://github.com/Maatwebsite/Laravel-Excel)
-    - [Laravel Collective HTML & Forms](https://github.com/LaravelCollective/html)
-- Automatic registration of Datatables facade.
-- HTML Builder with javascript from template. #298 - Credits to @vladkucherov.
-- HTML Builder column render now accepts a string, view or closure. #300 - Credits to @vladkucherov
-- Add resource on json response by using `->with('key', 'value')` method. #277
-
-###v5.12.5
-- Get order column name from the request. Fix #307.
-
-###v5.12.4
-- Fix searching when aliasing a column. Fix #274.
-
-###v5.12.3
-- Remove checking of columns - name index and let setupColumnName method to identify the proper column name.
-
-###v5.12.2
-- Fix double prefix when using join queries. Fix #272, #273
-
-###v5.12.1
-- Fix support for PHP5.4.
-
-###v5.12.0
-- Added support for Fractal Serializer.
-- Added config for default serializer.
-- Note: Should be used along with setTransformer method.
-- Usage:
-        return Datatables::of($model)
-        ->setTransformer(ModelTransformer::class)
-        ->setSerializer(ModelSerializer::class)
-        ->make(true);
-
-###v5.11.14
-- Sort by a multi-line 'select as' query. PR #245
-
-###v5.11.13
-- Allow fractal v0.12 and up. Fix #237.
-
-###v5.11.12
-- Use connection grammar to wrap columns and table name.
-
-###v5.11.11
-- Parse includes in fractal. Fix #225.
-
-###v5.11.10
-- CollectionEngine: fix sorting of relation columns by using seralize (like filtering). PR #197.
-
-###v5.11.9
-- Add fix for QueryBuilder: ORDER BY *. PR #194.
-
-###v5.11.8
-- Skip search, order and pagination on empty records.
-- Fix #149 and #176 empty collection error when using make(false).
-- Fix credits to @gabrielwelsche.
-
-###v5.11.7
-- Fix escaping of row when using eager loading. Fix #164
-- Add support for escaping rows using array dot notation when declaring escapeColumns.
-        Example: `->escapeColumns(['name', 'post.title'])`
-
-###v5.11.6
-- Refactor eloquent and query builder engine duplicate codes.
-
-###v5.11.5
-- Fix issues on database prefix. #161 and #162
-- Fix database prefix value when using Eloquent.
-
-###v5.11.4
-- Fix Undefined offset issue when using addColumn.
-- Credits to @openvast for PR #158
-
-###v5.11.3
-- Pass object or array to transformer. PR #155
-
-###v5.11.2
-- Add support for regular expressions search on column.
-
-###v5.11.1
-- Collection engine enhancement.
-- Add support for filtering compound key PR #146.
-- Add support for ordering using compound key.
-
-###v5.11.0
-- Add support for rendering view directly on addColumn and editColumn.
-
-###v5.10.0
-- Add LaravelDataTables on js window namespace. Issue #129. Credits to @greabock.
-
-###v5.9.2
-- Fix possible error when rendering table and overriding the attributes.
-- Merge DT parameters.
-
-###v5.9.1
-- Fix default ajax value causing js data null error.
-
-###v5.9.0
-- Added escapeColumns feature to escape the values.
-- Addresses XSS filtering issue #128.
-
-###v5.8.6
-- Fix DT_Row options when returning a flatten array response.
-- Fix PR #126.
-
-###v5.8.5
-- Revert try-catch when compiling blade.
-- Fix html builder unit test.
-
-###v5.8.4
-- Fix html builder merging of column attributes.
-
-###v5.8.3
-- Added space when setting html builder table attributes.
-- Set a default data value when adding a column.
-- Removed unnecessary slash when getting html builder.
-- Added html builder unit test.
-- Improved test coverage.
-
-###v5.8.2
-- Fix count when using DISTINCT query. Fix #125
-
-###v5.8.1
-- Fix compatiblity with PHP 5.4.
-
-###v5.8.0
-- Enhanced html builder class.
-- Added function to load html builder `columns` via mixed array.
-    - Automatic resolution of qualified title based on field name.
-    - Overriding of column attributes.
-- Added html builder and request object getter from main Datatables class.
-- Added more unit tests.
-
-###v5.7.0
-- Added orderColumn feature.
-
-###v5.6.1
-- Make BaseEngine $request property public.
-- Fix global searching when search value is zero (0).
-- Refactor methods from v5.6.0.
-
-###v5.6.0
-- Re-implement filterColumn function with special variable $1.
-- Fix filterColumn not getting included on OR statements within global search.
-- Fix #115.
-
-###v5.5.11
-- Fix ordering for when using column alias and make(false). Fix #103.
-
-###v5.5.10
-- Fix casting specific to stdClass only. Fix #114.
-
-###v5.5.9
-- Fix ordering of collection when data is stdClass.
-
-###v5.5.8
-- Fix issue when converting object to array. Fix #108.
-
-###v5.5.7
-- Fix and enhance support when passing object variables using blade templating approach.
-- Random code clean-up.
-
-###v5.5.6
-- Fix eager loading of hasOne and hasMany relationships. Issue #105.
-
-###v5.5.5
-- Fix collection engine sorting when columns is not defined
-
-###v5.5.4
-- Fix support for collection of objects
-
-###v5.5.3
-- Fix total filtered records count when overriding global search.
-- Fix implementation of PR #95 on Collection Engine.
-
-###v5.5.2
-- Fix database driver detection on Eloquent Engine.
-
-###v5.5.1
-- Fix missing import of Helper class.
-
-###v5.5.0
-- Refactor classes to improve code quality.
-- Implemented PR #95.
-
-###v5.4.4
-- Added column wrapper for SQLITE.
-
-###v5.4.3
-- Added column wrapper for Postgres. Bugfix #82.
-
-###v5.4.2
-- Throws Exception when using DataTable's legacy code.
-- Fixed CS - PSR2.
-
-###v5.4.1
-- Fixed Builder generateScript method.
-
-###v5.4
-- Added Html Builder.
-- Added magic methods to call enginges without the "using" word.
-- Minor Bugfixes.
-
-###v5.3
-- Added scrutinizer.
-- Code refactor/cleanup based on scrutinizers suggestions.
-- Bugfix #75.
-
-###v5.2
-- Datatables can now be used via Laravel IOC container `app('datatables')`.
-- Datatables Engine can now be used directly along with Laravel IOC.
-    - Available Engines:
-        - Query Builder Engine. `app('datatables')->usingQueryBuilder($builder)->make()`.
-        - Eloquent Engine. `app('datatables')->usingEloquent($model)->make()`.
-        - Collection Engine. `app('datatables')->usingCollection($collection)->make()`.
-- Datatables is now more testable and works with https://github.com/laracasts/integrated.
-- Bugfix #56.
-
-###v5.1
-- Added filterColumn function to override default global search in each column.
-- Datatables class extending Query Builder's functionality along with global search.
-- Restore queries on result when app is in debug mode.
-- Added input on result when app is in debug mode.
-- Force enable query log when app is in debug mode.
-- Convert string search from preg_match to Str::contains to improve performance.
-- Added support for having clause queries.
-- Added support for `league/fractal` for transforming data API output.
-
-###v5.0
-- Strictly for Laravel 5++.
-- Drop support for DT1.9 and below.
-- Strict implmentation of DT1.10 script pattern.
-- Added support for Collection as data source.
-
-###v4.3.x
-- Stable version for Laravel 5 with support for DT1.9.
-- Collection Engine not available.
-
-###v3.6.x
-- Stable version for Laravel 4.2.
-
-###v2.x
-- Stable version for Laravel 4.0 and 4.1
+### [Unreleased]
+
+### [v9.10.1] - 2020-05-30
+
+- Fix type casting issue [#2399], credits to [@ehsanrasta].
+- Fix [#1975] , [#1747].
+- Fix issue with non-existing variables/attributes on Collection. [#2391], credits to [@mgralikowski].
+- Add laravel missing versions on every docs [#2382], credits to [@lloricode].
+
+### [v9.10.0] - 2020-04-23
+
+- Add support for HasOneThrough [#2368], credits to [@warlof]
+
+### [v9.9.0] - 2020-03-04
+
+- Support Laravel 7 [#2332], credits to [@barryvdh].
+
+### [v9.8.0] - 2019-12-17
+
+- Add the possibility to makeVisible() some attribute of a model. [#2263], credits to [@imTigger].
+
+### [v9.7.2] - 2019-11-11
+
+- Cast database engines to array. [#2240], credits to [@mtvbrianking].
+- Fix [#2202].
+
+### [v9.7.1] - 2019-10-02
+
+- Fix skipTotalRecords api not working on initial state. [#2222]
+
+### [v9.7.0] - 2019-10-02
+
+- Allow orderColumn using closure. [#2199]
+
+### [v9.6.1] - 2019-09-26
+
+- Improve orderByNullsLast SQL generation. [#2191]
+- Fix [#1822], [#1738].
+
+### [v9.6.0] - 2019-09-04
+
+- Fix deprecated helper functions, then add support for Laravel 6. [#2171], credits to [@lloricode]
+- Fix [#2156].
+
+### [v9.5.0] - 2019-08-31
+
+- Add support for startsWithSearch filter. [#2163]
+- Fix [#2161].
+
+### [v9.4.1] - 2019-06-12
+
+- Removal of redundant SoftDelete check. [#2103], credits to [@selecod]
+
+### [v9.4.0] - 2019-06-06
+
+- Allow column search on blacklisted columns with custom filter. [#2102], fix [#2091].
+- Enable the dotted notation in the ->only() function. [#2084], credits to [@Arkhas]
+- Add tests.
+
+### [v9.3.0] - 2019-05-21
+
+- Prevent malformed UTF-8 characters in debug mode. [#2088], credits to [@drsdre].
+- Add the possibility to makeHidden() some attribute of a model. [#2085], credits to [@Arkhas].
+
+### [v9.2.0] - 2019-05-09
+
+- Enable the dotted notation in the ->removeColumn() function. [#2082], credits to [@Arkhas].
+- Consider black listed columns on column search. [#2079], credits to [@apreiml].
+- Using predefined offsets for API-driven server-side(ish) DataTables. [#2083], credits to [@Stokoe0990].
+
+### [v9.1.1] - 2019-04-25
+
+- Revert [#2051], fix [#2058]. [#2072].
+
+### [v9.1.0] - 2019-04-24
+
+#### FIXED
+
+- Fix rendering column from blade file. [#2067], credits to [@lukchojnicki].
+- Fix [#2045], [#2054], [#2024], [#1977], [#880], [#577], [#522], etc.
+
+#### ADDED
+
+- Add support for self join relationships. [#2051], credits to [@Morinohtar].
+
+### [v9.0.1] - 2019-03-26
+
+- Allow boolean values for column[i].searchable [#1813], credits to [@sgotre].
+
+### [v9.0.0] - 2019-02-27
+
+- Add support for Laravel 5.8 [#2002].
+- Fix [#2001], [#2003].
+- Drop support for lower version of dataTables.
+- Bump to php ^7.1.3.
+- Bump testbench to ^3.8.
+
+### [v8.13.5] - 2019-02-13
+
+- Keep select bindings option. [#1988], credits to [@royduin].
+- Fix [#1983].
+
+### [v8.13.4] - 2019-01-29
+
+- Added optional merge of config raw columns to rawColumns method. [#1960], credits to [@Spodnet]
+
+### [v8.13.3] - 2019-01-05
+
+- Revert [#1942].
+- Fix [#1951].
+
+### [v8.13.2] - 2019-01-04
+
+- Keep casted attributes. [#1942], credits to [@ridaamirini].
+- Fix [#1747].
+
+### [v8.13.1] - 2018-11-23
+
+- Revert v8.12.0 changes.
+
+### [v8.13.0] - 2018-11-23
+
+- Only escape callable output of add and edit column. [#1852], credits to [@sharifzadesina]
+- Fix adding of index column bug introduced by [#1852]. [#1915]
+- Add tests for [#1852].
+
+### [v8.12.0] - 2018-11-23
+
+- Skipped, bad tagging!
+
+### [v8.11.0] - 2018-11-20
+
+- Use skipTotalRecords as it better describe what the function does. [#1912]
+- Remove method `simplePagination` and use `skipTotalRecords` instead.
+
+### [v8.10.0] - 2018-11-20
+
+- Add simple pagination api. [#1911]
+- Use `toJson()` on all tests api. [#1911]
+- Use dedicated assertCount assertion. [#1903], credits to [@carusogabriel]
+
+### [v8.9.2] - 2018-10-30
+
+- Fix the default name of index column to follow DT syntax. [#1882], credits to [@sharifzadesina].
+
+### [v8.9.1] - 2018-10-05
+
+- DATATABLES_ERROR shouldn't be by default null [#1805] [#1811], credits to [@zeyad82].
+
+### [v8.9.0] - 2018-10-05
+
+- Added ability to pass an array of needed columns on response. [#1860], credits to [@ptuchik].
+
+### [v8.8.0] - 2018-09-05
+
+- Add support for Laravel 5.7
+- Fix [#1824], [#1830]
+
+### [v8.7.1] - 2018-07-06
+
+- Add validation for order direction. [#1792]
+- Prevents SQL injection on order direction.
+- Fix phpunit configuration warning.
+
+### [v8.7.0] - 2018-06-03
+
+- Add withQuery api for query callback. [#1759]
+- Revert [#1758] with callback implementation since its BC.
+
+### [v8.6.1] - 2018-06-03
+
+- Fix/Enhance with closure value implementation. [#1758]
+- Use filteredQuery as callback parameter.
+- Fix [#1752]
+
+### [v8.6.0] - 2018-05-18
+
+- Add support for manual setting of filtered count [#1743], credits to [@forgottencreature]
+- Fix [#1516].
+
+### [v8.5.2] - 2018-05-15
+
+- Revert "[8.0] Classify join statements as a complex query." [#1741]
+- Fix [#1739]
+
+### [v8.5.1] - 2018-05-12
+
+- Reset select bindings for count query [#1730], credits to [@fschalkwijk]
+- Classify join statements as a complex query [#1737].
+- Fix [#1600], [#1471].
+
+### [v8.5.0] - 2018-05-10
+
+- Support for Eloquent API Resources [#1702], credits to [@asahasrabuddhe].
+- Fixes [#1515], [#1659], [#1351].
+
+### [v8.4.4] - 2018-05-04
+
+- Use array_key_exists instead of in_array + array_keys [#1719], credits to [@carusogabriel].
+- Adds support to Laravel 5.6 on readme, [#1724], credits to [@nunomaduro]
+- Fixed a bug for "undefined index" errors, [#1728], credits to [@redelschaap]
+
+### [v8.4.3] - 2018-04-05
+
+- [8.0] Fix ambiguous column 'deleted_at'. [#1688], credits to [@sskl].
+
+### [v8.4.2] - 2018-03-29
+
+- Check SoftDeletes on HasOne or BelongsTo relations [#1628], credits to [@drahosistvan].
+- Add mention of Datatables Editor pkg to "suggests" [#1658], credits to [@drbyte].
+
+### [v8.4.1] - 2018-02-16
+
+- Change Log contract to LoggerInterface. [#1624], credits to [@LEI].
+- Fix [#1626].
+
+### [v8.4.0] - 2018-02-11
+
+- Added Laravel 5.6 Support [#1609], credits to [@marcoocram]
+- Fix [#1617]
+
+### [v8.3.3] - 2018-01-11
+
+- Fixes from PHPStan. [#1569], credits to [@carusogabriel].
+- Enable no_useless_else. [#1554], credits to [@carusogabriel].
+- Remove useless else statements. [#1553], credits to [@carusogabriel].
+- Fix typo. [#1536], credits to [@Oussama-Tn].
+- Test against PHP 7.2. [#1532], credits to [@carusogabriel].
+- Update TestCase with PSR-2. [#1496], credits to [@gabriel-caruso].
+
+### [v8.3.2] - 2017-11-02
+
+- Fix datatables() helper and use singleton instance. [#1487], credits to [@ElfSundae].
+- Styling phpdoc for facade. [#1489], credits to [@ElfSundae].
+- Apply StyleCI fixes. [#1485], [#1483].
+- Patch docs. [#1492]
+- Add StyleCI integration. [#1484]
+
+### [v8.3.1] - 2017-10-27
+
+- Fix filtered records total when using filterColumn. [#1473], credits to [@wuwx](https://github.com/wuwx).
+- Added Patreon Link. [#1476], credits to [@ChaosPower](https://github.com/ChaosPower).
+- Fix missing periods. [#1478], credits to [@jiwom].
+- Fix PHP Docs and minor array fixes. Remove unused import. [#1479], credits to [@jiwom].
+
+### [v8.3.0] - 2017-10-26
+
+**ADDED**
+
+- `DataTables` factory class is now Macroable. [#1462]
+- `query()` api added as a replacement for `queryBuilder()`. [#1462]
+
+**CHANGED**
+
+- Support for plugin engine methods. [#1462], credits to [@pimlie].
+- `datatables.builders` config is now optional/redundant. [#1462]
+- Deprecate `queryBuilder()` api and replaced with `query()`.
+
+**FIXED**
+
+- Support for custom engines (eg for mongodb) [#1294],
+
+### [v8.2.0] - 2017-10-25
+
+**FIXED**
+
+- Fix changelog links. [#1449]
+- Rename phpunit.xml and add composer script. [#1460], credits to [@pimlie].
+- Fix exception/warning for PHP 7.2. [#1465], credits to [@CristianDeluxe](https://github.com/CristianDeluxe).
+- Fix facade method annotations. [#1468], credits to [@Guja1501](https://github.com/Guja1501).
+- Fix globalSearch not working for 0. [#1467], credits to [@lrtr](https://github.com/lrtr).
+
+**ADDED/CHANGED**
+
+- Make wildcard string a function parameter. [#1461], credits to [@pimlie].
+
+### [v8.1.1] - 2017-10-17
+
+- Fix docs API link. [#1438], credits to [@dextermb](https://github.com/dextermb).
+- Fix merging config. [#1444], credits to [@ElfSundae].
+- Fix return type. [#1446], credits to [@gabriel-caruso].
+- Remove unused provides() from service provider. [#1445], credits to [@ElfSundae].
+
+### [v8.1.0] - 2017-10-08
+
+- Add addColumns() to EloquentDataTable. [#1416], credits to [@ElfSundae].
+
+### [v8.0.3] - 2017-09-12
+
+- Fix compatibility with Lumen. [#1382]
+- Fix [#1377].
+
+### [v8.0.2] - 2017-09-06
+
+- Remove void return type.
+- Fix [#1367], [#1368].
+
+### [v8.0.1] - 2017-08-31
+
+- Do not resolve column if relation is not eager loaded. [#1355]
+- Fix [#1353], sort/search not working when using join statements.
+- Add tests for join statements.
+
+### [v8.0.0] - 2017-08-31
+
+### ADDED
+
+- Add support for Laravel 5.5.
+- Package auto-discovery implemented.
+- Add the raw data to model key when compiling views when using addColumn and editColumn.
+- Make multi-term search configurable.
+- Source code clean-up, refactoring and type-hinting.
+- Improved scrutinizer code quality score from 6 to ~9 pts.
+- On the fly support for `SoftDeletes`. No need to use `withTrashed` and `onlyTrashed`.
+- Add `getQuery` api to get the query used by dataTable.
+- Add `getFilteredQuery` api to get the prepared (filtered, ordered & paginated) query.
+- Add `Arrayable` and `Jsonable` interface for a more Laravel like response.
+
+```php
+use Yajra\DataTables\Facades\DataTables;
+
+return DataTables::eloquent(User::query())->toJson();
+return DataTables::eloquent(User::query())->toArray();
+```
+
+- Introducing a new OOP / intuitive syntax.
+
+```php
+// using DataTables Factory
+use Yajra\DataTables\DataTables;
+
+return DataTables::of(User::query())->toJson();
+return (new DataTables)->eloquent(User::query())->toJson();
+return (new DataTables)->queryBuilder(DB::table('users'))->toJson();
+return (new DataTables)->collection(User::all())->toJson();
+
+// using DataTable class directly
+use Yajra\DataTables\EloquentDataTable;
+return (new EloquentDataTable(User::query())->toJson();
+
+use Yajra\DataTables\QueryDataTable;
+return (new QueryDataTable(DB::table('users'))->toJson();
+
+use Yajra\DataTables\CollectionDataTable;
+return (new CollectionDataTable(User::all())->toJson();
+```
+
+- Add `datatables()` function helper.
+
+### CHANGED
+
+- Namespace changed from `Yajra\Datatables` to `Yajra\DataTables`.
+- Rename `Datatables` to `DataTables` class.
+- Rename Facade from `Datatables` to `DataTables` class.
+- Preserve `Eloquent\Builder` when overriding the default ordering of dataTables when using `EloquentEngine`.
+- Preserve `Eloquent\Builder` when using filterColumn api. Allows us to use model scope and any eloquent magics.
+- Fractal integration extracted to own plugin [laravel-datatables-fractal].
+- Raw output are always passed on transformer instance.
+- Object response is now the default output `public function make($mDataSupport = true)`.
+
+### REMOVED
+
+- Remove `filterColumn` api magic query method in favor of closure.
+- Remove support on older `snake_case` methods.
+- Remove silly implementation of proxying query builder calls via magic method.
+- Removed unused methods.
+- Remove `withTrashed` and `onlyTrashed` api.
+
+### FIXED
+
+- How to get full used query ? [#1068]
+- Is there a way to build the query (with filtering and sorting) but without execute it? [#1234]
+- Fix orderColumn api where related tables are not joined.
+- Fix nested with relation search and sort function.
+
+[Unreleased]: https://github.com/yajra/laravel-datatables/compare/v9.10.1...9.0
+[v9.10.1]: https://github.com/yajra/laravel-datatables/compare/v9.10.0...v9.10.1
+[v9.10.0]: https://github.com/yajra/laravel-datatables/compare/v9.9.0...v9.10.0
+[v9.9.0]: https://github.com/yajra/laravel-datatables/compare/v9.8.0...v9.9.0
+[v9.8.0]: https://github.com/yajra/laravel-datatables/compare/v9.7.2...v9.8.0
+[v9.7.2]: https://github.com/yajra/laravel-datatables/compare/v9.7.1...v9.7.2
+[v9.7.1]: https://github.com/yajra/laravel-datatables/compare/v9.7.0...v9.7.1
+[v9.7.0]: https://github.com/yajra/laravel-datatables/compare/v9.6.1...v9.7.0
+[v9.6.1]: https://github.com/yajra/laravel-datatables/compare/v9.6.0...v9.6.1
+[v9.6.0]: https://github.com/yajra/laravel-datatables/compare/v9.5.0...v9.6.0
+[v9.5.0]: https://github.com/yajra/laravel-datatables/compare/v9.4.1...v9.5.0
+[v9.4.1]: https://github.com/yajra/laravel-datatables/compare/v9.4.0...v9.4.1
+[v9.4.0]: https://github.com/yajra/laravel-datatables/compare/v9.3.0...v9.4.0
+[v9.3.0]: https://github.com/yajra/laravel-datatables/compare/v9.2.0...v9.3.0
+[v9.2.0]: https://github.com/yajra/laravel-datatables/compare/v9.1.1...v9.2.0
+[v9.1.1]: https://github.com/yajra/laravel-datatables/compare/v9.1.0...v9.1.1
+[v9.1.0]: https://github.com/yajra/laravel-datatables/compare/v9.0.1...v9.1.0
+[v9.0.1]: https://github.com/yajra/laravel-datatables/compare/v9.0.0...v9.0.1
+[v9.0.0]: https://github.com/yajra/laravel-datatables/compare/v8.13.5...v9.0.0
+[v8.13.5]: https://github.com/yajra/laravel-datatables/compare/v8.13.4...v8.13.5
+[v8.13.4]: https://github.com/yajra/laravel-datatables/compare/v8.13.3...v8.13.4
+[v8.13.3]: https://github.com/yajra/laravel-datatables/compare/v8.13.2...v8.13.3
+[v8.13.2]: https://github.com/yajra/laravel-datatables/compare/v8.13.1...v8.13.2
+[v8.13.1]: https://github.com/yajra/laravel-datatables/compare/v8.13.0...v8.13.1
+[v8.13.0]: https://github.com/yajra/laravel-datatables/compare/v8.11.0...v8.13.0
+[v8.11.0]: https://github.com/yajra/laravel-datatables/compare/v8.10.0...v8.11.0
+[v8.10.0]: https://github.com/yajra/laravel-datatables/compare/v8.9.2...v8.10.0
+[v8.9.2]: https://github.com/yajra/laravel-datatables/compare/v8.9.1...v8.9.2
+[v8.9.1]: https://github.com/yajra/laravel-datatables/compare/v8.9.0...v8.9.1
+[v8.9.0]: https://github.com/yajra/laravel-datatables/compare/v8.8.0...v8.9.0
+[v8.8.0]: https://github.com/yajra/laravel-datatables/compare/v8.7.1...v8.8.0
+[v8.7.1]: https://github.com/yajra/laravel-datatables/compare/v8.7.0...v8.7.1
+[v8.7.0]: https://github.com/yajra/laravel-datatables/compare/v8.6.1...v8.7.0
+[v8.6.1]: https://github.com/yajra/laravel-datatables/compare/v8.6.0...v8.6.1
+[v8.6.0]: https://github.com/yajra/laravel-datatables/compare/v8.5.2...v8.6.0
+[v8.5.2]: https://github.com/yajra/laravel-datatables/compare/v8.5.1...v8.5.2
+[v8.5.1]: https://github.com/yajra/laravel-datatables/compare/v8.5.0...v8.5.1
+[v8.5.0]: https://github.com/yajra/laravel-datatables/compare/v8.4.4...v8.5.0
+[v8.4.4]: https://github.com/yajra/laravel-datatables/compare/v8.4.3...v8.4.4
+[v8.4.3]: https://github.com/yajra/laravel-datatables/compare/v8.4.2...v8.4.3
+[v8.4.2]: https://github.com/yajra/laravel-datatables/compare/v8.4.1...v8.4.2
+[v8.4.1]: https://github.com/yajra/laravel-datatables/compare/v8.4.0...v8.4.1
+[v8.4.0]: https://github.com/yajra/laravel-datatables/compare/v8.3.3...v8.4.0
+[v8.3.3]: https://github.com/yajra/laravel-datatables/compare/v8.3.2...v8.3.3
+[v8.3.2]: https://github.com/yajra/laravel-datatables/compare/v8.3.1...v8.3.2
+[v8.3.1]: https://github.com/yajra/laravel-datatables/compare/v8.3.0...v8.3.1
+[v8.3.0]: https://github.com/yajra/laravel-datatables/compare/v8.2.0...v8.3.0
+[v8.2.0]: https://github.com/yajra/laravel-datatables/compare/v8.1.1...v8.2.0
+[v8.1.1]: https://github.com/yajra/laravel-datatables/compare/v8.1.0...v8.1.1
+[v8.1.0]: https://github.com/yajra/laravel-datatables/compare/v8.0.3...v8.1.0
+[v8.0.3]: https://github.com/yajra/laravel-datatables/compare/v8.0.2...v8.0.3
+[v8.0.2]: https://github.com/yajra/laravel-datatables/compare/v8.0.1...v8.0.2
+[v8.0.1]: https://github.com/yajra/laravel-datatables/compare/v8.0.0...v8.0.1
+[v8.0.0]: https://github.com/yajra/laravel-datatables/compare/v7.10.1...v8.0.0
+
+[#1702]: https://github.com/yajra/laravel-datatables/pull/1702
+[#1728]: https://github.com/yajra/laravel-datatables/pull/1728
+[#1724]: https://github.com/yajra/laravel-datatables/pull/1724
+[#1719]: https://github.com/yajra/laravel-datatables/pull/1719
+[#1688]: https://github.com/yajra/laravel-datatables/pull/1688
+[#1658]: https://github.com/yajra/laravel-datatables/pull/1658
+[#1628]: https://github.com/yajra/laravel-datatables/pull/1628
+[#1624]: https://github.com/yajra/laravel-datatables/pull/1624
+[#1609]: https://github.com/yajra/laravel-datatables/pull/1609
+[#1492]: https://github.com/yajra/laravel-datatables/pull/1492
+[#1489]: https://github.com/yajra/laravel-datatables/pull/1489
+[#1487]: https://github.com/yajra/laravel-datatables/pull/1487
+[#1485]: https://github.com/yajra/laravel-datatables/pull/1485
+[#1484]: https://github.com/yajra/laravel-datatables/pull/1484
+[#1483]: https://github.com/yajra/laravel-datatables/pull/1483
+[#1473]: https://github.com/yajra/laravel-datatables/pull/1473
+[#1476]: https://github.com/yajra/laravel-datatables/pull/1476
+[#1478]: https://github.com/yajra/laravel-datatables/pull/1478
+[#1479]: https://github.com/yajra/laravel-datatables/pull/1479
+[#1462]: https://github.com/yajra/laravel-datatables/pull/1462
+[#1468]: https://github.com/yajra/laravel-datatables/pull/1468
+[#1467]: https://github.com/yajra/laravel-datatables/pull/1467
+[#1465]: https://github.com/yajra/laravel-datatables/pull/1465
+[#1461]: https://github.com/yajra/laravel-datatables/pull/1461
+[#1460]: https://github.com/yajra/laravel-datatables/pull/1460
+[#1449]: https://github.com/yajra/laravel-datatables/pull/1449
+[#1438]: https://github.com/yajra/laravel-datatables/pull/1438
+[#1444]: https://github.com/yajra/laravel-datatables/pull/1444
+[#1446]: https://github.com/yajra/laravel-datatables/pull/1446
+[#1445]: https://github.com/yajra/laravel-datatables/pull/1445
+[#1416]: https://github.com/yajra/laravel-datatables/pull/1416
+[#1382]: https://github.com/yajra/laravel-datatables/pull/1382
+[#1368]: https://github.com/yajra/laravel-datatables/pull/1368
+[#1355]: https://github.com/yajra/laravel-datatables/pull/1355
+[#1569]: https://github.com/yajra/laravel-datatables/pull/1569
+[#1554]: https://github.com/yajra/laravel-datatables/pull/1554
+[#1553]: https://github.com/yajra/laravel-datatables/pull/1553
+[#1536]: https://github.com/yajra/laravel-datatables/pull/1536
+[#1532]: https://github.com/yajra/laravel-datatables/pull/1532
+[#1496]: https://github.com/yajra/laravel-datatables/pull/1496
+[#1730]: https://github.com/yajra/laravel-datatables/pull/1730
+[#1737]: https://github.com/yajra/laravel-datatables/pull/1737
+[#1741]: https://github.com/yajra/laravel-datatables/pull/1741
+[#1743]: https://github.com/yajra/laravel-datatables/pull/1743
+[#1758]: https://github.com/yajra/laravel-datatables/pull/1758
+[#1759]: https://github.com/yajra/laravel-datatables/pull/1759
+[#1792]: https://github.com/yajra/laravel-datatables/pull/1792
+[#1830]: https://github.com/yajra/laravel-datatables/pull/1830
+[#1860]: https://github.com/yajra/laravel-datatables/pull/1860
+[#1811]: https://github.com/yajra/laravel-datatables/pull/1811
+[#1882]: https://github.com/yajra/laravel-datatables/pull/1882
+[#1911]: https://github.com/yajra/laravel-datatables/pull/1911
+[#1912]: https://github.com/yajra/laravel-datatables/pull/1912
+[#1852]: https://github.com/yajra/laravel-datatables/pull/1852
+[#1942]: https://github.com/yajra/laravel-datatables/pull/1942
+[#1960]: https://github.com/yajra/laravel-datatables/pull/1960
+[#1988]: https://github.com/yajra/laravel-datatables/pull/1988
+[#2001]: https://github.com/yajra/laravel-datatables/pull/2001
+[#2002]: https://github.com/yajra/laravel-datatables/pull/2002
+[#1813]: https://github.com/yajra/laravel-datatables/pull/1813
+[#2067]: https://github.com/yajra/laravel-datatables/pull/2067
+[#2051]: https://github.com/yajra/laravel-datatables/pull/2051
+[#2072]: https://github.com/yajra/laravel-datatables/pull/2072
+[#2082]: https://github.com/yajra/laravel-datatables/pull/2082
+[#2079]: https://github.com/yajra/laravel-datatables/pull/2079
+[#2083]: https://github.com/yajra/laravel-datatables/pull/2083
+[#2088]: https://github.com/yajra/laravel-datatables/pull/2088
+[#2085]: https://github.com/yajra/laravel-datatables/pull/2085
+[#2102]: https://github.com/yajra/laravel-datatables/pull/2102
+[#2084]: https://github.com/yajra/laravel-datatables/pull/2084
+[#2103]: https://github.com/yajra/laravel-datatables/pull/2103
+[#2163]: https://github.com/yajra/laravel-datatables/pull/2163
+[#2171]: https://github.com/yajra/laravel-datatables/pull/2171
+[#2191]: https://github.com/yajra/laravel-datatables/pull/2191
+[#2199]: https://github.com/yajra/laravel-datatables/pull/2199
+[#2222]: https://github.com/yajra/laravel-datatables/pull/2222
+[#2240]: https://github.com/yajra/laravel-datatables/pull/2240
+[#2263]: https://github.com/yajra/laravel-datatables/pull/2263
+[#2332]: https://github.com/yajra/laravel-datatables/pull/2332
+[#2368]: https://github.com/yajra/laravel-datatables/pull/2368
+[#2399]: https://github.com/yajra/laravel-datatables/pull/2399
+[#2391]: https://github.com/yajra/laravel-datatables/pull/2391
+[#2382]: https://github.com/yajra/laravel-datatables/pull/2382
+
+[#2091]: https://github.com/yajra/laravel-datatables/issues/2091
+[#2058]: https://github.com/yajra/laravel-datatables/issues/2058
+[#1626]: https://github.com/yajra/laravel-datatables/issues/1626
+[#1617]: https://github.com/yajra/laravel-datatables/issues/1617
+[#1294]: https://github.com/yajra/laravel-datatables/issues/1294
+[#1068]: https://github.com/yajra/laravel-datatables/issues/1068
+[#1234]: https://github.com/yajra/laravel-datatables/issues/1234
+[#1353]: https://github.com/yajra/laravel-datatables/issues/1353
+[#1367]: https://github.com/yajra/laravel-datatables/issues/1367
+[#1377]: https://github.com/yajra/laravel-datatables/issues/1377
+[#1515]: https://github.com/yajra/laravel-datatables/issues/1515
+[#1659]: https://github.com/yajra/laravel-datatables/issues/1659
+[#1351]: https://github.com/yajra/laravel-datatables/issues/1351
+[#1600]: https://github.com/yajra/laravel-datatables/issues/1600
+[#1471]: https://github.com/yajra/laravel-datatables/issues/1471
+[#1739]: https://github.com/yajra/laravel-datatables/issues/1739
+[#1516]: https://github.com/yajra/laravel-datatables/issues/1516
+[#1752]: https://github.com/yajra/laravel-datatables/issues/1752
+[#1824]: https://github.com/yajra/laravel-datatables/issues/1824
+[#1805]: https://github.com/yajra/laravel-datatables/issues/1805
+[#1747]: https://github.com/yajra/laravel-datatables/issues/1747
+[#1951]: https://github.com/yajra/laravel-datatables/issues/1951
+[#1983]: https://github.com/yajra/laravel-datatables/issues/1983
+[#2003]: https://github.com/yajra/laravel-datatables/issues/2003
+[#2045]: https://github.com/yajra/laravel-datatables/issues/2045
+[#2054]: https://github.com/yajra/laravel-datatables/issues/2054
+[#2024]: https://github.com/yajra/laravel-datatables/issues/2024
+[#1977]: https://github.com/yajra/laravel-datatables/issues/1977
+[#880]: https://github.com/yajra/laravel-datatables/issues/880
+[#577]: https://github.com/yajra/laravel-datatables/issues/577
+[#522]: https://github.com/yajra/laravel-datatables/issues/522
+[#2161]: https://github.com/yajra/laravel-datatables/issues/2161
+[#2156]: https://github.com/yajra/laravel-datatables/issues/2156
+[#1822]: https://github.com/yajra/laravel-datatables/issues/1822
+[#1738]: https://github.com/yajra/laravel-datatables/issues/1738
+[#2202]: https://github.com/yajra/laravel-datatables/issues/2202
+[#1975]: https://github.com/yajra/laravel-datatables/issues/1975
+[#1747]: https://github.com/yajra/laravel-datatables/issues/1747
+
+[laravel-datatables-fractal]: https://github.com/yajra/laravel-datatables-fractal
+
+[@sskl]: https://github.com/sskl
+[@drbyte]: https://github.com/drbyte
+[@drahosistvan]: https://github.com/drahosistvan
+[@LEI]: https://github.com/LEI
+[@marcoocram]: https://github.com/marcoocram
+[@ElfSundae]: https://github.com/ElfSundae
+[@carusogabriel]: https://github.com/carusogabriel
+[@gabriel-caruso]: https://github.com/gabriel-caruso
+[@pimlie]: https://github.com/pimlie
+[@jiwom]: https://github.com/jiwom
+[@Oussama-Tn]: https://github.com/Oussama-Tn
+[@redelschaap]: https://github.com/redelschaap
+[@nunomaduro]: https://github.com/nunomaduro
+[@asahasrabuddhe]: https://github.com/asahasrabuddhe
+[@fschalkwijk]: https://github.com/fschalkwijk
+[@forgottencreature]: https://github.com/forgottencreature
+[@ptuchik]: https://github.com/ptuchik
+[@zeyad82]: https://github.com/zeyad82
+[@sharifzadesina]: https://github.com/sharifzadesina
+[@ridaamirini]: https://github.com/ridaamirini
+[@Spodnet]: https://github.com/Spodnet
+[@royduin]: https://github.com/royduin
+[@sgotre]: https://github.com/sgotre
+[@lukchojnicki]: https://github.com/lukchojnicki
+[@Morinohtar]: https://github.com/Morinohtar
+[@Arkhas]: https://github.com/Arkhas
+[@apreiml]: https://github.com/apreiml
+[@Stokoe0990]: https://github.com/Stokoe0990
+[@drsdre]: https://github.com/drsdre
+[@selecod]: https://github.com/selecod
+[@lloricode]: https://github.com/lloricode
+[@mtvbrianking]: https://github.com/mtvbrianking
+[@imTigger]: https://github.com/imTigger
+[@barryvdh]: https://github.com/barryvdh
+[@warlof]: https://github.com/warlof
+[@ehsanrasta]: https://github.com/ehsanrasta
+[@mgralikowski]: https://github.com/mgralikowski

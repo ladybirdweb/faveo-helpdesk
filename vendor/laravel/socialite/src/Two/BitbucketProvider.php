@@ -4,6 +4,7 @@ namespace Laravel\Socialite\Two;
 
 use Exception;
 use GuzzleHttp\ClientInterface;
+use Illuminate\Support\Arr;
 
 class BitbucketProvider extends AbstractProvider implements ProviderInterface
 {
@@ -86,9 +87,11 @@ class BitbucketProvider extends AbstractProvider implements ProviderInterface
     protected function mapUserToObject(array $user)
     {
         return (new User)->setRaw($user)->map([
-            'id' => $user['uuid'], 'nickname' => $user['username'],
-            'name' => array_get($user, 'display_name'), 'email' => array_get($user, 'email'),
-            'avatar' => array_get($user, 'links.avatar.href'),
+            'id' => $user['uuid'],
+            'nickname' => $user['username'],
+            'name' => Arr::get($user, 'display_name'),
+            'email' => Arr::get($user, 'email'),
+            'avatar' => Arr::get($user, 'links.avatar.href'),
         ]);
     }
 

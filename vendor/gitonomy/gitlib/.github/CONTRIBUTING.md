@@ -27,5 +27,6 @@ Then run [PHPUnit](https://phpunit.de/):
 $ vendor/bin/phpunit
 ```
 
+* A script `test-git-version.sh` is available in repository to test gitlib against many git versions.
 * The tests will be automatically run by [Travis CI](https://travis-ci.org/) against pull requests.
 * We also have [StyleCI](https://styleci.io/) setup to automatically fix any code style issues.

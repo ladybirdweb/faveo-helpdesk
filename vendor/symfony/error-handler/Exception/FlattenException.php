@@ -196,7 +196,7 @@ class FlattenException extends LegacyFlattenException
     public function setMessage($message): self
     {
         if (false !== strpos($message, "class@anonymous\0")) {
-            $message = preg_replace_callback('/class@anonymous\x00.*?\.php(?:0x?|:)[0-9a-fA-F]++/', function ($m) {
+            $message = preg_replace_callback('/class@anonymous\x00.*?\.php(?:0x?|:[0-9]++\$)[0-9a-fA-F]++/', function ($m) {
                 return class_exists($m[0], false) ? get_parent_class($m[0]).'@anonymous' : $m[0];
             }, $message);
         }
@@ -206,7 +206,10 @@ class FlattenException extends LegacyFlattenException
         return $this;
     }
 
-    public function getCode(): int
+    /**
+     * @return int|string int most of the time (might be a string with PDOException)
+     */
+    public function getCode()
     {
         return $this->code;
     }

@@ -9,13 +9,14 @@ active
 @stop
 
 <?php
-$inputs     = \Input::get('show');
+$old = false;
+$inputs     = \Request::get('show');
 $activepage = $inputs[0];
-if (\Input::has('assigned'))
+if (\Request::has('assigned'))
 {
-    $activepage = \Input::get('assigned')[0];
-} elseif (\Input::has('last-response-by')){
-    $activepage = \Input::get('last-response-by')[0];
+    $activepage = \Request::get('assigned')[0];
+} elseif (\Request::has('last-response-by')){
+    $activepage = \Request::get('last-response-by')[0];
 }
 ?>
 
@@ -117,12 +118,12 @@ if (\Input::has('assigned'))
             @else
             {{Lang::get('lang.inbox')}}
             @endif 
-            @if(count(Input::all()) > 2 && $activepage != '0')
+            @if(count(Request::all()) > 2 && $activepage != '0')
             / {{Lang::get('lang.filtered-results')}}
             @else()
-            @if(count(Input::get('departments')) == 1 && Input::get('departments')[0] != 'All')
+            @if(count(Request::get('departments')) == 1 && Request::get('departments')[0] != 'All')
             / {{Lang::get('lang.filtered-results')}}
-            @elseif (count(Input::get('departments')) > 1)
+            @elseif (count(Request::get('departments')) > 1)
             / {{Lang::get('lang.filtered-results')}}
             @endif
             @endif
@@ -160,7 +161,7 @@ if (\Input::has('assigned'))
         <!-- Check all button -->
 
         <button type="button" class="btn btn-sm btn-default text-green" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets"><i class="fa fa-code-fork"> </i> {!! Lang::get('lang.merge') !!}</button>
-            <?php $inputs   = Input::all(); ?>
+            <?php $inputs   = Request::all(); ?>
         <div class="btn-group">
 <?php $statuses = Finder::getCustomedStatus(); ?>
             <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="d1"><i class="fa fa-exchange" style="color:teal;" id="hidespin"> </i><i class="fa fa-spinner fa-spin" style="color:teal; display:none;" id="spin"></i>
@@ -182,7 +183,17 @@ if (\Input::has('assigned'))
         <div class="mailbox-messages" id="refresh">
             <!--datatable-->
             {!! Form::open(['id'=>'modalpopup', 'route'=>'select_all','method'=>'post']) !!}
-            {!!$table->render('vendor.Chumper.template')!!}
+             <table id="chumper" class="table table-bordered dataTable no-footer">
+                <thead>
+                    <tr>
+                        <td><a class="checkbox-toggle"><i class="fa fa-square-o fa-2x"></i></a></td>
+                        <td>{!! Lang::get('lang.subject') !!}</td>
+                        <td>{!! Lang::get('lang.ticket_id') !!}</td>
+                        <td>{!! Lang::get('lang.from') !!}</td>
+                        <td>{!! Lang::get('lang.assigned_to') !!}</td>
+                        <td>{!! Lang::get('lang.last_activity') !!}</td>
+                    </tr>
+            </table>
             {!! Form::close() !!} 
 
             <!-- /.datatable -->
@@ -193,8 +204,7 @@ if (\Input::has('assigned'))
 
 <!-- Modal -->   
 @include('themes.default1.agent.helpdesk.ticket.more.tickets-model')
-
-{!! $table->script('vendor.Chumper.tickets-javascript') !!}
+@include('vendor.yajra.tickets-javascript')
 @include('themes.default1.agent.helpdesk.ticket.more.tickets-options-script')
 <script>
     $(document).ready(function () { /// Wait till page is loaded

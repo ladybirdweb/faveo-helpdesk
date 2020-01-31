@@ -2,8 +2,8 @@
 
 namespace Laravel\Socialite\Two;
 
-use Illuminate\Support\Arr;
 use GuzzleHttp\ClientInterface;
+use Illuminate\Support\Arr;
 
 class FacebookProvider extends AbstractProvider implements ProviderInterface
 {
@@ -19,7 +19,7 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
      *
      * @var string
      */
-    protected $version = 'v3.0';
+    protected $version = 'v3.3';
 
     /**
      * The user fields being requested.
@@ -76,8 +76,6 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
             $postKey => $this->getTokenFields($code),
         ]);
 
-        $data = [];
-
         $data = json_decode($response->getBody(), true);
 
         return Arr::add($data, 'expires_in', Arr::pull($data, 'expires'));
@@ -113,10 +111,13 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
         $avatarUrl = $this->graphUrl.'/'.$this->version.'/'.$user['id'].'/picture';
 
         return (new User)->setRaw($user)->map([
-            'id' => $user['id'], 'nickname' => null, 'name' => isset($user['name']) ? $user['name'] : null,
-            'email' => isset($user['email']) ? $user['email'] : null, 'avatar' => $avatarUrl.'?type=normal',
+            'id' => $user['id'],
+            'nickname' => null,
+            'name' => $user['name'] ?? null,
+            'email' => $user['email'] ?? null,
+            'avatar' => $avatarUrl.'?type=normal',
             'avatar_original' => $avatarUrl.'?width=1920',
-            'profileUrl' => isset($user['link']) ? $user['link'] : null,
+            'profileUrl' => $user['link'] ?? null,
         ]);
     }
 
@@ -171,6 +172,19 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
     public function reRequest()
     {
         $this->reRequest = true;
+
+        return $this;
+    }
+
+    /**
+     * Specify which graph version should be used.
+     *
+     * @param  string  $version
+     * @return $this
+     */
+    public function usingGraphVersion(string $version)
+    {
+        $this->version = $version;
 
         return $this;
     }
