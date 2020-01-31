@@ -440,6 +440,7 @@ return array(
     'PHPUnit\\Util\\TestDox\\XmlResultPrinter' => $vendorDir . '/phpunit/phpunit/src/Util/TestDox/XmlResultPrinter.php',
     'PHPUnit\\Util\\TextTestListRenderer' => $vendorDir . '/phpunit/phpunit/src/Util/TextTestListRenderer.php',
     'PHPUnit\\Util\\Type' => $vendorDir . '/phpunit/phpunit/src/Util/Type.php',
+    'PHPUnit\\Util\\VersionComparisonOperator' => $vendorDir . '/phpunit/phpunit/src/Util/VersionComparisonOperator.php',
     'PHPUnit\\Util\\XdebugFilterScriptGenerator' => $vendorDir . '/phpunit/phpunit/src/Util/XdebugFilterScriptGenerator.php',
     'PHPUnit\\Util\\Xml' => $vendorDir . '/phpunit/phpunit/src/Util/Xml.php',
     'PHPUnit\\Util\\XmlTestListRenderer' => $vendorDir . '/phpunit/phpunit/src/Util/XmlTestListRenderer.php',

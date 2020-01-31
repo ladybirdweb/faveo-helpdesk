@@ -89,8 +89,8 @@ class RouteServiceProvider extends ServiceProvider
             'middleware' => ['web', 'installer'],
             'namespace'  => $this->namespace,
         ], function ($router) {
-                    require base_path('routes/installer.php');
-                });
+            require base_path('routes/installer.php');
+        });
     }
 
     /**
@@ -107,7 +107,7 @@ class RouteServiceProvider extends ServiceProvider
             'namespace'  => $this->namespace,
             'prefix'     => 'app/update',
         ], function ($router) {
-                    require base_path('routes/update.php');
-                });
+            require base_path('routes/update.php');
+        });
     }
 }

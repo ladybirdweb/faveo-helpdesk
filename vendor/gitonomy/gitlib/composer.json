@@ -20,7 +20,6 @@
             "email": "alexandre.salome@gmail.com"
         }
     ],
-    "homepage": "http://gitonomy.com",
     "autoload": {
         "psr-4": {
             "Gitonomy\\Git\\": "src/Gitonomy/Git/"
@@ -33,6 +32,8 @@
     },
     "require": {
         "php": "^5.6 || ^7.0",
+        "ext-pcre": "*",
+        "symfony/polyfill-mbstring": "^1.7",
         "symfony/process": "^3.4|^4.0|^5.0"
     },
     "require-dev": {
@@ -40,6 +41,7 @@
         "psr/log": "^1.0"
     },
     "suggest": {
+        "ext-fileinfo": "Required to determine the mimetype of a blob",
         "psr/log": "Required to use loggers for reporting of execution"
     },
     "extra": {

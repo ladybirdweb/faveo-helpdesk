@@ -79,7 +79,7 @@ class Logger extends AbstractLogger
         }
 
         $formatter = $this->formatter;
-        fwrite($this->handle, $formatter($level, $message, $context));
+        @fwrite($this->handle, $formatter($level, $message, $context));
     }
 
     private function format(string $level, string $message, array $context): string
@@ -101,6 +101,6 @@ class Logger extends AbstractLogger
             $message = strtr($message, $replacements);
         }
 
-        return sprintf('%s [%s] %s', date(\DateTime::RFC3339), $level, $message).\PHP_EOL;
+        return sprintf('%s [%s] %s', date(\DateTime::RFC3339), $level, $message).PHP_EOL;
     }
 }

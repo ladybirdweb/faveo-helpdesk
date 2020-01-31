@@ -2,14 +2,14 @@
 
 namespace Illuminate\Database\Schema\Grammars;
 
-use RuntimeException;
-use Doctrine\DBAL\Types\Type;
-use Illuminate\Support\Fluent;
-use Doctrine\DBAL\Schema\Table;
-use Illuminate\Database\Connection;
-use Doctrine\DBAL\Schema\Comparator;
-use Illuminate\Database\Schema\Blueprint;
 use Doctrine\DBAL\Schema\AbstractSchemaManager as SchemaManager;
+use Doctrine\DBAL\Schema\Comparator;
+use Doctrine\DBAL\Schema\Table;
+use Doctrine\DBAL\Types\Type;
+use Illuminate\Database\Connection;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Fluent;
+use RuntimeException;
 
 class ChangeColumn
 {
@@ -19,7 +19,7 @@ class ChangeColumn
      * @param  \Illuminate\Database\Schema\Grammars\Grammar  $grammar
      * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
      * @param  \Illuminate\Support\Fluent  $command
-     * @param  \Illuminate\Database\Connection $connection
+     * @param  \Illuminate\Database\Connection  $connection
      * @return array
      *
      * @throws \RuntimeException
@@ -121,9 +121,10 @@ class ChangeColumn
             $options['length'] = static::calculateDoctrineTextLength($fluent['type']);
         }
 
-        if (in_array($fluent['type'], ['json', 'binary'])) {
+        if (static::doesntNeedCharacterOptions($fluent['type'])) {
             $options['customSchemaOptions'] = [
                 'collation' => '',
+                'charset' => '',
             ];
         }
 
@@ -175,6 +176,31 @@ class ChangeColumn
             default:
                 return 255 + 1;
         }
+    }
+
+    /**
+     * Determine if the given type does not need character / collation options.
+     *
+     * @param  string  $type
+     * @return bool
+     */
+    protected static function doesntNeedCharacterOptions($type)
+    {
+        return in_array($type, [
+            'bigInteger',
+            'binary',
+            'boolean',
+            'date',
+            'decimal',
+            'double',
+            'float',
+            'integer',
+            'json',
+            'mediumInteger',
+            'smallInteger',
+            'time',
+            'tinyInteger',
+        ]);
     }
 
     /**

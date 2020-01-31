@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 abstract class AbstractTest extends TestCase
 {
-    const REPOSITORY_URL = 'http://github.com/gitonomy/foobar.git';
+    const REPOSITORY_URL = 'https://github.com/gitonomy/foobar.git';
 
     const LONGFILE_COMMIT = '4f17752acc9b7c54ba679291bf24cb7d354f0f4f';
     const BEFORE_LONGFILE_COMMIT = 'e0ec50e2af75fa35485513f60b2e658e245227e9';

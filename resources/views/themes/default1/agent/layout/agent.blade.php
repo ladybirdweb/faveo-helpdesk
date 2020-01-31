@@ -396,7 +396,9 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                 </div>
                 <section class="content-header">
                     @yield('PageHeader')
-                    {!! Breadcrumbs::renderIfExists() !!}
+                    @if(Breadcrumbs::exists())
+                    {!! Breadcrumbs::render() !!}
+                    @endif
                 </section>
                 <!-- Main content -->
                 <section class="content">

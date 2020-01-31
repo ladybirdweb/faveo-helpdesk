@@ -644,6 +644,27 @@ XML;
         $this->assertFileIsReadable(__DIR__ . \DIRECTORY_SEPARATOR . 'NotExisting');
     }
 
+    public function testAssertFileIsNotReadable(): void
+    {
+        $tempFile = \tempnam(
+            \sys_get_temp_dir(),
+            'unreadable'
+        );
+
+        \chmod($tempFile, \octdec('0'));
+
+        $this->assertFileNotIsReadable($tempFile);
+
+        \chmod($tempFile, \octdec('755'));
+
+        try {
+            $this->assertFileNotIsReadable($tempFile);
+        } catch (AssertionFailedError $e) {
+        }
+
+        \unlink($tempFile);
+    }
+
     public function testAssertFileIsWritable(): void
     {
         $this->assertFileIsWritable(__FILE__);
@@ -1370,6 +1391,21 @@ XML;
         );
     }
 
+    public function testAssertStringEqualsFileIgnoringCase(): void
+    {
+        $this->assertStringEqualsFileIgnoringCase(
+            TEST_FILES_PATH . 'foo.xml',
+            \file_get_contents(TEST_FILES_PATH . 'fooUppercase.xml')
+        );
+
+        $this->expectException(AssertionFailedError::class);
+
+        $this->assertStringEqualsFileIgnoringCase(
+            TEST_FILES_PATH . 'foo.xml',
+            \file_get_contents(TEST_FILES_PATH . 'bar.xml')
+        );
+    }
+
     public function testAssertStringNotEqualsFile(): void
     {
         $this->assertStringNotEqualsFile(
@@ -1382,6 +1418,51 @@ XML;
         $this->assertStringNotEqualsFile(
             TEST_FILES_PATH . 'foo.xml',
             \file_get_contents(TEST_FILES_PATH . 'foo.xml')
+        );
+    }
+
+    public function testAssertStringNotEqualsFileIgnoringCase(): void
+    {
+        $this->assertStringNotEqualsFileIgnoringCase(
+            TEST_FILES_PATH . 'foo.xml',
+            \file_get_contents(TEST_FILES_PATH . 'bar.xml')
+        );
+
+        $this->expectException(AssertionFailedError::class);
+
+        $this->assertStringNotEqualsFileIgnoringCase(
+            TEST_FILES_PATH . 'foo.xml',
+            \file_get_contents(TEST_FILES_PATH . 'fooUppercase.xml')
+        );
+    }
+
+    public function testAssertFileEqualsIgnoringCase(): void
+    {
+        $this->assertFileEqualsIgnoringCase(
+            TEST_FILES_PATH . 'foo.xml',
+            TEST_FILES_PATH . 'fooUppercase.xml'
+        );
+
+        $this->expectException(AssertionFailedError::class);
+
+        $this->assertFileEqualsIgnoringCase(
+            TEST_FILES_PATH . 'foo.xml',
+            TEST_FILES_PATH . 'bar.xml'
+        );
+    }
+
+    public function testAssertFileNotEqualsIgnoringCase(): void
+    {
+        $this->assertFileNotEqualsIgnoringCase(
+            TEST_FILES_PATH . 'foo.xml',
+            TEST_FILES_PATH . 'bar.xml'
+        );
+
+        $this->expectException(AssertionFailedError::class);
+
+        $this->assertFileNotEqualsIgnoringCase(
+            TEST_FILES_PATH . 'foo.xml',
+            TEST_FILES_PATH . 'fooUppercase.xml'
         );
     }
 

@@ -2,10 +2,10 @@
 
 namespace Laravel\Dusk\Concerns;
 
+use Facebook\WebDriver\Exception\NoSuchElementException;
+use Facebook\WebDriver\Remote\RemoteWebElement;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Assert as PHPUnit;
-use Facebook\WebDriver\Remote\RemoteWebElement;
-use Facebook\WebDriver\Exception\NoSuchElementException;
 
 trait MakesAssertions
 {
@@ -39,233 +39,6 @@ trait MakesAssertions
         );
 
         return $this;
-    }
-
-    /**
-     * Assert that the current URL matches the given URL.
-     *
-     * @param  string  $url
-     * @return $this
-     */
-    public function assertUrlIs($url)
-    {
-        $pattern = str_replace('\*', '.*', preg_quote($url, '/'));
-
-        $segments = parse_url($this->driver->getCurrentURL());
-
-        $currentUrl = sprintf(
-            '%s://%s%s%s',
-            $segments['scheme'],
-            $segments['host'],
-            array_get($segments, 'port', '') ? ':'.$segments['port'] : '',
-            array_get($segments, 'path', '')
-        );
-
-        PHPUnit::assertRegExp(
-            '/^'.$pattern.'$/u', $currentUrl,
-            "Actual URL [{$this->driver->getCurrentURL()}] does not equal expected URL [{$url}]."
-        );
-
-        return $this;
-    }
-
-    /**
-     * Assert that the current URL path matches the given pattern.
-     *
-     * @param  string  $path
-     * @return $this
-     */
-    public function assertPathIs($path)
-    {
-        $pattern = preg_quote($path, '/');
-
-        $pattern = str_replace('\*', '.*', $pattern);
-
-        $actualPath = parse_url($this->driver->getCurrentURL())['path'];
-
-        PHPUnit::assertRegExp(
-            '/^'.$pattern.'$/u', $actualPath,
-            "Actual path [{$actualPath}] does not equal expected path [{$path}]."
-        );
-
-        return $this;
-    }
-
-    /**
-     * Assert that the current URL path begins with given path.
-     *
-     * @param  string  $path
-     * @return $this
-     */
-    public function assertPathBeginsWith($path)
-    {
-        $actualPath = parse_url($this->driver->getCurrentURL())['path'];
-
-        PHPUnit::assertStringStartsWith(
-            $path, $actualPath,
-            "Actual path [{$actualPath}] does not begin with expected path [{$path}]."
-        );
-
-        return $this;
-    }
-
-    /**
-     * Assert that the current URL path does not match the given path.
-     *
-     * @param  string  $path
-     * @return $this
-     */
-    public function assertPathIsNot($path)
-    {
-        $actualPath = parse_url($this->driver->getCurrentURL())['path'];
-
-        PHPUnit::assertNotEquals(
-            $path, $actualPath,
-            "Path [{$path}] should not equal the actual value."
-        );
-
-        return $this;
-    }
-
-    /**
-     * Assert that the current URL fragment matches the given pattern.
-     *
-     * @param  string  $fragment
-     * @return $this
-     */
-    public function assertFragmentIs($fragment)
-    {
-        $pattern = preg_quote($fragment, '/');
-
-        $actualFragment = (string) parse_url($this->driver->executeScript('return window.location.href;'), PHP_URL_FRAGMENT);
-
-        PHPUnit::assertRegExp(
-            '/^'.str_replace('\*', '.*', $pattern).'$/u', $actualFragment,
-            "Actual fragment [{$actualFragment}] does not equal expected fragment [{$fragment}]."
-        );
-
-        return $this;
-    }
-
-    /**
-     * Assert that the current URL fragment begins with given fragment.
-     *
-     * @param  string  $fragment
-     * @return $this
-     */
-    public function assertFragmentBeginsWith($fragment)
-    {
-        $actualFragment = (string) parse_url($this->driver->executeScript('return window.location.href;'), PHP_URL_FRAGMENT);
-
-        PHPUnit::assertStringStartsWith(
-            $fragment, $actualFragment,
-            "Actual fragment [$actualFragment] does not begin with expected fragment [$fragment]."
-        );
-
-        return $this;
-    }
-
-    /**
-     * Assert that the current URL fragment does not match the given fragment.
-     *
-     * @param  string  $fragment
-     * @return $this
-     */
-    public function assertFragmentIsNot($fragment)
-    {
-        $actualFragment = (string) parse_url($this->driver->executeScript('return window.location.href;'), PHP_URL_FRAGMENT);
-
-        PHPUnit::assertNotEquals(
-            $fragment, $actualFragment,
-            "Fragment [{$fragment}] should not equal the actual value."
-        );
-
-        return $this;
-    }
-
-    /**
-     * Assert that the current URL path matches the given route.
-     *
-     * @param  string  $route
-     * @param  array  $parameters
-     * @return $this
-     */
-    public function assertRouteIs($route, $parameters = [])
-    {
-        return $this->assertPathIs(route($route, $parameters, false));
-    }
-
-    /**
-     * Assert that a query string parameter is present and has a given value.
-     *
-     * @param  string  $name
-     * @param  string  $value
-     * @return $this
-     */
-    public function assertQueryStringHas($name, $value = null)
-    {
-        $output = $this->assertHasQueryStringParameter($name);
-
-        if (is_null($value)) {
-            return $this;
-        }
-
-        PHPUnit::assertEquals(
-            $value, $output[$name],
-            "Query string parameter [{$name}] had value [{$output[$name]}], but expected [{$value}]."
-        );
-
-        return $this;
-    }
-
-    /**
-     * Assert that the given query string parameter is missing.
-     *
-     * @param  string  $name
-     * @return $this
-     */
-    public function assertQueryStringMissing($name)
-    {
-        $parsedUrl = parse_url($this->driver->getCurrentURL());
-
-        if (! array_key_exists('query', $parsedUrl)) {
-            PHPUnit::assertTrue(true);
-            return $this;
-        }
-
-        parse_str($parsedUrl['query'], $output);
-
-        PHPUnit::assertArrayNotHasKey(
-            $name, $output,
-            "Found unexpected query string parameter [{$name}] in [".$this->driver->getCurrentURL()."]."
-        );
-
-        return $this;
-    }
-
-    /**
-     * Assert that the given query string parameter is present.
-     *
-     * @param  string  $name
-     * @return array
-     */
-    protected function assertHasQueryStringParameter($name)
-    {
-        $parsedUrl = parse_url($this->driver->getCurrentURL());
-
-        PHPUnit::assertArrayHasKey(
-            'query', $parsedUrl,
-            "Did not see expected query string in [".$this->driver->getCurrentURL()."]."
-        );
-
-        parse_str($parsedUrl['query'], $output);
-
-        PHPUnit::assertArrayHasKey(
-            $name, $output,
-            "Did not see expected query string parameter [{$name}] in [".$this->driver->getCurrentURL()."]."
-        );
-
-        return $output;
     }
 
     /**
@@ -432,8 +205,8 @@ trait MakesAssertions
      */
     public function assertSourceHas($code)
     {
-        PHPUnit::assertContains(
-            $code, $this->driver->getPageSource(),
+        PHPUnit::assertTrue(
+            Str::contains($this->driver->getPageSource(), $code),
             "Did not find expected source code [{$code}]"
         );
 
@@ -448,8 +221,8 @@ trait MakesAssertions
      */
     public function assertSourceMissing($code)
     {
-        PHPUnit::assertNotContains(
-            $code, $this->driver->getPageSource(),
+        PHPUnit::assertFalse(
+            Str::contains($this->driver->getPageSource(), $code),
             "Found unexpected source code [{$code}]"
         );
 
@@ -682,8 +455,8 @@ JS;
     /**
      * Assert that the given array of values are available to be selected.
      *
-     * @param string  $field
-     * @param array  $values
+     * @param  string  $field
+     * @param  array  $values
      * @return $this
      */
     public function assertSelectHasOptions($field, array $values)
@@ -696,7 +469,7 @@ JS;
 
         PHPUnit::assertCount(
             count($values), $options,
-            "Expected options [".implode(',', $values)."] for selection field [{$field}] to be available."
+            'Expected options ['.implode(',', $values)."] for selection field [{$field}] to be available."
         );
 
         return $this;
@@ -705,15 +478,15 @@ JS;
     /**
      * Assert that the given array of values are not available to be selected.
      *
-     * @param string  $field
-     * @param array  $values
+     * @param  string  $field
+     * @param  array  $values
      * @return $this
      */
     public function assertSelectMissingOptions($field, array $values)
     {
         PHPUnit::assertCount(
             0, $this->resolver->resolveSelectOptions($field, $values),
-            "Unexpected options [".implode(',', $values)."] for selection field [{$field}]."
+            'Unexpected options ['.implode(',', $values)."] for selection field [{$field}]."
         );
 
         return $this;
@@ -722,8 +495,8 @@ JS;
     /**
      * Assert that the given value is available to be selected on the given field.
      *
-     * @param string  $field
-     * @param string  $value
+     * @param  string  $field
+     * @param  string  $value
      * @return $this
      */
     public function assertSelectHasOption($field, $value)
@@ -734,8 +507,8 @@ JS;
     /**
      * Assert that the given value is not available to be selected on the given field.
      *
-     * @param string  $field
-     * @param string  $value
+     * @param  string  $field
+     * @param  string  $value
      * @return $this
      */
     public function assertSelectMissingOption($field, $value)
@@ -752,9 +525,11 @@ JS;
      */
     public function selected($field, $value)
     {
-        $element = $this->resolver->resolveForSelection($field);
+        $options = $this->resolver->resolveSelectOptions($field, (array) $value);
 
-        return (string) $element->getAttribute('value') === (string) $value;
+        return collect($options)->contains(function (RemoteWebElement $option) {
+            return $option->isSelected();
+        });
     }
 
     /**
@@ -771,6 +546,59 @@ JS;
         PHPUnit::assertEquals($value, $actual);
 
         return $this;
+    }
+
+    /**
+     * Assert that the element at the given selector has the given attribute value.
+     *
+     * @param  string  $selector
+     * @param  string  $attribute
+     * @param  string  $value
+     * @return $this
+     */
+    public function assertAttribute($selector, $attribute, $value)
+    {
+        $fullSelector = $this->resolver->format($selector);
+
+        $actual = $this->resolver->findOrFail($selector)->getAttribute($attribute);
+
+        PHPUnit::assertNotNull(
+            $actual,
+            "Did not see expected attribute [{$attribute}] within element [{$fullSelector}]."
+        );
+
+        PHPUnit::assertEquals(
+            $value, $actual,
+            "Expected '$attribute' attribute [{$value}] does not equal actual value [$actual]."
+        );
+
+        return $this;
+    }
+
+    /**
+     * Assert that the element at the given selector has the given data attribute value.
+     *
+     * @param  string  $selector
+     * @param  string  $attribute
+     * @param  string  $value
+     * @return $this
+     */
+    public function assertDataAttribute($selector, $attribute, $value)
+    {
+        return $this->assertAttribute($selector, 'data-'.$attribute, $value);
+    }
+
+    /**
+     * Assert that the element at the given selector has the given aria attribute value.
+     *
+     * @param  string  $selector
+     * @param  string  $attribute
+     * @param  string  $value
+     * @return $this
+     */
+    public function assertAriaAttribute($selector, $attribute, $value)
+    {
+        return $this->assertAttribute($selector, 'aria-'.$attribute, $value);
     }
 
     /**
@@ -854,7 +682,8 @@ JS;
      * @param  string  $field
      * @return $this
      */
-    public function assertEnabled($field) {
+    public function assertEnabled($field)
+    {
         $element = $this->resolver->resolveForField($field);
 
         PHPUnit::assertTrue(
@@ -871,7 +700,8 @@ JS;
      * @param  string  $field
      * @return $this
      */
-    public function assertDisabled($field) {
+    public function assertDisabled($field)
+    {
         $element = $this->resolver->resolveForField($field);
 
         PHPUnit::assertFalse(
@@ -883,12 +713,49 @@ JS;
     }
 
     /**
+     * Assert that the given button is enabled.
+     *
+     * @param  string  $button
+     * @return $this
+     */
+    public function assertButtonEnabled($button)
+    {
+        $element = $this->resolver->resolveForButtonPress($button);
+
+        PHPUnit::assertTrue(
+            $element->isEnabled(),
+            "Expected button [{$button}] to be enabled, but it wasn't."
+        );
+
+        return $this;
+    }
+
+    /**
+     * Assert that the given button is disabled.
+     *
+     * @param  string  $button
+     * @return $this
+     */
+    public function assertButtonDisabled($button)
+    {
+        $element = $this->resolver->resolveForButtonPress($button);
+
+        PHPUnit::assertFalse(
+            $element->isEnabled(),
+            "Expected button [{$button}] to be disabled, but it wasn't."
+        );
+
+        return $this;
+    }
+
+    /**
      * Assert that the given field is focused.
      *
      * @param  string  $field
      * @return $this
      */
-    public function assertFocused($field) {
+    public function assertFocused($field)
+    {
         $element = $this->resolver->resolveForField($field);
 
         PHPUnit::assertTrue(
@@ -905,7 +772,8 @@ JS;
      * @param  string  $field
      * @return $this
      */
-    public function assertNotFocused($field) {
+    public function assertNotFocused($field)
+    {
         $element = $this->resolver->resolveForField($field);
 
         PHPUnit::assertFalse(
@@ -958,7 +826,10 @@ JS;
      */
     public function assertVueContains($key, $value, $componentSelector = null)
     {
-        PHPUnit::assertContains($value, $this->vueAttribute($componentSelector, $key));
+        $attribute = $this->vueAttribute($componentSelector, $key);
+
+        PHPUnit::assertIsArray($attribute, "The attribute for key [$key] is not an array.");
+        PHPUnit::assertContains($value, $attribute);
 
         return $this;
     }
@@ -974,7 +845,10 @@ JS;
      */
     public function assertVueDoesNotContain($key, $value, $componentSelector = null)
     {
-        PHPUnit::assertNotContains($value, $this->vueAttribute($componentSelector, $key));
+        $attribute = $this->vueAttribute($componentSelector, $key);
+
+        PHPUnit::assertIsArray($attribute, "The attribute for key [$key] is not an array.");
+        PHPUnit::assertNotContains($value, $attribute);
 
         return $this;
     }
@@ -991,7 +865,7 @@ JS;
         $fullSelector = $this->resolver->format($componentSelector);
 
         return $this->driver->executeScript(
-            "return document.querySelector('" . $fullSelector . "').__vue__." . $key
+            "return document.querySelector('".$fullSelector."').__vue__.".$key
         );
     }
 }

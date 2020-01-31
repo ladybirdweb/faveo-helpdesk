@@ -11,12 +11,12 @@
     ],
     "require": {
         "php": ">=7.0",
-        "maximebf/debugbar": "~1.15.0",
-        "illuminate/routing": "^5.5|^6",
-        "illuminate/session": "^5.5|^6",
-        "illuminate/support": "^5.5|^6",
-        "symfony/debug": "^3|^4",
-        "symfony/finder": "^3|^4"
+        "maximebf/debugbar": "^1.15.1",
+        "illuminate/routing": "^5.5|^6|^7",
+        "illuminate/session": "^5.5|^6|^7",
+        "illuminate/support": "^5.5|^6|^7",
+        "symfony/debug": "^3|^4|^5",
+        "symfony/finder": "^3|^4|^5"
     },
     "autoload": {
         "psr-4": {
