@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,7 +9,13 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
-class IsJsonTest extends ConstraintTestCase
+use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\TestFailure;
+
+/**
+ * @small
+ */
+final class IsJsonTest extends ConstraintTestCase
 {
     public static function evaluateDataprovider(): array
     {
@@ -20,6 +26,7 @@ class IsJsonTest extends ConstraintTestCase
     }
 
     /**
+     * @testdox Evaluate $_dataName
      * @dataProvider evaluateDataprovider
      *
      * @throws \PHPUnit\Framework\ExpectationFailedException
@@ -30,5 +37,30 @@ class IsJsonTest extends ConstraintTestCase
         $constraint = new IsJson;
 
         $this->assertEquals($expected, $constraint->evaluate($jsonOther, '', true));
+    }
+
+    public function testIsJsonCanBeExportedAsString(): void
+    {
+        $isJson = new IsJson;
+
+        $this->assertSame('is valid JSON', $isJson->toString());
+    }
+
+    public function testIsJsonCanBeEmptyString(): void
+    {
+        $isJson = new IsJson;
+
+        try {
+            $isJson->evaluate('');
+        } catch (ExpectationFailedException $e) {
+            $this->assertEquals(
+                <<<EOF
+Failed asserting that an empty string is valid JSON.
+
+EOF
+                ,
+                TestFailure::exceptionToString($e)
+            );
+        }
     }
 }

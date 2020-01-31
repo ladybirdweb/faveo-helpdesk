@@ -189,7 +189,7 @@ class="active"
             </div>
             <div class="row">
             {{-- Event fire --}}
-            <?php Event::fire(new App\Events\ClientTicketForm()); ?>
+            <?php Event::dispatch(new App\Events\ClientTicketForm()); ?>
             </div>
         </div>
     </div>

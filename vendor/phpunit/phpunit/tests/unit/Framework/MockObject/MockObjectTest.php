@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -12,7 +12,10 @@ use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class MockObjectTest extends TestCase
+/**
+ * @small
+ */
+final class MockObjectTest extends TestCase
 {
     public function testMockedMethodIsNeverCalled(): void
     {
@@ -464,6 +467,9 @@ class MockObjectTest extends TestCase
         $this->assertNotEquals(\get_class($mock1), \get_class($mock2));
     }
 
+    /**
+     * @testdox getMock() for abstract class
+     */
     public function testGetMockForAbstractClass(): void
     {
         $mock = $this->getMockBuilder(AbstractMockTestClass::class)
@@ -474,6 +480,7 @@ class MockObjectTest extends TestCase
     }
 
     /**
+     * @testdox getMock() for Traversable $_dataName
      * @dataProvider traversableProvider
      */
     public function testGetMockForTraversable($type): void
@@ -484,15 +491,9 @@ class MockObjectTest extends TestCase
         $this->assertInstanceOf(Traversable::class, $mock);
     }
 
-    public function testMultipleInterfacesCanBeMockedInSingleObject(): void
-    {
-        $mock = $this->getMockBuilder([AnInterface::class, AnotherInterface::class])
-                     ->getMock();
-
-        $this->assertInstanceOf(AnInterface::class, $mock);
-        $this->assertInstanceOf(AnotherInterface::class, $mock);
-    }
-
+    /**
+     * @testdox getMockForTrait()
+     */
     public function testGetMockForTrait(): void
     {
         $mock = $this->getMockForTrait(AbstractTrait::class);
@@ -660,7 +661,7 @@ class MockObjectTest extends TestCase
             $this->fail('Expected exception');
         } catch (ExpectationFailedException $e) {
             $this->assertSame(
-                "Expectation failed for method name is equal to 'right' when invoked 1 time(s).\n" .
+                "Expectation failed for method name is \"right\" when invoked 1 time(s).\n" .
                 'Method was expected to be called 1 times, actually called 0 times.' . "\n",
                 $e->getMessage()
             );
@@ -685,7 +686,7 @@ class MockObjectTest extends TestCase
             $this->fail('Expected exception');
         } catch (ExpectationFailedException $e) {
             $this->assertSame(
-                "Expectation failed for method name is equal to 'right' when invoked 1 time(s).\n" .
+                "Expectation failed for method name is \"right\" when invoked 1 time(s).\n" .
                 'Method was expected to be called 1 times, actually called 0 times.' . "\n",
                 $e->getMessage()
             );
@@ -708,7 +709,7 @@ class MockObjectTest extends TestCase
             $mock->right(['second']);
         } catch (ExpectationFailedException $e) {
             $this->assertSame(
-                "Expectation failed for method name is equal to 'right' when invoked 1 time(s)\n" .
+                "Expectation failed for method name is \"right\" when invoked 1 time(s)\n" .
                 'Parameter 0 for invocation SomeClass::right(Array (...)) does not match expected value.' . "\n" .
                 'Failed asserting that two arrays are equal.',
                 $e->getMessage()
@@ -722,7 +723,7 @@ class MockObjectTest extends TestCase
 //            $this->fail('Expected exception');
         } catch (ExpectationFailedException $e) {
             $this->assertSame(
-                "Expectation failed for method name is equal to 'right' when invoked 1 time(s).\n" .
+                "Expectation failed for method name is \"right\" when invoked 1 time(s).\n" .
                 'Parameter 0 for invocation SomeClass::right(Array (...)) does not match expected value.' . "\n" .
                 'Failed asserting that two arrays are equal.' . "\n" .
                 '--- Expected' . "\n" .
@@ -801,7 +802,7 @@ class MockObjectTest extends TestCase
             $this->fail('Expected exception');
         } catch (ExpectationFailedException $e) {
             $this->assertSame(
-                "Expectation failed for method name is equal to 'right' when invoked 1 time(s)\n" .
+                "Expectation failed for method name is \"right\" when invoked 1 time(s)\n" .
                 'Parameter count for invocation SomeClass::right() is too low.' . "\n" .
                 'To allow 0 or more parameters with any value, omit ->with() or use ->withAnyParameters() instead.',
                 $e->getMessage()
@@ -1016,12 +1017,9 @@ class MockObjectTest extends TestCase
     public function traversableProvider(): array
     {
         return [
-            ['Traversable'],
-            ['\Traversable'],
-            ['TraversableMockTestInterface'],
-            [['Traversable']],
-            [['Iterator', 'Traversable']],
-            [['\Iterator', '\Traversable']],
+            'Traversable'                   => ['Traversable'],
+            '\Traversable'                  => ['\Traversable'],
+            'TraversableMockTestInterface'  => ['TraversableMockTestInterface'],
         ];
     }
 

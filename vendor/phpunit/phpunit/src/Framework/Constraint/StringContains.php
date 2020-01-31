@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -18,7 +18,7 @@ namespace PHPUnit\Framework\Constraint;
  *
  * The sub-string is passed in the constructor.
  */
-class StringContains extends Constraint
+final class StringContains extends Constraint
 {
     /**
      * @var string
@@ -32,8 +32,6 @@ class StringContains extends Constraint
 
     public function __construct(string $string, bool $ignoreCase = false)
     {
-        parent::__construct();
-
         $this->string     = $string;
         $this->ignoreCase = $ignoreCase;
     }

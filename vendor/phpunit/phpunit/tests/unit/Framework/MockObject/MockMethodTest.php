@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -11,10 +10,15 @@ declare(strict_types=1);
 namespace PHPUnit\Framework\MockObject;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\TestFixture\MockObject\ClassWithoutParentButParentReturnType;
+use SebastianBergmann\Type\UnknownType;
 
-class MockMethodTest extends TestCase
+/**
+ * @small
+ */
+final class MockMethodTest extends TestCase
 {
-    public function testGetNameReturnsMethodName()
+    public function testGetNameReturnsMethodName(): void
     {
         $method = new MockMethod(
             'ClassName',
@@ -23,7 +27,7 @@ class MockMethodTest extends TestCase
             '',
             '',
             '',
-            '',
+            new UnknownType,
             '',
             false,
             false,
@@ -33,23 +37,14 @@ class MockMethodTest extends TestCase
         $this->assertEquals('methodName', $method->getName());
     }
 
-    public function testFailWhenReturnTypeIsParentButThereIsNoParentClass()
+    /**
+     * @requires PHP < 7.4
+     */
+    public function testFailWhenReturnTypeIsParentButThereIsNoParentClass(): void
     {
-        $method = new MockMethod(
-            \stdClass::class,
-            'methodName',
-            false,
-            '',
-            '',
-            '',
-            'parent',
-            '',
-            false,
-            false,
-            null,
-            false
-        );
+        $class = new \ReflectionClass(ClassWithoutParentButParentReturnType::class);
+
         $this->expectException(\RuntimeException::class);
-        $method->generateCode();
+        MockMethod::fromReflection($class->getMethod('foo'), false, false);
     }
 }

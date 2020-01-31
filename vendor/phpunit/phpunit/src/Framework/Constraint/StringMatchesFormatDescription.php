@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -14,7 +14,7 @@ use SebastianBergmann\Diff\Differ;
 /**
  * ...
  */
-class StringMatchesFormatDescription extends RegularExpression
+final class StringMatchesFormatDescription extends RegularExpression
 {
     /**
      * @var string
@@ -68,9 +68,7 @@ class StringMatchesFormatDescription extends RegularExpression
         $this->string = \implode("\n", $from);
         $other        = \implode("\n", $to);
 
-        $differ = new Differ("--- Expected\n+++ Actual\n");
-
-        return $differ->diff($this->string, $other);
+        return (new Differ("--- Expected\n+++ Actual\n"))->diff($this->string, $other);
     }
 
     private function createPatternFromFormat(string $string): string

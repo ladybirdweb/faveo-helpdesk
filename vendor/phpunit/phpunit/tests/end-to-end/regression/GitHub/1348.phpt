@@ -1,16 +1,14 @@
 --TEST--
 https://github.com/sebastianbergmann/phpunit/issues/1348
 --SKIPIF--
-<?php
+<?php declare(strict_types=1);
 if (defined('HHVM_VERSION') || defined('PHPDBG_VERSION')) {
     print 'skip: PHP runtime required';
 }
-?>
 --FILE--
-<?php
+<?php declare(strict_types=1);
 $_SERVER['argv'][1] = '--no-configuration';
 $_SERVER['argv'][]  = '--process-isolation';
-$_SERVER['argv'][]  = 'Issue1348Test';
 $_SERVER['argv'][]  = __DIR__ . '/1348/Issue1348Test.php';
 
 require __DIR__ . '/../../../bootstrap.php';

@@ -4,7 +4,9 @@ namespace Barryvdh\Debugbar\DataCollector;
 
 use DebugBar\DataCollector\DataCollector;
 use DebugBar\DataCollector\Renderable;
+use Illuminate\Auth\Recaller;
 use Illuminate\Auth\SessionGuard;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Support\Arrayable;
@@ -20,6 +22,7 @@ class MultiAuthCollector extends DataCollector implements Renderable
 
     /** @var \Illuminate\Auth\AuthManager */
     protected $auth;
+
     /** @var bool */
     protected $showName = false;
 
@@ -47,20 +50,26 @@ class MultiAuthCollector extends DataCollector implements Renderable
      */
     public function collect()
     {
-        $data = [];
+        $data = [
+            'guards' => [],
+        ];
         $names = '';
 
-        foreach($this->guards as $guardName) {
+        foreach($this->guards as $guardName => $config) {
             try {
-                $user = $this->resolveUser($this->auth->guard($guardName));
+                $guard = $this->auth->guard($guardName);
+                if ($this->hasUser($guard)) {
+                    $user = $guard->user();
+
+                    if(!is_null($user)) {
+                        $data['guards'][$guardName] = $this->getUserInformation($user);
+                        $names .= $guardName . ": " . $data['guards'][$guardName]['name'] . ', ';
+                    }
+                } else {
+                    $data['guards'][$guardName] = null;
+                }
             } catch (\Exception $e) {
                 continue;
-            }
-
-            $data['guards'][$guardName] = $this->getUserInformation($user);
-
-            if(!is_null($user)) {
-                $names .= $guardName . ": " . $data['guards'][$guardName]['name'] . ', ';
             }
         }
 
@@ -75,23 +84,18 @@ class MultiAuthCollector extends DataCollector implements Renderable
         return $data;
     }
 
-    private function resolveUser(Guard $guard)
+    private function hasUser(Guard $guard)
     {
-        // if we're logging in using remember token
-        // then we must resolve user „manually”
-        // to prevent csrf token regeneration
-
-        $recaller = $guard instanceof SessionGuard
-            ? $guard->getRequest()->cookies->get($guard->getRecallerName())
-            : null;
-
-        if (is_string($recaller) && Str::contains($recaller, '|')) {
-            $segments = explode('|', $recaller);
-            if (count($segments) == 2 && trim($segments[0]) !== '' && trim($segments[1]) !== '') {
-                return $guard->getProvider()->retrieveByToken($segments[0], $segments[1]);
-            }
+        if (method_exists($guard, 'hasUser')) {
+            return $guard->hasUser();
         }
-        return $guard->user();
+
+        // For Laravel 5.5
+        if (method_exists($guard, 'alreadyAuthenticated')) {
+            return $guard->alreadyAuthenticated();
+        }
+
+        return false;
     }
 
     /**
@@ -111,15 +115,15 @@ class MultiAuthCollector extends DataCollector implements Renderable
 
         // The default auth identifer is the ID number, which isn't all that
         // useful. Try username and email.
-        $identifier = $user->getAuthIdentifier();
+        $identifier = $user instanceof Authenticatable ? $user->getAuthIdentifier() : $user->id;
         if (is_numeric($identifier)) {
             try {
-                if ($user->username) {
+                if (isset($user->username)) {
                     $identifier = $user->username;
-                } elseif ($user->email) {
+                } elseif (isset($user->email)) {
                     $identifier = $user->email;
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
             }
         }
 

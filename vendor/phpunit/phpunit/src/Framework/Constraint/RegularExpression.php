@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -27,8 +27,6 @@ class RegularExpression extends Constraint
 
     public function __construct(string $pattern)
     {
-        parent::__construct();
-
         $this->pattern = $pattern;
     }
 

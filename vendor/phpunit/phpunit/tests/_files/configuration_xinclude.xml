@@ -34,7 +34,8 @@
          timeoutForLargeTests="60"
          verbose="false"
          executionOrder="default"
-         resolveDependencies="false">
+         resolveDependencies="false"
+         noInteraction="true">
          <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
              href="configuration.xml"
              parse="xml"

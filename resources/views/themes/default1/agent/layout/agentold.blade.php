@@ -66,7 +66,7 @@
 
                 }
                 $replacetop = 0;
-                $replacetop = \Event::fire('service.desk.agent.topbar.replace', array());
+                $replacetop = \Event::dispatch('service.desk.agent.topbar.replace', array());
 
                 if (count($replacetop) == 0) {
                     $replacetop = 0;
@@ -74,7 +74,7 @@
                     $replacetop = $replacetop[0];
                 }
                 $replaceside = 0;
-                $replaceside = \Event::fire('service.desk.agent.sidebar.replace', array());
+                $replaceside = \Event::dispatch('service.desk.agent.sidebar.replace', array());
 
                 if (count($replaceside) == 0) {
                     $replaceside = 0;
@@ -105,10 +105,10 @@
                             @if(Auth::user()->role == 'admin')
                                 <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">Report</a></li>
                             @endif
-                            <?php \Event::fire('calendar.topbar', array()); ?>
+                            <?php \Event::dispatch('calendar.topbar', array()); ?>
                         </ul>
                         @else
-                            <?php \Event::fire('service.desk.agent.topbar', array()); ?>
+                            <?php \Event::dispatch('service.desk.agent.topbar', array()); ?>
                             @endif
                         <?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id', '=', Auth::user()->id)->where('is_read', '0')->get(); ?>
                         <ul class="nav navbar-nav navbar-right">
@@ -388,7 +388,7 @@
                         }
                         ?>
                         @else
-<?php \Event::fire('service.desk.agent.sidebar', array()); ?>
+<?php \Event::dispatch('service.desk.agent.sidebar', array()); ?>
                         @endif
                     </ul>
                 </section>
@@ -444,7 +444,7 @@
                                 </div>
                             @endif
                             @endif
-<?php \Event::fire('service.desk.agent.topsubbar', array()); ?>
+<?php \Event::dispatch('service.desk.agent.topsubbar', array()); ?>
                         </div>
                     </div>
                 </div>
@@ -613,8 +613,8 @@
 
     });
 </script>-->
-<?php Event::fire('show.calendar.script', array()); ?>
-<?php Event::fire('load-calendar-scripts', array()); ?>
+<?php Event::dispatch('show.calendar.script', array()); ?>
+<?php Event::dispatch('load-calendar-scripts', array()); ?>
 @yield('FooterInclude')
 </body>
 </html>

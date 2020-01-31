@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -18,9 +18,11 @@ use SebastianBergmann\Comparator\ComparisonFailure;
  * Uses array_replace_recursive() to check if a key value subset is part of the
  * subject array.
  *
+ * @codeCoverageIgnore
+ *
  * @deprecated https://github.com/sebastianbergmann/phpunit/issues/3494
  */
-class ArraySubset extends Constraint
+final class ArraySubset extends Constraint
 {
     /**
      * @var iterable
@@ -34,8 +36,6 @@ class ArraySubset extends Constraint
 
     public function __construct(iterable $subset, bool $strict = false)
     {
-        parent::__construct();
-
         $this->strict = $strict;
         $this->subset = $subset;
     }
@@ -50,14 +50,10 @@ class ArraySubset extends Constraint
      * a boolean value instead: true in case of success, false in case of a
      * failure.
      *
-     * @param mixed  $other        value or object to evaluate
-     * @param string $description  Additional information about the test
-     * @param bool   $returnResult Whether to return a result or throw an exception
-     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function evaluate($other, $description = '', $returnResult = false)
+    public function evaluate($other, string $description = '', bool $returnResult = false)
     {
         //type cast $other & $this->subset as an array to allow
         //support in standard array functions.
@@ -95,7 +91,7 @@ class ArraySubset extends Constraint
      */
     public function toString(): string
     {
-        return 'has the subset ' . $this->exporter->export($this->subset);
+        return 'has the subset ' . $this->exporter()->export($this->subset);
     }
 
     /**

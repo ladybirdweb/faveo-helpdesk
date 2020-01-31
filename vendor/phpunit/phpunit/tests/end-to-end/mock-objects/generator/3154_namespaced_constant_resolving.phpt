@@ -2,7 +2,7 @@
 https://github.com/sebastianbergmann/phpunit-mock-objects/issues/420
 https://github.com/sebastianbergmann/phpunit/issues/3154
 --FILE--
-<?php
+<?php declare(strict_types=1);
 namespace Is\Namespaced;
 /*
  * This file is part of PHPUnit.
@@ -35,19 +35,15 @@ $mock = $generator->generate(
     true
 );
 
-print $mock['code'];
+print $mock->getClassCode();
 --EXPECTF--
+declare(strict_types=1);
+
 class Issue3154Mock extends Is\Namespaced\Issue3154 implements PHPUnit\Framework\MockObject\MockObject
 {
-    private $__phpunit_invocationMocker;
-    private $__phpunit_originalObject;
-    private $__phpunit_configurable = ['a'];
-    private $__phpunit_returnValueGeneration = true;
-
-    public function __clone()
-    {
-        $this->__phpunit_invocationMocker = clone $this->__phpunit_getInvocationMocker();
-    }
+    use \PHPUnit\Framework\MockObject\Api;
+    use \PHPUnit\Framework\MockObject\Method;
+    use \PHPUnit\Framework\MockObject\MockedCloneMethod;
 
     public function a(int $i = %d, int $j = 17, string $v = '%s', string $z = '#'): string
     {
@@ -62,58 +58,12 @@ class Issue3154Mock extends Is\Namespaced\Issue3154 implements PHPUnit\Framework
             }
         }
 
-        $__phpunit_result = $this->__phpunit_getInvocationMocker()->invoke(
-            new \PHPUnit\Framework\MockObject\Invocation\ObjectInvocation(
-                'Is\Namespaced\Issue3154', 'a', $__phpunit_arguments, 'string', $this, true
+        $__phpunit_result = $this->__phpunit_getInvocationHandler()->invoke(
+            new \PHPUnit\Framework\MockObject\Invocation(
+                'Is\Namespaced\Issue3154', 'a', $__phpunit_arguments, ': string', $this, true
             )
         );
 
         return $__phpunit_result;
-    }
-
-    public function expects(\PHPUnit\Framework\MockObject\Matcher\Invocation $matcher)
-    {
-        return $this->__phpunit_getInvocationMocker()->expects($matcher);
-    }
-
-    public function method()
-    {
-        $any     = new \PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
-        $expects = $this->expects($any);
-
-        return call_user_func_array([$expects, 'method'], func_get_args());
-    }
-
-    public function __phpunit_setOriginalObject($originalObject)
-    {
-        $this->__phpunit_originalObject = $originalObject;
-    }
-
-    public function __phpunit_setReturnValueGeneration(bool $returnValueGeneration)
-    {
-        $this->__phpunit_returnValueGeneration = $returnValueGeneration;
-    }
-
-    public function __phpunit_getInvocationMocker()
-    {
-        if ($this->__phpunit_invocationMocker === null) {
-            $this->__phpunit_invocationMocker = new \PHPUnit\Framework\MockObject\InvocationMocker($this->__phpunit_configurable, $this->__phpunit_returnValueGeneration);
-        }
-
-        return $this->__phpunit_invocationMocker;
-    }
-
-    public function __phpunit_hasMatchers()
-    {
-        return $this->__phpunit_getInvocationMocker()->hasMatchers();
-    }
-
-    public function __phpunit_verify(bool $unsetInvocationMocker = true)
-    {
-        $this->__phpunit_getInvocationMocker()->verify();
-
-        if ($unsetInvocationMocker) {
-            $this->__phpunit_invocationMocker = null;
-        }
     }
 }

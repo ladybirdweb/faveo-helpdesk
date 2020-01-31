@@ -269,7 +269,7 @@ foreach ($conversations as $conversation) {
                 <div class="timeline-footer" style="margin-bottom:-5px">
                     @if(!$conversation->is_internal)
                     @if($conversation->user_id != null)
-                    <?php Event::fire(new App\Events\Timeline($conversation, $role, $user)); ?>
+                    <?php Event::dispatch(new App\Events\Timeline($conversation, $role, $user)); ?>
                     @endif
                     @endif
                     <?php

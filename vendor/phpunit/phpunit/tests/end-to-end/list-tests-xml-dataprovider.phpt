@@ -1,14 +1,13 @@
 --TEST--
-phpunit --list-tests-xml DataProviderTest ../../_files/DataProviderTest.php
+phpunit --list-tests-xml ../../_files/DataProviderTest.php
 --FILE--
-<?php
+<?php declare(strict_types=1);
 $target = tempnam(sys_get_temp_dir(), __FILE__);
 
 $_SERVER['argv'][1] = '--no-configuration';
 $_SERVER['argv'][2] = '--list-tests-xml';
 $_SERVER['argv'][3] = $target;
-$_SERVER['argv'][4] = 'DataProviderTest';
-$_SERVER['argv'][5] = __DIR__ . '/../_files/DataProviderTest.php';
+$_SERVER['argv'][4] = __DIR__ . '/../_files/DataProviderTest.php';
 
 require __DIR__ . '/../bootstrap.php';
 PHPUnit\TextUI\Command::main(false);

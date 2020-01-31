@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,7 +9,10 @@
  */
 namespace PHPUnit\Framework;
 
-class TestImplementorTest extends TestCase
+/**
+ * @small
+ */
+final class TestImplementorTest extends TestCase
 {
     public function testSuccessfulRun(): void
     {

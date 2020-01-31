@@ -38,7 +38,7 @@ active
                 <h2>{!! Lang::get('lang.next_step') !!}</h2>
                 <ul>
 
-                @if(\Event::fire('helpdesk.apply.whitelabel'))
+                @if(\Event::dispatch('helpdesk.apply.whitelabel'))
          <li class="setup-product"><a class="button button-primary button-large" href="{!! url('auth/login') !!}" style="float: none; text-align: center; font-size: 24px;    padding: 15px;     line-height: 1;">{!! Lang::get('lang.login_to_helpdesk') !!}</a>
                     </li>
         @else

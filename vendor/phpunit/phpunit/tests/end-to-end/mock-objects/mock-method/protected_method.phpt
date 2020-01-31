@@ -1,7 +1,7 @@
 --TEST--
 Mock static method
 --FILE--
-<?php
+<?php declare(strict_types=1);
 class Foo
 {
     protected function bar(){}
@@ -19,7 +19,6 @@ $mockMethod = \PHPUnit\Framework\MockObject\MockMethod::fromReflection(
 $code = $mockMethod->generateCode();
 
 print $code;
-?>
 --EXPECT--
 
 protected function bar()
@@ -35,8 +34,8 @@ protected function bar()
             }
         }
 
-        $__phpunit_result = $this->__phpunit_getInvocationMocker()->invoke(
-            new \PHPUnit\Framework\MockObject\Invocation\ObjectInvocation(
+        $__phpunit_result = $this->__phpunit_getInvocationHandler()->invoke(
+            new \PHPUnit\Framework\MockObject\Invocation(
                 'Foo', 'bar', $__phpunit_arguments, '', $this, false
             )
         );

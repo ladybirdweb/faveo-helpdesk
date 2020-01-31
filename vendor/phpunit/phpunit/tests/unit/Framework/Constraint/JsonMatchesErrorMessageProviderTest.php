@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -11,7 +11,10 @@ namespace PHPUnit\Framework\Constraint;
 
 use PHPUnit\Framework\TestCase;
 
-class JsonMatchesErrorMessageProviderTest extends TestCase
+/**
+ * @small
+ */
+final class JsonMatchesErrorMessageProviderTest extends TestCase
 {
     public static function determineJsonErrorDataprovider(): array
     {
@@ -69,6 +72,7 @@ class JsonMatchesErrorMessageProviderTest extends TestCase
     }
 
     /**
+     * @testdox Determine JSON error $_dataName
      * @dataProvider determineJsonErrorDataprovider
      *
      * @throws \PHPUnit\Framework\ExpectationFailedException
@@ -79,7 +83,7 @@ class JsonMatchesErrorMessageProviderTest extends TestCase
         $this->assertEquals(
             $expected,
             JsonMatchesErrorMessageProvider::determineJsonError(
-                $error,
+                (string) $error,
                 $prefix
             )
         );

@@ -19,6 +19,45 @@ jobs:
       - name: Run friendsofphp/php-cs-fixer
         run: php7.3 ./tools/php-cs-fixer fix --diff-format=udiff --dry-run --show-progress=dots --using-cache=no --verbose
 
+  type-checker:
+    name: Type Checker
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Update dependencies with composer
+        run: php7.3 ./tools/composer update --no-interaction --no-ansi --no-progress --no-suggest
+
+      - name: Run vimeo/psalm on public API
+        run: php7.3 ./tools/psalm --config=.psalm/static-analysis.xml --no-progress --show-info=false
+
+      - name: Run vimeo/psalm on internal code
+        run: php7.3 ./tools/psalm --config=.psalm/config.xml --no-progress --shepherd --show-info=false --stats
+
+  backward-compatibility:
+    name: Backward Compatibility
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 0
+
+      - name: "Install PHP with extensions"
+        uses: shivammathur/setup-php@v1
+        with:
+          php-version: 7.3
+          coverage: none
+          extensions: intl
+
+      - name: Run roave/backward-compatibility-check
+        run: php ./tools/roave-backward-compatibility-check --from=8.5.0
+
   lint-xml-configuration:
     name: Lint XML Configuration
 
@@ -34,7 +73,7 @@ jobs:
       - name: Lint XML configuration files
         uses: ./.docker/lint-xml-configuration
         with:
-          args: bash ./build/lint-xml-configuration
+          args: bash ./build/scripts/lint-xml-configuration
 
   tests:
     name: Tests
@@ -43,10 +82,10 @@ jobs:
 
     strategy:
       matrix:
-        php-binary:
-          - php7.1
-          - php7.2
-          - php7.3
+        php-version:
+          - 7.2
+          - 7.3
+          - 7.4
 
         dependencies:
           - lowest
@@ -56,27 +95,35 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: "Install PHP with extensions"
+        uses: shivammathur/setup-php@v1
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: pcov
+          extensions: dom, json, libxml, mbstring, pdo_sqlite, soap, xml, xmlwriter
+          ini-values: assert.exception=1, zend.assertions=1
+
       - name: "Cache dependencies installed with composer"
         uses: actions/cache@v1
         with:
           path: ~/.composer/cache
-          key: ${{ matrix.php-binary }}-composer-${{ matrix.dependencies }}-${{ hashFiles('**/composer.json') }}
+          key: php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('**/composer.json') }}
           restore-keys: |
-            ${{ matrix.php-binary }}-composer-${{ matrix.dependencies }}-
+            php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-
 
       - name: Install lowest dependencies with composer
         if: matrix.dependencies == 'lowest'
-        run: ${{ matrix.php-binary }} ./tools/composer update --no-ansi --no-interaction --no-progress --no-suggest --prefer-lowest
+        run: ./tools/composer update --no-ansi --no-interaction --no-progress --no-suggest --prefer-lowest
 
       - name: Install highest dependencies with composer
         if: matrix.dependencies == 'highest'
-        run: ${{ matrix.php-binary }} ./tools/composer update --no-ansi --no-interaction --no-progress --no-suggest
+        run: ./tools/composer update --no-ansi --no-interaction --no-progress --no-suggest
 
       - name: Run sanity check
-        run: PHP_BINARY=${{ matrix.php-binary }} bash ./build/sanity-check
+        run: bash ./build/scripts/sanity-check
 
       - name: Run tests with phpunit
-        run: ${{ matrix.php-binary }} -d assert.exception=1 -d zend.assertions=1 ./phpunit --coverage-clover=coverage.xml
+        run: ./phpunit --coverage-clover=coverage.xml
 
       - name: Send code coverage report to Codecov.io
         env:

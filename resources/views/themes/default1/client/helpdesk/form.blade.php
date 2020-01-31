@@ -201,7 +201,7 @@ class = "active"
                 {!! Lang::get('lang.max') !!}. 10MB
             </div>
             {{-- Event fire --}}
-            <?php Event::fire(new App\Events\ClientTicketForm()); ?>
+            <?php Event::dispatch(new App\Events\ClientTicketForm()); ?>
             <div class="col-md-12" id="response"> </div>
             <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>
             <div class="col-md-12 form-group">{!! Form::submit(Lang::get('lang.Send'),['class'=>'form-group btn btn-info pull-left', 'onclick' => 'this.disabled=true;this.value="Sending, please wait...";this.form.submit();'])!!}</div>

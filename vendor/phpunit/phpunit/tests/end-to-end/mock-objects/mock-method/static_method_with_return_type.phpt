@@ -1,7 +1,7 @@
 --TEST--
 Mock static method
 --FILE--
-<?php
+<?php declare(strict_types=1);
 class Foo
 {
     public static function bar(): bool{}
@@ -19,7 +19,6 @@ $mockMethod = \PHPUnit\Framework\MockObject\MockMethod::fromReflection(
 $code = $mockMethod->generateCode();
 
 print $code;
-?>
 --EXPECT--
 
 public static function bar(): bool
