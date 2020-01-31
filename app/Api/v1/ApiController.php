@@ -187,8 +187,8 @@ class ApiController extends Controller
         //dd($this->request->all());
         try {
             $v = \Validator::make($this->request->all(), [
-                        'ticket_id'     => 'required|exists:tickets,id',
-                        'reply_content' => 'required',
+                'ticket_id'     => 'required|exists:tickets,id',
+                'reply_content' => 'required',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -225,12 +225,12 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'ticket_id'       => 'required|exists:tickets,id',
-                        'subject'         => 'required',
-                        'sla_plan'        => 'required|exists:sla_plan,id',
-                        'help_topic'      => 'required|exists:help_topic,id',
-                        'ticket_source'   => 'required|exists:ticket_source,id',
-                        'ticket_priority' => 'required|exists:ticket_priority,priority_id',
+                'ticket_id'       => 'required|exists:tickets,id',
+                'subject'         => 'required',
+                'sla_plan'        => 'required|exists:sla_plan,id',
+                'help_topic'      => 'required|exists:help_topic,id',
+                'ticket_source'   => 'required|exists:ticket_source,id',
+                'ticket_priority' => 'required|exists:ticket_priority,priority_id',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -262,7 +262,7 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'ticket_id' => 'required|exists:tickets,id',
+                'ticket_id' => 'required|exists:tickets,id',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -496,8 +496,8 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'ticket_id' => 'required',
-                        'user'      => 'required',
+                'ticket_id' => 'required',
+                'user'      => 'required',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -535,7 +535,7 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'search' => 'required',
+                'search' => 'required',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -602,7 +602,7 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'user_id' => 'required',
+                'user_id' => 'required',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -635,7 +635,7 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'search' => 'required',
+                'search' => 'required',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -668,7 +668,7 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'id' => 'required',
+                'id' => 'required',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -708,7 +708,7 @@ class ApiController extends Controller
         //dd($this->request);
         try {
             $v = \Validator::make($this->request->all(), [
-                        'url' => 'required|url',
+                'url' => 'required|url',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -1013,9 +1013,9 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'user_id'   => 'required|exists:users,id',
-                        'ticket_id' => 'required|exists:tickets,id',
-                        'body'      => 'required',
+                'user_id'   => 'required|exists:users,id',
+                'ticket_id' => 'required|exists:tickets,id',
+                'body'      => 'required',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -1092,7 +1092,7 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'user_id' => 'required|exists:users,id',
+                'user_id' => 'required|exists:users,id',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -1149,7 +1149,7 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'user_id' => 'required|exists:users,id',
+                'user_id' => 'required|exists:users,id',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -1206,7 +1206,7 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'ticket_id' => 'required|exists:tickets,id',
+                'ticket_id' => 'required|exists:tickets,id',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -1345,9 +1345,9 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make(\Input::get(), [
-                        'email'     => 'required|email|unique:users',
-                        'ticket_id' => 'required',
-                            ]
+                'email'     => 'required|email|unique:users',
+                'ticket_id' => 'required',
+            ]
             );
             if ($v->fails()) {
                 $error = $v->messages();
@@ -1376,8 +1376,8 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make(\Input::get(), [
-                        'ticket_id' => 'required',
-                            ]
+                'ticket_id' => 'required',
+            ]
             );
             if ($v->fails()) {
                 $error = $v->messages();
@@ -1406,9 +1406,9 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make(\Input::get(), [
-                        'ticketid' => 'required',
-                        'email'    => 'required',
-                            ]
+                'ticketid' => 'required',
+                'email'    => 'required',
+            ]
             );
             if ($v->fails()) {
                 $result = $v->messages();
@@ -1538,8 +1538,8 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($request->all(), [
-                        'email'    => 'required|email|unique:users',
-                        'password' => 'required|min:6',
+                'email'    => 'required|email|unique:users',
+                'password' => 'required|min:6',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -1574,8 +1574,8 @@ class ApiController extends Controller
         try {
             $v = \Validator::make(
                             $this->request->all(), [
-                        'username'   => 'required|unique:users,user_name',
-                        'first_name' => 'required',
+                                'username'   => 'required|unique:users,user_name',
+                                'first_name' => 'required',
                             ]
             );
             if ($v->fails()) {
