@@ -28,7 +28,7 @@ A PHP library for parsing, formatting, storing and validating international phon
 
 ## Installation
 
-PHP versions 5.3 up to PHP 7.3 are currently supported.
+PHP versions 5.3 up to PHP 7.4 are currently supported.
 
 The PECL [mbstring](http://php.net/mbstring) extension is required.
 
@@ -250,7 +250,7 @@ Other packages exist that integrate libphonenumber-for-php into frameworks.
 
 | Framework | Packages      |
 | --------- |:-------------:|
-|Symfony|[PhoneNumberBundle](https://github.com/misd-service-development/phone-number-bundle)|
+|Symfony|[PhoneNumberBundle](https://github.com/odolbeau/phone-number-bundle)|
 |Laravel|[Laravel Phone](https://github.com/Propaganistas/Laravel-Phone)|
 |Yii2|[PhoneInput](https://github.com/Borales/yii2-phone-input)|
 |Kohana|[PhoneNumber](https://github.com/softmediadev/kohana-phonenumber)|

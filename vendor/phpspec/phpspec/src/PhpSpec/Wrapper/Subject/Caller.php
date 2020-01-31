@@ -16,7 +16,9 @@ namespace PhpSpec\Wrapper\Subject;
 use PhpSpec\CodeAnalysis\AccessInspector;
 use PhpSpec\Exception\ExceptionFactory;
 use PhpSpec\Exception\Fracture\NamedConstructorNotFoundException;
+use PhpSpec\Factory\ObjectFactory;
 use PhpSpec\Loader\Node\ExampleNode;
+use PhpSpec\Util\DispatchTrait;
 use PhpSpec\Wrapper\Subject;
 use PhpSpec\Wrapper\Wrapper;
 use PhpSpec\Wrapper\Unwrapper;
@@ -27,6 +29,8 @@ use ReflectionException;
 
 class Caller
 {
+    use DispatchTrait;
+
     /**
      * @var WrappedObject
      */
@@ -247,16 +251,18 @@ class Caller
      */
     private function invokeAndWrapMethodResult($subject, $method, array $arguments = array()): Subject
     {
-        $this->dispatcher->dispatch(
-            'beforeMethodCall',
-            new MethodCallEvent($this->example, $subject, $method, $arguments)
+        $this->dispatch(
+            $this->dispatcher,
+            new MethodCallEvent($this->example, $subject, $method, $arguments),
+            'beforeMethodCall'
         );
 
         $returnValue = \call_user_func_array(array($subject, $method), $arguments);
 
-        $this->dispatcher->dispatch(
-            'afterMethodCall',
-            new MethodCallEvent($this->example, $subject, $method, $arguments)
+        $this->dispatch(
+            $this->dispatcher,
+            new MethodCallEvent($this->example, $subject, $method, $arguments),
+            'afterMethodCall'
         );
 
         return $this->wrap($returnValue);
@@ -300,13 +306,14 @@ class Caller
     /**
      * @return mixed
      * @throws \PhpSpec\Exception\Fracture\MethodNotFoundException
+     * @throws \PhpSpec\Exception\Fracture\FactoryDoesNotReturnObjectException
      */
     private function newInstanceWithFactoryMethod()
     {
         $method = $this->wrappedObject->getFactoryMethod();
+        $className = $this->wrappedObject->getClassName();
 
         if (!\is_array($method)) {
-            $className = $this->wrappedObject->getClassName();
 
             if (\is_string($method) && !method_exists($className, $method)) {
                 throw $this->namedConstructorNotFound(
@@ -316,7 +323,10 @@ class Caller
             }
         }
 
-        return \call_user_func_array($method, $this->wrappedObject->getArguments());
+        return (new ObjectFactory())->instantiateFromCallable(
+            $method,
+            $this->wrappedObject->getArguments()
+        );
     }
 
     /**

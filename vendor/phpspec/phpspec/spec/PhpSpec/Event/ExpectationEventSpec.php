@@ -7,7 +7,6 @@ use PhpSpec\Loader\Suite;
 use PhpSpec\Loader\Node\SpecificationNode;
 use PhpSpec\Loader\Node\ExampleNode;
 use PhpSpec\Matcher\Matcher;
-use Prophecy\Argument;
 use Exception;
 
 class ExpectationEventSpec extends ObjectBehavior
@@ -26,7 +25,7 @@ class ExpectationEventSpec extends ObjectBehavior
 
     function it_is_an_event()
     {
-        $this->shouldBeAnInstanceOf('Symfony\Component\EventDispatcher\Event');
+        $this->shouldBeAnInstanceOf('PhpSpec\Event\BaseEvent');
         $this->shouldBeAnInstanceOf('PhpSpec\Event\PhpSpecEvent');
     }
 

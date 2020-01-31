@@ -106,6 +106,9 @@ Method                                                   | Description
 `isInstanceOf($value, $class, $message = '')`            | Check that a value is an `instanceof` a class
 `isInstanceOfAny($value, array $classes, $message = '')` | Check that a value is an `instanceof` a at least one class on the array of classes
 `notInstanceOf($value, $class, $message = '')`           | Check that a value is not an `instanceof` a class
+`isAOf($value, $class, $message = '')`                   | Check that a value is of the class or has one of its parents
+`isAnyOf($value, array $classes, $message = '')`         | Check that a value a at least one of the class or has one of its parents
+`isNotA($value, $class, $message = '')`                  | Check that a value is not of the class or has not one of its parents
 `isArrayAccessible($value, $message = '')`               | Check that a value can be accessed as an array
 `uniqueValues($values, $message = '')`                   | Check that the given array contains unique values
 
@@ -115,6 +118,7 @@ Method                                          | Description
 ----------------------------------------------- | --------------------------------------------------
 `true($value, $message = '')`                   | Check that a value is `true`
 `false($value, $message = '')`                  | Check that a value is `false`
+`notFalse($value, $message = '')`               | Check that a value is not `false`
 `null($value, $message = '')`                   | Check that a value is `null`
 `notNull($value, $message = '')`                | Check that a value is not `null`
 `isEmpty($value, $message = '')`                | Check that a value is `empty()`
@@ -240,7 +244,7 @@ Overriding the following methods in your assertion class allows you to change th
 * `protected static function typeToString($value)`
   * This method is used for error messages, to convert the a value to a string representing its type.
 * `protected static function strlen($value)`
-  * This method is used to calculate string lenght for relevant methods, using the `mb_strlen` if available and usefull.
+  * This method is used to calculate string length for relevant methods, using the `mb_strlen` if available and useful.
 * `protected static function reportInvalidArgument($message)`
   * This method is called when an assertion fails, with the specified error message. Here you can throw your own exception, or log something.
 
@@ -267,7 +271,7 @@ All contents of this package are licensed under the [MIT license].
 [beberlei/assert]: https://github.com/beberlei/assert
 [assert package]: https://github.com/beberlei/assert
 [Composer]: https://getcomposer.org
-[Bernhard Schussek]: http://webmozarts.com
+[Bernhard Schussek]: https://webmozarts.com
 [The Community Contributors]: https://github.com/webmozart/assert/graphs/contributors
 [issue tracker]: https://github.com/webmozart/assert/issues
 [Git repository]: https://github.com/webmozart/assert

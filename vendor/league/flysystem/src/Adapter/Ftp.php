@@ -131,9 +131,9 @@ class Ftp extends AbstractFtpAdapter
     public function connect()
     {
         if ($this->ssl) {
-            $this->connection = ftp_ssl_connect($this->getHost(), $this->getPort(), $this->getTimeout());
+            $this->connection = @ftp_ssl_connect($this->getHost(), $this->getPort(), $this->getTimeout());
         } else {
-            $this->connection = ftp_connect($this->getHost(), $this->getPort(), $this->getTimeout());
+            $this->connection = @ftp_connect($this->getHost(), $this->getPort(), $this->getTimeout());
         }
 
         if ( ! $this->connection) {
@@ -230,7 +230,7 @@ class Ftp extends AbstractFtpAdapter
     public function disconnect()
     {
         if (is_resource($this->connection)) {
-            ftp_close($this->connection);
+            @ftp_close($this->connection);
         }
 
         $this->connection = null;
@@ -532,15 +532,8 @@ class Ftp extends AbstractFtpAdapter
      */
     public function isConnected()
     {
-        try {
-            return is_resource($this->connection) && ftp_rawlist($this->connection, $this->getRoot()) !== false;
-        } catch (ErrorException $e) {
-            if (strpos($e->getMessage(), 'ftp_rawlist') === false) {
-                throw new ConnectionErrorException($e->getMessage());
-            }
-
-            return false;
-        }
+        return is_resource($this->connection)
+            && $this->getRawExecResponseCode('NOOP') === 200;
     }
 
     /**
@@ -570,5 +563,12 @@ class Ftp extends AbstractFtpAdapter
         }
 
         return ftp_rawlist($connection, $options . ' ' . $path);
+    }
+
+    private function getRawExecResponseCode($command)
+    {
+        $response = @ftp_raw($this->connection, trim($command));
+
+        return (int) preg_replace('/\D/', '', implode(' ', $response));
     }
 }

@@ -1,12 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * This file is part of phpDocumentor.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @copyright 2010-2015 Mike van Riel<mike@phpdoc.org>
- * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      http://phpdoc.org
  */
 
@@ -24,35 +25,32 @@ use Webmozart\Assert\Assert;
  */
 final class Throws extends TagWithType implements Factory\StaticMethod
 {
-    public function __construct(Type $type, Description $description = null)
+    public function __construct(Type $type, ?Description $description = null)
     {
-        $this->name = 'throws';
-        $this->type = $type;
+        $this->name        = 'throws';
+        $this->type        = $type;
         $this->description = $description;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function create(
-        $body,
-        TypeResolver $typeResolver = null,
-        DescriptionFactory $descriptionFactory = null,
-        TypeContext $context = null
-    ) {
-        Assert::string($body);
-        Assert::allNotNull([$typeResolver, $descriptionFactory]);
+        string $body,
+        ?TypeResolver $typeResolver = null,
+        ?DescriptionFactory $descriptionFactory = null,
+        ?TypeContext $context = null
+    ) : self {
+        Assert::notNull($typeResolver);
+        Assert::notNull($descriptionFactory);
 
-        list($type, $description) = self::extractTypeFromBody($body);
+        [$type, $description] = self::extractTypeFromBody($body);
 
-        $type = $typeResolver->resolve($type, $context);
+        $type        = $typeResolver->resolve($type, $context);
         $description = $descriptionFactory->create($description, $context);
 
         return new static($type, $description);
     }
 
-    public function __toString()
+    public function __toString() : string
     {
-        return $this->type . ' ' . $this->description;
+        return (string) $this->type . ' ' . (string) $this->description;
     }
 }

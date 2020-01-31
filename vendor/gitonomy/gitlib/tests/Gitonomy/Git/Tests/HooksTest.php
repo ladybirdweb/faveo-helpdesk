@@ -104,7 +104,7 @@ class HooksTest extends AbstractTest
         $repository->getHooks()->setSymlink('foo', $file);
 
         $this->assertTrue(is_link($this->hookPath($repository, 'foo')), 'foo hook is a symlink');
-        $this->assertEquals($file, readlink($this->hookPath($repository, 'foo')), 'target of symlink is correct');
+        $this->assertEquals(str_replace('\\', '/', $file), str_replace('\\', '/', readlink($this->hookPath($repository, 'foo'))), 'target of symlink is correct');
     }
 
     /**

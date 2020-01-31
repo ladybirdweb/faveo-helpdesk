@@ -2,15 +2,16 @@
 
 namespace Illuminate\Support\Testing\Fakes;
 
-use Illuminate\Support\Str;
+use Exception;
+use Illuminate\Contracts\Notifications\Dispatcher as NotificationDispatcher;
+use Illuminate\Contracts\Notifications\Factory as NotificationFactory;
+use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
 use PHPUnit\Framework\Assert as PHPUnit;
-use Illuminate\Contracts\Translation\HasLocalePreference;
-use Illuminate\Contracts\Notifications\Factory as NotificationFactory;
-use Illuminate\Contracts\Notifications\Dispatcher as NotificationDispatcher;
 
-class NotificationFake implements NotificationFactory, NotificationDispatcher
+class NotificationFake implements NotificationDispatcher, NotificationFactory
 {
     use Macroable;
 
@@ -35,10 +36,16 @@ class NotificationFake implements NotificationFactory, NotificationDispatcher
      * @param  string  $notification
      * @param  callable|null  $callback
      * @return void
+     *
+     * @throws \Exception
      */
     public function assertSentTo($notifiable, $notification, $callback = null)
     {
         if (is_array($notifiable) || $notifiable instanceof Collection) {
+            if (count($notifiable) === 0) {
+                throw new Exception('No notifiable given.');
+            }
+
             foreach ($notifiable as $singleNotifiable) {
                 $this->assertSentTo($singleNotifiable, $notification, $callback);
             }
@@ -79,10 +86,16 @@ class NotificationFake implements NotificationFactory, NotificationDispatcher
      * @param  string  $notification
      * @param  callable|null  $callback
      * @return void
+     *
+     * @throws \Exception
      */
     public function assertNotSentTo($notifiable, $notification, $callback = null)
     {
         if (is_array($notifiable) || $notifiable instanceof Collection) {
+            if (count($notifiable) === 0) {
+                throw new Exception('No notifiable given.');
+            }
+
             foreach ($notifiable as $singleNotifiable) {
                 $this->assertNotSentTo($singleNotifiable, $notification, $callback);
             }

@@ -2,8 +2,8 @@
 
 namespace Laravel\Dusk\Chrome;
 
+use Laravel\Dusk\OperatingSystem;
 use RuntimeException;
-use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 
 class ChromeProcess
@@ -11,7 +11,7 @@ class ChromeProcess
     /**
      * The path to the Chromedriver.
      *
-     * @var String
+     * @var string
      */
     protected $driver;
 
@@ -20,6 +20,8 @@ class ChromeProcess
      *
      * @param  string  $driver
      * @return void
+     *
+     * @throws \RuntimeException
      */
     public function __construct($driver = null)
     {
@@ -33,37 +35,37 @@ class ChromeProcess
     /**
      * Build the process to run Chromedriver.
      *
+     * @param  array  $arguments
      * @return \Symfony\Component\Process\Process
      */
-    public function toProcess()
+    public function toProcess(array $arguments = [])
     {
         if ($this->driver) {
-            return $this->process();
+            return $this->process($arguments);
         }
 
         if ($this->onWindows()) {
             $this->driver = realpath(__DIR__.'/../../bin/chromedriver-win.exe');
-
-            return $this->process();
+        } elseif ($this->onMac()) {
+            $this->driver = realpath(__DIR__.'/../../bin/chromedriver-mac');
+        } else {
+            $this->driver = realpath(__DIR__.'/../../bin/chromedriver-linux');
         }
 
-        $this->driver = $this->onMac()
-                        ? realpath(__DIR__.'/../../bin/chromedriver-mac')
-                        : realpath(__DIR__.'/../../bin/chromedriver-linux');
-
-        return $this->process();
+        return $this->process($arguments);
     }
 
     /**
      * Build the Chromedriver with Symfony Process.
      *
+     * @param  array  $arguments
      * @return \Symfony\Component\Process\Process
      */
-    protected function process()
+    protected function process(array $arguments = [])
     {
-        return (new Process(
-            [realpath($this->driver)], null, $this->chromeEnvironment()
-        ));
+        return new Process(
+            array_merge([realpath($this->driver)], $arguments), null, $this->chromeEnvironment()
+        );
     }
 
     /**
@@ -77,7 +79,7 @@ class ChromeProcess
             return [];
         }
 
-        return ['DISPLAY' => ':0'];
+        return ['DISPLAY' => $_ENV['DISPLAY'] ?? ':0'];
     }
 
     /**
@@ -87,7 +89,7 @@ class ChromeProcess
      */
     protected function onWindows()
     {
-        return PHP_OS === 'WINNT' || Str::contains(php_uname(), 'Microsoft');
+        return OperatingSystem::onWindows();
     }
 
     /**
@@ -97,6 +99,6 @@ class ChromeProcess
      */
     protected function onMac()
     {
-        return PHP_OS === 'Darwin';
+        return OperatingSystem::onMac();
     }
 }

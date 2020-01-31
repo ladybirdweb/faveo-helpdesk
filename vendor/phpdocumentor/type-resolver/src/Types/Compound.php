@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace phpDocumentor\Reflection\Types;
 
 use ArrayIterator;
-use InvalidArgumentException;
 use IteratorAggregate;
 use phpDocumentor\Reflection\Type;
 use function implode;
@@ -29,25 +28,18 @@ use function implode;
 final class Compound implements Type, IteratorAggregate
 {
     /** @var Type[] */
-    private $types;
+    private $types = [];
 
     /**
      * Initializes a compound type (i.e. `string|int`) and tests if the provided types all implement the Type interface.
      *
      * @param Type[] $types
-     *
-     * @throws InvalidArgumentException When types are not all instance of Type.
      */
     public function __construct(array $types)
     {
         foreach ($types as $type) {
-            /** @psalm-suppress RedundantConditionGivenDocblockType */
-            if (!$type instanceof Type) {
-                throw new InvalidArgumentException('A compound type can only have other types as elements');
-            }
+            $this->add($type);
         }
-
-        $this->types = $types;
     }
 
     /**
@@ -71,6 +63,21 @@ final class Compound implements Type, IteratorAggregate
     }
 
     /**
+     * Tests if this compound type contains the given type.
+     */
+    public function contains(Type $type) : bool
+    {
+        foreach ($this->types as $typePart) {
+            // if the type is duplicate; do not add it
+            if ((string) $typePart === (string) $type) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Returns a rendered output of the Type as it would be used in a DocBlock.
      */
     public function __toString() : string
@@ -84,5 +91,15 @@ final class Compound implements Type, IteratorAggregate
     public function getIterator()
     {
         return new ArrayIterator($this->types);
+    }
+
+    private function add(Type $type) : void
+    {
+        // if the type is duplicate; do not add it
+        if ($this->contains($type)) {
+            return;
+        }
+
+        $this->types[] = $type;
     }
 }

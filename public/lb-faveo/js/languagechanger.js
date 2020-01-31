@@ -1,3 +1,3 @@
 function changeLang(lang) {
-    location.href = "swtich-language/"+lang;
+    location.href = location.origin+"/swtich-language/"+lang;
 }

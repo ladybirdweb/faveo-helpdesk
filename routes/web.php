@@ -11,7 +11,7 @@
   |
  */
 Route::group(['middleware' => ['web']], function () {
-    Route::group(['middleware' => 'update', 'middleware' => 'install'], function () {
+    Route::group(['middleware' => ['install', 'update']], function () {
         Auth::routes();
         Route::post('login', ['uses' => 'Auth\AuthController@postLogin', 'as' => 'post.login']);
         Route::post('auth/register', ['uses' => 'Auth\AuthController@postRegister', 'as' => 'post.register']);
@@ -65,7 +65,7 @@ Route::group(['middleware' => ['web']], function () {
       | Here is defining entire routes for the Admin Panel
       |
      */
-    Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => 'install', 'middleware' => 'update'], function () {
+    Route::group(['middleware' => ['install', 'update', 'roles', 'auth']], function () {
         //Notification marking
         Route::post('mark-read/{id}', 'Common\NotificationController@markRead');
         Route::post('mark-all-read/{id}', 'Common\NotificationController@markAllRead');
@@ -290,7 +290,7 @@ Route::group(['middleware' => ['web']], function () {
       |
       |
      */
-    Route::group(['middleware' => 'role.agent', 'middleware' => 'auth', 'middleware' => 'install', 'middleware' => 'update'], function () {
+    Route::group(['middleware' => ['install', 'update', 'role.agent', 'auth']], function () {
         Route::post('chart-range/{date1}/{date2}', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
         Route::get('agen1', 'Agent\helpdesk\DashboardController@ChartData');
         Route::post('chart-range', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
@@ -414,73 +414,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('get-tag', ['as'=>'tag.get', 'uses'=>'Agent\helpdesk\Filter\TagController@getTag']);
 
         Route::group(['middleware' => ['force.option', 'role.agent']], function () {
-            Route::get('tickets', ['as' => 'tickets-view', 'uses' => 'Agent\helpdesk\TicketController@getTicketsView']);
+            Route::get('tickets/{old?}', ['as' => 'tickets-view', 'uses' => 'Agent\helpdesk\TicketController@getTicketsView']);
         });
-        Route::get('get-filtered-tickets', ['as'=>'get-filtered-tickets', 'uses'=>'Agent\helpdesk\Filter\FilterController@getFilter']);
-
-        /*
-         *=======================================================================
-         *                 DEPRECATED ROUTE BLOCKS START
-         *=======================================================================
-         * Route defined under this block will be derecated and are no longer
-         * used in the system. Though we have not removed these routes in v1.10 but
-         * we will remove these routes in upcoming releas
-         *=======================================================================
-         */
-        Route::get('/ticket/inbox', ['as' => 'inbox.ticket', 'uses' => 'Agent\helpdesk\TicketController@inbox_ticket_list']); /*  Get Inbox Ticket */
-
-        Route::get('/ticket/get-inbox', ['as' => 'get.inbox.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_inbox']);  /* Get tickets in datatable */
-        Route::get('/ticket/open', ['as' => 'open.ticket', 'uses' => 'Agent\helpdesk\TicketController@open_ticket_list']); /*  Get Open Ticket */
-
-        Route::get('/ticket/get-open', ['as' => 'get.open.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_open']);  /* Get tickets in datatable */
-        Route::get('/ticket/answered', ['as' => 'answered.ticket', 'uses' => 'Agent\helpdesk\TicketController@answered_ticket_list']); /*  Get Answered Ticket */
-
-        Route::get('/ticket/get-answered', ['as' => 'get.answered.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_answered']);  /* Get tickets in datatable */
-        Route::get('/ticket/myticket', ['as' => 'myticket.ticket', 'uses' => 'Agent\helpdesk\TicketController@myticket_ticket_list']); /*  Get Tickets Assigned to logged user */
-
-        Route::get('/ticket/get-myticket', ['as' => 'get.myticket.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_myticket']);  /* Get tickets in datatable */
-        Route::get('/ticket/overdue', ['as' => 'overdue.ticket', 'uses' => 'Agent\helpdesk\TicketController@overdue_ticket_list']); /*  Get Overdue Ticket */
-
-        Route::get('/ticket/get-overdue', ['as' => 'get.overdue.ticket', 'uses' => 'Agent\helpdesk\TicketController@getOverdueTickets']); /*  Get Overdue Ticket */
-        Route::get('/ticket/closed', ['as' => 'closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@closed_ticket_list']); /*  Get Closed Ticket */
-
-        Route::get('/ticket/get-closed', ['as' => 'get.closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_closed']);  /* Get tickets in datatable */
-        Route::get('/ticket/assigned', ['as' => 'assigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@assigned_ticket_list']); /*  Get Assigned Ticket */
-
-        Route::get('/ticket/get-assigned', ['as' => 'get.assigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_assigned']);  /* Get tickets in datatable */
-
-        //due today ticket
-        Route::get('duetoday', ['as' => 'ticket.duetoday',  'uses' =>'Agent\helpdesk\TicketController@dueTodayTicketlist']);
-
-        // Route::post('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']);
-        Route::get('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']); /*  Get Open Ticket */
-        Route::get('trash', ['as' => 'get-trash', 'uses' => 'Agent\helpdesk\TicketController@trash']); /* To show Deleted Tickets */
-
-        Route::get('/ticket/trash', ['as' => 'get.trash.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_trash']);  /* Get tickets in datatable */
-        Route::get('unassigned', ['as' => 'unassigned', 'uses' => 'Agent\helpdesk\TicketController@unassigned']); /* To show Unassigned Tickets */
-
-        Route::get('/ticket/unassigned', ['as' => 'get.unassigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_unassigned']);  /* Get tickets in datatable */
-        // Department ticket
-            Route::get('/{dept}/open', ['as' => 'dept.open.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptopen']); // Open
-            Route::get('tickets/{dept}/{status}', ['as' => 'dept.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptTicket']); // Open
-
-            Route::get('/{dept}/assigned', ['as' => 'dept.inprogress.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptinprogress']); // Inprogress
-
-        Route::get('/{dept}/closed', ['as' => 'dept.closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptclose']); // Closed
-        /*
-         * Followup tickets
-         */
-        Route::get('/ticket/followup', ['as' => 'followup.ticket', 'uses' => 'Agent\helpdesk\TicketController@followupTicketList']); //  Get Closed Ticket /
-
-        Route::get('/ticket/get-followup', ['as' => 'get.followup.ticket', 'uses' => 'Agent\helpdesk\TicketController@getFollowup']);  // Get tickets in datatable /
-            Route::get('/ticket/close/get-approval/{id}', ['as' => 'get.close.approval.ticket', 'uses' => 'Agent\helpdesk\TicketController@getCloseapproval']);  // Get tickets in datatable /
-            Route::get('filter', ['as'=>'filter', 'uses'=>'Agent\helpdesk\Filter\FilterControllerOld@getFilter']);
-
-        /*
-         *=======================================================================
-         *                 DEPRECATED ROUTE BLOCKS END
-         *=======================================================================
-         */
+        Route::get('get-filtered-tickets', ['as'=>'get-filtered-tickets', 'uses'=>'Agent\helpdesk\Filter\RelationFilterController@getFilter']);
     });
 
     /*
@@ -529,7 +465,7 @@ Route::group(['middleware' => ['web']], function () {
 
 //testing ckeditor
     //===================================================================================
-    Route::group(['middleware' => 'role.user', 'middleware' => 'auth'], function () {
+    Route::group(['middleware' => ['role.user', 'auth']], function () {
         Route::get('client-profile', ['as' => 'client.profile', 'uses' => 'Client\helpdesk\GuestController@getProfile']); /*  User profile get  */
 
         Route::get('mytickets', ['as' => 'ticket2', 'uses' => 'Client\helpdesk\GuestController@getMyticket']);

@@ -87,6 +87,11 @@ class Repository
     protected $environmentVariables;
 
     /**
+     * @var bool
+     */
+    protected $inheritEnvironmentVariables;
+
+    /**
      * Timeout that should be set for every running process.
      *
      * @var int
@@ -113,14 +118,14 @@ class Repository
      */
     public function __construct($dir, $options = [])
     {
-        $is_windows = defined('PHP_WINDOWS_VERSION_BUILD');
         $options = array_merge([
-            'working_dir'           => null,
-            'debug'                 => true,
-            'logger'                => null,
-            'environment_variables' => $is_windows ? ['PATH' => getenv('path')] : [],
-            'command'               => 'git',
-            'process_timeout'       => 3600,
+            'working_dir'                   => null,
+            'debug'                         => true,
+            'logger'                        => null,
+            'command'                       => 'git',
+            'environment_variables'         => [],
+            'inherit_environment_variables' => false,
+            'process_timeout'               => 3600,
         ], $options);
 
         if (null !== $options['logger'] && !$options['logger'] instanceof LoggerInterface) {
@@ -131,10 +136,16 @@ class Repository
         $this->initDir($dir, $options['working_dir']);
 
         $this->objects = [];
-        $this->debug = (bool) $options['debug'];
-        $this->environmentVariables = $options['environment_variables'];
-        $this->processTimeout = $options['process_timeout'];
         $this->command = $options['command'];
+        $this->debug = (bool) $options['debug'];
+        $this->processTimeout = $options['process_timeout'];
+
+        if (defined('PHP_WINDOWS_VERSION_BUILD') && isset($_SERVER['PATH']) && !isset($options['environment_variables']['PATH'])) {
+            $options['environment_variables']['PATH'] = $_SERVER['PATH'];
+        }
+
+        $this->environmentVariables = $options['environment_variables'];
+        $this->inheritEnvironmentVariables = $options['inherit_environment_variables'];
 
         if (true === $this->debug && null !== $this->logger) {
             $this->logger->debug(sprintf('Repository created (git dir: "%s", working dir: "%s")', $this->gitDir, $this->workingDir ?: 'none'));
@@ -411,30 +422,19 @@ class Repository
     /**
      * Returns the size of repository, in kilobytes.
      *
-     * @throws RuntimeException An error occurred while computing size
-     *
      * @return int A sum, in kilobytes
      */
     public function getSize()
     {
-        $process = new Process(['du', '-skc', $this->gitDir]);
-        $process->run();
-
-        if (!preg_match('/(\d+)\s+total$/', trim($process->getOutput()), $vars)) {
-            $message = sprintf("Unable to parse process output\ncommand: %s\noutput: %s", $process->getCommandLine(), $process->getOutput());
-
-            if (null !== $this->logger) {
-                $this->logger->error($message);
+        $totalBytes = 0;
+        $path = realpath($this->gitDir);
+        if ($path && file_exists($path)) {
+            foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS)) as $object) {
+                $totalBytes += $object->getSize();
             }
-
-            if (true === $this->debug) {
-                throw new RuntimeException('unable to parse repository size output');
-            }
-
-            return;
         }
 
-        return $vars[1];
+        return (int) ($totalBytes / 1000 + 0.5);
     }
 
     /**
@@ -620,7 +620,13 @@ class Repository
         $base[] = $command;
 
         $process = new Process(array_merge($base, $args));
-        $process->setEnv($this->environmentVariables);
+
+        if ($this->inheritEnvironmentVariables) {
+            $process->setEnv(array_replace($_SERVER, $this->environmentVariables));
+        } else {
+            $process->setEnv($this->environmentVariables);
+        }
+
         $process->setTimeout($this->processTimeout);
         $process->setIdleTimeout($this->processTimeout);
 

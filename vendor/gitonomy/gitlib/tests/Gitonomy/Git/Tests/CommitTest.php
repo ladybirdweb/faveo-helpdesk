@@ -227,14 +227,8 @@ class CommitTest extends AbstractTest
     public function testGetBodyMessage($repository)
     {
         $commit = $repository->getCommit(self::LONGMESSAGE_COMMIT);
-        $message = <<<'EOL'
-If you want to know everything,
-I ran something like `chmox +x test.sh`
-
-Hello and good bye.
-
-EOL;
-
+        $nl = chr(10);
+        $message = "If you want to know everything,{$nl}I ran something like `chmox +x test.sh`{$nl}{$nl}Hello and good bye.{$nl}";
         $this->assertEquals($message, $commit->getBodyMessage());
 
         $commit = $repository->getCommit(self::INITIAL_COMMIT);

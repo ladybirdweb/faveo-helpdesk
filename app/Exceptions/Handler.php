@@ -4,13 +4,12 @@ namespace App\Exceptions;
 
 // controller
 use Bugsnag;
-use Bugsnag\BugsnagLaravel\BugsnagExceptionHandler as ExceptionHandler;
 use Config;
 use Exception;
 // use Symfony\Component\HttpKernel\Exception\HttpException;
-// use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Foundation\Validation\ValidationException as foundation;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;

@@ -1,3 +1,7 @@
+# Deprecated
+
+This repository is no longer maintained. As an alternative, check [codacy-coverage-reporter](https://github.com/codacy/codacy-coverage-reporter) to send your test coverage results to your Codacy dashboard.
+
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/d992a862b1994805907ec277e16b0fda)](https://www.codacy.com/app/Codacy/php-codacy-coverage)
 [![Codacy Badge](https://api.codacy.com/project/badge/coverage/d992a862b1994805907ec277e16b0fda)](https://www.codacy.com/app/Codacy/php-codacy-coverage)
 [![Circle CI](https://circleci.com/gh/codacy/php-codacy-coverage.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/codacy/php-codacy-coverage)

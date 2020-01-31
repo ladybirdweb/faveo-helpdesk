@@ -3,11 +3,11 @@
 namespace Laravel\Socialite\Two;
 
 use GuzzleHttp\Client;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Contracts\Provider as ProviderContract;
 
 abstract class AbstractProvider implements ProviderContract
@@ -176,7 +176,8 @@ abstract class AbstractProvider implements ProviderContract
     protected function getCodeFields($state = null)
     {
         $fields = [
-            'client_id' => $this->clientId, 'redirect_uri' => $this->redirectUrl,
+            'client_id' => $this->clientId,
+            'redirect_uri' => $this->redirectUrl,
             'scope' => $this->formatScopes($this->getScopes(), $this->scopeSeparator),
             'response_type' => 'code',
         ];
@@ -276,8 +277,10 @@ abstract class AbstractProvider implements ProviderContract
     protected function getTokenFields($code)
     {
         return [
-            'client_id' => $this->clientId, 'client_secret' => $this->clientSecret,
-            'code' => $code, 'redirect_uri' => $this->redirectUrl,
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret,
+            'code' => $code,
+            'redirect_uri' => $this->redirectUrl,
         ];
     }
 

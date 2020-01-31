@@ -14,6 +14,7 @@ namespace Gitonomy\Git\Reference;
 
 use Gitonomy\Git\Exception\ProcessException;
 use Gitonomy\Git\Exception\RuntimeException;
+use Gitonomy\Git\Parser\ReferenceParser;
 use Gitonomy\Git\Parser\TagParser;
 use Gitonomy\Git\Reference;
 
@@ -21,6 +22,7 @@ use Gitonomy\Git\Reference;
  * Representation of a tag reference.
  *
  * @author Alexandre Salomé <alexandre.salome@gmail.com>
+ * @author Bruce Wells <brucekwells@gmail.com>
  */
 class Tag extends Reference
 {
@@ -47,6 +49,32 @@ class Tag extends Reference
         }
 
         return true;
+    }
+
+    /**
+     * Returns the actual commit associated with the tag, and not the hash of the tag if annotated.
+     *
+     * @return Commit
+     */
+    public function getCommit()
+    {
+        if ($this->isAnnotated()) {
+            try {
+                $output = $this->repository->run('show-ref', ['-d', '--tag', $this->revision]);
+                $parser = new ReferenceParser();
+                $parser->parse($output);
+
+                foreach ($parser->references as $row) {
+                    list($commitHash, $fullname) = $row;
+                }
+
+                return $this->repository->getCommit($commitHash);
+            } catch (ProcessException $e) {
+                // ignore the exception
+            }
+        }
+
+        return parent::getCommit();
     }
 
     /**
