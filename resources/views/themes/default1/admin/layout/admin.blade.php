@@ -368,7 +368,9 @@
                     <!--<div class="col-md-6">-->
                     @yield('PageHeader')
                     <!--</div>-->
-                    {!! Breadcrumbs::renderIfExists() !!}
+                    @if(Breadcrumbs::exists())
+                    {!! Breadcrumbs::render() !!}
+                    @endif
                     <!--</div>-->
                 </section>
 

@@ -7,9 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'thomaswelton\\GravatarLib\\' => array($vendorDir . '/thomaswelton/gravatarlib'),
-    'UpdateHelper\\' => array($vendorDir . '/kylekatarnls/update-helper/src'),
     'PhpSpec' => array($vendorDir . '/phpspec/phpspec/src'),
-    'Parsedown' => array($vendorDir . '/erusev/parsedown'),
     'PHPExcel' => array($vendorDir . '/phpoffice/phpexcel/Classes'),
     'Mremi\\UrlShortener' => array($vendorDir . '/mremi/url-shortener/src'),
     'Maatwebsite\\Excel\\' => array($vendorDir . '/maatwebsite/excel/src'),
@@ -19,7 +17,4 @@ return array(
     'Flow' => array($vendorDir . '/flowjs/flow-php-server/src'),
     'Fetch' => array($vendorDir . '/tedivm/fetch/src'),
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
-    'Chumper\\Datatable' => array($vendorDir . '/chumper/datatable/src'),
-    'Bugsnag_' => array($vendorDir . '/bugsnag/bugsnag/src'),
-    'Bugsnag\\BugsnagLaravel\\' => array($vendorDir . '/bugsnag/bugsnag-laravel/src'),
 );

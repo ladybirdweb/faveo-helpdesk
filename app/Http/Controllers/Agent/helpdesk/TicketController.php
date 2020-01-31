@@ -753,7 +753,7 @@ class TicketController extends Controller
                                         'ticket_number'           => $ticket_number2,
                                         'department_sign'         => '',
                                         'system_link'             => $link,
-                                        ]);
+                                    ]);
                         }
                     } catch (\Exception $e) {
                     }
@@ -811,19 +811,19 @@ class TicketController extends Controller
                 try {
                     $this->PhpMailController->sendmail(
                             $from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = [
-                        'user'  => $email_data['to_user'],
-                        'email' => $email_data['to_email'],
+                                'user'  => $email_data['to_user'],
+                                'email' => $email_data['to_email'],
                             ], $message = [
-                        'subject' => $updated_subject,
-                        'body'    => $body, 'scenario' => $mail,
+                                'subject' => $updated_subject,
+                                'body'    => $body, 'scenario' => $mail,
                             ], $template_variables = [
-                        'ticket_agent_name'   => $email_data['to_user_name'],
-                        'ticket_client_name'  => $username,
-                        'ticket_client_email' => $emailadd,
-                        'user'                => $email_data['to_user_name'],
-                        'ticket_number'       => $ticket_number2,
-                        'email_address'       => $emailadd,
-                        'name'                => $ticket_creator, ]
+                                'ticket_agent_name'   => $email_data['to_user_name'],
+                                'ticket_client_name'  => $username,
+                                'ticket_client_email' => $emailadd,
+                                'user'                => $email_data['to_user_name'],
+                                'ticket_number'       => $ticket_number2,
+                                'email_address'       => $emailadd,
+                                'name'                => $ticket_creator, ]
                     );
                 } catch (\Exception $e) {
                 }
@@ -1153,11 +1153,11 @@ class TicketController extends Controller
             return 0;
         }
         $data = [
-                'id'         => $ticket_status->ticket_number,
-                'status'     => 'Closed',
-                'first_name' => Auth::user()->first_name,
-                'last_name'  => Auth::user()->last_name,
-            ];
+            'id'         => $ticket_status->ticket_number,
+            'status'     => 'Closed',
+            'first_name' => Auth::user()->first_name,
+            'last_name'  => Auth::user()->last_name,
+        ];
         \Event::dispatch('change-status', [$data]);
 
         return 'your ticket'.$ticket_status->ticket_number.' has been closed';
@@ -2106,9 +2106,9 @@ class TicketController extends Controller
         $email = $email;
         $ticket_id = $ticket_id;
         $validator = \Validator::make(
-                        ['email' => $email,
-                    'name'       => $name, ], ['email'       => 'required|email',
-                        ]
+                        ['email'         => $email,
+                            'name'       => $name, ], ['email'       => 'required|email',
+                            ]
         );
         $user = User::where('email', '=', $email)->first();
         if ($user) {

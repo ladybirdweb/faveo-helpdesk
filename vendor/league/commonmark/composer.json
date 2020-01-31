@@ -1,0 +1,85 @@
+{
+    "name": "league/commonmark",
+    "type": "library",
+    "description": "PHP Markdown parser based on the CommonMark spec",
+    "keywords": ["markdown","parser","commonmark"],
+    "homepage": "https://commonmark.thephpleague.com",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Colin O'Dell",
+            "email": "colinodell@gmail.com",
+            "homepage": "https://www.colinodell.com",
+            "role": "Lead Developer"
+        }
+    ],
+    "support": {
+        "docs": "https://commonmark.thephpleague.com/",
+        "issues": "https://github.com/thephpleague/commonmark/issues",
+        "rss": "https://github.com/thephpleague/commonmark/releases.atom",
+        "source": "https://github.com/thephpleague/commonmark"
+    },
+    "replace": {
+        "colinodell/commonmark-php": "*"
+    },
+    "require": {
+        "php": "^7.1",
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
+        "ext-json": "*",
+        "cebe/markdown": "~1.0",
+        "commonmark/commonmark.js": "0.29.1",
+        "erusev/parsedown": "~1.0",
+        "michelf/php-markdown": "~1.4",
+        "mikehaertl/php-shellcommand": "^1.4",
+        "phpstan/phpstan-shim": "^0.11.5",
+        "phpunit/phpunit": "^7.5",
+        "scrutinizer/ocular": "^1.5",
+        "symfony/finder": "^4.2"
+    },
+    "suggest": {
+        "league/commonmark-extras": "Library of useful extensions including smart punctuation"
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "commonmark/commonmark.js",
+                "version": "0.29.1",
+                "dist": {
+                    "url": "https://github.com/commonmark/commonmark.js/archive/0.29.1.zip",
+                    "type": "zip"
+                }
+            }
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "League\\CommonMark\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "League\\CommonMark\\Tests\\Unit\\": "tests/unit",
+            "League\\CommonMark\\Tests\\Functional\\": "tests/functional"
+        }
+    },
+    "bin": ["bin/commonmark"],
+    "scripts": {
+        "phpstan": "phpstan analyse",
+        "phpunit": "phpunit --no-coverage",
+        "test": [
+            "@phpstan",
+            "@phpunit"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.3-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

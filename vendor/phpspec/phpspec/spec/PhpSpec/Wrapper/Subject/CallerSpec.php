@@ -5,7 +5,9 @@ namespace spec\PhpSpec\Wrapper\Subject;
 use Phpspec\CodeAnalysis\AccessInspector;
 use PhpSpec\Exception\Example\FailureException;
 use PhpSpec\Exception\ExceptionFactory;
+use PhpSpec\Exception\Fracture\FactoryDoesNotReturnObjectException;
 use PhpSpec\Exception\Fracture\PropertyNotFoundException;
+use PhpSpec\Util\DispatchTrait;
 use PhpSpec\Wrapper\Subject\WrappedObject;
 use PhpSpec\Wrapper\Wrapper;
 use PhpSpec\Wrapper\Subject;
@@ -19,6 +21,8 @@ use Prophecy\Argument;
 
 class CallerSpec extends ObjectBehavior
 {
+    use DispatchTrait;
+
     function let(WrappedObject $wrappedObject, ExampleNode $example, Dispatcher $dispatcher,
                  ExceptionFactory $exceptions, Wrapper $wrapper, AccessInspector $accessInspector, Subject $subject)
     {
@@ -32,6 +36,7 @@ class CallerSpec extends ObjectBehavior
         $exceptions->propertyNotFound(Argument::cetera())->willReturn(new PropertyNotFoundException('Message', 'subject', 'prop'));
 
         $accessInspector->isMethodCallable(Argument::cetera())->willReturn(false);
+        $dispatcher->dispatch(Argument::any(), Argument::any())->willReturnArgument(0);
     }
 
     function it_dispatches_method_call_events(Dispatcher $dispatcher, WrappedObject $wrappedObject,
@@ -42,14 +47,16 @@ class CallerSpec extends ObjectBehavior
 
         $accessInspector->isMethodCallable(Argument::type('ArrayObject'), 'count')->willReturn(true);
 
-        $dispatcher->dispatch(
-            'beforeMethodCall',
-            Argument::type('PhpSpec\Event\MethodCallEvent')
+        $this->dispatch(
+            $dispatcher,
+            Argument::type('PhpSpec\Event\MethodCallEvent'),
+            'beforeMethodCall'
         )->shouldBeCalled();
 
-        $dispatcher->dispatch(
-            'afterMethodCall',
-            Argument::type('PhpSpec\Event\MethodCallEvent')
+        $this->dispatch(
+            $dispatcher,
+            Argument::type('PhpSpec\Event\MethodCallEvent'),
+            'afterMethodCall'
         )->shouldBeCalled();
 
         $this->call('count');
@@ -268,11 +275,28 @@ class CallerSpec extends ObjectBehavior
         $this->shouldThrow('\PhpSpec\Exception\Wrapper\SubjectException')
             ->duringGet('foo');
     }
+
+    function it_delegates_throwing_factory_does_not_return_object_exception(
+        WrappedObject $wrappedObject
+    ) {
+        $wrappedObject->isInstantiated()->willReturn(false);
+        $wrappedObject->getInstance()->willReturn(null);
+        $wrappedObject->getClassName()->willReturn(\stdClass::class);
+        $wrappedObject->getFactoryMethod()->willReturn([ExampleClass::class, 'brokenFactory']);
+        $wrappedObject->getArguments()->willReturn([]);
+        $this->shouldThrow(FactoryDoesNotReturnObjectException::class)
+            ->during('getWrappedObject');
+    }
 }
 
 class ExampleClass
 {
     private function privateMethod()
     {
+    }
+
+    public static function brokenFactory()
+    {
+        return null;
     }
 }

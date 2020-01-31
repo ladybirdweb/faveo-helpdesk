@@ -139,11 +139,11 @@ class FormController extends Controller
                 if (!empty(Input::get('name')[$i])) {
                     $name = str_slug(Input::get('name')[$i], '_');
                     $field = Fields::create([
-                                'forms_id' => $forms->id,
-                                'label'    => Input::get('label')[$i],
-                                'name'     => $name,
-                                'type'     => Input::get('type')[$i],
-                                'required' => $require[$i],
+                        'forms_id' => $forms->id,
+                        'label'    => Input::get('label')[$i],
+                        'name'     => $name,
+                        'type'     => Input::get('type')[$i],
+                        'required' => $require[$i],
                     ]);
                     $field_id = $field->id;
                     $this->createValues($field_id, Input::get('value')[$i], null, $name);
