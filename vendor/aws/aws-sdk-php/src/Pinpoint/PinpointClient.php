@@ -12,12 +12,22 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise createAppAsync(array $args = [])
  * @method \Aws\Result createCampaign(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createCampaignAsync(array $args = [])
+ * @method \Aws\Result createEmailTemplate(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise createEmailTemplateAsync(array $args = [])
  * @method \Aws\Result createExportJob(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createExportJobAsync(array $args = [])
  * @method \Aws\Result createImportJob(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createImportJobAsync(array $args = [])
+ * @method \Aws\Result createJourney(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise createJourneyAsync(array $args = [])
+ * @method \Aws\Result createPushTemplate(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise createPushTemplateAsync(array $args = [])
  * @method \Aws\Result createSegment(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createSegmentAsync(array $args = [])
+ * @method \Aws\Result createSmsTemplate(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise createSmsTemplateAsync(array $args = [])
+ * @method \Aws\Result createVoiceTemplate(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise createVoiceTemplateAsync(array $args = [])
  * @method \Aws\Result deleteAdmChannel(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteAdmChannelAsync(array $args = [])
  * @method \Aws\Result deleteApnsChannel(array $args = [])
@@ -36,20 +46,30 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise deleteCampaignAsync(array $args = [])
  * @method \Aws\Result deleteEmailChannel(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteEmailChannelAsync(array $args = [])
+ * @method \Aws\Result deleteEmailTemplate(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteEmailTemplateAsync(array $args = [])
  * @method \Aws\Result deleteEndpoint(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteEndpointAsync(array $args = [])
  * @method \Aws\Result deleteEventStream(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteEventStreamAsync(array $args = [])
  * @method \Aws\Result deleteGcmChannel(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteGcmChannelAsync(array $args = [])
+ * @method \Aws\Result deleteJourney(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteJourneyAsync(array $args = [])
+ * @method \Aws\Result deletePushTemplate(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deletePushTemplateAsync(array $args = [])
  * @method \Aws\Result deleteSegment(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteSegmentAsync(array $args = [])
  * @method \Aws\Result deleteSmsChannel(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteSmsChannelAsync(array $args = [])
+ * @method \Aws\Result deleteSmsTemplate(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteSmsTemplateAsync(array $args = [])
  * @method \Aws\Result deleteUserEndpoints(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteUserEndpointsAsync(array $args = [])
  * @method \Aws\Result deleteVoiceChannel(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteVoiceChannelAsync(array $args = [])
+ * @method \Aws\Result deleteVoiceTemplate(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteVoiceTemplateAsync(array $args = [])
  * @method \Aws\Result getAdmChannel(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getAdmChannelAsync(array $args = [])
  * @method \Aws\Result getApnsChannel(array $args = [])
@@ -62,6 +82,8 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise getApnsVoipSandboxChannelAsync(array $args = [])
  * @method \Aws\Result getApp(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getAppAsync(array $args = [])
+ * @method \Aws\Result getApplicationDateRangeKpi(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getApplicationDateRangeKpiAsync(array $args = [])
  * @method \Aws\Result getApplicationSettings(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getApplicationSettingsAsync(array $args = [])
  * @method \Aws\Result getApps(array $args = [])
@@ -72,6 +94,8 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise getCampaignAsync(array $args = [])
  * @method \Aws\Result getCampaignActivities(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getCampaignActivitiesAsync(array $args = [])
+ * @method \Aws\Result getCampaignDateRangeKpi(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getCampaignDateRangeKpiAsync(array $args = [])
  * @method \Aws\Result getCampaignVersion(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getCampaignVersionAsync(array $args = [])
  * @method \Aws\Result getCampaignVersions(array $args = [])
@@ -82,8 +106,10 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise getChannelsAsync(array $args = [])
  * @method \Aws\Result getEmailChannel(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getEmailChannelAsync(array $args = [])
- * @method \Aws\Result getEndpoint(array $args = [])
- * @method \GuzzleHttp\Promise\Promise getEndpointAsync(array $args = [])
+ * @method \Aws\Result getEmailTemplate(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getEmailTemplateAsync(array $args = [])
+ * @method \Aws\Result getUserEndpoint(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getUserEndpointAsync(array $args = [])
  * @method \Aws\Result getEventStream(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getEventStreamAsync(array $args = [])
  * @method \Aws\Result getExportJob(array $args = [])
@@ -96,6 +122,16 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise getImportJobAsync(array $args = [])
  * @method \Aws\Result getImportJobs(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getImportJobsAsync(array $args = [])
+ * @method \Aws\Result getJourney(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getJourneyAsync(array $args = [])
+ * @method \Aws\Result getJourneyDateRangeKpi(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getJourneyDateRangeKpiAsync(array $args = [])
+ * @method \Aws\Result getJourneyExecutionActivityMetrics(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getJourneyExecutionActivityMetricsAsync(array $args = [])
+ * @method \Aws\Result getJourneyExecutionMetrics(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getJourneyExecutionMetricsAsync(array $args = [])
+ * @method \Aws\Result getPushTemplate(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getPushTemplateAsync(array $args = [])
  * @method \Aws\Result getSegment(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getSegmentAsync(array $args = [])
  * @method \Aws\Result getSegmentExportJobs(array $args = [])
@@ -110,10 +146,22 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise getSegmentsAsync(array $args = [])
  * @method \Aws\Result getSmsChannel(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getSmsChannelAsync(array $args = [])
+ * @method \Aws\Result getSmsTemplate(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getSmsTemplateAsync(array $args = [])
  * @method \Aws\Result getUserEndpoints(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getUserEndpointsAsync(array $args = [])
  * @method \Aws\Result getVoiceChannel(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getVoiceChannelAsync(array $args = [])
+ * @method \Aws\Result getVoiceTemplate(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise getVoiceTemplateAsync(array $args = [])
+ * @method \Aws\Result listJourneys(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise listJourneysAsync(array $args = [])
+ * @method \Aws\Result listTagsForResource(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise listTagsForResourceAsync(array $args = [])
+ * @method \Aws\Result listTemplateVersions(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise listTemplateVersionsAsync(array $args = [])
+ * @method \Aws\Result listTemplates(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise listTemplatesAsync(array $args = [])
  * @method \Aws\Result phoneNumberValidate(array $args = [])
  * @method \GuzzleHttp\Promise\Promise phoneNumberValidateAsync(array $args = [])
  * @method \Aws\Result putEventStream(array $args = [])
@@ -126,6 +174,10 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise sendMessagesAsync(array $args = [])
  * @method \Aws\Result sendUsersMessages(array $args = [])
  * @method \GuzzleHttp\Promise\Promise sendUsersMessagesAsync(array $args = [])
+ * @method \Aws\Result tagResource(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise tagResourceAsync(array $args = [])
+ * @method \Aws\Result untagResource(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise untagResourceAsync(array $args = [])
  * @method \Aws\Result updateAdmChannel(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateAdmChannelAsync(array $args = [])
  * @method \Aws\Result updateApnsChannel(array $args = [])
@@ -144,60 +196,31 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise updateCampaignAsync(array $args = [])
  * @method \Aws\Result updateEmailChannel(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateEmailChannelAsync(array $args = [])
- * @method \Aws\Result updateEndpoint(array $args = [])
- * @method \GuzzleHttp\Promise\Promise updateEndpointAsync(array $args = [])
- * @method \Aws\Result updateEndpointsBatch(array $args = [])
- * @method \GuzzleHttp\Promise\Promise updateEndpointsBatchAsync(array $args = [])
+ * @method \Aws\Result updateEmailTemplate(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise updateEmailTemplateAsync(array $args = [])
+ * @method \Aws\Result updateUserEndpoint(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise updateUserEndpointAsync(array $args = [])
+ * @method \Aws\Result updateUserEndpointsBatch(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise updateUserEndpointsBatchAsync(array $args = [])
  * @method \Aws\Result updateGcmChannel(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateGcmChannelAsync(array $args = [])
+ * @method \Aws\Result updateJourney(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise updateJourneyAsync(array $args = [])
+ * @method \Aws\Result updateJourneyState(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise updateJourneyStateAsync(array $args = [])
+ * @method \Aws\Result updatePushTemplate(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise updatePushTemplateAsync(array $args = [])
  * @method \Aws\Result updateSegment(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateSegmentAsync(array $args = [])
  * @method \Aws\Result updateSmsChannel(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateSmsChannelAsync(array $args = [])
+ * @method \Aws\Result updateSmsTemplate(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise updateSmsTemplateAsync(array $args = [])
+ * @method \Aws\Result updateTemplateActiveVersion(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise updateTemplateActiveVersionAsync(array $args = [])
  * @method \Aws\Result updateVoiceChannel(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateVoiceChannelAsync(array $args = [])
+ * @method \Aws\Result updateVoiceTemplate(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise updateVoiceTemplateAsync(array $args = [])
  */
-class PinpointClient extends AwsClient
-{
-    private static $nameCollisionOverrides = [
-        'GetUserEndpoint' => 'GetEndpoint',
-        'GetUserEndpointAsync' => 'GetEndpointAsync',
-        'UpdateUserEndpoint' => 'UpdateEndpoint',
-        'UpdateUserEndpointAsync' => 'UpdateEndpointAsync',
-        'UpdateUserEndpointsBatch' => 'UpdateEndpointsBatch',
-        'UpdateUserEndpointsBatchAsync' => 'UpdateEndpointsBatchAsync',
-    ];
-
-    public function __call($name, array $args)
-    {
-        // Overcomes a naming collision with `AwsClient::getEndpoint`.
-        if (isset(self::$nameCollisionOverrides[ucfirst($name)])) {
-            $name = self::$nameCollisionOverrides[ucfirst($name)];
-        }
-
-        return parent::__call($name, $args);
-    }
-
-    /**
-     * @internal
-     * @codeCoverageIgnore
-     */
-    public static function applyDocFilters(array $api, array $docs)
-    {
-        foreach (self::$nameCollisionOverrides as $overrideName => $operationName) {
-            if (substr($overrideName, -5) === 'Async') {
-                continue;
-            }
-            // Overcomes a naming collision with `AwsClient::getEndpoint`.
-            $api['operations'][$overrideName] = $api['operations'][$operationName];
-            $docs['operations'][$overrideName] = $docs['operations'][$operationName];
-            unset($api['operations'][$operationName], $docs['operations'][$operationName]);
-        }
-        ksort($api['operations']);
-
-        return [
-            new Service($api, ApiProvider::defaultProvider()),
-            new DocModel($docs)
-        ];
-    }
-}
+class PinpointClient extends AwsClient {}

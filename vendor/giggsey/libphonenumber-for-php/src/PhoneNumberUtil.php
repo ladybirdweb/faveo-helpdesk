@@ -17,7 +17,7 @@ use libphonenumber\Leniency\AbstractLeniency;
  * http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html
  *
  * @author Shaopeng Jia
- * @see https://github.com/googlei18n/libphonenumber
+ * @see https://github.com/google/libphonenumber
  */
 class PhoneNumberUtil
 {
@@ -530,7 +530,6 @@ class PhoneNumberUtil
     protected static function initMobileTokenMappings()
     {
         static::$MOBILE_TOKEN_MAPPINGS = array();
-        static::$MOBILE_TOKEN_MAPPINGS['52'] = '1';
         static::$MOBILE_TOKEN_MAPPINGS['54'] = '9';
     }
 
@@ -1053,7 +1052,13 @@ class PhoneNumberUtil
      * so that clients could use it to split a national significant number into NDC and subscriber
      * number. The NDC of a phone number is normally the first group of digit(s) right after the
      * country calling code when the number is formatted in the international format, if there is a
-     * subscriber number part that follows. An example of how this could be used:
+     * subscriber number part that follows.
+     *
+     * follows.
+     *
+     * N.B.: similar to an area code, not all numbers have an NDC!
+     *
+     * An example of how this could be used:
      *
      * <code>
      * $phoneUtil = PhoneNumberUtil::getInstance();
@@ -1074,7 +1079,7 @@ class PhoneNumberUtil
      * {@link #getLengthOfGeographicalAreaCode}.
      *
      * @param PhoneNumber $number the PhoneNumber object for which clients want to know the length of the NDC.
-     * @return int the length of NDC of the PhoneNumber object passed in.
+     * @return int the length of NDC of the PhoneNumber object passed in, which could be zero
      */
     public function getLengthOfNationalDestinationCode(PhoneNumber $number)
     {
@@ -2366,15 +2371,6 @@ class PhoneNumberUtil
                     // called within Brazil. Without that, most of the carriers won't connect the call.
                     // Because of that, we return an empty string here.
                     : '';
-            } elseif ($isValidNumber && $regionCode == 'HU') {
-                // The national format for HU numbers doesn't contain the national prefix, because that is
-                // how numbers are normally written down. However, the national prefix is obligatory when
-                // dialing from a mobile phone, except for short numbers. As a result, we add it back here
-                // if it is a valid regular length phone number.
-                $formattedNumber = $this->getNddPrefixForRegion(
-                        $regionCode,
-                        true /* strip non-digits */
-                    ) . ' ' . $this->format($numberNoExt, PhoneNumberFormat::NATIONAL);
             } elseif ($countryCallingCode === static::NANPA_COUNTRY_CODE) {
                 // For NANPA countries, we output international format for numbers that can be dialed
                 // internationally, since that always works, except for numbers which might potentially be
@@ -3155,7 +3151,7 @@ class PhoneNumberUtil
      *
      * @param string|int $regionCodeOrType the region for which an example number is needed
      * @param int $type the PhoneNumberType of number that is needed
-     * @return PhoneNumber a valid number for the specified region and type. Returns null when the metadata
+     * @return PhoneNumber|null a valid number for the specified region and type. Returns null when the metadata
      *     does not contain such information or if an invalid region or region 001 was entered.
      *     For 001 (representing non-geographical numbers), call
      *     {@link #getExampleNumberForNonGeoEntity} instead.
@@ -3479,7 +3475,7 @@ class PhoneNumberUtil
      */
     public function isPossibleNumber($number, $regionDialingFrom = null)
     {
-        if ($regionDialingFrom !== null && is_string($number)) {
+        if (is_string($number)) {
             try {
                 return $this->isPossibleNumber($this->parse($number, $regionDialingFrom));
             } catch (NumberParseException $e) {

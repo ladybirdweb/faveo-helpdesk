@@ -13,6 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use const PHP_EOL;
 use function assert;
+use function error_get_last;
 use function file_exists;
 use function file_get_contents;
 use function is_readable;
@@ -57,7 +58,7 @@ EOT
         $fileNames = $input->getArgument('file');
 
         if ($fileNames === null) {
-            return null;
+            return 0;
         }
 
         foreach ((array) $fileNames as $fileName) {
@@ -72,14 +73,22 @@ EOT
                 throw new InvalidArgumentException(
                     sprintf("SQL file '<info>%s</info>' does not exist.", $filePath)
                 );
-            } elseif (! is_readable($filePath)) {
+            }
+
+            if (! is_readable($filePath)) {
                 throw new InvalidArgumentException(
                     sprintf("SQL file '<info>%s</info>' does not have read permissions.", $filePath)
                 );
             }
 
             $output->write(sprintf("Processing file '<info>%s</info>'... ", $filePath));
-            $sql = file_get_contents($filePath);
+            $sql = @file_get_contents($filePath);
+
+            if ($sql === false) {
+                throw new RuntimeException(
+                    sprintf("Unable to read SQL file '<info>%s</info>': %s", $filePath, error_get_last()['message'])
+                );
+            }
 
             if ($conn instanceof PDOConnection) {
                 // PDO Drivers
@@ -124,6 +133,6 @@ EOT
             }
         }
 
-        return null;
+        return 0;
     }
 }

@@ -154,11 +154,10 @@ class MySqlPlatform extends AbstractPlatform
             $currentDatabase = $this->quoteStringLiteral($currentDatabase);
             $table           = $this->quoteStringLiteral($table);
 
-            return 'SELECT TABLE_NAME AS `Table`, NON_UNIQUE AS Non_Unique, INDEX_NAME AS Key_name, ' .
-                   'SEQ_IN_INDEX AS Seq_in_index, COLUMN_NAME AS Column_Name, COLLATION AS Collation, ' .
-                   'CARDINALITY AS Cardinality, SUB_PART AS Sub_Part, PACKED AS Packed, ' .
-                   'NULLABLE AS `Null`, INDEX_TYPE AS Index_Type, COMMENT AS Comment ' .
-                   'FROM information_schema.STATISTICS WHERE TABLE_NAME = ' . $table . ' AND TABLE_SCHEMA = ' . $currentDatabase .
+            return 'SELECT NON_UNIQUE AS Non_Unique, INDEX_NAME AS Key_name, COLUMN_NAME AS Column_Name,' .
+                   ' SUB_PART AS Sub_Part, INDEX_TYPE AS Index_Type' .
+                   ' FROM information_schema.STATISTICS WHERE TABLE_NAME = ' . $table .
+                   ' AND TABLE_SCHEMA = ' . $currentDatabase .
                    ' ORDER BY SEQ_IN_INDEX ASC';
         }
 
@@ -504,7 +503,7 @@ SQL
             $options['collate'] = $options['charset'] . '_unicode_ci';
         }
 
-        $tableOptions[] = sprintf('COLLATE %s', $options['collate']);
+        $tableOptions[] = $this->getColumnCollationDeclarationSQL($options['collate']);
 
         // Engine
         if (! isset($options['engine'])) {
@@ -520,9 +519,7 @@ SQL
 
         // Comment
         if (isset($options['comment'])) {
-            $comment = trim($options['comment'], " '");
-
-            $tableOptions[] = sprintf('COMMENT = %s ', $this->quoteStringLiteral($comment));
+            $tableOptions[] = sprintf('COMMENT = %s ', $this->quoteStringLiteral($options['comment']));
         }
 
         // Row format
@@ -554,8 +551,10 @@ SQL
     {
         $columnSql  = [];
         $queryParts = [];
-        if ($diff->newName !== false) {
-            $queryParts[] = 'RENAME TO ' . $diff->getNewName()->getQuotedName($this);
+        $newName    = $diff->getNewName();
+
+        if ($newName !== false) {
+            $queryParts[] = 'RENAME TO ' . $newName->getQuotedName($this);
         }
 
         foreach ($diff->addedColumns as $column) {
@@ -613,6 +612,17 @@ SQL
             $keyColumns   = array_unique(array_values($diff->addedIndexes['primary']->getColumns()));
             $queryParts[] = 'ADD PRIMARY KEY (' . implode(', ', $keyColumns) . ')';
             unset($diff->addedIndexes['primary']);
+        } elseif (isset($diff->changedIndexes['primary'])) {
+            // Necessary in case the new primary key includes a new auto_increment column
+            foreach ($diff->changedIndexes['primary']->getColumns() as $columnName) {
+                if (isset($diff->addedColumns[$columnName]) && $diff->addedColumns[$columnName]->getAutoincrement()) {
+                    $keyColumns   = array_unique(array_values($diff->changedIndexes['primary']->getColumns()));
+                    $queryParts[] = 'DROP PRIMARY KEY';
+                    $queryParts[] = 'ADD PRIMARY KEY (' . implode(', ', $keyColumns) . ')';
+                    unset($diff->changedIndexes['primary']);
+                    break;
+                }
+            }
         }
 
         $sql      = [];
@@ -845,10 +855,14 @@ SQL
      */
     protected function getPostAlterTableRenameIndexForeignKeySQL(TableDiff $diff)
     {
-        $sql       = [];
-        $tableName = $diff->newName !== false
-            ? $diff->getNewName()->getQuotedName($this)
-            : $diff->getName($this)->getQuotedName($this);
+        $sql     = [];
+        $newName = $diff->getNewName();
+
+        if ($newName !== false) {
+            $tableName = $newName->getQuotedName($this);
+        } else {
+            $tableName = $diff->getName($this)->getQuotedName($this);
+        }
 
         foreach ($this->getRemainingForeignKeyConstraintsRequiringRenamedIndexes($diff) as $foreignKey) {
             if (in_array($foreignKey, $diff->changedForeignKeys, true)) {
@@ -941,6 +955,22 @@ SQL
         }
 
         return $this->getUnsignedDeclaration($columnDef) . $autoinc;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getColumnCharsetDeclarationSQL($charset)
+    {
+        return 'CHARACTER SET ' . $charset;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getColumnCollationDeclarationSQL($collation)
+    {
+        return 'COLLATE ' . $this->quoteSingleIdentifier($collation);
     }
 
     /**

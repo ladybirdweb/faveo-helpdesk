@@ -4,26 +4,61 @@ namespace PhpParser\Lexer;
 
 use PhpParser\Error;
 use PhpParser\ErrorHandler;
+use PhpParser\Lexer;
+use PhpParser\Lexer\TokenEmulator\CoaleseEqualTokenEmulator;
+use PhpParser\Lexer\TokenEmulator\FnTokenEmulator;
+use PhpParser\Lexer\TokenEmulator\NumericLiteralSeparatorEmulator;
+use PhpParser\Lexer\TokenEmulator\TokenEmulatorInterface;
+use PhpParser\Parser\Tokens;
 
-class Emulative extends \PhpParser\Lexer
+class Emulative extends Lexer
 {
     const PHP_7_3 = '7.3.0dev';
+    const PHP_7_4 = '7.4.0dev';
+
+    const T_COALESCE_EQUAL = 1007;
+    const T_FN = 1008;
+
+    const FLEXIBLE_DOC_STRING_REGEX = <<<'REGEX'
+/<<<[ \t]*(['"]?)([a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*)\1\r?\n
+(?:.*\r?\n)*?
+(?<indentation>\h*)\2(?![a-zA-Z0-9_\x80-\xff])(?<separator>(?:;?[\r\n])?)/x
+REGEX;
+
+    /** @var mixed[] Patches used to reverse changes introduced in the code */
+    private $patches = [];
+
+    /** @var TokenEmulatorInterface[] */
+    private $tokenEmulators = [];
 
     /**
-     * @var array Patches used to reverse changes introduced in the code
+     * @param mixed[] $options
      */
-    private $patches;
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+
+        $this->tokenEmulators[] = new FnTokenEmulator();
+        $this->tokenEmulators[] = new CoaleseEqualTokenEmulator();
+        $this->tokenEmulators[] = new NumericLiteralSeparatorEmulator();
+
+        $this->tokenMap[self::T_COALESCE_EQUAL] = Tokens::T_COALESCE_EQUAL;
+        $this->tokenMap[self::T_FN] = Tokens::T_FN;
+    }
 
     public function startLexing(string $code, ErrorHandler $errorHandler = null) {
         $this->patches = [];
-        $preparedCode = $this->prepareCode($code);
-        if (null === $preparedCode) {
+
+        if ($this->isEmulationNeeded($code) === false) {
             // Nothing to emulate, yay
             parent::startLexing($code, $errorHandler);
             return;
         }
 
         $collector = new ErrorHandler\Collecting();
+
+        // 1. emulation of heredoc and nowdoc new syntax
+        $preparedCode = $this->processHeredocNowdoc($code);
         parent::startLexing($preparedCode, $collector);
         $this->fixupTokens();
 
@@ -34,32 +69,34 @@ class Emulative extends \PhpParser\Lexer
                 $errorHandler->handleError($error);
             }
         }
+
+        // add token emulation
+        foreach ($this->tokenEmulators as $emulativeToken) {
+            if ($emulativeToken->isEmulationNeeded($code)) {
+                $this->tokens = $emulativeToken->emulate($code, $this->tokens);
+            }
+        }
     }
 
-    /**
-     * Prepares code for emulation. If nothing has to be emulated null is returned.
-     *
-     * @param string $code
-     * @return null|string
-     */
-    private function prepareCode(string $code) {
+    private function isHeredocNowdocEmulationNeeded(string $code): bool
+    {
+        // skip version where this works without emulation
         if (version_compare(\PHP_VERSION, self::PHP_7_3, '>=')) {
-            return null;
+            return false;
         }
 
-        if (strpos($code, '<<<') === false) {
-            // Definitely doesn't contain heredoc/nowdoc
-            return null;
+        return strpos($code, '<<<') !== false;
+    }
+
+    private function processHeredocNowdoc(string $code): string
+    {
+        if ($this->isHeredocNowdocEmulationNeeded($code) === false) {
+            return $code;
         }
 
-        $flexibleDocStringRegex = <<<'REGEX'
-/<<<[ \t]*(['"]?)([a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*)\1\r?\n
-(?:.*\r?\n)*?
-(?<indentation>\h*)\2(?![a-zA-Z_\x80-\xff])(?<separator>(?:;?[\r\n])?)/x
-REGEX;
-        if (!preg_match_all($flexibleDocStringRegex, $code, $matches, PREG_SET_ORDER|PREG_OFFSET_CAPTURE)) {
+        if (!preg_match_all(self::FLEXIBLE_DOC_STRING_REGEX, $code, $matches, PREG_SET_ORDER|PREG_OFFSET_CAPTURE)) {
             // No heredoc/nowdoc found
-            return null;
+            return $code;
         }
 
         // Keep track of how much we need to adjust string offsets due to the modifications we
@@ -93,19 +130,29 @@ REGEX;
             }
         }
 
-        if (empty($this->patches)) {
-            // We did not end up emulating anything
-            return null;
-        }
-
         return $code;
     }
 
-    private function fixupTokens() {
-        assert(count($this->patches) > 0);
+    private function isEmulationNeeded(string $code): bool
+    {
+        foreach ($this->tokenEmulators as $emulativeToken) {
+            if ($emulativeToken->isEmulationNeeded($code)) {
+                return true;
+            }
+        }
+
+        return $this->isHeredocNowdocEmulationNeeded($code);
+    }
+
+    private function fixupTokens()
+    {
+        if (\count($this->patches) === 0) {
+            return;
+        }
 
         // Load first patch
         $patchIdx = 0;
+
         list($patchPos, $patchType, $patchText) = $this->patches[$patchIdx];
 
         // We use a manual loop over the tokens, because we modify the array on the fly

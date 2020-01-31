@@ -9,10 +9,11 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git\Tests;
 
 use Gitonomy\Git\Blob;
-use Gitonomy\Git\Repository;
+use Gitonomy\Git\Exception\RuntimeException;
 use Prophecy\Argument;
 
 class RepositoryTest extends AbstractTest
@@ -24,7 +25,7 @@ class RepositoryTest extends AbstractTest
     {
         $blob = $repository->getCommit(self::LONGFILE_COMMIT)->getTree()->resolvePath('README.md');
 
-        $this->assertTrue($blob instanceof Blob, 'getBlob() returns a Blob object');
+        $this->assertInstanceOf(Blob::class, $blob, 'getBlob() returns a Blob object');
         $this->assertContains('Foo Bar project', $blob->getContent(), 'file is correct');
     }
 
@@ -66,12 +67,10 @@ class RepositoryTest extends AbstractTest
         $loggerProphecy = $this->prophesize('Psr\Log\LoggerInterface');
         $loggerProphecy
             ->info('run command: remote "" ')
-            ->shouldBeCalledTimes(1)
-        ;
+            ->shouldBeCalledTimes(1);
         $loggerProphecy
             ->debug(Argument::type('string')) // duration, return code and output
-            ->shouldBeCalledTimes(3)
-        ;
+            ->shouldBeCalledTimes(3);
 
         $repository->setLogger($loggerProphecy->reveal());
 
@@ -80,7 +79,6 @@ class RepositoryTest extends AbstractTest
 
     /**
      * @dataProvider provideFoobar
-     * @expectedException RuntimeException
      */
     public function testLoggerNOk($repository)
     {
@@ -88,19 +86,18 @@ class RepositoryTest extends AbstractTest
             $this->markTestSkipped();
         }
 
+        $this->expectException(RuntimeException::class);
+
         $loggerProphecy = $this->prophesize('Psr\Log\LoggerInterface');
         $loggerProphecy
             ->info(Argument::type('string'))
-            ->shouldBeCalledTimes(1)
-        ;
+            ->shouldBeCalledTimes(1);
         $loggerProphecy
             ->debug(Argument::type('string')) // duration, return code and output
-            ->shouldBeCalledTimes(3)
-        ;
+            ->shouldBeCalledTimes(3);
         $loggerProphecy
             ->error(Argument::type('string'))
-            ->shouldBeCalledTimes(1)
-        ;
+            ->shouldBeCalledTimes(1);
 
         $repository->setLogger($loggerProphecy->reveal());
 

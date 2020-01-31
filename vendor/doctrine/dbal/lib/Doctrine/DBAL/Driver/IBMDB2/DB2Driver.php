@@ -34,11 +34,13 @@ class DB2Driver extends AbstractDB2Driver
             $password = null;
         }
 
-        return new DB2Connection($params, $username, $password, $driverOptions);
+        return new DB2Connection($params, (string) $username, (string) $password, $driverOptions);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated
      */
     public function getName()
     {

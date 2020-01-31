@@ -50,10 +50,7 @@ class ApplicationDescription
         $this->showHidden = $showHidden;
     }
 
-    /**
-     * @return array
-     */
-    public function getNamespaces()
+    public function getNamespaces(): array
     {
         if (null === $this->namespaces) {
             $this->inspectApplication();
@@ -65,7 +62,7 @@ class ApplicationDescription
     /**
      * @return Command[]
      */
-    public function getCommands()
+    public function getCommands(): array
     {
         if (null === $this->commands) {
             $this->inspectApplication();
@@ -75,13 +72,9 @@ class ApplicationDescription
     }
 
     /**
-     * @param string $name
-     *
-     * @return Command
-     *
      * @throws CommandNotFoundException
      */
-    public function getCommand($name)
+    public function getCommand(string $name): Command
     {
         if (!isset($this->commands[$name]) && !isset($this->aliases[$name])) {
             throw new CommandNotFoundException(sprintf('Command %s does not exist.', $name));
@@ -92,12 +85,12 @@ class ApplicationDescription
 
     private function inspectApplication()
     {
-        $this->commands = array();
-        $this->namespaces = array();
+        $this->commands = [];
+        $this->namespaces = [];
 
         $all = $this->application->all($this->namespace ? $this->application->findNamespace($this->namespace) : null);
         foreach ($this->sortCommands($all) as $namespace => $commands) {
-            $names = array();
+            $names = [];
 
             /** @var Command $command */
             foreach ($commands as $name => $command) {
@@ -114,31 +107,37 @@ class ApplicationDescription
                 $names[] = $name;
             }
 
-            $this->namespaces[$namespace] = array('id' => $namespace, 'commands' => $names);
+            $this->namespaces[$namespace] = ['id' => $namespace, 'commands' => $names];
         }
     }
 
     private function sortCommands(array $commands): array
     {
-        $namespacedCommands = array();
-        $globalCommands = array();
+        $namespacedCommands = [];
+        $globalCommands = [];
+        $sortedCommands = [];
         foreach ($commands as $name => $command) {
             $key = $this->application->extractNamespace($name, 1);
-            if (!$key) {
-                $globalCommands['_global'][$name] = $command;
+            if (\in_array($key, ['', self::GLOBAL_NAMESPACE], true)) {
+                $globalCommands[$name] = $command;
             } else {
                 $namespacedCommands[$key][$name] = $command;
             }
         }
-        ksort($namespacedCommands);
-        $namespacedCommands = array_merge($globalCommands, $namespacedCommands);
 
-        foreach ($namespacedCommands as &$commandsSet) {
-            ksort($commandsSet);
+        if ($globalCommands) {
+            ksort($globalCommands);
+            $sortedCommands[self::GLOBAL_NAMESPACE] = $globalCommands;
         }
-        // unset reference to keep scope clear
-        unset($commandsSet);
 
-        return $namespacedCommands;
+        if ($namespacedCommands) {
+            ksort($namespacedCommands);
+            foreach ($namespacedCommands as $key => $commandsSet) {
+                ksort($commandsSet);
+                $sortedCommands[$key] = $commandsSet;
+            }
+        }
+
+        return $sortedCommands;
     }
 }

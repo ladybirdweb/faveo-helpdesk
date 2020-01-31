@@ -79,7 +79,7 @@ class SpecificationNode implements \Countable
     /**
      * @param ExampleNode $example
      */
-    public function addExample(ExampleNode $example)
+    public function addExample(ExampleNode $example): void
     {
         $this->examples[] = $example;
         $example->setSpecification($this);
@@ -88,7 +88,7 @@ class SpecificationNode implements \Countable
     /**
      * @return ExampleNode[]
      */
-    public function getExamples()
+    public function getExamples(): array
     {
         return $this->examples;
     }

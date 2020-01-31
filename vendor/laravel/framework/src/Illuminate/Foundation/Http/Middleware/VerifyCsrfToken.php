@@ -36,6 +36,13 @@ class VerifyCsrfToken
     protected $except = [];
 
     /**
+     * Indicates whether the XSRF-TOKEN cookie should be set on the response.
+     *
+     * @var bool
+     */
+    protected $addHttpCookie = true;
+
+    /**
      * Create a new middleware instance.
      *
      * @param  \Illuminate\Foundation\Application  $app
@@ -65,7 +72,11 @@ class VerifyCsrfToken
             $this->inExceptArray($request) ||
             $this->tokensMatch($request)
         ) {
-            return $this->addCookieToResponse($request, $next($request));
+            return tap($next($request), function ($response) use ($request) {
+                if ($this->shouldAddXsrfTokenCookie()) {
+                    $this->addCookieToResponse($request, $response);
+                }
+            });
         }
 
         throw new TokenMismatchException;
@@ -143,6 +154,16 @@ class VerifyCsrfToken
         }
 
         return $token;
+    }
+
+    /**
+     * Determine if the cookie should be added to the response.
+     *
+     * @return bool
+     */
+    public function shouldAddXsrfTokenCookie()
+    {
+        return $this->addHttpCookie;
     }
 
     /**

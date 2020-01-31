@@ -25,18 +25,18 @@ class RouteCollectionBuilder
     /**
      * @var Route[]|RouteCollectionBuilder[]
      */
-    private $routes = array();
+    private $routes = [];
 
     private $loader;
-    private $defaults = array();
+    private $defaults = [];
     private $prefix;
     private $host;
     private $condition;
-    private $requirements = array();
-    private $options = array();
+    private $requirements = [];
+    private $options = [];
     private $schemes;
     private $methods;
-    private $resources = array();
+    private $resources = [];
 
     public function __construct(LoaderInterface $loader = null)
     {
@@ -115,8 +115,7 @@ class RouteCollectionBuilder
     /**
      * Add a RouteCollectionBuilder.
      *
-     * @param string                 $prefix
-     * @param RouteCollectionBuilder $builder
+     * @param string $prefix
      */
     public function mount($prefix, self $builder)
     {
@@ -127,7 +126,6 @@ class RouteCollectionBuilder
     /**
      * Adds a Route object to the builder.
      *
-     * @param Route       $route
      * @param string|null $name
      *
      * @return $this
@@ -309,7 +307,9 @@ class RouteCollectionBuilder
             } else {
                 /* @var self $route */
                 $subCollection = $route->build();
-                $subCollection->addPrefix($this->prefix);
+                if (null !== $this->prefix) {
+                    $subCollection->addPrefix($this->prefix);
+                }
 
                 $routeCollection->addCollection($subCollection);
             }
@@ -330,7 +330,7 @@ class RouteCollectionBuilder
         $methods = implode('_', $route->getMethods()).'_';
 
         $routeName = $methods.$route->getPath();
-        $routeName = str_replace(array('/', ':', '|', '-'), '_', $routeName);
+        $routeName = str_replace(['/', ':', '|', '-'], '_', $routeName);
         $routeName = preg_replace('/[^a-z0-9A-Z_.]+/', '', $routeName);
 
         // Collapse consecutive underscores down into a single underscore.
@@ -358,7 +358,7 @@ class RouteCollectionBuilder
         if ($this->loader->supports($resource, $type)) {
             $collections = $this->loader->load($resource, $type);
 
-            return \is_array($collections) ? $collections : array($collections);
+            return \is_array($collections) ? $collections : [$collections];
         }
 
         if (null === $resolver = $this->loader->getResolver()) {
@@ -371,6 +371,6 @@ class RouteCollectionBuilder
 
         $collections = $loader->load($resource, $type);
 
-        return \is_array($collections) ? $collections : array($collections);
+        return \is_array($collections) ? $collections : [$collections];
     }
 }

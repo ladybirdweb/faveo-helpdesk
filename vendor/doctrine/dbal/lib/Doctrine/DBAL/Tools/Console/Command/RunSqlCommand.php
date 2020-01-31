@@ -10,7 +10,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use function assert;
 use function is_numeric;
+use function is_string;
 use function stripos;
 
 /**
@@ -51,6 +53,8 @@ EOT
             throw new RuntimeException("Argument 'SQL' is required in order to execute this command correctly.");
         }
 
+        assert(is_string($sql));
+
         $depth = $input->getOption('depth');
 
         if (! is_numeric($depth)) {
@@ -64,5 +68,7 @@ EOT
         }
 
         $output->write(Dumper::dump($resultSet, (int) $depth));
+
+        return 0;
     }
 }

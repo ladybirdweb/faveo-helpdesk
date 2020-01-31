@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git\Parser;
 
 class ReferenceParser extends ParserBase
@@ -17,14 +18,14 @@ class ReferenceParser extends ParserBase
 
     protected function doParse()
     {
-        $this->references = array();
+        $this->references = [];
 
         while (!$this->isFinished()) {
             $hash = $this->consumeHash();
             $this->consume(' ');
             $name = $this->consumeTo("\n");
             $this->consumeNewLine();
-            $this->references[] = array($hash, $name);
+            $this->references[] = [$hash, $name];
         }
     }
 }

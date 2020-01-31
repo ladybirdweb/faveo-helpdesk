@@ -2,6 +2,51 @@
 
 All notable changes in `sebastianbergmann/environment` are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## [4.2.3] - 2019-11-20
+
+### Changed
+
+* Implemented [#50](https://github.com/sebastianbergmann/environment/pull/50): Windows improvements to console capabilities
+
+### Fixed
+
+* Fixed [#49](https://github.com/sebastianbergmann/environment/issues/49): Detection how OpCache handles docblocks does not work correctly when PHPDBG is used
+
+## [4.2.2] - 2019-05-05
+
+### Fixed
+
+* Fixed [#44](https://github.com/sebastianbergmann/environment/pull/44): `TypeError` in `Console::getNumberOfColumnsInteractive()`
+
+## [4.2.1] - 2019-04-25
+
+### Fixed
+
+* Fixed an issue in `Runtime::getCurrentSettings()`
+
+## [4.2.0] - 2019-04-25
+
+### Added
+
+* Implemented [#36](https://github.com/sebastianbergmann/environment/pull/36): `Runtime::getCurrentSettings()`
+
+## [4.1.0] - 2019-02-01
+
+### Added
+
+* Implemented `Runtime::getNameWithVersionAndCodeCoverageDriver()` method
+* Implemented [#34](https://github.com/sebastianbergmann/environment/pull/34): Support for PCOV extension
+
+## [4.0.2] - 2019-01-28
+
+### Fixed
+
+* Fixed [#33](https://github.com/sebastianbergmann/environment/issues/33): `Runtime::discardsComments()` returns true too eagerly
+
+### Removed
+
+* Removed support for Zend Optimizer+ in `Runtime::discardsComments()`
+
 ## [4.0.1] - 2018-11-25
 
 ### Fixed
@@ -58,6 +103,12 @@ All notable changes in `sebastianbergmann/environment` are documented in this fi
 
 * This component is no longer supported on PHP 5.6
 
+[4.2.3]: https://github.com/sebastianbergmann/phpunit/compare/4.2.2...4.2.3
+[4.2.2]: https://github.com/sebastianbergmann/phpunit/compare/4.2.1...4.2.2
+[4.2.1]: https://github.com/sebastianbergmann/phpunit/compare/4.2.0...4.2.1
+[4.2.0]: https://github.com/sebastianbergmann/phpunit/compare/4.1.0...4.2.0
+[4.1.0]: https://github.com/sebastianbergmann/phpunit/compare/4.0.2...4.1.0
+[4.0.2]: https://github.com/sebastianbergmann/phpunit/compare/4.0.1...4.0.2
 [4.0.1]: https://github.com/sebastianbergmann/phpunit/compare/66691f8e2dc4641909166b275a9a4f45c0e89092...4.0.1
 [4.0.0]: https://github.com/sebastianbergmann/phpunit/compare/3.1.0...66691f8e2dc4641909166b275a9a4f45c0e89092
 [3.1.0]: https://github.com/sebastianbergmann/phpunit/compare/3.0...3.1.0

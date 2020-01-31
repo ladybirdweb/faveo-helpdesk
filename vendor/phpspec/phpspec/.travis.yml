@@ -10,14 +10,13 @@ cache:
 
 matrix:
   include:
-    - php: 7.0
+    - php: 7.1
       env: COMPOSER_FLAGS='--prefer-lowest'
-    - php: 7.0
     - php: 7.1
     - php: 7.2
-    - php: 7.2
-      env: DEPENDENCIES='dev'
+    - php: 7.3
     - php: nightly
+      env: DEPENDENCIES='dev'
       env: COMPOSER_FLAGS='--ignore-platform-reqs'
   allow_failures:
     - php: nightly
@@ -51,5 +50,5 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
-    php: 7.0
+    php: 7.1
     condition: COMPOSER_FLAGS != "--prefer-lowest"

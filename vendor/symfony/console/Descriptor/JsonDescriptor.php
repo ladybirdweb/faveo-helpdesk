@@ -29,7 +29,7 @@ class JsonDescriptor extends Descriptor
     /**
      * {@inheritdoc}
      */
-    protected function describeInputArgument(InputArgument $argument, array $options = array())
+    protected function describeInputArgument(InputArgument $argument, array $options = [])
     {
         $this->writeData($this->getInputArgumentData($argument), $options);
     }
@@ -37,7 +37,7 @@ class JsonDescriptor extends Descriptor
     /**
      * {@inheritdoc}
      */
-    protected function describeInputOption(InputOption $option, array $options = array())
+    protected function describeInputOption(InputOption $option, array $options = [])
     {
         $this->writeData($this->getInputOptionData($option), $options);
     }
@@ -45,7 +45,7 @@ class JsonDescriptor extends Descriptor
     /**
      * {@inheritdoc}
      */
-    protected function describeInputDefinition(InputDefinition $definition, array $options = array())
+    protected function describeInputDefinition(InputDefinition $definition, array $options = [])
     {
         $this->writeData($this->getInputDefinitionData($definition), $options);
     }
@@ -53,7 +53,7 @@ class JsonDescriptor extends Descriptor
     /**
      * {@inheritdoc}
      */
-    protected function describeCommand(Command $command, array $options = array())
+    protected function describeCommand(Command $command, array $options = [])
     {
         $this->writeData($this->getCommandData($command), $options);
     }
@@ -61,17 +61,17 @@ class JsonDescriptor extends Descriptor
     /**
      * {@inheritdoc}
      */
-    protected function describeApplication(Application $application, array $options = array())
+    protected function describeApplication(Application $application, array $options = [])
     {
         $describedNamespace = isset($options['namespace']) ? $options['namespace'] : null;
         $description = new ApplicationDescription($application, $describedNamespace, true);
-        $commands = array();
+        $commands = [];
 
         foreach ($description->getCommands() as $command) {
             $commands[] = $this->getCommandData($command);
         }
 
-        $data = array();
+        $data = [];
         if ('UNKNOWN' !== $application->getName()) {
             $data['application']['name'] = $application->getName();
             if ('UNKNOWN' !== $application->getVersion()) {
@@ -92,34 +92,28 @@ class JsonDescriptor extends Descriptor
 
     /**
      * Writes data as json.
-     *
-     * @return array|string
      */
     private function writeData(array $data, array $options)
     {
-        $this->write(json_encode($data, isset($options['json_encoding']) ? $options['json_encoding'] : 0));
+        $flags = isset($options['json_encoding']) ? $options['json_encoding'] : 0;
+
+        $this->write(json_encode($data, $flags));
     }
 
-    /**
-     * @return array
-     */
-    private function getInputArgumentData(InputArgument $argument)
+    private function getInputArgumentData(InputArgument $argument): array
     {
-        return array(
+        return [
             'name' => $argument->getName(),
             'is_required' => $argument->isRequired(),
             'is_array' => $argument->isArray(),
             'description' => preg_replace('/\s*[\r\n]\s*/', ' ', $argument->getDescription()),
             'default' => INF === $argument->getDefault() ? 'INF' : $argument->getDefault(),
-        );
+        ];
     }
 
-    /**
-     * @return array
-     */
-    private function getInputOptionData(InputOption $option)
+    private function getInputOptionData(InputOption $option): array
     {
-        return array(
+        return [
             'name' => '--'.$option->getName(),
             'shortcut' => $option->getShortcut() ? '-'.str_replace('|', '|-', $option->getShortcut()) : '',
             'accept_value' => $option->acceptValue(),
@@ -127,42 +121,36 @@ class JsonDescriptor extends Descriptor
             'is_multiple' => $option->isArray(),
             'description' => preg_replace('/\s*[\r\n]\s*/', ' ', $option->getDescription()),
             'default' => INF === $option->getDefault() ? 'INF' : $option->getDefault(),
-        );
+        ];
     }
 
-    /**
-     * @return array
-     */
-    private function getInputDefinitionData(InputDefinition $definition)
+    private function getInputDefinitionData(InputDefinition $definition): array
     {
-        $inputArguments = array();
+        $inputArguments = [];
         foreach ($definition->getArguments() as $name => $argument) {
             $inputArguments[$name] = $this->getInputArgumentData($argument);
         }
 
-        $inputOptions = array();
+        $inputOptions = [];
         foreach ($definition->getOptions() as $name => $option) {
             $inputOptions[$name] = $this->getInputOptionData($option);
         }
 
-        return array('arguments' => $inputArguments, 'options' => $inputOptions);
+        return ['arguments' => $inputArguments, 'options' => $inputOptions];
     }
 
-    /**
-     * @return array
-     */
-    private function getCommandData(Command $command)
+    private function getCommandData(Command $command): array
     {
         $command->getSynopsis();
         $command->mergeApplicationDefinition(false);
 
-        return array(
+        return [
             'name' => $command->getName(),
-            'usage' => array_merge(array($command->getSynopsis()), $command->getUsages(), $command->getAliases()),
+            'usage' => array_merge([$command->getSynopsis()], $command->getUsages(), $command->getAliases()),
             'description' => $command->getDescription(),
             'help' => $command->getProcessedHelp(),
             'definition' => $this->getInputDefinitionData($command->getNativeDefinition()),
             'hidden' => $command->isHidden(),
-        );
+        ];
     }
 }

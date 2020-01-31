@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of phpunit/php-timer.
  *
@@ -7,22 +7,30 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace SebastianBergmann\Timer;
 
 final class Timer
 {
     /**
-     * @var array
+     * @var int[]
+     */
+    private static $sizes = [
+        'GB' => 1073741824,
+        'MB' => 1048576,
+        'KB' => 1024,
+    ];
+
+    /**
+     * @var int[]
      */
     private static $times = [
         'hour'   => 3600000,
         'minute' => 60000,
-        'second' => 1000
+        'second' => 1000,
     ];
 
     /**
-     * @var array
+     * @var float[]
      */
     private static $startTimes = [];
 
@@ -34,6 +42,17 @@ final class Timer
     public static function stop(): float
     {
         return \microtime(true) - \array_pop(self::$startTimes);
+    }
+
+    public static function bytesToString(float $bytes): string
+    {
+        foreach (self::$sizes as $unit => $value) {
+            if ($bytes >= $value) {
+                return \sprintf('%.2f %s', $bytes >= 1024 ? $bytes / $value : $bytes, $unit);
+            }
+        }
+
+        return $bytes . ' byte' . ((int) $bytes !== 1 ? 's' : '');
     }
 
     public static function secondsToTimeString(float $time): string
@@ -73,9 +92,9 @@ final class Timer
     public static function resourceUsage(): string
     {
         return \sprintf(
-            'Time: %s, Memory: %4.2fMB',
+            'Time: %s, Memory: %s',
             self::timeSinceStartOfRequest(),
-            \memory_get_peak_usage(true) / 1048576
+            self::bytesToString(\memory_get_peak_usage(true))
         );
     }
 }

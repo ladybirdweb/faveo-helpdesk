@@ -4,7 +4,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Optional;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Debug\Dumper;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\HigherOrderTapProxy;
 
@@ -444,7 +443,7 @@ if (! function_exists('data_get')) {
      * Get an item from an array or object using "dot" notation.
      *
      * @param  mixed   $target
-     * @param  string|array  $key
+     * @param  string|array|int  $key
      * @param  mixed   $default
      * @return mixed
      */
@@ -464,7 +463,11 @@ if (! function_exists('data_get')) {
                     return value($default);
                 }
 
-                $result = Arr::pluck($target, $key);
+                $result = [];
+
+                foreach ($target as $item) {
+                    $result[] = data_get($item, $key);
+                }
 
                 return in_array('*', $key) ? Arr::collapse($result) : $result;
             }
@@ -541,23 +544,6 @@ if (! function_exists('data_set')) {
         }
 
         return $target;
-    }
-}
-
-if (! function_exists('dd')) {
-    /**
-     * Dump the passed variables and end the script.
-     *
-     * @param  mixed  $args
-     * @return void
-     */
-    function dd(...$args)
-    {
-        foreach ($args as $x) {
-            (new Dumper)->dump($x);
-        }
-
-        die(1);
     }
 }
 
@@ -1052,6 +1038,7 @@ if (! function_exists('throw_if')) {
      * @param  \Throwable|string  $exception
      * @param  array  ...$parameters
      * @return mixed
+     *
      * @throws \Throwable
      */
     function throw_if($condition, $exception, ...$parameters)

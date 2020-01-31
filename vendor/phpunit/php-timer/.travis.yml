@@ -3,9 +3,8 @@ language: php
 php:
   - 7.1
   - 7.2
-  - master
-
-sudo: false
+  - 7.3
+  - 7.4snapshot
 
 before_install:
   - composer self-update

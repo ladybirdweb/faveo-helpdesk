@@ -14,7 +14,7 @@
 return array (
   'generalDesc' => 
   array (
-    'NationalNumberPattern' => '(?:0\\d|[2-7])\\d{6}',
+    'NationalNumberPattern' => '(?:[067]\\d|11)\\d{6}|[2-7]\\d{6}',
     'PossibleLength' => 
     array (
       0 => 7,
@@ -26,7 +26,7 @@ return array (
   ),
   'fixedLine' => 
   array (
-    'NationalNumberPattern' => '01\\d{6}',
+    'NationalNumberPattern' => '[01]1\\d{6}',
     'ExampleNumber' => '01441234',
     'PossibleLength' => 
     array (
@@ -38,7 +38,7 @@ return array (
   ),
   'mobile' => 
   array (
-    'NationalNumberPattern' => '(?:0[2-7]|[2-7])\\d{6}',
+    'NationalNumberPattern' => '(?:0[2-7]|6[256]|7[47])\\d{6}|[2-7]\\d{6}',
     'ExampleNumber' => '06031234',
     'PossibleLength' => 
     array (
@@ -140,6 +140,8 @@ return array (
   'id' => 'GA',
   'countryCode' => 241,
   'internationalPrefix' => '00',
+  'nationalPrefixForParsing' => '0(11\\d{6}|6[256]\\d{6}|7[47]\\d{6})',
+  'nationalPrefixTransformRule' => '$1',
   'sameMobileAndFixedLinePattern' => false,
   'numberFormat' => 
   array (
@@ -156,6 +158,18 @@ return array (
       'nationalPrefixOptionalWhenFormatting' => false,
     ),
     1 => 
+    array (
+      'pattern' => '(\\d{2})(\\d{2})(\\d{2})(\\d{2})',
+      'format' => '$1 $2 $3 $4',
+      'leadingDigitsPatterns' => 
+      array (
+        0 => '11|[67]',
+      ),
+      'nationalPrefixFormattingRule' => '0$1',
+      'domesticCarrierCodeFormattingRule' => '',
+      'nationalPrefixOptionalWhenFormatting' => false,
+    ),
+    2 => 
     array (
       'pattern' => '(\\d{2})(\\d{2})(\\d{2})(\\d{2})',
       'format' => '$1 $2 $3 $4',

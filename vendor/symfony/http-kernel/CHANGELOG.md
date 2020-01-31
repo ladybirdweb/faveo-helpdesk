@@ -1,13 +1,61 @@
 CHANGELOG
 =========
 
+4.4.0
+-----
+
+ * The `DebugHandlersListener` class has been marked as `final`
+ * Added new Bundle directory convention consistent with standard skeletons
+ * Deprecated the second and third argument of `KernelInterface::locateResource`
+ * Deprecated the second and third argument of `FileLocator::__construct`
+ * Deprecated loading resources from `%kernel.root_dir%/Resources` and `%kernel.root_dir%` as
+   fallback directories. Resources like service definitions are usually loaded relative to the
+   current directory or with a glob pattern. The fallback directories have never been advocated
+   so you likely do not use those in any app based on the SF Standard or Flex edition.
+ * Marked all dispatched event classes as `@final`
+ * Added `ErrorController` to enable the preview and error rendering mechanism
+ * Getting the container from a non-booted kernel is deprecated.
+ * Marked the `AjaxDataCollector`, `ConfigDataCollector`, `EventDataCollector`,
+   `ExceptionDataCollector`, `LoggerDataCollector`, `MemoryDataCollector`,
+   `RequestDataCollector` and `TimeDataCollector` classes as `@final`.
+ * Marked the `RouterDataCollector::collect()` method as `@final`.
+ * The `DataCollectorInterface::collect()` and `Profiler::collect()` methods third parameter signature
+   will be `\Throwable $exception = null` instead of `\Exception $exception = null` in Symfony 5.0.
+ * Deprecated methods `ExceptionEvent::get/setException()`, use `get/setThrowable()` instead
+ * Deprecated class `ExceptionListener`, use `ErrorListener` instead
+
+4.3.0
+-----
+
+ * renamed `Client` to `HttpKernelBrowser`
+ * `KernelInterface` doesn't extend `Serializable` anymore
+ * deprecated the `Kernel::serialize()` and `unserialize()` methods
+ * increased the priority of `Symfony\Component\HttpKernel\EventListener\AddRequestFormatsListener`
+ * made `Symfony\Component\HttpKernel\EventListener\LocaleListener` set the default locale early
+ * deprecated `TranslatorListener` in favor of `LocaleAwareListener`
+ * added the registration of all `LocaleAwareInterface` implementations into the `LocaleAwareListener`
+ * made `FileLinkFormatter` final and not implement `Serializable` anymore
+ * the base `DataCollector` doesn't implement `Serializable` anymore, you should
+   store all the serialized state in the data property instead
+ * `DumpDataCollector` has been marked as `final`
+ * added an event listener to prevent search engines from indexing applications in debug mode.
+ * renamed `FilterControllerArgumentsEvent` to `ControllerArgumentsEvent`
+ * renamed `FilterControllerEvent` to `ControllerEvent`
+ * renamed `FilterResponseEvent` to `ResponseEvent`
+ * renamed `GetResponseEvent` to `RequestEvent`
+ * renamed `GetResponseForControllerResultEvent` to `ViewEvent`
+ * renamed `GetResponseForExceptionEvent` to `ExceptionEvent`
+ * renamed `PostResponseEvent` to `TerminateEvent`
+ * added `HttpClientKernel` for handling requests with an `HttpClientInterface` instance
+ * added `trace_header` and `trace_level` configuration options to `HttpCache`
+
 4.2.0
 -----
 
  * deprecated `KernelInterface::getRootDir()` and the `kernel.root_dir` parameter
  * deprecated `KernelInterface::getName()` and the `kernel.name` parameter
- * deprecated the first and second constructor argument of `ConfigDataCollector` 
- * deprecated `ConfigDataCollector::getApplicationName()` 
+ * deprecated the first and second constructor argument of `ConfigDataCollector`
+ * deprecated `ConfigDataCollector::getApplicationName()`
  * deprecated `ConfigDataCollector::getApplicationVersion()`
 
 4.1.0

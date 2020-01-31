@@ -3117,6 +3117,7 @@ return array (
   1651923 => 'Goodhue, MN',
   1651999 => 'Saint Paul, MN',
   1657 => 'California',
+  1659 => 'Alabama',
   1660 => 'Missouri',
   1660248 => 'Fayette, MO',
   1660258 => 'Brookfield, MO',
@@ -3359,6 +3360,7 @@ return array (
   1667 => 'Maryland',
   1669 => 'California',
   1671646 => 'Tamuning',
+  1672 => 'British Columbia',
   1678 => 'Georgia',
   1678208 => 'Cumming, GA',
   1678225 => 'Lawrenceville, GA',
@@ -3439,4 +3441,5 @@ return array (
   1682622 => 'Mansfield, TX',
   1682647 => 'Fort Worth, TX',
   1682885 => 'Fort Worth, TX',
+  1689 => 'Florida',
 );

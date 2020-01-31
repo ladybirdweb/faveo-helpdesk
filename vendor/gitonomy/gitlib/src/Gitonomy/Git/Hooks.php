@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git;
 
 use Gitonomy\Git\Exception\InvalidArgumentException;
@@ -51,9 +52,9 @@ class Hooks
      *
      * @param string $name Name of the hook
      *
-     * @return string Content of the hook
-     *
      * @throws InvalidArgumentException Hook does not exist
+     *
+     * @return string Content of the hook
      */
     public function get($name)
     {

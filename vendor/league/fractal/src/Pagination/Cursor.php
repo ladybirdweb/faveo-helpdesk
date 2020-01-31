@@ -50,8 +50,8 @@ class Cursor implements CursorInterface
     /**
      * Create a new Cursor instance.
      *
-     * @param int   $current
-     * @param null  $prev
+     * @param mixed $current
+     * @param mixed $prev
      * @param mixed $next
      * @param int   $count
      *
@@ -78,7 +78,7 @@ class Cursor implements CursorInterface
     /**
      * Set the current cursor value.
      *
-     * @param int $current
+     * @param mixed $current
      *
      * @return Cursor
      */
@@ -102,7 +102,7 @@ class Cursor implements CursorInterface
     /**
      * Set the prev cursor value.
      *
-     * @param int $prev
+     * @param mixed $prev
      *
      * @return Cursor
      */
@@ -126,7 +126,7 @@ class Cursor implements CursorInterface
     /**
      * Set the next cursor value.
      *
-     * @param int $next
+     * @param mixed $next
      *
      * @return Cursor
      */

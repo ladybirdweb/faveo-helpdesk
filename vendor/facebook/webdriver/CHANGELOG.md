@@ -3,7 +3,21 @@ This project versioning adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
----
+## 1.7.1 - 2019-06-13
+### Fixed
+- Error `Call to a member function toArray()` if capabilities were already converted to an array.
+- Temporarily do not send capabilities to disable W3C WebDriver protocol when BrowserStack hub is used.
+
+## 1.7.0 - 2019-06-10
+### Added
+- `WebDriverCheckboxes` and `WebDriverRadios` helper classes to simplify interaction with checkboxes and radio buttons.
+
+### Fixed
+- Stop sending null values in Cookie object, which is against the protocol and may cause request to remote ends to fail.
+
+### Changed
+- Force Chrome to not use W3C WebDriver protocol.
+- Add workaround for Chromedriver bug [2943](https://bugs.chromium.org/p/chromedriver/issues/detail?id=2943) which breaks the protocol in Chromedriver 75.
 
 ## 1.6.0 - 2018-05-16
 ### Added

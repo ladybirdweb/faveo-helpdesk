@@ -29,6 +29,9 @@ class RetryMiddleware
         'RequestThrottled'                       => true,
         'BandwidthLimitExceeded'                 => true,
         'RequestThrottledException'              => true,
+        'TooManyRequestsException'               => true,
+        'IDPCommunicationError'                  => true,
+        'EC2ThrottledException'                  => true,
     ];
 
     private $decider;
@@ -141,6 +144,9 @@ class RetryMiddleware
         }
 
         if (!$error) {
+            if (!isset($result['@metadata']['statusCode'])) {
+                return false;
+            }
             return isset($statusCodes[$result['@metadata']['statusCode']]);
         }
 

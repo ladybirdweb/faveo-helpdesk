@@ -52,22 +52,28 @@ class QueryBuilder
      */
     private $connection;
 
+    /*
+     * The default values of SQL parts collection
+     */
+    private const SQL_PARTS_DEFAULTS = [
+        'select'   => [],
+        'distinct' => false,
+        'from'     => [],
+        'join'     => [],
+        'set'      => [],
+        'where'    => null,
+        'groupBy'  => [],
+        'having'   => null,
+        'orderBy'  => [],
+        'values'   => [],
+    ];
+
     /**
      * The array of SQL parts collected.
      *
      * @var mixed[]
      */
-    private $sqlParts = [
-        'select'  => [],
-        'from'    => [],
-        'join'    => [],
-        'set'     => [],
-        'where'   => null,
-        'groupBy' => [],
-        'having'  => null,
-        'orderBy' => [],
-        'values'  => [],
-    ];
+    private $sqlParts = self::SQL_PARTS_DEFAULTS;
 
     /**
      * The complete SQL string for this query.
@@ -403,7 +409,7 @@ class QueryBuilder
      * 'groupBy', 'having' and 'orderBy'.
      *
      * @param string $sqlPartName
-     * @param string $sqlPart
+     * @param mixed  $sqlPart
      * @param bool   $append
      *
      * @return $this This QueryBuilder instance.
@@ -470,6 +476,25 @@ class QueryBuilder
     }
 
     /**
+     * Adds DISTINCT to the query.
+     *
+     * <code>
+     *     $qb = $conn->createQueryBuilder()
+     *         ->select('u.id')
+     *         ->distinct()
+     *         ->from('users', 'u')
+     * </code>
+     *
+     * @return $this This QueryBuilder instance.
+     */
+    public function distinct() : self
+    {
+        $this->sqlParts['distinct'] = true;
+
+        return $this;
+    }
+
+    /**
      * Adds an item that is to be returned in the query result.
      *
      * <code>
@@ -504,7 +529,7 @@ class QueryBuilder
      * <code>
      *     $qb = $conn->createQueryBuilder()
      *         ->delete('users', 'u')
-     *         ->where('u.id = :user_id');
+     *         ->where('u.id = :user_id')
      *         ->setParameter(':user_id', 1);
      * </code>
      *
@@ -866,7 +891,6 @@ class QueryBuilder
         return $this->add('groupBy', $groupBy, false);
     }
 
-
     /**
      * Adds a grouping expression to the query.
      *
@@ -874,8 +898,8 @@ class QueryBuilder
      *     $qb = $conn->createQueryBuilder()
      *         ->select('u.name')
      *         ->from('users', 'u')
-     *         ->groupBy('u.lastLogin');
-     *         ->addGroupBy('u.createdAt')
+     *         ->groupBy('u.lastLogin')
+     *         ->addGroupBy('u.createdAt');
      * </code>
      *
      * @param mixed $groupBy The grouping expression.
@@ -1084,8 +1108,7 @@ class QueryBuilder
      */
     public function resetQueryPart($queryPartName)
     {
-        $this->sqlParts[$queryPartName] = is_array($this->sqlParts[$queryPartName])
-            ? [] : null;
+        $this->sqlParts[$queryPartName] = self::SQL_PARTS_DEFAULTS[$queryPartName];
 
         $this->state = self::STATE_DIRTY;
 
@@ -1099,7 +1122,8 @@ class QueryBuilder
      */
     private function getSQLForSelect()
     {
-        $query = 'SELECT ' . implode(', ', $this->sqlParts['select']);
+        $query = 'SELECT ' . ($this->sqlParts['distinct'] ? 'DISTINCT ' : '') .
+                  implode(', ', $this->sqlParts['select']);
 
         $query .= ($this->sqlParts['from'] ? ' FROM ' . implode(', ', $this->getFromClauses()) : '')
             . ($this->sqlParts['where'] !== null ? ' WHERE ' . ((string) $this->sqlParts['where']) : '')
@@ -1188,6 +1212,7 @@ class QueryBuilder
     private function getSQLForUpdate()
     {
         $table = $this->sqlParts['from']['table'] . ($this->sqlParts['from']['alias'] ? ' ' . $this->sqlParts['from']['alias'] : '');
+
         return 'UPDATE ' . $table
             . ' SET ' . implode(', ', $this->sqlParts['set'])
             . ($this->sqlParts['where'] !== null ? ' WHERE ' . ((string) $this->sqlParts['where']) : '');
@@ -1201,6 +1226,7 @@ class QueryBuilder
     private function getSQLForDelete()
     {
         $table = $this->sqlParts['from']['table'] . ($this->sqlParts['from']['alias'] ? ' ' . $this->sqlParts['from']['alias'] : '');
+
         return 'DELETE FROM ' . $table . ($this->sqlParts['where'] !== null ? ' WHERE ' . ((string) $this->sqlParts['where']) : '');
     }
 

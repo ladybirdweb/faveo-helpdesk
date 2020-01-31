@@ -4,7 +4,9 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\HtmlString;
 use Illuminate\Container\Container;
+use Illuminate\Queue\CallQueuedClosure;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Queue\SerializableClosure;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Contracts\Routing\UrlGenerator;
@@ -25,7 +27,7 @@ if (! function_exists('abort')) {
     /**
      * Throw an HttpException with the given data.
      *
-     * @param  \Symfony\Component\HttpFoundation\Response|int     $code
+     * @param  \Symfony\Component\HttpFoundation\Response|\Illuminate\Contracts\Support\Responsable|int     $code
      * @param  string  $message
      * @param  array   $headers
      * @return void
@@ -91,7 +93,7 @@ if (! function_exists('action')) {
     /**
      * Generate the URL to a controller action.
      *
-     * @param  string  $name
+     * @param  string|array  $name
      * @param  mixed   $parameters
      * @param  bool    $absolute
      * @return string
@@ -239,7 +241,7 @@ if (! function_exists('cache')) {
         }
 
         if (is_string($arguments[0])) {
-            return app('cache')->get($arguments[0], $arguments[1] ?? null);
+            return app('cache')->get(...$arguments);
         }
 
         if (! is_array($arguments[0])) {
@@ -390,6 +392,10 @@ if (! function_exists('dispatch')) {
      */
     function dispatch($job)
     {
+        if ($job instanceof Closure) {
+            $job = new CallQueuedClosure(new SerializableClosure($job));
+        }
+
         return new PendingDispatch($job);
     }
 }
@@ -581,7 +587,7 @@ if (! function_exists('mix')) {
         }
 
         if (file_exists(public_path($manifestDirectory.'/hot'))) {
-            $url = file_get_contents(public_path($manifestDirectory.'/hot'));
+            $url = rtrim(file_get_contents(public_path($manifestDirectory.'/hot')));
 
             if (Str::startsWith($url, ['http://', 'https://'])) {
                 return new HtmlString(Str::after($url, ':').$path);
@@ -603,10 +609,14 @@ if (! function_exists('mix')) {
         $manifest = $manifests[$manifestPath];
 
         if (! isset($manifest[$path])) {
-            report(new Exception("Unable to locate Mix file: {$path}."));
+            $exception = new Exception("Unable to locate Mix file: {$path}.");
 
             if (! app('config')->get('app.debug')) {
+                report($exception);
+
                 return $path;
+            } else {
+                throw $exception;
             }
         }
 
@@ -967,7 +977,7 @@ if (! function_exists('validator')) {
      * @param  array  $rules
      * @param  array  $messages
      * @param  array  $customAttributes
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @return \Illuminate\Contracts\Validation\Validator|\Illuminate\Contracts\Validation\Factory
      */
     function validator(array $data = [], array $rules = [], array $messages = [], array $customAttributes = [])
     {

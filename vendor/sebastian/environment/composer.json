@@ -19,7 +19,10 @@
         "php": "^7.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.4"
+        "phpunit/phpunit": "^7.5"
+    },
+    "suggest": {
+        "ext-posix": "*"
     },
     "autoload": {
         "classmap": [
@@ -28,7 +31,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "4.0-dev"
+            "dev-master": "4.2-dev"
         }
     }
 }

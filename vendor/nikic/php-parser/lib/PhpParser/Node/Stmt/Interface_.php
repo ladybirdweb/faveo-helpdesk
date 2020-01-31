@@ -19,7 +19,7 @@ class Interface_ extends ClassLike
      * @param array  $attributes Additional attributes
      */
     public function __construct($name, array $subNodes = [], array $attributes = []) {
-        parent::__construct($attributes);
+        $this->attributes = $attributes;
         $this->name = \is_string($name) ? new Node\Identifier($name) : $name;
         $this->extends = $subNodes['extends'] ?? [];
         $this->stmts = $subNodes['stmts'] ?? [];
@@ -28,7 +28,7 @@ class Interface_ extends ClassLike
     public function getSubNodeNames() : array {
         return ['name', 'extends', 'stmts'];
     }
-    
+
     public function getType() : string {
         return 'Stmt_Interface';
     }

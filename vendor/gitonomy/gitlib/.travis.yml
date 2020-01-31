@@ -1,26 +1,49 @@
 language: php
 
-sudo: false
-
-php:
-    - 5.4
-    - 5.5
-    - 5.6
-    - 7.0
-    - 7.1
-    - 7.2
-    - hhvm
-
 matrix:
-    include:
-        - php: 5.3
-          dist: precise
+  include:
+    - php: 5.6
+      dist: xenial
+      env: SYMFONY_VERSION=^3.4
+    - php: 7.0
+      dist: xenial
+      env: SYMFONY_VERSION=^3.4
+    - php: 7.1
+      dist: bionic
+      env: SYMFONY_VERSION=^3.4
+    - php: 7.1
+      dist: bionic
+      env: SYMFONY_VERSION=^4.0
+    - php: 7.2
+      dist: bionic
+      env: SYMFONY_VERSION=^3.4
+    - php: 7.2
+      dist: bionic
+      env: SYMFONY_VERSION=^4.0
+    - php: 7.2
+      dist: bionic
+      env: SYMFONY_VERSION=^5.0
+    - php: 7.3
+      dist: bionic
+      env: SYMFONY_VERSION=^3.4
+    - php: 7.3
+      dist: bionic
+      env: SYMFONY_VERSION=^4.0
+    - php: 7.3
+      dist: bionic
+      env: SYMFONY_VERSION=^5.0
+    - php: 7.4
+      dist: bionic
+      env: SYMFONY_VERSION=^3.4
+    - php: 7.4
+      dist: bionic
+      env: SYMFONY_VERSION=^4.0
+    - php: 7.4
+      dist: bionic
+      env: SYMFONY_VERSION=^5.0
 
-before_install:
-    # turn off XDebug, if present
-    - phpenv config-rm xdebug.ini || return 0
+before_install: composer require "symfony/process:${SYMFONY_VERSION}" --no-update
 
-install:
-    - composer install --no-interaction --no-progress
+install: travis_retry composer install --no-interaction --no-progress --no-suggest
 
 script: vendor/bin/phpunit

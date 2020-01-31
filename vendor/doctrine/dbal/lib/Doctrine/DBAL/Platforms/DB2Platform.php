@@ -6,9 +6,9 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Schema\ColumnDiff;
 use Doctrine\DBAL\Schema\Identifier;
 use Doctrine\DBAL\Schema\Index;
-use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\TableDiff;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use function array_merge;
 use function count;
 use function current;
@@ -97,7 +97,7 @@ class DB2Platform extends AbstractPlatform
      */
     public function isCommentedDoctrineType(Type $doctrineType)
     {
-        if ($doctrineType->getName() === Type::BOOLEAN) {
+        if ($doctrineType->getName() === Types::BOOLEAN) {
             // We require a commented boolean type in order to distinguish between boolean and smallint
             // as both (have to) map to the same native type.
             return true;
@@ -502,6 +502,7 @@ class DB2Platform extends AbstractPlatform
         foreach ($indexes as $definition) {
             $sqls[] = $this->getCreateIndexSQL($definition, $tableName);
         }
+
         return $sqls;
     }
 
@@ -571,7 +572,7 @@ class DB2Platform extends AbstractPlatform
                 }
             }
 
-            $this->gatherAlterColumnSQL($diff->fromTable, $columnDiff, $sql, $queryParts);
+            $this->gatherAlterColumnSQL($diff->getName($this), $columnDiff, $sql, $queryParts);
         }
 
         foreach ($diff->renamedColumns as $oldColumnName => $column) {
@@ -599,8 +600,14 @@ class DB2Platform extends AbstractPlatform
 
             $sql = array_merge($sql, $commentsSQL);
 
-            if ($diff->newName !== false) {
-                $sql[] =  'RENAME TABLE ' . $diff->getName($this)->getQuotedName($this) . ' TO ' . $diff->getNewName()->getQuotedName($this);
+            $newName = $diff->getNewName();
+
+            if ($newName !== false) {
+                $sql[] = sprintf(
+                    'RENAME TABLE %s TO %s',
+                    $diff->getName($this)->getQuotedName($this),
+                    $newName->getQuotedName($this)
+                );
             }
 
             $sql = array_merge(
@@ -616,12 +623,12 @@ class DB2Platform extends AbstractPlatform
     /**
      * Gathers the table alteration SQL for a given column diff.
      *
-     * @param Table      $table      The table to gather the SQL for.
+     * @param Identifier $table      The table to gather the SQL for.
      * @param ColumnDiff $columnDiff The column diff to evaluate.
      * @param string[]   $sql        The sequence of table alteration statements to fill.
      * @param mixed[]    $queryParts The sequence of column alteration clauses to fill.
      */
-    private function gatherAlterColumnSQL(Table $table, ColumnDiff $columnDiff, array &$sql, array &$queryParts)
+    private function gatherAlterColumnSQL(Identifier $table, ColumnDiff $columnDiff, array &$sql, array &$queryParts)
     {
         $alterColumnClauses = $this->getAlterColumnClausesSQL($columnDiff);
 
@@ -892,5 +899,18 @@ class DB2Platform extends AbstractPlatform
     protected function getReservedKeywordsClass()
     {
         return Keywords\DB2Keywords::class;
+    }
+
+    public function getListTableCommentsSQL(string $table) : string
+    {
+        return sprintf(
+            <<<'SQL'
+SELECT REMARKS
+  FROM SYSIBM.SYSTABLES
+  WHERE NAME = UPPER( %s )
+SQL
+            ,
+            $this->quoteStringLiteral($table)
+        );
     }
 }

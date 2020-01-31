@@ -94,6 +94,28 @@ class Bugsnag_Client
     }
 
     /**
+     * Adds new data fields to the device data collection.
+     *
+     * @param array $data an associative array containing the new data to be added
+     *
+     * @return $this
+     */
+    public function mergeDeviceData($data)
+    {
+        return $this->diagnostics->mergeDeviceData($data);
+    }
+
+    /**
+     * Get the device data.
+     *
+     * @return array
+     */
+    public function getDeviceData()
+    {
+        return $this->diagnostics->getDeviceData();
+    }
+
+    /**
      * Set which release stages should be allowed to notify Bugsnag.
      *
      * Eg array('production', 'development').

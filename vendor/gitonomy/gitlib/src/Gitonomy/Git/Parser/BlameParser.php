@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git\Parser;
 
 use Gitonomy\Git\Blame\Line;
@@ -27,9 +28,9 @@ class BlameParser extends ParserBase
 
     protected function doParse()
     {
-        $this->lines = array();
+        $this->lines = [];
 
-        $memory = array();
+        $memory = [];
 
         $line = 1;
         while (!$this->isFinished()) {
@@ -43,9 +44,9 @@ class BlameParser extends ParserBase
             $this->consumeNewLine();
 
             if (!isset($memory[$hash])) {
-                foreach (array('author', 'author-mail', 'author-time', 'author-tz',
+                foreach (['author', 'author-mail', 'author-time', 'author-tz',
                     'committer', 'committer-mail', 'committer-time', 'committer-tz',
-                    'summary', ) as $key) {
+                    'summary', ] as $key) {
                     $this->consume($key);
                     $this->consumeTo("\n");
                     $this->consumeNewLine();
@@ -68,7 +69,7 @@ class BlameParser extends ParserBase
             $this->consumeNewLine();
 
             $this->lines[$line] = new Line($memory[$hash], $sourceLine, $targetLine, $blockLine, $content);
-            ++$line;
+            $line++;
         }
     }
 }

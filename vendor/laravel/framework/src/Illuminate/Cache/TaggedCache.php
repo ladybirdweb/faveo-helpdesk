@@ -56,11 +56,13 @@ class TaggedCache extends Repository
     /**
      * Remove all items from the cache.
      *
-     * @return void
+     * @return bool
      */
     public function flush()
     {
         $this->tags->reset();
+
+        return true;
     }
 
     /**
@@ -91,5 +93,15 @@ class TaggedCache extends Repository
     protected function event($event)
     {
         parent::event($event->setTags($this->tags->getNames()));
+    }
+
+    /**
+     * Get the tag set instance.
+     *
+     * @return \Illuminate\Cache\TagSet
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 }

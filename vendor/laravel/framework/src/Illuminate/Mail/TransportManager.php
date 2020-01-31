@@ -5,13 +5,13 @@ namespace Illuminate\Mail;
 use Aws\Ses\SesClient;
 use Illuminate\Support\Arr;
 use Psr\Log\LoggerInterface;
+use Illuminate\Log\LogManager;
 use Illuminate\Support\Manager;
 use GuzzleHttp\Client as HttpClient;
 use Swift_SmtpTransport as SmtpTransport;
 use Illuminate\Mail\Transport\LogTransport;
 use Illuminate\Mail\Transport\SesTransport;
 use Illuminate\Mail\Transport\ArrayTransport;
-use Swift_SendmailTransport as MailTransport;
 use Illuminate\Mail\Transport\MailgunTransport;
 use Illuminate\Mail\Transport\MandrillTransport;
 use Illuminate\Mail\Transport\SparkPostTransport;
@@ -77,9 +77,10 @@ class TransportManager extends Manager
             'version' => 'latest', 'service' => 'email',
         ]);
 
-        return new SesTransport(new SesClient(
-            $this->addSesCredentials($config)
-        ));
+        return new SesTransport(
+            new SesClient($this->addSesCredentials($config)),
+            $config['options'] ?? []
+        );
     }
 
     /**
@@ -104,7 +105,7 @@ class TransportManager extends Manager
      */
     protected function createMailDriver()
     {
-        return new MailTransport;
+        return new SendmailTransport;
     }
 
     /**
@@ -118,7 +119,9 @@ class TransportManager extends Manager
 
         return new MailgunTransport(
             $this->guzzle($config),
-            $config['secret'], $config['domain']
+            $config['secret'],
+            $config['domain'],
+            $config['endpoint'] ?? null
         );
     }
 
@@ -157,7 +160,13 @@ class TransportManager extends Manager
      */
     protected function createLogDriver()
     {
-        return new LogTransport($this->app->make(LoggerInterface::class));
+        $logger = $this->app->make(LoggerInterface::class);
+
+        if ($logger instanceof LogManager) {
+            $logger = $logger->channel($this->app['config']['mail.log_channel']);
+        }
+
+        return new LogTransport($logger);
     }
 
     /**

@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git\Diff;
 
 use Gitonomy\Git\Repository;
@@ -76,7 +77,7 @@ class File
         $this->newIndex = $newIndex;
         $this->isBinary = $isBinary;
 
-        $this->changes = array();
+        $this->changes = [];
     }
 
     public function addChange(FileChange $change)
@@ -221,18 +222,18 @@ class File
 
     public function toArray()
     {
-        return array(
-            'old_name' => $this->oldName,
-            'new_name' => $this->newName,
-            'old_mode' => $this->oldMode,
-            'new_mode' => $this->newMode,
+        return [
+            'old_name'  => $this->oldName,
+            'new_name'  => $this->newName,
+            'old_mode'  => $this->oldMode,
+            'new_mode'  => $this->newMode,
             'old_index' => $this->oldIndex,
             'new_index' => $this->newIndex,
             'is_binary' => $this->isBinary,
-            'changes' => array_map(function (FileChange $change) {
+            'changes'   => array_map(function (FileChange $change) {
                 return $change->toArray();
             }, $this->changes),
-        );
+        ];
     }
 
     public static function fromArray(array $array)

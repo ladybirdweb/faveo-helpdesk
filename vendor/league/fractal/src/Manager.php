@@ -164,6 +164,7 @@ class Manager
     {
         // Wipe these before we go again
         $this->requestedIncludes = $this->includeParams = [];
+        $subRelations = '';
 
         if (is_string($includes)) {
             $includes = explode(',', $includes);
@@ -177,6 +178,7 @@ class Manager
 
         foreach ($includes as $include) {
             list($includeName, $allModifiersStr) = array_pad(explode(':', $include, 2), 2, null);
+            list($allModifiersStr, $subRelations) = array_pad(explode('.', $allModifiersStr, 2), 2, null);
 
             // Trim it down to a cool level of recursion
             $includeName = $this->trimToAcceptableRecursionLevel($includeName);
@@ -212,6 +214,10 @@ class Manager
             }
 
             $this->includeParams[$includeName] = $modifierArr;
+
+            if ($subRelations) {
+                $this->requestedIncludes[] = $this->trimToAcceptableRecursionLevel($includeName . '.' . $subRelations);
+            }
         }
 
         // This should be optional and public someday, but without it includes would never show up
@@ -223,8 +229,8 @@ class Manager
     /**
      * Parse field parameter.
      *
-     * @param array $fieldsets Array of fields to include. It must be an array
-     *                         whose keys are resource types and values a string
+     * @param array $fieldsets Array of fields to include. It must be an array whose keys
+     *                         are resource types and values an array or a string
      *                         of the fields to return, separated by a comma
      *
      * @return $this
@@ -233,8 +239,12 @@ class Manager
     {
         $this->requestedFieldsets = [];
         foreach ($fieldsets as $type => $fields) {
+            if (is_string($fields)) {
+                $fields = explode(',', $fields);
+            }
+
             //Remove empty and repeated fields
-            $this->requestedFieldsets[$type] = array_unique(array_filter(explode(',', $fields)));
+            $this->requestedFieldsets[$type] = array_unique(array_filter($fields));
         }
         return $this;
     }

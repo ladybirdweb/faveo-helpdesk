@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git;
 
 use Gitonomy\Git\Diff\Diff;
@@ -29,7 +30,7 @@ class Commit extends Revision
      *
      * @var array
      */
-    private $data = array();
+    private $data = [];
 
     /**
      * Constructor.
@@ -37,7 +38,7 @@ class Commit extends Revision
      * @param Gitonomy\Git\Repository $repository Repository of the commit
      * @param string                  $hash       Hash of the commit
      */
-    public function __construct(Repository $repository, $hash, array $data = array())
+    public function __construct(Repository $repository, $hash, array $data = [])
     {
         if (!preg_match('/^[a-f0-9]{40}$/', $hash)) {
             throw new ReferenceNotFoundException($hash);
@@ -60,7 +61,7 @@ class Commit extends Revision
      */
     public function getDiff()
     {
-        $args = array('-r', '-p', '-m', '-M', '--no-commit-id', '--full-index', $this->revision);
+        $args = ['-r', '-p', '-m', '-M', '--no-commit-id', '--full-index', $this->revision];
 
         $diff = Diff::parse($this->repository->run('diff-tree', $args));
         $diff->setRepository($this->repository);
@@ -113,7 +114,7 @@ class Commit extends Revision
      */
     public function getParents()
     {
-        $result = array();
+        $result = [];
         foreach ($this->getData('parentHashes') as $parentHash) {
             $result[] = $this->repository->getCommit($parentHash);
         }
@@ -149,7 +150,7 @@ class Commit extends Revision
             $path = $getWorkingDir.'/'.$path;
         }
 
-        $result = $this->repository->run('log', array('--format=%H', '-n', 1, $this->revision, '--', $path));
+        $result = $this->repository->run('log', ['--format=%H', '-n', 1, $this->revision, '--', $path]);
 
         return $this->repository->getCommit(trim($result));
     }
@@ -200,7 +201,7 @@ class Commit extends Revision
      */
     public function getIncludingBranches($local = true, $remote = true)
     {
-        $arguments = array('--contains', $this->revision);
+        $arguments = ['--contains', $this->revision];
 
         if ($local && $remote) {
             $arguments[] = '-a';
@@ -213,20 +214,22 @@ class Commit extends Revision
         try {
             $result = $this->repository->run('branch', $arguments);
         } catch (ProcessException $e) {
-            return array();
+            return [];
         }
 
         if (!$result) {
-            return array();
+            return [];
         }
 
         $branchesName = explode("\n", trim(str_replace('*', '', $result)));
-        $branchesName = array_filter($branchesName, function ($v) { return false === StringHelper::strpos($v, '->');});
+        $branchesName = array_filter($branchesName, function ($v) {
+            return false === StringHelper::strpos($v, '->');
+        });
         $branchesName = array_map('trim', $branchesName);
 
         $references = $this->repository->getReferences();
 
-        $branches = array();
+        $branches = [];
         foreach ($branchesName as $branchName) {
             if (false === $local) {
                 $branches[] = $references->getRemoteBranch($branchName);
@@ -263,7 +266,7 @@ class Commit extends Revision
     /**
      * Returns the authoring date.
      *
-     * @return DateTime A time object
+     * @return \DateTime A time object
      */
     public function getAuthorDate()
     {
@@ -293,7 +296,7 @@ class Commit extends Revision
     /**
      * Returns the authoring date.
      *
-     * @return DateTime A time object
+     * @return \DateTime A time object
      */
     public function getCommitterDate()
     {
@@ -331,7 +334,7 @@ class Commit extends Revision
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCommit()
     {
@@ -345,7 +348,7 @@ class Commit extends Revision
         }
 
         if ($name === 'shortHash') {
-            $this->data['shortHash'] = trim($this->repository->run('log', array('--abbrev-commit', '--format=%h', '-n', 1, $this->revision)));
+            $this->data['shortHash'] = trim($this->repository->run('log', ['--abbrev-commit', '--format=%h', '-n', 1, $this->revision]));
 
             return $this->data['shortHash'];
         }
@@ -377,8 +380,9 @@ class Commit extends Revision
         }
 
         $parser = new Parser\CommitParser();
+
         try {
-            $result = $this->repository->run('cat-file', array('commit', $this->revision));
+            $result = $this->repository->run('cat-file', ['commit', $this->revision]);
         } catch (ProcessException $e) {
             throw new ReferenceNotFoundException(sprintf('Can not find reference "%s"', $this->revision));
         }

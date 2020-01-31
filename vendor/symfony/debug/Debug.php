@@ -11,10 +11,14 @@
 
 namespace Symfony\Component\Debug;
 
+@trigger_error(sprintf('The "%s" class is deprecated since Symfony 4.4, use "%s" instead.', Debug::class, \Symfony\Component\ErrorHandler\Debug::class), E_USER_DEPRECATED);
+
 /**
  * Registers all the debug tools.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ *
+ * @deprecated since Symfony 4.4, use Symfony\Component\ErrorHandler\Debug instead.
  */
 class Debug
 {
@@ -42,7 +46,7 @@ class Debug
             error_reporting(E_ALL);
         }
 
-        if (!\in_array(\PHP_SAPI, array('cli', 'phpdbg'), true)) {
+        if (!\in_array(\PHP_SAPI, ['cli', 'phpdbg'], true)) {
             ini_set('display_errors', 0);
             ExceptionHandler::register();
         } elseif ($displayErrors && (!filter_var(ini_get('log_errors'), FILTER_VALIDATE_BOOLEAN) || ini_get('error_log'))) {

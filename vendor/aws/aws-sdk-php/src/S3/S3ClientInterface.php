@@ -22,12 +22,12 @@ interface S3ClientInterface extends AwsClientInterface
      *
      * @return RequestInterface
      */
-    public function createPresignedRequest(CommandInterface $command, $expires);
+    public function createPresignedRequest(CommandInterface $command, $expires, array $options = []);
 
     /**
      * Returns the URL to an object identified by its bucket and key.
      *
-     * The URL returned by this method is not signed nor does it ensure the the
+     * The URL returned by this method is not signed nor does it ensure that the
      * bucket and key given to the method exist. If you need a signed URL, then
      * use the {@see \Aws\S3\S3Client::createPresignedRequest} method and get
      * the URI of the signed request.

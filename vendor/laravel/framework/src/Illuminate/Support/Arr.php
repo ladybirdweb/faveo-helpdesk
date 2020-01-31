@@ -385,7 +385,7 @@ class Arr
     {
         $results = [];
 
-        list($value, $key) = static::explodePluckParameters($value, $key);
+        [$value, $key] = static::explodePluckParameters($value, $key);
 
         foreach ($array as $item) {
             $itemValue = data_get($item, $value);
@@ -595,6 +595,17 @@ class Arr
     }
 
     /**
+     * Convert the array into a query string.
+     *
+     * @param  array  $array
+     * @return string
+     */
+    public static function query($array)
+    {
+        return http_build_query($array, null, '&', PHP_QUERY_RFC3986);
+    }
+
+    /**
      * Filter the array using the given callback.
      *
      * @param  array  $array
@@ -618,6 +629,6 @@ class Arr
             return [];
         }
 
-        return ! is_array($value) ? [$value] : $value;
+        return is_array($value) ? $value : [$value];
     }
 }

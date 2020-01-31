@@ -27,12 +27,14 @@ use Doctrine\DBAL\TransactionIsolationLevel;
 use Doctrine\DBAL\Types;
 use Doctrine\DBAL\Types\Type;
 use InvalidArgumentException;
+use UnexpectedValueException;
 use const E_USER_DEPRECATED;
 use function addcslashes;
 use function array_map;
 use function array_merge;
 use function array_unique;
 use function array_values;
+use function assert;
 use function count;
 use function explode;
 use function func_get_arg;
@@ -144,7 +146,7 @@ abstract class AbstractPlatform
     /**
      * Holds the KeywordList instance for the current platform.
      *
-     * @var KeywordList
+     * @var KeywordList|null
      */
     protected $_keywords;
 
@@ -486,6 +488,8 @@ abstract class AbstractPlatform
             $this->initializeCommentedDoctrineTypes();
         }
 
+        assert(is_array($this->doctrineTypeComments));
+
         return in_array($doctrineType->getName(), $this->doctrineTypeComments);
     }
 
@@ -501,6 +505,8 @@ abstract class AbstractPlatform
         if ($this->doctrineTypeComments === null) {
             $this->initializeCommentedDoctrineTypes();
         }
+
+        assert(is_array($this->doctrineTypeComments));
 
         $this->doctrineTypeComments[] = $doctrineType instanceof Type ? $doctrineType->getName() : $doctrineType;
     }
@@ -518,7 +524,7 @@ abstract class AbstractPlatform
     /**
      * Gets the comment of a passed column modified by potential doctrine type comment hints.
      *
-     * @return string
+     * @return string|null
      */
     protected function getColumnComment(Column $column)
     {
@@ -864,9 +870,9 @@ abstract class AbstractPlatform
     /**
      * Returns the SQL snippet to get the position of the first occurrence of substring $substr in string $str.
      *
-     * @param string   $str      Literal string.
-     * @param string   $substr   Literal string to find.
-     * @param int|bool $startPos Position to start at, beginning of string by default.
+     * @param string    $str      Literal string.
+     * @param string    $substr   Literal string to find.
+     * @param int|false $startPos Position to start at, beginning of string by default.
      *
      * @return string
      *
@@ -1419,7 +1425,13 @@ abstract class AbstractPlatform
             $this->_eventManager->dispatchEvent(Events::onSchemaDropTable, $eventArgs);
 
             if ($eventArgs->isDefaultPrevented()) {
-                return $eventArgs->getSql();
+                $sql = $eventArgs->getSql();
+
+                if ($sql === null) {
+                    throw new UnexpectedValueException('Default implementation of DROP TABLE was overridden with NULL');
+                }
+
+                return $sql;
             }
         }
 
@@ -1595,6 +1607,9 @@ abstract class AbstractPlatform
 
         $sql = $this->_getCreateTableSQL($tableName, $columns, $options);
         if ($this->supportsCommentOnStatement()) {
+            if ($table->hasOption('comment')) {
+                $sql[] = $this->getCommentOnTableSQL($tableName, $table->getOption('comment'));
+            }
             foreach ($table->getColumns() as $column) {
                 $comment = $this->getColumnComment($column);
 
@@ -1609,10 +1624,21 @@ abstract class AbstractPlatform
         return array_merge($sql, $columnSql);
     }
 
+    protected function getCommentOnTableSQL(string $tableName, ?string $comment) : string
+    {
+        $tableName = new Identifier($tableName);
+
+        return sprintf(
+            'COMMENT ON TABLE %s IS %s',
+            $tableName->getQuotedName($this),
+            $this->quoteStringLiteral((string) $comment)
+        );
+    }
+
     /**
-     * @param string $tableName
-     * @param string $columnName
-     * @param string $comment
+     * @param string      $tableName
+     * @param string      $columnName
+     * @param string|null $comment
      *
      * @return string
      */
@@ -1620,13 +1646,12 @@ abstract class AbstractPlatform
     {
         $tableName  = new Identifier($tableName);
         $columnName = new Identifier($columnName);
-        $comment    = $this->quoteStringLiteral($comment);
 
         return sprintf(
             'COMMENT ON COLUMN %s.%s IS %s',
             $tableName->getQuotedName($this),
             $columnName->getQuotedName($this),
-            $comment
+            $this->quoteStringLiteral((string) $comment)
         );
     }
 
@@ -1833,6 +1858,10 @@ abstract class AbstractPlatform
      */
     public function getCreatePrimaryKeySQL(Index $index, $table)
     {
+        if ($table instanceof Table) {
+            $table = $table->getQuotedName($this);
+        }
+
         return 'ALTER TABLE ' . $table . ' ADD PRIMARY KEY (' . $this->getIndexFieldDeclarationListSQL($index) . ')';
     }
 
@@ -2067,11 +2096,14 @@ abstract class AbstractPlatform
      */
     protected function getPostAlterTableIndexForeignKeySQL(TableDiff $diff)
     {
-        $tableName = $diff->newName !== false
-            ? $diff->getNewName()->getQuotedName($this)
-            : $diff->getName($this)->getQuotedName($this);
+        $sql     = [];
+        $newName = $diff->getNewName();
 
-        $sql = [];
+        if ($newName !== false) {
+            $tableName = $newName->getQuotedName($this);
+        } else {
+            $tableName = $diff->getName($this)->getQuotedName($this);
+        }
 
         if ($this->supportsForeignKeyConstraints()) {
             foreach ($diff->addedForeignKeys as $foreignKey) {
@@ -2121,6 +2153,8 @@ abstract class AbstractPlatform
 
     /**
      * Common code for alter table statement generation that updates the changed Index and Foreign Key definitions.
+     *
+     * @deprecated
      *
      * @return string[]
      */
@@ -2293,14 +2327,14 @@ abstract class AbstractPlatform
             return " DEFAULT '" . $this->convertBooleans($default) . "'";
         }
 
-        return " DEFAULT '" . $default . "'";
+        return ' DEFAULT ' . $this->quoteStringLiteral($default);
     }
 
     /**
      * Obtains DBMS specific SQL code portion needed to set a CHECK constraint
      * declaration to be used in statements like CREATE TABLE.
      *
-     * @param mixed[][] $definition The check definition.
+     * @param string[]|mixed[][] $definition The check definition.
      *
      * @return string DBMS specific SQL code portion needed to set a CHECK constraint.
      */
@@ -2950,7 +2984,6 @@ abstract class AbstractPlatform
         return $this->getDateTimeTypeDeclarationSQL($fieldDeclaration);
     }
 
-
     /**
      * Obtains DBMS specific SQL to be used to create date fields in statements
      * like CREATE TABLE.
@@ -3154,7 +3187,7 @@ abstract class AbstractPlatform
      */
     public function supportsForeignKeyOnUpdate()
     {
-        return $this->supportsForeignKeyConstraints() && true;
+        return $this->supportsForeignKeyConstraints();
     }
 
     /**

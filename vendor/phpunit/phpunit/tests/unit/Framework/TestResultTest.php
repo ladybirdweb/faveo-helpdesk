@@ -66,9 +66,11 @@ class TestResultTest extends TestCase
     public function canSkipCoverageProvider(): array
     {
         return [
-            ['CoverageClassTest', true],
-            ['CoverageNothingTest', true],
+            ['CoverageClassTest', false],
+            ['CoverageClassWithoutAnnotationsTest', false],
             ['CoverageCoversOverridesCoversNothingTest', false],
+            ['CoverageClassNothingTest', true],
+            ['CoverageMethodNothingTest', true],
         ];
     }
 
@@ -79,8 +81,10 @@ class TestResultTest extends TestCase
     {
         require_once TEST_FILES_PATH . $testCase . '.php';
 
-        $test            = new $testCase;
-        $canSkipCoverage = TestResult::isAnyCoverageRequired($test);
+        $test             = new $testCase('testSomething');
+        $coverageRequired = TestResult::isAnyCoverageRequired($test);
+        $canSkipCoverage  = !$coverageRequired;
+
         $this->assertEquals($expectedCanSkip, $canSkipCoverage);
     }
 }

@@ -16,7 +16,7 @@ top_statement_list_ex:
 
 top_statement_list:
       top_statement_list_ex
-          { makeNop($nop, $this->lookaheadStartAttributes, $this->endAttributes);
+          { makeZeroLengthNop($nop, $this->lookaheadStartAttributes);
             if ($nop !== null) { $1[] = $nop; } $$ = $1; }
 ;
 
@@ -27,7 +27,7 @@ reserved_non_modifiers:
     | T_FINALLY | T_THROW | T_USE | T_INSTEADOF | T_GLOBAL | T_VAR | T_UNSET | T_ISSET | T_EMPTY | T_CONTINUE | T_GOTO
     | T_FUNCTION | T_CONST | T_RETURN | T_PRINT | T_YIELD | T_LIST | T_SWITCH | T_ENDSWITCH | T_CASE | T_DEFAULT
     | T_BREAK | T_ARRAY | T_CALLABLE | T_EXTENDS | T_IMPLEMENTS | T_NAMESPACE | T_TRAIT | T_INTERFACE | T_CLASS
-    | T_CLASS_C | T_TRAIT_C | T_FUNC_C | T_METHOD_C | T_LINE | T_FILE | T_DIR | T_NS_C | T_HALT_COMPILER
+    | T_CLASS_C | T_TRAIT_C | T_FUNC_C | T_METHOD_C | T_LINE | T_FILE | T_DIR | T_NS_C | T_HALT_COMPILER | T_FN
 ;
 
 semi_reserved:
@@ -196,7 +196,7 @@ inner_statement_list_ex:
 
 inner_statement_list:
       inner_statement_list_ex
-          { makeNop($nop, $this->lookaheadStartAttributes, $this->endAttributes);
+          { makeZeroLengthNop($nop, $this->lookaheadStartAttributes);
             if ($nop !== null) { $1[] = $nop; } $$ = $1; }
 ;
 
@@ -450,17 +450,18 @@ non_empty_parameter_list:
 ;
 
 parameter:
-      optional_param_type optional_ref optional_ellipsis plain_variable
+      optional_type optional_ref optional_ellipsis plain_variable
           { $$ = Node\Param[$4, null, $1, $2, $3]; $this->checkParam($$); }
-    | optional_param_type optional_ref optional_ellipsis plain_variable '=' expr
+    | optional_type optional_ref optional_ellipsis plain_variable '=' expr
           { $$ = Node\Param[$4, $6, $1, $2, $3]; $this->checkParam($$); }
-    | optional_param_type optional_ref optional_ellipsis error
+    | optional_type optional_ref optional_ellipsis error
           { $$ = Node\Param[Expr\Error[], null, $1, $2, $3]; }
 ;
 
 type_expr:
       type                                                  { $$ = $1; }
     | '?' type                                              { $$ = Node\NullableType[$2]; }
+    | union_type                                            { $$ = Node\UnionType[$1]; }
 ;
 
 type:
@@ -469,7 +470,12 @@ type:
     | T_CALLABLE                                            { $$ = Node\Identifier['callable']; }
 ;
 
-optional_param_type:
+union_type:
+      type '|' type                                         { init($1, $3); }
+    | union_type '|' type                                   { push($1, $3); }
+;
+
+optional_type:
       /* empty */                                           { $$ = null; }
     | type_expr                                             { $$ = $1; }
 ;
@@ -477,6 +483,7 @@ optional_param_type:
 optional_return_type:
       /* empty */                                           { $$ = null; }
     | ':' type_expr                                         { $$ = $2; }
+    | ':' error                                             { $$ = null; }
 ;
 
 argument_list:
@@ -529,13 +536,14 @@ class_statement_list_ex:
 
 class_statement_list:
       class_statement_list_ex
-          { makeNop($nop, $this->lookaheadStartAttributes, $this->endAttributes);
+          { makeZeroLengthNop($nop, $this->lookaheadStartAttributes);
             if ($nop !== null) { $1[] = $nop; } $$ = $1; }
 ;
 
 class_statement:
-      variable_modifiers property_declaration_list ';'
-          { $$ = Stmt\Property[$1, $2]; $this->checkProperty($$, #1); }
+      variable_modifiers optional_type property_declaration_list ';'
+          { $attrs = attributes();
+            $$ = new Stmt\Property($1, $3, $attrs, $2); $this->checkProperty($$, #1); }
     | method_modifiers T_CONST class_const_list ';'
           { $$ = Stmt\ClassConst[$3, $1]; $this->checkClassConst($$, #1); }
     | method_modifiers T_FUNCTION optional_ref identifier_ex '(' parameter_list ')' optional_return_type method_body
@@ -658,6 +666,7 @@ expr:
     | variable T_SL_EQUAL expr                              { $$ = Expr\AssignOp\ShiftLeft [$1, $3]; }
     | variable T_SR_EQUAL expr                              { $$ = Expr\AssignOp\ShiftRight[$1, $3]; }
     | variable T_POW_EQUAL expr                             { $$ = Expr\AssignOp\Pow       [$1, $3]; }
+    | variable T_COALESCE_EQUAL expr                        { $$ = Expr\AssignOp\Coalesce  [$1, $3]; }
     | variable T_INC                                        { $$ = Expr\PostInc[$1]; }
     | T_INC variable                                        { $$ = Expr\PreInc [$2]; }
     | variable T_DEC                                        { $$ = Expr\PostDec[$1]; }
@@ -705,7 +714,10 @@ expr:
     | T_REQUIRE expr                                        { $$ = Expr\Include_[$2, Expr\Include_::TYPE_REQUIRE]; }
     | T_REQUIRE_ONCE expr                                   { $$ = Expr\Include_[$2, Expr\Include_::TYPE_REQUIRE_ONCE]; }
     | T_INT_CAST expr                                       { $$ = Expr\Cast\Int_    [$2]; }
-    | T_DOUBLE_CAST expr                                    { $$ = Expr\Cast\Double  [$2]; }
+    | T_DOUBLE_CAST expr
+          { $attrs = attributes();
+            $attrs['kind'] = $this->getFloatCastKind($1);
+            $$ = new Expr\Cast\Double($2, $attrs); }
     | T_STRING_CAST expr                                    { $$ = Expr\Cast\String_ [$2]; }
     | T_ARRAY_CAST expr                                     { $$ = Expr\Cast\Array_  [$2]; }
     | T_OBJECT_CAST expr                                    { $$ = Expr\Cast\Object_ [$2]; }
@@ -723,6 +735,12 @@ expr:
     | T_YIELD expr                                          { $$ = Expr\Yield_[$2, null]; }
     | T_YIELD expr T_DOUBLE_ARROW expr                      { $$ = Expr\Yield_[$4, $2]; }
     | T_YIELD_FROM expr                                     { $$ = Expr\YieldFrom[$2]; }
+
+    | T_FN optional_ref '(' parameter_list ')' optional_return_type T_DOUBLE_ARROW expr
+          { $$ = Expr\ArrowFunction[['static' => false, 'byRef' => $2, 'params' => $4, 'returnType' => $6, 'expr' => $8]]; }
+    | T_STATIC T_FN optional_ref '(' parameter_list ')' optional_return_type T_DOUBLE_ARROW expr
+          { $$ = Expr\ArrowFunction[['static' => true, 'byRef' => $3, 'params' => $5, 'returnType' => $7, 'expr' => $9]]; }
+
     | T_FUNCTION optional_ref '(' parameter_list ')' lexical_vars optional_return_type
       block_or_error
           { $$ = Expr\Closure[['static' => false, 'byRef' => $2, 'params' => $4, 'uses' => $6, 'returnType' => $7, 'stmts' => $8]]; }
@@ -958,6 +976,7 @@ array_pair_list:
 comma_or_error:
       ','
     | error
+          { /* do nothing -- prevent default action of $$=$1. See #551. */ }
 ;
 
 inner_array_pair_list:
@@ -970,6 +989,7 @@ array_pair:
     | expr                                                  { $$ = Expr\ArrayItem[$1, null, false]; }
     | expr T_DOUBLE_ARROW '&' variable                      { $$ = Expr\ArrayItem[$4, $1,   true]; }
     | '&' variable                                          { $$ = Expr\ArrayItem[$2, null, true]; }
+    | T_ELLIPSIS expr                                       { $$ = Expr\ArrayItem[$2, null, false, attributes(), true]; }
     | /* empty */                                           { $$ = null; }
 ;
 

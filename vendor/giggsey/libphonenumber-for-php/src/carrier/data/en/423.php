@@ -11,12 +11,14 @@
  */
 
 return array (
-  423650 => 'Soracom',
+  42364 => 'Soracom',
+  423650 => 'Telecom Liechtenstein',
   423651 => 'Cubic',
   423652 => 'Cubic',
+  423653 => 'Cubic',
   423660 => 'Telecom Liechtenstein',
   423661 => 'Dimoco',
-  4236620 => 'First Mobile',
+  4236620 => 'Telecom Liechtenstein',
   4236626 => 'Datamobile',
   4236627 => 'Datamobile',
   4236628 => 'Datamobile',

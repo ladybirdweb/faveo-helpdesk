@@ -71,9 +71,9 @@ interface UrlGeneratorInterface extends RequestContextAwareInterface
      *
      * The special parameter _fragment will be used as the document fragment suffixed to the final URL.
      *
-     * @param string $name          The name of the route
-     * @param mixed  $parameters    An array of parameters
-     * @param int    $referenceType The type of reference to be generated (one of the constants)
+     * @param string  $name          The name of the route
+     * @param mixed[] $parameters    An array of parameters
+     * @param int     $referenceType The type of reference to be generated (one of the constants)
      *
      * @return string The generated URL
      *
@@ -82,5 +82,5 @@ interface UrlGeneratorInterface extends RequestContextAwareInterface
      * @throws InvalidParameterException           When a parameter value for a placeholder is not correct because
      *                                             it does not match the requirement
      */
-    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH);
+    public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH);
 }

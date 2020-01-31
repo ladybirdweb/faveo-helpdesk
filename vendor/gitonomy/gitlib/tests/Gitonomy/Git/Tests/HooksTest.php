@@ -9,7 +9,11 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git\Tests;
+
+use Gitonomy\Git\Exception\InvalidArgumentException;
+use Gitonomy\Git\Exception\LogicException;
 
 class HooksTest extends AbstractTest
 {
@@ -48,7 +52,7 @@ class HooksTest extends AbstractTest
         $file = $this->hookPath($repository, $hook);
 
         $this->assertTrue($repository->getHooks()->has($hook), "hook $hook in repository");
-        $this->assertTrue(file_exists($file), "Hook $hook is present");
+        $this->assertFileExists($file, "Hook $hook is present");
     }
 
     public function assertNoHook($repository, $hook)
@@ -56,7 +60,7 @@ class HooksTest extends AbstractTest
         $file = $this->hookPath($repository, $hook);
 
         $this->assertFalse($repository->getHooks()->has($hook), "No hook $hook in repository");
-        $this->assertFalse(file_exists($file), "Hook $hook is not present");
+        $this->assertFileNotExists($file, "Hook $hook is not present");
     }
 
     /**
@@ -71,10 +75,11 @@ class HooksTest extends AbstractTest
 
     /**
      * @dataProvider provideFoobar
-     * @expectedException InvalidArgumentException
      */
     public function testGet_InvalidName_ThrowsException($repository)
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $repository->getHooks()->get('foo');
     }
 
@@ -104,10 +109,11 @@ class HooksTest extends AbstractTest
 
     /**
      * @dataProvider provideFoobar
-     * @expectedException LogicException
      */
     public function testSymlink_WithExisting_ThrowsLogicException($repository)
     {
+        $this->expectException(LogicException::class);
+
         $this->markAsSkippedIfSymlinkIsMissing();
 
         $file = $this->hookPath($repository, 'target-symlink');
@@ -140,7 +146,7 @@ class HooksTest extends AbstractTest
     {
         $repository->getHooks()->set('foo', 'bar');
 
-        $this->setExpectedException('LogicException');
+        $this->expectException(LogicException::class);
         $repository->getHooks()->set('foo', 'bar');
     }
 
@@ -153,15 +159,16 @@ class HooksTest extends AbstractTest
         touch($file);
 
         $repository->getHooks()->remove('foo');
-        $this->assertFalse(file_exists($file));
+        $this->assertFileNotExists($file);
     }
 
     /**
      * @dataProvider provideFoobar
-     * @expectedException LogicException
      */
     public function testRemove_NotExisting_ThrowsLogicException($repository)
     {
+        $this->expectException(LogicException::class);
+
         $repository->getHooks()->remove('foo');
     }
 

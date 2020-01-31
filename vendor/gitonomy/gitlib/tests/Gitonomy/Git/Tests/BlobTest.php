@@ -9,7 +9,10 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git\Tests;
+
+use Gitonomy\Git\Exception\RuntimeException;
 
 class BlobTest extends AbstractTest
 {
@@ -32,10 +35,11 @@ class BlobTest extends AbstractTest
 
     /**
      * @dataProvider provideFoobar
-     * @expectedException RuntimeException
      */
     public function testNotExisting($repository)
     {
+        $this->expectException(RuntimeException::class);
+
         $blob = $repository->getBlob('foobar');
         $blob->getContent();
     }

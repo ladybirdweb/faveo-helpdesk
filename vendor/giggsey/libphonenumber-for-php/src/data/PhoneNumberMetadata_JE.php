@@ -14,7 +14,7 @@
 return array (
   'generalDesc' => 
   array (
-    'NationalNumberPattern' => '(?:1534|(?:[3578]\\d|90)\\d\\d)\\d{6}',
+    'NationalNumberPattern' => '1534\\d{6}|(?:[3578]\\d|90)\\d{8}',
     'PossibleLength' => 
     array (
       0 => 10,
@@ -103,7 +103,7 @@ return array (
   ),
   'pager' => 
   array (
-    'NationalNumberPattern' => '76(?:0[0-2]|2[356]|4[0134]|5[49]|6[0-369]|77|81|9[39])\\d{6}',
+    'NationalNumberPattern' => '76(?:0[0-2]|2[356]|34|4[0134]|5[49]|6[0-369]|77|81|9[39])\\d{6}',
     'ExampleNumber' => '7640123456',
     'PossibleLength' => 
     array (

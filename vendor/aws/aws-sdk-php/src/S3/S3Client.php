@@ -5,6 +5,7 @@ use Aws\Api\ApiProvider;
 use Aws\Api\DocModel;
 use Aws\Api\Service;
 use Aws\AwsClient;
+use Aws\CacheInterface;
 use Aws\ClientResolver;
 use Aws\Command;
 use Aws\Exception\AwsException;
@@ -13,7 +14,13 @@ use Aws\Middleware;
 use Aws\RetryMiddleware;
 use Aws\ResultInterface;
 use Aws\CommandInterface;
+use Aws\S3\UseArnRegion\Configuration;
+use Aws\S3\UseArnRegion\ConfigurationInterface;
+use Aws\S3\UseArnRegion\ConfigurationProvider as UseArnRegionConfigurationProvider;
+use Aws\S3\RegionalEndpoint\ConfigurationProvider;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -215,6 +222,19 @@ class S3Client extends AwsClient implements S3ClientInterface
                     . 'result of injecting the bucket into the URL. This '
                     . 'option is useful for interacting with CNAME endpoints.',
             ],
+            'use_arn_region' => [
+                'type'    => 'config',
+                'valid'   => [
+                    'bool',
+                    Configuration::class,
+                    CacheInterface::class,
+                    'callable'
+                ],
+                'doc'     => 'Set to true to allow passed in ARNs to override'
+                    . ' client region. Accepts...',
+                'fn' => [__CLASS__, '_apply_use_arn_region'],
+                'default' => [UseArnRegionConfigurationProvider::class, 'defaultProvider'],
+            ],
             'use_accelerate_endpoint' => [
                 'type' => 'config',
                 'valid' => ['bool'],
@@ -260,11 +280,28 @@ class S3Client extends AwsClient implements S3ClientInterface
      *   interacting with CNAME endpoints.
      * - calculate_md5: (bool) Set to false to disable calculating an MD5
      *   for all Amazon S3 signed uploads.
+     * - s3_us_east_1_regional_endpoint:
+     *   (Aws\S3\RegionalEndpoint\ConfigurationInterface|Aws\CacheInterface\|callable|string|array)
+     *   Specifies whether to use regional or legacy endpoints for the us-east-1
+     *   region. Provide an Aws\S3\RegionalEndpoint\ConfigurationInterface object, an
+     *   instance of Aws\CacheInterface, a callable configuration provider used
+     *   to create endpoint configuration, a string value of `legacy` or
+     *   `regional`, or an associative array with the following keys:
+     *   endpoint_types: (string)  Set to `legacy` or `regional`, defaults to
+     *   `legacy`
      * - use_accelerate_endpoint: (bool) Set to true to send requests to an S3
      *   Accelerate endpoint by default. Can be enabled or disabled on
      *   individual operations by setting '@use_accelerate_endpoint' to true or
      *   false. Note: you must enable S3 Accelerate on a bucket before it can be
      *   accessed via an Accelerate endpoint.
+     * - use_arn_region: (Aws\S3\UseArnRegion\ConfigurationInterface,
+     *   Aws\CacheInterface, bool, callable) Set to true to enable the client
+     *   to use the region from a supplied ARN argument instead of the client's
+     *   region. Provide an instance of Aws\S3\UseArnRegion\ConfigurationInterface,
+     *   an instance of Aws\CacheInterface, a callable that provides a promise for
+     *   a Configuration object, or a boolean value. Defaults to false (i.e.
+     *   the SDK will not follow the ARN region if it conflicts with the client
+     *   region and instead throw an error).
      * - use_dual_stack_endpoint: (bool) Set to true to send requests to an S3
      *   Dual Stack endpoint by default, which enables IPv6 Protocol.
      *   Can be enabled or disabled on individual operations by setting
@@ -280,6 +317,11 @@ class S3Client extends AwsClient implements S3ClientInterface
      */
     public function __construct(array $args)
     {
+        if (!isset($args['s3_us_east_1_regional_endpoint'])) {
+            $args['s3_us_east_1_regional_endpoint'] = ConfigurationProvider::defaultProvider();
+        } elseif ($args['s3_us_east_1_regional_endpoint'] instanceof CacheInterface) {
+            $args['s3_us_east_1_regional_endpoint'] = ConfigurationProvider::defaultProvider($args);
+        }
         parent::__construct($args);
         $stack = $this->getHandlerList();
         $stack->appendInit(SSECMiddleware::wrap($this->getEndpoint()->getScheme()), 's3.ssec');
@@ -288,7 +330,6 @@ class S3Client extends AwsClient implements S3ClientInterface
             Middleware::contentType(['PutObject', 'UploadPart']),
             's3.content_type'
         );
-
 
         // Use the bucket style middleware when using a "bucket_endpoint" (for cnames)
         if ($this->getConfig('bucket_endpoint')) {
@@ -307,6 +348,22 @@ class S3Client extends AwsClient implements S3ClientInterface
             );
         }
 
+        $stack->appendBuild(
+            BucketEndpointArnMiddleware::wrap(
+                $this->getApi(),
+                $this->getRegion(),
+                [
+                    'use_arn_region' => $this->getConfig('use_arn_region'),
+                    'dual_stack' => $this->getConfig('use_dual_stack_endpoint'),
+                    'accelerate' => $this->getConfig('use_accelerate_endpoint'),
+                    'path_style' => $this->getConfig('use_path_style_endpoint'),
+                    'endpoint' => isset($args['endpoint'])
+                        ? $args['endpoint']
+                        : null
+                ]
+            ),
+            's3.bucket_endpoint_arn'
+        );
         $stack->appendSign(PutObjectUrlMiddleware::wrap(), 's3.put_object_url');
         $stack->appendSign(PermanentRedirectMiddleware::wrap(), 's3.permanent_redirect');
         $stack->appendInit(Middleware::sourceFile($this->getApi()), 's3.source_file');
@@ -337,7 +394,26 @@ class S3Client extends AwsClient implements S3ClientInterface
             preg_match('/^[a-z0-9]([a-z0-9\-\.]*[a-z0-9])?$/', $bucket);
     }
 
-    public function createPresignedRequest(CommandInterface $command, $expires)
+    public static function _apply_use_arn_region($value, array &$args, HandlerList $list)
+    {
+        if ($value instanceof CacheInterface) {
+            $value = UseArnRegionConfigurationProvider::defaultProvider($args);
+        }
+        if (is_callable($value)) {
+            $value = $value();
+        }
+        if ($value instanceof PromiseInterface) {
+            $value = $value->wait();
+        }
+        if ($value instanceof ConfigurationInterface) {
+            $args['use_arn_region'] = $value;
+        } else {
+            // The Configuration class itself will validate other inputs
+            $args['use_arn_region'] = new Configuration($value);
+        }
+    }
+
+    public function createPresignedRequest(CommandInterface $command, $expires, array $options = [])
     {
         $command = clone $command;
         $command->getHandlerList()->remove('signer');
@@ -353,10 +429,24 @@ class S3Client extends AwsClient implements S3ClientInterface
         return $signer->presign(
             \Aws\serialize($command),
             $this->getCredentials()->wait(),
-            $expires
+            $expires,
+            $options
         );
     }
 
+    /**
+     * Returns the URL to an object identified by its bucket and key.
+     *
+     * The URL returned by this method is not signed nor does it ensure that the
+     * bucket and key given to the method exist. If you need a signed URL, then
+     * use the {@see \Aws\S3\S3Client::createPresignedRequest} method and get
+     * the URI of the signed request.
+     *
+     * @param string $bucket  The name of the bucket where the object is located
+     * @param string $key     The key of the object
+     *
+     * @return string The URL to the object
+     */
     public function getObjectUrl($bucket, $key)
     {
         $command = $this->getCommand('GetObject', [
@@ -552,7 +642,7 @@ class S3Client extends AwsClient implements S3ClientInterface
     /** @internal */
     public static function _applyApiProvider($value, array &$args, HandlerList $list)
     {
-        ClientResolver::_apply_api_provider($value, $args, $list);
+        ClientResolver::_apply_api_provider($value, $args);
         $args['parser'] = new GetBucketLocationParser(
             new AmbiguousSuccessParser(
                 new RetryableMalformedResponseParser(
@@ -629,5 +719,61 @@ class S3Client extends AwsClient implements S3ClientInterface
             new Service($api, ApiProvider::defaultProvider()),
             new DocModel($docs)
         ];
+    }
+
+    /**
+     * @internal
+     * @codeCoverageIgnore
+     */
+    public static function addDocExamples($examples)
+    {
+        $getObjectExample = [
+            'input' => [
+                'Bucket' => 'arn:aws:s3:us-east-1:123456789012:accesspoint:myaccesspoint',
+                'Key' => 'my-key'
+            ],
+            'output' => [
+                'Body' => 'class GuzzleHttp\Psr7\Stream#208 (7) {...}',
+                'ContentLength' => '11',
+                'ContentType' => 'application/octet-stream',
+            ],
+            'comments' => [
+                'input' => '',
+                'output' => 'Simplified example output'
+            ],
+            'description' => 'The following example retrieves an object by referencing the bucket via an S3 accesss point ARN. Result output is simplified for the example.',
+            'id' => '',
+            'title' => 'To get an object via an S3 access point ARN'
+        ];
+        if (isset($examples['GetObject'])) {
+            $examples['GetObject'] []= $getObjectExample;
+        } else {
+            $examples['GetObject'] = [$getObjectExample];
+        }
+
+        $putObjectExample = [
+            'input' => [
+                'Bucket' => 'arn:aws:s3:us-east-1:123456789012:accesspoint:myaccesspoint',
+                'Key' => 'my-key',
+                'Body' => 'my-body',
+            ],
+            'output' => [
+                'ObjectURL' => 'https://my-bucket.s3.us-east-1.amazonaws.com/my-key'
+            ],
+            'comments' => [
+                'input' => '',
+                'output' => 'Simplified example output'
+            ],
+            'description' => 'The following example uploads an object by referencing the bucket via an S3 accesss point ARN. Result output is simplified for the example.',
+            'id' => '',
+            'title' => 'To upload an object via an S3 access point ARN'
+        ];
+        if (isset($examples['PutObject'])) {
+            $examples['PutObject'] []= $putObjectExample;
+        } else {
+            $examples['PutObject'] = [$putObjectExample];
+        }
+
+        return $examples;
     }
 }

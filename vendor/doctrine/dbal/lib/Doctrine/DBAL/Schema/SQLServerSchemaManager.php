@@ -4,16 +4,19 @@ namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\DriverException;
+use Doctrine\DBAL\Platforms\SQLServerPlatform;
 use Doctrine\DBAL\Types\Type;
 use PDOException;
+use Throwable;
+use function assert;
 use function count;
 use function in_array;
-use function preg_replace;
+use function is_string;
+use function preg_match;
 use function sprintf;
 use function str_replace;
 use function strpos;
 use function strtok;
-use function trim;
 
 /**
  * SQL Server Schema Manager.
@@ -29,6 +32,7 @@ class SQLServerSchemaManager extends AbstractSchemaManager
             parent::dropDatabase($database);
         } catch (DBALException $exception) {
             $exception = $exception->getPrevious();
+            assert($exception instanceof Throwable);
 
             if (! $exception instanceof DriverException) {
                 throw $exception;
@@ -61,7 +65,9 @@ class SQLServerSchemaManager extends AbstractSchemaManager
      */
     protected function _getPortableTableColumnDefinition($tableColumn)
     {
-        $dbType  = strtok($tableColumn['type'], '(), ');
+        $dbType = strtok($tableColumn['type'], '(), ');
+        assert(is_string($dbType));
+
         $fixed   = null;
         $length  = (int) $tableColumn['length'];
         $default = $tableColumn['default'];
@@ -71,15 +77,7 @@ class SQLServerSchemaManager extends AbstractSchemaManager
         }
 
         if ($default !== null) {
-            while ($default !== ($default2 = preg_replace('/^\((.*)\)$/', '$1', $default))) {
-                $default = trim($default2, "'");
-
-                if ($default !== 'getdate()') {
-                    continue;
-                }
-
-                $default = $this->_platform->getCurrentTimestampSQL();
-            }
+            $default = $this->parseDefaultExpression($default);
         }
 
         switch ($dbType) {
@@ -109,7 +107,7 @@ class SQLServerSchemaManager extends AbstractSchemaManager
             'length'        => $length === 0 || ! in_array($type, ['text', 'string']) ? null : $length,
             'unsigned'      => false,
             'fixed'         => (bool) $fixed,
-            'default'       => $default !== 'NULL' ? $default : null,
+            'default'       => $default,
             'notnull'       => (bool) $tableColumn['notnull'],
             'scale'         => $tableColumn['scale'],
             'precision'     => $tableColumn['precision'],
@@ -124,6 +122,27 @@ class SQLServerSchemaManager extends AbstractSchemaManager
         }
 
         return $column;
+    }
+
+    private function parseDefaultExpression(string $value) : ?string
+    {
+        while (preg_match('/^\((.*)\)$/s', $value, $matches)) {
+            $value = $matches[1];
+        }
+
+        if ($value === 'NULL') {
+            return null;
+        }
+
+        if (preg_match('/^\'(.*)\'$/s', $value, $matches)) {
+            $value = str_replace("''", "'", $matches[1]);
+        }
+
+        if ($value === 'getdate()') {
+            return $this->_platform->getCurrentTimestampSQL();
+        }
+
+        return $value;
     }
 
     /**
@@ -216,7 +235,7 @@ class SQLServerSchemaManager extends AbstractSchemaManager
     protected function _getPortableViewDefinition($view)
     {
         // @todo
-        return new View($view['name'], null);
+        return new View($view['name'], '');
     }
 
     /**
@@ -306,5 +325,25 @@ class SQLServerSchemaManager extends AbstractSchemaManager
                 $database->getQuotedName($this->_platform)
             )
         );
+    }
+
+    /**
+     * @param string $tableName
+     */
+    public function listTableDetails($tableName) : Table
+    {
+        $table = parent::listTableDetails($tableName);
+
+        /** @var SQLServerPlatform $platform */
+        $platform = $this->_platform;
+        $sql      = $platform->getListTableMetadataSQL($tableName);
+
+        $tableOptions = $this->_conn->fetchAssoc($sql);
+
+        if ($tableOptions !== false) {
+            $table->addOption('comment', $tableOptions['table_comment']);
+        }
+
+        return $table;
     }
 }

@@ -52,8 +52,8 @@ final class SourceContextProvider implements ContextProviderInterface
                 && 'dump' === $trace[$i]['function']
                 && VarDumper::class === $trace[$i]['class']
             ) {
-                $file = $trace[$i]['file'];
-                $line = $trace[$i]['line'];
+                $file = $trace[$i]['file'] ?? $file;
+                $line = $trace[$i]['line'] ?? $line;
 
                 while (++$i < $this->limit) {
                     if (isset($trace[$i]['function'], $trace[$i]['file']) && empty($trace[$i]['class']) && 0 !== strpos($trace[$i]['function'], 'call_user_func')) {
@@ -72,7 +72,7 @@ final class SourceContextProvider implements ContextProviderInterface
 
                             if ($src) {
                                 $src = explode("\n", $src);
-                                $fileExcerpt = array();
+                                $fileExcerpt = [];
 
                                 for ($i = max($line - 3, 1), $max = min($line + 3, \count($src)); $i <= $max; ++$i) {
                                     $fileExcerpt[] = '<li'.($i === $line ? ' class="selected"' : '').'><code>'.$this->htmlEncode($src[$i - 1]).'</code></li>';
@@ -93,7 +93,7 @@ final class SourceContextProvider implements ContextProviderInterface
             $name = substr($name, strrpos($name, '/') + 1);
         }
 
-        $context = array('name' => $name, 'file' => $file, 'line' => $line);
+        $context = ['name' => $name, 'file' => $file, 'line' => $line];
         $context['file_excerpt'] = $fileExcerpt;
 
         if (null !== $this->projectDir) {

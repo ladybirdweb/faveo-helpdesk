@@ -9,9 +9,11 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git\Tests;
 
 use Gitonomy\Git\Admin;
+use Gitonomy\Git\Exception\RuntimeException;
 use Gitonomy\Git\Reference\Branch;
 use Gitonomy\Git\Repository;
 
@@ -19,12 +21,12 @@ class AdminTest extends AbstractTest
 {
     private $tmpDir;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->tmpDir = self::createTempDir();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->deleteDir(self::createTempDir());
     }
@@ -36,8 +38,8 @@ class AdminTest extends AbstractTest
         $objectDir = $this->tmpDir.'/objects';
 
         $this->assertTrue($repository->isBare(), 'Repository is bare');
-        $this->assertTrue(is_dir($objectDir),     'objects/ folder is present');
-        $this->assertTrue($repository instanceof Repository, 'Admin::init returns a repository');
+        $this->assertDirectoryExists($objectDir, 'objects/ folder is present');
+        $this->assertInstanceOf(Repository::class, $repository, 'Admin::init returns a repository');
         $this->assertEquals($this->tmpDir, $repository->getGitDir(), 'The folder passed as argument is git dir');
         $this->assertNull($repository->getWorkingDir(), 'No working dir in bare repository');
     }
@@ -49,8 +51,8 @@ class AdminTest extends AbstractTest
         $objectDir = $this->tmpDir.'/.git/objects';
 
         $this->assertFalse($repository->isBare(), 'Repository is not bare');
-        $this->assertTrue(is_dir($objectDir), 'objects/ folder is present');
-        $this->assertTrue($repository instanceof Repository, 'Admin::init returns a repository');
+        $this->assertDirectoryExists($objectDir, 'objects/ folder is present');
+        $this->assertInstanceOf(Repository::class, $repository, 'Admin::init returns a repository');
         $this->assertEquals($this->tmpDir.'/.git', $repository->getGitDir(), 'git dir as subfolder of argument');
         $this->assertEquals($this->tmpDir, $repository->getWorkingDir(), 'working dir present in bare repository');
     }
@@ -66,12 +68,12 @@ class AdminTest extends AbstractTest
 
         $newRefs = array_keys($new->getReferences()->getAll());
 
-        $this->assertTrue(in_array('refs/heads/master', $newRefs));
-        $this->assertTrue(in_array('refs/tags/0.1', $newRefs));
+        $this->assertContains('refs/heads/master', $newRefs);
+        $this->assertContains('refs/tags/0.1', $newRefs);
 
         if ($repository->isBare()) {
             $this->assertEquals($newDir, $new->getGitDir());
-            $this->assertTrue(in_array('refs/heads/new-feature', $newRefs));
+            $this->assertContains('refs/heads/new-feature', $newRefs);
         } else {
             $this->assertEquals($newDir.'/.git', $new->getGitDir());
             $this->assertEquals($newDir, $new->getWorkingDir());
@@ -89,7 +91,7 @@ class AdminTest extends AbstractTest
         self::registerDeletion($new);
 
         $head = $new->getHead();
-        $this->assertTrue($head instanceof Branch, 'HEAD is a branch');
+        $this->assertInstanceOf(Branch::class, $head, 'HEAD is a branch');
         $this->assertEquals('new-feature', $head->getName(), 'HEAD is branch new-feature');
     }
 
@@ -104,7 +106,7 @@ class AdminTest extends AbstractTest
         self::registerDeletion($new);
 
         $head = $new->getHead();
-        $this->assertTrue($head instanceof Branch, 'HEAD is a branch');
+        $this->assertInstanceOf(Branch::class, $head, 'HEAD is a branch');
         $this->assertEquals('new-feature', $head->getName(), 'HEAD is branch new-feature');
     }
 
@@ -119,14 +121,14 @@ class AdminTest extends AbstractTest
 
         $newRefs = array_keys($new->getReferences()->getAll());
 
-        $this->assertTrue(in_array('refs/heads/master', $newRefs));
-        $this->assertTrue(in_array('refs/tags/0.1', $newRefs));
+        $this->assertContains('refs/heads/master', $newRefs);
+        $this->assertContains('refs/tags/0.1', $newRefs);
         $this->assertEquals($newDir, $new->getGitDir());
 
         if ($repository->isBare()) {
-            $this->assertTrue(in_array('refs/heads/new-feature', $newRefs));
+            $this->assertContains('refs/heads/new-feature', $newRefs);
         } else {
-            $this->assertTrue(in_array('refs/remotes/origin/new-feature', $newRefs));
+            $this->assertContains('refs/remotes/origin/new-feature', $newRefs);
         }
     }
 
@@ -147,11 +149,10 @@ class AdminTest extends AbstractTest
         $this->assertFalse(Admin::isValidRepository($url));
     }
 
-    /**
-     * @expectedException RuntimeException
-     */
     public function testExistingFile()
     {
+        $this->expectException(RuntimeException::class);
+
         $file = $this->tmpDir.'/test';
         touch($file);
 
@@ -161,15 +162,15 @@ class AdminTest extends AbstractTest
     public function testCloneRepository()
     {
         $newDir = self::createTempDir();
-        $args = array();
+        $args = [];
 
         $new = Admin::cloneRepository($newDir, self::REPOSITORY_URL, $args, self::getOptions());
         self::registerDeletion($new);
 
         $newRefs = array_keys($new->getReferences()->getAll());
 
-        $this->assertTrue(in_array('refs/heads/master', $newRefs));
-        $this->assertTrue(in_array('refs/tags/0.1', $newRefs));
+        $this->assertContains('refs/heads/master', $newRefs);
+        $this->assertContains('refs/tags/0.1', $newRefs);
 
         $this->assertEquals($newDir.'/.git', $new->getGitDir());
         $this->assertEquals($newDir, $new->getWorkingDir());

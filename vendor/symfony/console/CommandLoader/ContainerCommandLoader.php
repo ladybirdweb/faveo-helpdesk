@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Symfony\Component\Console\CommandLoader;
 
 use Psr\Container\ContainerInterface;
@@ -16,8 +25,7 @@ class ContainerCommandLoader implements CommandLoaderInterface
     private $commandMap;
 
     /**
-     * @param ContainerInterface $container  A container from which to load command services
-     * @param array              $commandMap An array with command names as keys and service ids as values
+     * @param array $commandMap An array with command names as keys and service ids as values
      */
     public function __construct(ContainerInterface $container, array $commandMap)
     {

@@ -135,9 +135,7 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
         // If the user is null, but we decrypt a "recaller" cookie we can attempt to
         // pull the user data on that cookie which serves as a remember cookie on
         // the application. Once we have a user we can return it to the caller.
-        $recaller = $this->recaller();
-
-        if (is_null($this->user) && ! is_null($recaller)) {
+        if (is_null($this->user) && ! is_null($recaller = $this->recaller())) {
             $this->user = $this->userFromRecaller($recaller);
 
             if ($this->user) {
@@ -329,6 +327,7 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
      * Get the response for basic authentication.
      *
      * @return void
+     *
      * @throws \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException
      */
     protected function failedBasicResponse()
@@ -493,7 +492,7 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
         }
 
         if (isset($this->events)) {
-            $this->events->dispatch(new Events\Logout($user));
+            $this->events->dispatch(new Events\Logout($this->name, $user));
         }
 
         // Once we have fired the logout event we will clear the users out of memory
@@ -580,7 +579,7 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
     {
         if (isset($this->events)) {
             $this->events->dispatch(new Events\Attempting(
-                $credentials, $remember
+                $this->name, $credentials, $remember
             ));
         }
     }
@@ -595,7 +594,9 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
     protected function fireLoginEvent($user, $remember = false)
     {
         if (isset($this->events)) {
-            $this->events->dispatch(new Events\Login($user, $remember));
+            $this->events->dispatch(new Events\Login(
+                $this->name, $user, $remember
+            ));
         }
     }
 
@@ -608,7 +609,9 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
     protected function fireAuthenticatedEvent($user)
     {
         if (isset($this->events)) {
-            $this->events->dispatch(new Events\Authenticated($user));
+            $this->events->dispatch(new Events\Authenticated(
+                $this->name, $user
+            ));
         }
     }
 
@@ -622,7 +625,9 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
     protected function fireFailedEvent($user, array $credentials)
     {
         if (isset($this->events)) {
-            $this->events->dispatch(new Events\Failed($user, $credentials));
+            $this->events->dispatch(new Events\Failed(
+                $this->name, $user, $credentials
+            ));
         }
     }
 
