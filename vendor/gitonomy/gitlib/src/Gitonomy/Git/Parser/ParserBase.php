@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git\Parser;
 
 use Gitonomy\Git\Exception\RuntimeException;
@@ -123,11 +124,12 @@ abstract class ParserBase
     /**
      * @return string
      */
-    protected function consumeGPGSignature() {
+    protected function consumeGPGSignature()
+    {
         $expected = "\ngpgsig ";
         $length = strlen($expected);
         $actual = substr($this->content, $this->cursor, $length);
-        if($actual != $expected) {
+        if ($actual != $expected) {
             return '';
         }
         $this->cursor += $length;

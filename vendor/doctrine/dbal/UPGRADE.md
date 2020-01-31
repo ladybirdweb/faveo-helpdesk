@@ -1,3 +1,96 @@
+# Upgrade to 2.10
+
+## Deprecated `Doctrine\DBAL\Event\ConnectionEventArgs` methods
+
+The usage of the `getDriver()`, `getDatabasePlatform()` and `getSchemaManager()` methods of the `ConnectionEventArgs` class has been deprecated. Obtain the underlying connection via `getConnection()` and call the corresponding methods on the connection instance.
+
+## Deprecated `Doctrine\DBAL\Event\SchemaColumnDefinitionEventArgs` methods
+
+The usage of the `getDatabasePlatform()` method of the `SchemaColumnDefinitionEventArgs` class has been deprecated. Obtain the underlying connection via `getConnection()` and call the corresponding method on the connection instance.
+
+## Deprecated `Doctrine\DBAL\Connection` methods
+
+The usage of the `getHost()`, `getPort()`, `getUsername()` and `getPassword()` methods of the `Connection` class has been deprecated as they leak implementation details.
+
+## Deprecated array of statements in `addSql()` of `SchemaEventArgs`-based classes.
+
+Passing multiple SQL statements as an array to `SchemaAlterTableAddColumnEventArgs::addSql()` and the same method in other `SchemaEventArgs`-based classes is deprecated. Pass each statement as an individual argument instead.
+
+## Deprecated calling `AbstractSchemaManager::tablesExist()` with a string argument.
+
+Instead of passing a string, pass a one-element array.
+
+## Deprecated calling `OracleSchemaManager::createDatabase()` without an argument or by passing NULL.
+
+In order to create a database, always pass the database name.
+
+## Deprecated unused schema manager methods.
+
+The following methods have been deprecated as unused:
+
+- `AbstractSchemaManager::_getPortableFunctionsList()`,
+- `AbstractSchemaManager::_getPortableFunctionDefinition()`,
+- `OracleSchemaManager::_getPortableFunctionDefinition()`,
+- `SqliteSchemaManager::_getPortableTableIndexDefinition()`.
+
+# Deprecations in `Doctrine\DBAL\Driver`
+
+- The usage of NULL to indicate empty `$username` or `$password` when calling `connect()` is deprecated. Use an empty string instead.
+
+## Deprecated `Doctrine\DBAL\Platforms::_getAlterTableIndexForeignKeySQL()`
+
+Method `Doctrine\DBAL\Platforms::_getAlterTableIndexForeignKeySQL()` has been deprecated as no longer used.
+
+## Deprecated `Doctrine\DBAL\Driver\OCI8\OCI8Statement::$_PARAM`
+
+Property `Doctrine\DBAL\Driver\OCI8\OCI8Statement::$_PARAM` has been deprecated as not used.
+
+## Deprecated `Doctrine\DBAL\Driver::getName()`
+
+Relying on the name of the driver is discouraged. For referencing the driver, use its class name.
+
+## Deprecated usage of user-provided `PDO` instance
+
+The usage of user-provided `PDO` instance is deprecated. The known use cases are:
+
+1. **Persistent PDO connections.** DBAL 3.0 will supported establishing persistent connections, therefore, providing a pre-created persistent PDO connection will be no longer needed.
+2. **Sharing `PDO` instance between DBAL and legacy components.** In order to share a PDO instance, initialize the connection in DBAL and access it using `Connection::getWrappedConnection()->getWrappedConnection()`.
+
+## MINOR BC BREAK: Default values are no longer handled as SQL expressions
+
+They are converted to SQL literals (e.g. escaped). Clients must now specify default values in their initial form, not in the form of an SQL literal (e.g. escaped).
+
+Before:
+
+    $column->setDefault('Foo\\\\Bar\\\\Baz');
+
+After:
+
+    $column->setDefault('Foo\\Bar\\Baz');
+
+## Deprecated `Type::*` constants
+
+The constants for built-in types have been moved from `Doctrine\DBAL\Types\Type` to a separate class `Doctrine\DBAL\Types\Types`.
+
+Some of the constants were renamed in the process:
+* `TARRAY`-> `ARRAY`
+* `DATE` -> `DATE_MUTABLE`
+* `DATETIME` -> `DATETIME_MUTABLE`
+* `DATETIMETZ` -> `DATETIMETZ_MUTABLE`
+* `TIME` -> `TIME_MUTABLE`
+
+## Deprecated `SQLSrvStatement::LAST_INSERT_ID_SQL` constant
+
+The  `Doctrine\DBAL\Driver\SQLSrv\SQLSrvStatement::LAST_INSERT_ID_SQL` constant has been deprecated and will be made private in 3.0.
+
+## Deprecated `SQLParserUtils` constants
+
+The constants in `Doctrine\DBAL\SQLParserUtils` have been deprecated and will be made private in 3.0.
+
+## Deprecated `LoggerChain::addLogger` method
+
+The `Doctrine\DBAL\Logging\LoggerChain::addLogger` method has been deprecated. Inject list of loggers via constructor instead.
+
 # Upgrade to 2.9
 
 ## Deprecated `Statement::fetchColumn()` with an invalid index
@@ -67,7 +160,7 @@ This method now throws SPL ``UnexpectedValueException`` instead of accidentally 
 
 ## Doctrine\DBAL\Connection::TRANSACTION_* constants deprecated
 
-``Doctrine\DBAL\Connection::TRANSACTION_*`` were moved into ``Doctrine\DBAL\TransactionIsolationLevel`` class without the ``TRANSACTION_`` prefix. 
+``Doctrine\DBAL\Connection::TRANSACTION_*`` were moved into ``Doctrine\DBAL\TransactionIsolationLevel`` class without the ``TRANSACTION_`` prefix.
 
 ## DEPRECATION: direct usage of the PDO APIs in the DBAL API
 

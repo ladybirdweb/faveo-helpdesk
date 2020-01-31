@@ -28,8 +28,8 @@
         "illuminate/contracts": "~5.0",
         "mockery/mockery": "~0.9",
         "pagerfanta/pagerfanta": "~1.0.0",
-        "phpunit/phpunit": "~4.0",
-        "squizlabs/php_codesniffer": "~1.5",
+        "phpunit/phpunit": "^4.8.35 || ^7.5",
+        "squizlabs/php_codesniffer": "~1.5|~2.0|~3.4",
         "zendframework/zend-paginator": "~2.3"
     },
     "suggest": {

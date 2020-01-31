@@ -39,7 +39,7 @@ class MetadataBag implements SessionBagInterface
     /**
      * @var array
      */
-    protected $meta = array(self::CREATED => 0, self::UPDATED => 0, self::LIFETIME => 0);
+    protected $meta = [self::CREATED => 0, self::UPDATED => 0, self::LIFETIME => 0];
 
     /**
      * Unix timestamp.
@@ -159,7 +159,7 @@ class MetadataBag implements SessionBagInterface
         $this->name = $name;
     }
 
-    private function stampCreated($lifetime = null)
+    private function stampCreated(int $lifetime = null): void
     {
         $timeStamp = time();
         $this->meta[self::CREATED] = $this->meta[self::UPDATED] = $this->lastUsed = $timeStamp;

@@ -63,7 +63,7 @@ class ExampleNode
     /**
      * @param bool $isPending
      */
-    public function markAsPending(bool $isPending = true)
+    public function markAsPending(bool $isPending = true): void
     {
         $this->isPending = $isPending;
     }
@@ -87,7 +87,7 @@ class ExampleNode
     /**
      * @param SpecificationNode $specification
      */
-    public function setSpecification(SpecificationNode $specification)
+    public function setSpecification(SpecificationNode $specification): void
     {
         $this->specification = $specification;
     }

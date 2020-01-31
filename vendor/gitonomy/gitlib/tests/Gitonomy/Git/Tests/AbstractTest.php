@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git\Tests;
 
 use Gitonomy\Git\Admin;
@@ -51,10 +52,10 @@ abstract class AbstractTest extends TestCase
      */
     public static function provideFoobar()
     {
-        return array(
-            array(self::createFoobarRepository()),
-            array(self::createFoobarRepository(false)),
-        );
+        return [
+            [self::createFoobarRepository()],
+            [self::createFoobarRepository(false)],
+        ];
     }
 
     /**
@@ -62,10 +63,10 @@ abstract class AbstractTest extends TestCase
      */
     public static function provideEmpty()
     {
-        return array(
-            array(self::createEmptyRepository()),
-            array(self::createEmptyRepository(false)),
-        );
+        return [
+            [self::createEmptyRepository()],
+            [self::createEmptyRepository(false)],
+        ];
     }
 
     /**
@@ -93,7 +94,7 @@ abstract class AbstractTest extends TestCase
             } else {
                 $dir = $repository->getGitDir();
             }
-            AbstractTest::deleteDir($dir);
+            self::deleteDir($dir);
         });
     }
 
@@ -138,12 +139,12 @@ abstract class AbstractTest extends TestCase
     protected static function getOptions()
     {
         $command = isset($_SERVER['GIT_COMMAND']) ? $_SERVER['GIT_COMMAND'] : 'git';
-        $envs = isset($_SERVER['GIT_ENVS']) ? (array) $_SERVER['GIT_ENVS'] : array();
+        $envs = isset($_SERVER['GIT_ENVS']) ? (array) $_SERVER['GIT_ENVS'] : [];
 
-        return array(
-            'command' => $command,
+        return [
+            'command'               => $command,
             'environment_variables' => $envs,
-            'process_timeout' => 60,
-        );
+            'process_timeout'       => 60,
+        ];
     }
 }

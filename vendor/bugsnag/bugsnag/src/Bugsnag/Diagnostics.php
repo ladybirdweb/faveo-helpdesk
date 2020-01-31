@@ -10,6 +10,13 @@ class Bugsnag_Diagnostics
     private $config;
 
     /**
+     * The device data.
+     *
+     * @var string[]
+     */
+    private $deviceData = array();
+
+    /**
      * Create a new diagnostics instance.
      *
      * @param Bugsnag_Configuration $config the configuration instance
@@ -19,6 +26,8 @@ class Bugsnag_Diagnostics
     public function __construct(Bugsnag_Configuration $config)
     {
         $this->config = $config;
+
+        $this->mergeDeviceData(array('runtimeVersions' => array('php' => phpversion())));
     }
 
     /**
@@ -46,14 +55,29 @@ class Bugsnag_Diagnostics
     }
 
     /**
+     * Merges new data fields to the device data collection.
+     *
+     * @param array $deviceData the data to add
+     *
+     * @return $this
+     */
+    public function mergeDeviceData($deviceData)
+    {
+        $this->deviceData = array_merge_recursive($this->deviceData, $deviceData);
+
+        return $this;
+    }
+
+    /**
      * Get the device information.
      *
      * @return array
      */
     public function getDeviceData()
     {
-        return array(
-            'hostname' => $this->config->get('hostname', php_uname('n')),
+        return array_merge(
+            array('hostname' => $this->config->get('hostname', php_uname('n'))),
+            array_filter($this->deviceData)
         );
     }
 

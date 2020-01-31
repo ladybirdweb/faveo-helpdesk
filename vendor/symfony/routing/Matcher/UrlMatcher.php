@@ -32,19 +32,20 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
     const REQUIREMENT_MISMATCH = 1;
     const ROUTE_MATCH = 2;
 
+    /** @var RequestContext */
     protected $context;
 
     /**
      * Collects HTTP methods that would be allowed for the request.
      */
-    protected $allow = array();
+    protected $allow = [];
 
     /**
      * Collects URI schemes that would be allowed for the request.
      *
      * @internal
      */
-    protected $allowSchemes = array();
+    protected $allowSchemes = [];
 
     protected $routes;
     protected $request;
@@ -53,7 +54,7 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
     /**
      * @var ExpressionFunctionProviderInterface[]
      */
-    protected $expressionLanguageProviders = array();
+    protected $expressionLanguageProviders = [];
 
     public function __construct(RouteCollection $routes, RequestContext $context)
     {
@@ -82,19 +83,17 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
      */
     public function match($pathinfo)
     {
-        $this->allow = $this->allowSchemes = array();
+        $this->allow = $this->allowSchemes = [];
 
-        if ($ret = $this->matchCollection(rawurldecode($pathinfo), $this->routes)) {
+        if ($ret = $this->matchCollection(rawurldecode($pathinfo) ?: '/', $this->routes)) {
             return $ret;
         }
 
-        if ('/' === $pathinfo && !$this->allow) {
+        if ('/' === $pathinfo && !$this->allow && !$this->allowSchemes) {
             throw new NoConfigurationException();
         }
 
-        throw 0 < \count($this->allow)
-            ? new MethodNotAllowedException(array_unique($this->allow))
-            : new ResourceNotFoundException(sprintf('No routes found for "%s".', $pathinfo));
+        throw 0 < \count($this->allow) ? new MethodNotAllowedException(array_unique($this->allow)) : new ResourceNotFoundException(sprintf('No routes found for "%s".', $pathinfo));
     }
 
     /**
@@ -119,8 +118,7 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
     /**
      * Tries to match a URL with a set of routes.
      *
-     * @param string          $pathinfo The path info to be parsed
-     * @param RouteCollection $routes   The set of routes
+     * @param string $pathinfo The path info to be parsed
      *
      * @return array An array of parameters
      *
@@ -130,46 +128,43 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
      */
     protected function matchCollection($pathinfo, RouteCollection $routes)
     {
-        $supportsTrailingSlash = '/' !== $pathinfo && '' !== $pathinfo && $this instanceof RedirectableUrlMatcherInterface;
+        // HEAD and GET are equivalent as per RFC
+        if ('HEAD' === $method = $this->context->getMethod()) {
+            $method = 'GET';
+        }
+        $supportsTrailingSlash = 'GET' === $method && $this instanceof RedirectableUrlMatcherInterface;
+        $trimmedPathinfo = rtrim($pathinfo, '/') ?: '/';
 
         foreach ($routes as $name => $route) {
             $compiledRoute = $route->compile();
-            $staticPrefix = $compiledRoute->getStaticPrefix();
+            $staticPrefix = rtrim($compiledRoute->getStaticPrefix(), '/');
+            $requiredMethods = $route->getMethods();
 
             // check the static prefix of the URL first. Only use the more expensive preg_match when it matches
-            if ('' === $staticPrefix || 0 === strpos($pathinfo, $staticPrefix)) {
-                // no-op
-            } elseif (!$supportsTrailingSlash) {
-                continue;
-            } elseif ('/' === $staticPrefix[-1] && substr($staticPrefix, 0, -1) === $pathinfo) {
-                return;
-            } elseif ('/' === $pathinfo[-1] && substr($pathinfo, 0, -1) === $staticPrefix) {
-                return;
-            } else {
+            if ('' !== $staticPrefix && 0 !== strpos($trimmedPathinfo, $staticPrefix)) {
                 continue;
             }
             $regex = $compiledRoute->getRegex();
 
-            if ($supportsTrailingSlash) {
-                $pos = strrpos($regex, '$');
-                $hasTrailingSlash = '/' === $regex[$pos - 1];
-                $regex = substr_replace($regex, '/?$', $pos - $hasTrailingSlash, 1 + $hasTrailingSlash);
-            }
+            $pos = strrpos($regex, '$');
+            $hasTrailingSlash = '/' === $regex[$pos - 1];
+            $regex = substr_replace($regex, '/?$', $pos - $hasTrailingSlash, 1 + $hasTrailingSlash);
 
             if (!preg_match($regex, $pathinfo, $matches)) {
                 continue;
             }
 
-            if ($supportsTrailingSlash) {
-                if (!$hasTrailingSlash && '/' === $pathinfo[-1] && preg_match($regex, substr($pathinfo, 0, -1))) {
-                    return;
-                }
-                if ($hasTrailingSlash && '/' !== $pathinfo[-1]) {
-                    return;
+            $hasTrailingVar = $trimmedPathinfo !== $pathinfo && preg_match('#\{\w+\}/?$#', $route->getPath());
+
+            if ($hasTrailingVar && ($hasTrailingSlash || (null === $m = $matches[\count($compiledRoute->getPathVariables())] ?? null) || '/' !== ($m[-1] ?? '/')) && preg_match($regex, $trimmedPathinfo, $m)) {
+                if ($hasTrailingSlash) {
+                    $matches = $m;
+                } else {
+                    $hasTrailingVar = false;
                 }
             }
 
-            $hostMatches = array();
+            $hostMatches = [];
             if ($compiledRoute->getHostRegex() && !preg_match($compiledRoute->getHostRegex(), $this->context->getHost(), $hostMatches)) {
                 continue;
             }
@@ -180,30 +175,27 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
                 continue;
             }
 
-            $hasRequiredScheme = !$route->getSchemes() || $route->hasScheme($this->context->getScheme());
-            if ($requiredMethods = $route->getMethods()) {
-                // HEAD and GET are equivalent as per RFC
-                if ('HEAD' === $method = $this->context->getMethod()) {
-                    $method = 'GET';
+            if ('/' !== $pathinfo && !$hasTrailingVar && $hasTrailingSlash === ($trimmedPathinfo === $pathinfo)) {
+                if ($supportsTrailingSlash && (!$requiredMethods || \in_array('GET', $requiredMethods))) {
+                    return $this->allow = $this->allowSchemes = [];
                 }
-
-                if (!\in_array($method, $requiredMethods)) {
-                    if ($hasRequiredScheme) {
-                        $this->allow = array_merge($this->allow, $requiredMethods);
-                    }
-
-                    continue;
-                }
-            }
-
-            if (!$hasRequiredScheme) {
-                $this->allowSchemes = array_merge($this->allowSchemes, $route->getSchemes());
-
                 continue;
             }
 
-            return $this->getAttributes($route, $name, array_replace($matches, $hostMatches, isset($status[1]) ? $status[1] : array()));
+            if ($route->getSchemes() && !$route->hasScheme($this->context->getScheme())) {
+                $this->allowSchemes = array_merge($this->allowSchemes, $route->getSchemes());
+                continue;
+            }
+
+            if ($requiredMethods && !\in_array($method, $requiredMethods)) {
+                $this->allow = array_merge($this->allow, $requiredMethods);
+                continue;
+            }
+
+            return $this->getAttributes($route, $name, array_replace($matches, $hostMatches, isset($status[1]) ? $status[1] : []));
         }
+
+        return [];
     }
 
     /**
@@ -213,7 +205,6 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
      * in matchers that do not have access to the matched Route instance
      * (like the PHP and Apache matcher dumpers).
      *
-     * @param Route  $route      The route we are matching against
      * @param string $name       The name of the route
      * @param array  $attributes An array of attributes from the matcher
      *
@@ -236,18 +227,17 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
      *
      * @param string $pathinfo The path
      * @param string $name     The route name
-     * @param Route  $route    The route
      *
      * @return array The first element represents the status, the second contains additional information
      */
     protected function handleRouteRequirements($pathinfo, $name, Route $route)
     {
         // expression condition
-        if ($route->getCondition() && !$this->getExpressionLanguage()->evaluate($route->getCondition(), array('context' => $this->context, 'request' => $this->request ?: $this->createRequest($pathinfo)))) {
-            return array(self::REQUIREMENT_MISMATCH, null);
+        if ($route->getCondition() && !$this->getExpressionLanguage()->evaluate($route->getCondition(), ['context' => $this->context, 'request' => $this->request ?: $this->createRequest($pathinfo)])) {
+            return [self::REQUIREMENT_MISMATCH, null];
         }
 
-        return array(self::REQUIREMENT_MATCH, null);
+        return [self::REQUIREMENT_MATCH, null];
     }
 
     /**
@@ -284,15 +274,15 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
     /**
      * @internal
      */
-    protected function createRequest($pathinfo)
+    protected function createRequest(string $pathinfo): ?Request
     {
         if (!class_exists('Symfony\Component\HttpFoundation\Request')) {
             return null;
         }
 
-        return Request::create($this->context->getScheme().'://'.$this->context->getHost().$this->context->getBaseUrl().$pathinfo, $this->context->getMethod(), $this->context->getParameters(), array(), array(), array(
+        return Request::create($this->context->getScheme().'://'.$this->context->getHost().$this->context->getBaseUrl().$pathinfo, $this->context->getMethod(), $this->context->getParameters(), [], [], [
             'SCRIPT_FILENAME' => $this->context->getBaseUrl(),
             'SCRIPT_NAME' => $this->context->getBaseUrl(),
-        ));
+        ]);
     }
 }

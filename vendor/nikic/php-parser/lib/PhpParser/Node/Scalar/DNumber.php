@@ -16,7 +16,7 @@ class DNumber extends Scalar
      * @param array $attributes Additional attributes
      */
     public function __construct(float $value, array $attributes = []) {
-        parent::__construct($attributes);
+        $this->attributes = $attributes;
         $this->value = $value;
     }
 
@@ -34,6 +34,8 @@ class DNumber extends Scalar
      * @return float The parsed number
      */
     public static function parse(string $str) : float {
+        $str = str_replace('_', '', $str);
+
         // if string contains any of .eE just cast it to float
         if (false !== strpbrk($str, '.eE')) {
             return (float) $str;

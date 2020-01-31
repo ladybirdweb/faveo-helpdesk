@@ -2,7 +2,6 @@
 
 namespace PhpParser\NodeVisitor;
 
-use PhpParser\Error;
 use PhpParser\ErrorHandler;
 use PhpParser\NameContext;
 use PhpParser\Node;
@@ -92,8 +91,13 @@ class NameResolver extends NodeVisitorAbstract
             $this->resolveSignature($node);
         } elseif ($node instanceof Stmt\ClassMethod
                   || $node instanceof Expr\Closure
+                  || $node instanceof Expr\ArrowFunction
         ) {
             $this->resolveSignature($node);
+        } elseif ($node instanceof Stmt\Property) {
+            if (null !== $node->type) {
+                $node->type = $this->resolveType($node->type);
+            }
         } elseif ($node instanceof Stmt\Const_) {
             foreach ($node->consts as $const) {
                 $this->addNamespacedName($const);
@@ -158,12 +162,18 @@ class NameResolver extends NodeVisitorAbstract
     }
 
     private function resolveType($node) {
+        if ($node instanceof Name) {
+            return $this->resolveClassName($node);
+        }
         if ($node instanceof Node\NullableType) {
             $node->type = $this->resolveType($node->type);
             return $node;
         }
-        if ($node instanceof Name) {
-            return $this->resolveClassName($node);
+        if ($node instanceof Node\UnionType) {
+            foreach ($node->types as &$type) {
+                $type = $this->resolveType($type);
+            }
+            return $node;
         }
         return $node;
     }

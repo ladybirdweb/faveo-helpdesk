@@ -43,69 +43,69 @@ class UnixPipes extends AbstractPipes
     /**
      * {@inheritdoc}
      */
-    public function getDescriptors()
+    public function getDescriptors(): array
     {
         if (!$this->haveReadSupport) {
             $nullstream = fopen('/dev/null', 'c');
 
-            return array(
-                array('pipe', 'r'),
+            return [
+                ['pipe', 'r'],
                 $nullstream,
                 $nullstream,
-            );
+            ];
         }
 
         if ($this->ttyMode) {
-            return array(
-                array('file', '/dev/tty', 'r'),
-                array('file', '/dev/tty', 'w'),
-                array('file', '/dev/tty', 'w'),
-            );
+            return [
+                ['file', '/dev/tty', 'r'],
+                ['file', '/dev/tty', 'w'],
+                ['file', '/dev/tty', 'w'],
+            ];
         }
 
         if ($this->ptyMode && Process::isPtySupported()) {
-            return array(
-                array('pty'),
-                array('pty'),
-                array('pty'),
-            );
+            return [
+                ['pty'],
+                ['pty'],
+                ['pty'],
+            ];
         }
 
-        return array(
-            array('pipe', 'r'),
-            array('pipe', 'w'), // stdout
-            array('pipe', 'w'), // stderr
-        );
+        return [
+            ['pipe', 'r'],
+            ['pipe', 'w'], // stdout
+            ['pipe', 'w'], // stderr
+        ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getFiles()
+    public function getFiles(): array
     {
-        return array();
+        return [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function readAndWrite($blocking, $close = false)
+    public function readAndWrite(bool $blocking, bool $close = false): array
     {
         $this->unblock();
         $w = $this->write();
 
-        $read = $e = array();
+        $read = $e = [];
         $r = $this->pipes;
         unset($r[0]);
 
         // let's have a look if something changed in streams
-        set_error_handler(array($this, 'handleError'));
+        set_error_handler([$this, 'handleError']);
         if (($r || $w) && false === stream_select($r, $w, $e, 0, $blocking ? Process::TIMEOUT_PRECISION * 1E6 : 0)) {
             restore_error_handler();
             // if a system call has been interrupted, forget about it, let's try again
             // otherwise, an error occurred, let's reset pipes
             if (!$this->hasSystemCallBeenInterrupted()) {
-                $this->pipes = array();
+                $this->pipes = [];
             }
 
             return $read;
@@ -138,7 +138,7 @@ class UnixPipes extends AbstractPipes
     /**
      * {@inheritdoc}
      */
-    public function haveReadSupport()
+    public function haveReadSupport(): bool
     {
         return $this->haveReadSupport;
     }
@@ -146,7 +146,7 @@ class UnixPipes extends AbstractPipes
     /**
      * {@inheritdoc}
      */
-    public function areOpen()
+    public function areOpen(): bool
     {
         return (bool) $this->pipes;
     }

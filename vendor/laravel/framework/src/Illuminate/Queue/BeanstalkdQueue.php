@@ -5,6 +5,7 @@ namespace Illuminate\Queue;
 use Pheanstalk\Pheanstalk;
 use Pheanstalk\Job as PheanstalkJob;
 use Illuminate\Queue\Jobs\BeanstalkdJob;
+use Pheanstalk\Contract\PheanstalkInterface;
 use Illuminate\Contracts\Queue\Queue as QueueContract;
 
 class BeanstalkdQueue extends Queue implements QueueContract
@@ -68,7 +69,7 @@ class BeanstalkdQueue extends Queue implements QueueContract
      */
     public function push($job, $data = '', $queue = null)
     {
-        return $this->pushRaw($this->createPayload($job, $data), $queue);
+        return $this->pushRaw($this->createPayload($job, $this->getQueue($queue), $data), $queue);
     }
 
     /**
@@ -100,7 +101,7 @@ class BeanstalkdQueue extends Queue implements QueueContract
         $pheanstalk = $this->pheanstalk->useTube($this->getQueue($queue));
 
         return $pheanstalk->put(
-            $this->createPayload($job, $data),
+            $this->createPayload($job, $this->getQueue($queue), $data),
             Pheanstalk::DEFAULT_PRIORITY,
             $this->secondsUntil($delay),
             $this->timeToRun
@@ -117,7 +118,11 @@ class BeanstalkdQueue extends Queue implements QueueContract
     {
         $queue = $this->getQueue($queue);
 
-        $job = $this->pheanstalk->watchOnly($queue)->reserve(0);
+        $this->pheanstalk->watchOnly($queue);
+
+        $job = interface_exists(PheanstalkInterface::class)
+                    ? $this->pheanstalk->reserveWithTimeout(0)
+                    : $this->pheanstalk->reserve(0);
 
         if ($job instanceof PheanstalkJob) {
             return new BeanstalkdJob(

@@ -16,7 +16,7 @@ class Closure extends Expr implements FunctionLike
     public $params;
     /** @var ClosureUse[] use()s */
     public $uses;
-    /** @var null|Node\Identifier|Node\Name|Node\NullableType Return type */
+    /** @var null|Node\Identifier|Node\Name|Node\NullableType|Node\UnionType Return type */
     public $returnType;
     /** @var Node\Stmt[] Statements */
     public $stmts;
@@ -34,7 +34,7 @@ class Closure extends Expr implements FunctionLike
      * @param array $attributes Additional attributes
      */
     public function __construct(array $subNodes = [], array $attributes = []) {
-        parent::__construct($attributes);
+        $this->attributes = $attributes;
         $this->static = $subNodes['static'] ?? false;
         $this->byRef = $subNodes['byRef'] ?? false;
         $this->params = $subNodes['params'] ?? [];

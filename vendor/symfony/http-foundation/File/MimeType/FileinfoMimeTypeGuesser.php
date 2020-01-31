@@ -13,11 +13,16 @@ namespace Symfony\Component\HttpFoundation\File\MimeType;
 
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+use Symfony\Component\Mime\FileinfoMimeTypeGuesser as NewFileinfoMimeTypeGuesser;
+
+@trigger_error(sprintf('The "%s" class is deprecated since Symfony 4.3, use "%s" instead.', FileinfoMimeTypeGuesser::class, NewFileinfoMimeTypeGuesser::class), E_USER_DEPRECATED);
 
 /**
  * Guesses the mime type using the PECL extension FileInfo.
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
+ *
+ * @deprecated since Symfony 4.3, use {@link NewFileinfoMimeTypeGuesser} instead
  */
 class FileinfoMimeTypeGuesser implements MimeTypeGuesserInterface
 {
@@ -26,7 +31,7 @@ class FileinfoMimeTypeGuesser implements MimeTypeGuesserInterface
     /**
      * @param string $magicFile A magic file to use with the finfo instance
      *
-     * @see http://www.php.net/manual/en/function.finfo-open.php
+     * @see https://php.net/finfo-open
      */
     public function __construct(string $magicFile = null)
     {
@@ -57,11 +62,11 @@ class FileinfoMimeTypeGuesser implements MimeTypeGuesserInterface
         }
 
         if (!self::isSupported()) {
-            return;
+            return null;
         }
 
         if (!$finfo = new \finfo(FILEINFO_MIME_TYPE, $this->magicFile)) {
-            return;
+            return null;
         }
 
         return $finfo->file($path);

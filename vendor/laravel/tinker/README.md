@@ -21,6 +21,10 @@ To get started with Laravel Tinker, simply run:
 
 From your console, execute the `php artisan tinker` command.
 
+### Dispatching Jobs
+
+The `dispatch` helper function and `dispatch` method on the `Dispatchable` class depends on garbage collection to place the job on the queue. Therefore, when using `tinker`, you should use `Bus::dispatch` or `Queue::push` to dispatch jobs.
+
 ## License
 
 Laravel Tinker is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

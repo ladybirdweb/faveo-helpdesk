@@ -32,7 +32,7 @@ class ComposerPsrNamespaceProvider
      *                      'My\PSR0Namespace' => '',
      *                  ]
      */
-    public function getNamespaces() : array
+    public function getNamespaces(): array
     {
         $vendors = array();
         foreach (get_declared_classes() as $class) {
@@ -61,7 +61,7 @@ class ComposerPsrNamespaceProvider
         return $namespaces;
     }
 
-    private function getNamespacesFromPrefixes(array $prefixes, array $vendors, $standard)
+    private function getNamespacesFromPrefixes(array $prefixes, array $vendors, $standard) : array
     {
         $namespaces = array();
         foreach ($prefixes as $namespace => $psrPrefix) {

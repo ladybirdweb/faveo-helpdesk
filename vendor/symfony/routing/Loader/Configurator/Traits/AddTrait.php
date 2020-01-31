@@ -34,7 +34,7 @@ trait AddTrait
      */
     final public function add(string $name, $path): RouteConfigurator
     {
-        $paths = array();
+        $paths = [];
         $parentConfigurator = $this instanceof CollectionConfigurator ? $this : ($this instanceof RouteConfigurator ? $this->parentConfigurator : null);
 
         if (\is_array($path)) {
@@ -83,7 +83,7 @@ trait AddTrait
         return $this->add($name, $path);
     }
 
-    private function createRoute($path): Route
+    private function createRoute(string $path): Route
     {
         return new Route($path);
     }

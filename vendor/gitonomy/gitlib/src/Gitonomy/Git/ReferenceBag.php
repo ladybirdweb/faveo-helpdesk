@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git;
 
 use Gitonomy\Git\Exception\ReferenceNotFoundException;
@@ -68,9 +69,9 @@ class ReferenceBag implements \Countable, \IteratorAggregate
     public function __construct($repository)
     {
         $this->repository = $repository;
-        $this->references = array();
-        $this->tags = array();
-        $this->branches = array();
+        $this->references = [];
+        $this->tags = [];
+        $this->branches = [];
     }
 
     /**
@@ -103,7 +104,7 @@ class ReferenceBag implements \Countable, \IteratorAggregate
         $fullname = $reference->getFullname();
 
         $this->initialize();
-        $this->repository->run('update-ref', array($fullname, $reference->getCommitHash()));
+        $this->repository->run('update-ref', [$fullname, $reference->getCommitHash()]);
 
         $this->references[$fullname] = $reference;
 
@@ -126,7 +127,7 @@ class ReferenceBag implements \Countable, \IteratorAggregate
 
     public function delete($fullname)
     {
-        $this->repository->run('update-ref', array('-d', $fullname));
+        $this->repository->run('update-ref', ['-d', $fullname]);
 
         unset($this->references[$fullname]);
     }
@@ -172,7 +173,7 @@ class ReferenceBag implements \Countable, \IteratorAggregate
             $hash = $hash->getHash();
         }
 
-        $tags = array();
+        $tags = [];
         foreach ($this->references as $reference) {
             if ($reference instanceof Reference\Tag && $reference->getCommitHash() === $hash) {
                 $tags[] = $reference;
@@ -193,7 +194,7 @@ class ReferenceBag implements \Countable, \IteratorAggregate
             $hash = $hash->getHash();
         }
 
-        $branches = array();
+        $branches = [];
         foreach ($this->references as $reference) {
             if ($reference instanceof Reference\Branch && $reference->getCommitHash() === $hash) {
                 $branches[] = $reference;
@@ -214,7 +215,7 @@ class ReferenceBag implements \Countable, \IteratorAggregate
             $hash = $hash->getHash();
         }
 
-        $result = array();
+        $result = [];
         foreach ($this->references as $k => $reference) {
             if ($reference->getCommitHash() === $hash) {
                 $result[] = $reference;
@@ -245,7 +246,7 @@ class ReferenceBag implements \Countable, \IteratorAggregate
     {
         $this->initialize();
 
-        $result = array();
+        $result = [];
         foreach ($this->references as $reference) {
             if ($reference instanceof Reference\Branch) {
                 $result[] = $reference;
@@ -262,7 +263,7 @@ class ReferenceBag implements \Countable, \IteratorAggregate
      */
     public function getLocalBranches()
     {
-        $result = array();
+        $result = [];
         foreach ($this->getBranches() as $branch) {
             if ($branch->isLocal()) {
                 $result[] = $branch;
@@ -279,7 +280,7 @@ class ReferenceBag implements \Countable, \IteratorAggregate
      */
     public function getRemoteBranches()
     {
-        $result = array();
+        $result = [];
         foreach ($this->getBranches() as $branch) {
             if ($branch->isRemote()) {
                 $result[] = $branch;

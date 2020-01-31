@@ -11,7 +11,7 @@
 
 namespace Symfony\Component\HttpKernel;
 
-use Symfony\Component\BrowserKit\Client as BaseClient;
+use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\BrowserKit\CookieJar;
 use Symfony\Component\BrowserKit\History;
 use Symfony\Component\BrowserKit\Request as DomRequest;
@@ -21,25 +21,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Client simulates a browser and makes requests to a Kernel object.
- *
- * @author Fabien Potencier <fabien@symfony.com>
+ * Client simulates a browser and makes requests to an HttpKernel instance.
  *
  * @method Request  getRequest()  A Request instance
  * @method Response getResponse() A Response instance
+ *
+ * @deprecated since Symfony 4.3, use HttpKernelBrowser instead.
  */
-class Client extends BaseClient
+class Client extends AbstractBrowser
 {
     protected $kernel;
     private $catchExceptions = true;
 
     /**
-     * @param HttpKernelInterface $kernel    An HttpKernel instance
-     * @param array               $server    The server parameters (equivalent of $_SERVER)
-     * @param History             $history   A History instance to store the browser history
-     * @param CookieJar           $cookieJar A CookieJar instance to store the cookies
+     * @param array $server The server parameters (equivalent of $_SERVER)
      */
-    public function __construct(HttpKernelInterface $kernel, array $server = array(), History $history = null, CookieJar $cookieJar = null)
+    public function __construct(HttpKernelInterface $kernel, array $server = [], History $history = null, CookieJar $cookieJar = null)
     {
         // These class properties must be set before calling the parent constructor, as it may depend on it.
         $this->kernel = $kernel;
@@ -90,7 +87,7 @@ class Client extends BaseClient
         foreach (get_declared_classes() as $class) {
             if (0 === strpos($class, 'ComposerAutoloaderInit')) {
                 $r = new \ReflectionClass($class);
-                $file = \dirname(\dirname($r->getFileName())).'/autoload.php';
+                $file = \dirname($r->getFileName(), 2).'/autoload.php';
                 if (file_exists($file)) {
                     $requires .= 'require_once '.var_export($file, true).";\n";
                 }
@@ -159,7 +156,7 @@ EOF;
      */
     protected function filterFiles(array $files)
     {
-        $filtered = array();
+        $filtered = [];
         foreach ($files as $key => $value) {
             if (\is_array($value)) {
                 $filtered[$key] = $this->filterFiles($value);

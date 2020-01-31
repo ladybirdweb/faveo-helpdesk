@@ -50,7 +50,7 @@ return array (
   ),
   'tollFree' => 
   array (
-    'NationalNumberPattern' => '(?:242300|8(?:00|33|44|55|66|77|88)[2-9]\\d\\d)\\d{4}',
+    'NationalNumberPattern' => '242300\\d{4}|8(?:00|33|44|55|66|77|88)[2-9]\\d{6}',
     'ExampleNumber' => '8002123456',
     'PossibleLength' => 
     array (
@@ -147,7 +147,8 @@ return array (
   'countryCode' => 1,
   'internationalPrefix' => '011',
   'nationalPrefix' => '1',
-  'nationalPrefixForParsing' => '1',
+  'nationalPrefixForParsing' => '1|([3-8]\\d{6})$',
+  'nationalPrefixTransformRule' => '242$1',
   'sameMobileAndFixedLinePattern' => false,
   'numberFormat' => 
   array (

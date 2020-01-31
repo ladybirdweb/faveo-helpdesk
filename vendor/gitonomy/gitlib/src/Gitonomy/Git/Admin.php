@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git;
 
 use Gitonomy\Git\Exception\RuntimeException;
@@ -28,13 +29,13 @@ class Admin
      * @param bool   $bare    indicate to create a bare repository
      * @param array  $options options for Repository creation
      *
-     * @return Repository
-     *
      * @throws RuntimeException Directory exists or not writable (only if debug=true)
+     *
+     * @return Repository
      */
-    public static function init($path, $bare = true, array $options = array())
+    public static function init($path, $bare = true, array $options = [])
     {
-        $process = static::getProcess('init', array_merge(array('-q'), $bare ? array('--bare') : array(), array($path)), $options);
+        $process = static::getProcess('init', array_merge(['-q'], $bare ? ['--bare'] : [], [$path]), $options);
 
         $process->run();
 
@@ -57,9 +58,9 @@ class Admin
      *
      * @return bool true if url is valid
      */
-    public static function isValidRepository($url, array $options = array())
+    public static function isValidRepository($url, array $options = [])
     {
-        $process = static::getProcess('ls-remote', array($url), $options);
+        $process = static::getProcess('ls-remote', [$url], $options);
 
         $process->run();
 
@@ -76,9 +77,9 @@ class Admin
      *
      * @return Repository
      */
-    public static function cloneTo($path, $url, $bare = true, array $options = array())
+    public static function cloneTo($path, $url, $bare = true, array $options = [])
     {
-        $args = $bare ? array('--bare') : array();
+        $args = $bare ? ['--bare'] : [];
 
         return static::cloneRepository($path, $url, $args, $options);
     }
@@ -94,9 +95,9 @@ class Admin
      *
      * @return Repository
      */
-    public static function cloneBranchTo($path, $url, $branch, $bare = true, $options = array())
+    public static function cloneBranchTo($path, $url, $branch, $bare = true, $options = [])
     {
-        $args = array('--branch', $branch);
+        $args = ['--branch', $branch];
         if ($bare) {
             $args[] = '--bare';
         }
@@ -113,9 +114,9 @@ class Admin
      *
      * @return Repository
      */
-    public static function mirrorTo($path, $url, array $options = array())
+    public static function mirrorTo($path, $url, array $options = [])
     {
-        return static::cloneRepository($path, $url, array('--mirror'), $options);
+        return static::cloneRepository($path, $url, ['--mirror'], $options);
     }
 
     /**
@@ -128,9 +129,9 @@ class Admin
      *
      * @return Repository
      */
-    public static function cloneRepository($path, $url, array $args = array(), array $options = array())
+    public static function cloneRepository($path, $url, array $args = [], array $options = [])
     {
-        $process = static::getProcess('clone', array_merge(array('-q'), $args, array($url, $path)), $options);
+        $process = static::getProcess('clone', array_merge(['-q'], $args, [$url, $path]), $options);
 
         $process->run();
 
@@ -144,26 +145,16 @@ class Admin
     /**
      * This internal method is used to create a process object.
      */
-    private static function getProcess($command, array $args = array(), array $options = array())
+    private static function getProcess($command, array $args = [], array $options = [])
     {
         $is_windows = defined('PHP_WINDOWS_VERSION_BUILD');
-        $options = array_merge(array(
-            'environment_variables' => $is_windows ? array('PATH' => getenv('PATH')) : array(),
-            'command' => 'git',
-            'process_timeout' => 3600,
-        ), $options);
+        $options = array_merge([
+            'environment_variables' => $is_windows ? ['PATH' => getenv('PATH')] : [],
+            'command'               => 'git',
+            'process_timeout'       => 3600,
+        ], $options);
 
-        $commandline = array_merge(array($options['command'], $command), $args);
-
-        // Backward compatible layer for Symfony Process < 4.0.
-        if (class_exists('Symfony\Component\Process\ProcessBuilder')) {
-            $commandline = implode(' ', array_map(
-                'Symfony\Component\Process\ProcessUtils::escapeArgument',
-                $commandline
-            ));
-        }
-
-        $process = new Process($commandline);
+        $process = new Process(array_merge([$options['command'], $command], $args));
         $process->setEnv($options['environment_variables']);
         $process->setTimeout($options['process_timeout']);
         $process->setIdleTimeout($options['process_timeout']);

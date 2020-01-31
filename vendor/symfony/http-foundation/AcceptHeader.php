@@ -24,7 +24,7 @@ class AcceptHeader
     /**
      * @var AcceptHeaderItem[]
      */
-    private $items = array();
+    private $items = [];
 
     /**
      * @var bool
@@ -153,7 +153,7 @@ class AcceptHeader
     /**
      * Sorts items by descending quality.
      */
-    private function sort()
+    private function sort(): void
     {
         if (!$this->sorted) {
             uasort($this->items, function (AcceptHeaderItem $a, AcceptHeaderItem $b) {

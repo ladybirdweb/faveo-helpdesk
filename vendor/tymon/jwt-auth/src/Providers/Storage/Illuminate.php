@@ -12,9 +12,9 @@
 namespace Tymon\JWTAuth\Providers\Storage;
 
 use BadMethodCallException;
-use Tymon\JWTAuth\Contracts\Providers\Storage;
-use Psr\SimpleCache\CacheInterface as PsrCacheInterface;
 use Illuminate\Contracts\Cache\Repository as CacheContract;
+use Psr\SimpleCache\CacheInterface as PsrCacheInterface;
+use Tymon\JWTAuth\Contracts\Providers\Storage;
 
 class Illuminate implements Storage
 {
@@ -36,6 +36,11 @@ class Illuminate implements Storage
      * @var bool
      */
     protected $supportsTags;
+
+    /**
+     * @var string|null
+     */
+    protected $laravelVersion;
 
     /**
      * Constructor.
@@ -60,6 +65,14 @@ class Illuminate implements Storage
      */
     public function add($key, $value, $minutes)
     {
+        // If the laravel version is 5.8 or higher then convert minutes to seconds.
+        if ($this->laravelVersion !== null
+            && is_int($minutes)
+            && version_compare($this->laravelVersion, '5.8', '>=')
+        ) {
+            $minutes = $minutes * 60;
+        }
+
         $this->cache()->put($key, $value, $minutes);
     }
 
@@ -126,6 +139,16 @@ class Illuminate implements Storage
         }
 
         return $this->cache;
+    }
+
+    /**
+     * Set the laravel version.
+     */
+    public function setLaravelVersion($version)
+    {
+        $this->laravelVersion = $version;
+
+        return $this;
     }
 
     /**

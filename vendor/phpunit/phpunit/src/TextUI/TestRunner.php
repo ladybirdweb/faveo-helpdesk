@@ -36,9 +36,11 @@ use PHPUnit\Runner\TestSuiteLoader;
 use PHPUnit\Runner\TestSuiteSorter;
 use PHPUnit\Runner\Version;
 use PHPUnit\Util\Configuration;
+use PHPUnit\Util\Filesystem;
 use PHPUnit\Util\Log\JUnit;
 use PHPUnit\Util\Log\TeamCity;
 use PHPUnit\Util\Printer;
+use PHPUnit\Util\TestDox\CliTestDoxPrinter;
 use PHPUnit\Util\TestDox\HtmlResultPrinter;
 use PHPUnit\Util\TestDox\TextResultPrinter;
 use PHPUnit\Util\TestDox\XmlResultPrinter;
@@ -186,12 +188,23 @@ class TestRunner extends BaseTestRunner
         }
 
         if ($arguments['cacheResult']) {
-            if (isset($arguments['cacheResultFile'])) {
-                $cache = new TestResultCache($arguments['cacheResultFile']);
-            } else {
-                $cache = new TestResultCache;
+            if (!isset($arguments['cacheResultFile'])) {
+                if ($arguments['configuration'] instanceof Configuration) {
+                    $cacheLocation = $arguments['configuration']->getFilename();
+                } else {
+                    $cacheLocation = $_SERVER['PHP_SELF'];
+                }
+
+                $arguments['cacheResultFile'] = null;
+
+                $cacheResultFile = \realpath($cacheLocation);
+
+                if ($cacheResultFile !== false) {
+                    $arguments['cacheResultFile'] = \dirname($cacheResultFile);
+                }
             }
 
+            $cache              = new TestResultCache($arguments['cacheResultFile']);
             $this->extensions[] = new ResultCacheExtension($cache);
         }
 
@@ -203,6 +216,7 @@ class TestRunner extends BaseTestRunner
             $sorter = new TestSuiteSorter($cache);
 
             $sorter->reorderTestsInSuite($suite, $arguments['executionOrder'], $arguments['resolveDependencies'], $arguments['executionOrderDefects']);
+            $originalExecutionOrder = $sorter->getOriginalExecutionOrder();
 
             unset($sorter);
         }
@@ -309,6 +323,11 @@ class TestRunner extends BaseTestRunner
                     $arguments['columns'],
                     $arguments['reverseList']
                 );
+
+                if (isset($originalExecutionOrder) && ($this->printer instanceof CliTestDoxPrinter)) {
+                    /* @var CliTestDoxPrinter */
+                    $this->printer->setOriginalExecutionOrder($originalExecutionOrder);
+                }
             }
         }
 
@@ -330,13 +349,6 @@ class TestRunner extends BaseTestRunner
 
             $this->writeMessage('Runtime', $runtime);
 
-            if ($arguments['executionOrder'] === TestSuiteSorter::ORDER_RANDOMIZED) {
-                $this->writeMessage(
-                    'Random seed',
-                    $arguments['randomOrderSeed']
-                );
-            }
-
             if (isset($arguments['configuration'])) {
                 $this->writeMessage(
                     'Configuration',
@@ -357,6 +369,13 @@ class TestRunner extends BaseTestRunner
                     $extension
                 );
             }
+        }
+
+        if ($arguments['executionOrder'] === TestSuiteSorter::ORDER_RANDOMIZED) {
+            $this->writeMessage(
+                'Random seed',
+                $arguments['randomOrderSeed']
+            );
         }
 
         if (isset($tooFewColumnsRequested)) {
@@ -470,6 +489,51 @@ class TestRunner extends BaseTestRunner
         }
 
         if ($codeCoverageReports > 0 || isset($arguments['xdebugFilterFile'])) {
+            $whitelistFromConfigurationFile = false;
+            $whitelistFromOption            = false;
+
+            if (isset($arguments['whitelist'])) {
+                $this->codeCoverageFilter->addDirectoryToWhitelist($arguments['whitelist']);
+
+                $whitelistFromOption = true;
+            }
+
+            if (isset($arguments['configuration'])) {
+                $filterConfiguration = $arguments['configuration']->getFilterConfiguration();
+
+                if (!empty($filterConfiguration['whitelist'])) {
+                    $whitelistFromConfigurationFile = true;
+                }
+
+                if (!empty($filterConfiguration['whitelist'])) {
+                    foreach ($filterConfiguration['whitelist']['include']['directory'] as $dir) {
+                        $this->codeCoverageFilter->addDirectoryToWhitelist(
+                            $dir['path'],
+                            $dir['suffix'],
+                            $dir['prefix']
+                        );
+                    }
+
+                    foreach ($filterConfiguration['whitelist']['include']['file'] as $file) {
+                        $this->codeCoverageFilter->addFileToWhitelist($file);
+                    }
+
+                    foreach ($filterConfiguration['whitelist']['exclude']['directory'] as $dir) {
+                        $this->codeCoverageFilter->removeDirectoryFromWhitelist(
+                            $dir['path'],
+                            $dir['suffix'],
+                            $dir['prefix']
+                        );
+                    }
+
+                    foreach ($filterConfiguration['whitelist']['exclude']['file'] as $file) {
+                        $this->codeCoverageFilter->removeFileFromWhitelist($file);
+                    }
+                }
+            }
+        }
+
+        if ($codeCoverageReports > 0) {
             $codeCoverage = new CodeCoverage(
                 null,
                 $this->codeCoverageFilter
@@ -503,66 +567,14 @@ class TestRunner extends BaseTestRunner
                 $codeCoverage->setDisableIgnoredLines(true);
             }
 
-            $whitelistFromConfigurationFile = false;
-            $whitelistFromOption            = false;
+            if (!empty($filterConfiguration['whitelist'])) {
+                $codeCoverage->setAddUncoveredFilesFromWhitelist(
+                    $filterConfiguration['whitelist']['addUncoveredFilesFromWhitelist']
+                );
 
-            if (isset($arguments['whitelist'])) {
-                $this->codeCoverageFilter->addDirectoryToWhitelist($arguments['whitelist']);
-
-                $whitelistFromOption = true;
-            }
-
-            if (isset($arguments['configuration'])) {
-                $filterConfiguration = $arguments['configuration']->getFilterConfiguration();
-
-                if (!empty($filterConfiguration['whitelist'])) {
-                    $whitelistFromConfigurationFile = true;
-                }
-
-                if (!empty($filterConfiguration['whitelist'])) {
-                    $codeCoverage->setAddUncoveredFilesFromWhitelist(
-                        $filterConfiguration['whitelist']['addUncoveredFilesFromWhitelist']
-                    );
-
-                    $codeCoverage->setProcessUncoveredFilesFromWhitelist(
-                        $filterConfiguration['whitelist']['processUncoveredFilesFromWhitelist']
-                    );
-
-                    foreach ($filterConfiguration['whitelist']['include']['directory'] as $dir) {
-                        $this->codeCoverageFilter->addDirectoryToWhitelist(
-                            $dir['path'],
-                            $dir['suffix'],
-                            $dir['prefix']
-                        );
-                    }
-
-                    foreach ($filterConfiguration['whitelist']['include']['file'] as $file) {
-                        $this->codeCoverageFilter->addFileToWhitelist($file);
-                    }
-
-                    foreach ($filterConfiguration['whitelist']['exclude']['directory'] as $dir) {
-                        $this->codeCoverageFilter->removeDirectoryFromWhitelist(
-                            $dir['path'],
-                            $dir['suffix'],
-                            $dir['prefix']
-                        );
-                    }
-
-                    foreach ($filterConfiguration['whitelist']['exclude']['file'] as $file) {
-                        $this->codeCoverageFilter->removeFileFromWhitelist($file);
-                    }
-                }
-            }
-
-            if (isset($arguments['xdebugFilterFile'], $filterConfiguration)) {
-                $filterScriptGenerator = new XdebugFilterScriptGenerator;
-                $script                = $filterScriptGenerator->generate($filterConfiguration['whitelist']);
-                \file_put_contents($arguments['xdebugFilterFile'], $script);
-
-                $this->write("\n");
-                $this->write(\sprintf('Wrote Xdebug filter script to %s ' . \PHP_EOL, $arguments['xdebugFilterFile']));
-
-                exit(self::SUCCESS_EXIT);
+                $codeCoverage->setProcessUncoveredFilesFromWhitelist(
+                    $filterConfiguration['whitelist']['processUncoveredFilesFromWhitelist']
+                );
             }
 
             if (!$this->codeCoverageFilter->hasWhitelist()) {
@@ -576,6 +588,24 @@ class TestRunner extends BaseTestRunner
 
                 unset($codeCoverage);
             }
+        }
+
+        if (isset($arguments['xdebugFilterFile'], $filterConfiguration)) {
+            $this->write("\n");
+
+            $script = (new XdebugFilterScriptGenerator)->generate($filterConfiguration['whitelist']);
+
+            if ($arguments['xdebugFilterFile'] !== 'php://stdout' && $arguments['xdebugFilterFile'] !== 'php://stderr' && !Filesystem::createDirectory(\dirname($arguments['xdebugFilterFile']))) {
+                $this->write(\sprintf('Cannot write Xdebug filter script to %s ' . \PHP_EOL, $arguments['xdebugFilterFile']));
+
+                exit(self::EXCEPTION_EXIT);
+            }
+
+            \file_put_contents($arguments['xdebugFilterFile'], $script);
+
+            $this->write(\sprintf('Wrote Xdebug filter script to %s ' . \PHP_EOL, $arguments['xdebugFilterFile']));
+
+            exit(self::SUCCESS_EXIT);
         }
 
         $this->printer->write("\n");
@@ -755,7 +785,7 @@ class TestRunner extends BaseTestRunner
         }
 
         if ($exit) {
-            if ($result->wasSuccessful()) {
+            if ($result->wasSuccessfulIgnoringWarnings()) {
                 if ($arguments['failOnRisky'] && !$result->allHarmless()) {
                     exit(self::FAILURE_EXIT);
                 }

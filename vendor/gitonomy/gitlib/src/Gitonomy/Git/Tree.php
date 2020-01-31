@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git;
 
 use Gitonomy\Git\Exception\InvalidArgumentException;
@@ -41,20 +42,20 @@ class Tree
             return;
         }
 
-        $output = $this->repository->run('cat-file', array('-p', $this->hash));
+        $output = $this->repository->run('cat-file', ['-p', $this->hash]);
         $parser = new Parser\TreeParser();
         $parser->parse($output);
 
-        $this->entries = array();
+        $this->entries = [];
 
         foreach ($parser->entries as $entry) {
             list($mode, $type, $hash, $name) = $entry;
             if ($type == 'blob') {
-                $this->entries[$name] = array($mode, $this->repository->getBlob($hash));
+                $this->entries[$name] = [$mode, $this->repository->getBlob($hash)];
             } elseif ($type == 'tree') {
-                $this->entries[$name] = array($mode, $this->repository->getTree($hash));
+                $this->entries[$name] = [$mode, $this->repository->getTree($hash)];
             } else {
-                $this->entries[$name] = array($mode, new CommitReference($hash));
+                $this->entries[$name] = [$mode, new CommitReference($hash)];
             }
         }
 

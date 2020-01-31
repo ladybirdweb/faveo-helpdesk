@@ -1,0 +1,33 @@
+{
+  "name": "nexmo/client",
+  "description": "PHP Client for using Nexmo's API.",
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Tim Lytle",
+      "email": "tim@nexmo.com",
+      "role": "Developer",
+      "homepage": "http://twitter.com/tjlytle"
+    },
+    {
+      "name": "Michael Heap",
+      "email": "michael.heap@vonage.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Lorna Mitchell",
+      "email": "lorna.mitchell@vonage.com",
+      "role": "Developer"
+    }
+
+  ],
+  "support": {
+    "email": "devrel@nexmo.com"
+  },
+  "require": {
+    "php": ">=5.6",
+    "php-http/guzzle6-adapter": "^1.0",
+    "nexmo/client-core": "^1.0"
+  }
+}

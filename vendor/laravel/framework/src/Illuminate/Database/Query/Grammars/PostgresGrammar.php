@@ -3,10 +3,30 @@
 namespace Illuminate\Database\Query\Grammars;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Database\Query\Builder;
 
 class PostgresGrammar extends Grammar
 {
+    /**
+     * The components that make up a select clause.
+     *
+     * @var array
+     */
+    protected $selectComponents = [
+        'aggregate',
+        'columns',
+        'from',
+        'joins',
+        'wheres',
+        'groups',
+        'havings',
+        'orders',
+        'limit',
+        'offset',
+        'lock',
+    ];
+
     /**
      * All of the available clause operators.
      *
@@ -19,6 +39,27 @@ class PostgresGrammar extends Grammar
         '&&', '@>', '<@', '?', '?|', '?&', '||', '-', '-', '#-',
         'is distinct from', 'is not distinct from',
     ];
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $where
+     * @return string
+     */
+    protected function whereBasic(Builder $query, $where)
+    {
+        if (Str::contains(strtolower($where['operator']), 'like')) {
+            return sprintf(
+                '%s::text %s %s',
+                $this->wrap($where['column']),
+                $where['operator'],
+                $this->parameter($where['value'])
+            );
+        }
+
+        return parent::whereBasic($query, $where);
+    }
 
     /**
      * Compile a "where date" clause.
@@ -64,6 +105,40 @@ class PostgresGrammar extends Grammar
     }
 
     /**
+     * Compile a select query into SQL.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return string
+     */
+    public function compileSelect(Builder $query)
+    {
+        if ($query->unions && $query->aggregate) {
+            return $this->compileUnionAggregate($query);
+        }
+
+        $sql = parent::compileSelect($query);
+
+        if ($query->unions) {
+            $sql = '('.$sql.') '.$this->compileUnions($query);
+        }
+
+        return $sql;
+    }
+
+    /**
+     * Compile a single union statement.
+     *
+     * @param  array  $union
+     * @return string
+     */
+    protected function compileUnion(array $union)
+    {
+        $conjunction = $union['all'] ? ' union all ' : ' union ';
+
+        return $conjunction.'('.$union['query']->toSql().')';
+    }
+
+    /**
      * Compile a "JSON contains" statement into SQL.
      *
      * @param  string  $column
@@ -75,6 +150,21 @@ class PostgresGrammar extends Grammar
         $column = str_replace('->>', '->', $this->wrap($column));
 
         return '('.$column.')::jsonb @> '.$value;
+    }
+
+    /**
+     * Compile a "JSON length" statement into SQL.
+     *
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  string  $value
+     * @return string
+     */
+    protected function compileJsonLength($column, $operator, $value)
+    {
+        $column = str_replace('->>', '->', $this->wrap($column));
+
+        return 'json_array_length(('.$column.')::json) '.$operator.' '.$value;
     }
 
     /**
@@ -157,8 +247,30 @@ class PostgresGrammar extends Grammar
         // columns and convert it to a parameter value. Then we will concatenate a
         // list of the columns that can be added into this update query clauses.
         return collect($values)->map(function ($value, $key) {
+            if ($this->isJsonSelector($key)) {
+                return $this->compileJsonUpdateColumn($key, $value);
+            }
+
             return $this->wrap($key).' = '.$this->parameter($value);
         })->implode(', ');
+    }
+
+    /**
+     * Prepares a JSON column being updated using the JSONB_SET function.
+     *
+     * @param  string  $key
+     * @param  mixed  $value
+     * @return string
+     */
+    protected function compileJsonUpdateColumn($key, $value)
+    {
+        $parts = explode('->', $key);
+
+        $field = $this->wrap(array_shift($parts));
+
+        $path = '\'{"'.implode('","', $parts).'"}\'';
+
+        return "{$field} = jsonb_set({$field}::jsonb, {$path}, {$this->parameter($value)})";
     }
 
     /**
@@ -244,6 +356,12 @@ class PostgresGrammar extends Grammar
      */
     public function prepareBindingsForUpdate(array $bindings, array $values)
     {
+        $values = collect($values)->map(function ($value, $column) {
+            return $this->isJsonSelector($column) && ! $this->isExpression($value)
+                ? json_encode($value)
+                : $value;
+        })->all();
+
         // Update statements with "joins" in Postgres use an interesting syntax. We need to
         // take all of the bindings and put them on the end of this array since they are
         // added to the end of the "where" clause statements as typical where clauses.
@@ -295,7 +413,7 @@ class PostgresGrammar extends Grammar
      */
     public function compileTruncate(Builder $query)
     {
-        return ['truncate '.$this->wrapTable($query->from).' restart identity' => []];
+        return ['truncate '.$this->wrapTable($query->from).' restart identity cascade' => []];
     }
 
     /**

@@ -17,8 +17,8 @@ use Symfony\Component\Process\Process;
 /**
  * WindowsPipes implementation uses temporary files as handles.
  *
- * @see https://bugs.php.net/bug.php?id=51800
- * @see https://bugs.php.net/bug.php?id=65650
+ * @see https://bugs.php.net/51800
+ * @see https://bugs.php.net/65650
  *
  * @author Romain Neutron <imprec@gmail.com>
  *
@@ -26,13 +26,13 @@ use Symfony\Component\Process\Process;
  */
 class WindowsPipes extends AbstractPipes
 {
-    private $files = array();
-    private $fileHandles = array();
-    private $lockHandles = array();
-    private $readBytes = array(
+    private $files = [];
+    private $fileHandles = [];
+    private $lockHandles = [];
+    private $readBytes = [
         Process::STDOUT => 0,
         Process::STDERR => 0,
-    );
+    ];
     private $haveReadSupport;
 
     public function __construct($input, bool $haveReadSupport)
@@ -43,11 +43,11 @@ class WindowsPipes extends AbstractPipes
             // Fix for PHP bug #51800: reading from STDOUT pipe hangs forever on Windows if the output is too big.
             // Workaround for this problem is to use temporary files instead of pipes on Windows platform.
             //
-            // @see https://bugs.php.net/bug.php?id=51800
-            $pipes = array(
+            // @see https://bugs.php.net/51800
+            $pipes = [
                 Process::STDOUT => Process::OUT,
                 Process::STDERR => Process::ERR,
-            );
+            ];
             $tmpDir = sys_get_temp_dir();
             $lastError = 'unknown reason';
             set_error_handler(function ($type, $msg) use (&$lastError) { $lastError = $msg; });
@@ -93,32 +93,32 @@ class WindowsPipes extends AbstractPipes
     /**
      * {@inheritdoc}
      */
-    public function getDescriptors()
+    public function getDescriptors(): array
     {
         if (!$this->haveReadSupport) {
             $nullstream = fopen('NUL', 'c');
 
-            return array(
-                array('pipe', 'r'),
+            return [
+                ['pipe', 'r'],
                 $nullstream,
                 $nullstream,
-            );
+            ];
         }
 
-        // We're not using pipe on Windows platform as it hangs (https://bugs.php.net/bug.php?id=51800)
-        // We're not using file handles as it can produce corrupted output https://bugs.php.net/bug.php?id=65650
+        // We're not using pipe on Windows platform as it hangs (https://bugs.php.net/51800)
+        // We're not using file handles as it can produce corrupted output https://bugs.php.net/65650
         // So we redirect output within the commandline and pass the nul device to the process
-        return array(
-            array('pipe', 'r'),
-            array('file', 'NUL', 'w'),
-            array('file', 'NUL', 'w'),
-        );
+        return [
+            ['pipe', 'r'],
+            ['file', 'NUL', 'w'],
+            ['file', 'NUL', 'w'],
+        ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getFiles()
+    public function getFiles(): array
     {
         return $this->files;
     }
@@ -126,11 +126,11 @@ class WindowsPipes extends AbstractPipes
     /**
      * {@inheritdoc}
      */
-    public function readAndWrite($blocking, $close = false)
+    public function readAndWrite(bool $blocking, bool $close = false): array
     {
         $this->unblock();
         $w = $this->write();
-        $read = $r = $e = array();
+        $read = $r = $e = [];
 
         if ($blocking) {
             if ($w) {
@@ -161,7 +161,7 @@ class WindowsPipes extends AbstractPipes
     /**
      * {@inheritdoc}
      */
-    public function haveReadSupport()
+    public function haveReadSupport(): bool
     {
         return $this->haveReadSupport;
     }
@@ -169,7 +169,7 @@ class WindowsPipes extends AbstractPipes
     /**
      * {@inheritdoc}
      */
-    public function areOpen()
+    public function areOpen(): bool
     {
         return $this->pipes && $this->fileHandles;
     }
@@ -186,6 +186,6 @@ class WindowsPipes extends AbstractPipes
             flock($this->lockHandles[$type], LOCK_UN);
             fclose($this->lockHandles[$type]);
         }
-        $this->fileHandles = $this->lockHandles = array();
+        $this->fileHandles = $this->lockHandles = [];
     }
 }

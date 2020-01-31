@@ -6,7 +6,7 @@ use PhpParser\NodeAbstract;
 
 class Param extends NodeAbstract
 {
-    /** @var null|Identifier|Name|NullableType Typehint */
+    /** @var null|Identifier|Name|NullableType|UnionType Type declaration */
     public $type;
     /** @var bool Whether parameter is passed by reference */
     public $byRef;
@@ -20,18 +20,18 @@ class Param extends NodeAbstract
     /**
      * Constructs a parameter node.
      *
-     * @param Expr\Variable|Expr\Error      $var        Parameter variable
-     * @param null|Expr                     $default    Default value
-     * @param null|string|Name|NullableType $type       Typehint
-     * @param bool                          $byRef      Whether is passed by reference
-     * @param bool                          $variadic   Whether this is a variadic argument
-     * @param array                         $attributes Additional attributes
+     * @param Expr\Variable|Expr\Error                           $var        Parameter variable
+     * @param null|Expr                                          $default    Default value
+     * @param null|string|Identifier|Name|NullableType|UnionType $type       Type declaration
+     * @param bool                                               $byRef      Whether is passed by reference
+     * @param bool                                               $variadic   Whether this is a variadic argument
+     * @param array                                              $attributes Additional attributes
      */
     public function __construct(
         $var, Expr $default = null, $type = null,
         bool $byRef = false, bool $variadic = false, array $attributes = []
     ) {
-        parent::__construct($attributes);
+        $this->attributes = $attributes;
         $this->type = \is_string($type) ? new Identifier($type) : $type;
         $this->byRef = $byRef;
         $this->variadic = $variadic;
@@ -42,7 +42,7 @@ class Param extends NodeAbstract
     public function getSubNodeNames() : array {
         return ['type', 'byRef', 'variadic', 'var', 'default'];
     }
-    
+
     public function getType() : string {
         return 'Param';
     }

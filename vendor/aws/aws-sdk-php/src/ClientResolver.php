@@ -4,9 +4,15 @@ namespace Aws;
 use Aws\Api\Validator;
 use Aws\Api\ApiProvider;
 use Aws\Api\Service;
+use Aws\ClientSideMonitoring\ApiCallAttemptMonitoringMiddleware;
+use Aws\ClientSideMonitoring\ApiCallMonitoringMiddleware;
+use Aws\ClientSideMonitoring\Configuration;
 use Aws\Credentials\Credentials;
 use Aws\Credentials\CredentialsInterface;
 use Aws\Endpoint\PartitionEndpointProvider;
+use Aws\EndpointDiscovery\ConfigurationInterface;
+use Aws\EndpointDiscovery\ConfigurationProvider;
+use Aws\EndpointDiscovery\EndpointDiscoveryMiddleware;
 use Aws\Signature\SignatureProvider;
 use Aws\Endpoint\EndpointProvider;
 use Aws\Credentials\CredentialProvider;
@@ -133,7 +139,14 @@ class ClientResolver
             'valid'   => [CredentialsInterface::class, CacheInterface::class, 'array', 'bool', 'callable'],
             'doc'     => 'Specifies the credentials used to sign requests. Provide an Aws\Credentials\CredentialsInterface object, an associative array of "key", "secret", and an optional "token" key, `false` to use null credentials, or a callable credentials provider used to create credentials or return null. See Aws\\Credentials\\CredentialProvider for a list of built-in credentials providers. If no credentials are provided, the SDK will attempt to load them from the environment.',
             'fn'      => [__CLASS__, '_apply_credentials'],
-            'default' => [CredentialProvider::class, 'defaultProvider'],
+            'default' => [__CLASS__, '_default_credential_provider'],
+        ],
+        'endpoint_discovery' => [
+            'type'     => 'value',
+            'valid'    => [ConfigurationInterface::class, CacheInterface::class, 'array', 'callable'],
+            'doc'      => 'Specifies settings for endpoint discovery. Provide an instance of Aws\EndpointDiscovery\ConfigurationInterface, an instance Aws\CacheInterface, a callable that provides a promise for a Configuration object, or an associative array with the following keys: enabled: (bool) Set to true to enable endpoint discovery. Defaults to false; cache_limit: (int) The maximum number of keys in the endpoints cache. Defaults to 1000.',
+            'fn'       => [__CLASS__, '_apply_endpoint_discovery'],
+            'default'  => [__CLASS__, '_default_endpoint_discovery_provider']
         ],
         'stats' => [
             'type'  => 'value',
@@ -161,6 +174,13 @@ class ClientResolver
             'valid' => ['bool', 'array'],
             'doc'   => 'Set to true to display debug information when sending requests. Alternatively, you can provide an associative array with the following keys: logfn: (callable) Function that is invoked with log messages; stream_size: (int) When the size of a stream is greater than this number, the stream data will not be logged (set to "0" to not log any stream data); scrub_auth: (bool) Set to false to disable the scrubbing of auth data from the logged messages; http: (bool) Set to false to disable the "debug" feature of lower level HTTP adapters (e.g., verbose curl output).',
             'fn'    => [__CLASS__, '_apply_debug'],
+        ],
+        'csm' => [
+            'type'     => 'value',
+            'valid'    => [\Aws\ClientSideMonitoring\ConfigurationInterface::class, 'callable', 'array', 'bool'],
+            'doc'      => 'CSM options for the client. Provides a callable wrapping a promise, a boolean "false", an instance of ConfigurationInterface, or an associative array of "enabled", "host", "port", and "client_id".',
+            'fn'       => [__CLASS__, '_apply_csm'],
+            'default'  => [\Aws\ClientSideMonitoring\ConfigurationProvider::class, 'defaultProvider']
         ],
         'http' => [
             'type'    => 'value',
@@ -423,6 +443,44 @@ class ClientResolver
         }
     }
 
+    public static function _default_credential_provider(array $args)
+    {
+        return CredentialProvider::defaultProvider($args);
+    }
+
+    public static function _apply_csm($value, array &$args, HandlerList $list)
+    {
+        if ($value === false) {
+            $value = new Configuration(
+                false,
+                \Aws\ClientSideMonitoring\ConfigurationProvider::DEFAULT_HOST,
+                \Aws\ClientSideMonitoring\ConfigurationProvider::DEFAULT_PORT,
+                \Aws\ClientSideMonitoring\ConfigurationProvider::DEFAULT_CLIENT_ID
+            );
+            $args['csm'] = $value;
+        }
+
+        $list->appendBuild(
+            ApiCallMonitoringMiddleware::wrap(
+                $args['credentials'],
+                $value,
+                $args['region'],
+                $args['api']->getServiceId()
+            ),
+            'ApiCallMonitoringMiddleware'
+        );
+
+        $list->appendAttempt(
+            ApiCallAttemptMonitoringMiddleware::wrap(
+                $args['credentials'],
+                $value,
+                $args['region'],
+                $args['api']->getServiceId()
+            ),
+            'ApiCallAttemptMonitoringMiddleware'
+        );
+    }
+
     public static function _apply_api_provider(callable $value, array &$args)
     {
         $api = new Service(
@@ -444,7 +502,7 @@ class ClientResolver
 
         $args['api'] = $api;
         $args['parser'] = Service::createParser($api);
-        $args['error_parser'] = Service::createErrorParser($api->getProtocol());
+        $args['error_parser'] = Service::createErrorParser($api->getProtocol(), $api);
     }
 
     public static function _apply_endpoint_provider(callable $value, array &$args)
@@ -458,7 +516,8 @@ class ClientResolver
             $result = EndpointProvider::resolve($value, [
                 'service' => $endpointPrefix,
                 'region'  => $args['region'],
-                'scheme'  => $args['scheme']
+                'scheme'  => $args['scheme'],
+                'options' => self::getEndpointProviderOptions($args),
             ]);
 
             $args['endpoint'] = $result['endpoint'];
@@ -485,6 +544,15 @@ class ClientResolver
                 $args['config']['signing_name'] = $result['signingName'];
             }
         }
+    }
+
+    public static function _apply_endpoint_discovery($value, array &$args) {
+        $args['endpoint_discovery'] = $value;
+    }
+
+    public static function _default_endpoint_discovery_provider(array $args)
+    {
+        return ConfigurationProvider::defaultProvider($args);
     }
 
     public static function _apply_serializer($value, array &$args, HandlerList $list)
@@ -632,7 +700,8 @@ class ClientResolver
 
     public static function _default_endpoint_provider(array $args)
     {
-        return PartitionEndpointProvider::defaultProvider()
+        $options = self::getEndpointProviderOptions($args);
+        return PartitionEndpointProvider::defaultProvider($options)
             ->getPartition($args['region'], $args['service']);
     }
 
@@ -745,5 +814,23 @@ A "region" configuration value is required for the "{$service}" service
 (e.g., "us-west-2"). A list of available public regions and endpoints can be
 found at http://docs.aws.amazon.com/general/latest/gr/rande.html.
 EOT;
+    }
+
+    /**
+     * Extracts client options for the endpoint provider to its own array
+     *
+     * @param array $args
+     * @return array
+     */
+    private static function getEndpointProviderOptions(array $args)
+    {
+        $options = [];
+        $optionKeys = ['sts_regional_endpoints', 's3_us_east_1_regional_endpoint'];
+        foreach ($optionKeys as $key) {
+            if (isset($args[$key])) {
+                $options[$key] = $args[$key];
+            }
+        }
+        return $options;
     }
 }

@@ -41,7 +41,6 @@ trait HasRelationships
      */
     public static $manyMethods = [
         'belongsToMany', 'morphToMany', 'morphedByMany',
-        'guessBelongsToManyRelation', 'findFirstMethodThatIsntRelation',
     ];
 
     /**
@@ -91,7 +90,7 @@ trait HasRelationships
     {
         $instance = $this->newRelatedInstance($related);
 
-        list($type, $id) = $this->getMorphs($name, $type, $id);
+        [$type, $id] = $this->getMorphs($name, $type, $id);
 
         $table = $instance->getTable();
 
@@ -183,7 +182,7 @@ trait HasRelationships
         // use that to get both the class and foreign key that will be utilized.
         $name = $name ?: $this->guessBelongsToRelation();
 
-        list($type, $id) = $this->getMorphs(
+        [$type, $id] = $this->getMorphs(
             Str::snake($name), $type, $id
         );
 
@@ -266,7 +265,7 @@ trait HasRelationships
      */
     protected function guessBelongsToRelation()
     {
-        list($one, $two, $caller) = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
+        [$one, $two, $caller] = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
 
         return $caller['function'];
     }
@@ -366,7 +365,7 @@ trait HasRelationships
         // Here we will gather up the morph type and ID for the relationship so that we
         // can properly query the intermediate table of a relation. Finally, we will
         // get the table and create the relationship instances for the developers.
-        list($type, $id) = $this->getMorphs($name, $type, $id);
+        [$type, $id] = $this->getMorphs($name, $type, $id);
 
         $table = $instance->getTable();
 
@@ -425,7 +424,7 @@ trait HasRelationships
         // models using underscores in alphabetical order. The two model names
         // are transformed to snake case from their default CamelCase also.
         if (is_null($table)) {
-            $table = $this->joiningTable($related);
+            $table = $this->joiningTable($related, $instance);
         }
 
         return $this->newBelongsToMany(
@@ -546,14 +545,17 @@ trait HasRelationships
     }
 
     /**
-     * Get the relationship name of the belongs to many.
+     * Get the relationship name of the belongsToMany relationship.
      *
-     * @return string
+     * @return string|null
      */
     protected function guessBelongsToManyRelation()
     {
         $caller = Arr::first(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), function ($trace) {
-            return ! in_array($trace['function'], Model::$manyMethods);
+            return ! in_array(
+                $trace['function'],
+                array_merge(static::$manyMethods, ['guessBelongsToManyRelation'])
+            );
         });
 
         return ! is_null($caller) ? $caller['function'] : null;
@@ -563,24 +565,36 @@ trait HasRelationships
      * Get the joining table name for a many-to-many relation.
      *
      * @param  string  $related
+     * @param  \Illuminate\Database\Eloquent\Model|null  $instance
      * @return string
      */
-    public function joiningTable($related)
+    public function joiningTable($related, $instance = null)
     {
         // The joining table name, by convention, is simply the snake cased models
         // sorted alphabetically and concatenated with an underscore, so we can
         // just sort the models and join them together to get the table name.
-        $models = [
-            Str::snake(class_basename($related)),
-            Str::snake(class_basename($this)),
+        $segments = [
+            $instance ? $instance->joiningTableSegment()
+                      : Str::snake(class_basename($related)),
+            $this->joiningTableSegment(),
         ];
 
         // Now that we have the model names in an array we can just sort them and
         // use the implode function to join them together with an underscores,
         // which is typically used by convention within the database system.
-        sort($models);
+        sort($segments);
 
-        return strtolower(implode('_', $models));
+        return strtolower(implode('_', $segments));
+    }
+
+    /**
+     * Get this model's half of the intermediate table name for belongsToMany relationships.
+     *
+     * @return string
+     */
+    public function joiningTableSegment()
+    {
+        return Str::snake(class_basename($this));
     }
 
     /**

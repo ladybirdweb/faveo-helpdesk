@@ -51,7 +51,7 @@ class ReportFailedItem
     /**
      * @param int $index
      */
-    public function write(int $index)
+    public function write(int $index): void
     {
         $code = $this->presenter->presentException($this->event->getException(), true);
         $this->template->render(
@@ -70,7 +70,7 @@ class ReportFailedItem
     /**
      * @return string
      */
-    private function formatBacktrace(): string
+    private function formatBacktrace() : string
     {
         $backtrace = '';
         foreach ($this->event->getBacktrace() as $step) {

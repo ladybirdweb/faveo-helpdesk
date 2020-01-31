@@ -62,7 +62,7 @@ class FnDispatcher
         if (is_array($args[0])) {
             return in_array($args[1], $args[0]);
         } elseif (is_string($args[1])) {
-            return strpos($args[0], $args[1]) !== false;
+            return mb_strpos($args[0], $args[1], 0, 'UTF-8') !== false;
         } else {
             return null;
         }
@@ -72,7 +72,7 @@ class FnDispatcher
     {
         $this->validate('ends_with', $args, [['string'], ['string']]);
         list($search, $suffix) = $args;
-        return $suffix === '' || substr($search, -strlen($suffix)) === $suffix;
+        return $suffix === '' || mb_substr($search, -mb_strlen($suffix, 'UTF-8'), null, 'UTF-8') === $suffix;
     }
 
     private function fn_floor(array $args)
@@ -112,13 +112,15 @@ class FnDispatcher
     private function fn_length(array $args)
     {
         $this->validate('length', $args, [['string', 'array', 'object']]);
-        return is_string($args[0]) ? strlen($args[0]) : count((array) $args[0]);
+        return is_string($args[0]) ? mb_strlen($args[0], 'UTF-8') : count((array) $args[0]);
     }
 
     private function fn_max(array $args)
     {
         $this->validate('max', $args, [['array']]);
-        $fn = function ($a, $b) { return $a >= $b ? $a : $b; };
+        $fn = function ($a, $b) {
+            return $a >= $b ? $a : $b;
+        };
         return $this->reduce('max:0', $args[0], ['number', 'string'], $fn);
     }
 
@@ -137,7 +139,9 @@ class FnDispatcher
     private function fn_min(array $args)
     {
         $this->validate('min', $args, [['array']]);
-        $fn = function ($a, $b, $i) { return $i && $a <= $b ? $a : $b; };
+        $fn = function ($a, $b, $i) {
+            return $i && $a <= $b ? $a : $b;
+        };
         return $this->reduce('min:0', $args[0], ['number', 'string'], $fn);
     }
 
@@ -167,7 +171,9 @@ class FnDispatcher
     private function fn_sum(array $args)
     {
         $this->validate('sum', $args, [['array']]);
-        $fn = function ($a, $b) { return $a + $b; };
+        $fn = function ($a, $b) {
+            return $a + $b;
+        };
         return $this->reduce('sum:0', $args[0], ['number'], $fn);
     }
 
@@ -201,7 +207,7 @@ class FnDispatcher
     {
         $this->validate('starts_with', $args, [['string'], ['string']]);
         list($search, $prefix) = $args;
-        return $prefix === '' || strpos($search, $prefix) === 0;
+        return $prefix === '' || mb_strpos($search, $prefix, 0, 'UTF-8') === 0;
     }
 
     private function fn_type(array $args)
@@ -234,7 +240,7 @@ class FnDispatcher
         if ($type == 'number') {
             return $value;
         } elseif ($type == 'string' && is_numeric($value)) {
-            return strpos($value, '.') ? (float) $value : (int) $value;
+            return mb_strpos($value, '.', 0, 'UTF-8') ? (float) $value : (int) $value;
         } else {
             return null;
         }
@@ -276,7 +282,7 @@ class FnDispatcher
 
     private function typeError($from, $msg)
     {
-        if (strpos($from, ':')) {
+        if (mb_strpos($from, ':', 0, 'UTF-8')) {
             list($fn, $pos) = explode(':', $from);
             throw new \RuntimeException(
                 sprintf('Argument %d of %s %s', $pos, $fn, $msg)

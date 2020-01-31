@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git\Parser;
 
 use Gitonomy\Git\Exception\RuntimeException;
@@ -31,7 +32,7 @@ class CommitParser extends ParserBase
         $this->tree = $this->consumeHash();
         $this->consumeNewLine();
 
-        $this->parents = array();
+        $this->parents = [];
         while ($this->expects('parent ')) {
             $this->parents[] = $this->consumeHash();
             $this->consumeNewLine();
@@ -63,7 +64,7 @@ class CommitParser extends ParserBase
 
         $this->cursor += strlen($vars[1]);
 
-        return array($vars[2], $vars[3], $vars[4]);
+        return [$vars[2], $vars[3], $vars[4]];
     }
 
     protected function parseDate($text)

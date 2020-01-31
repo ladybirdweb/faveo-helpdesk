@@ -17,6 +17,8 @@ use Symfony\Component\VarDumper\Cloner\Stub;
  * Casts common resource types to array representation.
  *
  * @author Nicolas Grekas <p@tchwork.com>
+ *
+ * @final since Symfony 4.4
  */
 class ResourceCaster
 {
@@ -66,6 +68,32 @@ class ResourceCaster
         $a['host'] = mysql_get_host_info($h);
         $a['protocol'] = mysql_get_proto_info($h);
         $a['server'] = mysql_get_server_info($h);
+
+        return $a;
+    }
+
+    public static function castOpensslX509($h, array $a, Stub $stub, $isNested)
+    {
+        $stub->cut = -1;
+        $info = openssl_x509_parse($h, false);
+
+        $pin = openssl_pkey_get_public($h);
+        $pin = openssl_pkey_get_details($pin)['key'];
+        $pin = \array_slice(explode("\n", $pin), 1, -2);
+        $pin = base64_decode(implode('', $pin));
+        $pin = base64_encode(hash('sha256', $pin, true));
+
+        $a += [
+            'subject' => new EnumStub(array_intersect_key($info['subject'], ['organizationName' => true, 'commonName' => true])),
+            'issuer' => new EnumStub(array_intersect_key($info['issuer'], ['organizationName' => true, 'commonName' => true])),
+            'expiry' => new ConstStub(date(\DateTime::ISO8601, $info['validTo_time_t']), $info['validTo_time_t']),
+            'fingerprint' => new EnumStub([
+                'md5' => new ConstStub(wordwrap(strtoupper(openssl_x509_fingerprint($h, 'md5')), 2, ':', true)),
+                'sha1' => new ConstStub(wordwrap(strtoupper(openssl_x509_fingerprint($h, 'sha1')), 2, ':', true)),
+                'sha256' => new ConstStub(wordwrap(strtoupper(openssl_x509_fingerprint($h, 'sha256')), 2, ':', true)),
+                'pin-sha256' => new ConstStub($pin),
+            ]),
+        ];
 
         return $a;
     }

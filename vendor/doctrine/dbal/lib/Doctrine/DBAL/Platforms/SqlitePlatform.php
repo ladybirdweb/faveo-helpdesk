@@ -23,6 +23,7 @@ use function str_replace;
 use function strlen;
 use function strpos;
 use function strtolower;
+use function trim;
 
 /**
  * The SqlitePlatform class describes the specifics and dialects of the SQLite
@@ -332,7 +333,14 @@ class SqlitePlatform extends AbstractPlatform
             }
         }
 
-        $query = ['CREATE TABLE ' . $name . ' (' . $queryFields . ')'];
+        $tableComment = '';
+        if (isset($options['comment'])) {
+            $comment = trim($options['comment'], " '");
+
+            $tableComment = $this->getInlineTableCommentSQL($comment);
+        }
+
+        $query = ['CREATE TABLE ' . $name . ' ' . $tableComment . '(' . $queryFields . ')'];
 
         if (isset($options['alter']) && $options['alter'] === true) {
             return $query;
@@ -356,8 +364,8 @@ class SqlitePlatform extends AbstractPlatform
     /**
      * Generate a PRIMARY KEY definition if no autoincrement value is used
      *
-     * @param string[] $columns
-     * @param mixed[]  $options
+     * @param mixed[][] $columns
+     * @param mixed[]   $options
      */
     private function getNonAutoincrementPrimaryKeyDefinition(array $columns, array $options) : string
     {
@@ -368,7 +376,7 @@ class SqlitePlatform extends AbstractPlatform
         $keyColumns = array_unique(array_values($options['primary']));
 
         foreach ($keyColumns as $keyColumn) {
-            if (isset($columns[$keyColumn]['autoincrement']) && ! empty($columns[$keyColumn]['autoincrement'])) {
+            if (! empty($columns[$keyColumn]['autoincrement'])) {
                 return '';
             }
         }
@@ -605,6 +613,11 @@ class SqlitePlatform extends AbstractPlatform
         return '--' . str_replace("\n", "\n--", $comment) . "\n";
     }
 
+    private function getInlineTableCommentSQL(string $comment) : string
+    {
+        return $this->getInlineColumnCommentSQL($comment);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -685,7 +698,12 @@ class SqlitePlatform extends AbstractPlatform
         }
 
         $sql       = [];
-        $tableName = $diff->newName ? $diff->getNewName(): $diff->getName($this);
+        $tableName = $diff->getNewName();
+
+        if ($tableName === false) {
+            $tableName = $diff->getName($this);
+        }
+
         foreach ($this->getIndexesInAlteredTable($diff) as $index) {
             if ($index->isPrimary()) {
                 continue;
@@ -908,9 +926,14 @@ class SqlitePlatform extends AbstractPlatform
             $sql[] = sprintf('INSERT INTO %s (%s) SELECT %s FROM %s', $newTable->getQuotedName($this), implode(', ', $newColumnNames), implode(', ', $oldColumnNames), $dataTable->getQuotedName($this));
             $sql[] = $this->getDropTableSQL($dataTable);
 
-            if ($diff->newName && $diff->newName !== $diff->name) {
-                $renamedTable = $diff->getNewName();
-                $sql[]        = 'ALTER TABLE ' . $newTable->getQuotedName($this) . ' RENAME TO ' . $renamedTable->getQuotedName($this);
+            $newName = $diff->getNewName();
+
+            if ($newName !== false) {
+                $sql[] = sprintf(
+                    'ALTER TABLE %s RENAME TO %s',
+                    $newTable->getQuotedName($this),
+                    $newName->getQuotedName($this)
+                );
             }
 
             $sql = array_merge($sql, $this->getPostAlterTableIndexForeignKeySQL($diff));
@@ -1028,7 +1051,8 @@ class SqlitePlatform extends AbstractPlatform
             $columns[strtolower($columnName)]    = $columnName;
         }
 
-        foreach ($diff->addedColumns as $columnName => $column) {
+        foreach ($diff->addedColumns as $column) {
+            $columnName                       = $column->getName();
             $columns[strtolower($columnName)] = $columnName;
         }
 
@@ -1059,12 +1083,14 @@ class SqlitePlatform extends AbstractPlatform
                 if (! isset($columnNames[$normalizedColumnName])) {
                     unset($indexes[$key]);
                     continue 2;
-                } else {
-                    $indexColumns[] = $columnNames[$normalizedColumnName];
-                    if ($columnName !== $columnNames[$normalizedColumnName]) {
-                        $changed = true;
-                    }
                 }
+
+                $indexColumns[] = $columnNames[$normalizedColumnName];
+                if ($columnName === $columnNames[$normalizedColumnName]) {
+                    continue;
+                }
+
+                $changed = true;
             }
 
             if (! $changed) {
@@ -1111,12 +1137,14 @@ class SqlitePlatform extends AbstractPlatform
                 if (! isset($columnNames[$normalizedColumnName])) {
                     unset($foreignKeys[$key]);
                     continue 2;
-                } else {
-                    $localColumns[] = $columnNames[$normalizedColumnName];
-                    if ($columnName !== $columnNames[$normalizedColumnName]) {
-                        $changed = true;
-                    }
                 }
+
+                $localColumns[] = $columnNames[$normalizedColumnName];
+                if ($columnName === $columnNames[$normalizedColumnName]) {
+                    continue;
+                }
+
+                $changed = true;
             }
 
             if (! $changed) {
@@ -1127,6 +1155,10 @@ class SqlitePlatform extends AbstractPlatform
         }
 
         foreach ($diff->removedForeignKeys as $constraint) {
+            if (! $constraint instanceof ForeignKeyConstraint) {
+                $constraint = new Identifier($constraint);
+            }
+
             $constraintName = strtolower($constraint->getName());
             if (! strlen($constraintName) || ! isset($foreignKeys[$constraintName])) {
                 continue;

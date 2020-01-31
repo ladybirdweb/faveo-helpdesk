@@ -5,9 +5,11 @@ namespace Doctrine\DBAL\Types;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use function end;
-use function explode;
+use function array_map;
+use function get_class;
 use function str_replace;
+use function strrpos;
+use function substr;
 
 /**
  * The base class for so-called Doctrine mapping types.
@@ -16,76 +18,119 @@ use function str_replace;
  */
 abstract class Type
 {
-    public const TARRAY               = 'array';
-    public const SIMPLE_ARRAY         = 'simple_array';
-    public const JSON_ARRAY           = 'json_array';
-    public const JSON                 = 'json';
-    public const BIGINT               = 'bigint';
-    public const BOOLEAN              = 'boolean';
-    public const DATETIME             = 'datetime';
-    public const DATETIME_IMMUTABLE   = 'datetime_immutable';
-    public const DATETIMETZ           = 'datetimetz';
-    public const DATETIMETZ_IMMUTABLE = 'datetimetz_immutable';
-    public const DATE                 = 'date';
-    public const DATE_IMMUTABLE       = 'date_immutable';
-    public const TIME                 = 'time';
-    public const TIME_IMMUTABLE       = 'time_immutable';
-    public const DECIMAL              = 'decimal';
-    public const INTEGER              = 'integer';
-    public const OBJECT               = 'object';
-    public const SMALLINT             = 'smallint';
-    public const STRING               = 'string';
-    public const TEXT                 = 'text';
-    public const BINARY               = 'binary';
-    public const BLOB                 = 'blob';
-    public const FLOAT                = 'float';
-    public const GUID                 = 'guid';
-    public const DATEINTERVAL         = 'dateinterval';
+    /** @deprecated Use {@see Types::BIGINT} instead. */
+    public const BIGINT = Types::BIGINT;
 
-    /**
-     * Map of already instantiated type objects. One instance per type (flyweight).
-     *
-     * @var self[]
-     */
-    private static $_typeObjects = [];
+    /** @deprecated Use {@see Types::BINARY} instead. */
+    public const BINARY = Types::BINARY;
+
+    /** @deprecated Use {@see Types::BLOB} instead. */
+    public const BLOB = Types::BLOB;
+
+    /** @deprecated Use {@see Types::BOOLEAN} instead. */
+    public const BOOLEAN = Types::BOOLEAN;
+
+    /** @deprecated Use {@see Types::DATE_MUTABLE} instead. */
+    public const DATE = Types::DATE_MUTABLE;
+
+    /** @deprecated Use {@see Types::DATE_IMMUTABLE} instead. */
+    public const DATE_IMMUTABLE = Types::DATE_IMMUTABLE;
+
+    /** @deprecated Use {@see Types::DATEINTERVAL} instead. */
+    public const DATEINTERVAL = Types::DATEINTERVAL;
+
+    /** @deprecated Use {@see Types::DATETIME_MUTABLE} instead. */
+    public const DATETIME = Types::DATETIME_MUTABLE;
+
+    /** @deprecated Use {@see Types::DATETIME_IMMUTABLE} instead. */
+    public const DATETIME_IMMUTABLE = Types::DATETIME_IMMUTABLE;
+
+    /** @deprecated Use {@see Types::DATETIMETZ_MUTABLE} instead. */
+    public const DATETIMETZ = Types::DATETIMETZ_MUTABLE;
+
+    /** @deprecated Use {@see Types::DATETIMETZ_IMMUTABLE} instead. */
+    public const DATETIMETZ_IMMUTABLE = Types::DATETIMETZ_IMMUTABLE;
+
+    /** @deprecated Use {@see Types::DECIMAL} instead. */
+    public const DECIMAL = Types::DECIMAL;
+
+    /** @deprecated Use {@see Types::FLOAT} instead. */
+    public const FLOAT = Types::FLOAT;
+
+    /** @deprecated Use {@see Types::GUID} instead. */
+    public const GUID = Types::GUID;
+
+    /** @deprecated Use {@see Types::INTEGER} instead. */
+    public const INTEGER = Types::INTEGER;
+
+    /** @deprecated Use {@see Types::JSON} instead. */
+    public const JSON = Types::JSON;
+
+    /** @deprecated Use {@see Types::JSON_ARRAY} instead. */
+    public const JSON_ARRAY = Types::JSON_ARRAY;
+
+    /** @deprecated Use {@see Types::OBJECT} instead. */
+    public const OBJECT = Types::OBJECT;
+
+    /** @deprecated Use {@see Types::SIMPLE_ARRAY} instead. */
+    public const SIMPLE_ARRAY = Types::SIMPLE_ARRAY;
+
+    /** @deprecated Use {@see Types::SMALLINT} instead. */
+    public const SMALLINT = Types::SMALLINT;
+
+    /** @deprecated Use {@see Types::STRING} instead. */
+    public const STRING = Types::STRING;
+
+    /** @deprecated Use {@see Types::ARRAY} instead. */
+    public const TARRAY = Types::ARRAY;
+
+    /** @deprecated Use {@see Types::TEXT} instead. */
+    public const TEXT = Types::TEXT;
+
+    /** @deprecated Use {@see Types::TIME_MUTABLE} instead. */
+    public const TIME = Types::TIME_MUTABLE;
+
+    /** @deprecated Use {@see Types::TIME_IMMUTABLE} instead. */
+    public const TIME_IMMUTABLE = Types::TIME_IMMUTABLE;
 
     /**
      * The map of supported doctrine mapping types.
-     *
-     * @var string[]
      */
-    private static $_typesMap = [
-        self::TARRAY => ArrayType::class,
-        self::SIMPLE_ARRAY => SimpleArrayType::class,
-        self::JSON_ARRAY => JsonArrayType::class,
-        self::JSON => JsonType::class,
-        self::OBJECT => ObjectType::class,
-        self::BOOLEAN => BooleanType::class,
-        self::INTEGER => IntegerType::class,
-        self::SMALLINT => SmallIntType::class,
-        self::BIGINT => BigIntType::class,
-        self::STRING => StringType::class,
-        self::TEXT => TextType::class,
-        self::DATETIME => DateTimeType::class,
-        self::DATETIME_IMMUTABLE => DateTimeImmutableType::class,
-        self::DATETIMETZ => DateTimeTzType::class,
-        self::DATETIMETZ_IMMUTABLE => DateTimeTzImmutableType::class,
-        self::DATE => DateType::class,
-        self::DATE_IMMUTABLE => DateImmutableType::class,
-        self::TIME => TimeType::class,
-        self::TIME_IMMUTABLE => TimeImmutableType::class,
-        self::DECIMAL => DecimalType::class,
-        self::FLOAT => FloatType::class,
-        self::BINARY => BinaryType::class,
-        self::BLOB => BlobType::class,
-        self::GUID => GuidType::class,
-        self::DATEINTERVAL => DateIntervalType::class,
+    private const BUILTIN_TYPES_MAP = [
+        Types::ARRAY                => ArrayType::class,
+        Types::BIGINT               => BigIntType::class,
+        Types::BINARY               => BinaryType::class,
+        Types::BLOB                 => BlobType::class,
+        Types::BOOLEAN              => BooleanType::class,
+        Types::DATE_MUTABLE         => DateType::class,
+        Types::DATE_IMMUTABLE       => DateImmutableType::class,
+        Types::DATEINTERVAL         => DateIntervalType::class,
+        Types::DATETIME_MUTABLE     => DateTimeType::class,
+        Types::DATETIME_IMMUTABLE   => DateTimeImmutableType::class,
+        Types::DATETIMETZ_MUTABLE   => DateTimeTzType::class,
+        Types::DATETIMETZ_IMMUTABLE => DateTimeTzImmutableType::class,
+        Types::DECIMAL              => DecimalType::class,
+        Types::FLOAT                => FloatType::class,
+        Types::GUID                 => GuidType::class,
+        Types::INTEGER              => IntegerType::class,
+        Types::JSON                 => JsonType::class,
+        Types::JSON_ARRAY           => JsonArrayType::class,
+        Types::OBJECT               => ObjectType::class,
+        Types::SIMPLE_ARRAY         => SimpleArrayType::class,
+        Types::SMALLINT             => SmallIntType::class,
+        Types::STRING               => StringType::class,
+        Types::TEXT                 => TextType::class,
+        Types::TIME_MUTABLE         => TimeType::class,
+        Types::TIME_IMMUTABLE       => TimeImmutableType::class,
     ];
 
+    /** @var TypeRegistry|null */
+    private static $typeRegistry;
+
     /**
-     * Prevents instantiation and forces use of the factory method.
+     * @internal Do not instantiate directly - use {@see Type::addType()} method instead.
      */
-    final private function __construct()
+    final public function __construct()
     {
     }
 
@@ -149,6 +194,29 @@ abstract class Type
     abstract public function getName();
 
     /**
+     * @internal This method is only to be used within DBAL for forward compatibility purposes. Do not use directly.
+     */
+    final public static function getTypeRegistry() : TypeRegistry
+    {
+        if (self::$typeRegistry === null) {
+            self::$typeRegistry = self::createTypeRegistry();
+        }
+
+        return self::$typeRegistry;
+    }
+
+    private static function createTypeRegistry() : TypeRegistry
+    {
+        $registry = new TypeRegistry();
+
+        foreach (self::BUILTIN_TYPES_MAP as $name => $class) {
+            $registry->register($name, new $class());
+        }
+
+        return $registry;
+    }
+
+    /**
      * Factory method to create type instances.
      * Type instances are implemented as flyweights.
      *
@@ -160,14 +228,7 @@ abstract class Type
      */
     public static function getType($name)
     {
-        if (! isset(self::$_typeObjects[$name])) {
-            if (! isset(self::$_typesMap[$name])) {
-                throw DBALException::unknownColumnType($name);
-            }
-            self::$_typeObjects[$name] = new self::$_typesMap[$name]();
-        }
-
-        return self::$_typeObjects[$name];
+        return self::getTypeRegistry()->get($name);
     }
 
     /**
@@ -182,11 +243,7 @@ abstract class Type
      */
     public static function addType($name, $className)
     {
-        if (isset(self::$_typesMap[$name])) {
-            throw DBALException::typeExists($name);
-        }
-
-        self::$_typesMap[$name] = $className;
+        self::getTypeRegistry()->register($name, new $className());
     }
 
     /**
@@ -198,7 +255,7 @@ abstract class Type
      */
     public static function hasType($name)
     {
-        return isset(self::$_typesMap[$name]);
+        return self::getTypeRegistry()->has($name);
     }
 
     /**
@@ -213,15 +270,7 @@ abstract class Type
      */
     public static function overrideType($name, $className)
     {
-        if (! isset(self::$_typesMap[$name])) {
-            throw DBALException::typeNotFound($name);
-        }
-
-        if (isset(self::$_typeObjects[$name])) {
-            unset(self::$_typeObjects[$name]);
-        }
-
-        self::$_typesMap[$name] = $className;
+        self::getTypeRegistry()->override($name, new $className());
     }
 
     /**
@@ -245,7 +294,12 @@ abstract class Type
      */
     public static function getTypesMap()
     {
-        return self::$_typesMap;
+        return array_map(
+            static function (Type $type) : string {
+                return get_class($type);
+            },
+            self::getTypeRegistry()->getMap()
+        );
     }
 
     /**
@@ -255,9 +309,14 @@ abstract class Type
      */
     public function __toString()
     {
-        $e = explode('\\', static::class);
+        $type     = static::class;
+        $position = strrpos($type, '\\');
 
-        return str_replace('Type', '', end($e));
+        if ($position !== false) {
+            $type = substr($type, $position);
+        }
+
+        return str_replace('Type', '', $type);
     }
 
     /**

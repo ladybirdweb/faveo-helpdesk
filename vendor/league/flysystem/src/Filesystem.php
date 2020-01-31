@@ -115,7 +115,7 @@ class Filesystem implements FilesystemInterface
         $config = $this->prepareConfig($config);
         Util::rewindStream($resource);
 
-        if ( ! $this->getAdapter() instanceof CanOverwriteFiles &&$this->has($path)) {
+        if ( ! $this->getAdapter() instanceof CanOverwriteFiles && $this->has($path)) {
             return (bool) $this->getAdapter()->updateStream($path, $resource, $config);
         }
 
@@ -270,7 +270,8 @@ class Filesystem implements FilesystemInterface
         $directory = Util::normalizePath($directory);
         $contents = $this->getAdapter()->listContents($directory, $recursive);
 
-        return (new ContentListingFormatter($directory, $recursive))->formatListing($contents);
+        return (new ContentListingFormatter($directory, $recursive, $this->config->get('case_sensitive', true)))
+            ->formatListing($contents);
     }
 
     /**
@@ -364,7 +365,7 @@ class Filesystem implements FilesystemInterface
 
         if ( ! $handler) {
             $metadata = $this->getMetadata($path);
-            $handler = $metadata['type'] === 'file' ? new File($this, $path) : new Directory($this, $path);
+            $handler = ($metadata && $metadata['type'] === 'file') ? new File($this, $path) : new Directory($this, $path);
         }
 
         $handler->setPath($path);
