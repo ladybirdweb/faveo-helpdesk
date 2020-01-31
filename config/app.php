@@ -174,7 +174,7 @@ return [
         'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
         Madnest\Madzipper\MadzipperServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-       \Torann\GeoIP\GeoIPServiceProvider::class,
+        \Torann\GeoIP\GeoIPServiceProvider::class,
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
