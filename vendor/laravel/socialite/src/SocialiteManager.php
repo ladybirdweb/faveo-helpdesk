@@ -3,15 +3,16 @@
 namespace Laravel\Socialite;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Manager;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Illuminate\Support\Manager;
-use Laravel\Socialite\Two\GithubProvider;
-use Laravel\Socialite\Two\GoogleProvider;
 use Laravel\Socialite\One\TwitterProvider;
-use Laravel\Socialite\Two\FacebookProvider;
-use Laravel\Socialite\Two\LinkedInProvider;
 use Laravel\Socialite\Two\BitbucketProvider;
+use Laravel\Socialite\Two\FacebookProvider;
+use Laravel\Socialite\Two\GithubProvider;
+use Laravel\Socialite\Two\GitlabProvider;
+use Laravel\Socialite\Two\GoogleProvider;
+use Laravel\Socialite\Two\LinkedInProvider;
 use League\OAuth1\Client\Server\Twitter as TwitterServer;
 
 class SocialiteManager extends Manager implements Contracts\Factory
@@ -98,6 +99,20 @@ class SocialiteManager extends Manager implements Contracts\Factory
     }
 
     /**
+     * Create an instance of the specified driver.
+     *
+     * @return \Laravel\Socialite\Two\AbstractProvider
+     */
+    protected function createGitlabDriver()
+    {
+        $config = $this->app['config']['services.gitlab'];
+
+        return $this->buildProvider(
+            GitlabProvider::class, $config
+        );
+    }
+
+    /**
      * Build an OAuth 2 provider instance.
      *
      * @param  string  $provider
@@ -160,9 +175,9 @@ class SocialiteManager extends Manager implements Contracts\Factory
     /**
      * Get the default driver name.
      *
-     * @throws \InvalidArgumentException
-     *
      * @return string
+     *
+     * @throws \InvalidArgumentException
      */
     public function getDefaultDriver()
     {

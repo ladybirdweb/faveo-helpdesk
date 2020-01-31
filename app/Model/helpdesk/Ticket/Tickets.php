@@ -100,4 +100,62 @@ class Tickets extends BaseModel
 
         return $this->belongsTo($related, $foreignKey);
     }
+
+    public function statuses()
+    {
+        $related    = 'App\Model\helpdesk\Ticket\Ticket_Status';
+        $foreignKey = 'status';
+        return $this->belongsTo($related, $foreignKey);
+    }
+
+    /**
+     * gets the department details for which ticket is mapped in
+     */
+    public function department()
+    {
+        $related    = 'App\Model\helpdesk\Agent\Department';
+        $foreignKey = 'dept_id';
+        return $this->belongsTo($related, $foreignKey);
+    }
+
+    public function assigned()
+    {
+        $related    = 'App\User';
+        $foreignKey = 'assigned_to';
+        return $this->belongsTo($related, $foreignKey);
+    }
+
+    public function assignedTeam()
+    {
+        $related    = 'App\Model\helpdesk\Agent\Teams';
+        $foreignKey = 'team_id';
+        return $this->belongsTo($related, $foreignKey)->withDefault();
+    }
+
+    public function priority()
+    {
+        $related    = 'App\Model\helpdesk\Ticket\Ticket_Priority';
+        $foreignKey = 'priority_id';
+        return $this->belongsTo($related, $foreignKey);
+    }
+
+    public function sources()
+    {
+        return $this->belongsTo('App\Model\helpdesk\Ticket\Ticket_source', 'source');
+    }
+
+    public function slaPlan()
+    {
+        return $this->belongsTo(\App\Model\helpdesk\Manage\Sla_plan::class, 'sla');
+    }
+
+    public function threadSelectedFields()
+    {
+        return $this->hasOne('App\Model\helpdesk\Ticket\Ticket_Thread', 'ticket_id')->addSelect(
+            'ticket_id',
+            \DB::raw('substring_index(group_concat(title order by id asc SEPARATOR "-||,||-") , "-||,||-", 1) as title'),
+            \DB::raw('substring_index(group_concat(if(`is_internal` = 0, `poster`,null)ORDER By id desc) , ",", 1) as poster'),
+            \DB::raw('CONVERT_TZ(max(updated_at), "+00:00", "'.getGMT().'") as updated_at2')
+        )->where('is_internal', '=', 0)->groupBy('ticket_id');
+    }
 }

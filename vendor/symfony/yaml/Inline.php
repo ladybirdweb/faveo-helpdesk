@@ -589,6 +589,10 @@ class Inline
                         return substr($scalar, 2);
                     case 0 === strpos($scalar, '!php/object'):
                         if (self::$objectSupport) {
+                            if (!isset($scalar[12])) {
+                                return false;
+                            }
+
                             return unserialize(self::parseScalar(substr($scalar, 12)));
                         }
 
@@ -599,6 +603,10 @@ class Inline
                         return null;
                     case 0 === strpos($scalar, '!php/const'):
                         if (self::$constantSupport) {
+                            if (!isset($scalar[11])) {
+                                return '';
+                            }
+
                             $i = 0;
                             if (\defined($const = self::parseScalar(substr($scalar, 11), 0, null, $i, false))) {
                                 return \constant($const);
@@ -722,7 +730,7 @@ class Inline
         return base64_decode($parsedBinaryData, true);
     }
 
-    private static function isBinaryString(string $value)
+    private static function isBinaryString(string $value): bool
     {
         return !preg_match('//u', $value) || preg_match('/[^\x00\x07-\x0d\x1B\x20-\xff]/', $value);
     }

@@ -3,10 +3,10 @@
 namespace Laravel\Dusk;
 
 use Exception;
-use Illuminate\Support\Str;
-use InvalidArgumentException;
 use Facebook\WebDriver\WebDriverBy;
+use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
+use InvalidArgumentException;
 
 class ElementResolver
 {
@@ -43,7 +43,7 @@ class ElementResolver
         'findButtonBySelector',
         'findButtonByName',
         'findButtonByValue',
-        'findButtonByText'
+        'findButtonByText',
     ];
 
     /**
@@ -77,6 +77,7 @@ class ElementResolver
      *
      * @param  string  $field
      * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     *
      * @throws \Exception
      */
     public function resolveForTyping($field)
@@ -86,7 +87,7 @@ class ElementResolver
         }
 
         return $this->firstOrFail([
-            $field, "input[name='{$field}']", "textarea[name='{$field}']"
+            $field, "input[name='{$field}']", "textarea[name='{$field}']",
         ]);
     }
 
@@ -95,6 +96,7 @@ class ElementResolver
      *
      * @param  string  $field
      * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     *
      * @throws \Exception
      */
     public function resolveForSelection($field)
@@ -104,16 +106,17 @@ class ElementResolver
         }
 
         return $this->firstOrFail([
-            $field, "select[name='{$field}']"
+            $field, "select[name='{$field}']",
         ]);
     }
 
     /**
      * Resolve all the options with the given value on the select field.
      *
-     * @param string  $field
-     * @param array  $values
+     * @param  string  $field
+     * @param  array  $values
      * @return \Facebook\WebDriver\Remote\RemoteWebElement[]
+     *
      * @throws \Exception
      */
     public function resolveSelectOptions($field, array $values)
@@ -136,7 +139,9 @@ class ElementResolver
      * @param  string  $field
      * @param  string  $value
      * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     *
      * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function resolveForRadioSelection($field, $value = null)
     {
@@ -151,16 +156,17 @@ class ElementResolver
         }
 
         return $this->firstOrFail([
-            $field, "input[type=radio][name='{$field}'][value='{$value}']"
+            $field, "input[type=radio][name='{$field}'][value='{$value}']",
         ]);
     }
 
     /**
      * Resolve the element for a given checkbox "field".
      *
-     * @param  string  $field
+     * @param  string|null  $field
      * @param  string  $value
      * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     *
      * @throws \Exception
      */
     public function resolveForChecking($field, $value = null)
@@ -169,14 +175,18 @@ class ElementResolver
             return $element;
         }
 
-        $selector = "input[type=checkbox][name='{$field}']";
+        $selector = 'input[type=checkbox]';
+
+        if (! is_null($field)) {
+            $selector .= "[name='{$field}']";
+        }
 
         if (! is_null($value)) {
             $selector .= "[value='{$value}']";
         }
 
         return $this->firstOrFail([
-            $field, $selector
+            $field, $selector,
         ]);
     }
 
@@ -185,6 +195,7 @@ class ElementResolver
      *
      * @param  string  $field
      * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     *
      * @throws \Exception
      */
     public function resolveForAttachment($field)
@@ -194,7 +205,7 @@ class ElementResolver
         }
 
         return $this->firstOrFail([
-            $field, "input[type=file][name='{$field}']"
+            $field, "input[type=file][name='{$field}']",
         ]);
     }
 
@@ -203,6 +214,7 @@ class ElementResolver
      *
      * @param  string  $field
      * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     *
      * @throws \Exception
      */
     public function resolveForField($field)
@@ -213,7 +225,7 @@ class ElementResolver
 
         return $this->firstOrFail([
             $field, "input[name='{$field}']", "textarea[name='{$field}']",
-            "select[name='{$field}']", "button[name='{$field}']"
+            "select[name='{$field}']", "button[name='{$field}']",
         ]);
     }
 
@@ -222,6 +234,8 @@ class ElementResolver
      *
      * @param  string  $button
      * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     *
+     * @throws \InvalidArgumentException
      */
     public function resolveForButtonPress($button)
     {
@@ -272,7 +286,7 @@ class ElementResolver
      */
     protected function findButtonByValue($button)
     {
-        foreach ($this->all("input[type=submit]") as $element) {
+        foreach ($this->all('input[type=submit]') as $element) {
             if ($element->getAttribute('value') === $button) {
                 return $element;
             }
@@ -327,6 +341,7 @@ class ElementResolver
      *
      * @param  array  $selectors
      * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     *
      * @throws \Exception
      */
     public function firstOrFail($selectors)
@@ -394,7 +409,7 @@ class ElementResolver
             array_keys($sortedElements), array_values($sortedElements), $originalSelector = $selector
         );
 
-        if (starts_with($selector, '@') && $selector === $originalSelector) {
+        if (Str::startsWith($selector, '@') && $selector === $originalSelector) {
             $selector = '[dusk="'.explode('@', $selector)[1].'"]';
         }
 

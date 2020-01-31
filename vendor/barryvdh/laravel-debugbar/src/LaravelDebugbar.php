@@ -498,6 +498,7 @@ class LaravelDebugbar extends DebugBar
 
         $renderer = $this->getJavascriptRenderer();
         $renderer->setIncludeVendors($this->app['config']->get('debugbar.include_vendors', true));
+        $renderer->setBindAjaxHandlerToFetch($app['config']->get('debugbar.capture_ajax', true));
         $renderer->setBindAjaxHandlerToXHR($app['config']->get('debugbar.capture_ajax', true));
 
         $this->booted = true;
@@ -782,7 +783,7 @@ class LaravelDebugbar extends DebugBar
      */
     protected function isDebugbarRequest()
     {
-        return $this->app['request']->segment(1) == '_debugbar';
+        return $this->app['request']->segment(1) == $this->app['config']->get('debugbar.route_prefix');
     }
 
     /**

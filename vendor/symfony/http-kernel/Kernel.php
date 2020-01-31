@@ -76,11 +76,11 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
 
     private static $freshCache = [];
 
-    const VERSION = '4.4.3';
-    const VERSION_ID = 40403;
+    const VERSION = '4.4.5';
+    const VERSION_ID = 40405;
     const MAJOR_VERSION = 4;
     const MINOR_VERSION = 4;
-    const RELEASE_VERSION = 3;
+    const RELEASE_VERSION = 5;
     const EXTRA_VERSION = '';
 
     const END_OF_MAINTENANCE = '11/2022';
@@ -228,7 +228,7 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
     public function getBundle($name)
     {
         if (!isset($this->bundles[$name])) {
-            $class = \get_class($this);
+            $class = static::class;
             $class = 'c' === $class[0] && 0 === strpos($class, "class@anonymous\0") ? get_parent_class($class).'@anonymous' : $class;
 
             throw new \InvalidArgumentException(sprintf('Bundle "%s" does not exist or it is not enabled. Maybe you forgot to add it in the registerBundles() method of your %s.php file?', $name, $class));
@@ -473,7 +473,7 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
      */
     protected function getContainerClass()
     {
-        $class = \get_class($this);
+        $class = static::class;
         $class = 'c' === $class[0] && 0 === strpos($class, "class@anonymous\0") ? get_parent_class($class).str_replace('.', '_', ContainerBuilder::hash($class)) : $class;
         $class = $this->name.str_replace('\\', '_', $class).ucfirst($this->environment).($this->debug ? 'Debug' : '').'Container';
 
@@ -510,7 +510,7 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
         $cachePath = $cache->getPath();
 
         // Silence E_WARNING to ignore "include" failures - don't use "@" to prevent silencing fatal errors
-        $errorLevel = error_reporting(\E_ALL ^ \E_WARNING);
+        $errorLevel = error_reporting(E_ALL ^ E_WARNING);
 
         try {
             if (file_exists($cachePath) && \is_object($this->container = include $cachePath)
@@ -634,7 +634,10 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
         }
 
         $this->dumpContainer($cache, $container, $class, $this->getContainerBaseClass());
-        $cache->release();
+        if (method_exists($cache, 'release')) {
+            $cache->release();
+        }
+
         $this->container = require $cachePath;
         $this->container->set('kernel', $this);
 

@@ -10,16 +10,15 @@ cache:
 
 matrix:
   include:
-    - php: 7.1
+    - php: 7.2
       env: COMPOSER_FLAGS='--prefer-lowest'
-    - php: 7.1
     - php: 7.2
     - php: 7.3
-    - php: nightly
+    - php: 7.3
       env: DEPENDENCIES='dev'
-      env: COMPOSER_FLAGS='--ignore-platform-reqs'
+    - php: 7.4snapshot
   allow_failures:
-    - php: nightly
+    - env: DEPENDENCIES='dev'
   fast_finish: true
 
 before_install:
@@ -32,7 +31,7 @@ install:
 
 script:
    - bin/phpspec run --format=dot
-   - ./vendor/bin/phpunit
+   - ./vendor/bin/phpunit -v
    - ./vendor/bin/behat --format=progress
 
 before_deploy:
@@ -50,5 +49,5 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
-    php: 7.1
+    php: 7.2
     condition: COMPOSER_FLAGS != "--prefer-lowest"

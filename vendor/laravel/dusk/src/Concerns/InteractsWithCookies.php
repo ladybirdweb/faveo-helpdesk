@@ -17,12 +17,12 @@ trait InteractsWithCookies
      */
     public function cookie($name, $value = null, $expiry = null, array $options = [])
     {
-        if ($value) {
+        if (! is_null($value)) {
             return $this->addCookie($name, $value, $expiry, $options);
         }
 
         if ($cookie = $this->driver->manage()->getCookieNamed($name)) {
-            return decrypt(rawurldecode($cookie['value']));
+            return decrypt(rawurldecode($cookie['value']), $unserialize = false);
         }
     }
 
@@ -37,7 +37,7 @@ trait InteractsWithCookies
      */
     public function plainCookie($name, $value = null, $expiry = null, array $options = [])
     {
-        if ($value) {
+        if (! is_null($value)) {
             return $this->addCookie($name, $value, $expiry, $options, false);
         }
 
@@ -59,7 +59,7 @@ trait InteractsWithCookies
     public function addCookie($name, $value, $expiry = null, array $options = [], $encrypt = true)
     {
         if ($encrypt) {
-            $value = encrypt($value);
+            $value = encrypt($value, $serialize = false);
         }
 
         if ($expiry instanceof DateTimeInterface) {

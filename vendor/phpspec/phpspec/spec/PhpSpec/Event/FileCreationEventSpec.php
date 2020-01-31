@@ -3,7 +3,6 @@
 namespace spec\PhpSpec\Event;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 class FileCreationEventSpec extends ObjectBehavior
 {
@@ -16,7 +15,7 @@ class FileCreationEventSpec extends ObjectBehavior
 
     function it_should_be_a_symfony_event()
     {
-        $this->shouldHaveType('Symfony\Component\EventDispatcher\Event');
+        $this->shouldHaveType('PhpSpec\Event\BaseEvent');
     }
 
     function it_should_be_a_phpspec_event()

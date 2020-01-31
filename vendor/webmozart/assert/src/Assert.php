@@ -45,10 +45,14 @@ use Traversable;
  * @method static void nullOrIsInstanceOf($value, $class, $message = '')
  * @method static void nullOrNotInstanceOf($value, $class, $message = '')
  * @method static void nullOrIsInstanceOfAny($value, $classes, $message = '')
+ * @method static void nullOrIsAOf($value, $classes, $message = '')
+ * @method static void nullOrIsAnyOf($value, $classes, $message = '')
+ * @method static void nullOrIsNotA($value, $classes, $message = '')
  * @method static void nullOrIsEmpty($value, $message = '')
  * @method static void nullOrNotEmpty($value, $message = '')
  * @method static void nullOrTrue($value, $message = '')
  * @method static void nullOrFalse($value, $message = '')
+ * @method static void nullOrNotFalse($value, $message = '')
  * @method static void nullOrIp($value, $message = '')
  * @method static void nullOrIpv4($value, $message = '')
  * @method static void nullOrIpv6($value, $message = '')
@@ -128,12 +132,16 @@ use Traversable;
  * @method static void allIsInstanceOf($values, $class, $message = '')
  * @method static void allNotInstanceOf($values, $class, $message = '')
  * @method static void allIsInstanceOfAny($values, $classes, $message = '')
+ * @method static void allIsAOf($values, $class, $message = '')
+ * @method static void allIsAnyOf($values, $class, $message = '')
+ * @method static void allIsNotA($values, $class, $message = '')
  * @method static void allNull($values, $message = '')
  * @method static void allNotNull($values, $message = '')
  * @method static void allIsEmpty($values, $message = '')
  * @method static void allNotEmpty($values, $message = '')
  * @method static void allTrue($values, $message = '')
  * @method static void allFalse($values, $message = '')
+ * @method static void allNotFalse($values, $message = '')
  * @method static void allIp($values, $message = '')
  * @method static void allIpv4($values, $message = '')
  * @method static void allIpv6($values, $message = '')
@@ -589,6 +597,70 @@ class Assert
     }
 
     /**
+     * @param object|string $value
+     * @param string        $class
+     * @param string        $message
+     *
+     * @throws InvalidArgumentException
+     */
+    public static function isAOf($value, $class, $message = '')
+    {
+        static::string($class, 'Expected class as a string. Got: %s');
+
+        if (!\is_a($value, $class, \is_string($value))) {
+            static::reportInvalidArgument(sprintf(
+                $message ?: 'Expected an instance of this class or to this class among his parents %2$s. Got: %s',
+                static::typeToString($value),
+                $class
+            ));
+        }
+    }
+
+    /**
+     * @param object|string $value
+     * @param string        $class
+     * @param string        $message
+     *
+     * @throws InvalidArgumentException
+     */
+    public static function isNotA($value, $class, $message = '')
+    {
+        static::string($class, 'Expected class as a string. Got: %s');
+
+        if (\is_a($value, $class, \is_string($value))) {
+            static::reportInvalidArgument(sprintf(
+                $message ?: 'Expected an instance of this class or to this class among his parents other than %2$s. Got: %s',
+                static::typeToString($value),
+                $class
+            ));
+        }
+    }
+
+    /**
+     * @param object|string $value
+     * @param string[]      $classes
+     * @param string        $message
+     *
+     * @throws InvalidArgumentException
+     */
+    public static function isAnyOf($value, array $classes, $message = '')
+    {
+        foreach ($classes as $class) {
+            static::string($class, 'Expected class as a string. Got: %s');
+
+            if (\is_a($value, $class, \is_string($value))) {
+                return;
+            }
+        }
+
+        static::reportInvalidArgument(sprintf(
+            $message ?: 'Expected an any of instance of this class or to this class among his parents other than %2$s. Got: %s',
+            static::typeToString($value),
+            \implode(', ', \array_map(array('static', 'valueToString'), $classes))
+        ));
+    }
+
+    /**
      * @psalm-assert empty $value
      *
      * @param mixed  $value
@@ -692,6 +764,23 @@ class Assert
                 $message ?: 'Expected a value to be false. Got: %s',
                 static::valueToString($value)
             ));
+        }
+    }
+
+    /**
+     * @psalm-assert !false $value
+     *
+     * @param mixed  $value
+     * @param string $message
+     *
+     * @throws InvalidArgumentException
+     */
+    public static function notFalse($value, $message = '')
+    {
+        if (false === $value) {
+            static::reportInvalidArgument(
+                $message ?: 'Expected a value other than false.'
+            );
         }
     }
 
