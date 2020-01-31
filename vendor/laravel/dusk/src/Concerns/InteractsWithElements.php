@@ -2,11 +2,11 @@
 
 namespace Laravel\Dusk\Concerns;
 
-use Illuminate\Support\Str;
+use Facebook\WebDriver\Interactions\WebDriverActions;
+use Facebook\WebDriver\Remote\LocalFileDetector;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverKeys;
-use Facebook\WebDriver\Remote\LocalFileDetector;
-use Facebook\WebDriver\Interactions\WebDriverActions;
+use Illuminate\Support\Str;
 
 trait InteractsWithElements
 {
@@ -39,11 +39,11 @@ trait InteractsWithElements
      * @param  string  $element
      * @return $this
      */
-    public function clickLink($link, $element = "a")
+    public function clickLink($link, $element = 'a')
     {
         $this->ensurejQueryIsAvailable();
 
-        $selector = addslashes(trim($this->resolver->format("{$element}:contains({$link})")));
+        $selector = addslashes(trim($this->resolver->format("{$element}:contains({$link}):visible")));
 
         $this->driver->executeScript("jQuery.find(\"{$selector}\")[0].click();");
 
@@ -182,11 +182,15 @@ trait InteractsWithElements
     {
         $element = $this->resolver->resolveForSelection($field);
 
-        $options = $element->findElements(WebDriverBy::tagName('option'));
+        $options = $element->findElements(WebDriverBy::cssSelector('option:not([disabled])'));
 
         if (is_null($value)) {
             $options[array_rand($options)]->click();
         } else {
+            if (is_bool($value)) {
+                $value = $value ? '1' : '0';
+            }
+
             foreach ($options as $option) {
                 if ((string) $option->getAttribute('value') === (string) $value) {
                     $option->click();

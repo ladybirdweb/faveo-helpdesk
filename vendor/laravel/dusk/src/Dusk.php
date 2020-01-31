@@ -24,6 +24,8 @@ class Dusk
      *
      * @param  array  $options
      * @return bool
+     *
+     * @throws \InvalidArgumentException
      */
     protected static function duskEnvironment($options)
     {
@@ -36,7 +38,7 @@ class Dusk
         }
 
         if (! is_array($options['environments'])) {
-            throw new InvalidArgumentException("Dusk environments must be listed as an array.");
+            throw new InvalidArgumentException('Dusk environments must be listed as an array.');
         }
 
         return app()->environment(...$options['environments']);

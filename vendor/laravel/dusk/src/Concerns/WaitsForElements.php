@@ -2,13 +2,14 @@
 
 namespace Laravel\Dusk\Concerns;
 
+use Carbon\Carbon;
 use Closure;
 use Exception;
-use Carbon\Carbon;
-use Illuminate\Support\Str;
-use Facebook\WebDriver\Exception\TimeOutException;
 use Facebook\WebDriver\Exception\NoSuchElementException;
+use Facebook\WebDriver\Exception\TimeOutException;
 use Facebook\WebDriver\WebDriverExpectedCondition;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 trait WaitsForElements
 {
@@ -16,9 +17,10 @@ trait WaitsForElements
      * Execute the given callback in a scoped browser once the selector is available.
      *
      * @param  string  $selector
-     * @param  Closure  $callback
+     * @param  \Closure  $callback
      * @param  int  $seconds
      * @return $this
+     *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function whenAvailable($selector, Closure $callback, $seconds = null)
@@ -32,13 +34,16 @@ trait WaitsForElements
      * @param  string  $selector
      * @param  int  $seconds
      * @return $this
+     *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function waitFor($selector, $seconds = null)
     {
+        $message = $this->formatTimeOutMessage('Waited %s seconds for selector', $selector);
+
         return $this->waitUsing($seconds, 100, function () use ($selector) {
             return $this->resolver->findOrFail($selector)->isDisplayed();
-        }, "Waited %s seconds for selector [{$selector}].");
+        }, $message);
     }
 
     /**
@@ -47,10 +52,13 @@ trait WaitsForElements
      * @param  string  $selector
      * @param  int  $seconds
      * @return $this
+     *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function waitUntilMissing($selector, $seconds = null)
     {
+        $message = $this->formatTimeOutMessage('Waited %s seconds for removal of selector', $selector);
+
         return $this->waitUsing($seconds, 100, function () use ($selector) {
             try {
                 $missing = ! $this->resolver->findOrFail($selector)->isDisplayed();
@@ -59,22 +67,47 @@ trait WaitsForElements
             }
 
             return $missing;
-        }, "Waited %s seconds for removal of selector [{$selector}].");
+        }, $message);
+    }
+
+    /**
+     * Wait for the given text to be removed.
+     *
+     * @param  string  $text
+     * @param  int  $seconds
+     * @return $this
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
+     */
+    public function waitUntilMissingText($text, $seconds = null)
+    {
+        $text = Arr::wrap($text);
+
+        $message = $this->formatTimeOutMessage('Waited %s seconds for removal of text', implode("', '", $text));
+
+        return $this->waitUsing($seconds, 100, function () use ($text) {
+            return ! Str::contains($this->resolver->findOrFail('')->getText(), $text);
+        }, $message);
     }
 
     /**
      * Wait for the given text to be visible.
      *
-     * @param  string  $text
+     * @param  array|string  $text
      * @param  int  $seconds
      * @return $this
+     *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function waitForText($text, $seconds = null)
     {
+        $text = Arr::wrap($text);
+
+        $message = $this->formatTimeOutMessage('Waited %s seconds for text', implode("', '", $text));
+
         return $this->waitUsing($seconds, 100, function () use ($text) {
             return Str::contains($this->resolver->findOrFail('')->getText(), $text);
-        }, "Waited %s seconds for text [{$text}].");
+        }, $message);
     }
 
     /**
@@ -83,13 +116,16 @@ trait WaitsForElements
      * @param  string  $link
      * @param  int  $seconds
      * @return $this
+     *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function waitForLink($link, $seconds = null)
     {
+        $message = $this->formatTimeOutMessage('Waited %s seconds for link', $link);
+
         return $this->waitUsing($seconds, 100, function () use ($link) {
             return $this->seeLink($link);
-        }, "Waited %s seconds for link [{$link}].");
+        }, $message);
     }
 
     /**
@@ -98,11 +134,14 @@ trait WaitsForElements
      * @param  string  $path
      * @param  int  $seconds
      * @return $this
+     *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function waitForLocation($path, $seconds = null)
     {
-        return $this->waitUntil("window.location.pathname == '{$path}'", $seconds, "Waited %s seconds for location [{$path}].");
+        $message = $this->formatTimeOutMessage('Waited %s seconds for location', $path);
+
+        return $this->waitUntil("window.location.pathname == '{$path}'", $seconds, $message);
     }
 
     /**
@@ -112,6 +151,7 @@ trait WaitsForElements
      * @param  array  $parameters
      * @param  int  $seconds
      * @return $this
+     *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function waitForRoute($route, $parameters = [], $seconds = null)
@@ -126,6 +166,7 @@ trait WaitsForElements
      * @param  int  $seconds
      * @param  string  $message
      * @return $this
+     *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function waitUntil($script, $seconds = null, $message = null)
@@ -141,6 +182,40 @@ trait WaitsForElements
         return $this->waitUsing($seconds, 100, function () use ($script) {
             return $this->driver->executeScript($script);
         }, $message);
+    }
+
+    /**
+     * Wait until the Vue component's attribute at the given key has the given value.
+     *
+     * @param  string  $key
+     * @param  string  $value
+     * @param  string|null  $componentSelector
+     * @return $this
+     */
+    public function waitUntilVue($key, $value, $componentSelector = null, $seconds = null)
+    {
+        $this->waitUsing($seconds, 100, function () use ($key, $value, $componentSelector) {
+            return $value == $this->vueAttribute($componentSelector, $key);
+        });
+
+        return $this;
+    }
+
+    /**
+     * Wait until the Vue component's attribute at the given key does not have the given value.
+     *
+     * @param  string  $key
+     * @param  string  $value
+     * @param  string|null  $componentSelector
+     * @return $this
+     */
+    public function waitUntilVueIsNot($key, $value, $componentSelector = null, $seconds = null)
+    {
+        $this->waitUsing($seconds, 100, function () use ($key, $value, $componentSelector) {
+            return $value != $this->vueAttribute($componentSelector, $key);
+        });
+
+        return $this;
     }
 
     /**
@@ -163,14 +238,15 @@ trait WaitsForElements
     /**
      * Wait for the current page to reload.
      *
-     * @param  Closure  $callback
+     * @param  \Closure  $callback
      * @param  int  $seconds
      * @return $this
+     *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function waitForReload($callback = null, $seconds = null)
     {
-        $token = str_random();
+        $token = Str::random();
 
         $this->driver->executeScript("window['{$token}'] = {};");
 
@@ -188,9 +264,10 @@ trait WaitsForElements
      *
      * @param  int  $seconds
      * @param  int  $interval
-     * @param  Closure  $callback
+     * @param  \Closure  $callback
      * @param  string|null  $message
      * @return $this
+     *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function waitUsing($seconds, $interval, Closure $callback, $message = null)
@@ -221,5 +298,17 @@ trait WaitsForElements
         }
 
         return $this;
+    }
+
+    /**
+     * Prepare custom TimeOutException message for sprintf().
+     *
+     * @param  string  $message
+     * @param  string  $expected
+     * @return string
+     */
+    protected function formatTimeOutMessage($message, $expected)
+    {
+        return $message.' ['.str_replace('%', '%%', $expected).'].';
     }
 }
