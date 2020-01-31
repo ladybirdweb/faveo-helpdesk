@@ -33,7 +33,7 @@ return [
       | This tells about aplication current version.
       |
      */
-    'version' => 'Community 1.10.7',
+    'version' => 'Community 2.0.0',
     /*
       |--------------------------------------------------------------------------
       | Application Name
@@ -133,7 +133,7 @@ return [
      */
     'providers' => [
         'Illuminate\Broadcasting\BroadcastServiceProvider',
-        'DaveJamesMiller\Breadcrumbs\ServiceProvider',
+        'DaveJamesMiller\Breadcrumbs\BreadcrumbsServiceProvider',
         /*
          * Laravel Framework Service Providers...
          */
@@ -168,24 +168,22 @@ return [
         'App\Providers\RouteServiceProvider',
         'App\Providers\ConfigServiceProvider',
         'App\Providers\ComposerServiceProvider',
-        'Propaganistas\LaravelPhone\LaravelPhoneServiceProvider',
-        'Bugsnag\BugsnagLaravel\BugsnagLaravelServiceProvider',
+        Propaganistas\LaravelPhone\PhoneServiceProvider::class,
+        Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
         'Vsmoraes\Pdf\PdfServiceProvider',
         'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
-        'Chumper\Datatable\DatatableServiceProvider',
-        'Chumper\Zipper\ZipperServiceProvider',
+        Madnest\Madzipper\MadzipperServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         \Torann\GeoIP\GeoIPServiceProvider::class,
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        Unisharp\Ckeditor\ServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         //Collective\Bus\BusServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         App\FaveoLog\LaravelLogViewerServiceProvider::class,
         App\FaveoStorage\StorageServiceProvider::class,
-        Yajra\Datatables\DatatablesServiceProvider::class,
+        Yajra\DataTables\DataTablesServiceProvider::class,
         \App\Api\ApiServiceProvider::class,
 
     ],
@@ -213,7 +211,13 @@ return [
         'Event'        => 'Illuminate\Support\Facades\Event',
         'File'         => 'Illuminate\Support\Facades\File',
         'Hash'         => 'Illuminate\Support\Facades\Hash',
-        'Input'        => 'Illuminate\Support\Facades\Input',
+        /**
+         * @TODO
+         * Input Facade has been replaced by Request Facade so we need
+         * to update all calls to Input:: by Ruquest:: and remove the below
+         * line.
+         */
+        'Input'        => 'Illuminate\Support\Facades\Request',
         'Inspiring'    => 'Illuminate\Foundation\Inspiring',
         'Lang'         => 'Illuminate\Support\Facades\Lang',
         'Log'          => 'Illuminate\Support\Facades\Log',
@@ -240,8 +244,7 @@ return [
         'UTC'          => 'App\Http\Controllers\Agent\helpdesk\TicketController',
         'Ttable'       => 'App\Http\Controllers\Agent\helpdesk\TicketController', //to use getTable function.
         'SMTPS'        => 'App\Http\Controllers\HomeController',
-        'Datatable'    => 'Chumper\Datatable\Facades\DatatableFacade',
-        'Zipper'       => 'Chumper\Zipper\Zipper',
+        'Zipper'       => Madnest\Madzipper\Madzipper::class,
         'JWTAuth'      => 'Tymon\JWTAuth\Facades\JWTAuth',
         'JWTFactory'   => 'Tymon\JWTAuth\Facades\JWTFactory',
         'Breadcrumbs'  => 'DaveJamesMiller\Breadcrumbs\Facade',
@@ -254,7 +257,7 @@ return [
         'Socialite'    => Laravel\Socialite\Facades\Socialite::class,
         'UnAuth'       => 'App\Http\Controllers\Client\helpdesk\UnAuthController',
         'Finder'       => App\Helper\Finder::class,
-        'Datatables'   => Yajra\Datatables\Facades\Datatables::class,
+        'Datatables'   => Yajra\DataTables\Facades\Datatables::class,
         'Notification' => Illuminate\Support\Facades\Notification::class,
     ],
 ];

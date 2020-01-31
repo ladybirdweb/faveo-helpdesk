@@ -267,10 +267,12 @@ class Response
             $this->setContent(null);
             $headers->remove('Content-Type');
             $headers->remove('Content-Length');
+            // prevent PHP from sending the Content-Type header based on default_mimetype
+            ini_set('default_mimetype', '');
         } else {
             // Content-type based on the Request
             if (!$headers->has('Content-Type')) {
-                $format = $request->getPreferredFormat();
+                $format = $request->getPreferredFormat(null);
                 if (null !== $format && $mimeType = $request->getMimeType($format)) {
                     $headers->set('Content-Type', $mimeType);
                 }
@@ -628,7 +630,7 @@ class Response
     }
 
     /**
-     * Returns true if the response must be revalidated by caches.
+     * Returns true if the response must be revalidated by shared caches once it has become stale.
      *
      * This method indicates that the response must not be served stale by a
      * cache in any circumstance without first revalidating with the origin.

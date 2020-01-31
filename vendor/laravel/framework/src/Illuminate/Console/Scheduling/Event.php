@@ -4,14 +4,17 @@ namespace Illuminate\Console\Scheduling;
 
 use Closure;
 use Cron\CronExpression;
+use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Exception\TransferException;
+use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
-use GuzzleHttp\Client as HttpClient;
 use Illuminate\Support\Facades\Date;
-use Illuminate\Contracts\Mail\Mailer;
-use Symfony\Component\Process\Process;
 use Illuminate\Support\Traits\Macroable;
-use Illuminate\Contracts\Container\Container;
+use Psr\Http\Client\ClientExceptionInterface;
+use Symfony\Component\Process\Process;
 
 class Event
 {
@@ -155,7 +158,7 @@ class Event
      *
      * @param  \Illuminate\Console\Scheduling\EventMutex  $mutex
      * @param  string  $command
-     * @param  \DateTimeZone|string|null $timezone
+     * @param  \DateTimeZone|string|null  $timezone
      * @return void
      */
     public function __construct(EventMutex $mutex, $command, $timezone = null)
@@ -489,9 +492,7 @@ class Event
      */
     public function pingBefore($url)
     {
-        return $this->before(function () use ($url) {
-            (new HttpClient)->get($url);
-        });
+        return $this->before($this->pingCallback($url));
     }
 
     /**
@@ -514,9 +515,7 @@ class Event
      */
     public function thenPing($url)
     {
-        return $this->then(function () use ($url) {
-            (new HttpClient)->get($url);
-        });
+        return $this->then($this->pingCallback($url));
     }
 
     /**
@@ -539,9 +538,7 @@ class Event
      */
     public function pingOnSuccess($url)
     {
-        return $this->onSuccess(function () use ($url) {
-            (new HttpClient)->get($url);
-        });
+        return $this->onSuccess($this->pingCallback($url));
     }
 
     /**
@@ -552,9 +549,24 @@ class Event
      */
     public function pingOnFailure($url)
     {
-        return $this->onFailure(function () use ($url) {
-            (new HttpClient)->get($url);
-        });
+        return $this->onFailure($this->pingCallback($url));
+    }
+
+    /**
+     * Get the callback that pings the given URL.
+     *
+     * @param  string  $url
+     * @return \Closure
+     */
+    protected function pingCallback($url)
+    {
+        return function (Container $container, HttpClient $http) use ($url) {
+            try {
+                $http->get($url);
+            } catch (ClientExceptionInterface | TransferException $e) {
+                $container->make(ExceptionHandler::class)->report($e);
+            }
+        };
     }
 
     /**

@@ -2,17 +2,18 @@
 
 namespace Illuminate\Database\Migrations;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
 use Illuminate\Console\OutputStyle;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\ConnectionResolverInterface as Resolver;
 use Illuminate\Database\Events\MigrationEnded;
 use Illuminate\Database\Events\MigrationsEnded;
-use Illuminate\Database\Events\MigrationStarted;
 use Illuminate\Database\Events\MigrationsStarted;
-use Illuminate\Database\ConnectionResolverInterface as Resolver;
+use Illuminate\Database\Events\MigrationStarted;
+use Illuminate\Database\Events\NoPendingMigrations;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class Migrator
 {
@@ -139,6 +140,8 @@ class Migrator
         // aren't, we will just make a note of it to the developer so they're aware
         // that all of the migrations have been run against this database system.
         if (count($migrations) === 0) {
+            $this->fireMigrationEvent(new NoPendingMigrations('up'));
+
             $this->note('<info>Nothing to migrate.</info>');
 
             return;
@@ -173,8 +176,8 @@ class Migrator
      * Run "up" a migration instance.
      *
      * @param  string  $file
-     * @param  int     $batch
-     * @param  bool    $pretend
+     * @param  int  $batch
+     * @param  bool  $pretend
      * @return void
      */
     protected function runUp($file, $batch, $pretend)
@@ -209,7 +212,7 @@ class Migrator
     /**
      * Rollback the last migration operation.
      *
-     * @param  array|string $paths
+     * @param  array|string  $paths
      * @param  array  $options
      * @return array
      */
@@ -221,6 +224,8 @@ class Migrator
         $migrations = $this->getMigrationsForRollback($options);
 
         if (count($migrations) === 0) {
+            $this->fireMigrationEvent(new NoPendingMigrations('down'));
+
             $this->note('<info>Nothing to rollback.</info>');
 
             return [];
@@ -288,7 +293,7 @@ class Migrator
     /**
      * Rolls all of the currently applied migrations back.
      *
-     * @param  array|string $paths
+     * @param  array|string  $paths
      * @param  bool  $pretend
      * @return array
      */
@@ -335,7 +340,7 @@ class Migrator
      *
      * @param  string  $file
      * @param  object  $migration
-     * @param  bool    $pretend
+     * @param  bool  $pretend
      * @return void
      */
     protected function runDown($file, $migration, $pretend)
@@ -458,17 +463,17 @@ class Migrator
     {
         return Collection::make($paths)->flatMap(function ($path) {
             return Str::endsWith($path, '.php') ? [$path] : $this->files->glob($path.'/*_*.php');
-        })->filter()->sortBy(function ($file) {
+        })->filter()->values()->keyBy(function ($file) {
             return $this->getMigrationName($file);
-        })->values()->keyBy(function ($file) {
-            return $this->getMigrationName($file);
+        })->sortBy(function ($file, $key) {
+            return $key;
         })->all();
     }
 
     /**
      * Require in all the migration files in a given path.
      *
-     * @param  array   $files
+     * @param  array  $files
      * @return void
      */
     public function requireFiles(array $files)
@@ -624,7 +629,7 @@ class Migrator
     /**
      * Fire the given event for the migration.
      *
-     * @param  \Illuminate\Contracts\Database\Events\MigrationEvent $event
+     * @param  \Illuminate\Contracts\Database\Events\MigrationEvent  $event
      * @return void
      */
     public function fireMigrationEvent($event)

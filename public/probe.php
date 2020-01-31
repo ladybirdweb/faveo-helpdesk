@@ -1,4 +1,6 @@
 <?php
+echo isinstall();
+
 error_reporting();
 
 $extensions = [

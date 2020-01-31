@@ -1,17 +1,10 @@
 <?php
 
-namespace Yajra\Datatables\Processors;
+namespace Yajra\DataTables\Processors;
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Config;
-use Yajra\Datatables\Helper;
+use Yajra\DataTables\Utilities\Helper;
 
-/**
- * Class DataProcessor.
- *
- * @package Yajra\Datatables
- * @author  Arjay Angeles <aqangeles@gmail.com>
- */
 class DataProcessor
 {
     /**
@@ -27,7 +20,7 @@ class DataProcessor
     protected $escapeColumns = [];
 
     /**
-     * Processed data output
+     * Processed data output.
      *
      * @var array
      */
@@ -64,10 +57,20 @@ class DataProcessor
     protected $includeIndex;
 
     /**
+     * @var array
+     */
+    protected $rawColumns;
+
+    /**
+     * @var array
+     */
+    protected $exceptions = ['DT_RowId', 'DT_RowClass', 'DT_RowData', 'DT_RowAttr'];
+
+    /**
      * @param mixed $results
      * @param array $columnDef
      * @param array $templates
-     * @param int $start
+     * @param int   $start
      */
     public function __construct($results, array $columnDef, array $templates, $start)
     {
@@ -75,14 +78,18 @@ class DataProcessor
         $this->appendColumns = $columnDef['append'];
         $this->editColumns   = $columnDef['edit'];
         $this->excessColumns = $columnDef['excess'];
+        $this->onlyColumns   = $columnDef['only'];
         $this->escapeColumns = $columnDef['escape'];
         $this->includeIndex  = $columnDef['index'];
+        $this->rawColumns    = $columnDef['raw'];
+        $this->makeHidden    = $columnDef['hidden'];
+        $this->makeVisible   = $columnDef['visible'];
         $this->templates     = $templates;
         $this->start         = $start;
     }
 
     /**
-     * Process data to output on browser
+     * Process data to output on browser.
      *
      * @param bool $object
      * @return array
@@ -90,13 +97,14 @@ class DataProcessor
     public function process($object = false)
     {
         $this->output = [];
-        $indexColumn  = Config::get('datatables.index_column', 'DT_Row_Index');
+        $indexColumn  = config('datatables.index_column', 'DT_RowIndex');
 
         foreach ($this->results as $row) {
-            $data  = Helper::convertToArray($row);
+            $data  = Helper::convertToArray($row, ['hidden' => $this->makeHidden, 'visible' => $this->makeVisible]);
             $value = $this->addColumns($data, $row);
             $value = $this->editColumns($value, $row);
             $value = $this->setupRowVariables($value, $row);
+            $value = $this->selectOnlyNeededColumns($value);
             $value = $this->removeExcessColumns($value);
 
             if ($this->includeIndex) {
@@ -163,6 +171,31 @@ class DataProcessor
     }
 
     /**
+     * Get only needed columns.
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function selectOnlyNeededColumns(array $data)
+    {
+        if (is_null($this->onlyColumns)) {
+            return $data;
+        } else {
+            $results = [];
+            foreach ($this->onlyColumns as $onlyColumn) {
+                Arr::set($results, $onlyColumn, Arr::get($data, $onlyColumn));
+            }
+            foreach ($this->exceptions as $exception) {
+                if ($column = Arr::get($data, $exception)) {
+                    Arr::set($results, $exception, $column);
+                }
+            }
+
+            return $results;
+        }
+    }
+
+    /**
      * Remove declared hidden columns.
      *
      * @param array $data
@@ -171,7 +204,7 @@ class DataProcessor
     protected function removeExcessColumns(array $data)
     {
         foreach ($this->excessColumns as $value) {
-            unset($data[$value]);
+            Arr::forget($data, $value);
         }
 
         return $data;
@@ -185,11 +218,9 @@ class DataProcessor
      */
     public function flatten(array $array)
     {
-        $return     = [];
-        $exceptions = ['DT_RowId', 'DT_RowClass', 'DT_RowData', 'DT_RowAttr'];
-
+        $return = [];
         foreach ($array as $key => $value) {
-            if (in_array($key, $exceptions)) {
+            if (in_array($key, $this->exceptions)) {
                 $return[$key] = $value;
             } else {
                 $return[] = $value;
@@ -209,12 +240,11 @@ class DataProcessor
     {
         return array_map(function ($row) {
             if ($this->escapeColumns == '*') {
-                $row = $this->escapeRow($row, $this->escapeColumns);
-            } else {
-                foreach ($this->escapeColumns as $key) {
-                    if (array_get($row, $key)) {
-                        array_set($row, $key, e(array_get($row, $key)));
-                    }
+                $row = $this->escapeRow($row);
+            } elseif (is_array($this->escapeColumns)) {
+                $columns = array_diff($this->escapeColumns, $this->rawColumns);
+                foreach ($columns as $key) {
+                    Arr::set($row, $key, e(Arr::get($row, $key)));
                 }
             }
 
@@ -226,17 +256,19 @@ class DataProcessor
      * Escape all values of row.
      *
      * @param array $row
-     * @param string|array $escapeColumns
      * @return array
      */
-    protected function escapeRow(array $row, $escapeColumns)
+    protected function escapeRow(array $row)
     {
-        foreach ($row as $key => $value) {
-            if (is_array($value)) {
-                $row[$key] = $this->escapeRow($value, $escapeColumns);
-            } else {
-                $row[$key] = e($value);
+        $arrayDot = array_filter(Arr::dot($row));
+        foreach ($arrayDot as $key => $value) {
+            if (! in_array($key, $this->rawColumns)) {
+                $arrayDot[$key] = e($value);
             }
+        }
+
+        foreach ($arrayDot as $key => $value) {
+            Arr::set($row, $key, $value);
         }
 
         return $row;

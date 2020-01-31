@@ -15,24 +15,26 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
-        '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         'b067bc7112e384b61c701452d53a14a8' => __DIR__ . '/..' . '/mtdowling/jmespath.php/src/JmesPath.php',
         'def43f6c87e4f8dfd0c9e1b1bab14fe8' => __DIR__ . '/..' . '/symfony/polyfill-iconv/bootstrap.php',
-        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         '8a9dc1de0ca7e01f3e08231539562f61' => __DIR__ . '/..' . '/aws/aws-sdk-php/src/functions.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
+        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         '538ca81a9a966a6716601ecf48f4eaef' => __DIR__ . '/..' . '/opis/closure/functions.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
-        'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
+        '2a3c2110e8e0295330dc3d11a4cbc4cb' => __DIR__ . '/..' . '/php-webdriver/webdriver/lib/Exception/TimeoutException.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         '4a1f389d6ce373bda9e57857d3b61c84' => __DIR__ . '/..' . '/barryvdh/laravel-debugbar/src/helpers.php',
         '17d016dc52a631c1e74d2eb8fdd57342' => __DIR__ . '/..' . '/laravel/helpers/src/helpers.php',
+        'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
         '017b24472353920ed42bb364f7653c43' => __DIR__ . '/..' . '/propaganistas/laravel-phone/src/helpers.php',
         '1e298922c3e2134d42dcdb03e6d5f55a' => __DIR__ . '/..' . '/torann/geoip/src/helpers.php',
+        '0b47d6d4a00ca9112ba3953b49e7c9a4' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/helper.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -46,7 +48,7 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         ),
         'Y' => 
         array (
-            'Yajra\\Datatables\\' => 17,
+            'Yajra\\DataTables\\' => 17,
         ),
         'X' => 
         array (
@@ -63,7 +65,6 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         ),
         'U' => 
         array (
-            'Unisharp\\Ckeditor\\' => 18,
             'UniSharp\\LaravelFilemanager\\' => 28,
         ),
         'T' => 
@@ -134,12 +135,14 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         'M' => 
         array (
             'Monolog\\' => 8,
+            'Madnest\\Madzipper\\' => 18,
         ),
         'L' => 
         array (
             'League\\OAuth1\\' => 14,
-            'League\\Fractal\\' => 15,
+            'League\\ISO3166\\' => 15,
             'League\\Flysystem\\' => 17,
+            'League\\CommonMark\\' => 18,
             'Lcobucci\\JWT\\' => 13,
             'Laravel\\Tinker\\' => 15,
             'Laravel\\Socialite\\' => 18,
@@ -153,7 +156,6 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         ),
         'I' => 
         array (
-            'Iso3166\\' => 8,
             'Intervention\\Image\\' => 19,
             'Illuminate\\' => 11,
         ),
@@ -169,6 +171,7 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         array (
             'Faker\\' => 6,
             'Facebook\\WebDriver\\' => 19,
+            'Facade\\IgnitionContracts\\' => 25,
         ),
         'E' => 
         array (
@@ -190,11 +193,15 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         'C' => 
         array (
             'Cron\\' => 5,
+            'Composer\\CaBundle\\' => 18,
             'Collective\\Html\\' => 16,
-            'Chumper\\Zipper\\' => 15,
+            'Carbon\\' => 7,
         ),
         'B' => 
         array (
+            'Bugsnag\\PsrLogger\\' => 18,
+            'Bugsnag\\BugsnagLaravel\\' => 23,
+            'Bugsnag\\' => 8,
             'Barryvdh\\Debugbar\\' => 18,
         ),
         'A' => 
@@ -215,7 +222,7 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         array (
             0 => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src',
         ),
-        'Yajra\\Datatables\\' => 
+        'Yajra\\DataTables\\' => 
         array (
             0 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
         ),
@@ -234,10 +241,6 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         'Vsmoraes\\Pdf\\' => 
         array (
             0 => __DIR__ . '/..' . '/vsmoraes/laravel-pdf/src',
-        ),
-        'Unisharp\\Ckeditor\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/unisharp/laravel-ckeditor',
         ),
         'UniSharp\\LaravelFilemanager\\' => 
         array (
@@ -435,17 +438,25 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
+        'Madnest\\Madzipper\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/madnest/madzipper/src/Madnest/Madzipper',
+        ),
         'League\\OAuth1\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/oauth1-client/src',
         ),
-        'League\\Fractal\\' => 
+        'League\\ISO3166\\' => 
         array (
-            0 => __DIR__ . '/..' . '/league/fractal/src',
+            0 => __DIR__ . '/..' . '/league/iso3166/src',
         ),
         'League\\Flysystem\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/flysystem/src',
+        ),
+        'League\\CommonMark\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/commonmark/src',
         ),
         'Lcobucci\\JWT\\' => 
         array (
@@ -474,10 +485,6 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         'JakubOnderka\\PhpConsoleColor\\' => 
         array (
             0 => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src',
-        ),
-        'Iso3166\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/julien-c/iso3166/src',
         ),
         'Intervention\\Image\\' => 
         array (
@@ -513,7 +520,11 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         ),
         'Facebook\\WebDriver\\' => 
         array (
-            0 => __DIR__ . '/..' . '/facebook/webdriver/lib',
+            0 => __DIR__ . '/..' . '/php-webdriver/webdriver/lib',
+        ),
+        'Facade\\IgnitionContracts\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/facade/ignition-contracts/src',
         ),
         'Egulias\\EmailValidator\\' => 
         array (
@@ -563,13 +574,29 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         array (
             0 => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron',
         ),
+        'Composer\\CaBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/composer/ca-bundle/src',
+        ),
         'Collective\\Html\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravelcollective/html/src',
         ),
-        'Chumper\\Zipper\\' => 
+        'Carbon\\' => 
         array (
-            0 => __DIR__ . '/..' . '/chumper/zipper/src/Chumper/Zipper',
+            0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
+        ),
+        'Bugsnag\\PsrLogger\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/bugsnag/bugsnag-psr-logger/src',
+        ),
+        'Bugsnag\\BugsnagLaravel\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/bugsnag/bugsnag-laravel/src',
+        ),
+        'Bugsnag\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/bugsnag/bugsnag/src',
         ),
         'Barryvdh\\Debugbar\\' => 
         array (
@@ -585,10 +612,6 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         ),
     );
 
-    public static $fallbackDirsPsr4 = array (
-        0 => __DIR__ . '/..' . '/nesbot/carbon/src',
-    );
-
     public static $prefixesPsr0 = array (
         't' => 
         array (
@@ -597,22 +620,11 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
                 0 => __DIR__ . '/..' . '/thomaswelton/gravatarlib',
             ),
         ),
-        'U' => 
-        array (
-            'UpdateHelper\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/kylekatarnls/update-helper/src',
-            ),
-        ),
         'P' => 
         array (
             'PhpSpec' => 
             array (
                 0 => __DIR__ . '/..' . '/phpspec/phpspec/src',
-            ),
-            'Parsedown' => 
-            array (
-                0 => __DIR__ . '/..' . '/erusev/parsedown',
             ),
             'PHPExcel' => 
             array (
@@ -661,24 +673,6 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
             'Diff' => 
             array (
                 0 => __DIR__ . '/..' . '/phpspec/php-diff/lib',
-            ),
-        ),
-        'C' => 
-        array (
-            'Chumper\\Datatable' => 
-            array (
-                0 => __DIR__ . '/..' . '/chumper/datatable/src',
-            ),
-        ),
-        'B' => 
-        array (
-            'Bugsnag_' => 
-            array (
-                0 => __DIR__ . '/..' . '/bugsnag/bugsnag/src',
-            ),
-            'Bugsnag\\BugsnagLaravel\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/bugsnag/bugsnag-laravel/src',
             ),
         ),
     );
@@ -1519,7 +1513,6 @@ class ComposerStaticInit598add4b9b35c76d3599603201ccdd6d
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit598add4b9b35c76d3599603201ccdd6d::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit598add4b9b35c76d3599603201ccdd6d::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInit598add4b9b35c76d3599603201ccdd6d::$fallbackDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit598add4b9b35c76d3599603201ccdd6d::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit598add4b9b35c76d3599603201ccdd6d::$classMap;
 

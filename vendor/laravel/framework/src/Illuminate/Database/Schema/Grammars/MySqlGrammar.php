@@ -2,10 +2,10 @@
 
 namespace Illuminate\Database\Schema\Grammars;
 
-use RuntimeException;
-use Illuminate\Support\Fluent;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Fluent;
+use RuntimeException;
 
 class MySqlGrammar extends Grammar
 {
@@ -16,7 +16,7 @@ class MySqlGrammar extends Grammar
      */
     protected $modifiers = [
         'Unsigned', 'Charset', 'Collate', 'VirtualAs', 'StoredAs', 'Nullable',
-        'Default', 'Increment', 'Comment', 'After', 'First', 'Srid',
+        'Srid', 'Default', 'Increment', 'Comment', 'After', 'First',
     ];
 
     /**
@@ -346,8 +346,8 @@ class MySqlGrammar extends Grammar
     /**
      * Compile a rename index command.
      *
-     * @param  \Illuminate\Database\Schema\Blueprint $blueprint
-     * @param  \Illuminate\Support\Fluent $command
+     * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
+     * @param  \Illuminate\Support\Fluent  $command
      * @return string
      */
     public function compileRenameIndex(Blueprint $blueprint, Fluent $command)
@@ -941,6 +941,10 @@ class MySqlGrammar extends Grammar
     {
         if (is_null($column->virtualAs) && is_null($column->storedAs)) {
             return $column->nullable ? ' null' : ' not null';
+        }
+
+        if ($column->nullable === false) {
+            return ' not null';
         }
     }
 

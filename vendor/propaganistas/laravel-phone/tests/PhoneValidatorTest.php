@@ -1,209 +1,191 @@
 <?php namespace Propaganistas\LaravelPhone\Tests;
 
-use Illuminate\Foundation\Application;
-use libphonenumber\PhoneNumber;
-use libphonenumber\PhoneNumberFormat;
-use libphonenumber\PhoneNumberUtil;
-use Orchestra\Testbench\TestCase;
-use Phone;
-use Propaganistas\LaravelPhone\LaravelPhoneServiceProvider;
+use libphonenumber\PhoneNumberType;
+use Propaganistas\LaravelPhone\Rules\Phone as Rule;
+use Propaganistas\LaravelPhone\PhoneServiceProvider;
+use Propaganistas\LaravelPhone\Exceptions\InvalidParameterException;
 
 class PhoneValidatorTest extends TestCase
 {
-
     protected $validator;
 
-    protected function getPackageProviders()
-    {
-        return [
-            'Propaganistas\LaravelPhone\LaravelPhoneServiceProvider',
-        ];
-    }
-
-    protected function getPackageAliases()
-    {
-        return [
-            'Phone' => 'Propaganistas\LaravelPhone\LaravelPhoneFacade',
-        ];
-    }
-
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->validator = $this->app['validator'];
     }
 
-    public function testFacade()
-    {
-        $phoneNumber = Phone::parse('650-429-2057', 'US');
-        $this->assertTrue($phoneNumber instanceof PhoneNumber);
-    }
-
-    public function testValidatePhoneWithDefaultCountryNoType()
+    /** @test */
+    public function it_validates_with_default_countries_without_type()
     {
         // Validator with correct country field.
         $this->assertTrue($this->validator->make(
-            ['field' => '016123456'],
+            ['field' => '012345678'],
             ['field' => 'phone:BE'])->passes()
         );
 
         // Validator with wrong country value.
         $this->assertFalse($this->validator->make(
-            ['field' => '016123456'],
+            ['field' => '012345678'],
             ['field' => 'phone:NL'])->passes()
         );
 
         // Validator with multiple country values, one correct.
         $this->assertTrue($this->validator->make(
-            ['field' => '016123456'],
+            ['field' => '012345678'],
             ['field' => 'phone:BE,NL'])->passes()
         );
 
         // Validator with multiple country values, value correct for second country in list.
         $this->assertTrue($this->validator->make(
-            ['field' => '016123456'],
+            ['field' => '012345678'],
             ['field' => 'phone:NL,BE'])->passes()
         );
 
         // Validator with multiple wrong country values.
         $this->assertFalse($this->validator->make(
-            ['field' => '016123456'],
+            ['field' => '012345678'],
             ['field' => 'phone:DE,NL'])->passes()
         );
     }
 
-    public function testValidatePhoneWithCountryFieldNoType()
+    /** @test */
+    public function it_validates_with_country_field_without_type()
     {
         // Validator with correct country field supplied.
         $this->assertTrue($this->validator->make(
-            ['field' => '016123456', 'field_country' => 'BE'],
+            ['field' => '012345678', 'field_country' => 'BE'],
             ['field' => 'phone'])->passes()
         );
 
         // Validator with wrong country field supplied.
         $this->assertFalse($this->validator->make(
-            ['field' => '016123456', 'field_country' => 'NL'],
+            ['field' => '012345678', 'field_country' => 'NL'],
             ['field' => 'phone'])->passes()
         );
     }
 
-    public function testValidatePhoneWithDefaultCountryWithType()
+    /** @test */
+    public function it_validates_with_default_countries_with_type()
     {
         // Validator with correct country value, correct type.
         $this->assertTrue($this->validator->make(
-            ['field' => '0499123456'],
+            ['field' => '0470123456'],
             ['field' => 'phone:BE,mobile'])->passes()
         );
 
         // Validator with correct country value, wrong type.
         $this->assertFalse($this->validator->make(
-            ['field' => '016123456'],
+            ['field' => '012345678'],
             ['field' => 'phone:BE,mobile'])->passes()
         );
 
         // Validator with wrong country value, correct type.
         $this->assertFalse($this->validator->make(
-            ['field' => '0499123456'],
+            ['field' => '0470123456'],
             ['field' => 'phone:NL,mobile'])->passes()
         );
 
         // Validator with wrong country value, wrong type.
         $this->assertFalse($this->validator->make(
-            ['field' => '016123456'],
+            ['field' => '012345678'],
             ['field' => 'phone:NL,mobile'])->passes()
         );
 
         // Validator with multiple country values, one correct, correct type.
         $this->assertTrue($this->validator->make(
-            ['field' => '0499123456'],
+            ['field' => '0470123456'],
             ['field' => 'phone:BE,NL,mobile'])->passes()
         );
 
         // Validator with multiple country values, one correct, wrong type.
         $this->assertFalse($this->validator->make(
-            ['field' => '016123456'],
+            ['field' => '012345678'],
             ['field' => 'phone:BE,NL,mobile'])->passes()
         );
 
         // Validator with multiple country values, none correct, correct type.
         $this->assertFalse($this->validator->make(
-            ['field' => '0499123456'],
+            ['field' => '0470123456'],
             ['field' => 'phone:DE,NL,mobile'])->passes()
         );
 
         // Validator with multiple country values, none correct, wrong type.
         $this->assertFalse($this->validator->make(
-            ['field' => '016123456'],
+            ['field' => '012345678'],
             ['field' => 'phone:DE,NL,mobile'])->passes()
         );
     }
 
-    public function testValidatePhoneWithCountryFieldWithType()
+    /** @test */
+    public function it_validates_with_country_field_with_type()
     {
         // Validator with correct country field supplied, correct type.
         $this->assertTrue($this->validator->make(
-            ['field' => '0499123456', 'field_country' => 'BE'],
+            ['field' => '0470123456', 'field_country' => 'BE'],
             ['field' => 'phone:mobile'])->passes()
         );
 
         // Validator with correct country field supplied, wrong type.
         $this->assertFalse($this->validator->make(
-            ['field' => '016123456', 'field_country' => 'BE'],
+            ['field' => '012345678', 'field_country' => 'BE'],
             ['field' => 'phone:mobile'])->passes()
         );
 
         // Validator with wrong country field supplied, correct type.
         $this->assertFalse($this->validator->make(
-            ['field' => '0499123456', 'field_country' => 'NL'],
+            ['field' => '0470123456', 'field_country' => 'NL'],
             ['field' => 'phone:mobile'])->passes()
         );
 
         // Validator with wrong country field supplied, wrong type.
         $this->assertFalse($this->validator->make(
-            ['field' => '016123456', 'field_country' => 'NL'],
+            ['field' => '012345678', 'field_country' => 'NL'],
             ['field' => 'phone:mobile'])->passes()
         );
     }
 
-    public function testValidatePhoneWithCustomCountryField()
+    /** @test */
+    public function it_validates_custom_country_field()
     {
         // Validator with correct country field supplied, correct type.
         $this->assertTrue($this->validator->make(
-            ['field' => '0499123456', 'country_code' => 'BE'],
+            ['field' => '0470123456', 'country_code' => 'BE'],
             ['field' => 'phone:mobile,country_code'])->passes()
         );
 
         // Validator with correct country field supplied, wrong type.
         $this->assertFalse($this->validator->make(
-            ['field' => '016123456', 'country_code' => 'BE'],
+            ['field' => '012345678', 'country_code' => 'BE'],
             ['field' => 'phone:mobile,country_code'])->passes()
         );
 
         // Validator with wrong country field supplied, correct type.
         $this->assertFalse($this->validator->make(
-            ['field' => '0499123456', 'country_code' => 'NL'],
+            ['field' => '0470123456', 'country_code' => 'NL'],
             ['field' => 'phone:mobile,country_code'])->passes()
         );
 
         // Validator with wrong country field supplied, wrong type.
         $this->assertFalse($this->validator->make(
-            ['field' => '016123456', 'country_code' => 'NL'],
+            ['field' => '012345678', 'country_code' => 'NL'],
             ['field' => 'phone:mobile,country_code'])->passes()
         );
     }
 
-    public function testValidatePhoneAutomaticDetectionFromInternationalInput()
+    /** @test */
+    public function it_validates_with_automatic_detection()
     {
         // Validator with correct international input.
         $this->assertTrue($this->validator->make(
-            ['field' => '+3216123456'],
+            ['field' => '+3212345678'],
             ['field' => 'phone:AUTO'])->passes()
         );
 
         // Validator with wrong international input.
         $this->assertFalse($this->validator->make(
-            ['field' => '003216123456'],
+            ['field' => '003212345678'],
             ['field' => 'phone:AUTO'])->passes()
         );
 
@@ -215,75 +197,132 @@ class PhoneValidatorTest extends TestCase
 
         // Validator with wrong international input but correct default country.
         $this->assertTrue($this->validator->make(
-            ['field' => '016123456'],
+            ['field' => '012345678'],
             ['field' => 'phone:AUTO,NL,BE'])->passes()
         );
 
         // Validator with wrong international input and wrong default country.
         $this->assertFalse($this->validator->make(
-            ['field' => '016123456'],
+            ['field' => '012345678'],
             ['field' => 'phone:AUTO,DE,NL'])->passes()
         );
     }
 
-    public function testValidatePhoneNoDefaultCountryNoCountryField()
+    /** @test */
+    public function it_validates_without_countries()
     {
-        $this->setExpectedException('Propaganistas\LaravelPhone\Exceptions\NoValidCountryFoundException');
-
         // Validator with no country field or given country.
-        $this->validator->make(
-            ['field' => '016123456'],
+        $this->assertFalse($this->validator->make(
+            ['field' => '012345678'],
             ['field' => 'phone']
-        )->passes();
+        )->passes());
 
         // Validator with no country field or given country, wrong type.
-        $this->validator->make(
-            ['field' => '016123456'],
+        $this->assertFalse($this->validator->make(
+            ['field' => '012345678'],
             ['field' => 'phone:mobile']
-        )->passes();
+        )->passes());
 
         // Validator with no country field or given country, correct type.
-        $this->validator->make(
-            ['field' => '0499359308'],
+        $this->assertFalse($this->validator->make(
+            ['field' => '0470123456'],
             ['field' => 'phone:mobile']
-        )->passes();
+        )->passes());
+    }
 
-        // Validator with no country field or given country, correct type, faulty parameter.
+    /** @test */
+    public function it_validates_with_auto_and_country_field_and_fallback_country()
+    {
+        // Validator with correct country in custom field.
+        $this->assertTrue($this->validator->make(
+            ['field' => '012345678', 'country' => 'BE'],
+            ['field' => 'phone:AUTO,US,country']
+        )->passes());
+
+        // Validator with correct country as fallback country.
+        $this->assertTrue($this->validator->make(
+            ['field' => '012345678', 'country' => 'US'],
+            ['field' => 'phone:AUTO,BE,country']
+        )->passes());
+
+        // Validator with wrong field value and fallback country, but internationally formatted.
+        $this->assertTrue($this->validator->make(
+            ['field' => '+3212345678', 'country' => 'US'],
+            ['field' => 'phone:AUTO,CH,country']
+        )->passes());
+
+        // Validator with wrong field value and fallback country, and not internationally formatted.
+        $this->assertFalse($this->validator->make(
+            ['field' => '012345678', 'country' => 'US'],
+            ['field' => 'phone:AUTO,CH,country']
+        )->passes());
+    }
+
+    /** @test */
+    public function it_ignores_invalid_parameters()
+    {
+        $this->assertTrue($this->validator->make(
+            ['field' => '0470123456'],
+            ['field' => 'phone:BE,xyz,mobile,abc']
+        )->passes());
+
+        $this->assertFalse($this->validator->make(
+            ['field' => '012345678'],
+            ['field' => 'phone:BE,xyz,mobile,abc']
+        )->passes());
+    }
+
+    /** @test */
+    public function it_ingores_invalid_country_field_value()
+    {
+        $this->assertFalse($this->validator->make(
+            ['field' => '012345678', 'field_country' => 'foo'],
+            ['field' => 'phone']
+        )->passes());
+    }
+
+    /** @test */
+    public function it_throws_an_exception_for_ambiguous_parameters()
+    {
+        $this->expectException(InvalidParameterException::class);
+        $this->expectExceptionMessage('mobile');
+
         $this->validator->make(
-            ['field' => '0499359308'],
-            ['field' => 'phone:mobile,xyt']
+            ['mobile' => '0470123456', 'mobile_country' => 'BE'],
+            ['mobile' => 'phone:mobile']
         )->passes();
     }
 
-    public function testValidatePhoneLenient()
+    /** @test */
+    public function it_validates_lenient()
     {
         // Validator with AU area code, lenient off
         $this->assertFalse($this->validator->make(
-            ['field' => '88885555'],
+            ['field' => '12345678'],
             ['field' => 'phone:AU'])->passes()
         );
 
         // Validator with AU area code, lenient on
         $this->assertTrue($this->validator->make(
-            ['field' => '88885555'],
+            ['field' => '12345678'],
             ['field' => 'phone:LENIENT,AU'])->passes()
         );
 
         // Validator with correct country field supplied, lenient on
         $this->assertTrue($this->validator->make(
-            ['field' => '88885555', 'field_country' => 'AU'],
+            ['field' => '12345678', 'field_country' => 'AU'],
             ['field' => 'phone:LENIENT'])->passes()
         );
 
         // Validator with wrong country field supplied, lenient on
         $this->assertTrue($this->validator->make(
-            ['field' => '88885555', 'field_country' => 'BE'],
+            ['field' => '12345678', 'field_country' => 'BE'],
             ['field' => 'phone:LENIENT'])->passes()
         );
 
         // Validator with no area code, lenient on
         $this->assertTrue($this->validator->make(
-            ['field' => '+16502530000'],
+            ['field' => '+12015550123'],
             ['field' => 'phone:LENIENT'])->passes()
         );
 
@@ -295,56 +334,40 @@ class PhoneValidatorTest extends TestCase
 
         // Validator with no area code, lenient off
         $this->assertFalse($this->validator->make(
-            ['field' => '6502530000'],
+            ['field' => '2015550123'],
             ['field' => 'phone:LENIENT'])->passes()
         );
 
         // Validator with US area code, lenient on
         $this->assertTrue($this->validator->make(
-            ['field' => '6502530000'],
+            ['field' => '2015550123'],
             ['field' => 'phone:LENIENT,US'])->passes()
         );
 
         // Validator with US area code, lenient off
         $this->assertFalse($this->validator->make(
-            ['field' => '2530000'],
+            ['field' => '5550123'],
             ['field' => 'phone:LENIENT'])->passes()
         );
 
         // Validator with US area code, lenient on
         $this->assertTrue($this->validator->make(
-            ['field' => '2530000'],
+            ['field' => '5550123'],
             ['field' => 'phone:LENIENT,US'])->passes()
         );
     }
 
-    public function testValidatePhoneFaultyParameters()
+    /** @test */
+    public function it_validates_array_input()
     {
-        $this->setExpectedException('Propaganistas\LaravelPhone\Exceptions\InvalidParameterException');
-
-        // Validator with given country, correct type, faulty parameter.
-        $this->validator->make(
-            ['field' => '016123456'],
-            ['field' => 'phone:BE,mobile,xyz']
-        )->passes();
-
-        // Validator with country field, correct type, faulty parameter.
-        $this->validator->make(
-            ['field' => '016123456', 'field_country' => 'BE'],
-            ['field' => 'phone:mobile,xyz']
-        )->passes();
-    }
-
-    public function testValidatePhoneWithArrayInput()
-    {
-        if (LaravelPhoneServiceProvider::canUseDependentValidation()) {
+        if (PhoneServiceProvider::canUseDependentValidation()) {
             // Validator with correct country value.
             $this->assertTrue($this->validator->make(
                 [
                     'container' => [
-                        ['field' => '016123456'],
-                        ['field' => '0499123456']
-                    ]
+                        ['field' => '012345678'],
+                        ['field' => '0470123456'],
+                    ],
                 ],
                 ['container.*.field' => 'phone:BE'])->passes()
             );
@@ -353,9 +376,9 @@ class PhoneValidatorTest extends TestCase
             $this->assertFalse($this->validator->make(
                 [
                     'container' => [
-                        ['field' => '016123456'],
-                        ['field' => '0499123456']
-                    ]
+                        ['field' => '012345678'],
+                        ['field' => '0470123456'],
+                    ],
                 ],
                 ['container.*.field' => 'phone:NL'])->passes()
             );
@@ -364,9 +387,9 @@ class PhoneValidatorTest extends TestCase
             $this->assertFalse($this->validator->make(
                 [
                     'container' => [
-                        ['field' => '01612'],
-                        ['field' => '0499123456']
-                    ]
+                        ['field' => '01234'],
+                        ['field' => '0470123456'],
+                    ],
                 ],
                 ['container.*.field' => 'phone:BE'])->passes()
             );
@@ -375,9 +398,9 @@ class PhoneValidatorTest extends TestCase
             $this->assertFalse($this->validator->make(
                 [
                     'container' => [
-                        ['field' => '016123456'],
-                        ['field' => '049912']
-                    ]
+                        ['field' => '012345678'],
+                        ['field' => '047012'],
+                    ],
                 ],
                 ['container.*.field' => 'phone:BE'])->passes()
             );
@@ -386,9 +409,9 @@ class PhoneValidatorTest extends TestCase
             $this->assertTrue($this->validator->make(
                 [
                     'container' => [
-                        ['field' => '0477123456'],
-                        ['field' => '0499123456']
-                    ]
+                        ['field' => '0470123456'],
+                        ['field' => '0471123456'],
+                    ],
                 ],
                 ['container.*.field' => 'phone:BE,mobile'])->passes()
             );
@@ -397,9 +420,9 @@ class PhoneValidatorTest extends TestCase
             $this->assertFalse($this->validator->make(
                 [
                     'container' => [
-                        ['field' => '016123456'],
-                        ['field' => '0499123456']
-                    ]
+                        ['field' => '012345678'],
+                        ['field' => '0470123456'],
+                    ],
                 ],
                 ['container.*.field' => 'phone:BE,mobile'])->passes()
             );
@@ -408,9 +431,9 @@ class PhoneValidatorTest extends TestCase
             $this->assertTrue($this->validator->make(
                 [
                     'container' => [
-                        ['field' => '016123456', 'field_country' => 'BE'],
-                        ['field' => '6502530000', 'field_country' => 'US']
-                    ]
+                        ['field' => '012345678', 'field_country' => 'BE'],
+                        ['field' => '2015550123', 'field_country' => 'US'],
+                    ],
                 ],
                 ['container.*.field' => 'phone'])->passes()
             );
@@ -419,9 +442,9 @@ class PhoneValidatorTest extends TestCase
             $this->assertFalse($this->validator->make(
                 [
                     'container' => [
-                        ['field' => '016123456', 'field_country' => 'BE'],
-                        ['field' => '6502530000', 'field_country' => 'BE']
-                    ]
+                        ['field' => '012345678', 'field_country' => 'BE'],
+                        ['field' => '2015550123', 'field_country' => 'BE'],
+                    ],
                 ],
                 ['container.*.field' => 'phone'])->passes()
             );
@@ -430,9 +453,9 @@ class PhoneValidatorTest extends TestCase
             $this->assertTrue($this->validator->make(
                 [
                     'container' => [
-                        ['field' => '016123456', 'country_code' => 'BE'],
-                        ['field' => '6502530000', 'country_code' => 'US']
-                    ]
+                        ['field' => '012345678', 'country_code' => 'BE'],
+                        ['field' => '2015550123', 'country_code' => 'US'],
+                    ],
                 ],
                 ['container.*.field' => 'phone:container.*.country_code'])->passes()
             );
@@ -441,28 +464,113 @@ class PhoneValidatorTest extends TestCase
             $this->assertFalse($this->validator->make(
                 [
                     'container' => [
-                        ['field' => '016123456', 'country_code' => 'BE'],
-                        ['field' => '6502530000', 'country_code' => 'BE']
-                    ]
+                        ['field' => '012345678', 'country_code' => 'BE'],
+                        ['field' => '2015550123', 'country_code' => 'BE'],
+                    ],
                 ],
                 ['container.*.field' => 'phone:container.*.country_code'])->passes()
             );
         }
     }
 
-    public function testHelperFunction()
+    /** @test */
+    public function it_has_a_rule_class()
     {
-        // Test landline number without format parameter.
-        $actual = phone('016123456', 'BE');
-        $expected = '+32 16 12 34 56';
+        $actual = new Rule;
+        $expected = 'phone';
         $this->assertEquals($expected, $actual);
 
-        // Test landline number with format parameter.
-        $actual = phone('016123456', 'BE', PhoneNumberFormat::NATIONAL);
-        $expected = '016 12 34 56';
-        $this->assertEquals($expected, $actual);
+        $actual = with(new Rule)->mobile();
+        $expected = 'phone:1';
+        $this->assertEquals($expected, (string) $actual);
 
-        // Test fetching of util.
-        $this->assertTrue(phone() instanceof PhoneNumberUtil);
+        $actual = with(new Rule)->type('mobile');
+        $expected = 'phone:1';
+        $this->assertEquals($expected, (string) $actual);
+
+        $actual = with(new Rule)->mobile()->fixedLine();
+        $expected = 'phone:1,0';
+        $this->assertEquals($expected, (string) $actual);
+
+        $actual = with(new Rule)->type('mobile')->type('fixed_line');
+        $expected = 'phone:1,0';
+        $this->assertEquals($expected, (string) $actual);
+
+        $actual = with(new Rule)->country('BE')->country('AU','US')->country(['CH','FR']);
+        $expected = 'phone:BE,AU,US,CH,FR';
+        $this->assertEquals($expected, (string) $actual);
+
+        $actual = with(new Rule)->detect();
+        $expected = 'phone:AUTO';
+        $this->assertEquals($expected, (string) $actual);
+
+        $actual = with(new Rule)->lenient();
+        $expected = 'phone:LENIENT';
+        $this->assertEquals($expected, (string) $actual);
+
+        $actual = with(new Rule)->detect()->lenient()->type('toll_free')->type(PhoneNumberType::VOIP)->country('BE')->countryField('my_field');
+        $expected = 'phone:BE,3,6,my_field,AUTO,LENIENT';
+        $this->assertEquals($expected, (string) $actual);
+    }
+
+    /** @test */
+    public function it_validates_with_stringified_type_constant()
+    {
+        $this->assertTrue($this->validator->make(
+            ['field' => '0470123456'],
+            ['field' => 'phone:BE,' . PhoneNumberType::MOBILE])->passes()
+        );
+    }
+
+    /** @test */
+    public function it_prevents_parameter_hijacking_through_the_country_field()
+    {
+        $this->assertFalse($this->validator->make(
+            ['field' => '0470123456', 'field_country' => 'mobile'],
+            ['field' => 'phone:BE,fixed_line'])->passes()
+        );
+    }
+
+    /** @test */
+    public function it_accepts_mixed_case_parameters()
+    {
+        $this->assertTrue($this->validator->make(
+            ['field' => '+32470123456'],
+            ['field' => 'phone:aUtO,mObIlE'])->passes()
+        );
+
+        $this->assertTrue($this->validator->make(
+            ['field' => '0470123456'],
+            ['field' => 'phone:bE,mObIlE'])->passes()
+        );
+
+        $this->assertFalse($this->validator->make(
+            ['field' => '0470123456'],
+            ['field' => 'phone:AuTo,MoBiLe'])->passes()
+        );
+    }
+
+    /** @test */
+    public function it_validates_mixed_case_input_names()
+    {
+        $this->assertTrue($this->validator->make(
+            ['Field' => '0470123456'],
+            ['Field' => 'phone:be,mobile'])->passes()
+        );
+
+        $this->assertTrue($this->validator->make(
+            ['Field' => '0470123456', 'Field_country' => 'BE'],
+            ['Field' => 'phone:mobile'])->passes()
+        );
+
+        $this->assertTrue($this->validator->make(
+            ['field' => '0470123456', 'Country_Code' => 'BE'],
+            ['field' => 'phone:mobile,Country_Code'])->passes()
+        );
+
+        $this->assertFalse($this->validator->make(
+            ['field' => '0470123456', 'Country_Code' => 'BE'],
+            ['field' => 'phone:mobile,country_code'])->passes()
+        );
     }
 }
