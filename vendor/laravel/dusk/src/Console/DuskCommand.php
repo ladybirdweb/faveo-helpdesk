@@ -3,11 +3,12 @@
 namespace Laravel\Dusk\Console;
 
 use Dotenv\Dotenv;
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\Exception\RuntimeException;
+use Symfony\Component\Process\Process;
 
 class DuskCommand extends Command
 {
@@ -28,7 +29,7 @@ class DuskCommand extends Command
     /**
      * Indicates if the project has its own PHPUnit configuration.
      *
-     * @var boolean
+     * @var bool
      */
     protected $hasPhpUnitConfiguration = false;
 
@@ -68,9 +69,15 @@ class DuskCommand extends Command
                 $this->output->writeln('Warning: '.$e->getMessage());
             }
 
-            return $process->run(function ($type, $line) {
-                $this->output->write($line);
-            });
+            try {
+                return $process->run(function ($type, $line) {
+                    $this->output->write($line);
+                });
+            } catch (ProcessSignaledException $e) {
+                if (extension_loaded('pcntl') && $e->getSignal() !== SIGINT) {
+                    throw $e;
+                }
+            }
         });
     }
 
@@ -81,6 +88,10 @@ class DuskCommand extends Command
      */
     protected function binary()
     {
+        if ('phpdbg' === PHP_SAPI) {
+            return [PHP_BINARY, '-qrr', 'vendor/phpunit/phpunit/phpunit'];
+        }
+
         return [PHP_BINARY, 'vendor/phpunit/phpunit/phpunit'];
     }
 
@@ -96,18 +107,28 @@ class DuskCommand extends Command
             return ! Str::startsWith($option, '--env=');
         }));
 
-        return array_merge(['-c', base_path('phpunit.dusk.xml')], $options);
+        if (! file_exists($file = base_path('phpunit.dusk.xml'))) {
+            $file = base_path('phpunit.dusk.xml.dist');
+        }
+
+        return array_merge(['-c', $file], $options);
     }
 
     /**
-     * Purge the failure screenshots
+     * Purge the failure screenshots.
      *
      * @return void
      */
     protected function purgeScreenshots()
     {
+        $path = base_path('tests/Browser/screenshots');
+
+        if (! is_dir($path)) {
+            return;
+        }
+
         $files = Finder::create()->files()
-                        ->in(base_path('tests/Browser/screenshots'))
+                        ->in($path)
                         ->name('failure-*');
 
         foreach ($files as $file) {
@@ -122,8 +143,14 @@ class DuskCommand extends Command
      */
     protected function purgeConsoleLogs()
     {
+        $path = base_path('tests/Browser/console');
+
+        if (! is_dir($path)) {
+            return;
+        }
+
         $files = Finder::create()->files()
-            ->in(base_path('tests/Browser/console'))
+            ->in($path)
             ->name('*.log');
 
         foreach ($files as $file) {
@@ -139,6 +166,22 @@ class DuskCommand extends Command
      */
     protected function withDuskEnvironment($callback)
     {
+        $this->setupDuskEnvironment();
+
+        try {
+            return $callback();
+        } finally {
+            $this->teardownDuskEnviroment();
+        }
+    }
+
+    /**
+     * Setup the Dusk environment.
+     *
+     * @return void
+     */
+    protected function setupDuskEnvironment()
+    {
         if (file_exists(base_path($this->duskFile()))) {
             if (file_get_contents(base_path('.env')) !== file_get_contents(base_path($this->duskFile()))) {
                 $this->backupEnvironment();
@@ -149,13 +192,7 @@ class DuskCommand extends Command
 
         $this->writeConfiguration();
 
-        return tap($callback(), function () {
-            $this->removeConfiguration();
-
-            if (file_exists(base_path($this->duskFile())) && file_exists(base_path('.env.backup'))) {
-                $this->restoreEnvironment();
-            }
-        });
+        $this->setupSignalHandler();
     }
 
     /**
@@ -171,25 +208,27 @@ class DuskCommand extends Command
     }
 
     /**
-     * Restore the backed-up environment file.
-     *
-     * @return void
-     */
-    protected function restoreEnvironment()
-    {
-        copy(base_path('.env.backup'), base_path('.env'));
-
-        unlink(base_path('.env.backup'));
-    }
-
-    /**
      * Refresh the current environment variables.
      *
      * @return void
      */
     protected function refreshEnvironment()
     {
-        (new Dotenv(base_path()))->overload();
+        // BC fix to support Dotenv ^2.2...
+        if (! method_exists(Dotenv::class, 'create')) {
+            (new Dotenv(base_path()))->overload();
+
+            return;
+        }
+
+        // BC fix to support Dotenv ^3.0...
+        if (! method_exists(Dotenv::class, 'createMutable')) {
+            Dotenv::create(base_path())->overload();
+
+            return;
+        }
+
+        Dotenv::createMutable(base_path())->load();
     }
 
     /**
@@ -199,10 +238,43 @@ class DuskCommand extends Command
      */
     protected function writeConfiguration()
     {
-        if (! file_exists($file = base_path('phpunit.dusk.xml'))) {
+        if (! file_exists($file = base_path('phpunit.dusk.xml')) &&
+            ! file_exists(base_path('phpunit.dusk.xml.dist'))) {
             copy(realpath(__DIR__.'/../../stubs/phpunit.xml'), $file);
-        } else {
-            $this->hasPhpUnitConfiguration = true;
+
+            return;
+        }
+
+        $this->hasPhpUnitConfiguration = true;
+    }
+
+    /**
+     * Setup the SIGINT signal handler for CTRL+C exits.
+     *
+     * @return void
+     */
+    protected function setupSignalHandler()
+    {
+        if (extension_loaded('pcntl')) {
+            pcntl_async_signals(true);
+
+            pcntl_signal(SIGINT, function () {
+                $this->teardownDuskEnviroment();
+            });
+        }
+    }
+
+    /**
+     * Restore the original environment.
+     *
+     * @return void
+     */
+    protected function teardownDuskEnviroment()
+    {
+        $this->removeConfiguration();
+
+        if (file_exists(base_path($this->duskFile())) && file_exists(base_path('.env.backup'))) {
+            $this->restoreEnvironment();
         }
     }
 
@@ -213,9 +285,21 @@ class DuskCommand extends Command
      */
     protected function removeConfiguration()
     {
-        if (! $this->hasPhpUnitConfiguration) {
-            unlink(base_path('phpunit.dusk.xml'));
+        if (! $this->hasPhpUnitConfiguration && file_exists($file = base_path('phpunit.dusk.xml'))) {
+            unlink($file);
         }
+    }
+
+    /**
+     * Restore the backed-up environment file.
+     *
+     * @return void
+     */
+    protected function restoreEnvironment()
+    {
+        copy(base_path('.env.backup'), base_path('.env'));
+
+        unlink(base_path('.env.backup'));
     }
 
     /**

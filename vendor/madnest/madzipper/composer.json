@@ -1,0 +1,50 @@
+{
+    "name": "madnest/madzipper",
+    "description": "Wannabe successor of Chumper/Zipper package for Laravel",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jakub Theimer",
+            "email": "theimer@madne.st",
+            "homepage": "https://madne.st",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.0",
+        "laravel/framework": "^6.0",
+        "ext-zip": "*",
+        "illuminate/support": "6.*",
+        "illuminate/filesystem": "^6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0",
+        "mockery/mockery": "^1.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Madnest\\Madzipper\\": "src/Madnest/Madzipper"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Madnest\\Madzipper\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Madnest\\Madzipper\\MadzipperServiceProvider"
+            ],
+            "aliases": {
+                "Madzipper": "Madnest\\Madzipper\\Madzipper"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
