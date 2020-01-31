@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -11,7 +11,10 @@ namespace PHPUnit\Framework\Constraint;
 
 use PHPUnit\Framework\ExpectationFailedException;
 
-class StringMatchesFormatDescriptionTest extends ConstraintTestCase
+/**
+ * @small
+ */
+final class StringMatchesFormatDescriptionTest extends ConstraintTestCase
 {
     public function testConstraintStringMatchesDirectorySeparator(): void
     {

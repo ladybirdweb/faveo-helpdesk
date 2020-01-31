@@ -378,7 +378,7 @@
                         <p class="box-title" >{!! Lang::get('lang.close_ticket_workflow') !!}</p>
                     </div>
                 </div>
-               <?php \Event::fire('settings.ticket.view',[]); ?>
+               <?php \Event::dispatch('settings.ticket.view',[]); ?>
                 <!--/.col-md-2-->
             </div>
         </div>
@@ -491,7 +491,7 @@
                     </div>
                 </div>
                 
-                <?php \Event::fire('settings.system',[]); ?>
+                <?php \Event::dispatch('settings.system',[]); ?>
             </div>
         </div>
         <!-- /.row -->
@@ -672,7 +672,7 @@
     </div>
     <!-- ./box-body -->
 </div>
-<?php \Event::fire('service.desk.admin.settings', array()); ?>
+<?php \Event::dispatch('service.desk.admin.settings', array()); ?>
 
 
 @stop

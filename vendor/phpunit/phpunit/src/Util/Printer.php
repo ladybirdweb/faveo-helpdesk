@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -12,7 +12,7 @@ namespace PHPUnit\Util;
 use PHPUnit\Framework\Exception;
 
 /**
- * Utility class that can print to STDOUT or write to a file.
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 class Printer
 {
@@ -36,7 +36,7 @@ class Printer
     /**
      * Constructor.
      *
-     * @param null|mixed $out
+     * @param null|resource|string $out
      *
      * @throws Exception
      */

@@ -47,7 +47,7 @@ class ForgotPasswordController extends Controller
         try {
             $date = date('Y-m-d H:i:s');
             $this->validate($request, ['email' => 'required']);
-            \Event::fire('reset.password', []);
+            \Event::dispatch('reset.password', []);
             $user = User::where('email', '=', $request->all('email'))->orWhere('mobile', '=', $request->all('email'))->first();
             if (isset($user)) {
                 $user1 = $user->email;
@@ -73,7 +73,7 @@ class ForgotPasswordController extends Controller
                         'name'   => $name,
                         'mobile' => $user->mobile,
                         'code'   => $user->country_code, ];
-                    \Event::fire('reset.password2', [$value]);
+                    \Event::dispatch('reset.password2', [$value]);
                 }
 
                 return redirect()->back()->with('status', Lang::get('lang.we_have_e-mailed_your_password_reset_link'));

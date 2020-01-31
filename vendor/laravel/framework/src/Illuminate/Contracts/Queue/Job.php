@@ -36,6 +36,13 @@ interface Job
     public function release($delay = 0);
 
     /**
+     * Determine if the job was released back into the queue.
+     *
+     * @return bool
+     */
+    public function isReleased();
+
+    /**
      * Delete the job from the queue.
      *
      * @return void
@@ -64,12 +71,26 @@ interface Job
     public function attempts();
 
     /**
-     * Process an exception that caused the job to fail.
+     * Determine if the job has been marked as a failure.
      *
-     * @param  \Throwable  $e
+     * @return bool
+     */
+    public function hasFailed();
+
+    /**
+     * Mark the job as "failed".
+     *
      * @return void
      */
-    public function failed($e);
+    public function markAsFailed();
+
+    /**
+     * Delete the job, call the "failed" method, and raise the failed job event.
+     *
+     * @param  \Throwable|null $e
+     * @return void
+     */
+    public function fail($e = null);
 
     /**
      * Get the number of times to attempt a job.

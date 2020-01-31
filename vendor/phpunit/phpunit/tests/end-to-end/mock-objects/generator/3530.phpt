@@ -2,7 +2,7 @@
 \PHPUnit\Framework\MockObject\Generator::generateClassFromWsdl('3530.wsdl', 'Test')
 --SKIPIF--
 <?php declare(strict_types=1);
-if (!extension_loaded('soap')) echo 'skip: SOAP extension is required';
+if (!extension_loaded('soap')) echo 'skip: Extension soap is required';
 --FILE--
 <?php declare(strict_types=1);
 require __DIR__ . '/../../../../vendor/autoload.php';
@@ -14,6 +14,8 @@ print $generator->generateClassFromWsdl(
     'Test'
 );
 --EXPECTF--
+declare(strict_types=1);
+
 class Test extends \SoapClient
 {
     public function __construct($wsdl, array $options)

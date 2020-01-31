@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -15,22 +15,25 @@ use PHPUnit\Util\RegularExpression;
 use RecursiveFilterIterator;
 use RecursiveIterator;
 
-class NameFilterIterator extends RecursiveFilterIterator
+/**
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
+ */
+final class NameFilterIterator extends RecursiveFilterIterator
 {
     /**
      * @var string
      */
-    protected $filter;
+    private $filter;
 
     /**
      * @var int
      */
-    protected $filterMin;
+    private $filterMin;
 
     /**
      * @var int
      */
-    protected $filterMax;
+    private $filterMax;
 
     /**
      * @throws \Exception
@@ -42,6 +45,9 @@ class NameFilterIterator extends RecursiveFilterIterator
         $this->setFilter($filter);
     }
 
+    /**
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
     public function accept(): bool
     {
         $test = $this->getInnerIterator()->current();
@@ -54,12 +60,10 @@ class NameFilterIterator extends RecursiveFilterIterator
 
         if ($test instanceof WarningTestCase) {
             $name = $test->getMessage();
+        } elseif ($tmp[0] !== '') {
+            $name = \implode('::', $tmp);
         } else {
-            if ($tmp[0] !== '') {
-                $name = \implode('::', $tmp);
-            } else {
-                $name = $tmp[1];
-            }
+            $name = $tmp[1];
         }
 
         $accepted = @\preg_match($this->filter, $name, $matches);
@@ -75,7 +79,7 @@ class NameFilterIterator extends RecursiveFilterIterator
     /**
      * @throws \Exception
      */
-    protected function setFilter(string $filter): void
+    private function setFilter(string $filter): void
     {
         if (RegularExpression::safeMatch($filter, '') === false) {
             // Handles:

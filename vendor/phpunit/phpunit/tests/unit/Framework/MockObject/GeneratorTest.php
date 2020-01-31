@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -15,17 +15,18 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \PHPUnit\Framework\MockObject\Generator
  *
- * @uses \PHPUnit\Framework\MockObject\InvocationMocker
+ * @uses \PHPUnit\Framework\MockObject\InvocationHandler
  * @uses \PHPUnit\Framework\MockObject\Builder\InvocationMocker
- * @uses \PHPUnit\Framework\MockObject\Invocation\ObjectInvocation
- * @uses \PHPUnit\Framework\MockObject\Invocation\StaticInvocation
+ * @uses \PHPUnit\Framework\MockObject\Invocation
  * @uses \PHPUnit\Framework\MockObject\Matcher
- * @uses \PHPUnit\Framework\MockObject\Matcher\InvokedRecorder
- * @uses \PHPUnit\Framework\MockObject\Matcher\MethodName
+ * @uses \PHPUnit\Framework\MockObject\Rule\InvocationOrder
+ * @uses \PHPUnit\Framework\MockObject\Rule\MethodName
  * @uses \PHPUnit\Framework\MockObject\Stub\ReturnStub
- * @uses \PHPUnit\Framework\MockObject\Matcher\InvokedCount
+ * @uses \PHPUnit\Framework\MockObject\Rule\InvokedCount
+ *
+ * @small
  */
-class GeneratorTest extends TestCase
+final class GeneratorTest extends TestCase
 {
     /**
      * @var Generator
@@ -37,11 +38,50 @@ class GeneratorTest extends TestCase
         $this->generator = new Generator;
     }
 
-    public function testGetMockFailsWhenInvalidFunctionNameIsPassedInAsAFunctionToMock(): void
+    public function testGetMockThrowsExceptionWhenInvalidFunctionNameIsPassedInAsAFunctionToMock(): void
     {
         $this->expectException(\PHPUnit\Framework\MockObject\RuntimeException::class);
 
         $this->generator->getMock(stdClass::class, [0]);
+    }
+
+    public function testGetMockThrowsExceptionWithInvalidClassArgumentType(): void
+    {
+        $this->expectException(\PHPUnit\Framework\InvalidArgumentException::class);
+
+        $this->generator->getMock(false);
+    }
+
+    public function testGetMockThrowsExceptionWithInvalidMethods(): void
+    {
+        $this->expectException(\PHPUnit\Framework\InvalidArgumentException::class);
+
+        $this->generator->getMock(stdClass::class, false);
+    }
+
+    public function testGetMockThrowsExceptionWithNonExistingClass(): void
+    {
+        $this->expectException(\PHPUnit\Framework\MockObject\RuntimeException::class);
+
+        $this->assertFalse(\class_exists('Tux'));
+
+        $this->generator->getMock('Tux', [], [], '', true, true, false, true, false, null, false);
+    }
+
+    public function testGetMockThrowsExceptionWithNonExistingClasses(): void
+    {
+        $this->expectException(\PHPUnit\Framework\MockObject\RuntimeException::class);
+
+        $this->assertFalse(\class_exists('Tux'));
+
+        $this->generator->getMock(['Tux', false], [], [], '', true, true, false, true, false, null, false);
+    }
+
+    public function testGetMockThrowsExceptionWithExistingClassAsMockName(): void
+    {
+        $this->expectException(\PHPUnit\Framework\MockObject\RuntimeException::class);
+
+        $this->generator->getMock(stdClass::class, [], [], RuntimeException::class);
     }
 
     public function testGetMockCanCreateNonExistingFunctions(): void
@@ -51,7 +91,7 @@ class GeneratorTest extends TestCase
         $this->assertTrue(\method_exists($mock, 'testFunction'));
     }
 
-    public function testGetMockGeneratorFails(): void
+    public function testGetMockGeneratorThrowsException(): void
     {
         $this->expectException(\PHPUnit\Framework\MockObject\RuntimeException::class);
         $this->expectExceptionMessage('duplicates: "foo, bar, foo" (duplicate: "foo")');
@@ -109,29 +149,11 @@ class GeneratorTest extends TestCase
         $this->assertEquals(1, $mock->returnAnything());
     }
 
-    /**
-     * @dataProvider getMockForAbstractClassExpectsInvalidArgumentExceptionDataprovider
-     */
-    public function testGetMockForAbstractClassExpectingInvalidArgumentException($className, $mockClassName): void
-    {
-        $this->expectException(PHPUnit\Framework\Exception::class);
-
-        $this->generator->getMockForAbstractClass($className, [], $mockClassName);
-    }
-
     public function testGetMockForAbstractClassAbstractClassDoesNotExist(): void
     {
         $this->expectException(\PHPUnit\Framework\MockObject\RuntimeException::class);
 
         $this->generator->getMockForAbstractClass('Tux');
-    }
-
-    public function getMockForAbstractClassExpectsInvalidArgumentExceptionDataprovider(): array
-    {
-        return [
-            'className not a string'     => [[], ''],
-            'mockClassName not a string' => [Countable::class, new stdClass],
-        ];
     }
 
     public function testGetMockForTraitWithNonExistentMethodsAndNonAbstractMethods(): void
@@ -157,6 +179,27 @@ class GeneratorTest extends TestCase
         $mock = $this->generator->getMockForTrait(AbstractTrait::class);
 
         $this->assertTrue(\method_exists($mock, 'doSomething'));
+    }
+
+    public function testGetMockForTraitWithNonExistantTrait(): void
+    {
+        $this->expectException(\PHPUnit\Framework\MockObject\RuntimeException::class);
+
+        $mock = $this->generator->getMockForTrait('Tux');
+    }
+
+    public function testGetObjectForTraitWithNonExistantTrait(): void
+    {
+        $this->expectException(\PHPUnit\Framework\MockObject\RuntimeException::class);
+
+        $mock = $this->generator->getObjectForTrait('Tux');
+    }
+
+    public function testGetMockClassMethodsForNonExistantClass(): void
+    {
+        $this->expectException(\PHPUnit\Framework\MockObject\RuntimeException::class);
+
+        $mock = $this->generator->mockClassMethods('Tux', true, true);
     }
 
     public function testGetMockForSingletonWithReflectionSuccess(): void
@@ -226,7 +269,7 @@ class GeneratorTest extends TestCase
         $this->assertSame('It works', $mock->getMessage());
     }
 
-    public function testVariadicArgumentsArePassedToOriginalMethod()
+    public function testVariadicArgumentsArePassedToOriginalMethod(): void
     {
         /** @var ClassWithVariadicArgumentMethod|MockObject $mock */
         $mock = $this->generator->getMock(
@@ -245,7 +288,7 @@ class GeneratorTest extends TestCase
         $this->assertSame($arguments, $mock->foo(...$arguments));
     }
 
-    public function testVariadicArgumentsArePassedToMockedMethod()
+    public function testVariadicArgumentsArePassedToMockedMethod(): void
     {
         /** @var ClassWithVariadicArgumentMethod|MockObject $mock */
         $mock = $this->createMock(ClassWithVariadicArgumentMethod::class);
@@ -256,5 +299,19 @@ class GeneratorTest extends TestCase
             ->with(...$arguments);
 
         $mock->foo(...$arguments);
+    }
+
+    public function testGetClassMethodsWithNonExistingClass(): void
+    {
+        $this->expectException(\PHPUnit\Framework\MockObject\RuntimeException::class);
+
+        $this->generator->getClassMethods('Tux');
+    }
+
+    public function testCannotMockFinalClass(): void
+    {
+        $this->expectException(\PHPUnit\Framework\MockObject\RuntimeException::class);
+
+        $mock = $this->createMock(FinalClass::class);
     }
 }

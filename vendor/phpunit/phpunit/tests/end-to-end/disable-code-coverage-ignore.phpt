@@ -1,13 +1,12 @@
 --TEST--
-phpunit --colors=never --coverage-text=php://stdout --disable-coverage-ignore IgnoreCodeCoverageClassTest tests/_files/IgnoreCodeCoverageClassTest.php --whitelist ../../../tests/_files/IgnoreCodeCoverageClass.php
+phpunit --colors=never --coverage-text=php://stdout --disable-coverage-ignore tests/_files/IgnoreCodeCoverageClassTest.php --whitelist ../../../tests/_files/IgnoreCodeCoverageClass.php
 --SKIPIF--
-<?php
+<?php declare(strict_types=1);
 if (!extension_loaded('xdebug')) {
     print 'skip: Extension xdebug is required.';
 }
-?>
 --FILE--
-<?php
+<?php declare(strict_types=1);
 $_SERVER['argv'][1] = '--no-configuration';
 $_SERVER['argv'][2] = '--colors=never';
 $_SERVER['argv'][3] = '--coverage-text=php://stdout';

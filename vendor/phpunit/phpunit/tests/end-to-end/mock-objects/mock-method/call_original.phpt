@@ -1,7 +1,7 @@
 --TEST--
 Mock method and call original method
 --FILE--
-<?php
+<?php declare(strict_types=1);
 class Foo
 {
     public function bar(){}
@@ -19,7 +19,6 @@ $mockMethod = \PHPUnit\Framework\MockObject\MockMethod::fromReflection(
 $code = $mockMethod->generateCode();
 
 print $code;
-?>
 --EXPECT--
 
     public function bar()
@@ -35,15 +34,11 @@ print $code;
             }
         }
 
-        $__phpunit_invocation = new \PHPUnit\Framework\MockObject\Invocation\ObjectInvocation(
-            'Foo', 'bar', $__phpunit_arguments, '', $this, false
+        $this->__phpunit_getInvocationHandler()->invoke(
+            new \PHPUnit\Framework\MockObject\Invocation(
+                'Foo', 'bar', $__phpunit_arguments, '', $this, false, true
+            )
         );
-
-        $__phpunit_invocation->setProxiedCall();
-
-        $this->__phpunit_getInvocationMocker()->invoke($__phpunit_invocation);
-
-        unset($__phpunit_invocation);
 
         return call_user_func_array(array($this->__phpunit_originalObject, "bar"), $__phpunit_arguments);
     }

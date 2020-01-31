@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -11,7 +11,10 @@ namespace PHPUnit\Framework\Constraint;
 
 use PHPUnit\Framework\TestCase;
 
-class ExceptionMessageTest extends TestCase
+/**
+ * @small
+ */
+final class ExceptionMessageTest extends TestCase
 {
     public function testLiteralMessage(): void
     {
@@ -43,5 +46,19 @@ class ExceptionMessageTest extends TestCase
         $this->expectExceptionMessage('exception message');
 
         throw new \Exception('A partial exception message');
+    }
+
+    public function testEmptyMessageExportToString(): void
+    {
+        $exceptionMessage = new ExceptionMessage('');
+
+        $this->assertSame('exception message is empty', $exceptionMessage->toString());
+    }
+
+    public function testMessageExportToString(): void
+    {
+        $exceptionMessage = new ExceptionMessage('test');
+
+        $this->assertSame('exception message contains ', $exceptionMessage->toString());
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -12,20 +12,20 @@ namespace PHPUnit\Util\PHP;
 use PHPUnit\Framework\Exception;
 
 /**
- * Windows utility for PHP sub-processes.
- *
- * Reading from STDOUT or STDERR hangs forever on Windows if the output is
- * too large.
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  *
  * @see https://bugs.php.net/bug.php?id=51800
  */
-class WindowsPhpProcess extends DefaultPhpProcess
+final class WindowsPhpProcess extends DefaultPhpProcess
 {
     public function getCommand(array $settings, string $file = null): string
     {
         return '"' . parent::getCommand($settings, $file) . '"';
     }
 
+    /**
+     * @throws Exception
+     */
     protected function getHandles(): array
     {
         if (false === $stdout_handle = \tmpfile()) {

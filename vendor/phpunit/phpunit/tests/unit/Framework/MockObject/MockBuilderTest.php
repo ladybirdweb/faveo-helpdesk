@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -11,7 +11,10 @@
 use PHPUnit\Framework\MockObject\MockBuilder;
 use PHPUnit\Framework\TestCase;
 
-class MockBuilderTest extends TestCase
+/**
+ * @small
+ */
+final class MockBuilderTest extends TestCase
 {
     public function testMockBuilderRequiresClassName(): void
     {
@@ -41,21 +44,162 @@ class MockBuilderTest extends TestCase
     public function testMethodExceptionsToMockCanBeSpecified(): void
     {
         $mock = $this->getMockBuilder(Mockable::class)
-            ->setMethodsExcept(['mockableMethod'])
-            ->getMock();
+                     ->setMethodsExcept(['mockableMethod'])
+                     ->getMock();
 
         $this->assertTrue($mock->mockableMethod());
         $this->assertNull($mock->anotherMockableMethod());
     }
 
+    public function testSetMethodsAllowsNonExistentMethodNames(): void
+    {
+        $mock = $this->getMockBuilder(Mockable::class)
+                     ->setMethods(['mockableMethodWithCrazyName'])
+                     ->getMock();
+
+        $this->assertNull($mock->mockableMethodWithCrazyName());
+    }
+
+    public function testOnlyMethodsWithNonExistentMethodNames(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Trying to set mock method "mockableMethodWithCrazyName" with onlyMethods, but it does not exist in class "Mockable". Use addMethods() for methods that don\'t exist in the class.');
+
+        $this->getMockBuilder(Mockable::class)
+             ->onlyMethods(['mockableMethodWithCrazyName'])
+             ->getMock();
+    }
+
+    public function testOnlyMethodsWithExistingMethodNames(): void
+    {
+        $mock = $this->getMockBuilder(Mockable::class)
+                     ->onlyMethods(['mockableMethod'])
+                     ->getMock();
+
+        $this->assertNull($mock->mockableMethod());
+        $this->assertTrue($mock->anotherMockableMethod());
+    }
+
+    public function testOnlyMethodsWithEmptyArray(): void
+    {
+        $mock = $this->getMockBuilder(Mockable::class)
+                     ->onlyMethods([])
+                     ->getMock();
+
+        $this->assertTrue($mock->mockableMethod());
+    }
+
+    public function testAddMethodsWithNonExistentMethodNames(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Trying to set mock method "mockableMethod" with addMethods(), but it exists in class "Mockable". Use onlyMethods() for methods that exist in the class.');
+
+        $this->getMockBuilder(Mockable::class)
+             ->addMethods(['mockableMethod'])
+             ->getMock();
+    }
+
+    public function testAddMethodsWithExistingMethodNames(): void
+    {
+        $mock = $this->getMockBuilder(Mockable::class)
+                     ->addMethods(['mockableMethodWithFakeMethod'])
+                     ->getMock();
+
+        $this->assertNull($mock->mockableMethodWithFakeMethod());
+        $this->assertTrue($mock->anotherMockableMethod());
+    }
+
+    public function testAddMethodsWithEmptyArray(): void
+    {
+        $mock = $this->getMockBuilder(Mockable::class)
+                     ->addMethods([])
+                     ->getMock();
+
+        $this->assertTrue($mock->mockableMethod());
+    }
+
     public function testEmptyMethodExceptionsToMockCanBeSpecified(): void
     {
         $mock = $this->getMockBuilder(Mockable::class)
-            ->setMethodsExcept()
-            ->getMock();
+                     ->setMethodsExcept()
+                     ->getMock();
 
         $this->assertNull($mock->mockableMethod());
         $this->assertNull($mock->anotherMockableMethod());
+    }
+
+    public function testAbleToUseAddMethodsAfterOnlyMethods(): void
+    {
+        $mock = $this->getMockBuilder(Mockable::class)
+                     ->onlyMethods(['mockableMethod'])
+                     ->addMethods(['mockableMethodWithFakeMethod'])
+                     ->getMock();
+
+        $this->assertNull($mock->mockableMethod());
+        $this->assertNull($mock->mockableMethodWithFakeMethod());
+    }
+
+    public function testAbleToUseOnlyMethodsAfterAddMethods(): void
+    {
+        $mock = $this->getMockBuilder(Mockable::class)
+                     ->addMethods(['mockableMethodWithFakeMethod'])
+                     ->onlyMethods(['mockableMethod'])
+                     ->getMock();
+
+        $this->assertNull($mock->mockableMethodWithFakeMethod());
+        $this->assertNull($mock->mockableMethod());
+    }
+
+    public function testAbleToUseSetMethodsAfterOnlyMethods(): void
+    {
+        $mock = $this->getMockBuilder(Mockable::class)
+                     ->onlyMethods(['mockableMethod'])
+                     ->setMethods(['mockableMethodWithCrazyName'])
+                     ->getMock();
+
+        $this->assertNull($mock->mockableMethodWithCrazyName());
+    }
+
+    public function testAbleToUseSetMethodsAfterAddMethods(): void
+    {
+        $mock = $this->getMockBuilder(Mockable::class)
+                     ->addMethods(['notAMethod'])
+                     ->setMethods(['mockableMethodWithCrazyName'])
+                     ->getMock();
+
+        $this->assertNull($mock->mockableMethodWithCrazyName());
+    }
+
+    public function testAbleToUseAddMethodsAfterSetMethods(): void
+    {
+        $mock = $this->getMockBuilder(Mockable::class)
+                     ->setMethods(['mockableMethod'])
+                     ->addMethods(['mockableMethodWithFakeMethod'])
+                     ->getMock();
+
+        $this->assertNull($mock->mockableMethod());
+        $this->assertNull($mock->mockableMethodWithFakeMethod());
+    }
+
+    public function testAbleToUseOnlyMethodsAfterSetMethods(): void
+    {
+        $mock = $this->getMockBuilder(Mockable::class)
+                     ->setMethods(['mockableMethodWithFakeMethod'])
+                     ->onlyMethods(['mockableMethod'])
+                     ->getMock();
+
+        $this->assertNull($mock->mockableMethod());
+        $this->assertNull($mock->mockableMethodWithFakeMethod());
+    }
+
+    public function testAbleToUseAddMethodsAfterSetMethodsWithNull(): void
+    {
+        $mock = $this->getMockBuilder(Mockable::class)
+                     ->setMethods()
+                     ->addMethods(['mockableMethodWithFakeMethod'])
+                     ->getMock();
+
+        $this->assertNull($mock->mockableMethodWithFakeMethod());
     }
 
     public function testByDefaultDoesNotPassArgumentsToTheConstructor(): void

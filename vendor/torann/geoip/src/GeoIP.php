@@ -161,7 +161,7 @@ class GeoIP
                 if ($this->config('log_failures', true) === true) {
                     $log = new Logger('geoip');
                     $log->pushHandler(new StreamHandler(storage_path('logs/geoip.log'), Logger::ERROR));
-                    $log->addError($e);
+                    $log->error($e);
                 }
             }
         }
@@ -232,6 +232,7 @@ class GeoIP
         $remotes_keys = [
             'HTTP_X_FORWARDED_FOR',
             'HTTP_CLIENT_IP',
+            'HTTP_X_REAL_IP',
             'HTTP_X_FORWARDED',
             'HTTP_FORWARDED_FOR',
             'HTTP_FORWARDED',

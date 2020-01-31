@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -16,7 +16,7 @@ use SebastianBergmann\Comparator\ComparisonFailure;
 /**
  * Asserts whether or not two JSON objects are equal.
  */
-class JsonMatches extends Constraint
+final class JsonMatches extends Constraint
 {
     /**
      * @var string
@@ -25,8 +25,6 @@ class JsonMatches extends Constraint
 
     public function __construct(string $value)
     {
-        parent::__construct();
-
         $this->value = $value;
     }
 
@@ -84,16 +82,12 @@ class JsonMatches extends Constraint
 
             if ($error) {
                 parent::fail($other, $description);
-
-                return;
             }
 
             [$error] = Json::canonicalize($this->value);
 
             if ($error) {
                 parent::fail($other, $description);
-
-                return;
             }
 
             $comparisonFailure = new ComparisonFailure(

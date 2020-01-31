@@ -127,7 +127,7 @@ class AuthController extends Controller
         $settings = $settings->select('status')->where('option_name', '=', 'send_otp')->first();
         $email_mandatory = $settings->select('status')->where('option_name', '=', 'email_mandatory')->first();
         //dd($settings->status);
-        \Event::fire(new \App\Events\FormRegisterEvent());
+        \Event::dispatch(new \App\Events\FormRegisterEvent());
         if (Auth::user()) {
             if (Auth::user()->role == 'admin' || Auth::user()->role == 'agent') {
                 return \Redirect::route('dashboard');
@@ -184,7 +184,7 @@ class AuthController extends Controller
             $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
             $sms = Plugin::select('status')->where('name', '=', 'SMS')->first();
             // Event for login
-            \Event::fire(new \App\Events\LoginEvent($request));
+            \Event::dispatch(new \App\Events\LoginEvent($request));
             if ($request->input('email') !== '') {
                 $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/'.$code)]);
             }
@@ -296,7 +296,7 @@ class AuthController extends Controller
     {
         try {
             // dd($request->input());
-            \Event::fire('auth.login.event', []); //added 5/5/2016
+            \Event::dispatch('auth.login.event', []); //added 5/5/2016
             // Set login attempts and login time
             $value = $_SERVER['REMOTE_ADDR'];
             $usernameinput = $request->input('email');
@@ -592,7 +592,7 @@ class AuthController extends Controller
         } else {
             $sms = DB::table('sms')->get();
             if (count($sms) > 0) {
-                \Event::fire(new \App\Events\LoginEvent($request));
+                \Event::dispatch(new \App\Events\LoginEvent($request));
 
                 return 1;
             } else {
@@ -651,7 +651,7 @@ class AuthController extends Controller
      */
     public function getLogout(Request $request)
     {
-        \Event::fire('user.logout', []);
+        \Event::dispatch('user.logout', []);
         $login = new LoginController();
 
         return $login->logout($request);

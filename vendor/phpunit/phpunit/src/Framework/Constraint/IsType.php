@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -15,34 +15,70 @@ namespace PHPUnit\Framework\Constraint;
  *
  * The expected value is passed in the constructor.
  */
-class IsType extends Constraint
+final class IsType extends Constraint
 {
-    public const TYPE_ARRAY    = 'array';
+    /**
+     * @var string
+     */
+    public const TYPE_ARRAY = 'array';
 
-    public const TYPE_BOOL     = 'bool';
+    /**
+     * @var string
+     */
+    public const TYPE_BOOL = 'bool';
 
-    public const TYPE_FLOAT    = 'float';
+    /**
+     * @var string
+     */
+    public const TYPE_FLOAT = 'float';
 
-    public const TYPE_INT      = 'int';
+    /**
+     * @var string
+     */
+    public const TYPE_INT = 'int';
 
-    public const TYPE_NULL     = 'null';
+    /**
+     * @var string
+     */
+    public const TYPE_NULL = 'null';
 
-    public const TYPE_NUMERIC  = 'numeric';
+    /**
+     * @var string
+     */
+    public const TYPE_NUMERIC = 'numeric';
 
-    public const TYPE_OBJECT   = 'object';
+    /**
+     * @var string
+     */
+    public const TYPE_OBJECT = 'object';
 
+    /**
+     * @var string
+     */
     public const TYPE_RESOURCE = 'resource';
 
-    public const TYPE_STRING   = 'string';
+    /**
+     * @var string
+     */
+    public const TYPE_STRING = 'string';
 
-    public const TYPE_SCALAR   = 'scalar';
+    /**
+     * @var string
+     */
+    public const TYPE_SCALAR = 'scalar';
 
+    /**
+     * @var string
+     */
     public const TYPE_CALLABLE = 'callable';
 
+    /**
+     * @var string
+     */
     public const TYPE_ITERABLE = 'iterable';
 
     /**
-     * @var array
+     * @var array<string,bool>
      */
     private const KNOWN_TYPES = [
         'array'    => true,
@@ -73,8 +109,6 @@ class IsType extends Constraint
      */
     public function __construct(string $type)
     {
-        parent::__construct();
-
         if (!isset(self::KNOWN_TYPES[$type])) {
             throw new \PHPUnit\Framework\Exception(
                 \sprintf(
@@ -137,7 +171,20 @@ class IsType extends Constraint
                 return \is_object($other);
 
             case 'resource':
-                return \is_resource($other) || \is_string(@\get_resource_type($other));
+                if (\is_resource($other)) {
+                    return true;
+                }
+
+                try {
+                    $resource = @\get_resource_type($other);
+
+                    if (\is_string($resource)) {
+                        return true;
+                    }
+                } catch (\TypeError $e) {
+                }
+
+                return false;
 
             case 'scalar':
                 return \is_scalar($other);

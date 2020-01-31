@@ -74,7 +74,7 @@
             <header class="main-header">
                 <a href="http://www.faveohelpdesk.com" class="logo"><img src="{{ asset('lb-faveo/media/images/logo.png')}}" width="100px;"></a>
                 <?php
-                $replacetop = \Event::fire('service.desk.agent.topbar.replace', array());
+                $replacetop = \Event::dispatch('service.desk.agent.topbar.replace', array());
 
                 if (count($replacetop) == 0) {
                     $replacetop = 0;
@@ -82,7 +82,7 @@
                     $replacetop = $replacetop[0];
                 }
 
-                $replaceside = \Event::fire('service.desk.agent.sidebar.replace', array());
+                $replaceside = \Event::dispatch('service.desk.agent.sidebar.replace', array());
 
                 if (count($replaceside) == 0) {
                     $replaceside = 0;
@@ -110,10 +110,10 @@
                             @if($auth_user_role == 'admin')
                             <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">Report</a></li>
                             @endif
-                            <?php \Event::fire('calendar.topbar', array()); ?>
+                            <?php \Event::dispatch('calendar.topbar', array()); ?>
                         </ul>
                         @else
-                        <?php \Event::fire('service.desk.agent.topbar', array()); ?>
+                        <?php \Event::dispatch('service.desk.agent.topbar', array()); ?>
                         @endif
 
                         <ul class="nav navbar-nav navbar-right">
@@ -338,7 +338,7 @@
                         @endforeach
                         @else
 
-<?php \Event::fire('service.desk.agent.sidebar', array()); ?>
+<?php \Event::dispatch('service.desk.agent.sidebar', array()); ?>
                         @endif
                     </ul>
                 </section>
@@ -390,7 +390,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                             </div>
                             @endif
                             @endif
-<?php \Event::fire('service.desk.agent.topsubbar', array()); ?>
+<?php \Event::dispatch('service.desk.agent.topsubbar', array()); ?>
                         </div>
                     </div>
                 </div>
@@ -585,8 +585,8 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
 
     });
 </script>
-<?php Event::fire('show.calendar.script', array()); ?>
-<?php Event::fire('load-calendar-scripts', array()); ?>
+<?php Event::dispatch('show.calendar.script', array()); ?>
+<?php Event::dispatch('load-calendar-scripts', array()); ?>
         @yield('FooterInclude')
     </body>
 </html>

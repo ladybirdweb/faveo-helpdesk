@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -10,6 +9,9 @@ declare(strict_types=1);
  */
 namespace PHPUnit\Framework\MockObject;
 
+/**
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
+ */
 final class MockMethodSet
 {
     /**
@@ -24,6 +26,9 @@ final class MockMethodSet
         }
     }
 
+    /**
+     * @return MockMethod[]
+     */
     public function asArray(): array
     {
         return \array_values($this->methods);

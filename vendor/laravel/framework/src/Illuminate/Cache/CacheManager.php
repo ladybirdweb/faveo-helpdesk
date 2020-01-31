@@ -3,7 +3,9 @@
 namespace Illuminate\Cache;
 
 use Closure;
+use Illuminate\Support\Arr;
 use InvalidArgumentException;
+use Aws\DynamoDb\DynamoDbClient;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Contracts\Cache\Factory as FactoryContract;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
@@ -16,7 +18,7 @@ class CacheManager implements FactoryContract
     /**
      * The application instance.
      *
-     * @var \Illuminate\Foundation\Application
+     * @var \Illuminate\Contracts\Foundation\Application
      */
     protected $app;
 
@@ -37,7 +39,7 @@ class CacheManager implements FactoryContract
     /**
      * Create a new Cache manager instance.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return void
      */
     public function __construct($app)
@@ -212,6 +214,38 @@ class CacheManager implements FactoryContract
         return $this->repository(
             new DatabaseStore(
                 $connection, $config['table'], $this->getPrefix($config)
+            )
+        );
+    }
+
+    /**
+     * Create an instance of the DynamoDB cache driver.
+     *
+     * @param  array  $config
+     * @return \Illuminate\Cache\Repository
+     */
+    protected function createDynamodbDriver(array $config)
+    {
+        $dynamoConfig = [
+            'region' => $config['region'],
+            'version' => 'latest',
+            'endpoint' => $config['endpoint'] ?? null,
+        ];
+
+        if ($config['key'] && $config['secret']) {
+            $dynamoConfig['credentials'] = Arr::only(
+                $config, ['key', 'secret', 'token']
+            );
+        }
+
+        return $this->repository(
+            new DynamoDbStore(
+                new DynamoDbClient($dynamoConfig),
+                $config['table'],
+                $config['attributes']['key'] ?? 'key',
+                $config['attributes']['value'] ?? 'value',
+                $config['attributes']['expiration'] ?? 'expires_at',
+                $this->getPrefix($config)
             )
         );
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -14,5 +14,13 @@ class ThrowExceptionTestCase extends TestCase
     public function test(): void
     {
         throw new RuntimeException('A runtime error occurred');
+    }
+
+    public function testWithExpectExceptionObject(): void
+    {
+        throw new RuntimeException(
+            'Cannot compute at this time.',
+            9000
+        );
     }
 }

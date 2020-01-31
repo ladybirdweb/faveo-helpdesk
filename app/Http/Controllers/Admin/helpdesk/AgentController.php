@@ -157,7 +157,7 @@ class AgentController extends Controller
             }
             // returns for the success case
             if ($request->input('active') == '0' || $request->input('active') == 0) {
-                \Event::fire(new \App\Events\LoginEvent($request));
+                \Event::dispatch(new \App\Events\LoginEvent($request));
             }
 
             return redirect('agents')->with('success', Lang::get('lang.agent_creation_success'));

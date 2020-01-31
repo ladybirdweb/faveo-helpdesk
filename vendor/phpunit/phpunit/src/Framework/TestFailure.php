@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -13,19 +13,19 @@ use PHPUnit\Framework\Error\Error;
 use Throwable;
 
 /**
- * A TestFailure collects a failed test together with the caught exception.
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-class TestFailure
+final class TestFailure
 {
     /**
      * @var null|Test
      */
-    protected $failedTest;
+    private $failedTest;
 
     /**
      * @var Throwable
      */
-    protected $thrownException;
+    private $thrownException;
 
     /**
      * @var string
@@ -34,8 +34,6 @@ class TestFailure
 
     /**
      * Returns a description for an exception.
-     *
-     * @throws \InvalidArgumentException
      */
     public static function exceptionToString(Throwable $e): string
     {
@@ -44,6 +42,10 @@ class TestFailure
 
             if ($e instanceof ExpectationFailedException && $e->getComparisonFailure()) {
                 $buffer .= $e->getComparisonFailure()->getDiff();
+            }
+
+            if ($e instanceof PHPTAssertionFailedError) {
+                $buffer .= $e->getDiff();
             }
 
             if (!empty($buffer)) {
@@ -98,8 +100,6 @@ class TestFailure
 
     /**
      * Returns a description for the thrown exception.
-     *
-     * @throws \InvalidArgumentException
      */
     public function getExceptionAsString(): string
     {

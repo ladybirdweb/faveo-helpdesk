@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -11,7 +11,11 @@ namespace PHPUnit\Util\TestDox;
 
 use PHPUnit\Framework\TestCase;
 
-class NamePrettifierTest extends TestCase
+/**
+ * @group testdox
+ * @small
+ */
+final class NamePrettifierTest extends TestCase
 {
     /**
      * @var NamePrettifier
@@ -33,8 +37,9 @@ class NamePrettifierTest extends TestCase
         $this->assertEquals('Foo', $this->namePrettifier->prettifyTestClass('FooTest'));
         $this->assertEquals('Foo', $this->namePrettifier->prettifyTestClass('TestFoo'));
         $this->assertEquals('Foo', $this->namePrettifier->prettifyTestClass('TestFooTest'));
-        $this->assertEquals('Foo', $this->namePrettifier->prettifyTestClass('Test\FooTest'));
-        $this->assertEquals('Foo', $this->namePrettifier->prettifyTestClass('Tests\FooTest'));
+        $this->assertEquals('Foo (Test\Foo)', $this->namePrettifier->prettifyTestClass('Test\FooTest'));
+        $this->assertEquals('Foo (Tests\Foo)', $this->namePrettifier->prettifyTestClass('Tests\FooTest'));
+        $this->assertEquals('Unnamed Tests', $this->namePrettifier->prettifyTestClass('TestTest'));
     }
 
     public function testTestNameIsConvertedToASentence(): void

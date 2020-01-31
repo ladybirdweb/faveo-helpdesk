@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestResult;
 use SebastianBergmann\Environment\Runtime;
 
 /**
- * Utility methods for PHP sub-processes.
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 abstract class AbstractPhpProcess
 {
@@ -178,6 +178,23 @@ abstract class AbstractPhpProcess
     public function getCommand(array $settings, string $file = null): string
     {
         $command = $this->runtime->getBinary();
+
+        if ($this->runtime->hasPCOV()) {
+            $settings = \array_merge(
+                $settings,
+                $this->runtime->getCurrentSettings(
+                    \array_keys(\ini_get_all('pcov'))
+                )
+            );
+        } elseif ($this->runtime->hasXdebug()) {
+            $settings = \array_merge(
+                $settings,
+                $this->runtime->getCurrentSettings(
+                    \array_keys(\ini_get_all('xdebug'))
+                )
+            );
+        }
+
         $command .= $this->settingsToParameters($settings);
 
         if (\PHP_SAPI === 'phpdbg') {
@@ -199,7 +216,7 @@ abstract class AbstractPhpProcess
             $command .= ' ' . $this->args;
         }
 
-        if ($this->stderrRedirection === true) {
+        if ($this->stderrRedirection) {
             $command .= ' 2>&1';
         }
 
@@ -238,9 +255,14 @@ abstract class AbstractPhpProcess
                 $time
             );
         } else {
-            \set_error_handler(function ($errno, $errstr, $errfile, $errline): void {
-                throw new ErrorException($errstr, $errno, $errno, $errfile, $errline);
-            });
+            \set_error_handler(
+                /**
+                 * @throws ErrorException
+                 */
+                static function ($errno, $errstr, $errfile, $errline): void {
+                    throw new ErrorException($errstr, $errno, $errno, $errfile, $errline);
+                }
+            );
 
             try {
                 if (\strpos($stdout, "#!/usr/bin/env php\n") === 0) {
@@ -278,8 +300,8 @@ abstract class AbstractPhpProcess
                 $test->setResult($childResult['testResult']);
                 $test->addToAssertionCount($childResult['numAssertions']);
 
-                /** @var TestResult $childResult */
                 $childResult = $childResult['result'];
+                \assert($childResult instanceof  TestResult);
 
                 if ($result->getCollectCodeCoverageInformation()) {
                     $result->getCodeCoverage()->merge(

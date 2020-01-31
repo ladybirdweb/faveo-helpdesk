@@ -1,7 +1,7 @@
 --TEST--
 https://github.com/sebastianbergmann/phpunit-mock-objects/issues/397
 --FILE--
-<?php
+<?php declare(strict_types=1);
 class C
 {
     public function m(?self $other): self
@@ -21,19 +21,15 @@ $mock = $generator->generate(
     true
 );
 
-print $mock['code'];
---EXPECT--
+print $mock->getClassCode();
+--EXPECTF--
+declare(strict_types=1);
+
 class MockC extends C implements PHPUnit\Framework\MockObject\MockObject
 {
-    private $__phpunit_invocationMocker;
-    private $__phpunit_originalObject;
-    private $__phpunit_configurable = ['m'];
-    private $__phpunit_returnValueGeneration = true;
-
-    public function __clone()
-    {
-        $this->__phpunit_invocationMocker = clone $this->__phpunit_getInvocationMocker();
-    }
+    use \PHPUnit\Framework\MockObject\Api;
+    use \PHPUnit\Framework\MockObject\Method;
+    use \PHPUnit\Framework\MockObject\MockedCloneMethod;
 
     public function m(?C $other): C
     {
@@ -48,58 +44,12 @@ class MockC extends C implements PHPUnit\Framework\MockObject\MockObject
             }
         }
 
-        $__phpunit_result = $this->__phpunit_getInvocationMocker()->invoke(
-            new \PHPUnit\Framework\MockObject\Invocation\ObjectInvocation(
-                'C', 'm', $__phpunit_arguments, 'C', $this, true
+        $__phpunit_result = $this->__phpunit_getInvocationHandler()->invoke(
+            new \PHPUnit\Framework\MockObject\Invocation(
+                'C', 'm', $__phpunit_arguments, ': C', $this, true
             )
         );
 
         return $__phpunit_result;
-    }
-
-    public function expects(\PHPUnit\Framework\MockObject\Matcher\Invocation $matcher)
-    {
-        return $this->__phpunit_getInvocationMocker()->expects($matcher);
-    }
-
-    public function method()
-    {
-        $any     = new \PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
-        $expects = $this->expects($any);
-
-        return call_user_func_array([$expects, 'method'], func_get_args());
-    }
-
-    public function __phpunit_setOriginalObject($originalObject)
-    {
-        $this->__phpunit_originalObject = $originalObject;
-    }
-
-    public function __phpunit_setReturnValueGeneration(bool $returnValueGeneration)
-    {
-        $this->__phpunit_returnValueGeneration = $returnValueGeneration;
-    }
-
-    public function __phpunit_getInvocationMocker()
-    {
-        if ($this->__phpunit_invocationMocker === null) {
-            $this->__phpunit_invocationMocker = new \PHPUnit\Framework\MockObject\InvocationMocker($this->__phpunit_configurable, $this->__phpunit_returnValueGeneration);
-        }
-
-        return $this->__phpunit_invocationMocker;
-    }
-
-    public function __phpunit_hasMatchers()
-    {
-        return $this->__phpunit_getInvocationMocker()->hasMatchers();
-    }
-
-    public function __phpunit_verify(bool $unsetInvocationMocker = true)
-    {
-        $this->__phpunit_getInvocationMocker()->verify();
-
-        if ($unsetInvocationMocker) {
-            $this->__phpunit_invocationMocker = null;
-        }
     }
 }

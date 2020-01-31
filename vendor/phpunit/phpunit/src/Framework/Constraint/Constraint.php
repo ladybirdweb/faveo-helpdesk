@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -20,12 +20,10 @@ use SebastianBergmann\Exporter\Exporter;
  */
 abstract class Constraint implements Countable, SelfDescribing
 {
-    protected $exporter;
-
-    public function __construct()
-    {
-        $this->exporter = new Exporter;
-    }
+    /**
+     * @var Exporter
+     */
+    private $exporter;
 
     /**
      * Evaluates the constraint for parameter $other
@@ -37,14 +35,10 @@ abstract class Constraint implements Countable, SelfDescribing
      * a boolean value instead: true in case of success, false in case of a
      * failure.
      *
-     * @param mixed  $other        value or object to evaluate
-     * @param string $description  Additional information about the test
-     * @param bool   $returnResult Whether to return a result or throw an exception
-     *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function evaluate($other, $description = '', $returnResult = false)
+    public function evaluate($other, string $description = '', bool $returnResult = false)
     {
         $success = false;
 
@@ -69,6 +63,15 @@ abstract class Constraint implements Countable, SelfDescribing
         return 1;
     }
 
+    protected function exporter(): Exporter
+    {
+        if ($this->exporter === null) {
+            $this->exporter = new Exporter;
+        }
+
+        return $this->exporter;
+    }
+
     /**
      * Evaluates the constraint for parameter $other. Returns true if the
      * constraint is met, false otherwise.
@@ -76,6 +79,7 @@ abstract class Constraint implements Countable, SelfDescribing
      * This method can be overridden to implement the evaluation algorithm.
      *
      * @param mixed $other value or object to evaluate
+     * @codeCoverageIgnore
      */
     protected function matches($other): bool
     {
@@ -143,6 +147,6 @@ abstract class Constraint implements Countable, SelfDescribing
      */
     protected function failureDescription($other): string
     {
-        return $this->exporter->export($other) . ' ' . $this->toString();
+        return $this->exporter()->export($other) . ' ' . $this->toString();
     }
 }

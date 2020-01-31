@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -16,11 +16,12 @@ use PHPUnit\Framework\TestSuite;
 
 /**
  * @group test-reorder
+ * @small
  */
-class ResultCacheExtensionTest extends TestCase
+final class ResultCacheExtensionTest extends TestCase
 {
     /**
-     * @var TestResultCache
+     * @var DefaultTestResultCache
      */
     protected $cache;
 
@@ -36,7 +37,7 @@ class ResultCacheExtensionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->cache     = new TestResultCache;
+        $this->cache     = new DefaultTestResultCache;
         $this->extension = new ResultCacheExtension($this->cache);
 
         $listener = new TestListenerAdapter;
@@ -47,6 +48,7 @@ class ResultCacheExtensionTest extends TestCase
     }
 
     /**
+     * @testdox Clean up test name $_dataName
      * @dataProvider longTestNamesDataprovider
      */
     public function testStripsDataproviderParametersFromTestName(string $testName, string $expectedTestName): void

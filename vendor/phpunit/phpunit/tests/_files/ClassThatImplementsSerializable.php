@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -14,7 +14,7 @@ class ClassThatImplementsSerializable implements Serializable
         return \get_object_vars($this);
     }
 
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
         foreach (\unserialize($serialized) as $key => $value) {
             $this->{$key} = $value;

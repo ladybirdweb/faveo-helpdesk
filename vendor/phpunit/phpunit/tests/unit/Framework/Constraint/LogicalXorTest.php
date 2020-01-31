@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -13,6 +13,9 @@ use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\Constraint\LogicalXor;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @small
+ */
 final class LogicalXorTest extends TestCase
 {
     public function testFromConstraintsReturnsConstraint(): void
@@ -40,5 +43,14 @@ final class LogicalXorTest extends TestCase
 
         $this->assertInstanceOf(LogicalXor::class, $constraint);
         $this->assertTrue($constraint->evaluate($other, '', true));
+    }
+
+    public function testSetConstraintsWithNonConstraintsObjectArrayIsTreatedAsIsEqual(): void
+    {
+        $constraint = new LogicalXor;
+
+        $constraint->setConstraints(['cuckoo']);
+
+        $this->assertSame('is equal to \'cuckoo\'', $constraint->toString());
     }
 }

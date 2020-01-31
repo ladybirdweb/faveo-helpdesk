@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,16 +9,13 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
-use ReflectionClass;
-use ReflectionException;
-
 /**
  * Constraint that asserts that the object it is evaluated for is an instance
  * of a given class.
  *
  * The expected class name is passed in the constructor.
  */
-class IsInstanceOf extends Constraint
+final class IsInstanceOf extends Constraint
 {
     /**
      * @var string
@@ -27,8 +24,6 @@ class IsInstanceOf extends Constraint
 
     public function __construct(string $className)
     {
-        parent::__construct();
-
         $this->className = $className;
     }
 
@@ -69,7 +64,7 @@ class IsInstanceOf extends Constraint
     {
         return \sprintf(
             '%s is an instance of %s "%s"',
-            $this->exporter->shortenedExport($other),
+            $this->exporter()->shortenedExport($other),
             $this->getType(),
             $this->className
         );
@@ -78,12 +73,12 @@ class IsInstanceOf extends Constraint
     private function getType(): string
     {
         try {
-            $reflection = new ReflectionClass($this->className);
+            $reflection = new \ReflectionClass($this->className);
 
             if ($reflection->isInterface()) {
                 return 'interface';
             }
-        } catch (ReflectionException $e) {
+        } catch (\ReflectionException $e) {
         }
 
         return 'class';

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -11,7 +11,7 @@ namespace PHPUnit\Framework\Constraint;
 
 use PHPUnit\Util\RegularExpression as RegularExpressionUtil;
 
-class ExceptionMessageRegularExpression extends Constraint
+final class ExceptionMessageRegularExpression extends Constraint
 {
     /**
      * @var string
@@ -20,8 +20,6 @@ class ExceptionMessageRegularExpression extends Constraint
 
     public function __construct(string $expected)
     {
-        parent::__construct();
-
         $this->expectedMessageRegExp = $expected;
     }
 

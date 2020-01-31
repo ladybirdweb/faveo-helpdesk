@@ -8,8 +8,8 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=7.1.3",
-        "laravel/framework": "5.7.*",
+        "php": ">=7.2",
+        "laravel/framework": "5.8.*",
         "laravelcollective/html": "5.*",
         "vsmoraes/laravel-pdf": "1.0.1",
         "propaganistas/laravel-phone": "~2.0",
@@ -21,7 +21,7 @@
         "chumper/zipper": "1.0.x",
         "tymon/jwt-auth": "dev-develop",
         "davejamesmiller/laravel-breadcrumbs": "^3.0",
-        "barryvdh/laravel-debugbar": "3.2.0",
+        "barryvdh/laravel-debugbar": "3.2.*",
         "aws/aws-sdk-php": "~3.0",
         "predis/predis": "~1.0",
         "mremi/url-shortener": "^1.0",
@@ -33,10 +33,11 @@
         "torann/geoip": "^1.0",
         "yajra/laravel-datatables-oracle": "~6.0",
         "flowjs/flow-php-server": "^1.0",
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "laravel/helpers": "^1.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7",
+        "phpunit/phpunit": "^8",
         "phpspec/phpspec": "^4.0",
         "symfony/dom-crawler": "3.1.*",
         "symfony/css-selector": "3.1.*",

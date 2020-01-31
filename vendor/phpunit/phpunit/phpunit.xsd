@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:annotation>
         <xs:documentation source="https://phpunit.de/documentation.html">
-            This Schema file defines the rules by which the XML configuration file of PHPUnit 7.5 may be structured.
+            This Schema file defines the rules by which the XML configuration file of PHPUnit 8.5 may be structured.
         </xs:documentation>
         <xs:appinfo source="https://phpunit.de/documentation.html"/>
     </xs:annotation>
@@ -176,14 +176,22 @@
         <xs:restriction base="xs:string">
             <xs:enumeration value="default"/>
             <xs:enumeration value="defects"/>
-            <xs:enumeration value="duration"/>
             <xs:enumeration value="depends"/>
             <xs:enumeration value="depends,defects"/>
-            <xs:enumeration value="random"/>
-            <xs:enumeration value="reverse"/>
+            <xs:enumeration value="depends,duration"/>
             <xs:enumeration value="depends,random"/>
             <xs:enumeration value="depends,reverse"/>
-            <xs:enumeration value="depends,duration"/>
+            <xs:enumeration value="depends,size"/>
+            <xs:enumeration value="duration"/>
+            <xs:enumeration value="no-depends"/>
+            <xs:enumeration value="no-depends,defects"/>
+            <xs:enumeration value="no-depends,duration"/>
+            <xs:enumeration value="no-depends,random"/>
+            <xs:enumeration value="no-depends,reverse"/>
+            <xs:enumeration value="no-depends,size"/>
+            <xs:enumeration value="random"/>
+            <xs:enumeration value="reverse"/>
+            <xs:enumeration value="size"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="fileFilterType">
@@ -231,7 +239,7 @@
         <xs:attribute name="backupGlobals" type="xs:boolean" default="false"/>
         <xs:attribute name="backupStaticAttributes" type="xs:boolean" default="false"/>
         <xs:attribute name="bootstrap" type="xs:anyURI"/>
-        <xs:attribute name="cacheResult" type="xs:boolean" default="false"/>
+        <xs:attribute name="cacheResult" type="xs:boolean" default="true"/>
         <xs:attribute name="cacheResultFile" type="xs:anyURI"/>
         <xs:attribute name="cacheTokens" type="xs:boolean" default="false"/>
         <xs:attribute name="colors" type="xs:boolean" default="false"/>
@@ -270,12 +278,14 @@
         <xs:attribute name="testSuiteLoaderFile" type="xs:anyURI"/>
         <xs:attribute name="defaultTestSuite" type="xs:string" default=""/>
         <xs:attribute name="verbose" type="xs:boolean" default="false"/>
+        <xs:attribute name="testdox" type="xs:boolean" default="false"/>
         <xs:attribute name="stderr" type="xs:boolean" default="false"/>
         <xs:attribute name="reverseDefectList" type="xs:boolean" default="false"/>
         <xs:attribute name="registerMockObjectsFromTestArgumentsRecursively" type="xs:boolean" default="false"/>
         <xs:attribute name="extensionsDirectory" type="xs:string"/>
         <xs:attribute name="executionOrder" type="executionOrderType" default="default"/>
-        <xs:attribute name="resolveDependencies" type="xs:boolean" default="false"/>
+        <xs:attribute name="resolveDependencies" type="xs:boolean" default="true"/>
+        <xs:attribute name="noInteraction" type="xs:boolean" default="false"/>
     </xs:attributeGroup>
     <xs:group name="configGroup">
         <xs:all>

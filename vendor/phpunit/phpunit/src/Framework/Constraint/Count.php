@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -24,8 +24,6 @@ class Count extends Constraint
 
     public function __construct(int $expected)
     {
-        parent::__construct();
-
         $this->expectedCount = $expected;
     }
 
@@ -89,6 +87,8 @@ class Count extends Constraint
 
             return $count;
         }
+
+        return null;
     }
 
     /**

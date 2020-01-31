@@ -4,11 +4,14 @@ namespace Illuminate\Redis\Connectors;
 
 use Redis;
 use RedisCluster;
+use LogicException;
 use Illuminate\Support\Arr;
+use Illuminate\Contracts\Redis\Connector;
 use Illuminate\Redis\Connections\PhpRedisConnection;
+use Illuminate\Support\Facades\Redis as RedisFacade;
 use Illuminate\Redis\Connections\PhpRedisClusterConnection;
 
-class PhpRedisConnector
+class PhpRedisConnector implements Connector
 {
     /**
      * Create a new clustered PhpRedis connection.
@@ -59,10 +62,18 @@ class PhpRedisConnector
      *
      * @param  array  $config
      * @return \Redis
+     *
+     * @throws \LogicException
      */
     protected function createClient(array $config)
     {
         return tap(new Redis, function ($client) use ($config) {
+            if ($client instanceof RedisFacade) {
+                throw new LogicException(
+                    'Please remove or rename the Redis facade alias in your "app" configuration file in order to avoid collision with the PHP Redis extension.'
+                );
+            }
+
             $this->establishConnection($client, $config);
 
             if (! empty($config['password'])) {
@@ -118,6 +129,17 @@ class PhpRedisConnector
      */
     protected function createRedisClusterInstance(array $servers, array $options)
     {
+        if (version_compare(phpversion('redis'), '4.3.0', '>=')) {
+            return new RedisCluster(
+                null,
+                array_values($servers),
+                $options['timeout'] ?? 0,
+                $options['read_timeout'] ?? 0,
+                isset($options['persistent']) && $options['persistent'],
+                $options['password'] ?? null
+            );
+        }
+
         return new RedisCluster(
             null,
             array_values($servers),
