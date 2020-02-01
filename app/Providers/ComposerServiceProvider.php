@@ -30,12 +30,12 @@ class ComposerServiceProvider extends ServiceProvider
         );
         view()->composer(
             [
-               'themes.default1.update.notification',
+                'themes.default1.update.notification',
             ], 'App\Http\ViewComposers\UpdateNotification'
         );
         view()->composer(
             [
-               'themes.default1.agent.layout.agent',
+                'themes.default1.agent.layout.agent',
                 'themes.default1.admin.layout.admin',
             ], 'App\Http\ViewComposers\AuthUser'
         );
