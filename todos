@@ -1,0 +1,3 @@
+- Update settings_system timezone column to save tz as name instead of id
+	- remove foreign key contraints
+	

@@ -303,3 +303,21 @@ function carbon($date)
 {
     return \Carbon\Carbon::parse($date);
 }
+
+/**
+ * @category function to get GMT for system timezone
+ * @param null
+ * @var $system, $tz
+ * @return string GMT value of timezone
+ */
+function getGMT($fetchId = false)
+{
+    $system = \App\Model\helpdesk\Settings\System::select('time_zone')->first();
+    dd($system->time_zone);
+    $tz     = \DB::table('timezone')->select('location', 'id')->where('name', '=', $system->time_zone)->first();
+    if ($fetchId) {
+        return $tz->id;
+    }
+    $tz = explode(")", substr($tz->location, stripos($tz->location, 'T') + 1));
+    return $tz[0];
+}

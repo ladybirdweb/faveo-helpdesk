@@ -40,7 +40,7 @@ class="active"
 <div class="row">
     <!-- <div class="col-md-3 col-sm-6 col-xs-12"> -->
     <div class="col-md-2" style="width:20%;">
-        <a href="{!! route('inbox.ticket') !!}">
+        <a href="{!! url('/tickets') !!}">
             <div class="info-box">
                 <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
                 <div class="info-box-content">
@@ -52,7 +52,7 @@ class="active"
     </div><!-- /.col -->
     <!-- <div class="col-md-3 col-sm-6 col-xs-12"> -->
     <div class="col-md-2" style="width:20%;">
-        <a href="{!! route('unassigned') !!}">
+        <a href="{!! url('/tickets?show%5B%5D=unassigned') !!}">
             <div class="info-box">
                 <span class="info-box-icon bg-orange"><i class="fa fa-user-times"></i></span>
                 <div class="info-box-content">
@@ -68,7 +68,7 @@ class="active"
 
     <!-- <div class="col-md-3 col-sm-6 col-xs-12"> -->
     <div class="col-md-2" style="width:20%;">
-        <a href="{!! route('overdue.ticket') !!}">
+        <a href="{!! url('/tickets?show%5B%5D=overdue') !!}">
             <div class="info-box">
                 <span class="info-box-icon bg-red"><i class="fa fa-calendar-times-o"></i></span>
                 <div class="info-box-content">
@@ -80,7 +80,7 @@ class="active"
     </div><!-- /.col -->
     <!-- <div class="col-md-3 col-sm-6 col-xs-12"> -->
     <div class="col-md-2" style="width:20%;">
-        <a href="{!! route('myticket.ticket') !!}">
+        <a href="{!! url('/tickets?show%5B%5D=mytickets') !!}">
             <div class="info-box">
                 <span class="info-box-icon bg-yellow"><i class="fa fa-user"></i></span>
                 <div class="info-box-content">
@@ -101,7 +101,7 @@ class="active"
      $todaytickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->whereDate('tickets.duedate','=', \Carbon\Carbon::now()->format('Y-m-d'))->where('dept_id', '=', $dept->id)->count();
         }
       ?>
-                 <a href="{!! route('ticket.duetoday') !!}">
+                 <a href="{!! url('/tickets?show%5B%5D=due_today') !!}">
             <div class="info-box">
                 <span class="info-box-icon bg-red"><i class="glyphicon glyphicon-eye-open"></i></span>
                 <div class="info-box-content">

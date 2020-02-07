@@ -178,11 +178,20 @@ if (\Request::has('assigned'))
         <button form="modalpopup" class="btn btn-sm btn-danger" id="hard-delete" name="submit" type="submit"><i class="fa fa-trash"></i>&nbsp;{{Lang::get('lang.clean-up')}}</button>
         @endif
         <p><p/>
-        
         <div class="mailbox-messages" id="refresh">
             <!--datatable-->
             {!! Form::open(['id'=>'modalpopup', 'route'=>'select_all','method'=>'post']) !!}
-            {!!$table->render('vendor.Chumper.template')!!}
+            <table id="chumper" class="table table-bordered dataTable no-footer">
+                <thead>
+                    <tr>
+                        <td><a class="checkbox-toggle"><i class="fa fa-square-o fa-2x"></i></a></td>
+                        <td>{!! Lang::get('lang.subject') !!}</td>
+                        <td>{!! Lang::get('lang.ticket_id') !!}</td>
+                        <td>{!! Lang::get('lang.from') !!}</td>
+                        <td>{!! Lang::get('lang.assigned_to') !!}</td>
+                        <td>{!! Lang::get('lang.last_activity') !!}</td>
+                    </tr>
+            </table>
             {!! Form::close() !!} 
 
             <!-- /.datatable -->
@@ -194,7 +203,7 @@ if (\Request::has('assigned'))
 <!-- Modal -->   
 @include('themes.default1.agent.helpdesk.ticket.more.tickets-model')
 
-{!! $table->script('vendor.Chumper.tickets-javascript') !!}
+@include('vendor.yajra.tickets-javascript')
 @include('themes.default1.agent.helpdesk.ticket.more.tickets-options-script')
 <script>
     $(document).ready(function () { /// Wait till page is loaded

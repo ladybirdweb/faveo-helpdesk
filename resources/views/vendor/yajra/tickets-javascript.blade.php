@@ -17,6 +17,7 @@ foreach ($segments as $seg) {
 }
 $inputs = json_encode(\Input::all());
 $path = public_path();
+$record_per_page = (Cache::has('ticket_per_page')) ? Cache::get('ticket_per_page') : 10;
 ?>
 <script type="text/javascript">
     jQuery(document).ready(function () {
@@ -35,7 +36,7 @@ $path = public_path();
                 "oLanguage": {
                     "sLengthMenu": "_MENU_ Records per page",
                     "sSearch"    : "Search: ",
-                    "sProcessing": '<img id="blur-bg" class="backgroundfadein" style="top:40%;left:50%; width: 50px; height:50 px; display: block; position:    fixed;" src="{!! asset("lb-faveo/media/images/gifloader3.gif") !!}">'
+                    "sProcessing": '<img id="blur-bg" class="backgroundfadein" style="top:40%;left:50%; width: 50px; height:50 px; display: block; position:    fixed;" src="">'
                 },
                 "stateLoadParams": function (settings, data) {
                     if ('{{$load_old_state}}') {
@@ -44,6 +45,14 @@ $path = public_path();
                         return false;
                     }
                 },
+                columns:[
+                    {data:'id', name:'id'},
+                    {data:'title', name:'threadSelectedFields.title', orderable: true},
+                    {data:'ticket_number', name:'ticket_number', orderable: true},
+                    {data:'user.user_name', name:'user.user_name', orderable: true},
+                    {data:'assigned.user_name', name:'assigned.user_name',},
+                    {data:'last_response', name:'last_response', orderable: true},
+                ],
                 "fnDrawCallback": function( oSettings ) {
                     $("#chumper").css({"opacity": "1"});
                     $('#blur-bg').css({"opacity": "0.7", "z-index": "99999"});
@@ -66,13 +75,14 @@ $path = public_path();
                         $(thead).find('th').first().find('i').addClass('fa-square-o');
                     }
                 },
-                "lengthMenu": [[10, 25, 50, 100, 500], [10, 25, 50, 100, 500]],
+                "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
                 "ajax": {
                     url: "{{url('get-filtered-tickets')}}",
                     data: function (d) {
                         d.options = "{{$inputs}}";
-                    }
+                    },
                 },
+                "pageLength": '{!! (int)$record_per_page !!}',
                 "aaSorting": [[5, "desc"]],
                 "columnDefs": [
                     { "orderable": false, "targets": 0},
@@ -87,11 +97,12 @@ $path = public_path();
                                 $(nTd).css("border-left", "5px solid "+color);
                         }
                     } 
+
                 ],
                 "fnCreatedRow": function (nRow, aData, iDataIndex) {
-                    var str = aData[0];
-                    var length = aData[2].indexOf('*') - aData[2].indexOf('$');
-                    var p = aData[2].substr(aData[2].indexOf('$')+1, length-1);
+                    var str = aData.id;
+                    var length = aData.ticket_number.indexOf('*') - aData.ticket_number.indexOf('$');
+                    var p = aData.ticket_number.substr(aData.ticket_number.indexOf('$')+1, length-1);
                     $("td", nRow).attr('title', "{!! Lang::get('lang.ticket-has-x-priority', ['priority' => '"+p+"']) !!}");
                     if (str.search("#000") == -1) {
                         $("td", nRow).css({"background-color": "#F3F3F3", "font-weight": "600", "border-bottom": "solid 0.5px #ddd", "border-right": "solid 0.5px #F3F3F3"});

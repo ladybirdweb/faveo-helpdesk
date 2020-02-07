@@ -2647,27 +2647,6 @@ class TicketController extends Controller
         }
     }
 
-    /**
-     * Ticket table rendering related functions.
-     */
-
-    /**
-     * Function to get basic datatable format.
-     *
-     * @return object
-     */
-    public function getTableFormat()
-    {
-        return \Datatable::table()
-            ->addColumn(
-                '<a class="checkbox-toggle"><i class="fa fa-square-o fa-2x"></i></a>',
-                Lang::get('lang.subject'),
-                Lang::get('lang.ticket_id'),
-                Lang::get('lang.from'),
-                Lang::get('lang.assigned_to'),
-                Lang::get('lang.last_activity')
-            )->noScript();
-    }
 
     /**
      * Function to return new ticket table view.
@@ -2676,9 +2655,7 @@ class TicketController extends Controller
      */
     public function getTicketsView()
     {
-        $table = $this->getTableFormat();
-
-        return view('themes.default1.agent.helpdesk.ticket.tickets', compact('table'));
+        return view('themes.default1.agent.helpdesk.ticket.tickets');
     }
 
     /**
@@ -2794,333 +2771,84 @@ class TicketController extends Controller
     }
 
     /**
-     * =====================================================================
-     *               DEPRECATED FUNCTIONS BLOCK
-     * =====================================================================
-     * Functions under this block have been deprecated and are no
-     * longer used by the system.Though we have not removed these functions
-     * in v1.10 but we will remove these routes in upcoming releas
-     * =====================================================================.
-     **/
-
-    /**
-     * Show the Inbox ticket list page.
      *
-     * @return type response
-     */
-    public function inbox_ticket_list()
-    {
-        $table = \Datatable::table()
-                ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
-                ->noScript();
-
-        return view('themes.default1.agent.helpdesk.ticket.inbox', compact('table'));
-    }
-
-    /**
-     * Show the Open ticket list page.
      *
-     * @return type response
-     */
-    public function open_ticket_list()
-    {
-        $table = \Datatable::table()
-                ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
-                ->noScript();
-
-        return view('themes.default1.agent.helpdesk.ticket.open', compact('table'));
-    }
-
-    /**
-     * Show the answered ticket list page.
      *
-     * @return type response
      */
-    public function answered_ticket_list()
-    {
-        $table = \Datatable::table()
-                ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
-                ->noScript();
-
-        return view('themes.default1.agent.helpdesk.ticket.answered', compact('table'));
-    }
-
-    /**
-     * Show the Myticket list page.
-     *
-     * @return type response
-     */
-    public function myticket_ticket_list()
-    {
-        $table = \Datatable::table()
-                ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
-                ->noScript();
-
-        return view('themes.default1.agent.helpdesk.ticket.myticket', compact('table'));
-    }
-
-    /**
-     * Show the Overdue ticket list page.
-     *
-     * @return type response
-     */
-    public function overdue_ticket_list()
-    {
-        $table = \Datatable::table()
-                ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
-                ->noScript();
-
-        return view('themes.default1.agent.helpdesk.ticket.overdue', compact('table'));
-    }
-
-    /**
-     * Show the Open ticket list page.
-     *
-     * @return type response
-     */
-    public function dueTodayTicketlist()
-    {
-        $table = \Datatable::table()
-                ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
-                ->noScript();
-
-        return view('themes.default1.agent.helpdesk.ticket.duetodayticket', compact('table'));
-    }
-
-    /**
-     * Show the Closed ticket list page.
-     *
-     * @return type response
-     */
-    public function closed_ticket_list()
-    {
-        $table = \Datatable::table()
-                ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
-                ->noScript();
-
-        return view('themes.default1.agent.helpdesk.ticket.closed', compact('table'));
-    }
-
-    /**
-     * Show the ticket list page.
-     *
-     * @return type response
-     */
-    public function assigned_ticket_list()
-    {
-        $table = \Datatable::table()
-                ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
-                ->noScript();
-
-        return view('themes.default1.agent.helpdesk.ticket.assigned', compact('table'));
-    }
-
-    /**
-     * Show the deptopen ticket list page.
-     *
-     * @return type response
-     */
-    public function deptopen($id)
-    {
-        $dept = Department::where('name', '=', $id)->first();
-        if (Auth::user()->role == 'agent') {
-            if (Auth::user()->primary_dpt == $dept->id) {
-                return view('themes.default1.agent.helpdesk.dept-ticket.tickets', compact('id'));
-            } else {
-                return redirect()->back()->with('fails', 'Unauthorised!');
-            }
-        } else {
-            return view('themes.default1.agent.helpdesk.dept-ticket.tickets', compact('id'));
-        }
-    }
-
-    public function deptTicket($dept, $status)
-    {
-        if (\Auth::user()->role === 'agent') {
-            $dept2 = Department::where('id', '=', \Auth::user()->primary_dpt)->first();
-            if ($dept !== $dept2->name) {
-                return redirect()->back()->with('fails', Lang::get('lang.unauthorized_access'));
-            }
-        }
-        $table = \Datatable::table()
-                ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
-                ->noScript();
-
-        return view('themes.default1.agent.helpdesk.dept-ticket.tickets', compact('dept', 'status', 'table'));
-    }
-
-    /**
-     * shows trashed tickets.
-     *
-     * @return type response
-     */
-    public function trash()
-    {
-        $table = \Datatable::table()
-                ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
-                ->noScript();
-
-        return view('themes.default1.agent.helpdesk.ticket.trash', compact('table'));
-    }
-
-    /**
-     * shows unassigned tickets.
-     *
-     * @return type
-     */
-    public function unassigned()
-    {
-        $table = \Datatable::table()
-                ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
-                ->noScript();
-
-        return view('themes.default1.agent.helpdesk.ticket.unassigned', compact('table'));
-    }
-
-    /**
-     * shows tickets assigned to Auth::user().
-     *
-     * @return type
-     */
-    public function myticket()
-    {
-        $table = \Datatable::table()
-                ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
-                ->noScript();
-
-        return view('themes.default1.agent.helpdesk.ticket.myticket', compact('table'));
-    }
-
-    /**
-     * @return type
-     */
-    public function followupTicketList()
-    {
-        try {
-            $table = \Datatable::table()
-                    ->addColumn(
-                            '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
-                    ->noScript();
-
-            return view('themes.default1.agent.helpdesk.followup.followup', compact('table'));
-        } catch (Exception $e) {
-            return Redirect()->back()->with('fails', $e->getMessage());
-        }
-    }
-
-    /*
-     * chumper's function to return data to chumper datatable.
-     * @param Array-object $tickets
-     *
-     * @return Array-object
-     */
-
-    public static function getTable($tickets)
-    {
-        return \Datatables::of($tickets)
-            ->addColumn('id', function ($tickets) {
-                return "<input type='checkbox' name='select_all[]' id='".$tickets->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='".$tickets->id."'></input>";
+    public static function getTableWithRelation($tickets) {
+        return \DataTables::eloquent($tickets)
+            ->editColumn('id', function ($tickets) {
+                $rep = ($tickets->poster == 'client') ? '#F39C12': '#000';
+                return "<center><input type='checkbox' name='select_all[]' id='" . $tickets->id . "' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue " . $tickets->priority->priority_color . " " . $rep . "' value='" . $tickets->id . "'></input></center>";
             })
-            ->addColumn('title', function ($tickets) {
-                if (isset($tickets->ticket_title)) {
-                    $string = str_limit($tickets->ticket_title, 20);
-                } else {
-                    $string = '(no subject)';
-                }
-                $collab = $tickets->countcollaborator;
-                if ($collab > 0) {
-                    $collabString = '&nbsp;<i class="fa fa-users"></i>';
-                } else {
-                    $collabString = null;
-                }
-                $attachCount = $tickets->countattachment;
-                if ($attachCount > 0) {
-                    $attachString = '&nbsp;<i class="fa fa-paperclip"></i>';
-                } else {
-                    $attachString = '';
-                }
-                $css = $tickets->css;
-                $titles = '';
-                if ($tickets->ticket_title) {
-                    $titles = $tickets->ticket_title;
-                }
-                $tooltip_script = self::tooltip($tickets->id);
-
-                return "<div class='tooltip1' id='tool".$tickets->id."'>
-                            <a href='".route('ticket.thread', [$tickets->id])."'>".ucfirst($string)."&nbsp;<span style='color:green'>(".$tickets->countthread.") <i class='".$css."'></i></span>
-                            </a>".$collabString.$attachString.$tooltip_script.
-                            "<span class='tooltiptext'  id='tooltip".$tickets->id."'>Loading...</span></div>";
-            })
-            ->addColumn('ticket_number', function ($tickets) {
-                return "<a href='".route('ticket.thread', [$tickets->id])."' title='".$tickets->ticket_number."'>#".$tickets->ticket_number.'</a>';
-            })
-            ->addColumn('priority', function ($tickets) {
-                $rep = ($tickets->last_replier == 'client') ? '#F39C12' : '#000';
-                $priority = $tickets->priority;
-                if ($priority != null) {
-                    $prio = '<button class="btn btn-xs '.$rep.'" style="background-color: '.$tickets->priority_color.'; color:#F7FBCB">'.ucfirst($tickets->priority).'</button>';
-                } else {
-                    $prio = $tickets->last_relier_role;
-                }
-
-                return $prio;
-            })
-            ->addColumn('user_name', function ($tickets) {
-                $from = $tickets->first_name;
-                $url = route('user.show', $tickets->user_id);
-                $name = '';
-                if ($from) {
-                    $name = $tickets->first_name.' '.$tickets->last_name;
-                } else {
-                    $name = $tickets->user_name;
-                }
-                $color = '';
-                if ($tickets->verified == 0 || $tickets->verified == '0') {
-                    $color = "<i class='fa fa-exclamation-triangle'  title='".Lang::get('lang.accoutn-not-verified')."'></i>";
-                }
-
-                return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.ucfirst($tickets->user_name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:#508983'>".ucfirst(str_limit($name, 30)).' <span style="color:#f75959">'.$color.'</span></span></a>';
-            })
-            ->addColumn('assign_user_name', function ($tickets) {
-                if ($tickets->assigned_to == null) {
-                    return "<span style='color:red'>Unassigned</span>";
-                } else {
-                    $assign = $tickets->assign_user_name;
-                    $url = route('user.show', $tickets->assigned_to);
-
-                    return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.ucfirst($tickets->assign_first_name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:green'>".ucfirst($tickets->assign_first_name).' '.ucfirst($tickets->assign_last_name).'</span></a>';
-                }
-            })
-                ->addColumn('updated_at', function ($tickets) {
-                    $TicketDatarow = $tickets->updated_at;
-                    $updated = '--';
-                    if ($TicketDatarow) {
-                        $updated = $tickets->updated_at;
+            ->editColumn('user.user_name', function ($ticket) {
+                if ($ticket->user) {
+                    $url  = route('user.show', $ticket->user->id);
+                    if ($ticket->user->first_name) {
+                        return  '<a href="'.$url.'" title="'.Lang::get('lang.click_to_see_profile', ['user' => $ticket->user->first_name.' '.$ticket->user->last_name]).'">'.$ticket->user->first_name.' '.$ticket->user->last_name.'</a>';
                     }
-
-                    return '<span style="display:none">'.$updated.'</span>'.UTC::usertimezone($updated);
-                })
-                ->addColumn('created_at', function ($tickets) {
-                    $TicketDatarow = $tickets->created_at;
-                    $updated = '--';
-                    if ($TicketDatarow) {
-                        $updated = $tickets->created_at;
+                    return '<a href="'.$url.'" title="'.Lang::get('lang.click_to_see_profile', ['user' => $ticket->user->user_name]).'">'.$ticket->user->user_name.'</a>';
+                }
+                return Lang::get('lang.not-available');
+            })
+            ->editColumn('assigned.user_name', function ($ticket) {
+                if($ticket->assigned_to || $ticket->team_id) {
+                    if ($ticket->assigned_to) {
+                        $url = route('user.show', $ticket->assigned->id);
+                        return ($ticket->assigned->first_name)? '<a href="'.$url.'" title="'.Lang::get('lang.click_to_see_profile', ['user' => $ticket->assigned->first_name.' '.$ticket->assigned->last_name]).'">'.$ticket->assigned->first_name.' '.$ticket->assigned->last_name.'</a>' : '<a href="'.$url.'" title="'.Lang::get('lang.click_to_see_profile', ['user' => $ticket->assigned->user_name]).'">'.$ticket->assigned->user_name.'</a>';
+                    } else {
+                        $url = route('teams.profile.show', $ticket->assignedTeam);
+                        return '<a href="'.$url.'" title="'.Lang::get('lang.click_to_see_profile', ['user' => $ticket->assignedTeam->team_name]).'">'.$ticket->assignedTeam->team_name.'</a>';
                     }
-
-                    return '<span style="display:none">'.$updated.'</span>'.UTC::usertimezone($updated);
-                })
-                ->make();
+                } else {
+                    return '<span style="color:red; font-size:.9em">'.Lang::get('lang.Unassigned').'</span>';
+                }
+            })
+            ->editColumn('ticket_number', function ($ticket) {
+                return "<a href='" . route('ticket.thread', [$ticket->id]) . "' class='$" . ucfirst($ticket->priority->priority) . "*' title='" . Lang::get('lang.click-here-to-see-more-details') . "'>#" . $ticket->ticket_number . '</a>';
+            })
+            ->addColumn('title', function($ticket) {
+                $due = '';
+                $due_status = 0;
+                $dueTodayLabel = '&nbsp;<span style="background-color: rgba(240, 173, 78, 0.67) !important" title="' . Lang::get("lang.going-overdue-today") . '" class="label label-warning">' . Lang::get('lang.duetoday') . '</span>';
+                $overdueLabel = '&nbsp;<span style="background-color: rgba(221, 75, 57, 0.67) !important" title="' . Lang::get("lang.is_overdue") . '" class="label label-danger">' . Lang::get('lang.overdue') . '</span>';
+                if($ticket->duedate != null) {
+                    $now = strtotime(\Carbon\Carbon::now()->tz(timezone()));
+                    $duedate = strtotime($ticket->duedate);
+                    $check_due_time = $now;
+                    $due_status = $duedate - $check_due_time;
+                    if ($due_status < 0) {
+                        $due = $overdueLabel;
+                    } else {
+                        if (date('Ymd', $duedate) == date('Ymd', $now)) {
+                            $due = $dueTodayLabel;
+                        }
+                    }
+                } else {
+                    $due = '&nbsp;<span style="background-color: rgba(240, 173, 78, 0.67) !important" title="' . Lang::get("lang.sla-clock-is-paused") . '" class="label label-warning">' . Lang::get('lang.sla-halted') . '</span>';
+                    if ($ticket->statuses->purpose_of_status == 2) {
+                        $due =  ($ticket->is_resolution_sla == 1) ? '' : $overdueLabel;
+                    }
+                }
+                $string = utfEncoding($ticket->threadSelectedFields->title);
+                if (strlen($string) > 25) {
+                    $string = str_limit($string, 30) . '...';
+                }
+                $thread_count = '(' . $ticket->thread_count . ')';
+                if (Lang::getLocale() == "ar") {
+                       $thread_count = '&rlm;(' . $ticket->thread_count . ')';
+                }
+                $source = '<span><i style="color:green" title="' . Lang::get('lang.ticket_created_source', ['source' => $ticket->sources->source]) .'" class="' . $ticket->sources->source_icon . '"></i></span>';
+                $collab = ($ticket->collaborator_count != null) ? '&nbsp;<i class="fa fa-users" title="' . Lang::get('lang.ticket_has_collaborator') . '"></i>' : '';
+                $attach = ($ticket->attachment_count != 0) ? '&nbsp;<i class="fa fa-paperclip" title="' . Lang::get('lang.ticket_has_attachments') . '"></i>' : '' ;
+                $tooltip_script = self::tooltip($ticket->id);
+                return '<div class="tooltip1" id="tool' . $ticket->id . '"><a href="'.route('ticket.thread', [$ticket->id]).'" title="' . Lang::get('lang.click-here-to-see-more-details') . '">'.$string.'</a>&nbsp;<span style="color:green">'. $thread_count .'</span>&nbsp;'.$source.'&nbsp;'.$attach.'&nbsp;'.$collab.'&nbsp;'.$due. $tooltip_script .
+                                    '<span class="tooltiptext" id="tooltip' . $ticket->id . '" style="height:auto;width:300px;background-color:#fff;color:black;border-radius:3px;border:2px solid gainsboro;position:absolute;z-index:1;top:150%;left:50%;margin-left:-23px;word-wrap:break-word;">' . Lang::get('lang.loading') . '</span></div>';
+            })
+            ->editColumn('last_response', function(Tickets $ticket){
+                return faveoDate($ticket->last_response,'','', false);
+            })
+            ->rawColumns(['id', 'ticket_number', 'user.user_name', 'assigned.user_name', 'title'])
+            ->make();
     }
 }
