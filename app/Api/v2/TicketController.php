@@ -91,7 +91,6 @@ class TicketController extends Controller
 
             return errorResponse(compact('error', 'file', 'line'), $responseCode = 400);
         } catch (\TokenExpiredException $e) {
-
             return errorResponse($e->getMessage(), $responseCode = 400);
         }
     }

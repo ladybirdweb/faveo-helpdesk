@@ -2647,7 +2647,6 @@ class TicketController extends Controller
         }
     }
 
-
     /**
      * Function to return new ticket table view.
      *
@@ -2770,34 +2769,35 @@ class TicketController extends Controller
                         ->make();
     }
 
-    /**
-     *
-     *
-     *
-     */
-    public static function getTableWithRelation($tickets) {
+    public static function getTableWithRelation($tickets)
+    {
         return \DataTables::eloquent($tickets)
             ->editColumn('id', function ($tickets) {
-                $rep = ($tickets->poster == 'client') ? '#F39C12': '#000';
-                return "<center><input type='checkbox' name='select_all[]' id='" . $tickets->id . "' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue " . $tickets->priority->priority_color . " " . $rep . "' value='" . $tickets->id . "'></input></center>";
+                $rep = ($tickets->poster == 'client') ? '#F39C12' : '#000';
+
+                return "<center><input type='checkbox' name='select_all[]' id='".$tickets->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue ".$tickets->priority->priority_color.' '.$rep."' value='".$tickets->id."'></input></center>";
             })
             ->editColumn('user.user_name', function ($ticket) {
                 if ($ticket->user) {
-                    $url  = route('user.show', $ticket->user->id);
+                    $url = route('user.show', $ticket->user->id);
                     if ($ticket->user->first_name) {
                         return  '<a href="'.$url.'" title="'.Lang::get('lang.click_to_see_profile', ['user' => $ticket->user->first_name.' '.$ticket->user->last_name]).'">'.$ticket->user->first_name.' '.$ticket->user->last_name.'</a>';
                     }
+
                     return '<a href="'.$url.'" title="'.Lang::get('lang.click_to_see_profile', ['user' => $ticket->user->user_name]).'">'.$ticket->user->user_name.'</a>';
                 }
+
                 return Lang::get('lang.not-available');
             })
             ->editColumn('assigned.user_name', function ($ticket) {
-                if($ticket->assigned_to || $ticket->team_id) {
+                if ($ticket->assigned_to || $ticket->team_id) {
                     if ($ticket->assigned_to) {
                         $url = route('user.show', $ticket->assigned->id);
-                        return ($ticket->assigned->first_name)? '<a href="'.$url.'" title="'.Lang::get('lang.click_to_see_profile', ['user' => $ticket->assigned->first_name.' '.$ticket->assigned->last_name]).'">'.$ticket->assigned->first_name.' '.$ticket->assigned->last_name.'</a>' : '<a href="'.$url.'" title="'.Lang::get('lang.click_to_see_profile', ['user' => $ticket->assigned->user_name]).'">'.$ticket->assigned->user_name.'</a>';
+
+                        return ($ticket->assigned->first_name) ? '<a href="'.$url.'" title="'.Lang::get('lang.click_to_see_profile', ['user' => $ticket->assigned->first_name.' '.$ticket->assigned->last_name]).'">'.$ticket->assigned->first_name.' '.$ticket->assigned->last_name.'</a>' : '<a href="'.$url.'" title="'.Lang::get('lang.click_to_see_profile', ['user' => $ticket->assigned->user_name]).'">'.$ticket->assigned->user_name.'</a>';
                     } else {
                         $url = route('teams.profile.show', $ticket->assignedTeam);
+
                         return '<a href="'.$url.'" title="'.Lang::get('lang.click_to_see_profile', ['user' => $ticket->assignedTeam->team_name]).'">'.$ticket->assignedTeam->team_name.'</a>';
                     }
                 } else {
@@ -2805,14 +2805,14 @@ class TicketController extends Controller
                 }
             })
             ->editColumn('ticket_number', function ($ticket) {
-                return "<a href='" . route('ticket.thread', [$ticket->id]) . "' class='$" . ucfirst($ticket->priority->priority) . "*' title='" . Lang::get('lang.click-here-to-see-more-details') . "'>#" . $ticket->ticket_number . '</a>';
+                return "<a href='".route('ticket.thread', [$ticket->id])."' class='$".ucfirst($ticket->priority->priority)."*' title='".Lang::get('lang.click-here-to-see-more-details')."'>#".$ticket->ticket_number.'</a>';
             })
-            ->addColumn('title', function($ticket) {
+            ->addColumn('title', function ($ticket) {
                 $due = '';
                 $due_status = 0;
-                $dueTodayLabel = '&nbsp;<span style="background-color: rgba(240, 173, 78, 0.67) !important" title="' . Lang::get("lang.going-overdue-today") . '" class="label label-warning">' . Lang::get('lang.duetoday') . '</span>';
-                $overdueLabel = '&nbsp;<span style="background-color: rgba(221, 75, 57, 0.67) !important" title="' . Lang::get("lang.is_overdue") . '" class="label label-danger">' . Lang::get('lang.overdue') . '</span>';
-                if($ticket->duedate != null) {
+                $dueTodayLabel = '&nbsp;<span style="background-color: rgba(240, 173, 78, 0.67) !important" title="'.Lang::get('lang.going-overdue-today').'" class="label label-warning">'.Lang::get('lang.duetoday').'</span>';
+                $overdueLabel = '&nbsp;<span style="background-color: rgba(221, 75, 57, 0.67) !important" title="'.Lang::get('lang.is_overdue').'" class="label label-danger">'.Lang::get('lang.overdue').'</span>';
+                if ($ticket->duedate != null) {
                     $now = strtotime(\Carbon\Carbon::now()->tz(timezone()));
                     $duedate = strtotime($ticket->duedate);
                     $check_due_time = $now;
@@ -2825,28 +2825,29 @@ class TicketController extends Controller
                         }
                     }
                 } else {
-                    $due = '&nbsp;<span style="background-color: rgba(240, 173, 78, 0.67) !important" title="' . Lang::get("lang.sla-clock-is-paused") . '" class="label label-warning">' . Lang::get('lang.sla-halted') . '</span>';
+                    $due = '&nbsp;<span style="background-color: rgba(240, 173, 78, 0.67) !important" title="'.Lang::get('lang.sla-clock-is-paused').'" class="label label-warning">'.Lang::get('lang.sla-halted').'</span>';
                     if ($ticket->statuses->purpose_of_status == 2) {
-                        $due =  ($ticket->is_resolution_sla == 1) ? '' : $overdueLabel;
+                        $due = ($ticket->is_resolution_sla == 1) ? '' : $overdueLabel;
                     }
                 }
                 $string = utfEncoding($ticket->threadSelectedFields->title);
                 if (strlen($string) > 25) {
-                    $string = str_limit($string, 30) . '...';
+                    $string = str_limit($string, 30).'...';
                 }
-                $thread_count = '(' . $ticket->thread_count . ')';
-                if (Lang::getLocale() == "ar") {
-                       $thread_count = '&rlm;(' . $ticket->thread_count . ')';
+                $thread_count = '('.$ticket->thread_count.')';
+                if (Lang::getLocale() == 'ar') {
+                    $thread_count = '&rlm;('.$ticket->thread_count.')';
                 }
-                $source = '<span><i style="color:green" title="' . Lang::get('lang.ticket_created_source', ['source' => $ticket->sources->source]) .'" class="' . $ticket->sources->source_icon . '"></i></span>';
-                $collab = ($ticket->collaborator_count != null) ? '&nbsp;<i class="fa fa-users" title="' . Lang::get('lang.ticket_has_collaborator') . '"></i>' : '';
-                $attach = ($ticket->attachment_count != 0) ? '&nbsp;<i class="fa fa-paperclip" title="' . Lang::get('lang.ticket_has_attachments') . '"></i>' : '' ;
+                $source = '<span><i style="color:green" title="'.Lang::get('lang.ticket_created_source', ['source' => $ticket->sources->source]).'" class="'.$ticket->sources->source_icon.'"></i></span>';
+                $collab = ($ticket->collaborator_count != null) ? '&nbsp;<i class="fa fa-users" title="'.Lang::get('lang.ticket_has_collaborator').'"></i>' : '';
+                $attach = ($ticket->attachment_count != 0) ? '&nbsp;<i class="fa fa-paperclip" title="'.Lang::get('lang.ticket_has_attachments').'"></i>' : '';
                 $tooltip_script = self::tooltip($ticket->id);
-                return '<div class="tooltip1" id="tool' . $ticket->id . '"><a href="'.route('ticket.thread', [$ticket->id]).'" title="' . Lang::get('lang.click-here-to-see-more-details') . '">'.$string.'</a>&nbsp;<span style="color:green">'. $thread_count .'</span>&nbsp;'.$source.'&nbsp;'.$attach.'&nbsp;'.$collab.'&nbsp;'.$due. $tooltip_script .
-                                    '<span class="tooltiptext" id="tooltip' . $ticket->id . '" style="height:auto;width:300px;background-color:#fff;color:black;border-radius:3px;border:2px solid gainsboro;position:absolute;z-index:1;top:150%;left:50%;margin-left:-23px;word-wrap:break-word;">' . Lang::get('lang.loading') . '</span></div>';
+
+                return '<div class="tooltip1" id="tool'.$ticket->id.'"><a href="'.route('ticket.thread', [$ticket->id]).'" title="'.Lang::get('lang.click-here-to-see-more-details').'">'.$string.'</a>&nbsp;<span style="color:green">'.$thread_count.'</span>&nbsp;'.$source.'&nbsp;'.$attach.'&nbsp;'.$collab.'&nbsp;'.$due.$tooltip_script.
+                                    '<span class="tooltiptext" id="tooltip'.$ticket->id.'" style="height:auto;width:300px;background-color:#fff;color:black;border-radius:3px;border:2px solid gainsboro;position:absolute;z-index:1;top:150%;left:50%;margin-left:-23px;word-wrap:break-word;">'.Lang::get('lang.loading').'</span></div>';
             })
-            ->editColumn('last_response', function(Tickets $ticket){
-                return faveoDate($ticket->last_response,'','', false);
+            ->editColumn('last_response', function (Tickets $ticket) {
+                return faveoDate($ticket->last_response, '', '', false);
             })
             ->rawColumns(['id', 'ticket_number', 'user.user_name', 'assigned.user_name', 'title'])
             ->make();
