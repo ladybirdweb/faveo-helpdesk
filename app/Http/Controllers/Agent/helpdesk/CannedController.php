@@ -48,7 +48,7 @@ class CannedController extends Controller
     public function index()
     {
         try {
-            return view('themes.default1.agent.helpdesk.canned.index');
+            return view('agent.helpdesk.canned.index');
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -62,7 +62,7 @@ class CannedController extends Controller
     public function create()
     {
         try {
-            return view('themes.default1.agent.helpdesk.canned.create');
+            return view('agent.helpdesk.canned.create');
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -106,7 +106,7 @@ class CannedController extends Controller
             // fetching requested canned response
             $canned = $canned->where('user_id', '=', \Auth::user()->id)->where('id', '=', $id)->first();
 
-            return view('themes.default1.agent.helpdesk.canned.edit', compact('canned'));
+            return view('agent.helpdesk.canned.edit', compact('canned'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }

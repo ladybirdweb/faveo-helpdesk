@@ -1,4 +1,4 @@
-@extends('themes.default1.agent.layout.agent')
+@extends('agent.layout.agent')
 
 @section('sidebar')
 <li class="header">{!! Lang::get('lang.Report') !!}</li>

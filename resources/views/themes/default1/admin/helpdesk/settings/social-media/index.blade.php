@@ -1,4 +1,4 @@
-@extends('themes.default1.admin.layout.admin')
+@extends('admin.layout.admin')
 <link href="{{asset("lb-faveo/css/faveo-css.css")}}" rel="stylesheet" type="text/css" />
 @section('Settings')
 active

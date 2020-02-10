@@ -1,4 +1,4 @@
-@extends('themes.default1.client.layout.client')
+@extends('client.layout.client')
 @section('HeadInclude')
         <link href="{{asset("lb-faveo/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" />
 @stop

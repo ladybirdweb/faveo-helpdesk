@@ -1,4 +1,4 @@
-@extends('themes.default1.admin.layout.admin')
+@extends('admin.layout.admin')
 
 @section('Manage')
 active
@@ -32,7 +32,7 @@ class="active"
                 </div>
                 @if($field->values()->get()->count()>0)
                 <div class="col-md-2">
-                    @include('themes.default1.admin.helpdesk.manage.form.childpopup')
+                    @include('admin.helpdesk.manage.form.childpopup')
                 </div>
                 @endif
                 @endforeach

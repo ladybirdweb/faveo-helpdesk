@@ -18,7 +18,7 @@ class QueueController extends Controller
             $queue = new QueueService();
             $queues = $queue->select('id', 'name', 'status')->get();
 
-            return view('themes.default1.admin.helpdesk.queue.index', compact('queues'));
+            return view('admin.helpdesk.queue.index', compact('queues'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -33,7 +33,7 @@ class QueueController extends Controller
                 throw new Exception('Sorry we can not find your request');
             }
 
-            return view('themes.default1.admin.helpdesk.queue.edit', compact('queue'));
+            return view('admin.helpdesk.queue.edit', compact('queue'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }

@@ -1,4 +1,4 @@
-@extends('themes.default1.installer.layout.installer2')
+@extends('installer.layout.installer2')
 @section('license')
 active
 @stop

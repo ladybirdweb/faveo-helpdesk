@@ -1,4 +1,4 @@
-@extends('themes.default1.admin.layout.kb')
+@extends('admin.layout.kb')
 @section('settings')
     class="active"
 @stop

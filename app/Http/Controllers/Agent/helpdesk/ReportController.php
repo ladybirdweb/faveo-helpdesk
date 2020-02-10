@@ -45,7 +45,7 @@ class ReportController extends Controller
     public function index()
     {
         try {
-            return view('themes.default1.agent.helpdesk.report.index');
+            return view('agent.helpdesk.report.index');
         } catch (Exception $e) {
         }
     }
@@ -260,7 +260,7 @@ class ReportController extends Controller
     {
         $table_datas = json_decode($request->input('pdf_form'));
         $table_help_topic = json_decode($request->input('pdf_form_help_topic'));
-        $html = view('themes.default1.agent.helpdesk.report.pdf', compact('table_datas', 'table_help_topic'))->render();
+        $html = view('agent.helpdesk.report.pdf', compact('table_datas', 'table_help_topic'))->render();
         $html1 = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 
         return PDF::load($html1)->show();

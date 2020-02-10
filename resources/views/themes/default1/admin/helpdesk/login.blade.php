@@ -1,4 +1,4 @@
-@extends('themes.default1.layouts.login')
+@extends('layouts.login')
 @section('body')
 <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>

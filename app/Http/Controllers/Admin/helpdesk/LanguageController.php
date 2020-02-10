@@ -61,7 +61,7 @@ class LanguageController extends Controller
      */
     public function index()
     {
-        return view('themes.default1.admin.helpdesk.language.index');
+        return view('admin.helpdesk.language.index');
     }
 
     /**
@@ -71,7 +71,7 @@ class LanguageController extends Controller
      */
     public function getForm()
     {
-        return view('themes.default1.admin.helpdesk.language.create');
+        return view('admin.helpdesk.language.create');
     }
 
     /**

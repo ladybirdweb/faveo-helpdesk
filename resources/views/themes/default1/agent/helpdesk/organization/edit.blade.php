@@ -1,4 +1,4 @@
-@extends('themes.default1.agent.layout.agent')
+@extends('agent.layout.agent')
 @section('Users')
 class="active"
 @stop

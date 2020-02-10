@@ -45,7 +45,7 @@ class ClientTicketController extends Controller
      */
     public function getCheckTicket(Tickets $ticket, User $user)
     {
-        return view('themes.default1.client.helpdesk.guest-user.newticket', compact('ticket'));
+        return view('client.helpdesk.guest-user.newticket', compact('ticket'));
     }
 
     /**

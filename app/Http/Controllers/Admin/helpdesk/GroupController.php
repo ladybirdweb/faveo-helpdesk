@@ -50,7 +50,7 @@ class GroupController extends Controller
             $groups = $group->get();
             $departments = $department->pluck('id');
 
-            return view('themes.default1.admin.helpdesk.agent.groups.index', compact('departments', 'group_assign_department', 'groups'));
+            return view('admin.helpdesk.agent.groups.index', compact('departments', 'group_assign_department', 'groups'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', Lang::get('lang.failed_to_load_the_page'));
         }
@@ -64,7 +64,7 @@ class GroupController extends Controller
     public function create()
     {
         try {
-            return view('themes.default1.admin.helpdesk.agent.groups.create');
+            return view('admin.helpdesk.agent.groups.create');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', Lang::get('lang.failed_to_load_the_page'));
         }
@@ -104,7 +104,7 @@ class GroupController extends Controller
         try {
             $groups = $group->whereId($id)->first();
 
-            return view('themes.default1.admin.helpdesk.agent.groups.edit', compact('groups'));
+            return view('admin.helpdesk.agent.groups.edit', compact('groups'));
         } catch (Exception $e) {
             return redirect('groups')->with('fails', Lang::get('lang.group_can_not_update').'<li>'.$e->getMessage().'</li>');
         }

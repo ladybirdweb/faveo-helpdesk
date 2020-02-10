@@ -90,7 +90,7 @@
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
-                            @include('themes.default1.update.notification')
+                            @include('update.notification')
                             <!-- User Account: style can be found in dropdown.less -->
                             <ul class="nav navbar-nav navbar-right">
                             <!-- User Account: style can be found in dropdown.less -->

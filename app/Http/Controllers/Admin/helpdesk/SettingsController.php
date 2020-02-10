@@ -74,7 +74,7 @@ class SettingsController extends Controller
             /* fetch the values of company from company table */
             $companys = $company->whereId('1')->first();
             /* Direct to Company Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.company', compact('companys'));
+            return view('admin.helpdesk.settings.company', compact('companys'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -167,7 +167,7 @@ class SettingsController extends Controller
                     ->where('option_name', '=', 'email_mandatory')
                     ->first();
             /* Direct to System Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp', 'email_mandatory'));
+            return view('admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp', 'email_mandatory'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -242,7 +242,7 @@ class SettingsController extends Controller
             /* Fetch the values from Help_topic table */
             $topics = $topic->get();
             /* Direct to Ticket Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.ticket', compact('tickets', 'slas', 'topics', 'priority'));
+            return view('admin.helpdesk.settings.ticket', compact('tickets', 'slas', 'topics', 'priority'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -302,7 +302,7 @@ class SettingsController extends Controller
             /* Fetch the values from Emails table */
             $emails1 = $email1->get();
             /* Direct to Email Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.email', compact('emails', 'templates', 'emails1'));
+            return view('admin.helpdesk.settings.email', compact('emails', 'templates', 'emails1'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -396,7 +396,7 @@ class SettingsController extends Controller
             //$warn = "Please make 'register_argc_argv' flag as on. Or you can set all your job url in cron";
         }
 
-        return view('themes.default1.admin.helpdesk.settings.cron.cron', compact('emails', 'templates', 'emails1', 'workflow', 'warn', 'command', 'commands', 'followupcommands', 'condition', 'shared'));
+        return view('admin.helpdesk.settings.cron.cron', compact('emails', 'templates', 'emails1', 'workflow', 'warn', 'command', 'commands', 'followupcommands', 'condition', 'shared'));
         // } catch {
         // }
     }
@@ -455,7 +455,7 @@ class SettingsController extends Controller
             /* fetch the values of responder from responder table */
             $responders = $responder->whereId('1')->first();
             /* Direct to Responder Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.responder', compact('responders'));
+            return view('admin.helpdesk.settings.responder', compact('responders'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -504,7 +504,7 @@ class SettingsController extends Controller
             /* fetch the values of alert from alert table */
             $alerts = $alert->whereId('1')->first();
             /* Direct to Alert Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.alert', compact('alerts'));
+            return view('admin.helpdesk.settings.alert', compact('alerts'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -598,7 +598,7 @@ class SettingsController extends Controller
      */
     public function settings()
     {
-        return view('themes.default1.admin.helpdesk.setting');
+        return view('admin.helpdesk.setting');
     }
 
     /**
@@ -615,7 +615,7 @@ class SettingsController extends Controller
             /* fetch the values of company from company table */
             $statuss = \DB::table('ticket_status')->get();
             /* Direct to Company Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.status', compact('statuss'));
+            return view('admin.helpdesk.settings.status', compact('statuss'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -635,7 +635,7 @@ class SettingsController extends Controller
             /* fetch the values of company from company table */
             $status = \DB::table('ticket_status')->where('id', '=', $id)->first();
             /* Direct to Company Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.status-edit', compact('status'));
+            return view('admin.helpdesk.settings.status-edit', compact('status'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -734,7 +734,7 @@ class SettingsController extends Controller
      */
     public function notificationSettings()
     {
-        return view('themes.default1.admin.helpdesk.settings.notification');
+        return view('admin.helpdesk.settings.notification');
     }
 
     /**
@@ -786,7 +786,7 @@ class SettingsController extends Controller
         try {
             $ratings = Rating::orderBy('display_order', 'asc')->get();
 
-            return view('themes.default1.admin.helpdesk.settings.ratings', compact('ratings'));
+            return view('admin.helpdesk.settings.ratings', compact('ratings'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -804,7 +804,7 @@ class SettingsController extends Controller
         try {
             $rating = Rating::whereId($id)->first();
 
-            return view('themes.default1.admin.helpdesk.settings.edit-ratings', compact('rating'));
+            return view('admin.helpdesk.settings.edit-ratings', compact('rating'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -841,7 +841,7 @@ class SettingsController extends Controller
     public function createRating()
     {
         try {
-            return view('themes.default1.admin.helpdesk.settings.create-ratings');
+            return view('admin.helpdesk.settings.create-ratings');
         } catch (Exception $ex) {
             return redirect('getratings')->with('fails', Lang::get('lang.ratings_can_not_be_created').'<li>'.$ex->getMessage().'</li>');
         }
@@ -1062,7 +1062,7 @@ class SettingsController extends Controller
         $system_check = CommonSettings::select('status')->where('option_name', '=', 'dummy_data_installation')->first();
         if ($system_check) {
             if ($system_check->status == 1 || $system_check->status == '1') {
-                return View('themes.default1.admin.helpdesk.settings.cleandata');
+                return View('admin.helpdesk.settings.cleandata');
             }
         }
 

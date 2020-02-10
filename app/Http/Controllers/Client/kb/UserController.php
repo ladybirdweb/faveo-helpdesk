@@ -50,7 +50,7 @@ class UserController extends Controller
         $article->setPath('article-list');
         $categorys = $category->get();
 
-        return view('themes.default1.client.kb.article-list.articles', compact('time', 'categorys', 'article'));
+        return view('client.kb.article-list.articles', compact('time', 'categorys', 'article'));
     }
 
     /**
@@ -98,7 +98,7 @@ class UserController extends Controller
         $result->setPath('search?s='.$search);
         $categorys = $category->get();
 
-        return view('themes.default1.client.kb.article-list.search', compact('categorys', 'result'));
+        return view('client.kb.article-list.search', compact('categorys', 'result'));
     }
 
     /**
@@ -125,7 +125,7 @@ class UserController extends Controller
         $arti = $arti->first();
 
         if ($arti) {
-            return view('themes.default1.client.kb.article-list.show', compact('arti'));
+            return view('client.kb.article-list.show', compact('arti'));
         } else {
             return redirect('404');
         }
@@ -145,7 +145,7 @@ class UserController extends Controller
         $article_id = $all->pluck('article_id');
         $categorys = $category->get();
         /* direct to view with $article_id */
-        return view('themes.default1.client.kb.article-list.category', compact('all', 'id', 'categorys', 'article_id'));
+        return view('client.kb.article-list.category', compact('all', 'id', 'categorys', 'article_id'));
     }
 
     public function home(Article $article, Category $category, Relationship $relation)
@@ -157,7 +157,7 @@ class UserController extends Controller
             $categorys = $category->get();
             // $categorys->setPath('home');
             /* direct to view with $article_id */
-            return view('themes.default1.client.kb.article-list.home', compact('categorys', 'article_id'));
+            return view('client.kb.article-list.home', compact('categorys', 'article_id'));
         }
     }
 
@@ -166,7 +166,7 @@ class UserController extends Controller
         $faq = $faq->where('id', '1')->first();
         $categorys = $category->get();
 
-        return view('themes.default1.client.kb.article-list.faq', compact('categorys', 'faq'));
+        return view('client.kb.article-list.faq', compact('categorys', 'faq'));
     }
 
     /**
@@ -179,7 +179,7 @@ class UserController extends Controller
         $settings = $settings->whereId('1')->first();
         $categorys = $category->get();
 
-        return view('themes.default1.client.kb.article-list.contact', compact('settings', 'categorys'));
+        return view('client.kb.article-list.contact', compact('settings', 'categorys'));
     }
 
     /**
@@ -205,7 +205,7 @@ class UserController extends Controller
         $details = $request->input('message');
         //echo $message;
         //echo $contact->email;
-        $mail = Mail::send('themes.default1.client.kb.article-list.contact-details', ['name' => $name, 'email' => $email, 'subject' => $subject, 'details' => $details], function ($message) use ($contact) {
+        $mail = Mail::send('client.kb.article-list.contact-details', ['name' => $name, 'email' => $email, 'subject' => $subject, 'details' => $details], function ($message) use ($contact) {
             $message->to($contact->email, $contact->name)->subject('Contact');
         });
         if ($mail) {
@@ -217,7 +217,7 @@ class UserController extends Controller
 
     public function contactDetails()
     {
-        return view('themes.default1.client.kb.article-list.contact-details');
+        return view('client.kb.article-list.contact-details');
     }
 
     /**
@@ -249,7 +249,7 @@ class UserController extends Controller
     {
         $page = $page->where('slug', $name)->first();
         if ($page) {
-            return view('themes.default1.client.kb.article-list.pages', compact('page'));
+            return view('client.kb.article-list.pages', compact('page'));
         } else {
             return Redirect::back()->with('fails', Lang::get('lang.sorry_not_processed'));
         }
@@ -292,7 +292,7 @@ class UserController extends Controller
         $categorys = $category->get();
         // $categorys->setPath('home');
         /* direct to view with $article_id */
-        return view('themes.default1.client.kb.article-list.categoryList', compact('categorys', 'article_id'));
+        return view('client.kb.article-list.categoryList', compact('categorys', 'article_id'));
     }
 
     // static function timezone($utc) {
@@ -313,7 +313,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        return view('themes.default1.client.kb.article-list.profile', compact('user'));
+        return view('client.kb.article-list.profile', compact('user'));
     }
 
     public function postClientProfile($id, ProfileRequest $request)

@@ -61,12 +61,12 @@ class SettingsController2 extends Controller
      */
     public function settings()
     {
-        return view('themes.default1.admin.helpdesk.setting');
+        return view('admin.helpdesk.setting');
     }
 
     public function notificationSettings()
     {
-        return view('themes.default1.admin.helpdesk.settings.notification');
+        return view('admin.helpdesk.settings.notification');
     }
 
     public function deleteReadNoti()
@@ -109,7 +109,7 @@ class SettingsController2 extends Controller
             /* fetch the values of company from company table */
             $statuss = \DB::table('ticket_status')->get();
             /* Direct to Company Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.status', compact('statuss'));
+            return view('admin.helpdesk.settings.status', compact('statuss'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->errorInfo[2]);
         }
@@ -200,7 +200,7 @@ class SettingsController2 extends Controller
             /* fetch the values of company from company table */
             $companys = $company->whereId('1')->first();
             /* Direct to Company Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.company', compact('companys'));
+            return view('admin.helpdesk.settings.company', compact('companys'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -283,7 +283,7 @@ class SettingsController2 extends Controller
             /* Fetch the values from Timezones table */
             $timezones = $timezone->get();
             /* Direct to System Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time'));
+            return view('admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -335,7 +335,7 @@ class SettingsController2 extends Controller
             /* Fetch the values from Help_topic table */
             $topics = $topic->get();
             /* Direct to Ticket Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.ticket', compact('tickets', 'slas', 'topics', 'priority'));
+            return view('admin.helpdesk.settings.ticket', compact('tickets', 'slas', 'topics', 'priority'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -395,7 +395,7 @@ class SettingsController2 extends Controller
             /* Fetch the values from Emails table */
             $emails1 = $email1->get();
             /* Direct to Email Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.email', compact('emails', 'templates', 'emails1'));
+            return view('admin.helpdesk.settings.email', compact('emails', 'templates', 'emails1'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -453,7 +453,7 @@ class SettingsController2 extends Controller
         /* Fetch the values from Emails table */
         $emails1 = $email1->get();
 
-        return view('themes.default1.admin.helpdesk.settings.crone', compact('emails', 'templates', 'emails1'));
+        return view('admin.helpdesk.settings.crone', compact('emails', 'templates', 'emails1'));
         // } catch {
 
         // }
@@ -504,7 +504,7 @@ class SettingsController2 extends Controller
     // 		/* fetch the values of access from access table */
     // 		$accesses = $access->whereId('1')->first();
     //	// 		 Direct to Access Settings Page
-    // 		return view('themes.default1.admin.helpdesk.settings.access', compact('accesses'));
+    // 		return view('admin.helpdesk.settings.access', compact('accesses'));
     // 	} catch (Exception $e) {
     // 		return view('404');
     // 	}
@@ -556,7 +556,7 @@ class SettingsController2 extends Controller
             /* fetch the values of responder from responder table */
             $responders = $responder->whereId('1')->first();
             /* Direct to Responder Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.responder', compact('responders'));
+            return view('admin.helpdesk.settings.responder', compact('responders'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -605,7 +605,7 @@ class SettingsController2 extends Controller
             /* fetch the values of alert from alert table */
             $alerts = $alert->whereId('1')->first();
             /* Direct to Alert Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.alert', compact('alerts'));
+            return view('admin.helpdesk.settings.alert', compact('alerts'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -689,7 +689,7 @@ class SettingsController2 extends Controller
     {
         $ratings = DB::table('settings_ratings')->get();
 
-        return view('themes.default1.admin.helpdesk.settings.ratings', compact('ratings'));
+        return view('admin.helpdesk.settings.ratings', compact('ratings'));
     }
 
     /**

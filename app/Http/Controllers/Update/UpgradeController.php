@@ -227,7 +227,7 @@ class UpgradeController extends Controller
             if (Utility::getFileVersion() < $latest_version) {
                 $url = url('file-upgrade');
 
-                return view('themes.default1.update.file', compact('url'));
+                return view('update.file', compact('url'));
             }
 
             return redirect('dashboard')->with('fails', 'Could not find latest realeases from repository.');
@@ -245,7 +245,7 @@ class UpgradeController extends Controller
             $current_version = Utility::getFileVersion();
             if ($latest_version != '') {
                 if (Utility::getFileVersion() < $latest_version) {
-                    return view('themes.default1.update.update', compact('latest_version', 'current_version', 'request'));
+                    return view('update.update', compact('latest_version', 'current_version', 'request'));
                 }
             }
 
@@ -397,7 +397,7 @@ class UpgradeController extends Controller
             if (Utility::getFileVersion() > Utility::getDatabaseVersion()) {
                 $url = url('database-upgrade');
                 //$string = "Your Database is outdated please upgrade <a href=$url>Now !</a>";
-                return view('themes.default1.update.database', compact('url'));
+                return view('update.database', compact('url'));
             } else {
                 return redirect()->back();
             }

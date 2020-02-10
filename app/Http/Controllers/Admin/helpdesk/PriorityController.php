@@ -44,7 +44,7 @@ class PriorityController extends Controller
         $user_status = CommonSettings::where('option_name', '=', 'user_priority')->first();
         // dd( $user_status);
 
-        return view('themes.default1.admin.helpdesk.manage.ticket_priority.index', compact('user_status'));
+        return view('admin.helpdesk.manage.ticket_priority.index', compact('user_status'));
     }
 
     /**
@@ -109,7 +109,7 @@ class PriorityController extends Controller
      */
     public function priorityCreate()
     {
-        return view('themes.default1.admin.helpdesk.manage.ticket_priority.create');
+        return view('admin.helpdesk.manage.ticket_priority.create');
     }
 
     public function priorityCreate1(PriorityRequest $request)
@@ -134,7 +134,7 @@ class PriorityController extends Controller
     {
         $tk_priority = Ticket_Priority::wherepriority_id($priority_id)->first();
 
-        return view('themes.default1.admin.helpdesk.manage.ticket_priority.edit', compact('tk_priority'));
+        return view('admin.helpdesk.manage.ticket_priority.edit', compact('tk_priority'));
     }
 
     /**

@@ -49,7 +49,7 @@ class TemplateController extends Controller
         try {
             $templates = $template->get();
 
-            return view('themes.default1.admin.helpdesk.emails.template.index', compact('templates'));
+            return view('admin.helpdesk.emails.template.index', compact('templates'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -69,7 +69,7 @@ class TemplateController extends Controller
             $templates = $template->get();
             $languages = $language->get();
 
-            return view('themes.default1.admin.helpdesk.emails.template.create', compact('languages', 'templates'));
+            return view('admin.helpdesk.emails.template.create', compact('languages', 'templates'));
         } catch (Exception $e) {
             return view('404');
         }
@@ -127,7 +127,7 @@ class TemplateController extends Controller
         $directories = scandir($path);
         $directory = str_replace('/', '-', $path);
 
-        return view('themes.default1.admin.helpdesk.emails.template.listdirectories', compact('directories', 'directory'));
+        return view('admin.helpdesk.emails.template.listdirectories', compact('directories', 'directory'));
     }
 
     public function listtemplates($template, $path)
@@ -138,7 +138,7 @@ class TemplateController extends Controller
         $templates = scandir($directory2);
         $directory = str_replace('/', '-', $directory2.'/');
 
-        return view('themes.default1.admin.helpdesk.emails.template.listtemplates', compact('templates', 'directory'));
+        return view('admin.helpdesk.emails.template.listtemplates', compact('templates', 'directory'));
     }
 
     public function readtemplate($template, $path)
@@ -148,7 +148,7 @@ class TemplateController extends Controller
         $contents = fread($handle, filesize($directory.$template));
         fclose($handle);
 
-        return view('themes.default1.admin.helpdesk.emails.template.readtemplates', compact('contents', 'template', 'path'));
+        return view('admin.helpdesk.emails.template.readtemplates', compact('contents', 'template', 'path'));
     }
 
     public function createtemplate()
@@ -230,7 +230,7 @@ class TemplateController extends Controller
             $templates = $template->whereId($id)->first();
             $languages = $language->get();
 
-            return view('themes.default1.admin.helpdesk.emails.template.edit', compact('templates', 'languages'));
+            return view('admin.helpdesk.emails.template.edit', compact('templates', 'languages'));
         } catch (Exception $e) {
             return view('404');
         }
@@ -302,7 +302,7 @@ class TemplateController extends Controller
         try {
             $emails = $email->get();
 
-            return view('themes.default1.admin.helpdesk.emails.template.formDiagno', compact('emails'));
+            return view('admin.helpdesk.emails.template.formDiagno', compact('emails'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }

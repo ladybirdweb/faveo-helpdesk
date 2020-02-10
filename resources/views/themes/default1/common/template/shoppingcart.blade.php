@@ -1,4 +1,4 @@
-@extends('themes.default1.layouts.front.master')
+@extends('layouts.front.master')
 @section('title')
 pricing
 @stop

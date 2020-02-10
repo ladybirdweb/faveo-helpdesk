@@ -1,4 +1,4 @@
-@extends('themes.default1.client.layout.client')
+@extends('client.layout.client')
 @section('content')               
 <?php
 $tickets = App\Model\helpdesk\Ticket\Tickets::where('id', '=', \Crypt::decrypt($id))->first();

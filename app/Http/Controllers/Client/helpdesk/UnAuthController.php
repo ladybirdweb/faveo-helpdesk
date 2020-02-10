@@ -153,7 +153,7 @@ class UnAuthController extends Controller
                 }
                 $tickets = Tickets::where('id', '=', $ticket_id)->first();
 
-                return view('themes.default1.client.helpdesk.unauth.showticket', compact('tickets', 'token'));
+                return view('client.helpdesk.unauth.showticket', compact('tickets', 'token'));
             } else {
                 return redirect()->route('form')->with('fails', Lang::get('lang.sorry_you_are_not_allowed_token_expired'));
             }

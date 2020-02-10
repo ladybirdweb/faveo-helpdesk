@@ -1,4 +1,4 @@
-@extends('themes.default1.layouts.register')
+@extends('layouts.register')
 @section('body')
 	
 	<!-- openn a form -->

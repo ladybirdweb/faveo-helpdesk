@@ -52,7 +52,7 @@ class TeamController extends Controller
             $id = $teams->pluck('id');
             $assign_team_agent = $assign_team_agent->get();
 
-            return view('themes.default1.admin.helpdesk.agent.teams.index', compact('assign_team_agent', 'teams'));
+            return view('admin.helpdesk.agent.teams.index', compact('assign_team_agent', 'teams'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -70,7 +70,7 @@ class TeamController extends Controller
         try {
             $user = $user->where('role', '<>', 'user')->where('active', '=', 1)->orderBy('first_name')->get();
 
-            return view('themes.default1.admin.helpdesk.agent.teams.create', compact('user'));
+            return view('admin.helpdesk.agent.teams.create', compact('user'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -133,7 +133,7 @@ class TeamController extends Controller
 
             // $total_members = $assign_team_agent->where('team_id',$id)->count();
 
-            return view('themes.default1.admin.helpdesk.agent.teams.show', compact('user', 'teams', 'id'));
+            return view('admin.helpdesk.agent.teams.show', compact('user', 'teams', 'id'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -220,7 +220,7 @@ class TeamController extends Controller
             // dd($a_id);
             $user = $user->whereIn('id', $a_id)->where('active', '=', 1)->orderBy('first_name')->get();
             // dd($user);
-            return view('themes.default1.admin.helpdesk.agent.teams.edit', compact('agent_id', 'user', 'teams', 'allagents'));
+            return view('admin.helpdesk.agent.teams.edit', compact('agent_id', 'user', 'teams', 'allagents'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }

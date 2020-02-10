@@ -1,4 +1,4 @@
-@extends('themes.default1.admin.layout.kb')
+@extends('admin.layout.kb')
 
 @section('article')
     active
@@ -160,7 +160,7 @@
                                 <h4 class="modal-title">{{Lang::get('lang.addcategory')}}</h4>
                             </div>
                             <div class="modal-body">
-                               	@include('themes.default1.admin.category.form')
+                               	@include('admin.category.form')
                             </div>
                             <div class="modal-footer">
                               	<div class="form-group">

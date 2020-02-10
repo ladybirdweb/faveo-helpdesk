@@ -1,4 +1,4 @@
-@extends('themes.default1.layouts.login')
+@extends('layouts.login')
 @section('body')
 
 

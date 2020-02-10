@@ -1,4 +1,4 @@
-@extends('themes.default1.client.layout.client')
+@extends('client.layout.client')
 <?php $user = App\User::where('id', '=', $tickets->user_id)->first();?>
 <?php $assignedto = App\User::where('id', '=', $tickets->assigned_to)->first();?>
 

@@ -33,7 +33,7 @@ class ThreadController extends Controller
             /* get the values of priority from Priority Table  */
             $priorities = $priority->get();
             /* Direct to view page */
-            return view('themes.default1.admin.helpdesk.tickets.ticket', compact('threads', 'priorities'));
+            return view('admin.helpdesk.tickets.ticket', compact('threads', 'priorities'));
         } catch (Exception $e) {
             return view('404');
         }

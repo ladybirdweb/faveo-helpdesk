@@ -59,7 +59,7 @@ class WorkflowController extends Controller
     public function index()
     {
         try {
-            return view('themes.default1.admin.helpdesk.manage.workflow.index');
+            return view('admin.helpdesk.manage.workflow.index');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -151,7 +151,7 @@ class WorkflowController extends Controller
         $emails = $email_data;
 
         try {
-            return view('themes.default1.admin.helpdesk.manage.workflow.create', compact('emails'));
+            return view('admin.helpdesk.manage.workflow.create', compact('emails'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -218,7 +218,7 @@ class WorkflowController extends Controller
             $workflow_rules = $workflow_rule->whereWorkflow_id($id)->get();
             $workflow_actions = $workflow_action->whereWorkflow_id($id)->get();
 
-            return view('themes.default1.admin.helpdesk.manage.workflow.edit', compact('id', 'workflow', 'emails', 'workflow_rules', 'workflow_actions'));
+            return view('admin.helpdesk.manage.workflow.edit', compact('id', 'workflow', 'emails', 'workflow_rules', 'workflow_actions'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }

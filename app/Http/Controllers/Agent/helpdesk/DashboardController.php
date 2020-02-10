@@ -48,9 +48,9 @@ class DashboardController extends Controller
         // return \Redirect::route('home');
         // }
         try {
-            return View::make('themes.default1.agent.helpdesk.dashboard.dashboard');
+            return View::make('agent.helpdesk.dashboard.dashboard');
         } catch (Exception $e) {
-            return View::make('themes.default1.agent.helpdesk.dashboard.dashboard');
+            return View::make('agent.helpdesk.dashboard.dashboard');
         }
     }
 

@@ -51,7 +51,7 @@ class HelptopicController extends Controller
         try {
             $topics = $topic->get();
 
-            return view('themes.default1.admin.helpdesk.manage.helptopic.index', compact('topics'));
+            return view('admin.helpdesk.manage.helptopic.index', compact('topics'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -89,7 +89,7 @@ class HelptopicController extends Controller
             $slas = $sla->get();
             $priority = Ticket_Priority::where('status', '=', 1)->get();
 
-            return view('themes.default1.admin.helpdesk.manage.helptopic.create', compact('priority', 'departments', 'topics', 'forms', 'agents', 'slas'));
+            return view('admin.helpdesk.manage.helptopic.create', compact('priority', 'departments', 'topics', 'forms', 'agents', 'slas'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -153,7 +153,7 @@ class HelptopicController extends Controller
                                 ->select('help_topic')
                                 ->where('id', '=', 1)->first();
 
-            return view('themes.default1.admin.helpdesk.manage.helptopic.edit', compact('priority', 'departments', 'topics', 'forms', 'agents', 'slas', 'sys_help_topic'));
+            return view('admin.helpdesk.manage.helptopic.edit', compact('priority', 'departments', 'topics', 'forms', 'agents', 'slas', 'sys_help_topic'));
         } catch (Exception $e) {
             return redirect('helptopic')->with('fails', '<li>'.$e->getMessage().'</li>');
         }

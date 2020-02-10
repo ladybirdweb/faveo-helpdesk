@@ -33,7 +33,7 @@ class TemplateSetController extends Controller
         try {
             $sets = TemplateSet::all();
 
-            return view('themes.default1.common.template.sets', compact('sets'));
+            return view('common.template.sets', compact('sets'));
         } catch (\Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }

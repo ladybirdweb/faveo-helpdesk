@@ -61,7 +61,7 @@ class SettingsController extends Controller
         $settings = $settings->whereId('1')->first();
         $time = $time->get();
         //$date = $date->get();
-        return view('themes.default1.agent.kb.settings.settings', compact('date', 'settings', 'time'));
+        return view('agent.kb.settings.settings', compact('date', 'settings', 'time'));
     }
 
     /**
@@ -127,7 +127,7 @@ class SettingsController extends Controller
      */
     public function comment(Comment $comment)
     {
-        return view('themes.default1.agent.kb.settings.comment');
+        return view('agent.kb.settings.comment');
     }
 
     /**
@@ -215,7 +215,7 @@ class SettingsController extends Controller
         $time = Timezone::all();
         $user = Auth::user();
 
-        return view('themes.default1.agent.kb.settings.profile', compact('user', 'time'));
+        return view('agent.kb.settings.profile', compact('user', 'time'));
     }
 
     /**

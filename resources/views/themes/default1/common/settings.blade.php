@@ -1,4 +1,4 @@
-@extends('themes.default1.layouts.master')
+@extends('layouts.master')
 @section('content')
 
 <div class="row">

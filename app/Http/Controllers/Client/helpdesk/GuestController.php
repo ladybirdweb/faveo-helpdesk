@@ -65,7 +65,7 @@ class GuestController extends Controller
         $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
         $status = $settings->status;
 
-        return view('themes.default1.client.helpdesk.profile', compact('user'))
+        return view('client.helpdesk.profile', compact('user'))
                         ->with(['phonecode' => $phonecode->phonecode,
                             'verify'        => $status, ]);
     }
@@ -154,7 +154,7 @@ class GuestController extends Controller
     {
         $topics = $topic->get();
 
-        return view('themes.default1.client.helpdesk.tickets.form', compact('topics'));
+        return view('client.helpdesk.tickets.form', compact('topics'));
     }
 
     /**
@@ -172,7 +172,7 @@ class GuestController extends Controller
         if (System::first()->status == 1) {
             $topics = $topic->get();
 
-            return view('themes.default1.client.helpdesk.form', compact('topics'));
+            return view('client.helpdesk.form', compact('topics'));
         } else {
             return \Redirect::route('home');
         }
@@ -189,7 +189,7 @@ class GuestController extends Controller
      */
     public function getMyticket()
     {
-        return view('themes.default1.client.helpdesk.mytickets');
+        return view('client.helpdesk.mytickets');
     }
 
     /**
@@ -211,7 +211,7 @@ class GuestController extends Controller
         $thread = $thread->where('ticket_id', $tickets->id)->first();
         //dd($thread);
         // $tickets = $tickets->whereId($id)->first();
-        return view('themes.default1.client.guest-user.view_ticket', compact('thread', 'tickets'));
+        return view('client.guest-user.view_ticket', compact('thread', 'tickets'));
     }
 
     /**
@@ -283,7 +283,7 @@ class GuestController extends Controller
      */
     public function getCheckTicket(Tickets $ticket, User $user)
     {
-        return view('themes.default1.client.helpdesk.guest-user.newticket', compact('ticket'));
+        return view('client.helpdesk.guest-user.newticket', compact('ticket'));
     }
 
     /**
@@ -352,7 +352,7 @@ class GuestController extends Controller
                 ->where('option_name', '=', 'user_set_ticket_status')
                 ->first();
 
-        return view('themes.default1.client.helpdesk.ckeckticket', compact('id', 'common_setting'));
+        return view('client.helpdesk.ckeckticket', compact('id', 'common_setting'));
     }
 
     /**
@@ -364,7 +364,7 @@ class GuestController extends Controller
      */
     public function getTicketStat(Tickets $ticket)
     {
-        return view('themes.default1.client.helpdesk.ckeckticket', compact('ticket'));
+        return view('client.helpdesk.ckeckticket', compact('ticket'));
     }
 
     /**
