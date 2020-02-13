@@ -175,7 +175,7 @@ return [
         'Chumper\Datatable\DatatableServiceProvider',
         'Chumper\Zipper\ZipperServiceProvider',
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-       \Torann\GeoIP\GeoIPServiceProvider::class,
+        \Torann\GeoIP\GeoIPServiceProvider::class,
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Unisharp\Ckeditor\ServiceProvider::class,

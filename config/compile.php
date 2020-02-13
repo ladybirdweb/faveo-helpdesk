@@ -30,6 +30,6 @@ return [
       |
      */
     'providers' => [
-    //
+        //
     ],
 ];

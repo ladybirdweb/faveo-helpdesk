@@ -29,11 +29,11 @@ class TicketEditRequest extends Request
     public function rules()
     {
         return [
-                // 'subject' => 'required',
-                // 'sla_paln' => 'required',
-                // 'help_topic' => 'required',
-                // 'ticket_source' => 'required',
-                // 'ticket_priority' => 'required',
+            // 'subject' => 'required',
+            // 'sla_paln' => 'required',
+            // 'help_topic' => 'required',
+            // 'ticket_source' => 'required',
+            // 'ticket_priority' => 'required',
         ];
     }
 }

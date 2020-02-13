@@ -493,7 +493,7 @@ return [
     'footer2' => 'Footer2',
     'footer3' => 'Footer3',
     'footer4' => 'Footer4',
-     /*
+    /*
       |--------------------------------------
       |  Custom alert box
       |--------------------------------------
@@ -776,7 +776,7 @@ return [
     'user-exists'                                     => 'Benutzer existiert bereits. Versuchen Sie, den vorhandenen Benutzer zu suchen.',
     'valid-email'                                     => 'Geben sie eine gültige E-Mail-Adresse an.',
     'search_user'                                     => 'Benutzer suchen',
-     'merge-ticket'                                   => 'Ticket zusammenlegen',
+    'merge-ticket'                                    => 'Ticket zusammenlegen',
     'title'                                           => 'Title',
     'merge'                                           => 'Zusammenlegen',
     'select_tickets'                                  => 'Wählen Sie Tickets zum Zusammenführen aus',
@@ -1080,80 +1080,80 @@ return [
      * Followup Updated
      * --------------------------------------------------------------------------------------------
      */
-     'followup'              => 'Nachverfolgen',
-     'followup_tickets'      => 'Followup tickets',
-     'followup_Notification' => 'Follow-up-Benachrichtigung',
+    'followup'              => 'Nachverfolgen',
+    'followup_tickets'      => 'Followup tickets',
+    'followup_Notification' => 'Follow-up-Benachrichtigung',
 
-     /*
+    /*
       *--------------------------------------------------------------------------------------------
       *Updated 6-9-2016
       *---------------------------------------------------------------------------------------
       */
-     'not-available'  => 'Nicht verfügbar',
-     /* --------------------------------------------------------------------------------------------
+    'not-available'  => 'Nicht verfügbar',
+    /* --------------------------------------------------------------------------------------------
      * User Module
      * --------------------------------------------------------------------------------------------
      */
-     'agent_report'                                                 => 'Agentenbericht',
-     'assign_tickets'                                               => 'Tickets zuweisen',
-     'delete_agent'                                                 => 'Löschen Sie den Agenten',
-     'delete_user'                                                  => 'Benutzer löschen',
-     'confirm_deletion'                                             => 'Löschung bestätigen',
-     'delete_all_content'                                           => 'Lösche den gesamten Inhalt',
-     'agent_profile'                                                => 'Agentenprofil',
-     'change_role_to_admin'                                         => 'Ändern Sie die Rolle in Admin',
-     'change_role_to_user'                                          => 'Ändern Sie die Rolle in Benutzer',
-     'change_role_to_agent'                                         => 'Ändern Sie die Rolle in Agent',
-     'change_password'                                              => 'Passwort ändern',
-     'role_change'                                                  => 'Rollenwechsel',
-     'password_generator'                                           => 'Passwortgenerator',
-     'depertment'                                                   => 'Abteilung',
-     'duetoday'                                                     => 'Heute fällig',
-     'today-due_tickets'                                            => 'Heutige Tickets',
-     'password_change_successfully'                                 => 'Passwort erfolgreich geändert',
-     'role_change_successfully'                                     => 'Die Rolle wurde erfolgreich geändert',
-     'user_delete_successfully'                                     => 'Benutzer wurde erfolgreich gelöscht',
-     'agent_delete_successfully'                                    => 'Agent wurde erfolgreich gelöscht',
-     'select_another_agent'                                         => 'Wählen Sie einen anderen Agenten aus',
-     'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Der Agent wurde erfolgreich gelöscht und das Ticket wurde einem anderen Agenten zugewiesen',
-     'deleted_user'                                                 => 'Gelöschter Benutzer',
-     'deleted_user_directory'                                       => 'Gelöschtes Benutzerverzeichnis',
-     'restore'                                                      => 'Wiederherstellen',
-     'user_restore_successfully'                                    => 'Benutzerwiederherstellung erfolgreich',
+    'agent_report'                                                 => 'Agentenbericht',
+    'assign_tickets'                                               => 'Tickets zuweisen',
+    'delete_agent'                                                 => 'Löschen Sie den Agenten',
+    'delete_user'                                                  => 'Benutzer löschen',
+    'confirm_deletion'                                             => 'Löschung bestätigen',
+    'delete_all_content'                                           => 'Lösche den gesamten Inhalt',
+    'agent_profile'                                                => 'Agentenprofil',
+    'change_role_to_admin'                                         => 'Ändern Sie die Rolle in Admin',
+    'change_role_to_user'                                          => 'Ändern Sie die Rolle in Benutzer',
+    'change_role_to_agent'                                         => 'Ändern Sie die Rolle in Agent',
+    'change_password'                                              => 'Passwort ändern',
+    'role_change'                                                  => 'Rollenwechsel',
+    'password_generator'                                           => 'Passwortgenerator',
+    'depertment'                                                   => 'Abteilung',
+    'duetoday'                                                     => 'Heute fällig',
+    'today-due_tickets'                                            => 'Heutige Tickets',
+    'password_change_successfully'                                 => 'Passwort erfolgreich geändert',
+    'role_change_successfully'                                     => 'Die Rolle wurde erfolgreich geändert',
+    'user_delete_successfully'                                     => 'Benutzer wurde erfolgreich gelöscht',
+    'agent_delete_successfully'                                    => 'Agent wurde erfolgreich gelöscht',
+    'select_another_agent'                                         => 'Wählen Sie einen anderen Agenten aus',
+    'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Der Agent wurde erfolgreich gelöscht und das Ticket wurde einem anderen Agenten zugewiesen',
+    'deleted_user'                                                 => 'Gelöschter Benutzer',
+    'deleted_user_directory'                                       => 'Gelöschtes Benutzerverzeichnis',
+    'restore'                                                      => 'Wiederherstellen',
+    'user_restore_successfully'                                    => 'Benutzerwiederherstellung erfolgreich',
 
-     /*** updates 28-11-2016***/
-     'apply'              => 'anwenden',
+    /*** updates 28-11-2016***/
+    'apply'              => 'anwenden',
 
-     /* updates 2-12-2016 **/
-     'sort-by'                      => 'Sortiere nach',
-     'created-at'                   => 'Erstellt am',
-     'or'                           => 'oder',
-     'activate'                     => 'Aktivieren',
-     'system-email-not-configured'  => 'Wir können die E-Mail-Anfrage nicht verarbeiten, da das System keine konfigurierte E-Mail zum Senden von E-Mails hat. Bitte kontaktieren Sie den Systemadministrator und benachrichtigen Sie ihn.',
-     'assign-ticket'                => 'Tickets zuweisen',
-     'can-not-inactive-group'       => 'Die Gruppe kann nicht inaktiviert werden, da ihr Agenten zugewiesen sind. Weisen Sie diese Agenten einer anderen Gruppe zu und versuchen Sie es erneut.',
-     'internal-note-has-been-added' => 'Interne Notiz wurde dem Ticket hinzugefügt',
-     'active-users'                 => 'Aktive Benutzer',
-     'deleted-users'                => 'Gelöschte Benutzer',
-     'view-option'                  => 'Optionen anzeigen',
-     'accoutn-not-verified'         => 'Benutzerkonto wurde nicht überprüft',
-     'enabled'                      => 'Aktiviert',
-     'disabled'                     => 'Deaktiviert',
-     'user-account-is-deleted'      => 'Dieses Benutzerkonto wurde gelöscht.',
-     'restore-user'                 => 'Benutzerkonto wiederherstellen',
-     'delete-account-caution-info'  => 'Bitte beachten Sie, dass dieses Konto möglicherweise noch offene Tickets im System hat.',
-     'reply-can-not-be-empty'       => 'Antwort kann nicht leer sein. Bitte geben Sie Ihre Antwort ein.',
+    /* updates 2-12-2016 **/
+    'sort-by'                      => 'Sortiere nach',
+    'created-at'                   => 'Erstellt am',
+    'or'                           => 'oder',
+    'activate'                     => 'Aktivieren',
+    'system-email-not-configured'  => 'Wir können die E-Mail-Anfrage nicht verarbeiten, da das System keine konfigurierte E-Mail zum Senden von E-Mails hat. Bitte kontaktieren Sie den Systemadministrator und benachrichtigen Sie ihn.',
+    'assign-ticket'                => 'Tickets zuweisen',
+    'can-not-inactive-group'       => 'Die Gruppe kann nicht inaktiviert werden, da ihr Agenten zugewiesen sind. Weisen Sie diese Agenten einer anderen Gruppe zu und versuchen Sie es erneut.',
+    'internal-note-has-been-added' => 'Interne Notiz wurde dem Ticket hinzugefügt',
+    'active-users'                 => 'Aktive Benutzer',
+    'deleted-users'                => 'Gelöschte Benutzer',
+    'view-option'                  => 'Optionen anzeigen',
+    'accoutn-not-verified'         => 'Benutzerkonto wurde nicht überprüft',
+    'enabled'                      => 'Aktiviert',
+    'disabled'                     => 'Deaktiviert',
+    'user-account-is-deleted'      => 'Dieses Benutzerkonto wurde gelöscht.',
+    'restore-user'                 => 'Benutzerkonto wiederherstellen',
+    'delete-account-caution-info'  => 'Bitte beachten Sie, dass dieses Konto möglicherweise noch offene Tickets im System hat.',
+    'reply-can-not-be-empty'       => 'Antwort kann nicht leer sein. Bitte geben Sie Ihre Antwort ein.',
 
-     //update 18-12-2016
-     'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Ihr Konto wurde erfolgreich erstellt. Bitte kontaktieren Sie den Administrator für die Kontoaktivierung, da wir Ihnen keinen OPT-Code senden konnten.',
-     //update 19-12-2016
-     'only-agents'         => 'Agentenbenutzer',
-     'only-users'          => 'Kunden Benutzer',
-     'banned-users'        => 'Gesperrte Benutzer',
-     'inactive-users'      => 'Inaktiver Benutzer',
-     'all-users'           => 'Alle Nutzer',
-     //update 21-12-2016
-     'selected-user-is-already-the-owner' => 'Der ausgewählte Benutzer ist bereits Inhaber dieses Tickets.',
-     //updated 15-5-2017
-     'session-expired'     => 'Die Sitzung ist abgelaufen oder ungültig. Bitte versuchen Sie es erneut.',
+    //update 18-12-2016
+    'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Ihr Konto wurde erfolgreich erstellt. Bitte kontaktieren Sie den Administrator für die Kontoaktivierung, da wir Ihnen keinen OPT-Code senden konnten.',
+    //update 19-12-2016
+    'only-agents'         => 'Agentenbenutzer',
+    'only-users'          => 'Kunden Benutzer',
+    'banned-users'        => 'Gesperrte Benutzer',
+    'inactive-users'      => 'Inaktiver Benutzer',
+    'all-users'           => 'Alle Nutzer',
+    //update 21-12-2016
+    'selected-user-is-already-the-owner' => 'Der ausgewählte Benutzer ist bereits Inhaber dieses Tickets.',
+    //updated 15-5-2017
+    'session-expired'     => 'Die Sitzung ist abgelaufen oder ungültig. Bitte versuchen Sie es erneut.',
 ];

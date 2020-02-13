@@ -224,12 +224,12 @@ class InstallController extends Controller
     public function accountcheck(Request $request)
     {
         $validator = \Validator::make($request->all(), [
-                    'firstname'       => 'required|max:20',
-                    'Lastname'        => 'required|max:20',
-                    'email'           => 'required|max:50|email',
-                    'username'        => 'required|max:50|min:3',
-                    'password'        => 'required|min:6',
-                    'confirmpassword' => 'required|same:password',
+            'firstname'       => 'required|max:20',
+            'Lastname'        => 'required|max:20',
+            'email'           => 'required|max:50|email',
+            'username'        => 'required|max:50|min:3',
+            'password'        => 'required|min:6',
+            'confirmpassword' => 'required|same:password',
         ]);
 
         if ($validator->fails()) {
@@ -285,15 +285,15 @@ class InstallController extends Controller
         $admin_tzone = $timezones->id;
         // creating an user
         $user = User::updateOrCreate(['id' => 1], [
-                    'first_name'   => $firstname,
-                    'last_name'    => $lastname,
-                    'email'        => $email,
-                    'user_name'    => $username,
-                    'password'     => Hash::make($password),
-                    //'assign_group' => 1,
-                    'primary_dpt'  => 1,
-                    'active'       => 1,
-                    'role'         => 'admin',
+            'first_name'   => $firstname,
+            'last_name'    => $lastname,
+            'email'        => $email,
+            'user_name'    => $username,
+            'password'     => Hash::make($password),
+            //'assign_group' => 1,
+            'primary_dpt'  => 1,
+            'active'       => 1,
+            'role'         => 'admin',
         ]);
 
         // checking if the user have been created
