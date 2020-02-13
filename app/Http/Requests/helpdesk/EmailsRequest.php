@@ -39,9 +39,9 @@ class EmailsRequest extends Request
             // 'user_name' => 'required',
             // 'sending_host' => 'required',
             // 'sending_port' => 'required',
-//            'fetching_host'    => 'required',
-//            'fetching_port'    => 'required',
-//            'mailbox_protocol' => 'required',
+            //            'fetching_host'    => 'required',
+            //            'fetching_port'    => 'required',
+            //            'mailbox_protocol' => 'required',
         ];
     }
 }

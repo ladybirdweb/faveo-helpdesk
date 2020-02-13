@@ -48,7 +48,7 @@ return [
     'iforgot'                                => 'I forgot my password',
     'email_address'                          => 'Email address',
     'password'                               => 'Password',
-     'password_confirmation'                 => 'Password confirmation',
+    'password_confirmation'                  => 'Password confirmation',
     'woops'                                  => 'Whoops!',
     'theirisproblem'                         => 'There were some problems with your input.',
     'e-mail'                                 => 'Email',
@@ -64,7 +64,7 @@ return [
     'verify-number'                          => 'Verify number',
     'get-verify-message'                     => 'Enter the OTP code we\'ve sent to your new number.',
     'number-verification-sussessfull'        => 'Your number has been verified successfully, please wait we are updating your profile.',
-     'enter_your_email_here'                 => 'Enter Your Email Here',
+    'enter_your_email_here'                  => 'Enter Your Email Here',
     /*
       |--------------------------------------
       |   Register Page
@@ -462,7 +462,7 @@ return [
       |Social login
       |--------------------------------------------------
     */
-      'social-login' => 'Social login',
+    'social-login' => 'Social login',
 
     /*
       |------------------------------------------------
@@ -1120,7 +1120,7 @@ return [
     'user-exists'                                    => 'User already exists. Try search existing user.',
     'valid-email'                                    => 'Enter a valid email address.',
     'search_user'                                    => 'Search user',
-     'merge-ticket'                                  => 'Merge ticket',
+    'merge-ticket'                                   => 'Merge ticket',
     'title'                                          => 'Title',
     'merge'                                          => 'Merge',
     'select_tickets'                                 => 'Select tickets to merge',
@@ -1516,82 +1516,82 @@ return [
      * Followup Updated
      * --------------------------------------------------------------------------------------------
      */
-     'followup'              => 'Followup',
-     'followup_tickets'      => 'Followup tickets',
-     'followup_Notification' => 'Followup notification',
+    'followup'              => 'Followup',
+    'followup_tickets'      => 'Followup tickets',
+    'followup_Notification' => 'Followup notification',
 
-     /*
+    /*
       *--------------------------------------------------------------------------------------------
       *Updated 6-9-2016
       *---------------------------------------------------------------------------------------
       */
-     'not-available'  => 'Not available',
-     /* --------------------------------------------------------------------------------------------
+    'not-available'  => 'Not available',
+    /* --------------------------------------------------------------------------------------------
      * User Module
      * --------------------------------------------------------------------------------------------
      */
-     'agent_report'                                                 => 'Agent report',
-     'assign_tickets'                                               => 'Assign tickets',
-     'delete_agent'                                                 => 'Delete agent',
-     'delete_user'                                                  => 'Delete user',
-     'confirm_deletion'                                             => 'Confirm deletion',
-     'delete_all_content'                                           => 'Delete all content',
-     'agent_profile'                                                => 'Agent profile',
-     'change_role_to_admin'                                         => 'Change role to admin',
-     'change_role_to_user'                                          => 'Change role to user',
-     'change_role_to_agent'                                         => 'Change role to agent',
-     'change_password'                                              => 'Change password',
-     'role_change'                                                  => 'Role change',
-     'password_generator'                                           => 'Password generator',
-     'depertment'                                                   => 'Department',
-     'duetoday'                                                     => 'Due today',
-     'today-due_tickets'                                            => 'Today\'s due tickets',
-     'password_change_successfully'                                 => 'Password changed successfully',
-     'role_change_successfully'                                     => 'Role changed successfully',
-     'user_delete_successfully'                                     => 'User deleted successfully',
-     'agent_delete_successfully'                                    => 'Agent deleted successfully',
-     'select_another_agent'                                         => 'Select another agent',
-     'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agent deleted successfully and ticket assigned to another agent',
-     'deleted_user'                                                 => 'Deleted User',
-     'deleted_user_directory'                                       => 'Deleted User Directory',
-     'restore'                                                      => 'Restore',
-     'user_restore_successfully'                                    => 'User restore successfully',
+    'agent_report'                                                 => 'Agent report',
+    'assign_tickets'                                               => 'Assign tickets',
+    'delete_agent'                                                 => 'Delete agent',
+    'delete_user'                                                  => 'Delete user',
+    'confirm_deletion'                                             => 'Confirm deletion',
+    'delete_all_content'                                           => 'Delete all content',
+    'agent_profile'                                                => 'Agent profile',
+    'change_role_to_admin'                                         => 'Change role to admin',
+    'change_role_to_user'                                          => 'Change role to user',
+    'change_role_to_agent'                                         => 'Change role to agent',
+    'change_password'                                              => 'Change password',
+    'role_change'                                                  => 'Role change',
+    'password_generator'                                           => 'Password generator',
+    'depertment'                                                   => 'Department',
+    'duetoday'                                                     => 'Due today',
+    'today-due_tickets'                                            => 'Today\'s due tickets',
+    'password_change_successfully'                                 => 'Password changed successfully',
+    'role_change_successfully'                                     => 'Role changed successfully',
+    'user_delete_successfully'                                     => 'User deleted successfully',
+    'agent_delete_successfully'                                    => 'Agent deleted successfully',
+    'select_another_agent'                                         => 'Select another agent',
+    'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agent deleted successfully and ticket assigned to another agent',
+    'deleted_user'                                                 => 'Deleted User',
+    'deleted_user_directory'                                       => 'Deleted User Directory',
+    'restore'                                                      => 'Restore',
+    'user_restore_successfully'                                    => 'User restore successfully',
 
-     /*** updates 28-11-2016***/
-     'apply'              => 'Apply',
+    /*** updates 28-11-2016***/
+    'apply'              => 'Apply',
 
-     /* updates 2-12-2016 **/
-     'sort-by'                      => 'Sort by',
-     'created-at'                   => 'Created at',
-     'or'                           => 'OR',
-     'activate'                     => 'Activate',
-     'system-email-not-configured'  => 'System could not send emails to users as it does not have the email configured to send outgoing mails. Please contact and report system admin.',
-     'assign-ticket'                => 'Assign tickets',
-     'can-not-inactive-group'       => 'Can not make the group inactive as it has agents assigned in it. Please assign those agents to another group and try again.',
-     'internal-note-has-been-added' => 'Internal note added to the ticket',
-     'active-users'                 => 'Active users',
-     'deleted-users'                => 'Deleted users',
-     'view-option'                  => 'View options',
-     'accoutn-not-verified'         => 'User account is not verified',
-     'enabled'                      => 'Enabled',
-     'disabled'                     => 'Disabled',
-     'user-account-is-deleted'      => 'This user account has been deleted.',
-     'restore-user'                 => 'Restore user account',
-     'delete-account-caution-info'  => 'Please note this account may still have  open tickets in the system.',
-     'reply-can-not-be-empty'       => 'Reply can not be blank. Please enter your reply.',
+    /* updates 2-12-2016 **/
+    'sort-by'                      => 'Sort by',
+    'created-at'                   => 'Created at',
+    'or'                           => 'OR',
+    'activate'                     => 'Activate',
+    'system-email-not-configured'  => 'System could not send emails to users as it does not have the email configured to send outgoing mails. Please contact and report system admin.',
+    'assign-ticket'                => 'Assign tickets',
+    'can-not-inactive-group'       => 'Can not make the group inactive as it has agents assigned in it. Please assign those agents to another group and try again.',
+    'internal-note-has-been-added' => 'Internal note added to the ticket',
+    'active-users'                 => 'Active users',
+    'deleted-users'                => 'Deleted users',
+    'view-option'                  => 'View options',
+    'accoutn-not-verified'         => 'User account is not verified',
+    'enabled'                      => 'Enabled',
+    'disabled'                     => 'Disabled',
+    'user-account-is-deleted'      => 'This user account has been deleted.',
+    'restore-user'                 => 'Restore user account',
+    'delete-account-caution-info'  => 'Please note this account may still have  open tickets in the system.',
+    'reply-can-not-be-empty'       => 'Reply can not be blank. Please enter your reply.',
 
-     //update 18-12-2016
-     'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Your account has been created successfully. Please contact admin for account activation as we were not able to send you an OTP code.',
-     //update 19-12-2016
-     'only-agents'         => 'Agent users',
-     'only-users'          => 'Clients users',
-     'banned-users'        => 'Banned users',
-     'inactive-users'      => 'Inactive users',
-     'all-users'           => 'All users',
-     //update 21-12-2016
-     'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
-     //updated 15-5-2017
-     'session-expired'     => 'Session expired or invalid, please try again.',
+    //update 18-12-2016
+    'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Your account has been created successfully. Please contact admin for account activation as we were not able to send you an OTP code.',
+    //update 19-12-2016
+    'only-agents'         => 'Agent users',
+    'only-users'          => 'Clients users',
+    'banned-users'        => 'Banned users',
+    'inactive-users'      => 'Inactive users',
+    'all-users'           => 'All users',
+    //update 21-12-2016
+    'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
+    //updated 15-5-2017
+    'session-expired'     => 'Session expired or invalid, please try again.',
 
     //update since v1.10
     'your_helpdesk_is_ready'                       => 'Your Helpdesk is Ready!',
