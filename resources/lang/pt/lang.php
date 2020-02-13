@@ -677,7 +677,7 @@ return [
     'footer2' => 'Rodapé2',
     'footer3' => 'Rodapé3',
     'footer4' => 'Rodapé4',
-     /*
+    /*
       |--------------------------------------
       |  Custom alert box
       |--------------------------------------
@@ -1077,7 +1077,7 @@ return [
     'user-exists'                                     => 'Usuário já existe. Tente procurar usuários existentes.',
     'valid-email'                                     => 'Informe um endereço de e-mail válido.',
     'search_user'                                     => 'Procurar usuário',
-     'merge-ticket'                                   => 'Vincular ticket',
+    'merge-ticket'                                    => 'Vincular ticket',
     'title'                                           => 'Título',
     'merge'                                           => 'Vincular',
     'select_tickets'                                  => 'Selecione tickets para vincular',
@@ -1355,34 +1355,34 @@ return [
     'api_configurations'               => 'Configurações Api',
     'generate_key'                     => 'Gerar chave',
     'api_settings'                     => 'Configurações API',
-   /*
+    /*
     *-----------------------------------------------------------------------------
     * Error log and debugging settings
     *--------------------------------------------------------------------------
     *
     */
-   'error-debug'                                    => 'Logs de erros e depuração',
-   'debug-options'                                  => 'Opções de depuração',
-   'view-logs'                                      => 'Exibir logs de erro',
-   'not-authorised-error-debug'                     => 'Você não está autorizado a acessar a URL',
-   'error-debug-settings'                           => 'Configurações de erro e depuração',
-   'debugging'                                      => 'Modo de depuração',
-   'bugsnag-debugging'                              => 'Enviar relatórios de falha de aplicativos para ajudar Ladybird melhorar Faveo',
-   'error-debug-settings-saved-message'             => 'Suas configurações de erro e depuração foram salvas com sucesso',
-   'error-debug-settings-error-message'             => 'Você ainda não fez qualquer mudança nas configurações.',
-   'error-logs'                                     => 'Logs de erros',
-   /*---------------------------------------------------------------------------------------
+    'error-debug'                                    => 'Logs de erros e depuração',
+    'debug-options'                                  => 'Opções de depuração',
+    'view-logs'                                      => 'Exibir logs de erro',
+    'not-authorised-error-debug'                     => 'Você não está autorizado a acessar a URL',
+    'error-debug-settings'                           => 'Configurações de erro e depuração',
+    'debugging'                                      => 'Modo de depuração',
+    'bugsnag-debugging'                              => 'Enviar relatórios de falha de aplicativos para ajudar Ladybird melhorar Faveo',
+    'error-debug-settings-saved-message'             => 'Suas configurações de erro e depuração foram salvas com sucesso',
+    'error-debug-settings-error-message'             => 'Você ainda não fez qualquer mudança nas configurações.',
+    'error-logs'                                     => 'Logs de erros',
+    /*---------------------------------------------------------------------------------------
     *Latest update 16-06-2016
     *-----------------------------------------------------------------------------------
     */
-   'that_email_is not_available_in_this_system'     => 'Esse e-mail não está disponível neste sistema',
-   'use_subject'                                    => 'Use Assunto',
-   'reopen'                                         => 'Reabrir',
+    'that_email_is not_available_in_this_system'     => 'Esse e-mail não está disponível neste sistema',
+    'use_subject'                                    => 'Use Assunto',
+    'reopen'                                         => 'Reabrir',
 
-   /*******************************New updated ********************************************/
-   /*                       Translation Required                                          */
-   /***************************************************************************************/
-   'invalid_attempt'                            => 'Invalid Attempt',
+    /*******************************New updated ********************************************/
+    /*                       Translation Required                                          */
+    /***************************************************************************************/
+    'invalid_attempt'                            => 'Invalid Attempt',
     /* ---------------------------------------------------------------------------------------
      * Latest update 27-07-2016
      * -----------------------------------------------------------------------------------
@@ -1477,82 +1477,82 @@ return [
      * Followup Updated
      * --------------------------------------------------------------------------------------------
      */
-     'followup'              => 'Followup',
-     'followup_tickets'      => 'Followup tickets',
-     'followup_Notification' => 'Followup notification',
+    'followup'              => 'Followup',
+    'followup_tickets'      => 'Followup tickets',
+    'followup_Notification' => 'Followup notification',
 
-     /*
+    /*
       *--------------------------------------------------------------------------------------------
       *Updated 6-9-2016
       *---------------------------------------------------------------------------------------
       */
-     'not-available'  => 'Not available',
-     /* --------------------------------------------------------------------------------------------
+    'not-available'  => 'Not available',
+    /* --------------------------------------------------------------------------------------------
      * User Module
      * --------------------------------------------------------------------------------------------
      */
-     'agent_report'                                                 => 'Agent report',
-     'assign_tickets'                                               => 'Assign tickets',
-     'delete_agent'                                                 => 'Delete agent',
-     'delete_user'                                                  => 'Delete user',
-     'confirm_deletion'                                             => 'Confirm deletion',
-     'delete_all_content'                                           => 'Delete all content',
-     'agent_profile'                                                => 'Agent profile',
-     'change_role_to_admin'                                         => 'Change role to admin',
-     'change_role_to_user'                                          => 'Change role to user',
-     'change_role_to_agent'                                         => 'Change role to agent',
-     'change_password'                                              => 'Change password',
-     'role_change'                                                  => 'Role change',
-     'password_generator'                                           => 'Password generator',
-     'depertment'                                                   => 'Depertment',
-     'duetoday'                                                     => 'Due today',
-     'today-due_tickets'                                            => 'Today\'s due ticekts',
-     'password_change_successfully'                                 => 'Password changed successfully',
-     'role_change_successfully'                                     => 'Role changed successfully',
-     'user_delete_successfully'                                     => 'User deleted successfully',
-     'agent_delete_successfully'                                    => 'Agent deleted successfully',
-     'select_another_agent'                                         => 'Select another agent',
-     'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agent deleted successfully and ticket assigned to another agent',
-     'deleted_user'                                                 => 'Deleted User',
-     'deleted_user_directory'                                       => 'Deleted User Directory',
-     'restore'                                                      => 'Restore',
-     'user_restore_successfully'                                    => 'User restore successfully',
+    'agent_report'                                                 => 'Agent report',
+    'assign_tickets'                                               => 'Assign tickets',
+    'delete_agent'                                                 => 'Delete agent',
+    'delete_user'                                                  => 'Delete user',
+    'confirm_deletion'                                             => 'Confirm deletion',
+    'delete_all_content'                                           => 'Delete all content',
+    'agent_profile'                                                => 'Agent profile',
+    'change_role_to_admin'                                         => 'Change role to admin',
+    'change_role_to_user'                                          => 'Change role to user',
+    'change_role_to_agent'                                         => 'Change role to agent',
+    'change_password'                                              => 'Change password',
+    'role_change'                                                  => 'Role change',
+    'password_generator'                                           => 'Password generator',
+    'depertment'                                                   => 'Depertment',
+    'duetoday'                                                     => 'Due today',
+    'today-due_tickets'                                            => 'Today\'s due ticekts',
+    'password_change_successfully'                                 => 'Password changed successfully',
+    'role_change_successfully'                                     => 'Role changed successfully',
+    'user_delete_successfully'                                     => 'User deleted successfully',
+    'agent_delete_successfully'                                    => 'Agent deleted successfully',
+    'select_another_agent'                                         => 'Select another agent',
+    'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agent deleted successfully and ticket assigned to another agent',
+    'deleted_user'                                                 => 'Deleted User',
+    'deleted_user_directory'                                       => 'Deleted User Directory',
+    'restore'                                                      => 'Restore',
+    'user_restore_successfully'                                    => 'User restore successfully',
 
-     /*** updates 28-11-2016***/
-     'apply'              => 'Apply',
+    /*** updates 28-11-2016***/
+    'apply'              => 'Apply',
 
-     /* updates 2-12-2016 **/
-     'sort-by'                      => 'Sort by',
-     'created-at'                   => 'Created at',
-     'or'                           => 'OR',
-     'activate'                     => 'Activate',
-     'system-email-not-configured'  => 'We are unable to process email request as the system has no configured email for sending mails. Please contact and report system admin.',
-     'assign-ticket'                => 'Assign tickets',
-     'can-not-inactive-group'       => 'Can not make the group inactive as it has agents assigned in it. Please assign those agents to another group and try again.',
-     'internal-note-has-been-added' => 'Internal note added to the ticket',
-     'active-users'                 => 'Active users',
-     'deleted-users'                => 'Deleted users',
-     'view-option'                  => 'View options',
-     'accoutn-not-verified'         => 'User account is not verified',
-     'enabled'                      => 'Enabled',
-     'disabled'                     => 'Disabled',
-     'user-account-is-deleted'      => 'This user account has been deleted.',
-     'restore-user'                 => 'Restore user account',
-     'delete-account-caution-info'  => 'Please note this account may still have  open tickets in the system.',
-     'reply-can-not-be-empty'       => 'Reply can not be blank. Please enter your reply.',
+    /* updates 2-12-2016 **/
+    'sort-by'                      => 'Sort by',
+    'created-at'                   => 'Created at',
+    'or'                           => 'OR',
+    'activate'                     => 'Activate',
+    'system-email-not-configured'  => 'We are unable to process email request as the system has no configured email for sending mails. Please contact and report system admin.',
+    'assign-ticket'                => 'Assign tickets',
+    'can-not-inactive-group'       => 'Can not make the group inactive as it has agents assigned in it. Please assign those agents to another group and try again.',
+    'internal-note-has-been-added' => 'Internal note added to the ticket',
+    'active-users'                 => 'Active users',
+    'deleted-users'                => 'Deleted users',
+    'view-option'                  => 'View options',
+    'accoutn-not-verified'         => 'User account is not verified',
+    'enabled'                      => 'Enabled',
+    'disabled'                     => 'Disabled',
+    'user-account-is-deleted'      => 'This user account has been deleted.',
+    'restore-user'                 => 'Restore user account',
+    'delete-account-caution-info'  => 'Please note this account may still have  open tickets in the system.',
+    'reply-can-not-be-empty'       => 'Reply can not be blank. Please enter your reply.',
 
-     //update 18-12-2016
-     'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Your account has been created successfully. Please contact admin for account activation as we were not able to send you an OPT code.',
+    //update 18-12-2016
+    'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Your account has been created successfully. Please contact admin for account activation as we were not able to send you an OPT code.',
 
-     //update 19-12-2016
-     'only-agents'         => 'Agent users',
-     'only-users'          => 'Clients users',
-     'banned-users'        => 'Banned users',
-     'inactive-users'      => 'Inactive users',
-     'all-users'           => 'All users',
-     //update 21-12-2016
-     'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
-     //updated 15-5-2017
-     'session-expired'     => 'Session expired or invalid, please try again.',
+    //update 19-12-2016
+    'only-agents'         => 'Agent users',
+    'only-users'          => 'Clients users',
+    'banned-users'        => 'Banned users',
+    'inactive-users'      => 'Inactive users',
+    'all-users'           => 'All users',
+    //update 21-12-2016
+    'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
+    //updated 15-5-2017
+    'session-expired'     => 'Session expired or invalid, please try again.',
 
 ];

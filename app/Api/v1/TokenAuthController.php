@@ -134,7 +134,7 @@ class TokenAuthController extends Controller
     {
         try {
             $v = \Validator::make($request->all(), [
-                        'url' => 'required|url',
+                'url' => 'required|url',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
@@ -155,7 +155,7 @@ class TokenAuthController extends Controller
     {
         try {
             $v = \Validator::make($request->all(), [
-                        'email' => 'required|email|exists:users,email',
+                'email' => 'required|email|exists:users,email',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();

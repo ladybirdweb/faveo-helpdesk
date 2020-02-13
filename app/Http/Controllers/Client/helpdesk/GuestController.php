@@ -299,8 +299,8 @@ class GuestController extends Controller
     public function PostCheckTicket(Request $request)
     {
         $validator = \Validator::make($request->all(), [
-                    'email'         => 'required|email',
-                    'ticket_number' => 'required',
+            'email'         => 'required|email',
+            'ticket_number' => 'required',
         ]);
         if ($validator->fails()) {
             return redirect()->back()

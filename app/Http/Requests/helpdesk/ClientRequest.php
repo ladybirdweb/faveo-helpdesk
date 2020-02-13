@@ -129,16 +129,16 @@ class ClientRequest extends Request
         if (($email_mandatory->status == 0 || $email_mandatory->status == '0')) {
             if (!\Auth::check()) {
                 return [
-                'Name'    => 'required',
-                'Email'   => 'email',
-                'Subject' => 'required',
-                'Details' => 'required',
-                'mobile'  => 'required',
+                    'Name'    => 'required',
+                    'Email'   => 'email',
+                    'Subject' => 'required',
+                    'Details' => 'required',
+                    'mobile'  => 'required',
                 ];
             } else {
                 return [
-                'Subject' => 'required',
-                'Details' => 'required',
+                    'Subject' => 'required',
+                    'Details' => 'required',
                 ];
             }
         } else {
