@@ -1,0 +1,8 @@
+* text=auto
+*.css linguist-vendored
+*.less linguist-vendored
+*.js linguist-vendored
+*.html linguist-vendored
+tests/ export-ignore
+phpunit.xml export-ignore
+

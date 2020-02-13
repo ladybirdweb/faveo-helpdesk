@@ -1,0 +1,143 @@
+.ui-autocomplete {
+    background-color: #fff;
+    position: absolute;
+    cursor: default;
+    list-style: none;
+    margin: 25px 0 0;
+    padding: 0;
+    border: 1px solid #E5E5E5;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    -webkit-box-shadow: 0 3px 5px #888;
+    box-shadow: 0 3px 5px #888;
+    font-size: 12px;
+}
+
+.ui-autocomplete .ui-menu-item {
+    padding: 0;
+    margin: 0;
+}
+
+.ui-autocomplete  .ui-menu-item a {
+    display: block;
+    padding: 4px 6px;
+    margin: 0;
+    text-decoration: none;
+    line-height: 12px;
+    border-bottom: 1px solid #E5E5E5;
+    border-top: 1px solid #fff;
+    color: #78959D;
+    
+}
+
+.ui-autocomplete .ui-menu-item a.ui-state-hover,
+.ui-autocomplete .ui-menu-item a.ui-state-active {
+    background-color: #c0d1e2;
+    color: #555;
+    border-color: #a6cef7;
+}
+
+.ui-autocomplete-loading {
+    background: white url(ui-anim_basic_16x16.gif) right center no-repeat;
+}
+
+ul.tagit {
+    cursor: text;
+    overflow: auto;
+    font-size: 14px;
+    width: 97%;
+    padding: 3px;
+    margin-top: 2px;
+    margin-right: 6px;
+    margin-bottom: 16px;
+    border: 1px solid #E5E5E5;
+    background: #fff;
+    color: #555;
+}
+
+ul.tagit li {
+    border-radius: 5px;
+    display: block;
+    float: left;
+    margin: 2px 5px 2px 0;
+    position: relative;
+}
+
+ul.tagit.ui-sortable li.tagit-choice a.ui-icon.ui-icon-grip-dotted-vertical{
+    float: left;
+    width: 12px;
+    margin-left: -5px;
+    cursor: move;
+}
+
+ul.tagit li.tagit-choice {
+    background-color: #DEE7F8;
+    border: 1px solid #CAD8F3;
+    padding: 2px 13px 3px 4px;
+}
+
+ul.tagit li.tagit-choice.selected {
+    background-color: #f5b0b0;
+    border-color: #f76464;
+}
+
+ul.tagit li.tagit-choice:hover {
+    background-color: #bbcef1;
+    border-color: #6d95e0;
+}
+
+ul.tagit li.tagit-new {
+    padding: 2px 4px 3px;
+    padding: 2px 4px 1px;
+    padding: 2px 4px 1px 0;
+}
+
+ul.tagit li.tagit-choice input {
+    display: block;
+    float: left;
+    margin: 0 5px 0 0;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+ul.tagit li.tagit-choice a.tagit-close {
+    color: #777777;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    outline: medium none;
+    padding: 2px 0 2px 3px;
+    text-decoration: none;
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 3px;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+ul.tagit li.tagit-choice a.tagit-close:hover {
+    color: #535353;
+}
+
+ul.tagit div.tagit-label.hidden {
+	display: none;
+}
+
+ul.tagit input.tagit-edit {
+	margin: 0px 0px 0px 2px;
+	border: none;
+	line-height: 16px;
+}
+
+ul.tagit input[type="text"] {
+    -moz-box-sizing: border-box;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: inherit !important;
+    outline: none;
+}
+
+.tagit-hiddenSelect {
+    display:none;
+}

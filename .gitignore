@@ -1,0 +1,15 @@
+# Please try and keep this file organized by alphabetical order. Single files first, then directories.
+.env
+.phpunit.result.cache
+Homestead.yaml
+Homestead.json
+/config/lfm.php
+/nbproject/*
+/node_modules
+/public/error_log
+/public/lb-faveo/media/
+/public/uploads
+/public/photos/
+/app/FaveoJob
+/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+/storage/app/attachments

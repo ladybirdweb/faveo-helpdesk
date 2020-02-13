@@ -1,0 +1,50 @@
+|======================================
+|Updating from 1.0.7.8 to 1.0.7.9
+|======================================
+
+To update copy Updatedatabase.sql from Github Project folder /DB/update from 1.0.7.8 to 1.0.7.9/Updatedatabase.sql
+
+Please take a backup of your database before following this step. Import this file to your existing Faveo database.
+
+
+|======================================
+|Updating from 1.0.7.4 to 1.0.7.5
+|======================================
+
+|------------------------
+|Database Update
+|------------------------
+
+To update copy Updatedatabase.sql from Github Project folder /DB/update from 1.0.7.4 to 1.0.7.5/Updatedatabase.sql
+
+Please take a backup of your database before following this step. Import this file to your existing Faveo database.
+
+
+|======================================
+|Updating from 1.0.6.10 to 1.0.7
+|======================================
+
+|------------------------
+|Database Update
+|------------------------
+
+To update copy Updatedatabase.sql from Github Project folder /DB/update from 1.0.6.10 to 1.0.7/Updatedatabase.sql
+
+Please take a backup of your database before following this step. Import this file to your existing Faveo database.
+
+
+|=======================================
+|General Update Instructions
+|=======================================
+
+File System update
+
+Please take a backup of your existing Faveo files before following this step. Download latest release files from Github and replace into existing Faveo folder.
+
+Don’t replace these files/folder:
+
+.env file in the root directory.
+config/database.php file.
+config/lfm.php file.
+public/lb-faveo/media.
+public/photos.

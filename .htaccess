@@ -1,0 +1,20 @@
+# Very simple security for apache webserver - do not remove.
+#
+# Restrict access to DotFiles (like .htaccess, .env, .gitignore....)
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Restrict access to system files
+<FilesMatch "^(composer.json|composer.lock|artisan|code_of_conduct.md|gulpfile.js|package.json|error_log|phpspec.yml|example.env)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Uncomment to restrict access to release text files
+#<FilesMatch "^(LICENSE|README.md|readme.txt|release-notes.txt)">
+#    Order allow,deny
+#    Deny from all
+#</FilesMatch>
+

@@ -1,0 +1,11 @@
+{
+  "providers": [
+    "Bugsnag\BugsnagLaravel\BugsnagLaravelServiceProvider"
+  ],
+  "aliases": [
+    {
+      "alias": "Bugsnag",
+      "facade": "Bugsnag\BugsnagLaravel\BugsnagFacade"
+    }
+  ]
+}

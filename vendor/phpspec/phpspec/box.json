@@ -1,0 +1,19 @@
+{
+    "chmod": "0755",
+    "directories": [
+        "src"
+    ],
+    "files": [
+        "LICENSE"
+    ],
+    "finder": [
+        {
+            "name": "*.php",
+            "exclude": ["spec", "Tests", "tests"],
+            "in": "vendor"
+        }
+    ],
+    "main": "bin/phpspec",
+    "output": "phpspec.phar",
+    "stub": true
+}

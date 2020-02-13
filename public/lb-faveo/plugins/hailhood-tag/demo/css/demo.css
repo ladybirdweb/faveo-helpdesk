@@ -1,0 +1,245 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: Helvetica;
+	background-color: #396884;
+	font-size: 12px;
+}
+
+.tr {
+	width: 200px;
+}
+
+#switcher.notr a:active,
+#switcher.notr a:visited,
+#switcher.notr a {
+	text-decoration: none;
+	color: #fff;
+	font-size: 14px;
+	font-weight: bold;
+	text-align: center;
+	padding: 5px;
+	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: 5px;
+	box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.2), -2px -2px 2px rgba(0, 0, 0, 0.2);
+	display: block;
+}
+
+#switcher.notr a:hover {
+	background-color: rgba(0, 0, 0, 0.6);
+}
+
+#switcher_parent {
+	position: fixed;
+	top: 10px;
+	right: 10px;
+}
+
+#wrap {
+	width: 800px;
+	margin: 20px auto;
+	padding: 16px;
+	font-weight: normal;
+	-khtml-border-radius: 11px;
+	-webkit-border-radius: 11px;
+	border-radius: 5px;
+	background: #fff;
+	border: 1px solid #e5e5e5;
+	-webkit-box-shadow: rgba(200, 200, 200, 1) 0 4px 18px;
+	-khtml-box-shadow: rgba(200, 200, 200, 1) 0 4px 18px;
+	box-shadow: rgba(200, 200, 200, 1) 0 4px 18px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: #1a3c73;
+	padding-bottom: 10px;
+	padding-top: 15px;
+	margin-bottom: 0;
+	font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+#description {
+	margin-bottom: 20px;
+}
+
+.blue {
+	text-decoration:underline;;
+	color:Blue;
+}
+
+.box {
+	padding: 10px;
+	font-size: 12px;
+	border-radius: 2px;
+	background: #f3f3f3;
+	color: #4f6f95;
+	border: 1px solid #e5e5e5;
+}
+
+.note {
+	border: 1px solid #7a8fa9;
+	background: #fef1ec;
+	margin: 5px 0;
+	border-radius: 2px;
+	padding: 3px;
+}
+
+.code {
+	background-color: #eee;
+	border: 1px solid #eee;
+	color: #000;
+}
+
+.code .wrap {
+	font-family: monospace;
+	white-space: pre;
+}
+
+.box:hover .code {
+	background-color: #fff;
+	border-color: #92b5de;
+}
+
+.code .blue {
+	color: #2c4bc1;
+}
+
+.code .red {
+	color: #c12c2c;
+}
+
+.code .green {
+	color: #14730d;
+}
+
+.features {
+	font-size: 14px;
+}
+
+.features ul li {
+	margin-bottom: 5px;
+}
+
+table {
+	width: 100%;
+	border: 1px solid #e5eff8;
+	margin: 0 auto;
+	border-collapse: collapse;
+	background-color: #fff;
+	-webkit-box-shadow: rgba(200, 200, 200, 1) 0 4px 4px;
+	-khtml-box-shadow: rgba(200, 200, 200, 1) 0 4px 4px;
+	box-shadow: rgba(200, 200, 200, 1) 0 4px 4px;
+	font-size: 11px;
+}
+
+.box:hover table {
+	border-color: #9fccf4;
+}
+
+tr.odd td {
+	background: #f7fbff
+}
+
+tr:hover td {
+	background-color: #bddaf4;
+	color: #1d4b74;
+}
+
+td {
+	color: #678197;
+	border-bottom: 1px solid #e5eff8;
+	border-left: 1px solid #e5eff8;
+	padding: .7em 1em;
+}
+
+td.left {
+	text-align: left;
+}
+
+th {
+	font-weight: normal;
+	color: #678197;
+	text-align: left;
+	border-bottom: 1px solid #e5eff8;
+	border-left: 1px solid #e5eff8;
+	padding: .3em 1em;
+}
+
+thead th {
+	background: #f4f9fe;
+	font: bold 1.2em/2em "Century Gothic", "Trebuchet MS", Arial, Helvetica, sans-serif;
+	color: #66a3d3
+}
+
+.browser {
+	width: 138px;
+	height: 138px;
+	float: left;
+	margin-right: 22px;
+	position: relative;
+	border-radius: 5px;
+}
+
+.browser:hover {
+	background-color: #d5e0fe;
+}
+
+.browser a {
+	display: block;
+	height: 100%;
+	width: 100%;
+	margin: 5px;
+	text-decoration: none;
+}
+
+.browser a div {
+	top: 50%;
+	display: none;
+	background-color: rgba(0, 0, 0, 0.8);
+	/*background-color: #000000;*/
+	text-align: center;
+	height: 25px;
+	line-height: 25px;
+	position: absolute;
+	width: 128px;
+	border-radius: 5px;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+	border: 1px solid #82bac9;
+	color: #fff;
+	font-size: 10px;
+	text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.2);
+	text-decoration: none;
+}
+
+#firefox {
+	background: url('../images/browsers/firefox.png') no-repeat;
+}
+
+#chrome {
+	background: url('../images/browsers/chrome.png') no-repeat;
+}
+
+#ie {
+	background: url('../images/browsers/ie.png') no-repeat;
+}
+
+#opera {
+	background: url('../images/browsers/opera.png') no-repeat;
+}
+
+#safari {
+	background: url('../images/browsers/safari.png') no-repeat;
+}
+
+.box a {
+	text-decoration: none;
+	color: #4c91df;
+}
+
+.box a:hover {
+	color: #9fc4ed;
+}
+
+select.tagit-hiddenSelect {
+	display: inline-block !important;
+}

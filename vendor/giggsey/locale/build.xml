@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="giggsey/locale" default="test">
+
+    <property name="build.script" value="build/build.php"/>
+
+    <property name="git.url" value="https://github.com/unicode-cldr/cldr-localenames-full.git"/>
+    <property name="git.path" value="cldr-localenames-full"/>
+
+    <loadfile property="metadata.version" file="CLDR-VERSION.txt">
+        <filterchain>
+            <striplinecomments>
+                <comment value="#"/>
+            </striplinecomments>
+            <striplinebreaks/>
+        </filterchain>
+    </loadfile>
+
+    <property name="data" value="data/"/>
+
+    <target name="test" description="Run unit tests" depends="compile">
+        <exec passthru="true" command="vendor/bin/phpunit"/>
+    </target>
+
+    <target name="compile" description="Build data"
+            depends="cleanup-data,build-data">
+    </target>
+
+    <target name="cleanup-data" description="Cleanup built data">
+        <delete dir="${data}"/>
+        <mkdir dir="${data}"/>
+    </target>
+
+    <target name="git-pull">
+        <available file="${git.path}" type="dir" property="git.path.exists"/>
+        <if>
+            <or>
+                <not>
+                    <isset property="git.path.exists"/>
+                </not>
+                <isfalse value="${git.path.exists}"/>
+            </or>
+            <then>
+                <echo>Cloning repository</echo>
+                <gitclone
+                        repository="${git.url}"
+                        targetPath="${git.path}"/>
+            </then>
+        </if>
+
+        <gitfetch repository="${git.path}" all="true"/>
+        <echo message="Pulling Git project @ ${metadata.version}"/>
+
+        <gitcheckout
+                repository="${git.path}"
+                branchname="${metadata.version}" quiet="false" force="true"/>
+    </target>
+
+    <target name="build-data" depends="git-pull">
+        <exec executable="${build.script}" passthru="true">
+            <arg value="Build"/>
+            <arg value="${metadata.version}"/>
+            <arg value="${git.path}/main/"/>
+            <arg value="${data}"/>
+        </exec>
+    </target>
+
+</project>

@@ -1,0 +1,489 @@
+
+ ______                      _    _      _           _           _    
+|  ____|                    | |  | |    | |         | |         | |   
+| |__ __ ___   _____  ___   | |__| | ___| |_ __   __| | ___  ___| | __
+|  __/ _` \ \ / / _ \/ _ \  |  __  |/ _ \ | '_ \ / _` |/ _ \/ __| |/ /
+| | | (_| |\ V /  __/ (_) | | |  | |  __/ | |_) | (_| |  __/\__ \   < 
+|_|  \__,_| \_/ \___|\___/  |_|  |_|\___|_| .__/ \__,_|\___||___/_|\_\
+                                          | |                         
+                                          |_|                         
+|=====================================================
+| v1.10.7 Security patch
+|=====================================================
+- Updates symfony/http-foundation to 4.4.1
+- Added Brazilian Portuguese
+
+|=====================================================
+| v1.10.6 Chrome UI issue fix patch
+|=====================================================
+Issue #1665 fix patch
+
+Recent updates of Chrome browser introduced an issue in ticket timeline page where the reply threads from users were not visible in chrome browser's latest version. 
+
+The last release fixed the issue for agent/admin view. However, the issue persisted for client view in Chrome browser. Check out [the issue](https://github.com/ladybirdweb/faveo-helpdesk/issues/1665) raised for the same.
+
+Issue Reported by: [@n3zsistemas](https://github.com/n3zsistemas)
+
+We would like to thank the Faveo community users who report their issues with the system and help us to make Faveo Helpdesk better for other users.
+
+|=====================================================
+| v1.10.5 Chrome UI issue fix patch
+|=====================================================
+Recent updates of Chrome browser introduced an issue in ticket timeline page where the reply threads from users were not visible in chrome browser's latest version. 
+
+|=====================================================
+| v1.10.4 Security patch for Slack channel
+|=====================================================
+While integrating slack notifications in Travis for builds and PRs token for SLACK channel was not encrypted allowing anyone to use the credentials and post in the Slack channel as a Travis user. This update encrypts the slack token to fix the issue.
+
+|=====================================================
+| v1.10.3 Bug Fix patch with plugin working update
+|=====================================================
+- Changed plugin settings to activate and deactivate plugin by removing the update process for the config/app.php file.
+- Changed plugin ServiceProvider registration technique by removing the hard-coded code AppServiceProvider.php file. Now We are registering all plugins' ServiceProvider classes available for active plugins with status as 1 in plugins table in the database. It provides more dynamicity to developers so they need not worry about registering their custom plugin's ServiceProvider.
+- Added new event "after.ticket.created" which gets fired after tickets get created and contain ticket data. It can be useful for developers for creating new plugins which need to perform a certain action after the ticket is created.
+- Updated helpers.php added new method carbon() to parse string date into carbon date object.
+- Added Spanish language translation (translates system up to 60% in Spanish)
+- Forget password validation exception removed dd() statement
+- Updated isInstall() method get installation value from Config instead of directly calling from .env
+- SLA deletion issue fixed #714
+- Updates for Plugin working
+
+|=====================================================
+| v1.10.2 Bug Fix Patch
+|=====================================================
+### Bugs Fixed
+- Fixed #702, agents are unable to view their tickets
+- Fixed #701, turning off outgoing mails does not stop outgoing sending emails.
+- Fixed email edit/create page does not show proper error messages
+
+
+|=====================================================
+| v1.10.1 Laravel Framework update
+|=====================================================
+### PHP7.2 compatibility patch
+
+As we mentioned in the last release that the application is now compatible with PHP7.2 but as has not been tested completely there is the number of issues which occurred while using the application with PHP7.2. This release fixes the issues logged by the application in our issue track manager.
+
+#### Bugs fixed
+- PHP7.2 compatibility issues mentioned in this [GitHub issue](https://github.com/ladybirdweb/faveo-helpdesk/issues/681)
+- Agents are not able to view tickets in ticket pages
+- Delete Forever button does not work
+- Fixed logging method in CommonmailController
+- Fixed mail config file
+- Fixed attachment variable initialization in MailController
+- Fixed sendEmail() method in PhpMailController passing empty array as default value for $template_variables
+- Fixed Bugsnag reported an issue for sendmail() which is happening for reports
+- Changes status change URL method to post for preventing CSRF attacks for ticket status manipulation
+- Removed sla-escalate atrisan command from the kernel as the functionality is not working and which is causing the issue while running cron command in v1.10
+
+#### Changelog
+- Updated Laravel version to v5.6.38
+- Initial commit for Unit testing using PHP unit. We are starting with TDD and every module and class will be tested using unit test cases.
+- Updated Artful log in Readme.md, release notes and CLI installer
+- Added phpunit.bat for running unit tests on windows machines
+- Integrated slack channel for Travis build notifications
+- Updated Bugsnag API key
+
+Error Reporting
+--------------------------
+Faveo uses [Bugsnag](https://www.bugsnag.com/) to monitor application stability in the production environment. It helps us to provide bug fixes and feature updates after analyzing the logs and crash reports for the application. **If you are customizing the application under the development environment, we request you to disable this error reporting.** It will allow us to ignore the errors occurred during your development cycle and we can focus more on the exceptions/bugs occurring in the live system of other users of the Faveo community. It can be easily disabled from "Error logs and debugging" option in the admin panel or by updating your app environment to development in `.env`.
+
+You can still report the issues on our [Github Issue page](https://github.com/ladybirdweb/faveo-helpdesk/issues) by providing proper information about the changes you are trying to implement. We assure you that Faveo community will help you and your customization can be a part of Faveo application if it follows our contributing guidelines.
+
+|=====================================================
+| v1.10 Laravel Framework update
+|=====================================================
+Faveo helpdesk v1.10 introduces some backward non compatible changes due to framework updates and introduces some refinement patches for existing functionalities.
+
+* v1.10 updates the Laravel framework version to 5.6.33 requires php7.1.3 or greater version to run.
+* CLI commands for installation has been added.
+* Better language control access for users
+* Check for system email configuration
+* Email sending out department wise
+
+To know more please follow the links below
+https://github.com/ladybirdweb/faveo-helpdesk/releases
+https://github.com/ladybirdweb/faveo-helpdesk/wiki 
+
+|=====================================================
+| v1.9.6 Facebook login bug fix patch
+|=====================================================
+## Bug Fixed
+    Token parsing issue for Facebook which prevents users from login the system using Facebook oAuth API.
+
+|=====================================================
+| v1.9.5 (security hot fixt patch2)
+|=====================================================
+## Bug Fixed
+    Prevents execution of backdoor scripts
+    Prevents users from uploading PHP files into user's profile picture
+    Handling token mismatch error when the page is opened for too long and session gets expired
+
+|=====================================================
+| v1.9.4 (security hot fixt patch)
+|=====================================================
+## Bug Fixed
+    Github issue #446 regarding CSRF
+    Enabled CSRF token verification to prevent CSRF attacks
+
+
+|=====================================================
+| v1.9.3 (hot fix)
+|=====================================================
+## Bug fixed
+#344 
+System is storing the attachment in chosen storage medium(DB/file system) but not showing the attachments in ticket detail page or ticket timeline page.
+
+## How to Fix
+See this link https://github.com/ladybirdweb/faveo-helpdesk/commit/f4d71f3d743123d15558ab120af74499298a1891 for the details of changes made for bug fix.
+
+Or
+
+Open this file: Root_directory of faveo/app/Model/helpdesk/Ticket/Ticket_attachments.php
+search and replace
+`if ($this->poster == 'ATTACHMENT')`
+with 
+`if ($this->poster == 'ATTACHMENT' || $this->poster == 'attachment')`
+at line  **49**
+
+
+|======================================================
+|v1.9.2
+|======================================================
+
+Bug Fixes
+    Fixed single cron issue #366, #347
+    Corrected notification counts    
+    Fixed canned response error
+    Correct message for registration
+    Removed routes of PRO features
+    Exception handling while adding language
+    Showing agents in alphabetical order in various drop down menus
+    Handling the case when agent/admin adds same owner while changing ticket's owner
+    Fixed priority and auto assignment while creating ticket form cleint panel
+    Fixed typos in english language translation
+    Fixed counts of tickets of every categroy
+    Removed duplicate option from top nav bar
+    Fixed empty database check while installation
+    Assigning team leader in a team while creating new team
+    Fixed #361
+
+Enhancements
+    
+    Sending email notfications to users while merging their duplicate tickets
+    Implemented Yajra in users table
+    Custom filter and search option in users table
+    Check if JavaScript is enabled or not while installation
+    Put max execution time and "mbstring" extension check while installation
+
+    |========================================================
+    | Upgrade giude
+    |========================================================
+
+    Follow this wiki article to upgrade your Faveo system
+    https://github.com/ladybirdweb/faveo-helpdesk/wiki/Upgrade-guide-for-v1.9.2
+
+|=======================================================
+| v1.9.1
+|=======================================================
+
+Bug Fixes
+    
+    Admin was not able to save/update cron settings in new installation.
+    Incorrect count of tickets in dashboard while login as an agent .
+    In client panel users/clients were able to reply without entering any comment in comment field.
+
+|=======================================================
+| v1.9.1
+|=======================================================
+
+Change Log
+    
+    Datatable packaged form Chumper to Yajra
+    Version tag correction, following semantic versioning X.Y.Z format
+    Login/registration screen layouts
+    Attachment files storage option
+
+Bug Fixes
+    
+    Solved various issues listed on GitHub issue list
+    Ticket listing table optimization
+    Query optimization in admin/agent layouts for fast processing
+
+Known Bugs
+    
+    In ticket timeline the reply content added by clients are rendered using "iframe". The "iframe" behaves differently in different browsers. Height of iframe is not responsive.
+
+    NOTE: Chrome is recommended browser to open ticket timeline.
+
+    |=====================================================
+    |   update your Faveo version to v1.9.0
+    |======================================================
+    Follow our wiki article to update your faveo version to v1.9.0
+    https://github.com/ladybirdweb/faveo-helpdesk/wiki/Upgrade-guide-to-v1.9.0
+
+
+|=======================================================
+| v1.0.8.0
+|=======================================================
+    
+Enhancements
+    
+    Advance user module
+    One command for all cron jobs
+    System report
+    Custom URL redircetion and SSL support in URL
+    Socail login
+    Due today tickets
+    Custom forms update
+    Dynamic priority settings
+    Email non mandatory 
+    Laravle logs and queues
+
+Bug Fixes
+    Code cleanup
+    Email attachment/inline image related bugs
+
+    |===============================================
+    | Update to v1.0.8.0
+    |===============================================
+    Follow our wiki article to update your faveo version to v1.0.8.0
+    https://github.com/ladybirdweb/faveo-helpdesk/wiki/How-to-update-v1.0.7.9-to-v1.0.8.0
+
+
+|=======================================================
+| v1.0.7.9
+|=======================================================
+    
+Enhancements
+    
+    Ticket change status to show in client panel via settings.
+    Not to submit two tickets on double click of Ticket submit button.
+    Dashboard linking.
+    Incoming mail format check.
+    Added a thread for ticket reopen via email.
+    Ticket linking minor issue updated.
+    Nl2br added for ticket.
+    Different department users can view tickets if assigned.
+    Preventing fall back language from deleting.
+    Send email if checked to send email for first registration via agent panel.
+    Checking storage file permission while installation.
+    File info extension check during installation.
+    Curl extension check during installation.
+    Check for API mandatory.
+    RTL feature in email sending.
+
+Bug Fixed
+    
+    Moved media files to upload folder.
+    Multiple file upload via attachment exception handling.
+    Attachment issue fixed for ticket reply.
+    File uploading according to server configuration of post_max_size.
+    Code cleanup.
+    Department ticket issue and naming convention.
+    Help topic issue fixed in ticket creation.
+    Pdf issue.
+    Custom Form issue fixed for text area.
+    Agent panel layout color changed for differentiation.
+    Nesting level issue fixed.
+    Proper ticket threads count in client panel.
+    Validating dot files access via URL.
+    Breadcrumbs Update.
+    Exception handling for database server down issue.
+    In app notification fixed for different department tickets.
+    First name and user name issue fixed.
+    YouTube icon link fixed.
+    Clear error form fields on resubmit of form in email create/edit.
+    Exception handling on re-uploads of pre-uploaded plugin.
+    Department wise ticket creation had some exception.
+    Changed naming convention for organization manager.
+    Fixed trash side bar numbering.
+
+    |=================================================
+    |    Upgrade from v1.0.7.8 to v1.0.7.9 
+    |==================================================
+
+    Read upgrade giude here https://github.com/ladybirdweb/faveo-helpdesk/wiki/Manual-Upgrade-from-v1.0.7.8-to-v1.0.7.9
+
+|=======================================================
+| v1.0.7.8
+|=======================================================
+
+Bug Fixes
+    
+    Installer API bug fixed for .env file
+    Subject added utf8 encoding for email diagnostics
+
+
+|=======================================================
+| v1.0.7.7
+|=======================================================
+
+Bug Fixes
+
+    Removed multifile writing for installation.
+    Bug fixed on Installation for unwanted redirection back to first step
+    Email subject issue fixed for encrypted formats
+    Close ticket workflow issue fixed
+
+    |------------------------------------------
+    |Updating from 1.0.7.6 to 1.0.7.7
+    |------------------------------------------
+
+    To upgrade read instructions here http://ladybirdweb.com/support/show/v1077
+
+|=======================================================
+| v1.0.7.6
+|=======================================================
+
+Bug Fixes
+
+    Updated Config file for releasing
+
+|=======================================================
+| v1.0.7.5
+|=======================================================
+
+Enhancement
+
+    Changed email template from file system to database
+    Advanced Rating module
+    In App Notification Module is now per User
+    In App notification settings in admin panel
+    POP feature is added for fetching emails
+    Send mail from server using PHP mail feature is added for sending emails
+    Added more encryption options for sending emails
+    Removed Duplicate settings from system settings
+    One can do more advanced email diagnostics by choosing different emails
+    System Off line module Enhanced
+    Everything comes from language files now
+    Auto Close ticket workflow for closing a ticket in predefined days
+    Security settings added for secured login into the system
+    Error Debugging option added
+    Bugsnag integration added
+    Webhooks added for ticket creation
+    Added 3 new languages thanks to some of our clients (German, Russian, Italian)
+    Graph added to user profile
+    Remove organisation added in Client profile page
+    Graph and ticket list added Organisation page
+    GeoIp plugin added for Phone country code pickup
+    Faveo will be able to auto upgrade to new release from this version onwards
+    XSS Vulnerability check added
+    Upgrade from Laravel 5.0 to 5.2
+    Breadcrumbs
+    Auto update module
+
+Bug Fixes
+
+    Registration Module email issue
+    Pages in knowledge base had some issue
+    Complete UI improved and proper error messages are now displayed
+    Bug fixed in edit system workflow
+    Dashboard Graph smoothened
+    Check ticket details without logging
+    Install module – check for file permission issue
+    Added dummy data for dummy installation
+    
+    |------------------------------------------
+    |Updating from 1.0.7.4 to 1.0.7.5
+    |------------------------------------------
+
+    To upgrade read instructions here http://ladybirdweb.com/support/show/v1075
+
+    |------------------------------------------
+    |Updating from 1.0.7.4 to 1.0.7.5
+    |------------------------------------------
+    Please read this instruction carefully before updating from 1.0.7.4 to 1.0.7.5 
+    http://ladybirdweb.com/support/show/bug-after-update-from-1074-to-1075-or-higher-version
+
+|=======================================================
+| v1.0.7.4
+|=======================================================
+
+Enhancement
+
+    Added STARTTLS encryption feature on email fetching settings
+
+|=======================================================
+| v1.0.7.3
+|=======================================================
+
+Bug Fixes
+
+    Email settings update issue
+
+|=======================================================
+| v1.0.7.2
+|=======================================================
+
+Bug Fixes
+
+    System failing if no system email is configured issue fixed
+
+Enhancement
+
+    Plugin Module updated for Pro Version
+
+|=======================================================
+| v1.0.7.1
+|=======================================================
+
+Bug Fixed
+
+    In app notification bug fixed
+    Ticket Listing hover issue fixed
+    Agent panel issue fixed for role agents
+    Template issue fixed    
+    
+|=======================================================
+| v1.0.7
+|=======================================================
+
+Enhancements
+
+    Ticket Workflow
+    Ticket Overdue Listing
+    In App Notification
+    Cron job separate settings
+    Select all to delete permanently from trash
+    Added Read Unread features in ticket listing pages
+    User linking to where ever usernames are displayed
+    Attachment upload-able while creating ticket from client panel
+    Enhanced email check while setting emails
+    Ticket rating enhanced
+
+Bug Fixed
+
+    Date sorting issue fixed
+    Department folder issue fixed
+    Group update issue fixed
+    Templates issue fixed
+    Email checking issue fixed
+    Ticket rating issue fixed
+    
+    |------------------------------------------
+    |Updating from 1.0.6.10 to 1.0.7
+    |------------------------------------------
+    
+    To upgrade read instructions here http://ladybirdweb.com/support/show/v107
+    
+|======================================================
+| v1.0.6.10
+|======================================================
+
+Bug Fixed
+
+    Redirection issue fixed from ticket details page
+    Login dropdown box responsitivity issue fixed
+    Mailing issue for ticket reply and new ticket creation fixed
+    Email template issue fixed for replying tickets and auto response for ticket creation
+    Settings pages error display issue fixed for html type errors
+    Daily notification issue fixed for the new mail system integrated for faveo
+    Issue fixed for large size attachments
+
+Enhancements
+
+    Added loader image in datatable processing
+    Added readme.txt which will provide install instruction
+    Updated auth validation message and showing custom logo in auth/login page
