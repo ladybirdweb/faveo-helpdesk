@@ -65,6 +65,10 @@
                                 @endif
                             </a>
                     </div><!-- #logo -->
+                    <button style="float: right;margin: 10px;" class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="navbar" aria-controls="#navbar" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button> <!-- collapse -->
+
                     <div id="navbar" class="navbar-wrapper text-center">
                         <!-- <nav class="navbar navbar-default site-navigation" role="navigation"> -->
                         <nav class="navbar navbar-light bg-light site-navigation navbar-expand-md" role="navigation">
@@ -79,6 +83,7 @@
                                         <li><a class="dropdown-item" href="{{route('category-list')}}">{!! Lang::get('lang.categories') !!}</a></li>
                                         <li class="dropdown-submenu"><a class="dropdown-item" href="{{route('article-list')}}">{!! Lang::get('lang.articles') !!}</a></li>
                                     </ul>
+                                    
                                 </li>
                                 <?php $pages = App\Model\kb\Page::where('status', '1')->where('visibility', '1')->get();
                                 ?>

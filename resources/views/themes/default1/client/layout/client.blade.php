@@ -14,6 +14,7 @@
         <!-- faveo favicon -->
         <link href="{{asset("lb-faveo/media/images/favicon.ico")}}"  rel="shortcut icon" >
 
+
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- Bootstrap  4.0.0 -->  
         <link href="{{asset("lb-faveo/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
@@ -71,18 +72,15 @@
                                 @endif
                             </a>
                     </div><!-- #logo -->
-                    
                     <button style="float: right;margin: 10px;" class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="navbar" aria-controls="#navbar" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button> <!-- collapse -->
-
-                     <div id="navbar" class="navbar-wrapper text-center">
+                    <div id="navbar" class="navbar-wrapper text-center">
                          <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent"> -->
                      <nav class="navbar navbar-light bg-light site-navigation navbar-expand-md" role="navigation">
                             <ul class="navbar-nav navbar-menu">
                         
-                           
-                                <li class="nav-item active" @yield('home')><a class="nav-link" href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
+                            <li class="nav-item active" @yield('home')><a class="nav-link" href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
                                 @if($system->first()->status == 1)
                                 <li class="nav-item" @yield('submit')><a class="nav-link" href="{{URL::route('form')}}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
                                 @endif
@@ -104,9 +102,9 @@
                                 @if(Auth::user())
                                 <li class="nav-item" @yield('myticket')><a class="nav-link" href="{{url('mytickets')}}">{!! Lang::get('lang.my_tickets') !!}</a></li>
 
-                                {{-- <li @yield('contact')><a href="{{route('contact')}}">Contact us</a></li> --}}
+                                {{-- <li class="nav-item" @yield('contact')><a class="nav-link" href="{{route('contact')}}">Contact us</a></li> --}}
                                 <li class="nav-item dropdown" @yield('profile')><a class="dropdowntoggle nav-link" href="#" >{!! Lang::get('lang.my_profile') !!}</a>
-                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
                                         <li>
                                             <div class="banner-wrapper user-menu text-center clearfix">
                                                 <img src="{{Auth::user()->profile_pic}}"class="img-circle" alt="User Image" height="80" width="80"/>
@@ -213,9 +211,9 @@
                                 </div>
                             </div><!-- #login-form -->
                             @endif
-                            <!-- <ul class="nav-item dropdown">
-                           
-                            <li class="navbarDropdown">
+                            <!-- <ul class="nav navbar-nav navbar-menu">
+
+                            <li class="dropdown">
                                     <?php $src = Lang::getLocale().'.png'; ?>
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><img src="{{asset("lb-faveo/flags/$src")}}"></img> &nbsp;<span class="caret"></span></a>
                                         <ul class="dropdown-menu" role="menu">
@@ -229,8 +227,7 @@
                                             @endforeach       
                                         </ul>
                                 </li>
-                                
-                            </ul>  -->
+                            </ul> -->
                         </nav><!-- #site-navigation -->
                     </div><!-- #navbar -->
                     <div id="header-search" class="site-search clearfix" style="padding-bottom:5px"><!-- #header-search -->
