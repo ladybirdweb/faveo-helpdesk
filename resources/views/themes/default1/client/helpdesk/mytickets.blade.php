@@ -23,13 +23,14 @@ class="active"
             ->orderBy('id', 'DESC')
             ->paginate(20);
     ?>
-    <div class="nav-tabs-custom">
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">{!! Lang::get('lang.opened') !!} <small class="label bg-orange">{!! $open->total() !!}</small></a></li>
-            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">{!! Lang::get('lang.closed') !!} <small class="label bg-green">{!! $close->total() !!}</small></a></li>
+    <div>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <!-- <ul class="nav nav-tabs"> -->
+            <li class="nav-item"><a class="nav-link active" id="tab_1" href="#tab_1" data-toggle="tab" aria-expanded="true">{!! Lang::get('lang.opened') !!} <small class="badge badge-pill" style="background-color: rgb(0, 154, 186);color: #FFFFFF">{!! $open->total() !!}</small></a></li>
+            <li class="nav-item"><a class="nav-link" id="tab_2" href="#tab_2" data-toggle="tab" aria-expanded="false">{!! Lang::get('lang.closed') !!} <small class="badge badge-pill" style="background-color: rgb(0, 154, 186);color: #FFFFFF">{!! $close->total() !!}</small></a></li>
         </ul>
-        <div class="tab-content">
-            <div class="tab-pane active" id="tab_1">
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="tab_1" role="tabpanel" aria-labelledby="tab_1">
                 {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
                 <div class="mailbox-controls">
                     <!-- Check all button -->
@@ -118,7 +119,7 @@ class="active"
                 {!! Form::close() !!}
             </div><!-- /.box-body -->
             {{-- /.tab_1 --}}
-            <div class="tab-pane" id="tab_2">
+            <div class="tab-pane" id="tab_2" role="tabpanel" aria-labelledby="tab_2" >
                 {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
                 <div class="mailbox-controls">
                     <!-- Check all button -->
