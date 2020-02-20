@@ -40,9 +40,9 @@ class EmailsEditRequest extends Request
             // 'sending_host' => 'required',
             // 'sending_port' => 'required',
             //'mailbox_protocol'	=>		'required'
-//            'fetching_host'    => 'required',
-//            'fetching_port'    => 'required',
-//            'mailbox_protocol' => 'required',
+            //            'fetching_host'    => 'required',
+            //            'fetching_port'    => 'required',
+            //            'mailbox_protocol' => 'required',
         ];
     }
 }

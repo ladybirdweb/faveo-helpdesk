@@ -470,7 +470,7 @@ return [
       |Social login
       |--------------------------------------------------
     */
-      'social-login' => 'Accesso con i Social',
+    'social-login' => 'Accesso con i Social',
 
     /*
       |------------------------------------------------
@@ -1128,7 +1128,7 @@ return [
     'user-exists'                                    => 'Utente già esistente, prova a cercare questo stesso utente.',
     'valid-email'                                    => 'Inserisci un indirizzo email valido.',
     'search_user'                                    => 'Cerca utente',
-     'merge-ticket'                                  => 'Unisci ticket',
+    'merge-ticket'                                   => 'Unisci ticket',
     'title'                                          => 'Titolo',
     'merge'                                          => 'Unisci',
     'select_tickets'                                 => 'Seleziona ticket da unire',
@@ -1520,78 +1520,78 @@ return [
      * Followup Updated
      * --------------------------------------------------------------------------------------------
      */
-     'followup'              => 'Followup',
-     'followup_tickets'      => 'Ticket di followup',
-     'followup_Notification' => 'Notifiche followup',
+    'followup'              => 'Followup',
+    'followup_tickets'      => 'Ticket di followup',
+    'followup_Notification' => 'Notifiche followup',
 
-     /*
+    /*
       *--------------------------------------------------------------------------------------------
       *Updated 6-9-2016
       *---------------------------------------------------------------------------------------
       */
-     'not-available' => 'Non disponibile',
-     /* --------------------------------------------------------------------------------------------
+    'not-available' => 'Non disponibile',
+    /* --------------------------------------------------------------------------------------------
      * User Module
      * --------------------------------------------------------------------------------------------
      */
-     'agent_report'                                                 => 'Resoconto agente',
-     'assign_tickets'                                               => 'Ticket assegnati',
-     'delete_agent'                                                 => 'Cancella agente',
-     'delete_user'                                                  => 'Cancella utente',
-     'confirm_deletion'                                             => 'Conferma cancellazione',
-     'delete_all_content'                                           => 'Cancella tutti i contenuti',
-     'agent_profile'                                                => 'Profilo agente',
-     'change_role_to_admin'                                         => 'Cambia ruolo in admin',
-     'change_role_to_user'                                          => 'Cambia ruolo in utente',
-     'change_role_to_agent'                                         => 'Cambia ruolo in agente',
-     'change_password'                                              => 'Cambia password',
-     'role_change'                                                  => 'Cambio ruolo',
-     'password_generator'                                           => 'Genera password',
-     'depertment'                                                   => 'Dipartimento',
-     'duetoday'                                                     => 'In ritardo oggi',
-     'today-due_tickets'                                            => 'In scadenza oggi',
-     'password_change_successfully'                                 => 'Password cambiata con successo',
-     'role_change_successfully'                                     => 'Ruolo modificato con successo',
-     'user_delete_successfully'                                     => 'Utente cancellato correttamente',
-     'agent_delete_successfully'                                    => 'Agente cancellato correttamente',
-     'select_another_agent'                                         => 'Seleziona un altro agente',
-     'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agente cancellato e ticket assegnato ad altro agente',
-     'deleted_user'                                                 => 'Utente cancellato',
-     'deleted_user_directory'                                       => 'Cartella utente cancellata',
-     'restore'                                                      => 'Ripristina',
-     'user_restore_successfully'                                    => 'Utente ripristinato correttamente',
+    'agent_report'                                                 => 'Resoconto agente',
+    'assign_tickets'                                               => 'Ticket assegnati',
+    'delete_agent'                                                 => 'Cancella agente',
+    'delete_user'                                                  => 'Cancella utente',
+    'confirm_deletion'                                             => 'Conferma cancellazione',
+    'delete_all_content'                                           => 'Cancella tutti i contenuti',
+    'agent_profile'                                                => 'Profilo agente',
+    'change_role_to_admin'                                         => 'Cambia ruolo in admin',
+    'change_role_to_user'                                          => 'Cambia ruolo in utente',
+    'change_role_to_agent'                                         => 'Cambia ruolo in agente',
+    'change_password'                                              => 'Cambia password',
+    'role_change'                                                  => 'Cambio ruolo',
+    'password_generator'                                           => 'Genera password',
+    'depertment'                                                   => 'Dipartimento',
+    'duetoday'                                                     => 'In ritardo oggi',
+    'today-due_tickets'                                            => 'In scadenza oggi',
+    'password_change_successfully'                                 => 'Password cambiata con successo',
+    'role_change_successfully'                                     => 'Ruolo modificato con successo',
+    'user_delete_successfully'                                     => 'Utente cancellato correttamente',
+    'agent_delete_successfully'                                    => 'Agente cancellato correttamente',
+    'select_another_agent'                                         => 'Seleziona un altro agente',
+    'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agente cancellato e ticket assegnato ad altro agente',
+    'deleted_user'                                                 => 'Utente cancellato',
+    'deleted_user_directory'                                       => 'Cartella utente cancellata',
+    'restore'                                                      => 'Ripristina',
+    'user_restore_successfully'                                    => 'Utente ripristinato correttamente',
 
-     /*** updates 28-11-2016***/
-     'apply' => 'Applica',
+    /*** updates 28-11-2016***/
+    'apply' => 'Applica',
 
-     /* updates 2-12-2016 **/
-     'sort-by'                      => 'Ordina per',
-     'created-at'                   => 'Creato a',
-     'or'                           => 'o',
-     'activate'                     => 'Attiva',
-     'system-email-not-configured'  => 'Non possiamo processare la richiesta in quanto il sistema non ha configurato alcuna mail per le notifiche. Per favore contatta l\'amministratore.',
-     'assign-ticket'                => 'Assegna ticket',
-     'can-not-inactive-group'       => 'Impossibile disattivare il gruppo con agenti assegnati. Per favore riassegna gli agenti ad un altro gruppo e riprova.',
-     'internal-note-has-been-added' => 'Note interne aggiunte al ticket',
-     'active-users'                 => 'Utenti attivi',
-     'deleted-users'                => 'Utenti cancellati',
-     'view-option'                  => 'Visualizza opzioni',
-     'accoutn-not-verified'         => 'Account non verificato',
-     'enabled'                      => 'Abilitato',
-     'disabled'                     => 'Disabilitato',
-     'user-account-is-deleted'      => 'Questo account è stato cancellato.',
-     'restore-user'                 => 'Ripristina account utente',
-     'delete-account-caution-info'  => 'Questo account potrebbe avere ancora ticket aperti nel sistema.',
-     'reply-can-not-be-empty'       => 'La risposta non può essere vuota.',
+    /* updates 2-12-2016 **/
+    'sort-by'                      => 'Ordina per',
+    'created-at'                   => 'Creato a',
+    'or'                           => 'o',
+    'activate'                     => 'Attiva',
+    'system-email-not-configured'  => 'Non possiamo processare la richiesta in quanto il sistema non ha configurato alcuna mail per le notifiche. Per favore contatta l\'amministratore.',
+    'assign-ticket'                => 'Assegna ticket',
+    'can-not-inactive-group'       => 'Impossibile disattivare il gruppo con agenti assegnati. Per favore riassegna gli agenti ad un altro gruppo e riprova.',
+    'internal-note-has-been-added' => 'Note interne aggiunte al ticket',
+    'active-users'                 => 'Utenti attivi',
+    'deleted-users'                => 'Utenti cancellati',
+    'view-option'                  => 'Visualizza opzioni',
+    'accoutn-not-verified'         => 'Account non verificato',
+    'enabled'                      => 'Abilitato',
+    'disabled'                     => 'Disabilitato',
+    'user-account-is-deleted'      => 'Questo account è stato cancellato.',
+    'restore-user'                 => 'Ripristina account utente',
+    'delete-account-caution-info'  => 'Questo account potrebbe avere ancora ticket aperti nel sistema.',
+    'reply-can-not-be-empty'       => 'La risposta non può essere vuota.',
 
-     //update 18-12-2016
-     'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Il tuo account è stato creato correttamente. Per favore contatta l\'amministratore in quanto non siamo stati in grado di spedire un codice OTP.',
-     //update 19-12-2016
-     'only-agents'    => 'Utenti agenti',
-     'only-users'     => 'Utenti clienti',
-     'banned-users'   => 'Utenti bannati',
-     'inactive-users' => 'Utenti inattivi',
-     'all-users'      => 'Tutti gli utenti',
-     //update 21-12-2016
-     'selected-user-is-already-the-owner' => 'L\'utente selezionato è già il proprietario del ticket.',
+    //update 18-12-2016
+    'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Il tuo account è stato creato correttamente. Per favore contatta l\'amministratore in quanto non siamo stati in grado di spedire un codice OTP.',
+    //update 19-12-2016
+    'only-agents'    => 'Utenti agenti',
+    'only-users'     => 'Utenti clienti',
+    'banned-users'   => 'Utenti bannati',
+    'inactive-users' => 'Utenti inattivi',
+    'all-users'      => 'Tutti gli utenti',
+    //update 21-12-2016
+    'selected-user-is-already-the-owner' => 'L\'utente selezionato è già il proprietario del ticket.',
 ];

@@ -25,7 +25,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-//        'Symfony\Component\HttpKernel\Exception\HttpException',
+        //        'Symfony\Component\HttpKernel\Exception\HttpException',
         \Illuminate\Http\Exception\HttpResponseException::class,
         foundation::class,
         AuthorizationException::class,
@@ -46,7 +46,7 @@ class Handler extends ExceptionHandler
      * @return void
      */
     public function report(Exception $e)
-    { 
+    {
         // dd($e);
         Bugsnag::setBeforeNotifyFunction(function ($error) { //set bugsnag
             return false;

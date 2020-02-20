@@ -53,8 +53,8 @@ class UnAuthController extends Controller
     {
         try {
             $validator = \Validator::make($request->all(), [
-                        'email_address' => 'required|email',
-                        'ticket_number' => 'required',
+                'email_address' => 'required|email',
+                'ticket_number' => 'required',
             ]);
             if ($validator->fails()) {
                 return redirect()->back()
