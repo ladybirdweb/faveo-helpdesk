@@ -1099,8 +1099,13 @@ class SettingsController extends Controller
     {
         try {
             $user = \App\User::select(
-                            'user_name', 'first_name', 'last_name', 'email', 'password', 'agent_tzone'
-                    )->where('id', '=', 1)->first();
+                'user_name',
+                'first_name',
+                'last_name',
+                'email',
+                'password',
+                'agent_tzone'
+            )->where('id', '=', 1)->first();
             $system = System::where('id', '=', 1)->first();
             \Schema::disableForeignKeyConstraints();
             $tableNames = \Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();

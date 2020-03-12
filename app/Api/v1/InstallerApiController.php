@@ -52,7 +52,8 @@ class InstallerApiController extends Controller
                 'databasename' => $request->databasename,
                 'dbusername'   => $request->dbusername,
                 'port'         => $request->port,
-            ], $rules
+            ],
+            $rules
         );
         if ($validator->fails()) {
             $jsons = $validator->messages();

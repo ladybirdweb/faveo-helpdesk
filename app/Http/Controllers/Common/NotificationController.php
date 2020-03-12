@@ -13,7 +13,7 @@ class NotificationController extends Controller
 {
     /**
      * ********************************************
-     * Class Notification Controller
+     * Class Notification Controller.
      * ********************************************
      * This controller is used to generate in app notification
      * under the folling occurrence

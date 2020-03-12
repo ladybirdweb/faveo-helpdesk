@@ -412,20 +412,20 @@ class TicketController extends Controller
                 $link = url('check_ticket/'.$encoded_ticketid);
                 $this->NotificationController->create($ticket_id, Auth::user()->id, '2');
                 $this->PhpMailController->sendmail(
-                        $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id),
-                        $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators],
-                        $message = [
-                            'subject'     => $ticket_subject.'[#'.$ticket_number.']',
-                            'body'        => $line.$request->input('reply_content'),
-                            'scenario'    => 'ticket-reply',
-                            'attachments' => $attachment_files,
-                        ],
-                        $template_variables = [
-                            'ticket_number' => $ticket_number,
-                            'user'          => $username,
-                            'agent_sign'    => $agentsign,
-                            'system_link'   => $link,
-                        ]
+                    $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id),
+                    $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators],
+                    $message = [
+                        'subject'     => $ticket_subject.'[#'.$ticket_number.']',
+                        'body'        => $line.$request->input('reply_content'),
+                        'scenario'    => 'ticket-reply',
+                        'attachments' => $attachment_files,
+                    ],
+                    $template_variables = [
+                        'ticket_number' => $ticket_number,
+                        'user'          => $username,
+                        'agent_sign'    => $agentsign,
+                        'system_link'   => $link,
+                    ]
                 );
             }
         } catch (\Exception $e) {
@@ -733,12 +733,16 @@ class TicketController extends Controller
                         if ($auto_response == 0) {
                             $encoded_ticketid = Crypt::encrypt($ticketdata->id);
                             $link = url('check_ticket/'.$encoded_ticketid);
-                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket-by-agent', 'body' => $body],
-                                    $template_variables = [
-                                        'agent_sign'    => Auth::user()->agent_sign,
-                                        'ticket_number' => $ticket_number2,
-                                        'system_link'   => $link,
-                                    ]);
+                            $this->PhpMailController->sendmail(
+                                $from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id),
+                                $to = ['name' => $username, 'email' => $emailadd],
+                                $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket-by-agent', 'body' => $body],
+                                $template_variables = [
+                                    'agent_sign'    => Auth::user()->agent_sign,
+                                    'ticket_number' => $ticket_number2,
+                                    'system_link'   => $link,
+                                ]
+                            );
                         }
                     } catch (\Exception $e) {
                         //dd($e);
@@ -748,12 +752,16 @@ class TicketController extends Controller
 
                     try {
                         if ($auto_response == 0) {
-                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket'],
-                                    $template_variables = ['user' => $username,
-                                        'ticket_number'           => $ticket_number2,
-                                        'department_sign'         => '',
-                                        'system_link'             => $link,
-                                    ]);
+                            $this->PhpMailController->sendmail(
+                                $from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id),
+                                $to = ['name' => $username, 'email' => $emailadd],
+                                $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket'],
+                                $template_variables = ['user' => $username,
+                                    'ticket_number'           => $ticket_number2,
+                                    'department_sign'         => '',
+                                    'system_link'             => $link,
+                                ]
+                            );
                         }
                     } catch (\Exception $e) {
                     }
@@ -810,20 +818,23 @@ class TicketController extends Controller
             foreach ($emails_to_be_sent as $email_data) {
                 try {
                     $this->PhpMailController->sendmail(
-                            $from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = [
-                                'user'  => $email_data['to_user'],
-                                'email' => $email_data['to_email'],
-                            ], $message = [
-                                'subject' => $updated_subject,
-                                'body'    => $body, 'scenario' => $mail,
-                            ], $template_variables = [
-                                'ticket_agent_name'   => $email_data['to_user_name'],
-                                'ticket_client_name'  => $username,
-                                'ticket_client_email' => $emailadd,
-                                'user'                => $email_data['to_user_name'],
-                                'ticket_number'       => $ticket_number2,
-                                'email_address'       => $emailadd,
-                                'name'                => $ticket_creator, ]
+                        $from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id),
+                        $to = [
+                            'user'  => $email_data['to_user'],
+                            'email' => $email_data['to_email'],
+                        ],
+                        $message = [
+                            'subject' => $updated_subject,
+                            'body'    => $body, 'scenario' => $mail,
+                        ],
+                        $template_variables = [
+                            'ticket_agent_name'   => $email_data['to_user_name'],
+                            'ticket_client_name'  => $username,
+                            'ticket_client_email' => $emailadd,
+                            'user'                => $email_data['to_user_name'],
+                            'ticket_number'       => $ticket_number2,
+                            'email_address'       => $emailadd,
+                            'name'                => $ticket_creator, ]
                     );
                 } catch (\Exception $e) {
                 }
@@ -1736,7 +1747,10 @@ class TicketController extends Controller
                     $notification = Notification::select('id')->where('model_id', '=', $ticket->id)->get();
                     foreach ($notification as $id) {
                         $user_notification = UserNotification::where(
-                                        'notification_id', '=', $id->id);
+                            'notification_id',
+                            '=',
+                            $id->id
+                        );
                         $user_notification->delete();
                     }
                     $notification = Notification::select('id')->where('model_id', '=', $ticket->id);
@@ -2106,9 +2120,10 @@ class TicketController extends Controller
         $email = $email;
         $ticket_id = $ticket_id;
         $validator = \Validator::make(
-                        ['email'         => $email,
-                            'name'       => $name, ], ['email'       => 'required|email',
-                            ]
+            ['email'         => $email,
+                'name'       => $name, ],
+            ['email'         => 'required|email',
+            ]
         );
         $user = User::where('email', '=', $email)->first();
         if ($user) {
@@ -2812,7 +2827,15 @@ class TicketController extends Controller
     {
         $table = \Datatable::table()
                 ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
+                    '',
+                    Lang::get('lang.subject'),
+                    Lang::get('lang.ticket_id'),
+                    Lang::get('lang.priority'),
+                    Lang::get('lang.from'),
+                    Lang::get('lang.assigned_to'),
+                    Lang::get('lang.last_activity'),
+                    Lang::get('lang.created-at')
+                )
                 ->noScript();
 
         return view('themes.default1.agent.helpdesk.ticket.inbox', compact('table'));
@@ -2827,7 +2850,15 @@ class TicketController extends Controller
     {
         $table = \Datatable::table()
                 ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
+                    '',
+                    Lang::get('lang.subject'),
+                    Lang::get('lang.ticket_id'),
+                    Lang::get('lang.priority'),
+                    Lang::get('lang.from'),
+                    Lang::get('lang.assigned_to'),
+                    Lang::get('lang.last_activity'),
+                    Lang::get('lang.created-at')
+                )
                 ->noScript();
 
         return view('themes.default1.agent.helpdesk.ticket.open', compact('table'));
@@ -2842,7 +2873,15 @@ class TicketController extends Controller
     {
         $table = \Datatable::table()
                 ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
+                    '',
+                    Lang::get('lang.subject'),
+                    Lang::get('lang.ticket_id'),
+                    Lang::get('lang.priority'),
+                    Lang::get('lang.from'),
+                    Lang::get('lang.assigned_to'),
+                    Lang::get('lang.last_activity'),
+                    Lang::get('lang.created-at')
+                )
                 ->noScript();
 
         return view('themes.default1.agent.helpdesk.ticket.answered', compact('table'));
@@ -2857,7 +2896,15 @@ class TicketController extends Controller
     {
         $table = \Datatable::table()
                 ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
+                    '',
+                    Lang::get('lang.subject'),
+                    Lang::get('lang.ticket_id'),
+                    Lang::get('lang.priority'),
+                    Lang::get('lang.from'),
+                    Lang::get('lang.assigned_to'),
+                    Lang::get('lang.last_activity'),
+                    Lang::get('lang.created-at')
+                )
                 ->noScript();
 
         return view('themes.default1.agent.helpdesk.ticket.myticket', compact('table'));
@@ -2872,7 +2919,15 @@ class TicketController extends Controller
     {
         $table = \Datatable::table()
                 ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
+                    '',
+                    Lang::get('lang.subject'),
+                    Lang::get('lang.ticket_id'),
+                    Lang::get('lang.priority'),
+                    Lang::get('lang.from'),
+                    Lang::get('lang.assigned_to'),
+                    Lang::get('lang.last_activity'),
+                    Lang::get('lang.created-at')
+                )
                 ->noScript();
 
         return view('themes.default1.agent.helpdesk.ticket.overdue', compact('table'));
@@ -2887,7 +2942,15 @@ class TicketController extends Controller
     {
         $table = \Datatable::table()
                 ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
+                    '',
+                    Lang::get('lang.subject'),
+                    Lang::get('lang.ticket_id'),
+                    Lang::get('lang.priority'),
+                    Lang::get('lang.from'),
+                    Lang::get('lang.assigned_to'),
+                    Lang::get('lang.last_activity'),
+                    Lang::get('lang.created-at')
+                )
                 ->noScript();
 
         return view('themes.default1.agent.helpdesk.ticket.duetodayticket', compact('table'));
@@ -2902,7 +2965,15 @@ class TicketController extends Controller
     {
         $table = \Datatable::table()
                 ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
+                    '',
+                    Lang::get('lang.subject'),
+                    Lang::get('lang.ticket_id'),
+                    Lang::get('lang.priority'),
+                    Lang::get('lang.from'),
+                    Lang::get('lang.assigned_to'),
+                    Lang::get('lang.last_activity'),
+                    Lang::get('lang.created-at')
+                )
                 ->noScript();
 
         return view('themes.default1.agent.helpdesk.ticket.closed', compact('table'));
@@ -2917,7 +2988,15 @@ class TicketController extends Controller
     {
         $table = \Datatable::table()
                 ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
+                    '',
+                    Lang::get('lang.subject'),
+                    Lang::get('lang.ticket_id'),
+                    Lang::get('lang.priority'),
+                    Lang::get('lang.from'),
+                    Lang::get('lang.assigned_to'),
+                    Lang::get('lang.last_activity'),
+                    Lang::get('lang.created-at')
+                )
                 ->noScript();
 
         return view('themes.default1.agent.helpdesk.ticket.assigned', compact('table'));
@@ -2952,7 +3031,15 @@ class TicketController extends Controller
         }
         $table = \Datatable::table()
                 ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
+                    '',
+                    Lang::get('lang.subject'),
+                    Lang::get('lang.ticket_id'),
+                    Lang::get('lang.priority'),
+                    Lang::get('lang.from'),
+                    Lang::get('lang.assigned_to'),
+                    Lang::get('lang.last_activity'),
+                    Lang::get('lang.created-at')
+                )
                 ->noScript();
 
         return view('themes.default1.agent.helpdesk.dept-ticket.tickets', compact('dept', 'status', 'table'));
@@ -2967,7 +3054,15 @@ class TicketController extends Controller
     {
         $table = \Datatable::table()
                 ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
+                    '',
+                    Lang::get('lang.subject'),
+                    Lang::get('lang.ticket_id'),
+                    Lang::get('lang.priority'),
+                    Lang::get('lang.from'),
+                    Lang::get('lang.assigned_to'),
+                    Lang::get('lang.last_activity'),
+                    Lang::get('lang.created-at')
+                )
                 ->noScript();
 
         return view('themes.default1.agent.helpdesk.ticket.trash', compact('table'));
@@ -2982,7 +3077,15 @@ class TicketController extends Controller
     {
         $table = \Datatable::table()
                 ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
+                    '',
+                    Lang::get('lang.subject'),
+                    Lang::get('lang.ticket_id'),
+                    Lang::get('lang.priority'),
+                    Lang::get('lang.from'),
+                    Lang::get('lang.assigned_to'),
+                    Lang::get('lang.last_activity'),
+                    Lang::get('lang.created-at')
+                )
                 ->noScript();
 
         return view('themes.default1.agent.helpdesk.ticket.unassigned', compact('table'));
@@ -2997,7 +3100,15 @@ class TicketController extends Controller
     {
         $table = \Datatable::table()
                 ->addColumn(
-                        '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
+                    '',
+                    Lang::get('lang.subject'),
+                    Lang::get('lang.ticket_id'),
+                    Lang::get('lang.priority'),
+                    Lang::get('lang.from'),
+                    Lang::get('lang.assigned_to'),
+                    Lang::get('lang.last_activity'),
+                    Lang::get('lang.created-at')
+                )
                 ->noScript();
 
         return view('themes.default1.agent.helpdesk.ticket.myticket', compact('table'));
@@ -3011,7 +3122,15 @@ class TicketController extends Controller
         try {
             $table = \Datatable::table()
                     ->addColumn(
-                            '', Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
+                        '',
+                        Lang::get('lang.subject'),
+                        Lang::get('lang.ticket_id'),
+                        Lang::get('lang.priority'),
+                        Lang::get('lang.from'),
+                        Lang::get('lang.assigned_to'),
+                        Lang::get('lang.last_activity'),
+                        Lang::get('lang.created-at')
+                    )
                     ->noScript();
 
             return view('themes.default1.agent.helpdesk.followup.followup', compact('table'));

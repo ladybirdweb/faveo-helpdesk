@@ -82,13 +82,15 @@ class UserController extends Controller
             /* get all values in Sys_user */
 
             $table = \ Datatable::table()
-            ->addColumn(Lang::get('lang.name'),
+            ->addColumn(
+                Lang::get('lang.name'),
                 Lang::get('lang.email'),
                 Lang::get('lang.phone'),
                 Lang::get('lang.status'),
                 Lang::get('lang.last_login'),
                 Lang::get('lang.role'),
-                Lang::get('lang.action'))  // these are the column headings to be shown
+                Lang::get('lang.action')
+            )  // these are the column headings to be shown
                 ->noScript();
 
             return view('themes.default1.agent.helpdesk.user.index', compact('table'));

@@ -1123,7 +1123,24 @@ class ApiController extends Controller
                     ->leftJoin('ticket_attachment', 'ticket_attachment.thread_id', '=', 'ticket_thread.id')
                     ->where('users.id', $id)
                     ->select(
-                            'ticket_priority.priority_color as priority_color', \DB::raw('substring_index(group_concat(ticket_thread.title order by ticket_thread.id asc) , ",", 1) as title'), 'tickets.duedate as overdue_date', \DB::raw('count(ticket_attachment.id) as attachment'), \DB::raw('max(ticket_thread.updated_at) as updated_at'), 'client.user_name', 'client.first_name', 'client.last_name', 'client.email', 'client.profile_pic', 'ticket_number', 'tickets.id', 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name'
+                        'ticket_priority.priority_color as priority_color',
+                        \DB::raw('substring_index(group_concat(ticket_thread.title order by ticket_thread.id asc) , ",", 1) as title'),
+                        'tickets.duedate as overdue_date',
+                        \DB::raw('count(ticket_attachment.id) as attachment'),
+                        \DB::raw('max(ticket_thread.updated_at) as updated_at'),
+                        'client.user_name',
+                        'client.first_name',
+                        'client.last_name',
+                        'client.email',
+                        'client.profile_pic',
+                        'ticket_number',
+                        'tickets.id',
+                        'tickets.created_at',
+                        'department.name as department_name',
+                        'ticket_priority.priority as priotity_name',
+                        'sla_plan.name as sla_plan_name',
+                        'help_topic.topic as help_topic_name',
+                        'ticket_status.name as ticket_status_name'
                     )
                     ->orderBy('updated_at', 'desc')
                     ->groupby('tickets.id')
@@ -1166,7 +1183,20 @@ class ApiController extends Controller
                                             ->leftJoin('user_assign_organization', 'users.id', '=', 'user_assign_organization.user_id')
                                             ->leftJoin('organization', 'user_assign_organization.org_id', '=', 'organization.id')
                                             ->select(
-                                                    'users.first_name', 'users.last_name', 'users.user_name', 'users.email', 'users.id', 'users.profile_pic', 'users.ban', 'users.active', 'users.is_delete', 'users.phone_number', 'users.ext', 'users.country_code', 'users.mobile', 'organization.name as company'
+                                                'users.first_name',
+                                                'users.last_name',
+                                                'users.user_name',
+                                                'users.email',
+                                                'users.id',
+                                                'users.profile_pic',
+                                                'users.ban',
+                                                'users.active',
+                                                'users.is_delete',
+                                                'users.phone_number',
+                                                'users.ext',
+                                                'users.country_code',
+                                                'users.mobile',
+                                                'organization.name as company'
                                             )->first()->toArray();
             $result = $this->user->join('tickets', function ($join) use ($id) {
                 $join->on('users.id', '=', 'tickets.user_id')
@@ -1234,7 +1264,39 @@ class ApiController extends Controller
             //$select = 'users.email','users.user_name','users.first_name','users.last_name','tickets.id','ticket_number','num_sequence','user_id','priority_id','sla','max_open_ticket','captcha','status','lock_by','lock_at','source','isoverdue','reopened','isanswered','is_deleted', 'closed','is_transfer','transfer_at','reopened_at','duedate','closed_at','last_message_at';
 
             $result = $response->addSelect(
-                            'users.email', 'users.user_name', 'users.first_name', 'users.last_name', 'tickets.id', 'ticket_number', 'user_id', 'ticket_priority.priority_id', 'ticket_priority.priority as priority_name', 'department.name as dept_name', 'ticket_status.name as status_name', 'sla_plan.name as sla_name', 'ticket_source.name as source_name', 'sla_plan.id as sla', 'ticket_status.id as status', 'lock_by', 'lock_at', 'ticket_source.id as source', 'isoverdue', 'reopened', 'isanswered', 'is_deleted', 'closed', 'reopened_at', 'duedate', 'closed_at', 'tickets.created_at', 'tickets.updated_at', 'ticket_priority.priority_color as priority_color', 'help_topic.id as helptopic_id', 'help_topic.topic as helptopic_name', 'sla_plan.grace_period as grace_period')->first();
+                'users.email',
+                'users.user_name',
+                'users.first_name',
+                'users.last_name',
+                'tickets.id',
+                'ticket_number',
+                'user_id',
+                'ticket_priority.priority_id',
+                'ticket_priority.priority as priority_name',
+                'department.name as dept_name',
+                'ticket_status.name as status_name',
+                'sla_plan.name as sla_name',
+                'ticket_source.name as source_name',
+                'sla_plan.id as sla',
+                'ticket_status.id as status',
+                'lock_by',
+                'lock_at',
+                'ticket_source.id as source',
+                'isoverdue',
+                'reopened',
+                'isanswered',
+                'is_deleted',
+                'closed',
+                'reopened_at',
+                'duedate',
+                'closed_at',
+                'tickets.created_at',
+                'tickets.updated_at',
+                'ticket_priority.priority_color as priority_color',
+                'help_topic.id as helptopic_id',
+                'help_topic.topic as helptopic_name',
+                'sla_plan.grace_period as grace_period'
+            )->first();
 //            $resultticket_source
             $result2 = $result;
             $result = $result->toArray();
@@ -1344,10 +1406,12 @@ class ApiController extends Controller
     public function addCollaboratorForTicket()
     {
         try {
-            $v = \Validator::make(\Input::get(), [
-                'email'     => 'required|email|unique:users',
-                'ticket_id' => 'required',
-            ]
+            $v = \Validator::make(
+                \Input::get(),
+                [
+                    'email'     => 'required|email|unique:users',
+                    'ticket_id' => 'required',
+                ]
             );
             if ($v->fails()) {
                 $error = $v->messages();
@@ -1375,9 +1439,11 @@ class ApiController extends Controller
     public function getCollaboratorForTicket()
     {
         try {
-            $v = \Validator::make(\Input::get(), [
-                'ticket_id' => 'required',
-            ]
+            $v = \Validator::make(
+                \Input::get(),
+                [
+                    'ticket_id' => 'required',
+                ]
             );
             if ($v->fails()) {
                 $error = $v->messages();
@@ -1405,10 +1471,12 @@ class ApiController extends Controller
     public function deleteCollaborator()
     {
         try {
-            $v = \Validator::make(\Input::get(), [
-                'ticketid' => 'required',
-                'email'    => 'required',
-            ]
+            $v = \Validator::make(
+                \Input::get(),
+                [
+                    'ticketid' => 'required',
+                    'email'    => 'required',
+                ]
             );
             if ($v->fails()) {
                 $result = $v->messages();
@@ -1573,10 +1641,11 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make(
-                            $this->request->all(), [
-                                'username'   => 'required|unique:users,user_name',
-                                'first_name' => 'required',
-                            ]
+                $this->request->all(),
+                [
+                    'username'   => 'required|unique:users,user_name',
+                    'first_name' => 'required',
+                ]
             );
             if ($v->fails()) {
                 $error = $v->messages();
