@@ -88,11 +88,11 @@ class Sys_userRequest extends Request
     public function onlyMobleRequired()
     {
         return [
-                'first_name'            => 'required',
-                'user_name'             => 'required|min:3|unique:users,user_name',
-                'email'                 => 'unique:users,email',
-                'country_code'          => 'required',
-                'mobile'                => 'required|unique:users',
-            ];
+            'first_name'            => 'required',
+            'user_name'             => 'required|min:3|unique:users,user_name',
+            'email'                 => 'unique:users,email',
+            'country_code'          => 'required',
+            'mobile'                => 'required|unique:users',
+        ];
     }
 }

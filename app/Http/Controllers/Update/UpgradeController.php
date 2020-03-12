@@ -82,11 +82,11 @@ class UpgradeController extends Controller
     {
         echo '<p>Downloading New Update</p>';
         $context = stream_context_create(
-                [
-                    'http' => [
-                        'header' => 'User-Agent: Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36',
-                    ],
-                ]
+            [
+                'http' => [
+                    'header' => 'User-Agent: Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36',
+                ],
+            ]
         );
 
         $newUpdate = file_get_contents($download_url, false, $context);
