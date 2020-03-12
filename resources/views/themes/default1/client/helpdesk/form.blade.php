@@ -192,6 +192,10 @@ class = "active"
                 {!! Form::label('Subject',Lang::get('lang.subject')) !!}<span class="text-red"> *</span>
                 {!! Form::text('Subject',null,['class' => 'form-control']) !!}
             </div>
+            <div class="col-md-12 form-group {{ $errors->has('email') ? 'has-error' : '' }}">
+                {!! Form::label('email',Lang::get('lang.email')) !!}<span class="text-red"> *</span>
+                {!! Form::text('email',null,['class' => 'form-control']) !!}
+            </div>
             <div class="col-md-12 form-group {{ $errors->has('Details') ? 'has-error' : '' }}">
                 {!! Form::label('Details',Lang::get('lang.message')) !!}<span class="text-red"> *</span>
                 {!! Form::textarea('Details',null,['class' => 'form-control']) !!}

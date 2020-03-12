@@ -14,17 +14,19 @@
         <!-- faveo favicon -->
         <link href="{{asset("lb-faveo/media/images/favicon.ico")}}"  rel="shortcut icon" >
 
+
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-        <!-- Bootstrap 3.3.2 -->
+        <!-- Bootstrap  4.0.0 -->  
+        
         <link href="{{asset("lb-faveo/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
-        <!-- Admin LTE CSS -->
+        <!-- Admin LTE CSS3 -->
         <link href="{{asset("lb-faveo/css/AdminLTEsemi.css")}}" rel="stylesheet" type="text/css" />
         <!-- Font Awesome Icons -->
         <link href="{{asset("lb-faveo/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Ionicons -->
         <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- fullCalendar 2.2.5-->
-        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.css")}}" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
 
@@ -41,6 +43,12 @@
         @yield('HeadInclude')
     </head>
     <body>
+    <!-- <style>
+        .site-navigation{
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        </style> -->
         <div id="page" class="hfeed site">
             <header id="masthead" class="site-header" role="banner">
                 <div class="container" style="">
@@ -65,18 +73,26 @@
                                 @endif
                             </a>
                     </div><!-- #logo -->
+                    <button style="float: right;margin: 10px;" class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="navbar" aria-controls="#navbar" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button> <!-- collapse -->
                     <div id="navbar" class="navbar-wrapper text-center">
-                        <nav class="navbar navbar-default site-navigation" role="navigation">
-                            <ul class="nav navbar-nav navbar-menu">
-                                <li @yield('home')><a href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
+                         <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent"> -->
+                     <nav class="navbar navbar-light bg-light site-navigation navbar-expand-md" role="navigation">
+                            <ul class="navbar-nav navbar-menu">
+                        
+                            <li class="nav-item active" @yield('home')><a class="nav-link" href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
                                 @if($system->first()->status == 1)
-                                <li @yield('submit')><a href="{{URL::route('form')}}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
+                                <li class="nav-item" @yield('submit')><a class="nav-link" href="{{URL::route('form')}}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
                                 @endif
-                                <li @yield('kb')><a href="{!! url('knowledgebase') !!}">{!! Lang::get('lang.knowledge_base') !!}</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{route('category-list')}}">{!! Lang::get('lang.categories') !!}</a></li>
-                                        <li><a href="{{route('article-list')}}">{!! Lang::get('lang.articles') !!}</a></li>
+                                <li  class="nav-item dropdown" @yield('kb')><a class="dropdowntoggle nav-link" href="{!! url('knowledgebase') !!}">{!! Lang::get('lang.knowledge_base') !!}</a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                                        <li><a class="dropdown-item" href="{{route('category-list')}}">{!! Lang::get('lang.categories') !!}</a></li>
+                                        <li class="dropdown-submenu"><a class="dropdown-item" href="{{route('article-list')}}">{!! Lang::get('lang.articles') !!}</a></li>
+                                        <!-- <li class="dropdown-submenu"><a href="{{route('category-list')}}">{!! Lang::get('lang.categories') !!}</a></li> -->
+
                                     </ul>
+                                    
                                 </li>
                                 <?php $pages = App\Model\kb\Page::where('status', '1')->where('visibility', '1')->get();
                                 ?>
@@ -85,11 +101,11 @@
                                 @endforeach
                                 
                                 @if(Auth::user())
-                                <li @yield('myticket')><a href="{{url('mytickets')}}">{!! Lang::get('lang.my_tickets') !!}</a></li>
+                                <li class="nav-item" @yield('myticket')><a class="nav-link" href="{{url('mytickets')}}">{!! Lang::get('lang.my_tickets') !!}</a></li>
 
-                                {{-- <li @yield('contact')><a href="{{route('contact')}}">Contact us</a></li> --}}
-                                <li @yield('profile')><a href="#" >{!! Lang::get('lang.my_profile') !!}</a>
-                                    <ul class="dropdown-menu">
+                                {{-- <li class="nav-item" @yield('contact')><a class="nav-link" href="{{route('contact')}}">Contact us</a></li> --}}
+                                <li class="nav-item dropdown" @yield('profile')><a class="dropdowntoggle nav-link" href="#" >{!! Lang::get('lang.my_profile') !!}</a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
                                         <li>
                                             <div class="banner-wrapper user-menu text-center clearfix">
                                                 <img src="{{Auth::user()->profile_pic}}"class="img-circle" alt="User Image" height="80" width="80"/>
@@ -196,7 +212,7 @@
                                 </div>
                             </div><!-- #login-form -->
                             @endif
-                            <ul class="nav navbar-nav navbar-menu">
+                            <!-- <ul class="nav navbar-nav navbar-menu">
 
                             <li class="dropdown">
                                     <?php $src = Lang::getLocale().'.png'; ?>
@@ -212,7 +228,7 @@
                                             @endforeach       
                                         </ul>
                                 </li>
-                            </ul>
+                            </ul> -->
                         </nav><!-- #site-navigation -->
                     </div><!-- #navbar -->
                     <div id="header-search" class="site-search clearfix" style="padding-bottom:5px"><!-- #header-search -->
@@ -222,7 +238,7 @@
                                 <div class="form-group">
                                     <input type="text" name="s" class="search-field form-control input-lg" title="Enter search term" placeholder="{!! Lang::get('lang.have_a_question?_type_your_search_term_here') !!}" required/>
                                 </div>
-                                <button type="submit" class="search-submit btn btn-custom btn-lg pull-right">{!! Lang::get('lang.search') !!}</button>
+                                <button  type="submit" class="search-submit btn btn-custom btn-lg  pull-right">{!! Lang::get('lang.search') !!}</button>
                             </div>
                         </div>
                         {!! Form::close() !!}
@@ -305,6 +321,8 @@
                                 </section><!-- #section-about -->
                             </div>
                         </div>
+                        
+                        <!-- <div class=""> -->
                         @endif
                         @if($footer2->title == null)
                         @else
@@ -321,13 +339,15 @@
                         @endif
                         @if($footer3->title == null)
                         @else
-                        <div class="col-md-3">
+                        <div class="col-md-3"> 
                             <div class="widget-area">
                                 <section id="section-newsletter" class="section">
-                                    <h2 class="section-title h4 clearfix">{!!$footer3->title!!}</h2>
+                                    <h2 class="section-title h4 clearfix">
+                                    {!!$footer3->title!!}</h2>
                                     <div class="textwidget">
-                                        <p>{!! $footer3->value !!}</p>
+                                        <p> {!! $footer3->value !!}</p>
                                     </div>
+                                
                                 </section><!-- #section-newsletter -->
                             </div>
                         </div>
@@ -348,7 +368,9 @@
                     </div>
                     <div class="clearfix"></div>
                     <hr style="color:#E5E5E5"/>
+                    
                     <div class="row">
+                        
                         <div class="site-info col-md-6">
                             <p class="text-muted">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>. {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/"  target="_blank">Faveo</a></p>
                         </div>

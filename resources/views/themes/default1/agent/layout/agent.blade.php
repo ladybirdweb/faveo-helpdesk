@@ -69,6 +69,7 @@
 
         </style>
     </head>
+    
     <body class="skin-blue fixed">
         <div class="wrapper">
             <header class="main-header">
@@ -100,15 +101,18 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <div class="collapse navbar-collapse" id="navbar-collapse">
+                    <div id="navbar-collapse" class="navbar-wrapper text-left">
+                    <!-- <div class="collapse navbar-collapse" id="navbar-collapse"> -->
+                    <nav class="navbar site-navigation navbar-expand-md" role="navigation">
+                            <ul class="navbar-nav navbar-menu">
                         @if($replacetop==0)
                         <ul class="tabs tabs-horizontal nav navbar-nav navbar-left">
-                            <li @yield('Dashboard')><a id="dash" data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard(event);">{!! Lang::get('lang.dashboard') !!}</a></li>
-                            <li @yield('Users')><a data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
-                            <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
-                            <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
+                            <li class="nav-item active" @yield('Dashboard')><a class="nav-link" id="dash" data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard(event);">{!! Lang::get('lang.dashboard') !!}</a></li>
+                            <li class="nav-item" @yield('Users')><a class="nav-link" data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
+                            <li class="nav-item" @yield('Tickets')><a class="nav-link" data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
+                            <li class="nav-item" @yield('Tools')><a class="nav-link" data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
                             @if($auth_user_role == 'admin')
-                            <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">Report</a></li>
+                            <li class="nav-item" @yield('Report')><a class="nav-link" href="{{URL::route('report.index')}}" onclick="clickReport(event);">Report</a></li>
                             @endif
                             <?php \Event::fire('calendar.topbar', array()); ?>
                         </ul>
@@ -116,9 +120,9 @@
                         <?php \Event::fire('service.desk.agent.topbar', array()); ?>
                         @endif
 
-                        <ul class="nav navbar-nav navbar-right">
+                        <ul class="nav navbar-nav navbar-left">
                             @if($auth_user_role == 'admin')
-                            <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
+                            <li><a class="nav-item" href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
 
                             @endif
                             @include('themes.default1.update.notification')
@@ -240,19 +244,20 @@
             <aside class="main-sidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar">
-                    <div class="user-panel">
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                         @if (trim($__env->yieldContent('profileimg')))
                         <h1>@yield('profileimg')</h1>
                         @else
                         <div class = "row">
                             <div class="col-xs-3"></div>
-                            <div class="col-xs-2" style="width:50%;">
+                            <div class="col-xs-2" style="width:80%;margin-left:10px">
                                 <a href="{!! url('profile') !!}">
                                     <img src="{{$auth_user_profile_pic}}" class="img-circle" alt="User Image" />
                                 </a>
                             </div>
                         </div>
                         @endif
+                        
                         <div class="info" style="text-align:center;">
                             @if($auth_user_id)
                             <p>{{$auth_name}}</p>
@@ -271,32 +276,32 @@
 
                         <li @yield('inbox')>
                              <a href="{{ url('tickets')}}" id="load-inbox">
-                                <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green">{{$tickets -> count()}}</small>
+                                <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="badge badge-info  right">{{$tickets -> count()}}</small>
                             </a>
                         </li>
                         <li @yield('myticket')>
                              <a href="{{url('/tickets?show=mytickets')}}" id="load-myticket">
                                 <i class="fa fa-user"></i> <span>{!! Lang::get('lang.my_tickets') !!} </span>
-                                <small class="label pull-right bg-green">{{$myticket -> count()}}</small>
+                                <small class="badge badge-info  right">{{$myticket -> count()}}</small>
                             </a>
                         </li>
                         <li @yield('unassigned')>
                              <a href="{{url('/tickets?assigned[]=0')}}" id="load-unassigned">
                                 <i class="fa fa-th"></i> <span>{!! Lang::get('lang.unassigned') !!}</span>
-                                <small class="label pull-right bg-green">{{$unassigned -> count()}}</small>
+                                <small class="badge badge-info  right">{{$unassigned -> count()}}</small>
                             </a>
                         </li>
                         <li @yield('overdue')>
                              <a href="{{url('/tickets?show=overdue')}}" id="load-unassigned">
                                 <i class="fa fa-calendar-times-o"></i> <span>{!! Lang::get('lang.overdue') !!}</span>
-                                <small class="label pull-right bg-green">{{$overdues->count()}}</small>
+                                <small class="badge badge-info  right">{{$overdues->count()}}</small>
                             </a>
                         </li>
 
                         <li @yield('trash')>
                              <a href="{{url('/tickets?show=trash')}}">
                                 <i class="fa fa-trash-o"></i> <span>{!! Lang::get('lang.trash') !!}</span>
-                                <small class="label pull-right bg-green">{{$deleted -> count()}}</small>
+                                <small class="badge badge-info  right">{{$deleted -> count()}}</small>
                             </a>
                         </li>
                         <li class="header">{!! Lang::get('lang.Departments') !!}</li>
@@ -329,7 +334,7 @@
                            @foreach($statuses as $status)
                            @if($dept->get($status))
                            <ul class="treeview-menu">
-                                <li @if($status2 == $dept->get($status)->status && $dept2 === $name) @yield('inbox') @endif><a href="{!! url('tickets?departments='.$name.'&status='.$dept->get($status)->status) !!}"><i class="fa fa-circle-o"></i> {!!$dept->get($status)->status !!}<small class="label pull-right bg-green">{{$dept->get($status)->count}}</small></a></li>
+                                <li @if($status2 == $dept->get($status)->status && $dept2 === $name) @yield('inbox') @endif><a href="{!! url('tickets?departments='.$name.'&status='.$dept->get($status)->status) !!}"><i class="fa fa-circle-o"></i> {!!$dept->get($status)->status !!}<small class="badge badge-info  right">{{$dept->get($status)->count}}</small></a></li>
                             </ul>
                            @endif
                             @endforeach
@@ -401,16 +406,16 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                 <!-- Main content -->
                 <section class="content">
                 @if($dummy_installation == 1 || $dummy_installation == '1')
-                    <div class="alert alert-info alert-dismissible">
+                    <!-- <div class="alert alert-info alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                         <i class="icon fa  fa-exclamation-triangle"></i> @if (\Auth::user()->role == 'admin')
                             {{Lang::get('lang.dummy_data_installation_message')}} <a href="{{route('clean-database')}}">{{Lang::get('lang.click')}}</a> {{Lang::get('lang.clear-dummy-data')}}
                         @else
                             {{Lang::get('lang.clear-dummy-data-agent-message')}}
                         @endif
-                    </div>
+                    </div> -->
                 @elseif (!$is_mail_conigured)
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-md-12">
                             <div class="callout callout-warning lead">
                                 <h4><i class="fa fa-exclamation-triangle"></i>&nbsp;{{Lang::get('Alert')}}</h4>
@@ -423,7 +428,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                                 </p>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 @endif
                     @yield('content')
                 </section><!-- /.content -->
