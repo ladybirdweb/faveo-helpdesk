@@ -401,6 +401,7 @@ a:focus {
   background-color: transparent;
   background-image: none;
   padding: 15px 15px;
+  min-height: 50px;
   font-family: fontAwesome;
 }
 .main-header .sidebar-toggle:before {
@@ -429,7 +430,7 @@ a:focus {
 .main-header .logo {
   display: block;
   float: left;
-  height: 50px;
+  height: 70px;
   font-size: 20px;
   line-height: 50px;
   text-align: center;

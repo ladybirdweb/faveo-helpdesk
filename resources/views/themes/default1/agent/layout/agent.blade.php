@@ -101,15 +101,18 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <div class="collapse navbar-collapse" id="navbar-collapse">
+                    <div id="navbar-collapse" class="navbar-wrapper text-left">
+                    <!-- <div class="collapse navbar-collapse" id="navbar-collapse"> -->
+                    <nav class="navbar site-navigation navbar-expand-md" role="navigation">
+                            <ul class="navbar-nav navbar-menu">
                         @if($replacetop==0)
                         <ul class="tabs tabs-horizontal nav navbar-nav navbar-left">
-                            <li @yield('Dashboard')><a id="dash" data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard(event);">{!! Lang::get('lang.dashboard') !!}</a></li>
-                            <li @yield('Users')><a data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
-                            <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
-                            <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
+                            <li class="nav-item active" @yield('Dashboard')><a class="nav-link" id="dash" data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard(event);">{!! Lang::get('lang.dashboard') !!}</a></li>
+                            <li class="nav-item" @yield('Users')><a class="nav-link" data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
+                            <li class="nav-item" @yield('Tickets')><a class="nav-link" data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
+                            <li class="nav-item" @yield('Tools')><a class="nav-link" data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
                             @if($auth_user_role == 'admin')
-                            <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">Report</a></li>
+                            <li class="nav-item" @yield('Report')><a class="nav-link" href="{{URL::route('report.index')}}" onclick="clickReport(event);">Report</a></li>
                             @endif
                             <?php \Event::fire('calendar.topbar', array()); ?>
                         </ul>
@@ -117,9 +120,9 @@
                         <?php \Event::fire('service.desk.agent.topbar', array()); ?>
                         @endif
 
-                        <ul class="nav navbar-nav navbar-right">
+                        <ul class="nav navbar-nav navbar-left">
                             @if($auth_user_role == 'admin')
-                            <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
+                            <li><a class="nav-item" href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
 
                             @endif
                             @include('themes.default1.update.notification')
@@ -247,13 +250,14 @@
                         @else
                         <div class = "row">
                             <div class="col-xs-3"></div>
-                            <div class="col-xs-2" style="width:70%;">
+                            <div class="col-xs-2" style="width:80%;margin-left:10px">
                                 <a href="{!! url('profile') !!}">
                                     <img src="{{$auth_user_profile_pic}}" class="img-circle" alt="User Image" />
                                 </a>
                             </div>
                         </div>
                         @endif
+                        
                         <div class="info" style="text-align:center;">
                             @if($auth_user_id)
                             <p>{{$auth_name}}</p>
