@@ -321,10 +321,10 @@ class AuthController extends Controller
                 return redirect()->back()
                                 ->withInput($request->only('email', 'remember'))
                                 ->withErrors([
-                                    'email'         => $this->getFailedLoginMessage(),
-                                    'password'      => $this->getFailedLoginMessage(),
-                                ])->with(['error'   => Lang::get('lang.not-registered'),
-                            'referer'               => $referer, ]);
+                                    'email'                 => $this->getFailedLoginMessage(),
+                                    'password'              => $this->getFailedLoginMessage(),
+                                ])->with(['error'           => Lang::get('lang.not-registered'),
+                                    'referer'               => $referer, ]);
             }
 
             //if user exists
@@ -367,10 +367,10 @@ class AuthController extends Controller
                     return redirect()->back()
                                     ->withInput($request->only('email', 'remember'))
                                     ->withErrors([
-                                        'email'         => $this->getFailedLoginMessage(),
-                                        'password'      => $this->getFailedLoginMessage(),
-                                    ])->with(['error'   => Lang::get('lang.this_account_is_currently_inactive'),
-                                'referer'               => $referer, ]);
+                                        'email'                 => $this->getFailedLoginMessage(),
+                                        'password'              => $this->getFailedLoginMessage(),
+                                    ])->with(['error'           => Lang::get('lang.this_account_is_currently_inactive'),
+                                        'referer'               => $referer, ]);
                 } else {
                     // try login
                     $loginAttempts = 1;
@@ -416,10 +416,10 @@ class AuthController extends Controller
             return redirect()->back()
                             ->withInput($request->only('email', 'remember'))
                             ->withErrors([
-                                'email'         => $this->getFailedLoginMessage(),
-                                'password'      => $this->getFailedLoginMessage(),
-                            ])->with(['error'   => Lang::get('lang.invalid'),
-                        'referer'               => $referer, ]);
+                                'email'                 => $this->getFailedLoginMessage(),
+                                'password'              => $this->getFailedLoginMessage(),
+                            ])->with(['error'           => Lang::get('lang.invalid'),
+                                'referer'               => $referer, ]);
             // Increment login attempts
         } catch (\Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());

@@ -35,7 +35,7 @@ class HelptopicRequest extends Request
             'department' => 'required',
             'priority'   => 'required',
             'sla_plan'   => 'required',
-                // 'auto_assign' => 'required',
+            // 'auto_assign' => 'required',
         ];
     }
 }

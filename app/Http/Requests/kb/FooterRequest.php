@@ -25,7 +25,7 @@ class FooterRequest extends Request
     {
         return [
             'title' => 'required',
-                //'description' => 'required',
+            //'description' => 'required',
         ];
     }
 }

@@ -28,7 +28,8 @@ class PhpMailController extends Controller
     {
         $emails = Emails::where(
             [['id', '=', $id],
-            ['sending_status', '=', 1], ])
+                ['sending_status', '=', 1], ]
+        )
         ->first();
 
         return $emails;
@@ -182,11 +183,11 @@ class PhpMailController extends Controller
         switch ($mail->sending_protocol) {
             case 'smtp':
                 $config = ['host'      => $mail->sending_host,
-                            'port'     => $mail->sending_port,
-                            'security' => $mail->sending_encryption,
-                            'username' => $mail->email_address,
-                            'password' => $mail->password,
-                        ];
+                    'port'             => $mail->sending_port,
+                    'security'         => $mail->sending_encryption,
+                    'username'         => $mail->email_address,
+                    'password'         => $mail->password,
+                ];
                 if (!$this->commonMailer->setSmtpDriver($config)) {
                     \Log::info('Invaid configuration :- '.$config);
 
@@ -195,12 +196,12 @@ class PhpMailController extends Controller
                 break;
             case 'send_mail':
                 $config = [
-                            'host'     => \Config::get('mail.host'),
-                            'port'     => \Config::get('mail.port'),
-                            'security' => \Config::get('mail.encryption'),
-                            'username' => \Config::get('mail.username'),
-                            'password' => \Config::get('mail.password'),
-                        ];
+                    'host'     => \Config::get('mail.host'),
+                    'port'     => \Config::get('mail.port'),
+                    'security' => \Config::get('mail.encryption'),
+                    'username' => \Config::get('mail.username'),
+                    'password' => \Config::get('mail.password'),
+                ];
                 $this->commonMailer->setSmtpDriver($config);
                 break;
             case 'mailgun':
