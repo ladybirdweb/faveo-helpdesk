@@ -88,7 +88,7 @@ class FilterController extends Controller
      *
      * @param null
      *
-     * @var $tickets
+     * @var
      *
      * @return builder $tickets
      */
@@ -105,7 +105,35 @@ class FilterController extends Controller
                         ->leftJoin('ticket_thread as th', 'th.ticket_id', '=', 'tickets.id')
                         ->leftJoin('ticket_attachment', 'ticket_attachment.thread_id', '=', 'th.id')
                         ->select(
-                                'tickets.id', 'th.title', 'tickets.ticket_number', 'u1.user_name as c_uname', 'u2.user_name as a_uname', \DB::raw('CONVERT_TZ(max(th.updated_at), "+00:00", "'.$this->gmt.'") as updated_at2'), \DB::raw('CONVERT_TZ(min(th.updated_at), "+00:00", "'.$this->gmt.'") as created_at2'), \DB::raw('CONVERT_TZ(max(tickets.duedate), "+00:00", "'.$this->gmt.'") as duedate'), \DB::raw('max(th.updated_at) as updated_at'), \DB::raw('min(th.updated_at) as created_at'), 'tickets.duedate as due', 'u1.id as c_uid', 'ticket_priority.priority as priority', 'u1.first_name AS c_fname', 'u1.last_name as c_lname', 'u2.id as a_uid', 'u2.first_name as a_fname', 'u2.last_name as a_lname', 'u1.active as verified', 'teams.name', 'tickets.assigned_to', 'ticket_priority.priority_color as color', 'ticket_source.css_class as css', \DB::raw('COUNT(ticket_attachment.thread_id) as countattachment'), DB::raw('COUNT(ticket_collaborator.ticket_id) as countcollaborator'), \DB::raw('COUNT(DISTINCT th.id) as countthread'), \DB::raw('substring_index(group_concat(if(`th`.`is_internal` = 0, `th`.`poster`,null)ORDER By th.id desc) , ",", 1) as last_replier'), \DB::raw('substring_index(group_concat(th.title order by th.id asc SEPARATOR "-||,||-") , "-||,||-", 1) as ticket_title'), 'ticket_source.name as source'
+                            'tickets.id',
+                            'th.title',
+                            'tickets.ticket_number',
+                            'u1.user_name as c_uname',
+                            'u2.user_name as a_uname',
+                            \DB::raw('CONVERT_TZ(max(th.updated_at), "+00:00", "'.$this->gmt.'") as updated_at2'),
+                            \DB::raw('CONVERT_TZ(min(th.updated_at), "+00:00", "'.$this->gmt.'") as created_at2'),
+                            \DB::raw('CONVERT_TZ(max(tickets.duedate), "+00:00", "'.$this->gmt.'") as duedate'),
+                            \DB::raw('max(th.updated_at) as updated_at'),
+                            \DB::raw('min(th.updated_at) as created_at'),
+                            'tickets.duedate as due',
+                            'u1.id as c_uid',
+                            'ticket_priority.priority as priority',
+                            'u1.first_name AS c_fname',
+                            'u1.last_name as c_lname',
+                            'u2.id as a_uid',
+                            'u2.first_name as a_fname',
+                            'u2.last_name as a_lname',
+                            'u1.active as verified',
+                            'teams.name',
+                            'tickets.assigned_to',
+                            'ticket_priority.priority_color as color',
+                            'ticket_source.css_class as css',
+                            \DB::raw('COUNT(ticket_attachment.thread_id) as countattachment'),
+                            DB::raw('COUNT(ticket_collaborator.ticket_id) as countcollaborator'),
+                            \DB::raw('COUNT(DISTINCT th.id) as countthread'),
+                            \DB::raw('substring_index(group_concat(if(`th`.`is_internal` = 0, `th`.`poster`,null)ORDER By th.id desc) , ",", 1) as last_replier'),
+                            \DB::raw('substring_index(group_concat(th.title order by th.id asc SEPARATOR "-||,||-") , "-||,||-", 1) as ticket_title'),
+                            'ticket_source.name as source'
                         )->groupby('tickets.id');
 
         return $tickets;
@@ -387,7 +415,7 @@ class FilterController extends Controller
      *
      * @param $table querybuilder
      *
-     * @var $id, $dept
+     * @var, $dept
      *
      * @return $table
      */
@@ -410,7 +438,7 @@ class FilterController extends Controller
      *
      * @param array $value //requested department, $table
      *
-     * @var array $departmentTickets
+     * @var array
      *
      * @return $table
      */
@@ -440,7 +468,7 @@ class FilterController extends Controller
      *
      * @param array $departments
      *
-     * @var array $requested_dept
+     * @var array
      *
      * @return array of boolean and array values
      */
@@ -464,7 +492,7 @@ class FilterController extends Controller
      *
      * @param array $priority, builder $table
      *
-     * @var array $priority_ids
+     * @var array
      *
      * @return builder
      */
@@ -483,7 +511,7 @@ class FilterController extends Controller
      *
      * @param string array $user_name, builder $table
      *
-     * @var array $users
+     * @var array
      *
      * @return filtered builder
      */
@@ -508,7 +536,7 @@ class FilterController extends Controller
      *
      * @param array of string values $name
      *
-     * @var $query, array $teams(all fetched teams id)
+     * @var, array $teams(all fetched teams id)
      *
      * @return array $teams
      */
@@ -525,7 +553,7 @@ class FilterController extends Controller
      *
      * @param string array $name, builder $table
      *
-     * @var array $users (stores id's of agents and admin),
+     * @var array (stores id's of agents and admin),
      *            array $teams (stores ids of teams), array asssigned merged arrya of unique elements in $teams and $users
      *
      * @return builder $table
@@ -557,7 +585,7 @@ class FilterController extends Controller
      *
      * @param string $type (to check type of filter to apply on date), string $value for filters, builder $table
      *
-     * @var array $date [start and end dates]
+     * @var array [start and end dates]
      *
      * @return builder
      */
@@ -599,7 +627,7 @@ class FilterController extends Controller
      *
      * @param string $value
      *
-     * @var date string $start, date string $end
+     * @var date string, date string $end
      *
      * @return array of start and end date
      */
@@ -846,7 +874,7 @@ class FilterController extends Controller
      *
      * @param array $dates, builder $table, $column (type of filter based on which column is being chosen), $value
      *
-     * @var string $check_column (name of column), array $dates
+     * @var string (name of column), array $dates
      *
      * @return builder
      */
@@ -880,7 +908,7 @@ class FilterController extends Controller
      *
      * @param array $name of source, builder $table
      *
-     * @var array $sources
+     * @var array
      *
      * @return builder
      */
@@ -894,7 +922,7 @@ class FilterController extends Controller
         return $table->whereIn('tickets.source', $sources);
     }
 
-    /**    DEPRICATED
+    /**    DEPRICATED.
      * @category function to get array of status to filter tickets
      *
      * @param string $status
@@ -1024,7 +1052,7 @@ class FilterController extends Controller
      *
      * @param null
      *
-     * @var $system, $tz
+     * @var, $tz
      *
      * @return string GMT value of timezone
      */

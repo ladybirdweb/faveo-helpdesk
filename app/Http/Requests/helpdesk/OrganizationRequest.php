@@ -32,7 +32,7 @@ class OrganizationRequest extends Request
 
             'name'    => 'required|unique:organization',
             'website' => 'url',
-                // 'phone' => 'size:10',
+            // 'phone' => 'size:10',
         ];
     }
 }

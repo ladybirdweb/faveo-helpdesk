@@ -25,7 +25,7 @@ class ApiExceptAuthController extends Controller
         //dd($this->request);
         try {
             $v = \Validator::make($this->request->all(), [
-                        'url' => 'required|url',
+                'url' => 'required|url',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();

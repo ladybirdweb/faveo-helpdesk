@@ -69,7 +69,7 @@ class AgentRequest extends Request
                 // 'last_name'           => 'required|max:30',
                 'email'               => 'required|unique:users',
                 'active'              => 'required',
-            // 'account_status'       => 'required',
+                // 'account_status'       => 'required',
                 'group'               => 'required',
                 'primary_department'  => 'required',
                 'agent_time_zone'     => 'required',

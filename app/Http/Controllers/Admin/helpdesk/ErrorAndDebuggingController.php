@@ -62,24 +62,32 @@ class ErrorAndDebuggingController extends Controller
                 // dd($request->input());
                 $debug_new = base_path().DIRECTORY_SEPARATOR.'.env';
                 $datacontent = File::get($debug_new);
-                $datacontent = str_replace('APP_DEBUG='.$debug,
-                                           'APP_DEBUG='.\Input::get('debug'),
-                                            $datacontent);
+                $datacontent = str_replace(
+                    'APP_DEBUG='.$debug,
+                    'APP_DEBUG='.\Input::get('debug'),
+                    $datacontent
+                );
                 File::put($debug_new, $datacontent);
 
                 // dd($request->input());
                 $bugsnag_debug_new = base_path().DIRECTORY_SEPARATOR.'.env';
                 $datacontent2 = File::get($bugsnag_debug_new);
-                $datacontent2 = str_replace('APP_BUGSNAG='.$bugsnag_debug,
-                                           'APP_BUGSNAG='.\Input::get('bugsnag'),
-                                            $datacontent2);
+                $datacontent2 = str_replace(
+                    'APP_BUGSNAG='.$bugsnag_debug,
+                    'APP_BUGSNAG='.\Input::get('bugsnag'),
+                    $datacontent2
+                );
                 File::put($bugsnag_debug_new, $datacontent2);
 
-                return redirect()->back()->with('success',
-                    Lang::get('lang.error-debug-settings-saved-message'));
+                return redirect()->back()->with(
+                    'success',
+                    Lang::get('lang.error-debug-settings-saved-message')
+                );
             } else {
-                return redirect()->back()->with('fails',
-                    Lang::get('lang.error-debug-settings-error-message'));
+                return redirect()->back()->with(
+                    'fails',
+                    Lang::get('lang.error-debug-settings-error-message')
+                );
             }
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */

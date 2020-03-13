@@ -37,11 +37,11 @@ class InstallerApiController extends Controller
     public function config_database(Request $request)
     {
         $rules = [
-                'database'     => 'required|min:1',
-                'host'         => 'required',
-                'databasename' => 'required|min:1',
-                'dbusername'   => 'required|min:1',
-            ];
+            'database'     => 'required|min:1',
+            'host'         => 'required',
+            'databasename' => 'required|min:1',
+            'dbusername'   => 'required|min:1',
+        ];
         if ($request->port) {
             $rules['port'] = 'integer|min:0';
         }
@@ -52,7 +52,8 @@ class InstallerApiController extends Controller
                 'databasename' => $request->databasename,
                 'dbusername'   => $request->dbusername,
                 'port'         => $request->port,
-            ], $rules
+            ],
+            $rules
         );
         if ($validator->fails()) {
             $jsons = $validator->messages();
@@ -200,15 +201,15 @@ class InstallerApiController extends Controller
 
             // Creating user
             $user = User::create([
-                        'first_name'   => $firstname,
-                        'last_name'    => $lastname,
-                        'email'        => $email,
-                        'user_name'    => $username,
-                        'password'     => Hash::make($password),
-                        'active'       => 1,
-                        'role'         => 'admin',
-                        'assign_group' => 1,
-                        'primary_dpt'  => 1,
+                'first_name'   => $firstname,
+                'last_name'    => $lastname,
+                'email'        => $email,
+                'user_name'    => $username,
+                'password'     => Hash::make($password),
+                'active'       => 1,
+                'role'         => 'admin',
+                'assign_group' => 1,
+                'primary_dpt'  => 1,
             ]);
 
             // Setting database installed status
