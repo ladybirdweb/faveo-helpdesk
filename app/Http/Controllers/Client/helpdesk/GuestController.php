@@ -299,8 +299,8 @@ class GuestController extends Controller
     public function PostCheckTicket(Request $request)
     {
         $validator = \Validator::make($request->all(), [
-                    'email'         => 'required|email',
-                    'ticket_number' => 'required',
+            'email'         => 'required|email',
+            'ticket_number' => 'required',
         ]);
         if ($validator->fails()) {
             return redirect()->back()
@@ -330,7 +330,10 @@ class GuestController extends Controller
                 $company = $this->company();
 
                 $this->PhpMailController->sendmail(
-                        $from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $user->email], $message = ['subject' => 'Ticket link Request ['.$Ticket_number.']', 'scenario' => 'check-ticket'], $template_variables = ['user' => $username, 'ticket_link_with_number' => \URL::route('check_ticket', $code)]
+                    $from = $this->PhpMailController->mailfrom('1', '0'),
+                    $to = ['name' => $username, 'email' => $user->email],
+                    $message = ['subject' => 'Ticket link Request ['.$Ticket_number.']', 'scenario' => 'check-ticket'],
+                    $template_variables = ['user' => $username, 'ticket_link_with_number' => \URL::route('check_ticket', $code)]
                 );
 
                 return \Redirect::back()

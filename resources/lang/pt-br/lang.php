@@ -676,7 +676,7 @@ return [
     'footer2' => 'Rodapé2',
     'footer3' => 'Rodapé3',
     'footer4' => 'Rodapé4',
-     /*
+    /*
       |--------------------------------------
       |  Custom alert box
       |--------------------------------------
@@ -1353,34 +1353,34 @@ return [
     'api_configurations'               => 'Configurações Api',
     'generate_key'                     => 'Gerar chave',
     'api_settings'                     => 'Configurações API',
-   /*
+    /*
     *-----------------------------------------------------------------------------
     * Error log and debugging settings
     *--------------------------------------------------------------------------
     *
     */
-   'error-debug'                                    => 'Logs de erros e depuração',
-   'debug-options'                                  => 'Opções de depuração',
-   'view-logs'                                      => 'Exibir logs de erro',
-   'not-authorised-error-debug'                     => 'Você não está autorizado a acessar a URL',
-   'error-debug-settings'                           => 'Configurações de erro e depuração',
-   'debugging'                                      => 'Modo de depuração',
-   'bugsnag-debugging'                              => 'Enviar relatórios de falha de aplicativos para ajudar Ladybird melhorar Faveo',
-   'error-debug-settings-saved-message'             => 'Suas configurações de erro e depuração foram salvas com sucesso',
-   'error-debug-settings-error-message'             => 'Você ainda não fez qualquer mudança nas configurações.',
-   'error-logs'                                     => 'Logs de erros',
-   /*---------------------------------------------------------------------------------------
+    'error-debug'                                    => 'Logs de erros e depuração',
+    'debug-options'                                  => 'Opções de depuração',
+    'view-logs'                                      => 'Exibir logs de erro',
+    'not-authorised-error-debug'                     => 'Você não está autorizado a acessar a URL',
+    'error-debug-settings'                           => 'Configurações de erro e depuração',
+    'debugging'                                      => 'Modo de depuração',
+    'bugsnag-debugging'                              => 'Enviar relatórios de falha de aplicativos para ajudar Ladybird melhorar Faveo',
+    'error-debug-settings-saved-message'             => 'Suas configurações de erro e depuração foram salvas com sucesso',
+    'error-debug-settings-error-message'             => 'Você ainda não fez qualquer mudança nas configurações.',
+    'error-logs'                                     => 'Logs de erros',
+    /*---------------------------------------------------------------------------------------
     *Latest update 16-06-2016
     *-----------------------------------------------------------------------------------
     */
-   'that_email_is not_available_in_this_system'     => 'Esse e-mail não está disponível neste sistema',
-   'use_subject'                                    => 'Use Assunto',
-   'reopen'                                         => 'Reabrir',
+    'that_email_is not_available_in_this_system'     => 'Esse e-mail não está disponível neste sistema',
+    'use_subject'                                    => 'Use Assunto',
+    'reopen'                                         => 'Reabrir',
 
-   /*******************************New updated ********************************************/
-   /*                       Translation Required                                          */
-   /***************************************************************************************/
-   'invalid_attempt'                            => 'Tentativa inválida',
+    /*******************************New updated ********************************************/
+    /*                       Translation Required                                          */
+    /***************************************************************************************/
+    'invalid_attempt'                            => 'Tentativa inválida',
     /* ---------------------------------------------------------------------------------------
      * Latest update 27-07-2016
      * -----------------------------------------------------------------------------------
@@ -1475,82 +1475,82 @@ return [
      * Followup Updated
      * --------------------------------------------------------------------------------------------
      */
-     'followup'              => 'Acompanhamento',
-     'followup_tickets'      => 'Tickets em acompanhamento',
-     'followup_Notification' => 'Notificação de acompanhamento',
+    'followup'              => 'Acompanhamento',
+    'followup_tickets'      => 'Tickets em acompanhamento',
+    'followup_Notification' => 'Notificação de acompanhamento',
 
-     /*
+    /*
       *--------------------------------------------------------------------------------------------
       *Updated 6-9-2016
       *--------------------------------------------------------------------------------------------
       */
-     'not-available'  => 'Não disponível',
-     /* --------------------------------------------------------------------------------------------
+    'not-available'  => 'Não disponível',
+    /* --------------------------------------------------------------------------------------------
      * User Module
      * ---------------------------------------------------------------------------------------------
      */
-     'agent_report'                                                 => 'Relatório do agente',
-     'assign_tickets'                                               => 'Atribuir ticket',
-     'delete_agent'                                                 => 'Deletar agente',
-     'delete_user'                                                  => 'Deletar usuário',
-     'confirm_deletion'                                             => 'Confirmar exclusão',
-     'delete_all_content'                                           => 'Deletar todo conteúdo',
-     'agent_profile'                                                => 'Perfil do agente',
-     'change_role_to_admin'                                         => 'Alterar função para admin',
-     'change_role_to_user'                                          => 'Alterar função para usuário',
-     'change_role_to_agent'                                         => 'Alterar função para agente',
-     'change_password'                                              => 'Alterar senha',
-     'role_change'                                                  => 'Alterar função',
-     'password_generator'                                           => 'Gerador de senha',
-     'depertment'                                                   => 'Depertamento',
-     'duetoday'                                                     => 'Vencendo hoje',
-     'today-due_tickets'                                            => 'Tickets vencendo hoje',
-     'password_change_successfully'                                 => 'Senha alterada com sucesso',
-     'role_change_successfully'                                     => 'Função alterada com sucesso',
-     'user_delete_successfully'                                     => 'Usuário excluído com sucesso',
-     'agent_delete_successfully'                                    => 'Agente excluído com sucesso',
-     'select_another_agent'                                         => 'Escolher outro agente',
-     'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agente excluído com sucesso e ticket associado a outro agente',
-     'deleted_user'                                                 => 'Usuário excluído',
-     'deleted_user_directory'                                       => 'Diretório de usuário excluído',
-     'restore'                                                      => 'Restaurar',
-     'user_restore_successfully'                                    => 'Usuário restaurado com sucesso',
+    'agent_report'                                                 => 'Relatório do agente',
+    'assign_tickets'                                               => 'Atribuir ticket',
+    'delete_agent'                                                 => 'Deletar agente',
+    'delete_user'                                                  => 'Deletar usuário',
+    'confirm_deletion'                                             => 'Confirmar exclusão',
+    'delete_all_content'                                           => 'Deletar todo conteúdo',
+    'agent_profile'                                                => 'Perfil do agente',
+    'change_role_to_admin'                                         => 'Alterar função para admin',
+    'change_role_to_user'                                          => 'Alterar função para usuário',
+    'change_role_to_agent'                                         => 'Alterar função para agente',
+    'change_password'                                              => 'Alterar senha',
+    'role_change'                                                  => 'Alterar função',
+    'password_generator'                                           => 'Gerador de senha',
+    'depertment'                                                   => 'Depertamento',
+    'duetoday'                                                     => 'Vencendo hoje',
+    'today-due_tickets'                                            => 'Tickets vencendo hoje',
+    'password_change_successfully'                                 => 'Senha alterada com sucesso',
+    'role_change_successfully'                                     => 'Função alterada com sucesso',
+    'user_delete_successfully'                                     => 'Usuário excluído com sucesso',
+    'agent_delete_successfully'                                    => 'Agente excluído com sucesso',
+    'select_another_agent'                                         => 'Escolher outro agente',
+    'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agente excluído com sucesso e ticket associado a outro agente',
+    'deleted_user'                                                 => 'Usuário excluído',
+    'deleted_user_directory'                                       => 'Diretório de usuário excluído',
+    'restore'                                                      => 'Restaurar',
+    'user_restore_successfully'                                    => 'Usuário restaurado com sucesso',
 
-     /*** updates 28-11-2016***/
-     'apply'              => 'Aplicar',
+    /*** updates 28-11-2016***/
+    'apply'              => 'Aplicar',
 
-     /* updates 2-12-2016 **/
-     'sort-by'                      => 'Ordenar por',
-     'created-at'                   => 'Criado em',
-     'or'                           => 'OU',
-     'activate'                     => 'Ativar',
-     'system-email-not-configured'  => 'Não podemos processar a solicitação de email, pois o sistema não possui email configurado para o envio de emails. Entre em contato e relate ao administrador do sistema.',
-     'assign-ticket'                => 'Atribuir tickets',
-     'can-not-inactive-group'       => 'Não é possível tornar o grupo inativo, pois possui agentes atribuídos. Atribua esses agentes a outro grupo e tente novamente.',
-     'internal-note-has-been-added' => 'Nota interna adicionada ao ticket',
-     'active-users'                 => 'Usuários ativos',
-     'deleted-users'                => 'Usuários excluídos',
-     'view-option'                  => 'Ver opções',
-     'accoutn-not-verified'         => 'Conta de usuário não está verificada',
-     'enabled'                      => 'Habilitado',
-     'disabled'                     => 'Desabilitado',
-     'user-account-is-deleted'      => 'Esta conta de usuário foi excluída.',
-     'restore-user'                 => 'Restaurar conta de usuário',
-     'delete-account-caution-info'  => 'Observe que esta conta ainda pode ter tickets abertos no sistema.',
-     'reply-can-not-be-empty'       => 'A resposta não pode ficar em branco. Digite sua resposta.',
+    /* updates 2-12-2016 **/
+    'sort-by'                      => 'Ordenar por',
+    'created-at'                   => 'Criado em',
+    'or'                           => 'OU',
+    'activate'                     => 'Ativar',
+    'system-email-not-configured'  => 'Não podemos processar a solicitação de email, pois o sistema não possui email configurado para o envio de emails. Entre em contato e relate ao administrador do sistema.',
+    'assign-ticket'                => 'Atribuir tickets',
+    'can-not-inactive-group'       => 'Não é possível tornar o grupo inativo, pois possui agentes atribuídos. Atribua esses agentes a outro grupo e tente novamente.',
+    'internal-note-has-been-added' => 'Nota interna adicionada ao ticket',
+    'active-users'                 => 'Usuários ativos',
+    'deleted-users'                => 'Usuários excluídos',
+    'view-option'                  => 'Ver opções',
+    'accoutn-not-verified'         => 'Conta de usuário não está verificada',
+    'enabled'                      => 'Habilitado',
+    'disabled'                     => 'Desabilitado',
+    'user-account-is-deleted'      => 'Esta conta de usuário foi excluída.',
+    'restore-user'                 => 'Restaurar conta de usuário',
+    'delete-account-caution-info'  => 'Observe que esta conta ainda pode ter tickets abertos no sistema.',
+    'reply-can-not-be-empty'       => 'A resposta não pode ficar em branco. Digite sua resposta.',
 
-     //update 18-12-2016
-     'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Sua conta foi criada com sucesso. Entre em contato com o administrador para ativar a conta, pois não foi possível enviar um código OPT.',
+    //update 18-12-2016
+    'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Sua conta foi criada com sucesso. Entre em contato com o administrador para ativar a conta, pois não foi possível enviar um código OPT.',
 
-     //update 19-12-2016
-     'only-agents'         => 'Usuários agentes',
-     'only-users'          => 'Usuários clientes',
-     'banned-users'        => 'Usuários banidos',
-     'inactive-users'      => 'Usuários inativos',
-     'all-users'           => 'Todos os usuários',
-     //update 21-12-2016
-     'selected-user-is-already-the-owner' => 'O usuário selecionado já é o proprietário deste ticket.',
-     //updated 15-5-2017
-     'session-expired'     => 'Sessão expirada ou inválida, tente novamente.',
+    //update 19-12-2016
+    'only-agents'         => 'Usuários agentes',
+    'only-users'          => 'Usuários clientes',
+    'banned-users'        => 'Usuários banidos',
+    'inactive-users'      => 'Usuários inativos',
+    'all-users'           => 'Todos os usuários',
+    //update 21-12-2016
+    'selected-user-is-already-the-owner' => 'O usuário selecionado já é o proprietário deste ticket.',
+    //updated 15-5-2017
+    'session-expired'     => 'Sessão expirada ou inválida, tente novamente.',
 
 ];

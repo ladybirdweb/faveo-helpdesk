@@ -24,8 +24,8 @@ class SettingsRequests extends Request
     public function rules()
     {
         return [
-                // 'company_name' => 'required',
-                // 'website' => 'required|url',
+            // 'company_name' => 'required',
+            // 'website' => 'required|url',
         ];
     }
 }
