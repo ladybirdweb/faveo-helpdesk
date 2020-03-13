@@ -29,8 +29,8 @@ class TemplateRequest extends Request
     public function rules()
     {
         return [
-//            'name'                  => 'required|unique:template',
-//            'subject'               => 'required',
+            //            'name'                  => 'required|unique:template',
+            //            'subject'               => 'required',
             'type'                  => 'required',
             'message'               => 'required',
         ];

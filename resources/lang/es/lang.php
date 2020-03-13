@@ -62,7 +62,7 @@ return [
     'iforgot'                                => 'Olvidé mi contraseña',
     'email_address'                          => 'Dirección de correo electrónico',
     'password'                               => 'Contraseña',
-     'password_confirmation'                 => 'confirmación de contraseña',
+    'password_confirmation'                  => 'confirmación de contraseña',
     'woops'                                  => 'Whoops!',
     'theirisproblem'                         => 'Hubo algunos problemas con su entrada.',
     'login'                                  => 'Iniciar sesión',
@@ -79,7 +79,7 @@ return [
     'verify-number'                          => 'Verificar el número',
     'get-verify-message'                     => 'Ingrese el código de OTP que enviamos a su nuevo número.',
     'number-verification-sussessfull'        => 'Su número se ha verificado correctamente, por favor espere que estamos actualizando su perfil.',
-     'enter_your_email_here'                 => 'Ingrese su dirección de correo electrónico aquí',
+    'enter_your_email_here'                  => 'Ingrese su dirección de correo electrónico aquí',
     /*
       |--------------------------------------
       |   Página de Registro
@@ -478,7 +478,7 @@ return [
       |Social login
       |--------------------------------------------------
     */
-      'social-login' => 'Ingreso social',
+    'social-login' => 'Ingreso social',
 
     /*
       |------------------------------------------------
@@ -1137,7 +1137,7 @@ return [
     'user-exists'                                    => 'El usuario ya existe. Intente buscar el usuario existente.',
     'valid-email'                                    => 'Introduzca una dirección de correo electrónico válida.',
     'search_user'                                    => 'Buscar usuario',
-     'merge-ticket'                                  => 'Fusionar ticket',
+    'merge-ticket'                                   => 'Fusionar ticket',
     'title'                                          => 'Título',
     'merge'                                          => 'Fusionar',
     'select_tickets'                                 => 'Seleccionar tickets para fusionar',
@@ -1534,95 +1534,95 @@ Puede ingresar el número de días de registros de base de datos que se eliminar
      * Followup Updated
      * --------------------------------------------------------------------------------------------
      */
-     'followup'              => 'Seguir',
-     'followup_tickets'      => 'Seguir tickets',
-     'followup_Notification' => 'Notificación de Seguimiento',
+    'followup'              => 'Seguir',
+    'followup_tickets'      => 'Seguir tickets',
+    'followup_Notification' => 'Notificación de Seguimiento',
 
-     /*
+    /*
       *--------------------------------------------------------------------------------------------
       *Updated 6-9-2016
       *---------------------------------------------------------------------------------------
       */
-     'not-available'  => 'No disponible',
-     /* --------------------------------------------------------------------------------------------
+    'not-available'  => 'No disponible',
+    /* --------------------------------------------------------------------------------------------
      * User Module
      * --------------------------------------------------------------------------------------------
      */
-     'agent_report'                                                 => 'Informe del agente',
-     'assign_tickets'                                               => 'Asignar tickets',
-     'delete_agent'                                                 => 'Borrar agente',
-     'delete_user'                                                  => 'Borrar usuario',
-     'confirm_deletion'                                             => 'Confirmar la eliminación',
-     'delete_all_content'                                           => 'Borrar todo el contenido',
-     'agent_profile'                                                => 'Perfil del agente',
-     'change_role_to_admin'                                         => 'Cambiar el rol a admin',
-     'change_role_to_user'                                          => 'Cambiar función a usuario',
-     'change_role_to_agent'                                         => 'Cambiar el rol a agente',
-     'change_password'                                              => 'Cambia la contraseña',
-     'role_change'                                                  => 'Cambio de rol',
-     'password_generator'                                           => 'Generador de contraseñas',
-     'depertment'                                                   => 'Departmento',
-     'duetoday'                                                     => 'Para hoy',
-     'today-due_tickets'                                            => 'Tickets para hoy',
-     'password_change_successfully'                                 => 'Contraseña cambiada con éxito',
-     'role_change_successfully'                                     => 'Función cambiada con éxito',
-     'user_delete_successfully'                                     => 'Usuario eliminado correctamente',
-     'agent_delete_successfully'                                    => 'Agente eliminado correctamente',
-     'select_another_agent'                                         => 'Seleccione otro agente',
-     'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agente eliminado con éxito y el ticket asignado a otro agente',
-     'deleted_user'                                                 => 'Eliminar usuario',
-     'deleted_user_directory'                                       => 'Eliminar directorio del usuario',
-     'restore'                                                      => 'Restaurar',
-     'user_restore_successfully'                                    => 'Usuario restaurado con éxito',
+    'agent_report'                                                 => 'Informe del agente',
+    'assign_tickets'                                               => 'Asignar tickets',
+    'delete_agent'                                                 => 'Borrar agente',
+    'delete_user'                                                  => 'Borrar usuario',
+    'confirm_deletion'                                             => 'Confirmar la eliminación',
+    'delete_all_content'                                           => 'Borrar todo el contenido',
+    'agent_profile'                                                => 'Perfil del agente',
+    'change_role_to_admin'                                         => 'Cambiar el rol a admin',
+    'change_role_to_user'                                          => 'Cambiar función a usuario',
+    'change_role_to_agent'                                         => 'Cambiar el rol a agente',
+    'change_password'                                              => 'Cambia la contraseña',
+    'role_change'                                                  => 'Cambio de rol',
+    'password_generator'                                           => 'Generador de contraseñas',
+    'depertment'                                                   => 'Departmento',
+    'duetoday'                                                     => 'Para hoy',
+    'today-due_tickets'                                            => 'Tickets para hoy',
+    'password_change_successfully'                                 => 'Contraseña cambiada con éxito',
+    'role_change_successfully'                                     => 'Función cambiada con éxito',
+    'user_delete_successfully'                                     => 'Usuario eliminado correctamente',
+    'agent_delete_successfully'                                    => 'Agente eliminado correctamente',
+    'select_another_agent'                                         => 'Seleccione otro agente',
+    'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agente eliminado con éxito y el ticket asignado a otro agente',
+    'deleted_user'                                                 => 'Eliminar usuario',
+    'deleted_user_directory'                                       => 'Eliminar directorio del usuario',
+    'restore'                                                      => 'Restaurar',
+    'user_restore_successfully'                                    => 'Usuario restaurado con éxito',
 
-     /*** updates 28-11-2016***/
-     'apply'              => 'Apply',
+    /*** updates 28-11-2016***/
+    'apply'              => 'Apply',
 
-     /* updates 2-12-2016 **/
-     'sort-by'                      => 'Ordenar por',
-     'created-at'                   => 'Creado en',
-     'or'                           => 'OR',
-     'activate'                     => 'Activar',
-     'system-email-not-configured'  => 'No podemos procesar la solicitud de correo electrónico porque el sistema no tiene correo configurado para enviar correos. Comuníquese con el administrador del sistema.',
-     'assign-ticket'                => 'Asignar tickets',
-     'can-not-inactive-group'       => 'No se puede hacer que el grupo inactivo, ya que tiene agentes asignados en él. Asigne estos agentes a otro grupo e inténtelo de nuevo.',
-     'internal-note-has-been-added' => 'Nota interna añadida al ticket',
-     'active-users'                 => 'Usuarios Activos',
-     'deleted-users'                => 'Borrar usuarios',
-     'view-option'                  => 'Ver opciones',
-     'accoutn-not-verified'         => 'La cuenta de usuario no se ha verificado',
-     'enabled'                      => 'Habilitado',
-     'disabled'                     => 'Desabilitado',
-     'user-account-is-deleted'      => 'Se ha eliminado esta cuenta de usuario.',
-     'restore-user'                 => 'Restaurar cuenta de usuario',
-     'delete-account-caution-info'  => 'Tenga en cuenta que esta cuenta todavía puede tener entradas abiertas en el sistema.',
-     'reply-can-not-be-empty'       => 'La respuesta no puede estar en blanco. Ingrese su respuesta.',
+    /* updates 2-12-2016 **/
+    'sort-by'                      => 'Ordenar por',
+    'created-at'                   => 'Creado en',
+    'or'                           => 'OR',
+    'activate'                     => 'Activar',
+    'system-email-not-configured'  => 'No podemos procesar la solicitud de correo electrónico porque el sistema no tiene correo configurado para enviar correos. Comuníquese con el administrador del sistema.',
+    'assign-ticket'                => 'Asignar tickets',
+    'can-not-inactive-group'       => 'No se puede hacer que el grupo inactivo, ya que tiene agentes asignados en él. Asigne estos agentes a otro grupo e inténtelo de nuevo.',
+    'internal-note-has-been-added' => 'Nota interna añadida al ticket',
+    'active-users'                 => 'Usuarios Activos',
+    'deleted-users'                => 'Borrar usuarios',
+    'view-option'                  => 'Ver opciones',
+    'accoutn-not-verified'         => 'La cuenta de usuario no se ha verificado',
+    'enabled'                      => 'Habilitado',
+    'disabled'                     => 'Desabilitado',
+    'user-account-is-deleted'      => 'Se ha eliminado esta cuenta de usuario.',
+    'restore-user'                 => 'Restaurar cuenta de usuario',
+    'delete-account-caution-info'  => 'Tenga en cuenta que esta cuenta todavía puede tener entradas abiertas en el sistema.',
+    'reply-can-not-be-empty'       => 'La respuesta no puede estar en blanco. Ingrese su respuesta.',
 
-     //update 18-12-2016
-     'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Su cuenta se ha creado correctamente. Póngase en contacto con admin para activar la cuenta, ya que no hemos podido enviarle un código de OTP.',
-     //update 19-12-2016
-     'only-agents'         => 'Usuarios de agentes',
-     'only-users'          => 'Clientes usuarios',
-     'banned-users'        => 'Usuarios baneados',
-     'inactive-users'      => 'Usuarios inactivos',
-     'all-users'           => 'Todos los usuarios',
-     'search'              => 'Buscar...',
-     //update 21-12-2016
-     'selected-user-is-already-the-owner' => 'El usuario seleccionado ya es el propietario de este ticket.',
-          //update 1-2-2017
-     'system-outgoing-incoming-mail-not-configured' => 'You have not configured system mail. Faveo can\'t fetch tickets from mail or send mail to users without it.',
-     'confihure-the-mail-now'                       => 'Click here to configure the mail.',
-     'system-mail-not-configured-agent-message'     => 'System incoming and outgoing email settings are not configured. Please contct the admin.',
+    //update 18-12-2016
+    'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Su cuenta se ha creado correctamente. Póngase en contacto con admin para activar la cuenta, ya que no hemos podido enviarle un código de OTP.',
+    //update 19-12-2016
+    'only-agents'         => 'Usuarios de agentes',
+    'only-users'          => 'Clientes usuarios',
+    'banned-users'        => 'Usuarios baneados',
+    'inactive-users'      => 'Usuarios inactivos',
+    'all-users'           => 'Todos los usuarios',
+    'search'              => 'Buscar...',
+    //update 21-12-2016
+    'selected-user-is-already-the-owner' => 'El usuario seleccionado ya es el propietario de este ticket.',
+    //update 1-2-2017
+    'system-outgoing-incoming-mail-not-configured' => 'You have not configured system mail. Faveo can\'t fetch tickets from mail or send mail to users without it.',
+    'confihure-the-mail-now'                       => 'Click here to configure the mail.',
+    'system-mail-not-configured-agent-message'     => 'System incoming and outgoing email settings are not configured. Please contct the admin.',
 
-      // arindam-14.2.2017
-     // sla
-     'min'   => 'Min',
-     'hours' => 'Hours',
-     'days'  => 'Days',
-     'months'=> 'Months',
-     'year'  => 'Year',
-// department change
-     'change_department'                    => 'Change Department',
+    // arindam-14.2.2017
+    // sla
+    'min'   => 'Min',
+    'hours' => 'Hours',
+    'days'  => 'Days',
+    'months'=> 'Months',
+    'year'  => 'Year',
+    // department change
+    'change_department'                     => 'Change Department',
     'ticket_department_successfully_changed'=> 'Ticket Department Successfully Changed',
     'select_another_department'             => 'Select another department',
 

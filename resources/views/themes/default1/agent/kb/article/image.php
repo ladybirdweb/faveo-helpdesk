@@ -14,10 +14,10 @@ if (isset($_FILES['image'])) {
     $link = "http://$_SERVER[HTTP_HOST]".'/codex/'.$path;
     //Here we are constructing the JSON Object
     $res = ['upload' => [
-            'links' => ['original' => $link],
-            'image' => ['width' => $data[0],
-                'height'        => $data[1],
-            ],
+        'links' => ['original' => $link],
+        'image' => ['width' => $data[0],
+            'height'        => $data[1],
+        ],
     ]];
     //echo out the response :)
     echo json_encode($res);

@@ -82,26 +82,26 @@ return [
       |   Register Page
       |--------------------------------------
      */
-'registration'                                                                                    => 'Registratie',
-'full_name'                                                                                       => 'Volledige naam',
-'firstname'                                                                                       => 'Voornaam',
-'lastname'                                                                                        => 'Achternaam',
-'profilepicture'                                                                                  => 'Profielfoto',
-'oldpassword'                                                                                     => 'Oude wachtwoord',
-'newpassword'                                                                                     => 'Nieuwe wachtwoord',
-'retype_password'                                                                                 => 'Herhaal wachtwoord',
-'i_agree_to_the'                                                                                  => 'Ik ga akkoord met de',
-'terms'                                                                                           => 'algemene voorwaarden',
-'register'                                                                                        => 'Registreren',
-'i_already_have_a_membership'                                                                     => 'Ik heb al een profiel',
-'see-profile1'                                                                                    => 'Klik hier om dit te bekijken ',
-'see-profile2'                                                                                    => 's profiel',
-'activate_your_account_click_on_Link_that_send_to_your_mail'                                      => 'Activeer je account ! Klik op de link welke we naar je e-mailadres hebben gestuurd',
-'activate_your_account_click_on_Link_that_send_to_your_mail_and_moble'                            => 'Activeer je account ! Klik op de link welke we naar je e-mailadres hebben gestuur of login op je account en voer de OTP code in welke we naar je mobiele nummer hebben gestuurd.',
-'activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup'     => 'Account aangemaakt. Neem contact op met de systeembeheer want we konden geen OTP code naar je mobiele nummer verzenden, ook konden we geen e-mail versturen naar je e-mailadres.',
-'this_field_do_not_match_our_records'                                                             => 'Dit veld komt niet overeen met onze gegevens.',
-'we_have_e-mailed_your_password_reset_link'                                                       => 'We hebben een link verstuurd om je wachtwoord te resetten!',
-"we_can't_find_a_user_with_that_e-mail_address"                                                   => 'We kunnen geen gebruiker met dat e-mailadres vinden.',
+    'registration'                                                                                    => 'Registratie',
+    'full_name'                                                                                       => 'Volledige naam',
+    'firstname'                                                                                       => 'Voornaam',
+    'lastname'                                                                                        => 'Achternaam',
+    'profilepicture'                                                                                  => 'Profielfoto',
+    'oldpassword'                                                                                     => 'Oude wachtwoord',
+    'newpassword'                                                                                     => 'Nieuwe wachtwoord',
+    'retype_password'                                                                                 => 'Herhaal wachtwoord',
+    'i_agree_to_the'                                                                                  => 'Ik ga akkoord met de',
+    'terms'                                                                                           => 'algemene voorwaarden',
+    'register'                                                                                        => 'Registreren',
+    'i_already_have_a_membership'                                                                     => 'Ik heb al een profiel',
+    'see-profile1'                                                                                    => 'Klik hier om dit te bekijken ',
+    'see-profile2'                                                                                    => 's profiel',
+    'activate_your_account_click_on_Link_that_send_to_your_mail'                                      => 'Activeer je account ! Klik op de link welke we naar je e-mailadres hebben gestuurd',
+    'activate_your_account_click_on_Link_that_send_to_your_mail_and_moble'                            => 'Activeer je account ! Klik op de link welke we naar je e-mailadres hebben gestuur of login op je account en voer de OTP code in welke we naar je mobiele nummer hebben gestuurd.',
+    'activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup'     => 'Account aangemaakt. Neem contact op met de systeembeheer want we konden geen OTP code naar je mobiele nummer verzenden, ook konden we geen e-mail versturen naar je e-mailadres.',
+    'this_field_do_not_match_our_records'                                                             => 'Dit veld komt niet overeen met onze gegevens.',
+    'we_have_e-mailed_your_password_reset_link'                                                       => 'We hebben een link verstuurd om je wachtwoord te resetten!',
+    "we_can't_find_a_user_with_that_e-mail_address"                                                   => 'We kunnen geen gebruiker met dat e-mailadres vinden.',
     /*
       |--------------------------------------
       |   Reset Password Page
@@ -1532,81 +1532,81 @@ return [
      * Followup Updated
      * --------------------------------------------------------------------------------------------
      */
-     'followup'              => 'Opvolging',
-     'followup_tickets'      => 'Opvolg tickets',
-     'followup_Notification' => 'Opvolging melding',
+    'followup'              => 'Opvolging',
+    'followup_tickets'      => 'Opvolg tickets',
+    'followup_Notification' => 'Opvolging melding',
 
-     /*
+    /*
       *--------------------------------------------------------------------------------------------
       *Updated 6-9-2016
       *---------------------------------------------------------------------------------------
       */
-     'not-available'  => 'Niet beschikbaar',
-     /* --------------------------------------------------------------------------------------------
+    'not-available'  => 'Niet beschikbaar',
+    /* --------------------------------------------------------------------------------------------
      * User Module
      * --------------------------------------------------------------------------------------------
      */
-     'confirm_deletion'                                           => 'Verwijderen bevestigen',
-     'delete_all_content'                                         => 'Verwijder alle inhoud',
-     'agent_profile'                                              => 'Medewerker profiel',
-     'change_role_to_admin'                                       => 'Verander naar beheerder',
-     'change_role_to_user'                                        => 'Verander naar gebruiker',
-     'change_role_to_agent'                                       => 'Verander naar medewerker',
-     'change_password'                                            => 'Verander wachtwoord',
-     'role_change'                                                => 'Rol aanpassen',
-     'password_generator'                                         => 'Wachtwoord generator',
-     'depertment'                                                 => 'Afdeling',
-     'duetoday'                                                   => 'Einddatum vandaag',
-     'today-due_tickets'                                          => 'Ticket met een einddatum vandaag',
-     'password_change_successfully'                               => 'Wachtwoord succesvol veranderd',
-     'role_change_successfully'                                   => 'Rol succesvol veranderd',
-     'user_delete_successfully'                                   => 'Gebruiker succesvol verwijderd',
-     'agent_delete_successfully'                                  => 'Medewerker succesvol verwijderd',
-     'select_another_user'                                        => 'Selecteer een andere gebruiker',
+    'confirm_deletion'                                            => 'Verwijderen bevestigen',
+    'delete_all_content'                                          => 'Verwijder alle inhoud',
+    'agent_profile'                                               => 'Medewerker profiel',
+    'change_role_to_admin'                                        => 'Verander naar beheerder',
+    'change_role_to_user'                                         => 'Verander naar gebruiker',
+    'change_role_to_agent'                                        => 'Verander naar medewerker',
+    'change_password'                                             => 'Verander wachtwoord',
+    'role_change'                                                 => 'Rol aanpassen',
+    'password_generator'                                          => 'Wachtwoord generator',
+    'depertment'                                                  => 'Afdeling',
+    'duetoday'                                                    => 'Einddatum vandaag',
+    'today-due_tickets'                                           => 'Ticket met een einddatum vandaag',
+    'password_change_successfully'                                => 'Wachtwoord succesvol veranderd',
+    'role_change_successfully'                                    => 'Rol succesvol veranderd',
+    'user_delete_successfully'                                    => 'Gebruiker succesvol verwijderd',
+    'agent_delete_successfully'                                   => 'Medewerker succesvol verwijderd',
+    'select_another_user'                                         => 'Selecteer een andere gebruiker',
     'agent_delete_successfully_and_ticket_assign_to_another_user' => 'Medewerker succesvol verwijderd, het ticket is aan een andere gebruiker toegewezen',
 
     /************************************New updates*************************************/
     /*                             Translation Required                                 */
     /************************************************************************************/
     'deleted_user'                                                  => 'Deleted User',
-     'deleted_user_directory'                                       => 'Deleted User Directory',
-     'restore'                                                      => 'Restore',
-     'user_restore_successfully'                                    => 'User restore successfully',
+    'deleted_user_directory'                                        => 'Deleted User Directory',
+    'restore'                                                       => 'Restore',
+    'user_restore_successfully'                                     => 'User restore successfully',
 
-     /*** updates 28-11-2016***/
-     'apply'              => 'Apply',
+    /*** updates 28-11-2016***/
+    'apply'              => 'Apply',
 
-     /* updates 2-12-2016 **/
-     'sort-by'                      => 'Sort by',
-     'created-at'                   => 'Created at',
-     'or'                           => 'OR',
-     'activate'                     => 'Activate',
-     'system-email-not-configured'  => 'We are unable to process email request as the system has no configured email for sending mails. Please contact and report system admin.',
-     'assign-ticket'                => 'Assign tickets',
-     'can-not-inactive-group'       => 'Can not make the group inactive as it has agents assigned in it. Please assign those agents to another group and try again.',
-     'internal-note-has-been-added' => 'Internal note added to the ticket',
-     'active-users'                 => 'Active users',
-     'deleted-users'                => 'Deleted users',
-     'view-option'                  => 'View options',
-     'accoutn-not-verified'         => 'User account is not verified',
-     'enabled'                      => 'Enabled',
-     'disabled'                     => 'Disabled',
-     'user-account-is-deleted'      => 'This user account has been deleted.',
-     'restore-user'                 => 'Restore user account',
-     'delete-account-caution-info'  => 'Please note this account may still have  open tickets in the system.',
-     'reply-can-not-be-empty'       => 'Reply can not be blank. Please enter your reply.',
+    /* updates 2-12-2016 **/
+    'sort-by'                      => 'Sort by',
+    'created-at'                   => 'Created at',
+    'or'                           => 'OR',
+    'activate'                     => 'Activate',
+    'system-email-not-configured'  => 'We are unable to process email request as the system has no configured email for sending mails. Please contact and report system admin.',
+    'assign-ticket'                => 'Assign tickets',
+    'can-not-inactive-group'       => 'Can not make the group inactive as it has agents assigned in it. Please assign those agents to another group and try again.',
+    'internal-note-has-been-added' => 'Internal note added to the ticket',
+    'active-users'                 => 'Active users',
+    'deleted-users'                => 'Deleted users',
+    'view-option'                  => 'View options',
+    'accoutn-not-verified'         => 'User account is not verified',
+    'enabled'                      => 'Enabled',
+    'disabled'                     => 'Disabled',
+    'user-account-is-deleted'      => 'This user account has been deleted.',
+    'restore-user'                 => 'Restore user account',
+    'delete-account-caution-info'  => 'Please note this account may still have  open tickets in the system.',
+    'reply-can-not-be-empty'       => 'Reply can not be blank. Please enter your reply.',
 
-     //update 18-12-2016
-     'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Your account has been created successfully. Please contact admin for account activation as we were not able to send you an OPT code.',
+    //update 18-12-2016
+    'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Your account has been created successfully. Please contact admin for account activation as we were not able to send you an OPT code.',
 
-     //update 19-12-2016
-     'only-agents'         => 'Agent users',
-     'only-users'          => 'Clients users',
-     'banned-users'        => 'Banned users',
-     'inactive-users'      => 'Inactive users',
-     'all-users'           => 'All users',
-     //update 21-12-2016
-     'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
-     //updated 15-5-2017
-     'session-expired'     => 'Session expired or invalid, please try again.',
+    //update 19-12-2016
+    'only-agents'         => 'Agent users',
+    'only-users'          => 'Clients users',
+    'banned-users'        => 'Banned users',
+    'inactive-users'      => 'Inactive users',
+    'all-users'           => 'All users',
+    //update 21-12-2016
+    'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
+    //updated 15-5-2017
+    'session-expired'     => 'Session expired or invalid, please try again.',
 ];

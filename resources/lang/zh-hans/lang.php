@@ -1589,7 +1589,7 @@ return [
     'days'                                   => '天',
     'months'                                 => '月',
     'year'                                   => '年',
-// department change
+    // department change
     'change_department'                      => '改变部门',
     'ticket_department_successfully_changed' => '成功改变工单部门',
     'select_another_department'              => '选择另一个部门',
