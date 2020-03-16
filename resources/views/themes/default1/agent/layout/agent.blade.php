@@ -93,14 +93,21 @@
                 ?>
 
                 <!-- Header Navbar: style can be found in header.less -->
-                <nav class="navbar navbar-static-top">
+                <!-- <nav class="navbar navbar-static-top"> -->
                     <!-- Sidebar toggle button-->
-                    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                        <span class="sr-only">Toggle navigation</span>
+                    <!-- <a href="#" class="sidebar-toggle"data-widget="pushmenu" data-toggle="offcanvas" role="button"> -->
+                    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+
+                    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="sidebar-toggle" data-widget="pushmenu" href="#"></a>
+      </li>
+            </ul>
+                        <!-- <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
+                        <span class="icon-bar"></span> -->
+                    <!-- </a> -->
                     <div id="navbar-collapse" class="navbar-wrapper text-left">
                     <!-- <div class="collapse navbar-collapse" id="navbar-collapse"> -->
                     <nav class="navbar site-navigation navbar-expand-md" role="navigation">
@@ -119,10 +126,10 @@
                         @else
                         <?php \Event::fire('service.desk.agent.topbar', array()); ?>
                         @endif
-
-                        <ul class="nav navbar-nav navbar-left">
+<div>
+                        <ul class="nav navbar-nav navbar-right">
                             @if($auth_user_role == 'admin')
-                            <li><a class="nav-item" href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
+                            <!-- <li><a class="nav-item" href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li> -->
 
                             @endif
                             @include('themes.default1.update.notification')
@@ -237,6 +244,7 @@
                         </ul>
 
                     </div>
+            </div>
 
                 </nav>
             </header>
