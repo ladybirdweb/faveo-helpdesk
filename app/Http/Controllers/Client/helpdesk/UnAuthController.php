@@ -53,8 +53,8 @@ class UnAuthController extends Controller
     {
         try {
             $validator = \Validator::make($request->all(), [
-                        'email_address' => 'required|email',
-                        'ticket_number' => 'required',
+                'email_address' => 'required|email',
+                'ticket_number' => 'required',
             ]);
             if ($validator->fails()) {
                 return redirect()->back()
@@ -98,7 +98,10 @@ class UnAuthController extends Controller
 
                 try {
                     $this->PhpMailController->sendmail(
-                            $from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $user_details->email], $message = ['subject' => 'Ticket link Request ['.$ticket_number.']', 'scenario' => 'check-ticket'], $template_variables = ['user' => $username, 'ticket_link_with_number' => url('show-ticket/'.$ticket->id.'/'.$token)]
+                        $from = $this->PhpMailController->mailfrom('1', '0'),
+                        $to = ['name' => $username, 'email' => $user_details->email],
+                        $message = ['subject' => 'Ticket link Request ['.$ticket_number.']', 'scenario' => 'check-ticket'],
+                        $template_variables = ['user' => $username, 'ticket_link_with_number' => url('show-ticket/'.$ticket->id.'/'.$token)]
                     );
                 } catch (\Exception $e) {
                 }

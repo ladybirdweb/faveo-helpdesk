@@ -266,10 +266,10 @@ function successResponse($successMsg = '', $data = '', $responseCode = 200)
 function exceptionResponse(\Exception $exception)
 {
     return errorResponse([
-            'file'       => $exception->getFile(),
-            'line_number'=> $exception->getLine(),
-            'exception'  => $exception->getMessage(),
-        ], 500);
+        'file'       => $exception->getFile(),
+        'line_number'=> $exception->getLine(),
+        'exception'  => $exception->getMessage(),
+    ], 500);
 }
 
 /**

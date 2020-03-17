@@ -13,7 +13,7 @@ class NotificationController extends Controller
 {
     /**
      * ********************************************
-     * Class Notification Controller
+     * Class Notification Controller.
      * ********************************************
      * This controller is used to generate in app notification
      * under the folling occurrence
@@ -157,13 +157,13 @@ class NotificationController extends Controller
     public static function getNotifications()
     {
         $notifications = UserNotification::with([
-                    'notification.type' => function ($query) {
-                        $query->select('id', 'message', 'type');
-                    }, 'users' => function ($query) {
-                        $query->select('id', 'email', 'profile_pic');
-                    }, 'notification.model' => function ($query) {
-                        $query->select('id', 'ticket_number');
-                    },
+            'notification.type' => function ($query) {
+                $query->select('id', 'message', 'type');
+            }, 'users' => function ($query) {
+                $query->select('id', 'email', 'profile_pic');
+            }, 'notification.model' => function ($query) {
+                $query->select('id', 'ticket_number');
+            },
         ])->where('user_id', '=', \Auth::user()->id);
 
         return $notifications;
