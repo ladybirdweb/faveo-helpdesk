@@ -265,12 +265,14 @@ class FilterControllerOld extends Controller
                         DB::raw('COUNT(ticket_collaborator.ticket_id) as countcollaborator'),
                         'tickets.status',
                         'tickets.user_id',
-                        'tickets.priority_id', 'tickets.assigned_to',
+                        'tickets.priority_id',
+                        'tickets.assigned_to',
                         'ticket_status.name as tickets_status',
                         'ticket_source.css_class as css',
                         DB::raw('substring_index(group_concat(ticket_thread.poster order by ticket_thread.id desc) , ",", 1) as last_replier'),
                         DB::raw('substring_index(group_concat(ticket_thread.title order by ticket_thread.id asc) , ",", 1) as ticket_title'),
-                        'u.active as verified')
+                        'u.active as verified'
+                    )
                     ->groupby('tickets.id');
 
         return $tickets;

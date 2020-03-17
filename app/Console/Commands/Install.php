@@ -54,7 +54,8 @@ class Install extends Command
             $this->appEnv();
             if ($this->confirm('Do you want to intall faveo?')) {
                 $default = $this->choice(
-                    'Which sql engine would you like to use?', ['mysql']
+                    'Which sql engine would you like to use?',
+                    ['mysql']
                 );
                 $host = $this->ask('Enter your sql host');
                 $database = $this->ask('Enter your database name');

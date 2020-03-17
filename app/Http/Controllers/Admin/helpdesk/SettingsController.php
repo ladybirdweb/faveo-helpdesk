@@ -1099,8 +1099,13 @@ class SettingsController extends Controller
     {
         try {
             $user = \App\User::select(
-                            'user_name', 'first_name', 'last_name', 'email', 'password', 'agent_tzone'
-                    )->where('id', '=', 1)->first();
+                'user_name',
+                'first_name',
+                'last_name',
+                'email',
+                'password',
+                'agent_tzone'
+            )->where('id', '=', 1)->first();
             $system = System::where('id', '=', 1)->first();
             \Schema::disableForeignKeyConstraints();
             $tableNames = \Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
@@ -1123,16 +1128,16 @@ class SettingsController extends Controller
             DB::commit();
             \Artisan::call('db:seed', ['--force' => true]);
             $user2 = \App\User::updateOrCreate(['id' => 1], [
-                        'first_name'   => $user->first_name,
-                        'last_name'    => $user->last_name,
-                        'email'        => $user->email,
-                        'user_name'    => $user->user_name,
-                        'password'     => $user->password,
-                        'assign_group' => 1,
-                        'primary_dpt'  => 1,
-                        'active'       => 1,
-                        'agent_tzone'  => $user->agent_tzone,
-                        'role'         => 'admin',
+                'first_name'   => $user->first_name,
+                'last_name'    => $user->last_name,
+                'email'        => $user->email,
+                'user_name'    => $user->user_name,
+                'password'     => $user->password,
+                'assign_group' => 1,
+                'primary_dpt'  => 1,
+                'active'       => 1,
+                'agent_tzone'  => $user->agent_tzone,
+                'role'         => 'admin',
             ]);
             $system2 = System::find(1);
             $system2->time_zone = $system->time_zone;

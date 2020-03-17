@@ -68,7 +68,7 @@ class MailRequest extends Request
                 return $rules;
             case 'mandrill':
                 $rules = [
-                   'secret'=> 'required',
+                    'secret'=> 'required',
                 ];
 
                 return $rules;
