@@ -103,39 +103,44 @@ class Tickets extends BaseModel
 
     public function statuses()
     {
-        $related    = 'App\Model\helpdesk\Ticket\Ticket_Status';
+        $related = 'App\Model\helpdesk\Ticket\Ticket_Status';
         $foreignKey = 'status';
+
         return $this->belongsTo($related, $foreignKey);
     }
 
     /**
-     * gets the department details for which ticket is mapped in
+     * gets the department details for which ticket is mapped in.
      */
     public function department()
     {
-        $related    = 'App\Model\helpdesk\Agent\Department';
+        $related = 'App\Model\helpdesk\Agent\Department';
         $foreignKey = 'dept_id';
+
         return $this->belongsTo($related, $foreignKey);
     }
 
     public function assigned()
     {
-        $related    = 'App\User';
+        $related = 'App\User';
         $foreignKey = 'assigned_to';
+
         return $this->belongsTo($related, $foreignKey);
     }
 
     public function assignedTeam()
     {
-        $related    = 'App\Model\helpdesk\Agent\Teams';
+        $related = 'App\Model\helpdesk\Agent\Teams';
         $foreignKey = 'team_id';
+
         return $this->belongsTo($related, $foreignKey)->withDefault();
     }
 
     public function priority()
     {
-        $related    = 'App\Model\helpdesk\Ticket\Ticket_Priority';
+        $related = 'App\Model\helpdesk\Ticket\Ticket_Priority';
         $foreignKey = 'priority_id';
+
         return $this->belongsTo($related, $foreignKey);
     }
 

@@ -290,7 +290,7 @@ Route::group(['middleware' => ['web']], function () {
       |
       |
      */
-    Route::group(['middleware' => ['install', 'update', 'role.agent', 'auth',]], function () {
+    Route::group(['middleware' => ['install', 'update', 'role.agent', 'auth']], function () {
         Route::post('chart-range/{date1}/{date2}', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
         Route::get('agen1', 'Agent\helpdesk\DashboardController@ChartData');
         Route::post('chart-range', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
