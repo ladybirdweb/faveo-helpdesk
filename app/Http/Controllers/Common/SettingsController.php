@@ -22,7 +22,7 @@ use Lang;
 
 /**
  * ***************************
- * Settings Controllers
+ * Settings Controllers.
  * ***************************
  * Controller to keep smtp details and fetch where ever needed.
  */

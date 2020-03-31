@@ -341,7 +341,8 @@ class TemplateController extends Controller
 
             return redirect()->back()->with(
                 'success',
-                trans('lang.mail-sent-to-job-for-process'));
+                trans('lang.mail-sent-to-job-for-process')
+            );
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
