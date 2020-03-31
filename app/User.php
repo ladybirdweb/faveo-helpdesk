@@ -11,8 +11,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract, AuthenticatableUserContract
 {
-    use Authenticatable,
-        CanResetPassword;
+    use Authenticatable;
+    use CanResetPassword;
 
     /**
      * The database table used by the model.
