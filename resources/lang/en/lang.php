@@ -748,7 +748,7 @@ return [
     'department'         => 'Department',
     'created'            => 'Created',
     'lastlogin'          => 'Last login',
-    'createagent'        => 'Create an agent',
+    'createagent'        => 'Create agent',
     'delete'             => 'Delete',
     'agents'             => 'Agents',
     'create'             => 'Create',
@@ -789,7 +789,7 @@ return [
     'agent_deleted_sucessfully'                => 'Agent deleted sucessfully',
     'this_staff_is_related_to_some_tickets'    => 'This staff is related to some tickets',
     'list_of_agents'                           => 'List of agents',
-    'create_an_agent'                          => 'Create an agent',
+    'create_an_agent'                          => 'Create agent',
     'edit_an_agent'                            => 'Edit an agent',
 
     /*

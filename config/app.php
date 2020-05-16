@@ -238,7 +238,7 @@ return [
         'Form'         => Collective\Html\FormFacade::class,
         'Html'         => Collective\Html\HtmlFacade::class,
         'phone'        => 'The :attribute field contains an invalid number.',
-        'Bugsnag'      => 'Bugsnag\BugsnagLaravel\BugsnagFacade',
+        'Bugsnag'      => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
         'PDF'          => 'Vsmoraes\Pdf\PdfFacade',
         'Gravatar'     => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
         'UTC'          => 'App\Http\Controllers\Agent\helpdesk\TicketController',

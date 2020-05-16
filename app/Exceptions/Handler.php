@@ -2,236 +2,230 @@
 
 namespace App\Exceptions;
 
-// controller
 use Bugsnag;
-use Config;
 use Exception;
-// use Symfony\Component\HttpKernel\Exception\HttpException;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Foundation\Validation\ValidationException as foundation;
-use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
+use PDOException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Foundation\Http\Exceptions\MaintenanceModeException;
+use \Illuminate\Database\Eloquent\ModelNotFoundException;
+
 
 class Handler extends ExceptionHandler
 {
     /**
-     * A list of the exception types that should not be reported.
+     * A list of the exception types that are not reported.
      *
      * @var array
      */
     protected $dontReport = [
-        //        'Symfony\Component\HttpKernel\Exception\HttpException',
-        \Illuminate\Http\Exception\HttpResponseException::class,
-        foundation::class,
-        AuthorizationException::class,
-        HttpResponseException::class,
-        ModelNotFoundException::class,
-        \Symfony\Component\HttpKernel\Exception\HttpException::class,
-        ValidationException::class,
-        \DaveJamesMiller\Breadcrumbs\Exception::class,
+        \Illuminate\Auth\AuthenticationException::class,
+        \Illuminate\Auth\Access\AuthorizationException::class,
+        \Illuminate\Database\Eloquent\ModelNotFoundException::class,
+        \Illuminate\Validation\ValidationException::class,
+        \Symfony\Component\HttpKernel\Exception\HttpException::class
+    ];
+
+    /**
+     * A list of the inputs that are never flashed for validation exceptions.
+     *
+     * @var array
+     */
+    protected $dontFlash = [
+        'password',
+        'password_confirmation',
     ];
 
     /**
      * Report or log an exception.
      *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param \Exception $e
-     *
+     * @param  \Exception  $exception
      * @return void
      */
-    public function report(Exception $e)
+    public function report(Exception $exception)
     {
-        dd($e);
-        Bugsnag::setBeforeNotifyFunction(function ($error) { //set bugsnag
-            return false;
-        });
-        // check if system is running in production environment
-        if (\App::environment() == 'production') {
-            $debug = Config::get('app.bugsnag_reporting'); //get bugsang reporting preference
-            if ($debug) { //if preference is true for reporting
-                $version = Config::get('app.version'); //set app version in report
-                Bugsnag::setAppVersion($version);
-                Bugsnag::setBeforeNotifyFunction(function ($error) { //set bugsnag
-                    return true;
-                }); //set bugsnag reporting as true
-            }
-        }
+        // Handle route model binding failure
+        $this->handleModelNotFoundException($exception);
 
-        return parent::report($e);
+        // Handle database connection failed
+        $this->reportDatabaseConnectionFailed($exception);
+
+        parent::report($exception);
+
+        // Send unhandled exceptions to bugsnag
+        $this->reportToBugsnag($exception);
     }
 
     /**
-     * Convert a validation exception into a JSON response.
-     *
-     * @param \Illuminate\Http\Request                   $request
-     * @param \Illuminate\Validation\ValidationException $exception
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * Function to handle ModelNotFoundException exception thrown while binding
+     * route with models.
+     * 
+     * @param  \Exception  $exception
+     * @return void
+     * @throws NotFoundHttpException
      */
-    protected function invalidJson($request, ValidationException $exception)
+    public function handleModelNotFoundException(Exception $exception)
     {
-        return response()->json(['success' => false, 'errors' => $exception->errors()], $exception->status);
+        if($exception instanceof ModelNotFoundException) {
+            throw new NotFoundHttpException(trans('lang.not_found'));
+        }
+    } 
+
+    /**
+     * Function to check the exception should be stored in database exception logs
+     * or not
+     * @param  Exception  $exception current Exception instance
+     * @return bool       false if exception should not be logged in DB, otherwise true
+     */
+    private function shouldBeLoggedInDB(Exception $exception)
+    {
+        $notAllowedExceptions = [PDOException::class, MaintenanceModeException::class, NotFoundHttpException::class];
+        foreach ($notAllowedExceptions as $notAllowedException) {
+            if($exception instanceof $notAllowedException) return false;
+        }
+
+        return true;
     }
 
     /**
      * Render an exception into an HTTP response.
      *
-     * @param type      $request
-     * @param Exception $e
-     *
-     * @return type mixed
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Exception                $exception
+     * @return \Illuminate\Http\Response | \Illuminate\Http\JsonResponse |
+     *  Illuminate\Http\RedirectResponse
      */
-    public function render($request, Exception $e)
+    public function render($request, Exception $exception)
     {
-        switch ($e) {
-            case $e instanceof \Illuminate\Http\Exception\HttpResponseException:
-                return parent::render($request, $e);
-            case $e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException:
-                return response()->json(['message' => $e->getMessage(), 'code' => $e->getStatusCode()]);
-            case $e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException:
-                return response()->json(['message' => $e->getMessage(), 'code' => $e->getStatusCode()]);
-            case $e instanceof TokenMismatchException:
-                if ($request->ajax() || $request->wantsJson()) {
-                    $result = ['fails' => \Lang::get('lang.session-expired')];
+        // Handle for APIs
+        if (stripos($request->url(), 'api') || $request->ajax() || $request->wantsJson()) return $this->responseForApi($request, $exception);
 
-                    return response()->json(compact('result'), 402);
-                }
+        //if validation exception then let parent class render it
+        if($exception instanceof ValidationException) return parent::render($request, $exception);
+        
+        //if model/HTTP not found error show custom 404 irrespective of app debug mode
+        if($exception instanceof NotFoundHttpException)return redirect('404');
 
-                return redirect()->back()->with('fails', \Lang::get('lang.session-expired'));
-            default:
-                return $this->common($request, $e);
+        //else render exception based on debug mode
+        return $this->renderExceptionBasedOnDebugMode($request, $exception);
+    }
+
+    /**
+     * Convert a validation exception into a JSON response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Validation\ValidationException  $exception
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function invalidJson($request, ValidationException $exception)
+    {
+        return response()->json($exception->errors(), FAVEO_VALIDATION_ERROR_CODE);
+    }
+
+    /**
+     * Report to Bugsnag
+     *
+     * @param Exception $exception Exception instance
+     * @return void
+     */
+    protected function reportToBugsnag(Exception $exception)
+    {
+        // Check bugsnag reporting is active
+        if (config('app.bugsnag_reporting') && $this->shouldNotifyToBugSnag($exception)) {
+            Bugsnag::notifyException($exception);
         }
     }
 
     /**
-     * Function to render 500 error page.
+     * Function to decide whether the exception should be notified to Bugsnag
+     * or not. The intent of this method is to skip Bugsnag reporting for general
+     * exceptions like ValidationExeption, AuthenticationException etc. to avoid
+     * high usage of Bugsnag allowd events.
      *
-     * @param type $request
-     * @param type $e
+     * NOTE: There is an issue with bugsnag reporting to skip reporting for $dontReport
+     * refrence https://laracasts.com/discuss/channels/laravel/validation-exceptions-being-reported-on-bugsnag-despite-being-handled-and-ignored-in-laravel
      *
-     * @return type mixed
+     * @todo Do R&D to fix issue with $dontReport skipping so that this method can be
+     * removed
+     *  
+     * @param  Exception  $exception
+     * @return bool       true if exception should be reported otherwise false
      */
-    public function render500($request, $e)
+    private function shouldNotifyToBugSnag(Exception $exception) :bool
     {
-        $seg = $request->segments();
-        if (in_array('api', $seg)) {
-            if ($e instanceof ValidationException) {
-                return $this->invalidJson($request, $e);
+        array_push($this->dontReport, MethodNotAllowedHttpException::class);
+        array_push($this->dontReport, NotFoundHttpException::class);
+        array_push($this->dontReport, CustomException::class);
+        foreach ($this->dontReport as $notAllowedException) {
+            if($exception instanceof $notAllowedException) return false;
+        }
+        
+        return true;
+    }
+
+    /**
+     * Render an exception into an HTTP response based on debug mode.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Exception                $exception
+     @return \Illuminate\Http\Response | Illuminate\Http\RedirectResponse
+     */
+    protected function renderExceptionBasedOnDebugMode($request, Exception $exception)
+    {
+        //if debug mode enabled or system is under maintenance mode, redirect to actual error page else show custom server error page
+        return (config('app.debug') === true) || $exception instanceof MaintenanceModeException ? parent::render($request, $exception) : redirect('500');
+    }
+
+    /**
+     * Response for exception for APIs
+     *
+     * @param Exception $exception Exception instance
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function responseForApi($request, Exception $exception)
+    {
+        switch ($exception) {
+            case $exception instanceof MethodNotAllowedHttpException:
+                // Handle invalid HTTP method called
+                return errorResponse(__('lang.method_not_allowed'), FAVEO_INVALID_METHOD_CODE);
+
+            case $exception instanceof NotFoundHttpException:
+                // Handle invalid end point called
+                return errorResponse(__('lang.invalid-api-endpoint'), FAVEO_NOT_FOUND_CODE);
+
+            case $exception instanceof ValidationException:
+                return $this->invalidJson($request, $exception);
+
+            default:
+                // if debug mode is ON, actual exception message should go else internal-server-error
+                return \Config::get("app.debug") ? exceptionResponse($exception) : errorResponse(__('lang.internal-server-error'), FAVEO_EXCEPTION_CODE);
+        }
+    }
+
+    /**
+     * Report database connection failed error
+     *
+     * @param Exception $exception Exception instance
+     * @return HTTP Response
+     */
+    protected function reportDatabaseConnectionFailed(Exception $exception)
+    {
+        if ($exception instanceof PDOException) {
+            /**
+             * Handle PDOException of Unknown database name & invalid database credential
+             *
+             * [1049] => Unknown database
+             * [1045] => Access denied for user
+             * [2002] => Database down or not running
+             */
+            if(in_array($exception->getCode(), [1045, 1049, 2002])) {
+                echo '<h1>Database connection failed!!!</h1><p><a href="mailto:support@ladybirdweb.com">Report this event to developers</a></p>';
+                throw new Exception($exception->getCode(), 1);
             }
 
-            return response()->json(['error' => $e->getMessage()], 500);
+            return parent::report($exception);
         }
-        if (config('app.debug') == true) {
-            return parent::render($request, $e);
-        } elseif ($e instanceof ValidationException) {
-            return parent::render($request, $e);
-        } elseif ($e instanceof \Illuminate\Validation\ValidationException) {
-            return parent::render($request, $e);
-        }
-
-        return response()->view('errors.500');
-        //return redirect()->route('error500', []);
-    }
-
-    /**
-     * Function to render 404 error page.
-     *
-     * @param type $request
-     * @param type $e
-     *
-     * @return type mixed
-     */
-    public function render404($request, $e)
-    {
-        $seg = $request->segments();
-        if (in_array('api', $seg)) {
-            return response()->json(['success' => false, 'message' => 'not-found'], 404);
-        }
-        if (config('app.debug') == true) {
-            if ($e->getStatusCode() == '404') {
-                return redirect()->route('error404', []);
-            }
-
-            return parent::render($request, $e);
-        }
-
-        return redirect()->route('error404', []);
-    }
-
-    /**
-     * Function to render database connection failed.
-     *
-     * @param type $request
-     * @param type $e
-     *
-     * @return type mixed
-     */
-    public function renderDB($request, $e)
-    {
-        $seg = $request->segments();
-        if (in_array('api', $seg)) {
-            return response()->json(['status' => '404']);
-        }
-        if (config('app.debug') == true) {
-            return parent::render($request, $e);
-        }
-
-        return redirect()->route('error404', []);
-    }
-
-    /**
-     * Common finction to render both types of codes.
-     *
-     * @param type $request
-     * @param type $e
-     *
-     * @return type mixed
-     */
-    public function common($request, $e)
-    {
-        switch ($e) {
-            case $e instanceof HttpException:
-                return $this->render404($request, $e);
-            case $e instanceof NotFoundHttpException:
-                return $this->render404($request, $e);
-            case $e instanceof PDOException:
-                if (strpos('1045', $e->getMessage()) == true) {
-                    return $this->renderDB($request, $e);
-                } else {
-                    return $this->render500($request, $e);
-                }
-//            case $e instanceof ErrorException:
-//                if($e->getMessage() == 'Breadcrumb not found with name "" ') {
-//                    return $this->render404($request, $e);
-//                } else {
-//                    return parent::render($request, $e);
-//                }
-            case $e instanceof TokenMismatchException:
-                if ($request->ajax() || $request->wantsJson()) {
-                    $result = ['fails' => \Lang::get('lang.session-expired')];
-
-                    return response()->json(compact('result'), 402);
-                }
-
-                return redirect()->back()->with('fails', \Lang::get('lang.session-expired'));
-            case $e instanceof AuthorizationException:
-                return redirect('/')->with('fails', \Lang::get('lang.access-denied'));
-            case $e instanceof MethodNotAllowedHttpException:
-                if (stripos($request->url(), 'api')) {
-                    $result = ['message' => \Lang::get('lang.methon_not_allowed'), 'success' => false];
-
-                    return response()->json($result, 405);
-                }
-                $this->render500($request, $e);
-            default:
-                return $this->render500($request, $e);
-        }
-
-        return parent::render($request, $e);
     }
 }
