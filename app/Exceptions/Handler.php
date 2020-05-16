@@ -4,14 +4,13 @@ namespace App\Exceptions;
 
 use Bugsnag;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Foundation\Http\Exceptions\MaintenanceModeException;
 use Illuminate\Validation\ValidationException;
 use PDOException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Illuminate\Foundation\Http\Exceptions\MaintenanceModeException;
-use \Illuminate\Database\Eloquent\ModelNotFoundException;
-
 
 class Handler extends ExceptionHandler
 {
@@ -25,7 +24,7 @@ class Handler extends ExceptionHandler
         \Illuminate\Auth\Access\AuthorizationException::class,
         \Illuminate\Database\Eloquent\ModelNotFoundException::class,
         \Illuminate\Validation\ValidationException::class,
-        \Symfony\Component\HttpKernel\Exception\HttpException::class
+        \Symfony\Component\HttpKernel\Exception\HttpException::class,
     ];
 
     /**
@@ -41,7 +40,8 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $exception
+     * @param \Exception $exception
+     *
      * @return void
      */
     public function report(Exception $exception)
@@ -61,29 +61,35 @@ class Handler extends ExceptionHandler
     /**
      * Function to handle ModelNotFoundException exception thrown while binding
      * route with models.
-     * 
-     * @param  \Exception  $exception
-     * @return void
+     *
+     * @param \Exception $exception
+     *
      * @throws NotFoundHttpException
+     *
+     * @return void
      */
     public function handleModelNotFoundException(Exception $exception)
     {
-        if($exception instanceof ModelNotFoundException) {
+        if ($exception instanceof ModelNotFoundException) {
             throw new NotFoundHttpException(trans('lang.not_found'));
         }
-    } 
+    }
 
     /**
      * Function to check the exception should be stored in database exception logs
-     * or not
-     * @param  Exception  $exception current Exception instance
-     * @return bool       false if exception should not be logged in DB, otherwise true
+     * or not.
+     *
+     * @param Exception $exception current Exception instance
+     *
+     * @return bool false if exception should not be logged in DB, otherwise true
      */
     private function shouldBeLoggedInDB(Exception $exception)
     {
         $notAllowedExceptions = [PDOException::class, MaintenanceModeException::class, NotFoundHttpException::class];
         foreach ($notAllowedExceptions as $notAllowedException) {
-            if($exception instanceof $notAllowedException) return false;
+            if ($exception instanceof $notAllowedException) {
+                return false;
+            }
         }
 
         return true;
@@ -92,21 +98,28 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception                $exception
+     * @param \Illuminate\Http\Request $request
+     * @param \Exception               $exception
+     *
      * @return \Illuminate\Http\Response | \Illuminate\Http\JsonResponse |
-     *  Illuminate\Http\RedirectResponse
+     *                                   Illuminate\Http\RedirectResponse
      */
     public function render($request, Exception $exception)
     {
         // Handle for APIs
-        if (stripos($request->url(), 'api') || $request->ajax() || $request->wantsJson()) return $this->responseForApi($request, $exception);
+        if (stripos($request->url(), 'api') || $request->ajax() || $request->wantsJson()) {
+            return $this->responseForApi($request, $exception);
+        }
 
         //if validation exception then let parent class render it
-        if($exception instanceof ValidationException) return parent::render($request, $exception);
-        
+        if ($exception instanceof ValidationException) {
+            return parent::render($request, $exception);
+        }
+
         //if model/HTTP not found error show custom 404 irrespective of app debug mode
-        if($exception instanceof NotFoundHttpException)return redirect('404');
+        if ($exception instanceof NotFoundHttpException) {
+            return redirect('404');
+        }
 
         //else render exception based on debug mode
         return $this->renderExceptionBasedOnDebugMode($request, $exception);
@@ -115,8 +128,9 @@ class Handler extends ExceptionHandler
     /**
      * Convert a validation exception into a JSON response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Validation\ValidationException  $exception
+     * @param \Illuminate\Http\Request                   $request
+     * @param \Illuminate\Validation\ValidationException $exception
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     protected function invalidJson($request, ValidationException $exception)
@@ -125,9 +139,10 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * Report to Bugsnag
+     * Report to Bugsnag.
      *
      * @param Exception $exception Exception instance
+     *
      * @return void
      */
     protected function reportToBugsnag(Exception $exception)
@@ -149,28 +164,31 @@ class Handler extends ExceptionHandler
      *
      * @todo Do R&D to fix issue with $dontReport skipping so that this method can be
      * removed
-     *  
-     * @param  Exception  $exception
-     * @return bool       true if exception should be reported otherwise false
+     *
+     * @param Exception $exception
+     *
+     * @return bool true if exception should be reported otherwise false
      */
-    private function shouldNotifyToBugSnag(Exception $exception) :bool
+    private function shouldNotifyToBugSnag(Exception $exception): bool
     {
         array_push($this->dontReport, MethodNotAllowedHttpException::class);
         array_push($this->dontReport, NotFoundHttpException::class);
         array_push($this->dontReport, CustomException::class);
         foreach ($this->dontReport as $notAllowedException) {
-            if($exception instanceof $notAllowedException) return false;
+            if ($exception instanceof $notAllowedException) {
+                return false;
+            }
         }
-        
+
         return true;
     }
 
     /**
      * Render an exception into an HTTP response based on debug mode.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception                $exception
-     @return \Illuminate\Http\Response | Illuminate\Http\RedirectResponse
+     * @param \Illuminate\Http\Request $request
+     * @param \Exception               $exception
+     * @return \Illuminate\Http\Response | Illuminate\Http\RedirectResponse
      */
     protected function renderExceptionBasedOnDebugMode($request, Exception $exception)
     {
@@ -179,9 +197,10 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * Response for exception for APIs
+     * Response for exception for APIs.
      *
      * @param Exception $exception Exception instance
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     protected function responseForApi($request, Exception $exception)
@@ -200,28 +219,30 @@ class Handler extends ExceptionHandler
 
             default:
                 // if debug mode is ON, actual exception message should go else internal-server-error
-                return \Config::get("app.debug") ? exceptionResponse($exception) : errorResponse(__('lang.internal-server-error'), FAVEO_EXCEPTION_CODE);
+                return \Config::get('app.debug') ? exceptionResponse($exception) : errorResponse(__('lang.internal-server-error'), FAVEO_EXCEPTION_CODE);
         }
     }
 
     /**
-     * Report database connection failed error
+     * Report database connection failed error.
      *
      * @param Exception $exception Exception instance
+     *
      * @return HTTP Response
      */
     protected function reportDatabaseConnectionFailed(Exception $exception)
     {
         if ($exception instanceof PDOException) {
             /**
-             * Handle PDOException of Unknown database name & invalid database credential
+             * Handle PDOException of Unknown database name & invalid database credential.
              *
              * [1049] => Unknown database
              * [1045] => Access denied for user
              * [2002] => Database down or not running
              */
-            if(in_array($exception->getCode(), [1045, 1049, 2002])) {
+            if (in_array($exception->getCode(), [1045, 1049, 2002])) {
                 echo '<h1>Database connection failed!!!</h1><p><a href="mailto:support@ladybirdweb.com">Report this event to developers</a></p>';
+
                 throw new Exception($exception->getCode(), 1);
             }
 

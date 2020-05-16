@@ -101,9 +101,9 @@ return [
     */
 
     'proxy' => array_filter([
-        'http' => env('HTTP_PROXY'),
+        'http'  => env('HTTP_PROXY'),
         'https' => env('HTTPS_PROXY'),
-        'no' => empty(env('NO_PROXY')) ? null : explode(',', str_replace(' ', '', env('NO_PROXY'))),
+        'no'    => empty(env('NO_PROXY')) ? null : explode(',', str_replace(' ', '', env('NO_PROXY'))),
     ]),
 
     /*
