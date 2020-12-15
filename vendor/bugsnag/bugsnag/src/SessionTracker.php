@@ -3,11 +3,17 @@
 namespace Bugsnag;
 
 use Exception;
-use GuzzleHttp\ClientInterface;
 use InvalidArgumentException;
 
 class SessionTracker
 {
+    /**
+     * The current session payload version.
+     *
+     * @deprecated Use {HttpClient::SESSION_PAYLOAD_VERSION} instead.
+     */
+    protected static $SESSION_PAYLOAD_VERSION = HttpClient::SESSION_PAYLOAD_VERSION;
+
     /**
      * The amount of time between each sending attempt.
      */
@@ -17,11 +23,6 @@ class SessionTracker
      * The maximum amount of sessions to hold onto.
      */
     protected static $MAX_SESSION_COUNT = 50;
-
-    /**
-     * The current payload version.
-     */
-    protected static $SESSION_PAYLOAD_VERSION = '1.0';
 
     /**
      * The key for storing session counts.
@@ -34,11 +35,14 @@ class SessionTracker
     protected static $SESSIONS_LAST_SENT_KEY = 'bugsnag-sessions-last-sent';
 
     /**
-     * The current client configuration.
-     *
      * @var Configuration
      */
     protected $config;
+
+    /**
+     * @var HttpClient
+     */
+    protected $http;
 
     /**
      * An array of session counts.
@@ -87,32 +91,33 @@ class SessionTracker
      *
      * @var int
      */
-    protected $lastSent;
+    protected $lastSent = 0;
 
     /**
      * The current session.
      *
      * @var array
      */
-    protected $currentSession;
+    protected $currentSession = [];
 
     /**
-     * Create a session tracker instance.
-     *
-     * @param Configuration $config the initial client configuration
-     *
-     * @return void
+     * @param Configuration   $config
+     * @param HttpClient|null $http   A HttpClient instance to use. Passing null
+     *                                is deprecated and $http will be required
+     *                                in the next major version.
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $config, HttpClient $http = null)
     {
         $this->config = $config;
-        $this->lastSent = 0;
+        $this->http = $http === null
+            ? new HttpClient($config, $config->getSessionClient())
+            : $http;
     }
 
     /**
      * @param Configuration $config
      *
-     * @return void
+     * @deprecated Change the Configuration via the Client object instead.
      */
     public function setConfig(Configuration $config)
     {
@@ -144,7 +149,7 @@ class SessionTracker
      *
      * @return void
      */
-    protected function setCurrentSession(array $session)
+    public function setCurrentSession(array $session)
     {
         if (is_callable($this->sessionFunction)) {
             call_user_func($this->sessionFunction, $session);
@@ -331,11 +336,12 @@ class SessionTracker
     {
         $sessions = $this->getSessionCounts();
 
-        uksort($sessions, function ($key) {
-            return strtotime($key);
+        // Sort the session counts so that the oldest minutes are first
+        // i.e. '2000-01-01T00:00:00' should be after '2000-01-01T00:01:00'
+        uksort($sessions, function ($a, $b) {
+            return strtotime($b) - strtotime($a);
         });
 
-        $sessions = array_reverse($sessions);
         $sessionCounts = array_slice($sessions, 0, self::$MAX_SESSION_COUNT);
 
         $this->setSessionCounts($sessionCounts);
@@ -378,30 +384,15 @@ class SessionTracker
             return;
         }
 
-        $http = $this->config->getSessionClient();
-
-        $options = [
-            'json' => $this->constructPayload($sessions),
-            'headers' => [
-                'Bugsnag-Api-Key' => $this->config->getApiKey(),
-                'Bugsnag-Payload-Version' => self::$SESSION_PAYLOAD_VERSION,
-                'Bugsnag-Sent-At' => strftime('%Y-%m-%dT%H:%M:%S'),
-            ],
-        ];
+        $payload = $this->constructPayload($sessions);
 
         $this->setLastSent();
 
         try {
-            // Support later Guzzle versions — note we check the interface to make
-            // sure "request" is a public method as on PHP 7.4 "method_exists" will
-            // return true for private methods
-            if (method_exists(ClientInterface::class, 'request')) {
-                $http->request('POST', '', $options);
-            } else {
-                $http->post('', $options);
-            }
+            $this->http->sendSessions($payload);
         } catch (Exception $e) {
             error_log('Bugsnag Warning: Couldn\'t notify. '.$e->getMessage());
+
             if (is_callable($this->retryFunction)) {
                 call_user_func($this->retryFunction, $sessions);
             } else {

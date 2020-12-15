@@ -13,6 +13,7 @@
 return array (
   5042200 => 'Polo Paz',
   5042201 => 'Polo Paz',
+  5042202 => 'Tegucigalpa',
   5042203 => 'Polo Paz',
   5042209 => 'Res. Centro América, Tegucigalpa',
   5042211 => 'El Picacho',
@@ -47,7 +48,7 @@ return array (
   5042257 => 'Prados Universitarios',
   5042290 => 'Toncontin',
   5042291 => 'Toncontin',
-  504240 => 'Roatán, Bay Islands',
+  5042407 => 'Roatán, Bay Islands',
   5042423 => 'La Ceiba',
   5042424 => 'Sabá',
   5042425 => 'Utila, Bay Islands',

@@ -6,6 +6,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\Sequence;
 use Doctrine\DBAL\Schema\Table;
+
 use function array_merge;
 
 class CreateSchemaSqlCollector extends AbstractVisitor
@@ -23,7 +24,7 @@ class CreateSchemaSqlCollector extends AbstractVisitor
     private $createFkConstraintQueries = [];
 
     /** @var AbstractPlatform */
-    private $platform = null;
+    private $platform;
 
     public function __construct(AbstractPlatform $platform)
     {

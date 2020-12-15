@@ -30,7 +30,11 @@ class BlobTest extends AbstractTest
     {
         $blob = $this->getReadmeBlob($repository);
 
-        $this->assertContains(self::README_FRAGMENT, $blob->getContent());
+        if (method_exists($this, 'assertStringContainsString')) {
+            $this->assertStringContainsString(self::README_FRAGMENT, $blob->getContent());
+        } else {
+            $this->assertContains(self::README_FRAGMENT, $blob->getContent());
+        }
     }
 
     /**
@@ -50,7 +54,12 @@ class BlobTest extends AbstractTest
     public function testGetMimetype($repository)
     {
         $blob = $this->getReadmeBlob($repository);
-        $this->assertRegexp('#text/plain#', $blob->getMimetype());
+
+        if (method_exists($this, 'assertMatchesRegularExpression')) {
+            $this->assertMatchesRegularExpression('#text/plain#', $blob->getMimetype());
+        } else {
+            $this->assertRegExp('#text/plain#', $blob->getMimetype());
+        }
     }
 
     /**

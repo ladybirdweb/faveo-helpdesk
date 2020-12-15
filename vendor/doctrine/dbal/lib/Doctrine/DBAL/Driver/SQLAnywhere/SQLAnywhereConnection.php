@@ -3,8 +3,10 @@
 namespace Doctrine\DBAL\Driver\SQLAnywhere;
 
 use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Driver\Result;
 use Doctrine\DBAL\Driver\ServerInfoAwareConnection;
 use Doctrine\DBAL\ParameterType;
+
 use function assert;
 use function func_get_args;
 use function is_float;
@@ -33,6 +35,8 @@ class SQLAnywhereConnection implements Connection, ServerInfoAwareConnection
 
     /**
      * Connects to database with given connection string.
+     *
+     * @internal The connection can be only instantiated by its driver.
      *
      * @param string $dsn        The connection string.
      * @param bool   $persistent Whether or not to establish a persistent connection.
@@ -90,6 +94,8 @@ class SQLAnywhereConnection implements Connection, ServerInfoAwareConnection
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated The error information is available via exceptions.
      */
     public function errorCode()
     {
@@ -98,6 +104,8 @@ class SQLAnywhereConnection implements Connection, ServerInfoAwareConnection
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated The error information is available via exceptions.
      */
     public function errorInfo()
     {
@@ -107,9 +115,9 @@ class SQLAnywhereConnection implements Connection, ServerInfoAwareConnection
     /**
      * {@inheritdoc}
      */
-    public function exec($statement)
+    public function exec($sql)
     {
-        if (sasql_real_query($this->connection, $statement) === false) {
+        if (sasql_real_query($this->connection, $sql) === false) {
             throw SQLAnywhereException::fromSQLAnywhereError($this->connection);
         }
 
@@ -121,7 +129,13 @@ class SQLAnywhereConnection implements Connection, ServerInfoAwareConnection
      */
     public function getServerVersion()
     {
-        $version = $this->query("SELECT PROPERTY('ProductVersion')")->fetchColumn();
+        $stmt = $this->query("SELECT PROPERTY('ProductVersion')");
+
+        if ($stmt instanceof Result) {
+            $version = $stmt->fetchOne();
+        } else {
+            $version = $stmt->fetchColumn();
+        }
 
         assert(is_string($version));
 
@@ -137,15 +151,21 @@ class SQLAnywhereConnection implements Connection, ServerInfoAwareConnection
             return sasql_insert_id($this->connection);
         }
 
-        return $this->query('SELECT ' . $name . '.CURRVAL')->fetchColumn();
+        $stmt = $this->query('SELECT ' . $name . '.CURRVAL');
+
+        if ($stmt instanceof Result) {
+            return $stmt->fetchOne();
+        }
+
+        return $stmt->fetchColumn();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function prepare($prepareString)
+    public function prepare($sql)
     {
-        return new SQLAnywhereStatement($this->connection, $prepareString);
+        return new SQLAnywhereStatement($this->connection, $sql);
     }
 
     /**
@@ -164,13 +184,13 @@ class SQLAnywhereConnection implements Connection, ServerInfoAwareConnection
     /**
      * {@inheritdoc}
      */
-    public function quote($input, $type = ParameterType::STRING)
+    public function quote($value, $type = ParameterType::STRING)
     {
-        if (is_int($input) || is_float($input)) {
-            return $input;
+        if (is_int($value) || is_float($value)) {
+            return $value;
         }
 
-        return "'" . sasql_escape_string($this->connection, $input) . "'";
+        return "'" . sasql_escape_string($this->connection, $value) . "'";
     }
 
     /**

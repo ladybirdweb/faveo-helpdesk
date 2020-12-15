@@ -1,8 +1,6 @@
 # Laravel Phone
 
-[![Build Status](https://travis-ci.org/Propaganistas/Laravel-Phone.svg?branch=master)](https://travis-ci.org/Propaganistas/Laravel-Phone)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Propaganistas/Laravel-Phone/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Propaganistas/Laravel-Phone/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/Propaganistas/Laravel-Phone/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Propaganistas/Laravel-Phone/?branch=master)
+![Tests](https://github.com/Propaganistas/Laravel-Phone/workflows/Tests/badge.svg?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/propaganistas/laravel-phone/v/stable)](https://packagist.org/packages/propaganistas/laravel-phone)
 [![Total Downloads](https://poser.pugx.org/propaganistas/laravel-phone/downloads)](https://packagist.org/packages/propaganistas/laravel-phone)
 [![License](https://poser.pugx.org/propaganistas/laravel-phone/license)](https://packagist.org/packages/propaganistas/laravel-phone)
@@ -35,14 +33,7 @@ composer require propaganistas/laravel-phone
 
 ### Laravel
 
-If you don't use auto-discovery, open up your app config and add the Service Provider to the `$providers` array:
-
- ```php
-'providers' => [
-    ...
-    Propaganistas\LaravelPhone\PhoneServiceProvider::class,
-],
-```
+The Service Provider gets discovered automatically.
 
 In your languages directory, add an extra line for each language file:
 

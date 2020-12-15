@@ -132,7 +132,7 @@ class FilesystemAdapter implements CloudFilesystemContract
         try {
             return $this->driver->read($path);
         } catch (FileNotFoundException $e) {
-            throw new ContractFileNotFoundException($path, $e->getCode(), $e);
+            throw new ContractFileNotFoundException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -230,7 +230,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      *
      * @param  string  $path
      * @param  \Illuminate\Http\File|\Illuminate\Http\UploadedFile|string  $file
-     * @param  array  $options
+     * @param  mixed  $options
      * @return string|false
      */
     public function putFile($path, $file, $options = [])
@@ -246,7 +246,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      * @param  string  $path
      * @param  \Illuminate\Http\File|\Illuminate\Http\UploadedFile|string  $file
      * @param  string  $name
-     * @param  array  $options
+     * @param  mixed  $options
      * @return string|false
      */
     public function putFileAs($path, $file, $name, $options = [])
@@ -739,6 +739,6 @@ class FilesystemAdapter implements CloudFilesystemContract
      */
     public function __call($method, array $parameters)
     {
-        return call_user_func_array([$this->driver, $method], $parameters);
+        return $this->driver->{$method}(...array_values($parameters));
     }
 }

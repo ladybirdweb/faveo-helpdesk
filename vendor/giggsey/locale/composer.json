@@ -35,5 +35,17 @@
       "Giggsey\\Locale\\Tests\\": "tests/",
       "Giggsey\\Locale\\Build\\": "build/Build/"
     }
+  },
+  "archive": {
+    "exclude": [
+      "build/",
+      "tests/",
+      ".gitattributes",
+      ".gitignore",
+      ".styleci.yml",
+      ".travis.yml",
+      "build.xml",
+      "phpunit.xml.dist"
+    ]
   }
 }

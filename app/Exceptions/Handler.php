@@ -45,7 +45,7 @@ class Handler extends ExceptionHandler
      * @return void
      */
     public function report(Exception $exception)
-    {
+    {dd($exception);
         // Handle route model binding failure
         $this->handleModelNotFoundException($exception);
 

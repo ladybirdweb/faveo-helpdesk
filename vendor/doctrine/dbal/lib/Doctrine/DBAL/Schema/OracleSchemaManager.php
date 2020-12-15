@@ -3,11 +3,11 @@
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\DriverException;
+use Doctrine\DBAL\Driver\Exception;
 use Doctrine\DBAL\Platforms\OraclePlatform;
 use Doctrine\DBAL\Types\Type;
 use Throwable;
-use const CASE_LOWER;
+
 use function array_change_key_case;
 use function array_values;
 use function assert;
@@ -18,6 +18,8 @@ use function strpos;
 use function strtolower;
 use function strtoupper;
 use function trim;
+
+use const CASE_LOWER;
 
 /**
  * Oracle Schema Manager.
@@ -35,7 +37,7 @@ class OracleSchemaManager extends AbstractSchemaManager
             $exception = $exception->getPrevious();
             assert($exception instanceof Throwable);
 
-            if (! $exception instanceof DriverException) {
+            if (! $exception instanceof Exception) {
                 throw $exception;
             }
 
@@ -107,6 +109,7 @@ class OracleSchemaManager extends AbstractSchemaManager
                 $buffer['primary']    = false;
                 $buffer['non_unique'] = ! $tableIndex['is_unique'];
             }
+
             $buffer['key_name']    = $keyName;
             $buffer['column_name'] = $this->getQuotedIdentifierName($tableIndex['column_name']);
             $indexBuffer[]         = $buffer;
@@ -176,12 +179,14 @@ class OracleSchemaManager extends AbstractSchemaManager
                 }
 
                 break;
+
             case 'varchar':
             case 'varchar2':
             case 'nvarchar2':
                 $length = $tableColumn['char_length'];
                 $fixed  = false;
                 break;
+
             case 'char':
             case 'nchar':
                 $length = $tableColumn['char_length'];
@@ -302,10 +307,10 @@ class OracleSchemaManager extends AbstractSchemaManager
         $password = $params['password'];
 
         $query = 'CREATE USER ' . $username . ' IDENTIFIED BY ' . $password;
-        $this->_conn->executeUpdate($query);
+        $this->_conn->executeStatement($query);
 
         $query = 'GRANT DBA TO ' . $username;
-        $this->_conn->executeUpdate($query);
+        $this->_conn->executeStatement($query);
     }
 
     /**
@@ -319,7 +324,7 @@ class OracleSchemaManager extends AbstractSchemaManager
 
         $sql = $this->_platform->getDropAutoincrementSql($table);
         foreach ($sql as $query) {
-            $this->_conn->executeUpdate($query);
+            $this->_conn->executeStatement($query);
         }
 
         return true;
@@ -377,7 +382,7 @@ WHERE
     AND p.addr(+) = s.paddr
 SQL;
 
-        $activeUserSessions = $this->_conn->fetchAll($sql, [strtoupper($user)]);
+        $activeUserSessions = $this->_conn->fetchAllAssociative($sql, [strtoupper($user)]);
 
         foreach ($activeUserSessions as $activeUserSession) {
             $activeUserSession = array_change_key_case($activeUserSession, CASE_LOWER);
@@ -392,15 +397,18 @@ SQL;
         }
     }
 
-    public function listTableDetails($tableName) : Table
+    /**
+     * {@inheritdoc}
+     */
+    public function listTableDetails($name): Table
     {
-        $table = parent::listTableDetails($tableName);
+        $table = parent::listTableDetails($name);
 
-        /** @var OraclePlatform $platform */
         $platform = $this->_platform;
-        $sql      = $platform->getListTableCommentsSQL($tableName);
+        assert($platform instanceof OraclePlatform);
+        $sql = $platform->getListTableCommentsSQL($name);
 
-        $tableOptions = $this->_conn->fetchAssoc($sql);
+        $tableOptions = $this->_conn->fetchAssociative($sql);
 
         if ($tableOptions !== false) {
             $table->addOption('comment', $tableOptions['COMMENTS']);

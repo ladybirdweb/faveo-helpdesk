@@ -10,27 +10,27 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 class TableDiff
 {
     /** @var string */
-    public $name = null;
+    public $name;
 
     /** @var string|false */
     public $newName = false;
 
     /**
-     * All added fields.
+     * All added columns
      *
      * @var Column[]
      */
     public $addedColumns;
 
     /**
-     * All changed fields.
+     * All changed columns
      *
      * @var ColumnDiff[]
      */
     public $changedColumns = [];
 
     /**
-     * All removed fields.
+     * All removed columns
      *
      * @var Column[]
      */

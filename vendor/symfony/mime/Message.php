@@ -80,7 +80,9 @@ class Message extends RawMessage
             $headers->addMailboxListHeader('From', [$headers->get('Sender')->getAddress()]);
         }
 
-        $headers->addTextHeader('MIME-Version', '1.0');
+        if (!$headers->has('MIME-Version')) {
+            $headers->addTextHeader('MIME-Version', '1.0');
+        }
 
         if (!$headers->has('Date')) {
             $headers->addDateHeader('Date', new \DateTimeImmutable());
@@ -122,8 +124,8 @@ class Message extends RawMessage
 
     public function ensureValidity()
     {
-        if (!$this->headers->has('To')) {
-            throw new LogicException('An email must have a "To" header.');
+        if (!$this->headers->has('To') && !$this->headers->has('Cc') && !$this->headers->has('Bcc')) {
+            throw new LogicException('An email must have a "To", "Cc", or "Bcc" header.');
         }
 
         if (!$this->headers->has('From') && !$this->headers->has('Sender')) {

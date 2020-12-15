@@ -6,10 +6,10 @@ use Bugsnag\Breadcrumbs\Breadcrumb;
 use Bugsnag\Breadcrumbs\Recorder;
 use Bugsnag\Callbacks\GlobalMetaData;
 use Bugsnag\Callbacks\RequestContext;
-use Bugsnag\Callbacks\RequestCookies;
 use Bugsnag\Callbacks\RequestMetaData;
 use Bugsnag\Callbacks\RequestSession;
 use Bugsnag\Callbacks\RequestUser;
+use Bugsnag\Internal\GuzzleCompat;
 use Bugsnag\Middleware\BreadcrumbData;
 use Bugsnag\Middleware\CallbackBridge;
 use Bugsnag\Middleware\NotificationSkipper;
@@ -19,17 +19,18 @@ use Bugsnag\Request\ResolverInterface;
 use Bugsnag\Shutdown\PhpShutdownStrategy;
 use Bugsnag\Shutdown\ShutdownStrategyInterface;
 use Composer\CaBundle\CaBundle;
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\ClientInterface;
+use GuzzleHttp;
 
 class Client
 {
     /**
-     * The default endpoint.
+     * The default event notification endpoint.
      *
      * @var string
+     *
+     * @deprecated Use {@see Configuration::NOTIFY_ENDPOINT} instead.
      */
-    const ENDPOINT = 'https://notify.bugsnag.com';
+    const ENDPOINT = Configuration::NOTIFY_ENDPOINT;
 
     /**
      * The config instance.
@@ -74,23 +75,34 @@ class Client
     protected $sessionTracker;
 
     /**
+     * Default HTTP timeout, in seconds.
+     *
+     * @internal
+     *
+     * @var float
+     */
+    const DEFAULT_TIMEOUT_S = 15.0;
+
+    /**
      * Make a new client instance.
      *
      * If you don't pass in a key, we'll try to read it from the env variables.
      *
-     * @param string|null $apiKey   your bugsnag api key
-     * @param string|null $endpoint your bugsnag endpoint
-     * @param bool        $default  if we should register our default callbacks
+     * @param string|null $apiKey         your bugsnag api key
+     * @param string|null $notifyEndpoint your bugsnag notify endpoint
+     * @param bool        $defaults       if we should register our default callbacks
      *
      * @return static
      */
-    public static function make($apiKey = null, $endpoint = null, $defaults = true)
-    {
-        // Retrieves environment variables
+    public static function make(
+        $apiKey = null,
+        $notifyEndpoint = null,
+        $defaults = true
+    ) {
         $env = new Env();
 
         $config = new Configuration($apiKey ?: $env->get('BUGSNAG_API_KEY'));
-        $guzzle = static::makeGuzzle($endpoint ?: $env->get('BUGSNAG_ENDPOINT'));
+        $guzzle = static::makeGuzzle($notifyEndpoint ?: $env->get('BUGSNAG_ENDPOINT'));
 
         $client = new static($config, null, $guzzle);
 
@@ -102,23 +114,27 @@ class Client
     }
 
     /**
-     * Create a new client instance.
-     *
-     * @param \Bugsnag\Configuration                            $config
-     * @param \Bugsnag\Request\ResolverInterface|null           $resolver
-     * @param \GuzzleHttp\ClientInterface|null                  $guzzle
-     * @param \Bugsnag\Shutdown\ShutdownStrategyInterface|null  $shutdownStrategy
-     *
-     * @return void
+     * @param \Bugsnag\Configuration $config
+     * @param \Bugsnag\Request\ResolverInterface|null $resolver
+     * @param \GuzzleHttp\ClientInterface|null $guzzle
+     * @param \Bugsnag\Shutdown\ShutdownStrategyInterface|null $shutdownStrategy
      */
-    public function __construct(Configuration $config, ResolverInterface $resolver = null, ClientInterface $guzzle = null, ShutdownStrategyInterface $shutdownStrategy = null)
-    {
+    public function __construct(
+        Configuration $config,
+        ResolverInterface $resolver = null,
+        GuzzleHttp\ClientInterface $guzzle = null,
+        ShutdownStrategyInterface $shutdownStrategy = null
+    ) {
+        $guzzle = $guzzle ?: self::makeGuzzle();
+
+        $this->syncNotifyEndpointWithGuzzleBaseUri($config, $guzzle);
+
         $this->config = $config;
         $this->resolver = $resolver ?: new BasicResolver();
         $this->recorder = new Recorder();
         $this->pipeline = new Pipeline();
-        $this->http = new HttpClient($config, $guzzle ?: static::makeGuzzle());
-        $this->sessionTracker = new SessionTracker($config);
+        $this->http = new HttpClient($config, $guzzle);
+        $this->sessionTracker = new SessionTracker($config, $this->http);
 
         $this->registerMiddleware(new NotificationSkipper($config));
         $this->registerMiddleware(new BreadcrumbData($this->recorder));
@@ -135,19 +151,65 @@ class Client
      * @param string|null $base
      * @param array       $options
      *
-     * @return \GuzzleHttp\ClientInterface
+     * @return GuzzleHttp\ClientInterface
      */
     public static function makeGuzzle($base = null, array $options = [])
     {
-        $key = method_exists(ClientInterface::class, 'request') ? 'base_uri' : 'base_url';
+        $options = self::resolveGuzzleOptions($base, $options);
 
-        $options[$key] = $base ?: static::ENDPOINT;
+        return new GuzzleHttp\Client($options);
+    }
 
-        if ($path = static::getCaBundlePath()) {
+    /**
+     * @param string|null $base
+     * @param array $options
+     *
+     * @return array
+     */
+    private static function resolveGuzzleOptions($base, array $options)
+    {
+        $key = GuzzleCompat::getBaseUriOptionName();
+        $options[$key] = $base ?: Configuration::NOTIFY_ENDPOINT;
+
+        $path = static::getCaBundlePath();
+
+        if ($path) {
             $options['verify'] = $path;
         }
 
-        return new GuzzleClient($options);
+        return GuzzleCompat::applyRequestOptions(
+            $options,
+            [
+                'timeout' => self::DEFAULT_TIMEOUT_S,
+                'connect_timeout' => self::DEFAULT_TIMEOUT_S,
+            ]
+        );
+    }
+
+    /**
+     * Ensure the notify endpoint is synchronised with Guzzle's base URL.
+     *
+     * @param \Bugsnag\Configuration $configuration
+     * @param \GuzzleHttp\ClientInterface $guzzle
+     *
+     * @return void
+     */
+    private function syncNotifyEndpointWithGuzzleBaseUri(
+        Configuration $configuration,
+        GuzzleHttp\ClientInterface $guzzle
+    ) {
+        // Don't change the endpoint if one is already set, otherwise we could be
+        // resetting it back to the default as the Guzzle base URL will always
+        // be set by 'makeGuzzle'.
+        if ($configuration->getNotifyEndpoint() !== Configuration::NOTIFY_ENDPOINT) {
+            return;
+        }
+
+        $base = GuzzleCompat::getBaseUri($guzzle);
+
+        if (is_string($base) || (is_object($base) && method_exists($base, '__toString'))) {
+            $configuration->setNotifyEndpoint((string) $base);
+        }
     }
 
     /**
@@ -207,7 +269,6 @@ class Client
     {
         $this->registerCallback(new GlobalMetaData($this->config))
              ->registerCallback(new RequestMetaData($this->resolver))
-             ->registerCallback(new RequestCookies($this->resolver))
              ->registerCallback(new RequestSession($this->resolver))
              ->registerCallback(new RequestUser($this->resolver))
              ->registerCallback(new RequestContext($this->resolver));
@@ -326,13 +387,13 @@ class Client
     /**
      * Notify Bugsnag of a deployment.
      *
-     * @deprecated This function is being deprecated in favour of `build`.
-     *
      * @param string|null $repository the repository from which you are deploying the code
      * @param string|null $branch     the source control branch from which you are deploying
      * @param string|null $revision   the source control revision you are currently deploying
      *
      * @return void
+     *
+     * @deprecated Use {@see Client::build} instead.
      */
     public function deploy($repository = null, $branch = null, $revision = null)
     {
@@ -379,7 +440,7 @@ class Client
      */
     public function flush()
     {
-        $this->http->send();
+        $this->http->sendEvents();
     }
 
     /**
@@ -768,23 +829,33 @@ class Client
     }
 
     /**
-     * Set session tracking state and pass in optional guzzle.
+     * Set notification delivery endpoint.
      *
-     * @param bool $track whether to track sessions
+     * @param string $endpoint
      *
      * @return $this
      */
-    public function setAutoCaptureSessions($track)
+    public function setNotifyEndpoint($endpoint)
     {
-        $this->config->setAutoCaptureSessions($track);
+        $this->config->setNotifyEndpoint($endpoint);
 
         return $this;
     }
 
     /**
+     * Get notification delivery endpoint.
+     *
+     * @return string
+     */
+    public function getNotifyEndpoint()
+    {
+        return $this->config->getNotifyEndpoint();
+    }
+
+    /**
      * Set session delivery endpoint.
      *
-     * @param string $endpoint the session endpoint
+     * @param string $endpoint
      *
      * @return $this
      */
@@ -796,27 +867,17 @@ class Client
     }
 
     /**
-     * Get the session client.
+     * Get session delivery endpoint.
      *
-     * @return \GuzzleHttp\ClientInterface
+     * @return string
      */
-    public function getSessionClient()
+    public function getSessionEndpoint()
     {
-        return $this->config->getSessionClient();
+        return $this->config->getSessionEndpoint();
     }
 
     /**
-     * Whether should be auto-capturing sessions.
-     *
-     * @return bool
-     */
-    public function shouldCaptureSessions()
-    {
-        return $this->config->shouldCaptureSessions();
-    }
-
-    /**
-     * Sets the build endpoint.
+     * Set the build endpoint.
      *
      * @param string $endpoint the build endpoint
      *
@@ -830,12 +891,48 @@ class Client
     }
 
     /**
-     * Returns the build endpoint.
+     * Get the build endpoint.
      *
      * @return string
      */
     public function getBuildEndpoint()
     {
         return $this->config->getBuildEndpoint();
+    }
+
+    /**
+     * Set session tracking state.
+     *
+     * @param bool $track whether to track sessions
+     *
+     * @return $this
+     */
+    public function setAutoCaptureSessions($track)
+    {
+        $this->config->setAutoCaptureSessions($track);
+
+        return $this;
+    }
+
+    /**
+     * Whether should be auto-capturing sessions.
+     *
+     * @return bool
+     */
+    public function shouldCaptureSessions()
+    {
+        return $this->config->shouldCaptureSessions();
+    }
+
+    /**
+     * Get the session client.
+     *
+     * @return \GuzzleHttp\ClientInterface
+     *
+     * @deprecated This will be removed in the next major version.
+     */
+    public function getSessionClient()
+    {
+        return $this->config->getSessionClient();
     }
 }

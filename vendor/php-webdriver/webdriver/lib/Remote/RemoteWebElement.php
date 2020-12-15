@@ -81,8 +81,7 @@ class RemoteWebElement implements WebDriverElement, WebDriverLocatable
      * Find the first WebDriverElement within this element using the given mechanism.
      *
      * @param WebDriverBy $by
-     * @return RemoteWebElement NoSuchElementException is thrown in
-     *    HttpCommandExecutor if no element is found.
+     * @return RemoteWebElement NoSuchElementException is thrown in HttpCommandExecutor if no element is found.
      * @see WebDriverBy
      */
     public function findElement(WebDriverBy $by)
@@ -124,7 +123,7 @@ class RemoteWebElement implements WebDriverElement, WebDriverLocatable
     }
 
     /**
-     * Get the value of a the given attribute of the element.
+     * Get the value of the given attribute of the element.
      *
      * @param string $attribute_name The name of the attribute.
      * @return string|null The value of the attribute.
@@ -213,10 +212,10 @@ class RemoteWebElement implements WebDriverElement, WebDriverLocatable
         $element = $this;
 
         $on_screen = null; // planned but not yet implemented
-        $in_view_port = function () use ($element) {
+        $in_view_port = static function () use ($element) {
             return $element->getLocationOnScreenOnceScrolledIntoView();
         };
-        $on_page = function () use ($element) {
+        $on_page = static function () use ($element) {
             return $element->getLocation();
         };
         $auxiliary = $this->getID();
@@ -304,7 +303,7 @@ class RemoteWebElement implements WebDriverElement, WebDriverLocatable
     }
 
     /**
-     * Determine whether or not this element is selected or not.
+     * Determine whether this element is selected or not.
      *
      * @return bool
      */
@@ -326,14 +325,20 @@ class RemoteWebElement implements WebDriverElement, WebDriverLocatable
     {
         $local_file = $this->fileDetector->getLocalFile($value);
 
+        $params = [];
         if ($local_file === null) {
             if ($this->isW3cCompliant) {
-                $params = [
-                    'text' => WebDriverKeys::encode($value, true),
-                    ':id' => $this->id,
-                ];
+                // Work around the Geckodriver NULL issue by splitting on NULL and calling sendKeys multiple times.
+                // See https://bugzilla.mozilla.org/show_bug.cgi?id=1494661.
+                $encodedValues = explode(WebDriverKeys::NULL, WebDriverKeys::encode($value, true));
+                foreach ($encodedValues as $encodedValue) {
+                    $params[] = [
+                        'text' => $encodedValue,
+                        ':id' => $this->id,
+                    ];
+                }
             } else {
-                $params = [
+                $params[] = [
                     'value' => WebDriverKeys::encode($value),
                     ':id' => $this->id,
                 ];
@@ -349,26 +354,27 @@ class RemoteWebElement implements WebDriverElement, WebDriverLocatable
                     $fileName = $local_file;
                 }
 
-                $params = [
+                $params[] = [
                     'text' => $fileName,
                     ':id' => $this->id,
                 ];
             } else {
-                $params = [
+                $params[] = [
                     'value' => WebDriverKeys::encode($this->upload($local_file)),
                     ':id' => $this->id,
                 ];
             }
         }
 
-        $this->executor->execute(DriverCommand::SEND_KEYS_TO_ELEMENT, $params);
+        foreach ($params as $param) {
+            $this->executor->execute(DriverCommand::SEND_KEYS_TO_ELEMENT, $param);
+        }
 
         return $this;
     }
 
     /**
-     * Set the fileDetector in order to let the RemoteWebElement to know that
-     * you are going to upload a file.
+     * Set the fileDetector in order to let the RemoteWebElement to know that you are going to upload a file.
      *
      * Basically, if you want WebDriver trying to send a file, set the fileDetector
      * to be LocalFileDetector. Otherwise, keep it UselessFileDetector.
@@ -427,7 +433,7 @@ class RemoteWebElement implements WebDriverElement, WebDriverLocatable
     }
 
     /**
-     * Take screenshot of a specific element.
+     * Take a screenshot of a specific element.
      *
      * @param string $save_as The path of the screenshot to be saved.
      * @return string The screenshot in PNG format.
@@ -454,7 +460,7 @@ class RemoteWebElement implements WebDriverElement, WebDriverLocatable
     }
 
     /**
-     * Test if two element IDs refer to the same DOM element.
+     * Test if two elements IDs refer to the same DOM element.
      *
      * @param WebDriverElement $other
      * @return bool

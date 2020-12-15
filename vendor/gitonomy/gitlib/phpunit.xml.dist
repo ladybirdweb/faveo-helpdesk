@@ -9,7 +9,7 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          failOnRisky="true"
-         failOnWarning="true"
+         failOnWarning="false"
          processIsolation="false"
          stopOnError="false"
          stopOnFailure="false"

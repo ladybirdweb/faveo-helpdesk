@@ -114,8 +114,10 @@ class Application implements ResetInterface
      */
     public function run(InputInterface $input = null, OutputInterface $output = null)
     {
-        putenv('LINES='.$this->terminal->getHeight());
-        putenv('COLUMNS='.$this->terminal->getWidth());
+        if (\function_exists('putenv')) {
+            @putenv('LINES='.$this->terminal->getHeight());
+            @putenv('COLUMNS='.$this->terminal->getWidth());
+        }
 
         if (null === $input) {
             $input = new ArgvInput();
@@ -513,6 +515,11 @@ class Application implements ResetInterface
             throw new CommandNotFoundException(sprintf('The command "%s" does not exist.', $name));
         }
 
+        // When the command has a different name than the one used at the command loader level
+        if (!isset($this->commands[$name])) {
+            throw new CommandNotFoundException(sprintf('The "%s" command cannot be found because it is registered under multiple names. Make sure you don\'t set a different name via constructor or "setName()".', $name));
+        }
+
         $command = $this->commands[$name];
 
         if ($this->wantHelps) {
@@ -714,7 +721,7 @@ class Application implements ResetInterface
         $command = $this->get(reset($commands));
 
         if ($command->isHidden()) {
-            @trigger_error(sprintf('Command "%s" is hidden, finding it using an abbreviation is deprecated since Symfony 4.4, use its full name instead.', $command->getName()), E_USER_DEPRECATED);
+            @trigger_error(sprintf('Command "%s" is hidden, finding it using an abbreviation is deprecated since Symfony 4.4, use its full name instead.', $command->getName()), \E_USER_DEPRECATED);
         }
 
         return $command;
@@ -793,7 +800,7 @@ class Application implements ResetInterface
      */
     public function renderException(\Exception $e, OutputInterface $output)
     {
-        @trigger_error(sprintf('The "%s::renderException()" method is deprecated since Symfony 4.4, use "renderThrowable()" instead.', __CLASS__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('The "%s::renderException()" method is deprecated since Symfony 4.4, use "renderThrowable()" instead.', __CLASS__), \E_USER_DEPRECATED);
 
         $output->writeln('', OutputInterface::VERBOSITY_QUIET);
 
@@ -805,10 +812,10 @@ class Application implements ResetInterface
     public function renderThrowable(\Throwable $e, OutputInterface $output): void
     {
         if (__CLASS__ !== static::class && __CLASS__ === (new \ReflectionMethod($this, 'renderThrowable'))->getDeclaringClass()->getName() && __CLASS__ !== (new \ReflectionMethod($this, 'renderException'))->getDeclaringClass()->getName()) {
-            @trigger_error(sprintf('The "%s::renderException()" method is deprecated since Symfony 4.4, use "renderThrowable()" instead.', __CLASS__), E_USER_DEPRECATED);
+            @trigger_error(sprintf('The "%s::renderException()" method is deprecated since Symfony 4.4, use "renderThrowable()" instead.', __CLASS__), \E_USER_DEPRECATED);
 
             if (!$e instanceof \Exception) {
-                $e = class_exists(FatalThrowableError::class) ? new FatalThrowableError($e) : new \ErrorException($e->getMessage(), $e->getCode(), E_ERROR, $e->getFile(), $e->getLine());
+                $e = class_exists(FatalThrowableError::class) ? new FatalThrowableError($e) : new \ErrorException($e->getMessage(), $e->getCode(), \E_ERROR, $e->getFile(), $e->getLine());
             }
 
             $this->renderException($e, $output);
@@ -836,7 +843,7 @@ class Application implements ResetInterface
      */
     protected function doRenderException(\Exception $e, OutputInterface $output)
     {
-        @trigger_error(sprintf('The "%s::doRenderException()" method is deprecated since Symfony 4.4, use "doRenderThrowable()" instead.', __CLASS__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('The "%s::doRenderException()" method is deprecated since Symfony 4.4, use "doRenderThrowable()" instead.', __CLASS__), \E_USER_DEPRECATED);
 
         $this->doActuallyRenderThrowable($e, $output);
     }
@@ -844,10 +851,10 @@ class Application implements ResetInterface
     protected function doRenderThrowable(\Throwable $e, OutputInterface $output): void
     {
         if (__CLASS__ !== static::class && __CLASS__ === (new \ReflectionMethod($this, 'doRenderThrowable'))->getDeclaringClass()->getName() && __CLASS__ !== (new \ReflectionMethod($this, 'doRenderException'))->getDeclaringClass()->getName()) {
-            @trigger_error(sprintf('The "%s::doRenderException()" method is deprecated since Symfony 4.4, use "doRenderThrowable()" instead.', __CLASS__), E_USER_DEPRECATED);
+            @trigger_error(sprintf('The "%s::doRenderException()" method is deprecated since Symfony 4.4, use "doRenderThrowable()" instead.', __CLASS__), \E_USER_DEPRECATED);
 
             if (!$e instanceof \Exception) {
-                $e = class_exists(FatalThrowableError::class) ? new FatalThrowableError($e) : new \ErrorException($e->getMessage(), $e->getCode(), E_ERROR, $e->getFile(), $e->getLine());
+                $e = class_exists(FatalThrowableError::class) ? new FatalThrowableError($e) : new \ErrorException($e->getMessage(), $e->getCode(), \E_ERROR, $e->getFile(), $e->getLine());
             }
 
             $this->doRenderException($e, $output);
@@ -863,21 +870,20 @@ class Application implements ResetInterface
         do {
             $message = trim($e->getMessage());
             if ('' === $message || OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
-                $class = \get_class($e);
-                $class = 'c' === $class[0] && 0 === strpos($class, "class@anonymous\0") ? get_parent_class($class).'@anonymous' : $class;
+                $class = get_debug_type($e);
                 $title = sprintf('  [%s%s]  ', $class, 0 !== ($code = $e->getCode()) ? ' ('.$code.')' : '');
                 $len = Helper::strlen($title);
             } else {
                 $len = 0;
             }
 
-            if (false !== strpos($message, "class@anonymous\0")) {
-                $message = preg_replace_callback('/class@anonymous\x00.*?\.php(?:0x?|:[0-9]++\$)[0-9a-fA-F]++/', function ($m) {
-                    return class_exists($m[0], false) ? get_parent_class($m[0]).'@anonymous' : $m[0];
+            if (false !== strpos($message, "@anonymous\0")) {
+                $message = preg_replace_callback('/[a-zA-Z_\x7f-\xff][\\\\a-zA-Z0-9_\x7f-\xff]*+@anonymous\x00.*?\.php(?:0x?|:[0-9]++\$)[0-9a-fA-F]++/', function ($m) {
+                    return class_exists($m[0], false) ? (get_parent_class($m[0]) ?: key(class_implements($m[0])) ?: 'class').'@anonymous' : $m[0];
                 }, $message);
             }
 
-            $width = $this->terminal->getWidth() ? $this->terminal->getWidth() - 1 : PHP_INT_MAX;
+            $width = $this->terminal->getWidth() ? $this->terminal->getWidth() - 1 : \PHP_INT_MAX;
             $lines = [];
             foreach ('' !== $message ? preg_split('/\r?\n/', $message) : [] as $line) {
                 foreach ($this->splitStringByWidth($line, $width - 4) as $line) {
@@ -976,7 +982,9 @@ class Application implements ResetInterface
             $input->setInteractive(false);
         }
 
-        putenv('SHELL_VERBOSITY='.$shellVerbosity);
+        if (\function_exists('putenv')) {
+            @putenv('SHELL_VERBOSITY='.$shellVerbosity);
+        }
         $_ENV['SHELL_VERBOSITY'] = $shellVerbosity;
         $_SERVER['SHELL_VERBOSITY'] = $shellVerbosity;
     }
@@ -1163,7 +1171,7 @@ class Application implements ResetInterface
         }
 
         $alternatives = array_filter($alternatives, function ($lev) use ($threshold) { return $lev < 2 * $threshold; });
-        ksort($alternatives, SORT_NATURAL | SORT_FLAG_CASE);
+        ksort($alternatives, \SORT_NATURAL | \SORT_FLAG_CASE);
 
         return array_keys($alternatives);
     }

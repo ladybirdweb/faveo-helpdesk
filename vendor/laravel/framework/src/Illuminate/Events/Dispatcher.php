@@ -384,9 +384,9 @@ class Dispatcher implements DispatcherContract
                 return call_user_func($this->createClassCallable($listener), $event, $payload);
             }
 
-            return call_user_func_array(
-                $this->createClassCallable($listener), $payload
-            );
+            $callable = $this->createClassCallable($listener);
+
+            return $callable(...array_values($payload));
         };
     }
 
@@ -569,7 +569,7 @@ class Dispatcher implements DispatcherContract
     /**
      * Get the queue implementation from the resolver.
      *
-     * @return \Illuminate\Contracts\Queue\Queue
+     * @return \Illuminate\Contracts\Queue\Factory
      */
     protected function resolveQueue()
     {

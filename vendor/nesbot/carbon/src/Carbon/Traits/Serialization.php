@@ -26,7 +26,7 @@ use Carbon\Exceptions\InvalidFormatException;
  *
  * Depends on the following methods:
  *
- * @method string|static locale(string $locale = null)
+ * @method string|static locale(string $locale = null, string ...$fallbackLocales)
  * @method string        toJSON()
  */
 trait Serialization
@@ -93,7 +93,7 @@ trait Serialization
      */
     public static function __set_state($dump)
     {
-        if (is_string($dump)) {
+        if (\is_string($dump)) {
             return static::parse($dump);
         }
 
@@ -150,9 +150,9 @@ trait Serialization
     {
         $serializer = $this->localSerializer ?? static::$serializer;
         if ($serializer) {
-            return is_string($serializer)
+            return \is_string($serializer)
                 ? $this->rawFormat($serializer)
-                : call_user_func($serializer, $this);
+                : \call_user_func($serializer, $this);
         }
 
         return $this->toJSON();

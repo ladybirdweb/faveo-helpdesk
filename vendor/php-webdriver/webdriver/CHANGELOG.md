@@ -3,6 +3,20 @@ This project versioning adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## 1.9.0 - 2020-11-19
+### Added
+- Support of SameSite cookie property.
+- Command `RemoteWebDriver::newWindow()` for W3C mode to open new top-level browsing context (aka window).
+- PHP 8.0 support.
+
+## 1.8.3 - 2020-10-06
+### Fixed
+- Make `alertIsPresent()` condition working in W3C mode.
+- `RemoteWebDriver::create()` cannot be used without providing the second parameter (which is in fact optional).
+- `ChromeDriver::start()` starts in inconsistent state mixing W3C/OSS mode.
+- Modifier keys are not released when sending NULL key in GeckoDriver (workaround for GeckoDriver bug [1494661](https://bugzilla.mozilla.org/show_bug.cgi?id=1494661)).
+- Do not set unnecessary `binary` value of `goog:chromeOptions` while keep the object in proper data type required by ChromeDriver.
+
 ## 1.8.2 - 2020-03-04
 ### Changed
 - Reimplement element `equals()` method to be working in W3C mode.

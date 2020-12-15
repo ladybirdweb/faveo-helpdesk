@@ -112,9 +112,9 @@ class AwsClient implements AwsClientInterface
      *   Provide an instance of Aws\EndpointDiscovery\ConfigurationInterface,
      *   an instance Aws\CacheInterface, a callable that provides a promise for
      *   a Configuration object, or an associative array with the following
-     *   keys: enabled: (bool) Set to true to enable endpoint discovery,
-     *   defaults to false; cache_limit: (int) The maximum number of keys in the
-     *   endpoints cache, defaults to 1000.
+     *   keys: enabled: (bool) Set to true to enable endpoint discovery, false
+     *   to explicitly disable it, defaults to false; cache_limit: (int) The
+     *   maximum number of keys in the endpoints cache, defaults to 1000.
      * - endpoint_provider: (callable) An optional PHP callable that
      *   accepts a hash of options including a "service" and "region" key and
      *   returns NULL or a hash of endpoint data, of which the "endpoint" key
@@ -171,6 +171,10 @@ class AwsClient implements AwsClientInterface
      *   signature version to use with a service (e.g., v4). Note that
      *   per/operation signature version MAY override this requested signature
      *   version.
+     * - use_aws_shared_config_files: (bool, default=bool(true)) Set to false to
+     *   disable checking for shared config file in '~/.aws/config' and
+     *   '~/.aws/credentials'.  This will override the AWS_CONFIG_FILE
+     *   environment variable.
      * - validate: (bool, default=bool(true)) Set to false to disable
      *   client-side parameter validation.
      * - version: (string, required) The version of the webservice to
@@ -277,7 +281,7 @@ class AwsClient implements AwsClientInterface
      *
      * @return callable
      */
-    final protected function getSignatureProvider()
+    final public function getSignatureProvider()
     {
         return $this->signatureProvider;
     }
@@ -346,6 +350,9 @@ class AwsClient implements AwsClientInterface
         ) use ($api, $provider, $name, $region, $version) {
             if (!empty($c['@context']['signing_region'])) {
                 $region = $c['@context']['signing_region'];
+            }
+            if (!empty($c['@context']['signing_service'])) {
+                $name = $c['@context']['signing_service'];
             }
             $authType = $api->getOperation($c->getName())['authtype'];
             switch ($authType){

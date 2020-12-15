@@ -64,7 +64,7 @@ class ControllerResolver implements ControllerResolverInterface
             }
 
             if (!\is_callable($controller)) {
-                throw new \InvalidArgumentException(sprintf('The controller for URI "%s" is not callable: '.$this->getControllerError($controller), $request->getPathInfo()));
+                throw new \InvalidArgumentException(sprintf('The controller for URI "%s" is not callable: ', $request->getPathInfo()).$this->getControllerError($controller));
             }
 
             return $controller;
@@ -85,7 +85,7 @@ class ControllerResolver implements ControllerResolverInterface
         try {
             $callable = $this->createController($controller);
         } catch (\InvalidArgumentException $e) {
-            throw new \InvalidArgumentException(sprintf('The controller for URI "%s" is not callable: '.$e->getMessage(), $request->getPathInfo()), 0, $e);
+            throw new \InvalidArgumentException(sprintf('The controller for URI "%s" is not callable: ', $request->getPathInfo()).$e->getMessage(), 0, $e);
         }
 
         if (!\is_callable($callable)) {
@@ -116,7 +116,7 @@ class ControllerResolver implements ControllerResolverInterface
             return $controller;
         }
 
-        list($class, $method) = explode('::', $controller, 2);
+        [$class, $method] = explode('::', $controller, 2);
 
         try {
             $controller = [$this->instantiateController($class), $method];
@@ -176,7 +176,7 @@ class ControllerResolver implements ControllerResolverInterface
             return 'Invalid array callable, expected [controller, method].';
         }
 
-        list($controller, $method) = $callable;
+        [$controller, $method] = $callable;
 
         if (\is_string($controller) && !class_exists($controller)) {
             return sprintf('Class "%s" does not exist.', $controller);

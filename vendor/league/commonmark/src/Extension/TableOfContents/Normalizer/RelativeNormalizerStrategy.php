@@ -13,7 +13,7 @@ namespace League\CommonMark\Extension\TableOfContents\Normalizer;
 
 use League\CommonMark\Block\Element\ListBlock;
 use League\CommonMark\Block\Element\ListItem;
-use League\CommonMark\Extension\TableOfContents\TableOfContents;
+use League\CommonMark\Extension\TableOfContents\Node\TableOfContents;
 
 final class RelativeNormalizerStrategy implements NormalizerStrategyInterface
 {
@@ -46,6 +46,8 @@ final class RelativeNormalizerStrategy implements NormalizerStrategyInterface
         // Need to go one level deeper? Add that level
         if ($lastListItem !== false && $level > $previousLevel) {
             $targetListBlock = new ListBlock($lastListItem->getListData());
+            $targetListBlock->setStartLine($listItemToAdd->getStartLine());
+            $targetListBlock->setEndLine($listItemToAdd->getEndLine());
             $lastListItem->appendChild($targetListBlock);
         // Otherwise we're at the right level
         // If there's no stack we're adding this item directly to the TOC element
@@ -60,3 +62,6 @@ final class RelativeNormalizerStrategy implements NormalizerStrategyInterface
         $this->listItemStack[$level] = $listItemToAdd;
     }
 }
+
+// Trigger autoload without causing a deprecated error
+\class_exists(TableOfContents::class);

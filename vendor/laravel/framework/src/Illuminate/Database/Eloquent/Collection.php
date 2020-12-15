@@ -259,6 +259,23 @@ class Collection extends BaseCollection implements QueueableCollection
     }
 
     /**
+     * Run an associative map over each of the items.
+     *
+     * The callback should return an associative array with a single key / value pair.
+     *
+     * @param  callable  $callback
+     * @return \Illuminate\Support\Collection|static
+     */
+    public function mapWithKeys(callable $callback)
+    {
+        $result = parent::mapWithKeys($callback);
+
+        return $result->contains(function ($item) {
+            return ! $item instanceof Model;
+        }) ? $result->toBase() : $result;
+    }
+
+    /**
      * Reload a fresh model instance from the database for all the entities.
      *
      * @param  array|string  $with
@@ -335,7 +352,7 @@ class Collection extends BaseCollection implements QueueableCollection
      *
      * @param  string|callable|null  $key
      * @param  bool  $strict
-     * @return static|\Illuminate\Support\Collection
+     * @return static
      */
     public function unique($key = null, $strict = false)
     {
@@ -451,7 +468,7 @@ class Collection extends BaseCollection implements QueueableCollection
      */
     public function zip($items)
     {
-        return call_user_func_array([$this->toBase(), 'zip'], func_get_args());
+        return $this->toBase()->zip(...func_get_args());
     }
 
     /**
@@ -566,7 +583,7 @@ class Collection extends BaseCollection implements QueueableCollection
         if (count($relations) === 0 || $relations === [[]]) {
             return [];
         } elseif (count($relations) === 1) {
-            return $relations[0];
+            return array_values($relations)[0];
         } else {
             return array_intersect(...$relations);
         }

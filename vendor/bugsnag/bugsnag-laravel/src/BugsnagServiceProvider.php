@@ -36,7 +36,7 @@ class BugsnagServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    const VERSION = '2.19.0';
+    const VERSION = '2.21.0';
 
     /**
      * Boot the service provider.
@@ -213,6 +213,10 @@ class BugsnagServiceProvider extends ServiceProvider
                 $client->setFilters($config['filters']);
             }
 
+            if (isset($config['endpoint'])) {
+                $client->setNotifyEndpoint($config['endpoint']);
+            }
+
             if ($this->isSessionTrackingAllowed($config)) {
                 $endpoint = isset($config['session_endpoint']) ? $config['session_endpoint'] : null;
                 $this->setupSessionTracking($client, $endpoint, $this->app->events);
@@ -266,6 +270,11 @@ class BugsnagServiceProvider extends ServiceProvider
      */
     protected function getGuzzle(array $config)
     {
+        // If a 'bugsnag.guzzle' instance exists in the container, use it
+        if ($this->app->bound('bugsnag.guzzle')) {
+            return $this->app->make('bugsnag.guzzle');
+        }
+
         $options = [];
 
         if (isset($config['proxy']) && $config['proxy']) {
@@ -276,7 +285,7 @@ class BugsnagServiceProvider extends ServiceProvider
             $options['proxy'] = $config['proxy'];
         }
 
-        return Client::makeGuzzle(isset($config['endpoint']) ? $config['endpoint'] : null, $options);
+        return Client::makeGuzzle(null, $options);
     }
 
     /**

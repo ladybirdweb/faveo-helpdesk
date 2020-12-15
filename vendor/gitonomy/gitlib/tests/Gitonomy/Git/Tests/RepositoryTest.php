@@ -21,12 +21,17 @@ class RepositoryTest extends AbstractTest
     /**
      * @dataProvider provideFoobar
      */
-    public function testGetBlob_WithExisting_Works($repository)
+    public function testGetBlobWithExistingWorks($repository)
     {
         $blob = $repository->getCommit(self::LONGFILE_COMMIT)->getTree()->resolvePath('README.md');
 
         $this->assertInstanceOf(Blob::class, $blob, 'getBlob() returns a Blob object');
-        $this->assertContains('Foo Bar project', $blob->getContent(), 'file is correct');
+
+        if (method_exists($this, 'assertStringContainsString')) {
+            $this->assertStringContainsString('Foo Bar project', $blob->getContent(), 'file is correct');
+        } else {
+            $this->assertContains('Foo Bar project', $blob->getContent(), 'file is correct');
+        }
     }
 
     /**

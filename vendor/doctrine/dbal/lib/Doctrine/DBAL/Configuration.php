@@ -5,13 +5,14 @@ namespace Doctrine\DBAL;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\DBAL\Logging\SQLLogger;
 use Doctrine\DBAL\Schema\AbstractAsset;
+
 use function preg_match;
 
 /**
  * Configuration container for the Doctrine DBAL.
  *
- * @internal When adding a new configuration option just write a getter/setter
- *           pair and add the option to the _attributes array with a proper default value.
+ * Internal note: When adding a new configuration option just write a getter/setter
+ *                pair and add the option to the _attributes array with a proper default value.
  */
 class Configuration
 {
@@ -72,7 +73,7 @@ class Configuration
      *
      * @deprecated Use Configuration::setSchemaAssetsFilter() instead
      *
-     * @param string $filterExpression
+     * @param string|null $filterExpression
      *
      * @return void
      */
@@ -80,7 +81,8 @@ class Configuration
     {
         $this->_attributes['filterSchemaAssetsExpression'] = $filterExpression;
         if ($filterExpression) {
-            $this->_attributes['filterSchemaAssetsExpressionCallable'] = $this->buildSchemaAssetsFilterFromExpression($filterExpression);
+            $this->_attributes['filterSchemaAssetsExpressionCallable']
+                = $this->buildSchemaAssetsFilterFromExpression($filterExpression);
         } else {
             $this->_attributes['filterSchemaAssetsExpressionCallable'] = null;
         }
@@ -101,7 +103,7 @@ class Configuration
     /**
      * @param string $filterExpression
      */
-    private function buildSchemaAssetsFilterFromExpression($filterExpression) : callable
+    private function buildSchemaAssetsFilterFromExpression($filterExpression): callable
     {
         return static function ($assetName) use ($filterExpression) {
             if ($assetName instanceof AbstractAsset) {
@@ -115,7 +117,7 @@ class Configuration
     /**
      * Sets the callable to use to filter schema assets.
      */
-    public function setSchemaAssetsFilter(?callable $callable = null) : ?callable
+    public function setSchemaAssetsFilter(?callable $callable = null): ?callable
     {
         $this->_attributes['filterSchemaAssetsExpression'] = null;
 
@@ -125,7 +127,7 @@ class Configuration
     /**
      * Returns the callable to use to filter schema assets.
      */
-    public function getSchemaAssetsFilter() : ?callable
+    public function getSchemaAssetsFilter(): ?callable
     {
         return $this->_attributes['filterSchemaAssetsExpressionCallable'] ?? null;
     }

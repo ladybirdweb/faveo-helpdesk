@@ -35,10 +35,16 @@ class ChromeDriver extends RemoteWebDriver
             null,
             DriverCommand::NEW_SESSION,
             [
-                'desiredCapabilities' => $desired_capabilities->toArray(),
+                'desiredCapabilities' => (object) $desired_capabilities->toArray(),
             ]
         );
         $response = $this->executor->execute($command);
+        $value = $response->getValue();
+
+        if (!$this->isW3cCompliant = isset($value['capabilities'])) {
+            $this->executor->disableW3cCompliance();
+        }
+
         $this->sessionID = $response->getSessionID();
     }
 

@@ -1,14 +1,12 @@
-# libphonenumber for PHP [![Build Status](https://img.shields.io/travis/giggsey/libphonenumber-for-php.svg?style=flat-square)](https://travis-ci.org/giggsey/libphonenumber-for-php) [![Coverage Status](https://img.shields.io/coveralls/giggsey/libphonenumber-for-php.svg?style=flat-square)](https://coveralls.io/r/giggsey/libphonenumber-for-php?branch=master)
+# libphonenumber for PHP [![Build Status](https://github.com/giggsey/libphonenumber-for-php/workflows/Continuous%20Integration/badge.svg)](https://github.com/giggsey/libphonenumber-for-php/actions?query=workflow%3A%22Continuous+Integration%22) [![Coverage Status](https://img.shields.io/coveralls/giggsey/libphonenumber-for-php.svg?style=flat-square)](https://coveralls.io/r/giggsey/libphonenumber-for-php?branch=master)
 
 [![Total Downloads](https://poser.pugx.org/giggsey/libphonenumber-for-php/downloads?format=flat-square)](https://packagist.org/packages/giggsey/libphonenumber-for-php)
 [![Downloads per month](https://img.shields.io/packagist/dm/giggsey/libphonenumber-for-php.svg?style=flat-square)](https://packagist.org/packages/giggsey/libphonenumber-for-php)
 [![Latest Stable Version](https://img.shields.io/packagist/v/giggsey/libphonenumber-for-php.svg?style=flat-square)](https://packagist.org/packages/giggsey/libphonenumber-for-php)
-[![License](http://img.shields.io/badge/license-Apache%202.0-red.svg?style=flat-square)](https://packagist.org/packages/giggsey/libphonenumber-for-php)
+[![License](https://img.shields.io/badge/license-Apache%202.0-red.svg?style=flat-square)](https://packagist.org/packages/giggsey/libphonenumber-for-php)
 
 ## What is it?
 A PHP library for parsing, formatting, storing and validating international phone numbers. This library is based on Google's [libphonenumber](https://github.com/google/libphonenumber).
-
-
 
  - [Installation](#installation)
  - [Documentation](#documentation)
@@ -28,7 +26,7 @@ A PHP library for parsing, formatting, storing and validating international phon
 
 ## Installation
 
-PHP versions 5.3 up to PHP 7.4 are currently supported.
+PHP versions 5.3 up to PHP 8.0 are currently supported.
 
 The PECL [mbstring](http://php.net/mbstring) extension is required.
 
@@ -243,6 +241,12 @@ $ vendor/bin/phing compile
 ```
 
 This compile process clones the [libphonenumber](https://github.com/google/libphonenumber) project at the version specified in [METADATA-VERSION.txt](METADATA-VERSION.txt).
+
+### Running tests
+
+This project uses [PHPUnit Bridge](https://symfony.com/doc/current/components/phpunit_bridge.html) to maintain compatibility for the supported PHP versions.
+
+To run the tests locally, run the `./phpunit` script.
 
 ## Integration with frameworks
 

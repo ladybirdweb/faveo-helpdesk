@@ -1,9 +1,9 @@
 # Laravel Helpers
 
 <a href="https://github.com/laravel/helpers/actions"><img src="https://github.com/laravel/helpers/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/helpers"><img src="https://poser.pugx.org/laravel/helpers/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/helpers"><img src="https://poser.pugx.org/laravel/helpers/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/helpers"><img src="https://poser.pugx.org/laravel/helpers/license.svg" alt="License"></a>
+<a href="https://packagist.org/packages/laravel/helpers"><img src="https://img.shields.io/packagist/dt/laravel/helpers" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/helpers"><img src="https://img.shields.io/packagist/v/laravel/helpers" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/helpers"><img src="https://img.shields.io/packagist/l/laravel/helpers" alt="License"></a>
 
 This package provides a backwards compatibility layer for Laravel 5.8 helpers in the latest Laravel release.
 

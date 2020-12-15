@@ -21,14 +21,20 @@ class AdminTest extends AbstractTest
 {
     private $tmpDir;
 
-    protected function setUp()
+    /**
+     * @before
+     */
+    public function setUpTmpDir()
     {
         $this->tmpDir = self::createTempDir();
     }
 
-    protected function tearDown()
+    /**
+     * @after
+     */
+    public function tearDownTmpDir()
     {
-        $this->deleteDir(self::createTempDir());
+        self::deleteDir(self::createTempDir());
     }
 
     public function testBare()

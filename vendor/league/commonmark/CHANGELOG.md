@@ -4,6 +4,103 @@ Updates should follow the [Keep a CHANGELOG](https://keepachangelog.com/) princi
 
 ## [Unreleased][unreleased]
 
+## [1.5.7] - 2020-10-31
+
+### Fixed
+
+ - Fixed mentions not being parsed when appearing after non-word characters (#582)
+
+## [1.5.6] - 2020-10-17
+
+### Changed
+
+ - Blocks added outside of the parsing context now have their start/end line numbers defaulted to 0 to avoid type errors (#579)
+
+### Fixed
+
+ - Fixed replacement blocks not inheriting the start line number of the container they're replacing (#579)
+ - Fixed Table of Contents blocks not having correct start/end line numbers (#579)
+
+## [1.5.5] - 2020-09-13
+
+### Changed
+
+ - Bumped CommonMark spec compliance to 0.28.2
+
+### Fixed
+
+ - Fixed `textarea` elements not being treated as a type 1 HTML block (like `script`, `style`, or `pre`)
+ - Fixed autolink processor not handling other unmatched trailing parentheses
+
+## [1.5.4] - 2020-08-17
+
+### Fixed
+
+ - Fixed footnote ID configuration not taking effect (#524, #530)
+ - Fixed heading permalink slugs not being unique (#531, #534)
+
+## [1.5.3] - 2020-07-19
+
+### Fixed
+
+ - Fixed regression of multi-byte inline parser characters not being matched
+
+## [1.5.2] - 2020-07-19
+
+### Changed
+
+ - Significantly improved performance of the inline parser regex
+
+### Fixed
+
+ - Fixed parent class lookups for non-existent classes on PHP 8 (#517)
+
+## [1.5.1] - 2020-06-27
+
+### Fixed
+
+ - Fixed UTF-8 encoding not being checked in the `UrlEncoder` utility (#509) or the `Cursor`
+
+## [1.5.0] - 2020-06-21
+
+### Added
+
+ - Added new `AttributesExtension` based on <https://github.com/webuni/commonmark-attributes-extension> (#474)
+ - Added new `FootnoteExtension` based on <https://github.com/rezozero/commonmark-ext-footnotes> (#474)
+ - Added new `MentionExtension` to replace `InlineMentionParser` with more flexibility and customization
+ - Added the ability to render `TableOfContents` nodes anywhere in a document (given by a placeholder)
+ - Added the ability to properly clone `Node` objects
+ - Added options to customize the value of `rel` attributes set via the `ExternalLink` extension (#476)
+ - Added a new `heading_permalink/slug_normalizer` configuration option to allow custom slug generation (#460)
+ - Added a new `heading_permalink/symbol` configuration option to replace the now deprecated `heading_permalink/inner_contents` configuration option (#505)
+ - Added `SlugNormalizer` and `TextNormalizer` classes to make normalization reusable by extensions (#485)
+ - Added new classes:
+   - `TableOfContentsGenerator`
+   - `TableOfContentsGeneratorInterface`
+   - `TableOfContentsPlaceholder`
+   - `TableOfContentsPlaceholderParser`
+   - `TableOfContentsPlaceholderRenderer`
+
+### Changed
+
+ - "Moved" the `TableOfContents` class into a new `Node` sub-namespace (with backward-compatibility)
+ - Reference labels are now generated and stored in lower-case instead of upper-case
+ - Reference labels are no longer normalized inside the `Reference`, only the `ReferenceMap`
+
+### Fixed
+
+ - Fixed reference label case folding polyfill not being consistent between different PHP versions
+
+### Deprecated
+
+ - Deprecated the `CommonMarkConverter::VERSION` constant (#496)
+ - Deprecated `League\CommonMark\Extension\Autolink\InlineMentionParser` (use `League\CommonMark\Extension\Mention\MentionParser` instead)
+ - Deprecated everything under `League\CommonMark\Extension\HeadingPermalink\Slug` (use the classes under `League\CommonMark\Normalizer` instead)
+ - Deprecated `League\CommonMark\Extension\TableOfContents\TableOfContents` (use the one in the new `Node` sub-namespace instead)
+ - Deprecated the `STYLE_` and `NORMALIZE_` constants in `TableOfContentsBuilder` (use the ones in `TableOfContentsGenerator` instead)
+ - Deprecated the `\League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkRenderer::DEFAULT_INNER_CONTENTS` constant (#505)
+ - Deprecated the `heading_permalink/inner_contents` configuration option in the `HeadingPermalink` extension (use the new `heading_permalink/symbol` configuration option instead) (#505)
+
 ## [1.4.3] - 2020-05-04
 
 ### Fixed
@@ -301,7 +398,15 @@ No changes were made since 1.0.0-rc1.
    - Removed `DelimiterStack::iterateByCharacters()` (use the new `processDelimiters()` method instead)
    - Removed the protected `DelimiterStack::findMatchingOpener()` method
 
-[unreleased]: https://github.com/thephpleague/commonmark/compare/1.4.3...HEAD
+[unreleased]: https://github.com/thephpleague/commonmark/compare/1.5.7...1.5
+[1.5.7]: https://github.com/thephpleague/commonmark/compare/1.5.6...1.5.7
+[1.5.6]: https://github.com/thephpleague/commonmark/compare/1.5.5...1.5.6
+[1.5.5]: https://github.com/thephpleague/commonmark/compare/1.5.4...1.5.5
+[1.5.4]: https://github.com/thephpleague/commonmark/compare/1.5.3...1.5.4
+[1.5.3]: https://github.com/thephpleague/commonmark/compare/1.5.2...1.5.3
+[1.5.2]: https://github.com/thephpleague/commonmark/compare/1.5.1...1.5.2
+[1.5.1]: https://github.com/thephpleague/commonmark/compare/1.5.0...1.5.1
+[1.5.0]: https://github.com/thephpleague/commonmark/compare/1.4.3...1.5.0
 [1.4.3]: https://github.com/thephpleague/commonmark/compare/1.4.2...1.4.3
 [1.4.2]: https://github.com/thephpleague/commonmark/compare/1.4.1...1.4.2
 [1.4.1]: https://github.com/thephpleague/commonmark/compare/1.4.0...1.4.1

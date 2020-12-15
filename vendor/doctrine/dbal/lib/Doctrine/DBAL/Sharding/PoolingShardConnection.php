@@ -11,6 +11,7 @@ use Doctrine\DBAL\Event\ConnectionEventArgs;
 use Doctrine\DBAL\Events;
 use Doctrine\DBAL\Sharding\ShardChoser\ShardChoser;
 use InvalidArgumentException;
+
 use function array_merge;
 use function is_numeric;
 use function is_string;
@@ -31,6 +32,8 @@ use function is_string;
  *   transaction.
  *
  * Instantiation through the DriverManager looks like:
+ *
+ * @deprecated
  *
  * @example
  *
@@ -62,10 +65,16 @@ class PoolingShardConnection extends Connection
     /**
      * {@inheritDoc}
      *
+     * @internal The connection can be only instantiated by the driver manager.
+     *
      * @throws InvalidArgumentException
      */
-    public function __construct(array $params, Driver $driver, ?Configuration $config = null, ?EventManager $eventManager = null)
-    {
+    public function __construct(
+        array $params,
+        Driver $driver,
+        ?Configuration $config = null,
+        ?EventManager $eventManager = null
+    ) {
         if (! isset($params['global'], $params['shards'])) {
             throw new InvalidArgumentException("Connection Parameters require 'global' and 'shards' configurations.");
         }
@@ -79,14 +88,18 @@ class PoolingShardConnection extends Connection
         }
 
         if (! ($params['shardChoser'] instanceof ShardChoser)) {
-            throw new InvalidArgumentException("The 'shardChoser' configuration is not a valid instance of Doctrine\DBAL\Sharding\ShardChoser\ShardChoser");
+            throw new InvalidArgumentException(
+                "The 'shardChoser' configuration is not a valid instance of " . ShardChoser::class
+            );
         }
 
         $this->connectionParameters[0] = array_merge($params, $params['global']);
 
         foreach ($params['shards'] as $shard) {
             if (! isset($shard['id'])) {
-                throw new InvalidArgumentException("Missing 'id' for one configured shard. Please specify a unique shard-id.");
+                throw new InvalidArgumentException(
+                    "Missing 'id' for one configured shard. Please specify a unique shard-id."
+                );
             }
 
             if (! is_numeric($shard['id']) || $shard['id'] < 1) {
@@ -118,7 +131,9 @@ class PoolingShardConnection extends Connection
      */
     public function getParams()
     {
-        return $this->activeShardId ? $this->connectionParameters[$this->activeShardId] : $this->connectionParameters[0];
+        return $this->activeShardId
+            ? $this->connectionParameters[$this->activeShardId]
+            : $this->connectionParameters[0];
     }
 
     /**

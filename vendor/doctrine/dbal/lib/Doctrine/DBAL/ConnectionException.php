@@ -5,10 +5,10 @@ namespace Doctrine\DBAL;
 /**
  * @psalm-immutable
  */
-class ConnectionException extends DBALException
+class ConnectionException extends Exception
 {
     /**
-     * @return \Doctrine\DBAL\ConnectionException
+     * @return ConnectionException
      */
     public static function commitFailedRollbackOnly()
     {
@@ -16,7 +16,7 @@ class ConnectionException extends DBALException
     }
 
     /**
-     * @return \Doctrine\DBAL\ConnectionException
+     * @return ConnectionException
      */
     public static function noActiveTransaction()
     {
@@ -24,7 +24,7 @@ class ConnectionException extends DBALException
     }
 
     /**
-     * @return \Doctrine\DBAL\ConnectionException
+     * @return ConnectionException
      */
     public static function savepointsNotSupported()
     {
@@ -32,7 +32,7 @@ class ConnectionException extends DBALException
     }
 
     /**
-     * @return \Doctrine\DBAL\ConnectionException
+     * @return ConnectionException
      */
     public static function mayNotAlterNestedTransactionWithSavepointsInTransaction()
     {

@@ -89,7 +89,7 @@ class Diff_SequenceMatcher
 	 * @param string|array $junkCallback Either an array or string that references a callback function (if there is one) to determine 'junk' characters.
 	 * @param array $options
 	 */
-	public function __construct($a, $b, $junkCallback=null, $options)
+	public function __construct($a, $b, $junkCallback=null, $options=[])
 	{
 		$this->a = null;
 		$this->b = null;

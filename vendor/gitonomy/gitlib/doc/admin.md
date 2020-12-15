@@ -43,7 +43,7 @@ non-bare repository, this branch will be checked out:
 $repository = Gitonomy\Git\Admin::cloneBranchTo('/tmp/gitlib', 'https://github.com/gitonomy/gitlib.git', 'a-branch');
 
 // Clone to a non-bare repository
-$repository = Gitonomy\Git\Admin::cloneBranchTo('/tmp/gitlib', 'https://github.com/gitonomy/gitlib.git', 'a-branch' false);
+$repository = Gitonomy\Git\Admin::cloneBranchTo('/tmp/gitlib', 'https://github.com/gitonomy/gitlib.git', 'a-branch', false);
 ```
 
 Clone a Repository object

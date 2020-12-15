@@ -82,7 +82,7 @@ trait Modifiers
         }
 
         return $this->change(
-            'next '.(is_string($modifier) ? $modifier : static::$days[$modifier])
+            'next '.(\is_string($modifier) ? $modifier : static::$days[$modifier])
         );
     }
 
@@ -96,7 +96,7 @@ trait Modifiers
      */
     private function nextOrPreviousDay($weekday = true, $forward = true)
     {
-        /** @var CarbonInterface $step */
+        /** @var CarbonInterface $date */
         $date = $this;
         $step = $forward ? 1 : -1;
 
@@ -164,7 +164,7 @@ trait Modifiers
         }
 
         return $this->change(
-            'last '.(is_string($modifier) ? $modifier : static::$days[$modifier])
+            'last '.(\is_string($modifier) ? $modifier : static::$days[$modifier])
         );
     }
 

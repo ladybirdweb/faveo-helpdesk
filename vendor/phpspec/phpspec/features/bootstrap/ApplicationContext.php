@@ -80,6 +80,7 @@ class ApplicationContext implements Context
 
     private function resetShellVerbosity()
     {
+        putenv('SHELL_INTERACTIVE=1');
         putenv(sprintf('SHELL_VERBOSITY=%d', OutputInterface::VERBOSITY_NORMAL));
     }
 
@@ -409,6 +410,7 @@ class ApplicationContext implements Context
         $string = preg_replace('/\([0-9]+ms\)/', '', $string);
         $string = str_replace("\r", '', $string);
         $string = preg_replace('#(Double\\\\.+?\\\\P)\d+#u', '$1', $string);
+        $string = preg_replace('/\(\s+("[^"]*")\s+\)/', '($1)', $string);
 
         return $string;
     }

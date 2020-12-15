@@ -2,6 +2,7 @@
 
 namespace Bugsnag\Breadcrumbs;
 
+use Bugsnag\DateTime\Date;
 use InvalidArgumentException;
 
 class Breadcrumb
@@ -129,7 +130,7 @@ class Breadcrumb
             throw new InvalidArgumentException(sprintf('The breadcrumb type must be one of the set of %d standard types.', count($types)));
         }
 
-        $this->timestamp = gmdate('Y-m-d\TH:i:s\Z');
+        $this->timestamp = Date::now();
         $this->name = $name;
         $this->type = $type;
         $this->metaData = $metaData;

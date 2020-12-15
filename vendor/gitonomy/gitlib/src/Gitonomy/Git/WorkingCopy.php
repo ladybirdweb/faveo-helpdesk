@@ -35,11 +35,6 @@ class WorkingCopy
         }
     }
 
-    public function getStatus()
-    {
-        return WorkingStatus::parseOutput();
-    }
-
     public function getUntrackedFiles()
     {
         $lines = explode("\0", $this->run('status', ['--porcelain', '--untracked-files=all', '-z']));

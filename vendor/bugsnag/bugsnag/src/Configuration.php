@@ -7,22 +7,21 @@ use InvalidArgumentException;
 class Configuration
 {
     /**
-     * The default endpoint.
-     *
-     * @var string
+     * The default endpoint for event notifications.
+     */
+    const NOTIFY_ENDPOINT = 'https://notify.bugsnag.com';
+
+    /**
+     * The default endpoint for session tracking.
      */
     const SESSION_ENDPOINT = 'https://sessions.bugsnag.com';
 
     /**
-     * The default build endpoint.
-     *
-     * @var string
+     * The default endpoint for build notifications.
      */
     const BUILD_ENDPOINT = 'https://build.bugsnag.com';
 
     /**
-     * The Bugsnag API Key.
-     *
      * @var string
      */
     protected $apiKey;
@@ -46,7 +45,14 @@ class Configuration
      *
      * @var string[]
      */
-    protected $filters = ['password'];
+    protected $filters = [
+        'password',
+        'cookie',
+        'authorization',
+        'php-auth-user',
+        'php-auth-pw',
+        'php-auth-digest',
+    ];
 
     /**
      * The project root regex.
@@ -76,7 +82,7 @@ class Configuration
      */
     protected $notifier = [
         'name' => 'Bugsnag PHP (Official)',
-        'version' => '3.21.0',
+        'version' => '3.25.0',
         'url' => 'https://bugsnag.com',
     ];
 
@@ -126,22 +132,25 @@ class Configuration
      * A client to use to send sessions.
      *
      * @var \GuzzleHttp\ClientInterface
+     *
+     * @deprecated This will be removed in the next major version.
      */
     protected $sessionClient;
 
     /**
-     * The endpoint to deliver sessions to.
-     *
+     * @var string
+     */
+    protected $notifyEndpoint = self::NOTIFY_ENDPOINT;
+
+    /**
      * @var string
      */
     protected $sessionEndpoint = self::SESSION_ENDPOINT;
 
     /**
-     * The endpoint to deliver build notifications to.
-     *
      * @var string
      */
-    protected $buildEndpoint;
+    protected $buildEndpoint = self::BUILD_ENDPOINT;
 
     /**
      * Create a new config instance.
@@ -481,7 +490,7 @@ class Configuration
      *
      * @param array $data an associative array containing the new data to be added
      *
-     * @return this
+     * @return $this
      */
     public function mergeDeviceData($data)
     {
@@ -560,9 +569,66 @@ class Configuration
      */
     public function setErrorReportingLevel($errorReportingLevel)
     {
+        if (!$this->isSubsetOfErrorReporting($errorReportingLevel)) {
+            $missingLevels = implode(', ', $this->getMissingErrorLevelNames($errorReportingLevel));
+            $message =
+                'Bugsnag Warning: errorReportingLevel cannot contain values that are not in error_reporting. '.
+                "Any errors of these levels will be ignored: {$missingLevels}.";
+
+            error_log($message);
+        }
+
         $this->errorReportingLevel = $errorReportingLevel;
 
         return $this;
+    }
+
+    /**
+     * Check if the given error reporting level is a subset of error_reporting.
+     *
+     * For example, if $level contains E_WARNING then error_reporting must too.
+     *
+     * @param int|null $level
+     *
+     * @return bool
+     */
+    private function isSubsetOfErrorReporting($level)
+    {
+        if (!is_int($level)) {
+            return true;
+        }
+
+        $errorReporting = error_reporting();
+
+        // If all of the bits in $level are also in $errorReporting, ORing them
+        // together will result in the same value as $errorReporting because
+        // there are no new bits to add
+        return ($errorReporting | $level) === $errorReporting;
+    }
+
+    /**
+     * Get a list of error level names that are in $level but not error_reporting.
+     *
+     * For example, if error_reporting is E_NOTICE and $level is E_ERROR then
+     * this will return ['E_ERROR']
+     *
+     * @param int $level
+     *
+     * @return string[]
+     */
+    private function getMissingErrorLevelNames($level)
+    {
+        $missingLevels = [];
+        $errorReporting = error_reporting();
+
+        foreach (ErrorTypes::getAllCodes() as $code) {
+            // $code is "missing" if it's in $level but not in $errorReporting
+            if (($code & $level) && !($code & $errorReporting)) {
+                $missingLevels[] = ErrorTypes::codeToString($code);
+            }
+        }
+
+        return $missingLevels;
     }
 
     /**
@@ -574,39 +640,49 @@ class Configuration
      */
     public function shouldIgnoreErrorCode($code)
     {
-        $defaultReportingLevel = error_reporting();
-
-        if ($defaultReportingLevel === 0) {
-            // The error has been suppressed using the error control operator ('@')
-            // Ignore the error in all cases.
+        // If the code is not in error_reporting then it is either totally
+        // disabled or is being suppressed with '@'
+        if (!(error_reporting() & $code)) {
             return true;
         }
 
+        // Filter the error code further against our error reporting level, which
+        // can be lower than error_reporting
         if (isset($this->errorReportingLevel)) {
             return !($this->errorReportingLevel & $code);
         }
 
-        return !($defaultReportingLevel & $code);
+        return false;
     }
 
     /**
-     * Set session tracking state and pass in optional guzzle.
+     * Set event notification endpoint.
      *
-     * @param bool $track whether to track sessions
+     * @param string $endpoint
      *
      * @return $this
      */
-    public function setAutoCaptureSessions($track)
+    public function setNotifyEndpoint($endpoint)
     {
-        $this->autoCaptureSessions = $track;
+        $this->notifyEndpoint = $endpoint;
 
         return $this;
     }
 
     /**
+     * Get event notification endpoint.
+     *
+     * @return string
+     */
+    public function getNotifyEndpoint()
+    {
+        return $this->notifyEndpoint;
+    }
+
+    /**
      * Set session delivery endpoint.
      *
-     * @param string $endpoint the session endpoint
+     * @param string $endpoint
      *
      * @return $this
      */
@@ -614,37 +690,21 @@ class Configuration
     {
         $this->sessionEndpoint = $endpoint;
 
-        $this->sessionClient = Client::makeGuzzle($this->sessionEndpoint);
-
         return $this;
     }
 
     /**
-     * Get the session client.
+     * Get session delivery endpoint.
      *
-     * @return \GuzzleHttp\ClientInterface
+     * @return string
      */
-    public function getSessionClient()
+    public function getSessionEndpoint()
     {
-        if (is_null($this->sessionClient)) {
-            $this->sessionClient = Client::makeGuzzle($this->sessionEndpoint);
-        }
-
-        return $this->sessionClient;
+        return $this->sessionEndpoint;
     }
 
     /**
-     * Whether should be auto-capturing sessions.
-     *
-     * @return bool
-     */
-    public function shouldCaptureSessions()
-    {
-        return $this->autoCaptureSessions;
-    }
-
-    /**
-     * Sets the build endpoint.
+     * Set the build endpoint.
      *
      * @param string $endpoint the build endpoint
      *
@@ -658,16 +718,52 @@ class Configuration
     }
 
     /**
-     * Returns the build endpoint.
+     * Get the build endpoint.
      *
      * @return string
      */
     public function getBuildEndpoint()
     {
-        if (isset($this->buildEndpoint)) {
-            return $this->buildEndpoint;
+        return $this->buildEndpoint;
+    }
+
+    /**
+     * Set session tracking state.
+     *
+     * @param bool $track whether to track sessions
+     *
+     * @return $this
+     */
+    public function setAutoCaptureSessions($track)
+    {
+        $this->autoCaptureSessions = $track;
+
+        return $this;
+    }
+
+    /**
+     * Whether should be auto-capturing sessions.
+     *
+     * @return bool
+     */
+    public function shouldCaptureSessions()
+    {
+        return $this->autoCaptureSessions;
+    }
+
+    /**
+     * Get the session client.
+     *
+     * @return \GuzzleHttp\ClientInterface
+     *
+     * @deprecated This will be removed in the next major version.
+     */
+    public function getSessionClient()
+    {
+        if (is_null($this->sessionClient)) {
+            $this->sessionClient = Client::makeGuzzle($this->sessionEndpoint);
         }
 
-        return self::BUILD_ENDPOINT;
+        return $this->sessionClient;
     }
 }

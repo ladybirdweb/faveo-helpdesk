@@ -558,7 +558,7 @@ trait ValidatesAttributes
             [1, 1], array_filter(sscanf($parameters['ratio'], '%f/%d'))
         );
 
-        $precision = 1 / max($width, $height);
+        $precision = 1 / (max($width, $height) + 1);
 
         return abs($numerator / $denominator - $width / $height) > $precision;
     }
@@ -925,6 +925,10 @@ trait ValidatesAttributes
             return $this->getSize($attribute, $value) > $parameters[0];
         }
 
+        if (is_numeric($parameters[0])) {
+            return false;
+        }
+
         if ($this->hasRule($attribute, $this->numericRules) && is_numeric($value) && is_numeric($comparedToValue)) {
             return $value > $comparedToValue;
         }
@@ -954,6 +958,10 @@ trait ValidatesAttributes
 
         if (is_null($comparedToValue) && (is_numeric($value) && is_numeric($parameters[0]))) {
             return $this->getSize($attribute, $value) < $parameters[0];
+        }
+
+        if (is_numeric($parameters[0])) {
+            return false;
         }
 
         if ($this->hasRule($attribute, $this->numericRules) && is_numeric($value) && is_numeric($comparedToValue)) {
@@ -987,6 +995,10 @@ trait ValidatesAttributes
             return $this->getSize($attribute, $value) >= $parameters[0];
         }
 
+        if (is_numeric($parameters[0])) {
+            return false;
+        }
+
         if ($this->hasRule($attribute, $this->numericRules) && is_numeric($value) && is_numeric($comparedToValue)) {
             return $value >= $comparedToValue;
         }
@@ -1018,6 +1030,10 @@ trait ValidatesAttributes
             return $this->getSize($attribute, $value) <= $parameters[0];
         }
 
+        if (is_numeric($parameters[0])) {
+            return false;
+        }
+
         if ($this->hasRule($attribute, $this->numericRules) && is_numeric($value) && is_numeric($comparedToValue)) {
             return $value <= $comparedToValue;
         }
@@ -1038,7 +1054,7 @@ trait ValidatesAttributes
      */
     public function validateImage($attribute, $value)
     {
-        return $this->validateMimes($attribute, $value, ['jpeg', 'png', 'gif', 'bmp', 'svg', 'webp']);
+        return $this->validateMimes($attribute, $value, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp']);
     }
 
     /**
@@ -1188,6 +1204,10 @@ trait ValidatesAttributes
 
         if ($this->shouldBlockPhpUpload($value, $parameters)) {
             return false;
+        }
+
+        if (in_array('jpg', $parameters) || in_array('jpeg', $parameters)) {
+            $parameters = array_unique(array_merge($parameters, ['jpg', 'jpeg']));
         }
 
         return $value->getPath() !== '' && in_array($value->guessExtension(), $parameters);
@@ -1489,11 +1509,9 @@ trait ValidatesAttributes
     {
         $this->requireParameterCount(2, $parameters, 'required_unless');
 
-        $data = Arr::get($this->data, $parameters[0]);
+        [$values, $other] = $this->prepareValuesAndOther($parameters);
 
-        $values = array_slice($parameters, 1);
-
-        if (! in_array($data, $values)) {
+        if (! in_array($other, $values)) {
             return $this->validateRequired($attribute, $value);
         }
 

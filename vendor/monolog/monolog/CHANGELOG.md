@@ -1,3 +1,26 @@
+### 2.2.0 (2020-12-14)
+
+  * Added JSON_PARTIAL_OUTPUT_ON_ERROR to default json encoding flags, to avoid dropping entire context data or even records due to an invalid subset of it somewhere
+  * Added setDateFormat to NormalizerFormatter (and Line/Json formatters by extension) to allow changing this after object creation
+  * Added RedisPubSubHandler to log records to a Redis channel using PUBLISH
+  * Added support for Elastica 7, and deprecated the $type argument of ElasticaFormatter which is not in use anymore as of Elastica 7
+  * Added support for millisecond write timeouts in SocketHandler, you can now pass floats to setWritingTimeout, e.g. 0.2 is 200ms
+  * Added support for unix sockets in SyslogUdpHandler (set $port to 0 to make the $host a unix socket)
+  * Added handleBatch support for TelegramBotHandler
+  * Added RFC5424e extended date format including milliseconds to SyslogUdpHandler
+  * Added support for configuring handlers with numeric level values in strings (coming from e.g. env vars)
+  * Fixed Wildfire/FirePHP/ChromePHP handling of unicode characters
+  * Fixed PHP 8 issues in SyslogUdpHandler
+  * Fixed internal type error when mbstring is missing
+
+### 2.1.1 (2020-07-23)
+
+  * Fixed removing of json encoding options
+  * Fixed type hint of $level not accepting strings in SendGridHandler and OverflowHandler
+  * Fixed SwiftMailerHandler not accepting email templates with an empty subject
+  * Fixed array access on null in RavenHandler
+  * Fixed unique_id in WebProcessor not being disableable
+
 ### 2.1.0 (2020-05-22)
 
   * Added `JSON_INVALID_UTF8_SUBSTITUTE` to default json flags, so that invalid UTF8 characters now get converted to [�](https://en.wikipedia.org/wiki/Specials_(Unicode_block)#Replacement_character) instead of being converted from ISO-8859-15 to UTF8 as it was before, which was hardly a comprehensive solution
@@ -77,6 +100,15 @@
   * Added a `$dateFormat` option to the PsrLogMessageProcessor which lets you format DateTime instances nicely
   * Added support for the PHP 7.x `mongodb` extension in the MongoDBHandler
   * Fixed many minor issues in various handlers, and probably added a few regressions too
+
+### 1.26.0 (2020-12-14)
+
+  * Added $dateFormat and $removeUsedContextFields arguments to PsrLogMessageProcessor (backport from 2.x)
+
+### 1.25.5 (2020-07-23)
+
+  * Fixed array access on null in RavenHandler
+  * Fixed unique_id in WebProcessor not being disableable
 
 ### 1.25.4 (2020-05-22)
 

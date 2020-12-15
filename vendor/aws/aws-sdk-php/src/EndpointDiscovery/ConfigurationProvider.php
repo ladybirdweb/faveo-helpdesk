@@ -73,11 +73,14 @@ class ConfigurationProvider extends AbstractConfigurationProvider
      */
     public static function defaultProvider(array $config = [])
     {
-        $configProviders = [
-            self::env(),
-            self::ini(),
-            self::fallback()
-        ];
+        $configProviders = [self::env()];
+        if (
+            !isset($config['use_aws_shared_config_files'])
+            || $config['use_aws_shared_config_files'] != false
+        ) {
+            $configProviders[] = self::ini();
+        }
+        $configProviders[] = self::fallback($config);
 
         $memo = self::memoize(
             call_user_func_array('self::chain', $configProviders)
@@ -118,16 +121,36 @@ class ConfigurationProvider extends AbstractConfigurationProvider
     }
 
     /**
-     * Fallback config options when other sources are not set.
+     * Fallback config options when other sources are not set. Will check the
+     * service model for any endpoint discovery required operations, and enable
+     * endpoint discovery in that case. If no required operations found, will use
+     * the class default values.
      *
+     * @param array $config
      * @return callable
      */
-    public static function fallback()
+    public static function fallback($config = [])
     {
-        return function () {
+        $enabled = self::DEFAULT_ENABLED;
+        if (!empty($config['api_provider'])
+            && !empty($config['service'])
+            && !empty($config['version'])
+        ) {
+            $provider = $config['api_provider'];
+            $apiData = $provider('api', $config['service'], $config['version']);
+            if (!empty($apiData['operations'])) {
+                foreach ($apiData['operations'] as $operation) {
+                    if (!empty($operation['endpointdiscovery']['required'])) {
+                        $enabled = true;
+                    }
+                }
+            }
+        }
+
+        return function () use ($enabled) {
             return Promise\promise_for(
                 new Configuration(
-                    self::DEFAULT_ENABLED,
+                    $enabled,
                     self::DEFAULT_CACHE_LIMIT
                 )
             );

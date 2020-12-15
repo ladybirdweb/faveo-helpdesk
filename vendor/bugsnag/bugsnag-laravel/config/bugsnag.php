@@ -77,7 +77,7 @@ return [
     |
     */
 
-    'filters' => empty(env('BUGSNAG_FILTERS')) ? ['password'] : explode(',', str_replace(' ', '', env('BUGSNAG_FILTERS'))),
+    'filters' => empty(env('BUGSNAG_FILTERS')) ? null : explode(',', str_replace(' ', '', env('BUGSNAG_FILTERS'))),
 
     /*
     |--------------------------------------------------------------------------

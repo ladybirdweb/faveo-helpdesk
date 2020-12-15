@@ -98,6 +98,16 @@ trait FormatsMessages
         // that is not attribute specific. If we find either we'll return it.
         foreach ($keys as $key) {
             foreach (array_keys($source) as $sourceKey) {
+                if (strpos($sourceKey, '*') !== false) {
+                    $pattern = str_replace('\*', '([^.]*)', preg_quote($sourceKey, '#'));
+
+                    if (preg_match('#^'.$pattern.'\z#u', $key) === 1) {
+                        return $source[$sourceKey];
+                    }
+
+                    continue;
+                }
+
                 if (Str::is($sourceKey, $key)) {
                     return $source[$sourceKey];
                 }
@@ -364,7 +374,7 @@ trait FormatsMessages
         $callback = $this->replacers[$rule];
 
         if ($callback instanceof Closure) {
-            return call_user_func_array($callback, func_get_args());
+            return $callback(...func_get_args());
         } elseif (is_string($callback)) {
             return $this->callClassBasedReplacer($callback, $message, $attribute, $rule, $parameters, $validator);
         }
@@ -385,6 +395,6 @@ trait FormatsMessages
     {
         [$class, $method] = Str::parseCallback($callback, 'replace');
 
-        return call_user_func_array([$this->container->make($class), $method], array_slice(func_get_args(), 1));
+        return $this->container->make($class)->{$method}(...array_slice(func_get_args(), 1));
     }
 }

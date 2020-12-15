@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.2.5|^8.0",
         "ext-json": "*",
         "illuminate/console": "^6.0",
         "illuminate/container": "^6.0",
@@ -23,7 +23,7 @@
         "illuminate/filesystem": "^6.0",
         "illuminate/pipeline": "^6.0",
         "illuminate/support": "^6.0",
-        "opis/closure": "^3.1",
+        "opis/closure": "^3.6",
         "symfony/debug": "^4.3.4",
         "symfony/process": "^4.3.4"
     },
@@ -40,7 +40,7 @@
     "suggest": {
         "ext-pcntl": "Required to use all features of the queue worker.",
         "ext-posix": "Required to use all features of the queue worker.",
-        "aws/aws-sdk-php": "Required to use the SQS queue driver and DynamoDb failed job storage (^3.0).",
+        "aws/aws-sdk-php": "Required to use the SQS queue driver and DynamoDb failed job storage (^3.155).",
         "illuminate/redis": "Required to use the Redis queue driver (^6.0).",
         "pda/pheanstalk": "Required to use the Beanstalk queue driver (^4.0)."
     },

@@ -1,10 +1,12 @@
 <?php
 namespace Aws\Crypto;
 
+use Aws\Exception\CryptoException;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use Psr\Http\Message\StreamInterface;
-use \RuntimeException;
+use Aws\Crypto\Polyfill\AesGcm;
+use Aws\Crypto\Polyfill\Key;
 
 /**
  * @internal Represents a stream of data to be gcm decrypted.
@@ -45,12 +47,6 @@ class AesGcmDecryptingStream implements AesStreamInterface
         $tagLength = 128,
         $keySize = 256
     ) {
-        if (version_compare(PHP_VERSION, '7.1', '<')) {
-            throw new RuntimeException(
-                'AES-GCM decryption is only supported in PHP 7.1 or greater'
-            );
-        }
-
         $this->cipherText = $cipherText;
         $this->key = $key;
         $this->initializationVector = $initializationVector;
@@ -77,15 +73,31 @@ class AesGcmDecryptingStream implements AesStreamInterface
 
     public function createStream()
     {
-        return Psr7\stream_for(openssl_decrypt(
-            (string) $this->cipherText,
-            $this->getOpenSslName(),
-            $this->key,
-            OPENSSL_RAW_DATA,
-            $this->initializationVector,
-            $this->tag,
-            $this->aad
-        ));
+        if (version_compare(PHP_VERSION, '7.1', '<')) {
+            return Psr7\stream_for(AesGcm::decrypt(
+                (string) $this->cipherText,
+                $this->initializationVector,
+                new Key($this->key),
+                $this->aad,
+                $this->tag,
+                $this->keySize
+            ));
+        } else {
+            $result = \openssl_decrypt(
+                (string)$this->cipherText,
+                $this->getOpenSslName(),
+                $this->key,
+                OPENSSL_RAW_DATA,
+                $this->initializationVector,
+                $this->tag,
+                $this->aad
+            );
+            if ($result === false) {
+                throw new CryptoException('The requested object could not be'
+                    . ' decrypted due to an invalid authentication tag.');
+            }
+            return Psr7\stream_for($result);
+        }
     }
 
     public function isWritable()

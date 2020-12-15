@@ -2,9 +2,10 @@
 
 namespace Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+
 use function array_map;
 use function get_class;
 use function str_replace;
@@ -98,6 +99,7 @@ abstract class Type
      */
     private const BUILTIN_TYPES_MAP = [
         Types::ARRAY                => ArrayType::class,
+        Types::ASCII_STRING         => AsciiStringType::class,
         Types::BIGINT               => BigIntType::class,
         Types::BINARY               => BinaryType::class,
         Types::BLOB                 => BlobType::class,
@@ -175,14 +177,14 @@ abstract class Type
     }
 
     /**
-     * Gets the SQL declaration snippet for a field of this type.
+     * Gets the SQL declaration snippet for a column of this type.
      *
-     * @param mixed[]          $fieldDeclaration The field declaration.
-     * @param AbstractPlatform $platform         The currently used database platform.
+     * @param mixed[]          $column   The column definition
+     * @param AbstractPlatform $platform The currently used database platform.
      *
      * @return string
      */
-    abstract public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform);
+    abstract public function getSQLDeclaration(array $column, AbstractPlatform $platform);
 
     /**
      * Gets the name of this type.
@@ -196,7 +198,7 @@ abstract class Type
     /**
      * @internal This method is only to be used within DBAL for forward compatibility purposes. Do not use directly.
      */
-    final public static function getTypeRegistry() : TypeRegistry
+    final public static function getTypeRegistry(): TypeRegistry
     {
         if (self::$typeRegistry === null) {
             self::$typeRegistry = self::createTypeRegistry();
@@ -205,15 +207,15 @@ abstract class Type
         return self::$typeRegistry;
     }
 
-    private static function createTypeRegistry() : TypeRegistry
+    private static function createTypeRegistry(): TypeRegistry
     {
-        $registry = new TypeRegistry();
+        $instances = [];
 
         foreach (self::BUILTIN_TYPES_MAP as $name => $class) {
-            $registry->register($name, new $class());
+            $instances[$name] = new $class();
         }
 
-        return $registry;
+        return new TypeRegistry($instances);
     }
 
     /**
@@ -222,9 +224,9 @@ abstract class Type
      *
      * @param string $name The name of the type (as returned by getName()).
      *
-     * @return \Doctrine\DBAL\Types\Type
+     * @return Type
      *
-     * @throws DBALException
+     * @throws Exception
      */
     public static function getType($name)
     {
@@ -234,12 +236,12 @@ abstract class Type
     /**
      * Adds a custom type to the type map.
      *
-     * @param string $name      The name of the type. This should correspond to what getName() returns.
-     * @param string $className The class name of the custom type.
+     * @param string             $name      The name of the type. This should correspond to what getName() returns.
+     * @param class-string<Type> $className The class name of the custom type.
      *
      * @return void
      *
-     * @throws DBALException
+     * @throws Exception
      */
     public static function addType($name, $className)
     {
@@ -261,12 +263,12 @@ abstract class Type
     /**
      * Overrides an already defined type to use a different implementation.
      *
-     * @param string $name
-     * @param string $className
+     * @param string             $name
+     * @param class-string<Type> $className
      *
      * @return void
      *
-     * @throws DBALException
+     * @throws Exception
      */
     public static function overrideType($name, $className)
     {
@@ -277,7 +279,7 @@ abstract class Type
      * Gets the (preferred) binding type for values of this type that
      * can be used when binding parameters to prepared statements.
      *
-     * This method should return one of the {@link \Doctrine\DBAL\ParameterType} constants.
+     * This method should return one of the {@link ParameterType} constants.
      *
      * @return int
      */
@@ -295,7 +297,7 @@ abstract class Type
     public static function getTypesMap()
     {
         return array_map(
-            static function (Type $type) : string {
+            static function (Type $type): string {
                 return get_class($type);
             },
             self::getTypeRegistry()->getMap()

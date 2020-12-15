@@ -315,11 +315,13 @@ class Repository
     /**
      * Returns the reference list associated to the repository.
      *
+     * @param bool $reload Reload references from the filesystem
+     *
      * @return ReferenceBag
      */
-    public function getReferences()
+    public function getReferences($reload = false)
     {
-        if (null === $this->referenceBag) {
+        if (null === $this->referenceBag || $reload) {
             $this->referenceBag = new ReferenceBag($this);
         }
 

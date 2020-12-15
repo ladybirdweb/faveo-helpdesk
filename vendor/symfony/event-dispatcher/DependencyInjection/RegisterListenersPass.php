@@ -56,12 +56,12 @@ class RegisterListenersPass implements CompilerPassInterface
             return;
         }
 
+        $aliases = [];
+
         if ($container->hasParameter($this->eventAliasesParameter)) {
             $aliases = $container->getParameter($this->eventAliasesParameter);
-            $container->getParameterBag()->remove($this->eventAliasesParameter);
-        } else {
-            $aliases = [];
         }
+
         $definition = $container->findDefinition($this->dispatcherService);
 
         foreach ($container->findTaggedServiceIds($this->listenerTag, true) as $id => $events) {
@@ -138,7 +138,7 @@ class RegisterListenersPass implements CompilerPassInterface
             || !($r = $container->getReflectionClass($class, false))
             || !$r->hasMethod($method)
             || 1 > ($m = $r->getMethod($method))->getNumberOfParameters()
-            || !($type = $m->getParameters()[0]->getType())
+            || !($type = $m->getParameters()[0]->getType()) instanceof \ReflectionNamedType
             || $type->isBuiltin()
             || Event::class === ($name = $type->getName())
             || LegacyEvent::class === $name

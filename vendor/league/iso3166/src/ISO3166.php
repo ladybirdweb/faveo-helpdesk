@@ -93,11 +93,7 @@ final class ISO3166 implements \Countable, \IteratorAggregate, ISO3166DataProvid
     public function iterator($key = self::KEY_ALPHA2)
     {
         if (!in_array($key, $this->keys, true)) {
-            throw new DomainException(sprintf(
-                'Invalid value for $indexBy, got "%s", expected one of: %s',
-                $key,
-                implode(', ', $this->keys)
-            ));
+            throw new DomainException(sprintf('Invalid value for $indexBy, got "%s", expected one of: %s', $key, implode(', ', $this->keys)));
         }
 
         foreach ($this->countries as $country) {
@@ -151,9 +147,7 @@ final class ISO3166 implements \Countable, \IteratorAggregate, ISO3166DataProvid
             }
         }
 
-        throw new OutOfBoundsException(
-            sprintf('No "%s" key found matching: %s', $key, $value)
-        );
+        throw new OutOfBoundsException(sprintf('No "%s" key found matching: %s', $key, $value));
     }
 
     /**

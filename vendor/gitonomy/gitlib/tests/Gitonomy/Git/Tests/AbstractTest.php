@@ -117,7 +117,7 @@ abstract class AbstractTest extends TestCase
      *
      * @param string $dir directory to delete
      */
-    public static function deleteDir($dir)
+    protected static function deleteDir($dir)
     {
         $iterator = new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS);
         $iterator = new \RecursiveIteratorIterator($iterator, \RecursiveIteratorIterator::CHILD_FIRST);

@@ -24,9 +24,7 @@ final class Guards
     public static function guardAgainstInvalidName($name)
     {
         if (!is_string($name)) {
-            throw new InvalidArgumentException(
-                sprintf('Expected $name to be of type string, got: %s', gettype($name))
-            );
+            throw new InvalidArgumentException(sprintf('Expected $name to be of type string, got: %s', gettype($name)));
         }
     }
 
@@ -41,15 +39,11 @@ final class Guards
     public static function guardAgainstInvalidAlpha2($alpha2)
     {
         if (!is_string($alpha2)) {
-            throw new InvalidArgumentException(
-                sprintf('Expected $alpha2 to be of type string, got: %s', gettype($alpha2))
-            );
+            throw new InvalidArgumentException(sprintf('Expected $alpha2 to be of type string, got: %s', gettype($alpha2)));
         }
 
         if (!preg_match('/^[a-zA-Z]{2}$/', $alpha2)) {
-            throw new DomainException(
-                sprintf('Not a valid alpha2 key: %s', $alpha2)
-            );
+            throw new DomainException(sprintf('Not a valid alpha2 key: %s', $alpha2));
         }
     }
 
@@ -64,15 +58,11 @@ final class Guards
     public static function guardAgainstInvalidAlpha3($alpha3)
     {
         if (!is_string($alpha3)) {
-            throw new InvalidArgumentException(
-                sprintf('Expected $alpha3 to be of type string, got: %s', gettype($alpha3))
-            );
+            throw new InvalidArgumentException(sprintf('Expected $alpha3 to be of type string, got: %s', gettype($alpha3)));
         }
 
         if (!preg_match('/^[a-zA-Z]{3}$/', $alpha3)) {
-            throw new DomainException(
-                sprintf('Not a valid alpha3 key: %s', $alpha3)
-            );
+            throw new DomainException(sprintf('Not a valid alpha3 key: %s', $alpha3));
         }
     }
 
@@ -87,15 +77,11 @@ final class Guards
     public static function guardAgainstInvalidNumeric($numeric)
     {
         if (!is_string($numeric)) {
-            throw new InvalidArgumentException(
-                sprintf('Expected $numeric to be of type string, got: %s', gettype($numeric))
-            );
+            throw new InvalidArgumentException(sprintf('Expected $numeric to be of type string, got: %s', gettype($numeric)));
         }
 
         if (!preg_match('/^[0-9]{3}$/', $numeric)) {
-            throw new DomainException(
-                sprintf('Not a valid numeric key: %s', $numeric)
-            );
+            throw new DomainException(sprintf('Not a valid numeric key: %s', $numeric));
         }
     }
 }

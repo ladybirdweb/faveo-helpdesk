@@ -52,6 +52,9 @@ return [
     'millisecond' => ':count milisegundo|:count milisegundos',
     'a_millisecond' => 'un milisegundo|:count milisegundos',
     'ms' => ':countms',
+    'microsecond' => ':count microsegundo|:count microsegundos',
+    'a_microsecond' => 'un microsegundo|:count microsegundos',
+    'µs' => ':countµs',
     'ago' => 'hace :time',
     'from_now' => 'en :time',
     'after' => ':time después',
@@ -63,7 +66,7 @@ return [
     'diff_yesterday_regexp' => 'ayer(?:\\s+a)?(?:\\s+las)?',
     'diff_tomorrow' => 'mañana',
     'diff_tomorrow_regexp' => 'mañana(?:\\s+a)?(?:\\s+las)?',
-    'diff_before_yesterday' => 'antier',
+    'diff_before_yesterday' => 'anteayer',
     'diff_after_tomorrow' => 'pasado mañana',
     'formats' => [
         'LT' => 'H:mm',

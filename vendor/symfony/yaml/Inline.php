@@ -90,7 +90,7 @@ class Inline
             }
 
             // some comments are allowed at the end
-            if (preg_replace('/\s+#.*$/A', '', substr($value, $i))) {
+            if (preg_replace('/\s*#.*$/A', '', substr($value, $i))) {
                 throw new ParseException(sprintf('Unexpected characters near "%s".', substr($value, $i)), self::$parsedLineNumber + 1, $value, self::$parsedFilename);
             }
 
@@ -161,10 +161,10 @@ class Inline
                 return 'false';
             case ctype_digit($value):
                 return \is_string($value) ? "'$value'" : (int) $value;
-            case is_numeric($value):
-                $locale = setlocale(LC_NUMERIC, 0);
+            case is_numeric($value) && false === strpos($value, "\f") && false === strpos($value, "\n") && false === strpos($value, "\r") && false === strpos($value, "\t") && false === strpos($value, "\v"):
+                $locale = setlocale(\LC_NUMERIC, 0);
                 if (false !== $locale) {
-                    setlocale(LC_NUMERIC, 'C');
+                    setlocale(\LC_NUMERIC, 'C');
                 }
                 if (\is_float($value)) {
                     $repr = (string) $value;
@@ -178,7 +178,7 @@ class Inline
                     $repr = \is_string($value) ? "'$value'" : (string) $value;
                 }
                 if (false !== $locale) {
-                    setlocale(LC_NUMERIC, $locale);
+                    setlocale(\LC_NUMERIC, $locale);
                 }
 
                 return $repr;
@@ -269,7 +269,7 @@ class Inline
      */
     public static function parseScalar(string $scalar, int $flags = 0, array $delimiters = null, int &$i = 0, bool $evaluate = true, array $references = [])
     {
-        if (\in_array($scalar[$i], ['"', "'"])) {
+        if (\in_array($scalar[$i], ['"', "'"], true)) {
             // quoted scalar
             $output = self::parseQuotedScalar($scalar, $i);
 
@@ -289,7 +289,7 @@ class Inline
                 $i += \strlen($output);
 
                 // remove comments
-                if (Parser::preg_match('/[ \t]+#/', $output, $match, PREG_OFFSET_CAPTURE)) {
+                if (Parser::preg_match('/[ \t]+#/', $output, $match, \PREG_OFFSET_CAPTURE)) {
                     $output = substr($output, 0, $match[0][1]);
                 }
             } elseif (Parser::preg_match('/^(.*?)('.implode('|', $delimiters).')/', substr($scalar, $i), $match)) {
@@ -324,7 +324,7 @@ class Inline
             throw new ParseException(sprintf('Malformed inline YAML string: "%s".', substr($scalar, $i)), self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
         }
 
-        $output = substr($match[0], 1, \strlen($match[0]) - 2);
+        $output = substr($match[0], 1, -1);
 
         $unescaper = new Unescaper();
         if ('"' == $scalar[$i]) {
@@ -371,7 +371,7 @@ class Inline
                     $value = self::parseMapping($sequence, $flags, $i, $references);
                     break;
                 default:
-                    $isQuoted = \in_array($sequence[$i], ['"', "'"]);
+                    $isQuoted = \in_array($sequence[$i], ['"', "'"], true);
                     $value = self::parseScalar($sequence, $flags, [',', ']'], $i, null === $tag, $references);
 
                     // the value can be an array if a reference has been resolved to an array var
@@ -551,9 +551,8 @@ class Inline
     private static function evaluateScalar(string $scalar, int $flags, array $references = [])
     {
         $scalar = trim($scalar);
-        $scalarLower = strtolower($scalar);
 
-        if (0 === strpos($scalar, '*')) {
+        if ('*' === ($scalar[0] ?? '')) {
             if (false !== $pos = strpos($scalar, '#')) {
                 $value = substr($scalar, 1, $pos - 2);
             } else {
@@ -572,6 +571,8 @@ class Inline
             return $references[$value];
         }
 
+        $scalarLower = strtolower($scalar);
+
         switch (true) {
             case 'null' === $scalarLower:
             case '' === $scalar:
@@ -583,13 +584,15 @@ class Inline
                 return false;
             case '!' === $scalar[0]:
                 switch (true) {
-                    case 0 === strpos($scalar, '!!str '):
+                    case 0 === strncmp($scalar, '!!str ', 6):
                         return (string) substr($scalar, 6);
-                    case 0 === strpos($scalar, '! '):
+                    case 0 === strncmp($scalar, '! ', 2):
                         return substr($scalar, 2);
-                    case 0 === strpos($scalar, '!php/object'):
+                    case 0 === strncmp($scalar, '!php/object', 11):
                         if (self::$objectSupport) {
                             if (!isset($scalar[12])) {
+                                trigger_deprecation('symfony/yaml', '5.1', 'Using the !php/object tag without a value is deprecated.');
+
                                 return false;
                             }
 
@@ -601,9 +604,11 @@ class Inline
                         }
 
                         return null;
-                    case 0 === strpos($scalar, '!php/const'):
+                    case 0 === strncmp($scalar, '!php/const', 10):
                         if (self::$constantSupport) {
                             if (!isset($scalar[11])) {
+                                trigger_deprecation('symfony/yaml', '5.1', 'Using the !php/const tag without a value is deprecated.');
+
                                 return '';
                             }
 
@@ -619,32 +624,51 @@ class Inline
                         }
 
                         return null;
-                    case 0 === strpos($scalar, '!!float '):
+                    case 0 === strncmp($scalar, '!!float ', 8):
                         return (float) substr($scalar, 8);
-                    case 0 === strpos($scalar, '!!binary '):
+                    case 0 === strncmp($scalar, '!!binary ', 9):
                         return self::evaluateBinaryScalar(substr($scalar, 9));
                     default:
                         throw new ParseException(sprintf('The string "%s" could not be parsed as it uses an unsupported built-in tag.', $scalar), self::$parsedLineNumber, $scalar, self::$parsedFilename);
                 }
+                // no break
+            case preg_match('/^(?:\+|-)?0o(?P<value>[0-7_]++)$/', $scalar, $matches):
+                $value = str_replace('_', '', $matches['value']);
+
+                if ('-' === $scalar[0]) {
+                    return -octdec($value);
+                } else {
+                    return octdec($value);
+                }
 
             // Optimize for returning strings.
             // no break
-            case '+' === $scalar[0] || '-' === $scalar[0] || '.' === $scalar[0] || is_numeric($scalar[0]):
+            case \in_array($scalar[0], ['+', '-', '.'], true) || is_numeric($scalar[0]):
                 if (Parser::preg_match('{^[+-]?[0-9][0-9_]*$}', $scalar)) {
                     $scalar = str_replace('_', '', (string) $scalar);
                 }
 
                 switch (true) {
                     case ctype_digit($scalar):
-                        $raw = $scalar;
+                        if (preg_match('/^0[0-7]+$/', $scalar)) {
+                            trigger_deprecation('symfony/yaml', '5.1', 'Support for parsing numbers prefixed with 0 as octal numbers. They will be parsed as strings as of 6.0.');
+
+                            return octdec($scalar);
+                        }
+
                         $cast = (int) $scalar;
 
-                        return '0' == $scalar[0] ? octdec($scalar) : (((string) $raw == (string) $cast) ? $cast : $raw);
+                        return ($scalar === (string) $cast) ? $cast : $scalar;
                     case '-' === $scalar[0] && ctype_digit(substr($scalar, 1)):
-                        $raw = $scalar;
+                        if (preg_match('/^-0[0-7]+$/', $scalar)) {
+                            trigger_deprecation('symfony/yaml', '5.1', 'Support for parsing numbers prefixed with 0 as octal numbers. They will be parsed as strings as of 6.0.');
+
+                            return -octdec(substr($scalar, 1));
+                        }
+
                         $cast = (int) $scalar;
 
-                        return '0' == $scalar[1] ? -octdec(substr($scalar, 1)) : (($raw === (string) $cast) ? $cast : $raw);
+                        return ($scalar === (string) $cast) ? $cast : $scalar;
                     case is_numeric($scalar):
                     case Parser::preg_match(self::getHexRegex(), $scalar):
                         $scalar = str_replace('_', '', $scalar);

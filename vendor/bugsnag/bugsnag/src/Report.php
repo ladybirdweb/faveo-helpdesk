@@ -3,6 +3,7 @@
 namespace Bugsnag;
 
 use Bugsnag\Breadcrumbs\Breadcrumb;
+use Bugsnag\DateTime\Date;
 use Exception;
 use InvalidArgumentException;
 use Throwable;
@@ -10,16 +11,16 @@ use Throwable;
 class Report
 {
     /**
-     * The payload version.
+     * The payload version for the error notification API.
      *
-     * @var string
+     * @deprecated Use {HttpClient::NOTIFY_PAYLOAD_VERSION} instead.
      */
-    const PAYLOAD_VERSION = HttpClient::PAYLOAD_VERSION;
+    const PAYLOAD_VERSION = HttpClient::NOTIFY_PAYLOAD_VERSION;
 
     /**
      * The config object.
      *
-     * @var \Bugsnag\Config
+     * @var \Bugsnag\Configuration
      */
     protected $config;
 
@@ -204,7 +205,7 @@ class Report
     protected function __construct(Configuration $config)
     {
         $this->config = $config;
-        $this->time = gmdate('Y-m-d\TH:i:s\Z');
+        $this->time = Date::now();
     }
 
     /**
@@ -386,7 +387,7 @@ class Report
      */
     public function setName($name)
     {
-        if (is_scalar($name) || method_exists($name, '__toString')) {
+        if (is_scalar($name) || (is_object($name) && method_exists($name, '__toString'))) {
             $this->name = (string) $name;
         } else {
             throw new InvalidArgumentException('The name must be a string.');
@@ -422,7 +423,10 @@ class Report
     {
         if ($message === null) {
             $this->message = null;
-        } elseif (is_scalar($message) || method_exists($message, '__toString')) {
+        } elseif (
+            is_scalar($message)
+            || (is_object($message) && method_exists($message, '__toString'))
+        ) {
             $this->message = (string) $message;
         } else {
             throw new InvalidArgumentException('The message must be a string.');
@@ -652,7 +656,7 @@ class Report
             'device' => array_merge(['time' => $this->time], $this->config->getDeviceData()),
             'user' => $this->getUser(),
             'context' => $this->getContext(),
-            'payloadVersion' => HttpClient::PAYLOAD_VERSION,
+            'payloadVersion' => HttpClient::NOTIFY_PAYLOAD_VERSION,
             'severity' => $this->getSeverity(),
             'exceptions' => $this->exceptionArray(),
             'breadcrumbs' => $this->breadcrumbs,
@@ -750,7 +754,7 @@ class Report
     {
         if ($isMetaData) {
             foreach ($this->config->getFilters() as $filter) {
-                if (strpos($key, $filter) !== false) {
+                if (stripos($key, $filter) !== false) {
                     return true;
                 }
             }
