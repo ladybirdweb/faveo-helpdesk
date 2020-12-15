@@ -81,7 +81,7 @@ class UserController extends Controller
         try {
             /* get all values in Sys_user */
 
-            $table = \ Datatable::table()
+            $table = \Datatable::table()
             ->addColumn(
                 Lang::get('lang.name'),
                 Lang::get('lang.email'),

@@ -625,8 +625,7 @@ class TicketController extends Controller
     public function create_user($emailadd, $username, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $auto_response, $status)
     {
         // define global variables
-        $email;
-        $username;
+
         $unique = $emailadd;
         if (!$emailadd) {
             $unique = $mobile_number;
@@ -1086,6 +1085,7 @@ class TicketController extends Controller
         $thread->body = $body;
         if ($thread->save()) {
             \Event::dispatch('ticket.details', ['ticket' => $thread]); //get the ticket details
+
             return true;
         }
     }
@@ -2036,6 +2036,7 @@ class TicketController extends Controller
                 $ticket->lock_by = Auth::user()->id;
                 $ticket->lock_at = date('Y-m-d H:i:s');
                 $ticket->save(); //ticket is available and lock ticket for new user
+
                 return 2;
             }
         }
