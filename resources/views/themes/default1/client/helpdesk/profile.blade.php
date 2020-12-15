@@ -1,11 +1,7 @@
 @extends('themes.default1.client.layout.client')
 
-@section('HeadInclude')
-<link href="{{asset("lb-faveo/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" />
-@stop
-
 @section('profile')
-class="active"
+class="nav-item active"
 @stop
 
 @section('content')

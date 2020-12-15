@@ -15,42 +15,88 @@
         <link href="{{asset("lb-faveo/media/images/favicon.ico")}}"  rel="shortcut icon" >
 
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-        <!-- Bootstrap 3.3.2 -->
-        <link href="{{asset("lb-faveo/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
-        <!-- Admin LTE CSS -->
-        <link href="{{asset("lb-faveo/css/AdminLTEsemi.css")}}" rel="stylesheet" type="text/css" />
+
+        <link href="{{asset("lb-faveo/css/widgetbox.min.css")}}" rel="stylesheet" type="text/css" />
+        <!-- Bootstrap 4.3.1 -->
+        <link href="{{asset("lb-faveo/css/bootstrap4.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Font Awesome Icons -->
-        <link href="{{asset("lb-faveo/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css" />
-        <!-- Ionicons -->
-        <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet" type="text/css" />
-        <!-- fullCalendar 2.2.5-->
-        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/css/font-awesome-5.min.css")}}" rel="stylesheet" type="text/css" />
+
+        <link href="{{asset("lb-faveo/css/intlTelInput.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
+        <link href="{{asset("lb-faveo/css/client.min.css")}}" rel="stylesheet" type="text/css" />
+
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
 
-        <link href="{{asset("lb-faveo/css/app.css")}}" rel="stylesheet" type="text/css" />
+        <script src="{{asset("lb-faveo/js/jquery-3.4.1.min.js")}}" type="text/javascript"></script>
 
-        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
-
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-        <![endif]-->
-
-        <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
         @yield('HeadInclude')
     </head>
     <body>
+
+        <style>
+           #dropdown_content{
+                padding-top: 1rem;
+                margin: 0 !important;
+            }
+            #user_avatar{
+                border-radius: 35px;
+                width: 70px;
+            height: 70px;
+            }
+            #profile_dropdown {
+             border: 1px solid transparent !important; 
+          }
+          #profile_dropdown:hover{
+            background: transparent !important;
+          }
+          .profile_btn{
+            padding: 3px !important;
+          }
+          .text-white:hover{
+            color: white !important;
+          }
+            .ellipsize_first_name {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .lang_dropdown-menu {
+        right : -1px !important;
+        left : auto !important;
+    }
+    #lang_ul{
+        width: max-content;
+        font-size: unset !important;
+    }
+
+    .lang{
+        cursor: pointer;
+    }
+
+    .breadcrumb{
+        background-color: transparent !important;
+        padding: 0 !important;
+        margin-top: 15px !important;
+        margin-left: 17% !important;
+    }
+        </style>
         <div id="page" class="hfeed site">
+        
             <header id="masthead" class="site-header" role="banner">
-                <div class="container" style="">
-                    <div id="logo" class="site-logo text-center" style="font-size: 30px;">
-                        <?php
-                        $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
-                        $system = App\Model\helpdesk\Settings\System::where('id', '=', '1')->first();
-                        ?>
-                        @if($system->url)
-                        <a href="{!! $system->url !!}" rel="home">
+        
+                <div class="container">
+
+                    <nav id="navbar" class="site-navigation navbar navbar-expand-lg navbar-light">
+
+                        <div id="logo" class="navbar-brand brand site-logo text-center" style="font-size: 30px;">
+
+                            <?php
+                            $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
+                            $system = App\Model\helpdesk\Settings\System::where('id', '=', '1')->first();
+                            ?>
+                            @if($system->url)
+                            <a href="{!! $system->url !!}" rel="home">
                             @else
                             <a href="{{url('/')}}" rel="home">
                                 @endif
@@ -64,86 +110,137 @@
                                 @endif
                                 @endif
                             </a>
-                    </div><!-- #logo -->
-                    <div id="navbar" class="navbar-wrapper text-center">
-                        <nav class="navbar navbar-default site-navigation" role="navigation">
-                            <ul class="nav navbar-nav navbar-menu">
-                                <li @yield('home')><a href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
+                        </div>
+
+                        <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" 
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            
+                            <span class="navbar-toggler-icon"></span>
+                        </button> <!-- collapse -->
+
+                        <div class="collapse navbar-collapse links" id="navbarSupportedContent">
+                            
+                            <ul class="navbar-nav navbar-menu site-navigate ml-auto">
+                                
+                                <li @yield('home') class="nav-item"><a href="{{url('/')}}" class="nav-link">{!! Lang::get('lang.home') !!}</a></li>
+
                                 @if($system->first()->status == 1)
-                                <li @yield('submit')><a href="{{URL::route('form')}}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
+                                <li @yield('submit') class="nav-item">
+                                    <a href="{{URL::route('form')}}" class="nav-link">{!! Lang::get('lang.submit_a_ticket') !!}</a>
+                                </li>
                                 @endif
-                                <li @yield('kb')><a href="{!! url('knowledgebase') !!}">{!! Lang::get('lang.knowledge_base') !!}</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{route('category-list')}}">{!! Lang::get('lang.categories') !!}</a></li>
-                                        <li><a href="{{route('article-list')}}">{!! Lang::get('lang.articles') !!}</a></li>
+
+                                <li @yield('kb') class="nav-item dropdown">
+                                    <a href="{!! url('knowledgebase') !!}" class="dropdown-toggle nav-link"  id="navbarDropdown" role="button" data-toggle="" 
+                                        aria-haspopup="true" aria-expanded="false">{!! Lang::get('lang.knowledge_base') !!}
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                                        <li><a href="{{route('category-list')}}" class="dropdown-item">{!! Lang::get('lang.categories') !!}</a></li>
+                                        <li><a href="{{route('article-list')}}" class="dropdown-item">{!! Lang::get('lang.articles') !!}</a></li>
                                     </ul>
                                 </li>
-                                <?php $pages = App\Model\kb\Page::where('status', '1')->where('visibility', '1')->get();
-                                ?>
-                                @foreach($pages as $page)
-                                <li><a href="{{route('pages',$page->slug)}}">{{$page->name}}</a></li>
-                                @endforeach
-                                
-                                @if(Auth::user())
-                                <li @yield('myticket')><a href="{{url('mytickets')}}">{!! Lang::get('lang.my_tickets') !!}</a></li>
 
-                                {{-- <li @yield('contact')><a href="{{route('contact')}}">Contact us</a></li> --}}
-                                <li @yield('profile')><a href="#" >{!! Lang::get('lang.my_profile') !!}</a>
-                                    <ul class="dropdown-menu">
+                                 <?php $pages = App\Model\kb\Page::where('status', '1')->where('visibility', '1')->get();
+                                ?>
+                                 @if(count($pages))
+                                <li @yield('pages') class="nav-item dropdown">
+                                    <a class="dropdown-toggle nav-link"  id="navbarDropdown" role="button" data-toggle="" 
+                                        aria-haspopup="true" aria-expanded="false">{!! Lang::get('lang.pages') !!}
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                                        @foreach($pages as $page)
+                                        <li><a href="{{route('pages',$page->slug)}}" class="dropdown-item">{{$page->name}}</a></li>
+                                         @endforeach
+                                    </ul>
+                                </li>
+                                @endif
+
+                                @if(Auth::user())
+                                <li @yield('myticket') class="nav-item">
+                                    <a href="{{url('mytickets')}}" class="nav-link">{!! Lang::get('lang.my_tickets') !!}</a>
+                                </li>
+
+                                <li @yield('profile') class="nav-item dropdown">
+                                    <a href="#" class="dropdown-toggle nav-link"  id="navbarDropdown" role="button" data-toggle="" 
+                                        aria-haspopup="true" aria-expanded="false">{!! Lang::get('lang.my_profile') !!}
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
                                         <li>
-                                            <div class="banner-wrapper user-menu text-center clearfix">
-                                                <img src="{{Auth::user()->profile_pic}}"class="img-circle" alt="User Image" height="80" width="80"/>
-                                                <h3 class="banner-title text-info h4">{{Auth::user()->first_name." ".Auth::user()->last_name}}</h3>
-                                                <div class="banner-content">
-                                                    {{-- <a href="{{url('kb/client-profile')}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.edit_profile') !!}</a> --}} <a href="{{url('auth/logout')}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.log_out') !!}</a>
+
+                                            <div class="banner-wrapper user-data text-center clearfix" id="profile_dropdown">
+
+                                                <img id="user_avatar" src="{{Auth::user()->profile_pic}}"class="avatar" alt="User Image" height="70" width="70"/>
+
+                                                <div><strong>Hello</strong></div>
+                                                
+                                                <p class="banner-title ellipsize_first_name h4">{{Auth::user()->first_name." ".Auth::user()->last_name}}</p>
+                                                
+                                                <div class="banner-content" id="dropdown_content">
+
+                                                    <a href="{{url('auth/logout')}}" class="btn btn-custom btn-sm text-white profile_btn">{!! Lang::get('lang.log_out') !!}</a>
+
+                                                    @if(Auth::user())
+                                                    @if(Auth::user()->role != 'user')
+                                                        <a href="{{url('dashboard')}}" class="btn btn-custom btn-sm text-white profile_btn">{!! Lang::get('lang.dashboard') !!}</a>
+                                                    @endif
+                                                    @endif
+                                                    @if(Auth::user())
+                                                    @if(Auth::user()->role == 'user')
+                                                    <a href="{{url('client-profile')}}" class="btn btn-custom btn-sm text-white profile_btn">{!! Lang::get('lang.profile') !!}</a>
+                                                    @endif
+                                                    @endif
                                                 </div>
-                                                @if(Auth::user())
-                                                @if(Auth::user()->role != 'user')
-                                                <div class="banner-content">
-                                                    <a href="{{url('dashboard')}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.dashboard') !!}</a>
-                                                </div>
-                                                @endif
-                                                @endif
-                                                @if(Auth::user())
-                                                @if(Auth::user()->role == 'user')
-                                                <div class="banner-content">
-                                                    <a href="{{url('client-profile')}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.profile') !!}</a>
-                                                </div>
-                                                @endif
-                                                @endif
                                             </div>
                                         </li>
                                     </ul>
                                 </li>
-                            </ul><!-- .navbar-user -->
-                            @else
-                            </ul>
-                            @if(isset($errors))
-                            <ul class="nav navbar-nav navbar-login">
-                                <li 
-                                <?php
-                                if (is_object($errors)) {
-                                    if ($errors->first('email') || $errors->first('password')) {
-                                        ?> class="sfHover" 
-                                            <?php
+                                @else
+                                @if(isset($errors))
+                                <li class="nav-item"
+                                    <?php
+                                    if (is_object($errors)) {
+                                        if ($errors->first('email') || $errors->first('password')) {
+                                            ?> class="sfHover" 
+                                                <?php
+                                            }
                                         }
-                                    }
-                                    ?> 
-                                    ><a href="#"  data-toggle="collapse"  
-                                        <?php
-                                        if (is_object($errors)) {
-                                            if ($errors->first('email') || $errors->first('password')) {
-                                                
-                                            } else {
-                                                ?> class="collapsed" 
+                                        ?> 
+                                        ><a href="#"  data-toggle="collapse"  class="nav-link"
                                             <?php
+                                            if (is_object($errors)) {
+                                                if ($errors->first('email') || $errors->first('password')) {
+                                                    
+                                                } else {
+                                                    ?> class="collapsed" 
+                                                <?php
+                                            }
                                         }
-                                    }
-                                    ?> 
-                                    data-target="#login-form">{!! Lang::get('lang.login') !!} <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i></a></li>
-                            </ul><!-- .navbar-login -->
-                            @endif
-                            <div id="login-form" @if(isset($errors))<?php if ($errors->first('email') || $errors->first('password')) { ?> class="login-form collapse fade clearfix in" <?php } else { ?> class="login-form collapse fade clearfix" <?php } ?>@endif >
+                                        ?> 
+                                        data-target="#login-form">{!! Lang::get('lang.login') !!} <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i></a>
+                                    </li>
+                                    @endif
+                                    @endif
+                                    <li class="nav-item dropdown">
+                                    <?php $src = Lang::getLocale().'.png'; ?>
+                                        <a href="#" class="dropdown-toggle nav-link" id="navbarDropdown" role="button" data-toggle="" aria-haspopup="true" 
+                                            aria-expanded="false">
+                                            <img src="{{asset("lb-faveo/flags/$src")}}"></img>
+                                        </a>
+                                        <ul class="dropdown-menu lang_dropdown-menu" role="menu" aria-labelledby="dropdownMenu" id="lang_ul">
+                                            @foreach($langs as $key => $value)
+                                                <?php $src = $key.".png"; ?>
+                                                <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)" class="lang dropdown-item">
+                                                    <img src="{{asset("lb-faveo/flags/$src")}}"></img>&nbsp;{{$value[0]}}&nbsp;
+                                            @if(Lang::getLocale() == "ar")
+                                                &rlm;
+                                            @endif
+                                                ({{$value[1]}})</a></li>
+                                            @endforeach       
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                            <div id="login-form" class="login-form collapse fade clearfix" @if(isset($errors))<?php if ($errors->first('email') || $errors->first('password')) { ?> class="login-form collapse fade clearfix in" <?php } else { ?> class="login-form collapse fade clearfix" <?php } ?>@endif >
                                  <div class="row">
                                     <div class="col-md-12">
                                         {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}
@@ -162,11 +259,9 @@
                                         @endif
                                         <div class="form-group has-feedback @if(isset($errors)) {!! $errors->has('email') ? 'has-error' : '' !!} @endif">
                                             {!! Form::text('email',null,['placeholder'=>Lang::get('lang.e-mail'),'class' => 'form-control']) !!}
-                                            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                                         </div>
                                         <div class="form-group has-feedback @if(isset($errors)) {!! $errors->has('password') ? 'has-error' : '' !!} @endif">
                                             {!! Form::password('password',['placeholder'=>Lang::get('lang.password'),'class' => 'form-control']) !!}
-                                            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                                             <?php \Event::fire('auth.login.form'); ?>
                                             <a href="{{url('password/email')}}" style="font-size: .8em" class="pull-left">{!! Lang::get('lang.forgot_password') !!}</a>
                                         </div>
@@ -174,55 +269,35 @@
                                          <input type="checkbox" name="remember"> {!! Lang::get("lang.remember") !!}
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <button type="submit" class="btn btn-custom  .btn-sm ">{!! Lang::get('lang.login') !!}</button>
+                                    <div class="col-md-12 text-center">
+                                            <button type="submit" class="btn btn-custom">{!! Lang::get('lang.login') !!}</button>
                                         {!! Form::close() !!}
-                                        </div>
                                     </div>
-                                    {{Lang::get('lang.or')}}
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <ul class="list-unstyled">
-                                            <a href="{{url('auth/register')}}" style="font-size: 1.2em">{!! Lang::get('lang.create_account') !!}</a>
-                                        </ul>
-                                    </div>
+                                   
+                                <div class="col-md-12 text-center">
+                                     {{Lang::get('lang.or')}}
+                                    <ul class="list-unstyled">
+                                        <a href="{{url('auth/register')}}" style="font-size: 1.2em">{!! Lang::get('lang.create_account') !!}</a>
+                                    </ul>
                                 </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12">
+                                    <div>
                                         @include('themes.default1.client.layout.social-login')
                                     </div>
-                                </div>
                             </div><!-- #login-form -->
-                            @endif
-                            <ul class="nav navbar-nav navbar-menu">
-
-                            <li class="dropdown">
-                                    <?php $src = Lang::getLocale().'.png'; ?>
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><img src="{{asset("lb-faveo/flags/$src")}}"></img> &nbsp;<span class="caret"></span></a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            @foreach($langs as $key => $value)
-                                                <?php $src = $key.".png"; ?>
-                                                <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}"></img>&nbsp;{{$value[0]}}&nbsp;
-                                            @if(Lang::getLocale() == "ar")
-                                                &rlm;
-                                            @endif
-                                                ({{$value[1]}})</a></li>
-                                            @endforeach       
-                                        </ul>
-                                </li>
-                            </ul>
-                        </nav><!-- #site-navigation -->
-                    </div><!-- #navbar -->
-                    <div id="header-search" class="site-search clearfix" style="padding-bottom:5px"><!-- #header-search -->
+                        </div>
+                    </nav>
+                
+                    <div id="header-search" class="site-search clearfix"><!-- #header-search -->
                         {!!Form::open(['method'=>'get','action'=>'Client\kb\UserController@search','class'=>'search-form clearfix'])!!}
                         <div class="form-border">
                             <div class="form-inline ">
-                                <div class="form-group">
+                                <div class="form-group input-group" style="width: 88%;">
                                     <input type="text" name="s" class="search-field form-control input-lg" title="Enter search term" placeholder="{!! Lang::get('lang.have_a_question?_type_your_search_term_here') !!}" required/>
                                 </div>
-                                <button type="submit" class="search-submit btn btn-custom btn-lg pull-right">{!! Lang::get('lang.search') !!}</button>
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-custom btn-md" style="margin-left: 8px;">{!! Lang::get('lang.search') !!}</button>
+                                </span>
                             </div>
                         </div>
                         {!! Form::close() !!}
@@ -292,7 +367,7 @@
             ?>
             <footer id="colophon" class="site-footer" role="contentinfo">
                 <div class="container">
-                    <div class="row col-md-12">
+                    <div class="row">
                         @if($footer1->title == null)
                         @else
                         <div class="col-md-3">
@@ -354,76 +429,76 @@
                         </div>
                         <div class="site-social text-right col-md-6">
                             <?php $socials = App\Model\helpdesk\Theme\Widgets::all(); ?>
-                            <ul class="list-inline hidden-print">
+                            <ul class="list-inline hidden-print" style="display: flex;float: right;">
                                 @foreach($socials as $social)
                                 @if($social->name == 'facebook')
                                 @if($social->value)
-                                <li><a href="{!! $social->value !!}" class="btn btn-social btn-facebook" target="_blank"><i class="fa fa-facebook fa-fw"></i></a></li>
+                                <li><a href="{!! $social->value !!}" class="btn btn-social btn-facebook" target="_blank"><i class="fab fa-facebook fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "twitter")
                                 @if($social->value)
-                                <li><a href="{{ $social->value }}" class="btn btn-social btn-twitter" target="_blank"><i class="fa fa-twitter fa-fw"></i></a></li>
+                                <li><a href="{{ $social->value }}" class="btn btn-social btn-twitter" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "google")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-google-plus" target="_blank"><i class="fa fa-google-plus fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-google-plus" target="_blank"><i class="fab fa-google-plus fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "linkedin")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-linkedin" target="_blank"><i class="fa fa-linkedin fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-linkedin" target="_blank"><i class="fab fa-linkedin fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "vimeo")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-vimeo" target="_blank"><i class="fa fa-vimeo-square fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-vimeo" target="_blank"><i class="fab fa-vimeo-square fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "youtube")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-youtube" target="_blank"><i class="fa fa-youtube-play fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-youtube" target="_blank"><i class="fab fa-youtube fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "pinterest")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-pinterest" target="_blank"><i class="fa fa-pinterest fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-pinterest" target="_blank"><i class="fab fa-pinterest fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "dribbble")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-dribbble" target="_blank"><i class="fa fa-dribbble fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-dribbble" target="_blank"><i class="fab fa-dribbble fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "flickr")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-flickr" target="_blank"><i class="fa fa-flickr fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-flickr" target="_blank"><i class="fab fa-flickr fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "instagram")
                                 @if($social->value)
-                                <li><a href="{{$social->value }}" class="btn btn-social btn-instagram" target="_blank"><i class="fa fa-instagram fa-fw"></i></a></li>
+                                <li><a href="{{$social->value }}" class="btn btn-social btn-instagram" target="_blank"><i class="fab fa-instagram fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "rss")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-rss" target="_blank"><i class="fa fa-rss fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-rss" target="_blank"><i class="fas fa-rss fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "skype")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-twitter" target="_blank"><i class="fa fa-skype fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-twitter" target="_blank"><i class="fab fa-skype fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "stumble")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-google-plus" target="_blank"><i class="fa fa-stumbleupon fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-google-plus" target="_blank"><i class="fab fa-stumbleupon fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "deviantart")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-success" target="_blank"><i class="fa fa-deviantart fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-success" target="_blank"><i class="fab fa-deviantart fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @endforeach
@@ -431,20 +506,16 @@
                         </div>
                     </div>
             </footer><!-- #colophon -->
-            <!-- jQuery 2.1.1 -->
-            <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
+            
+            <script src="{{asset("lb-faveo/js/popper.min.js")}}" type="text/javascript"></script>
             <!-- Bootstrap 3.3.2 JS -->
-            <script src="{{asset("lb-faveo/js/bootstrap.min.js")}}" type="text/javascript"></script>
-            <!-- Slimscroll -->
-            <script src="{{asset("lb-faveo/js/superfish.js")}}" type="text/javascript"></script>
+            <script src="{{asset("lb-faveo/js/bootstrap4.min.js")}}" type="text/javascript"></script>
+            
+            <script src="{{asset("lb-faveo/js/client.min.js")}}" type="text/javascript"></script>
 
-            <script src="{{asset("lb-faveo/js/mobilemenu.js")}}" type="text/javascript"></script>
+            <script src="{{asset("lb-faveo/js/superfish.min.js")}}" type="text/javascript"></script>
 
-            <script src="{{asset("lb-faveo/js/know.js")}}" type="text/javascript"></script>
-
-            <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
-
-            <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
+            <script src="{{asset("lb-faveo/js/mobilemenu.min.js")}}" type="text/javascript"></script>
 
             <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
 

@@ -5,7 +5,7 @@ Category List -
 @stop
 
 @section('kb')
-class = "active"
+class = "nav-item active"
 @stop
 
 @section('content')

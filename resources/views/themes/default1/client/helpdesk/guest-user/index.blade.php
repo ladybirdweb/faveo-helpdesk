@@ -1,7 +1,7 @@
 @extends('themes.default1.client.layout.client')
 
 @section('home')
-    class = "active"
+    class = "nav-item active"
 @stop
 
 @section('HeadInclude')

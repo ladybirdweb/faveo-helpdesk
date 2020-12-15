@@ -5,7 +5,7 @@
 @stop
 
 @section('submit')
-class = "active"
+class = "nav-item active"
 @stop
 <!-- breadcrumbs -->
 @section('breadcrumb')

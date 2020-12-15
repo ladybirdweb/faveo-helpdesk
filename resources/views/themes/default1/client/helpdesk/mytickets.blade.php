@@ -5,7 +5,7 @@ My Tickets -
 @stop
 
 @section('myticket')
-class="active"
+class="nav-item active"
 @stop
 
 @section('content')
