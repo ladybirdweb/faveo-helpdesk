@@ -1,4 +1,13 @@
 @extends('themes.default1.client.layout.client')
+
+@section('title')
+    Pages List -
+@stop
+
+@section('pages')
+class = "nav-item  active"
+@stop
+
 @section('content')
 
 <!-- Start of Page Container -->

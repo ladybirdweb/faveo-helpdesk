@@ -5,7 +5,7 @@ Knowledge Base -
 @stop
 
 @section('knowledgebase')
-class = "active"
+class = "nav-item active"
 @stop
 @section('content')
 
