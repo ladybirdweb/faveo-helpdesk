@@ -1106,7 +1106,7 @@ class ApiController extends Controller
                 return response()->json(compact('error'));
             }
             //$user = \JWTAuth::parseToken()->authenticate();
-            $result = $this->user->join('tickets', function ($join) use ($id) {
+            $result = $this->user->join('tickets', function ($join) {
                 $join->on('users.id', '=', 'tickets.assigned_to')
                         ->where('status', '=', 1);
                 //->where('user_id', '=', $id);
