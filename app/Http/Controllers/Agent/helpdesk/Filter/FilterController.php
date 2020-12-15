@@ -627,7 +627,7 @@ class FilterController extends Controller
      *
      * @param string $value
      *
-     * @var date string, date string $end
+     * @var date string, date string
      *
      * @return array of start and end date
      */
@@ -874,7 +874,7 @@ class FilterController extends Controller
      *
      * @param array $dates, builder $table, $column (type of filter based on which column is being chosen), $value
      *
-     * @var string (name of column), array $dates
+     * @var string (name of column), array
      *
      * @return builder
      */
