@@ -4,14 +4,14 @@
 Knowledge Base -
 @stop
 
-@section('knowledgebase')
+@section('kb')
 class = "nav-item active"
 @stop
 @section('content')
 
 @if(Session::has('success'))
 <div class="alert alert-success alert-dismissable">
-    <i class="fa  fa-check-circle"></i>
+    <i class="fas  fa-check-circle"></i>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {{Session::get('success')}}
 </div>
@@ -19,7 +19,7 @@ class = "nav-item active"
 <!-- failure message -->
 @if(Session::has('fails'))
 <div class="alert alert-danger alert-dismissable">
-    <i class="fa fa-ban"></i>
+    <i class="fas fa-ban"></i>
     <b>{!! Lang::get('lang.alert') !!}!</b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {{Session::get('fails')}}
@@ -41,13 +41,24 @@ class = "nav-item active"
         $count = count($article_id);
         ?>
         <div class="col-md-6">
+
             <section class="box-categories">
+            
                 <h1 class="section-title h4 clearfix">
-                    <i class="fa fa-folder-open-o fa-fw text-muted"></i>
-                    <small class="pull-right"><i class="fa fa-hdd-o fa-fw"></i></small>
-                    {{$category->name}}
+                
+                    <i class="line"></i>
+
+                    <i class="far fa-folder-open fa-fw text-muted"></i>
+                    
+                    <small class="float-right">
+                
+                        <a href="{{url('category-list/'.$category->slug)}}"><i class="far fa-hdd fa-fw"></i>({{count($all)}})</a>
+                    </small>
+                    
+                    <a href="{{url('category-list/'.$category->slug)}}">{{$category->name}}</a>
                 </h1>
-                <ul class="fa-ul">
+
+                <ul class="fa-ul" style="min-height: 150px;">
                     <?php
                     foreach ($article_id as $id) {
                         //$format = App\Model\helpdesk\Settings\System::where('id','1')->first()->date_time_format;
@@ -70,33 +81,37 @@ class = "nav-item active"
                         ?>
                         @forelse($article as $arti)
                         <li>
-                            <i class="fa-li fa fa-list-alt fa-fw text-muted"></i>
-                            <h3 class="h5"><a href="#"><a href="{{url('show/'.$arti->slug)}}">{{$arti->name}}</a></h3>
-                            <span class="article-meta">{{$arti->created_at->format('l, d-m-Y')}}</span>
-                            <?php
-                            $str = $arti->description;
-                            $len = strlen($str);
+                            
+                            <h3 class="h5" style="text-align:left">
+                            
+                                <i class="fa-li fa fa-list-alt fa-fw text-muted"></i>
+                                
+                                <a href="{{url('show/'.$arti->slug)}}">{{$arti->name}}</a>
 
-                            $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 20);
-                            ?>
-                            {!! strip_tags($excerpt) !!} <br/><a class="more-link text-center" href="{{url('show/'.$arti->slug)}}" style="color: orange">{!! Lang::get('lang.read_more') !!}</a>
+                            </h3>
                         </li>
                         @empty
                         <p>{!! Lang::get('lang.no_article') !!}</p>
                         @endforelse
                     <?php } ?>
                 </ul>
-                <p class="more-link text-center"><a href="{{url('category-list/'.$category->slug)}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.view_all') !!}</a></p>
+                <p class="more-link text-center"><a href="{{url('category-list/'.$category->slug)}}" class="btn btn-custom btn-sm">{!! Lang::get('lang.view_all') !!}</a></p>
             </section>
         </div>
         @endforeach
     </div>
+
     <section class="section">
-        <div class="banner-wrapper banner-horizontal clearfix">
-            <h4 class="banner-title h4">{!! Lang::get('lang.need_more_support') !!}?</h4>
+                        
+        <div class="banner-wrapper banner-horizontal clearfix" style="background: none;">
+            
+            <h4 style="font-size: 15px;" class="banner-title h3">{!! Lang::get('lang.need_more_support') !!}?</h4>
+                
             <div class="banner-content">
+                    
                 <p>{!! Lang::get('lang.if_you_did_not_find_an_answer_please_raise_a_ticket_describing_the_issue') !!}.</p>
             </div>
+                
             <p><a href="{!! URL::route('form') !!}" class="btn btn-custom">{!! Lang::get('lang.submit_a_ticket') !!}</a></p>
         </div>
     </section>
@@ -104,15 +119,44 @@ class = "nav-item active"
 @stop
 
 @section('category')
-<h2 class="section-title h4 clearfix">{!! Lang::get('lang.categories') !!}<small class="pull-right"><i class="fa fa-hdd-o fa-fw"></i></small></h2>
-<ul class="nav nav-pills nav-stacked nav-categories">
-    @foreach($categorys as $category)
-    <?php
-    $num = \App\Model\kb\Relationship::where('category_id', '=', $category->id)->get();
-    $article_id = $num->pluck('article_id');
-    $numcount = count($article_id);
-    ?>
-    <li><a href="{{url('category-list/'.$category->slug)}}"><span class="badge pull-right">{{$numcount}}</span>{{$category->name}}</a></li>
-    @endforeach
-</ul>
+
+<div id="sidebar" class="site-sidebar col-md-3">
+
+    <div class="col-sm-12">
+    
+        <div class="widget-area">
+        
+            <section id="section-categories" class="section">
+                
+                <h2 class="section-title h4 clearfix">
+
+                    <i class="line"></i>{!! Lang::get('lang.categories') !!}
+                
+                    <small class="float-right"><i class="far fa-hdd fa-fw"></i></small>
+                </h2>
+
+                <ul class="nav nav-pills nav-stacked nav-categories">
+    
+                    @foreach($categorys as $category)
+                    <?php
+                        $num = \App\Model\kb\Relationship::where('category_id', '=', $category->id)->get();
+                        $article_id = $num->pluck('article_id');
+                        $numcount = count($article_id);
+                    ?>
+
+                    <li class="d-flex justify-content-between align-items-center">
+                        
+                        <a  href="{{url('category-list/'.$category->slug)}}" class="list-group-item list-group-item-action" style="padding: 5px;">
+                                    
+                            <span class="badge badge-pill float-right" style="margin-top: 2px;">{{$numcount}}</span>
+
+                            {{$category->name}}
+                        </a>
+                    </li>
+                     @endforeach
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>
 @stop

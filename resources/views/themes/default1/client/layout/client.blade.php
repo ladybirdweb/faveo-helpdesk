@@ -28,6 +28,8 @@
 
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
 
+         <link rel="stylesheet" href="lb-faveo/plugins/summernote/summernote-bs4.min.css">
+
         <script src="{{asset("lb-faveo/js/jquery-3.4.1.min.js")}}" type="text/javascript"></script>
 
         @yield('HeadInclude')
@@ -35,53 +37,43 @@
     <body>
 
         <style>
-           #dropdown_content{
-                padding-top: 1rem;
-                margin: 0 !important;
-            }
-            #user_avatar{
-                border-radius: 35px;
-                width: 70px;
-            height: 70px;
-            }
-            #profile_dropdown {
-             border: 1px solid transparent !important; 
-          }
-          #profile_dropdown:hover{
-            background: transparent !important;
-          }
-          .profile_btn{
-            padding: 3px !important;
-          }
-          .text-white:hover{
-            color: white !important;
-          }
-            .ellipsize_first_name {
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
+           
+           #dropdown_content{ padding-top: 1rem;margin: 0 !important;}
 
-            .lang_dropdown-menu {
-        right : -1px !important;
-        left : auto !important;
-    }
-    #lang_ul{
-        width: max-content;
-        font-size: unset !important;
-    }
+            #user_avatar{ border-radius: 35px;width: 70px;height: 70px;}
 
-    .lang{
-        cursor: pointer;
-    }
+            #profile_dropdown {border: 1px solid transparent !important; }
 
-    .breadcrumb{
-        background-color: transparent !important;
-        padding: 0 !important;
-        margin-top: 15px !important;
-        margin-left: 17% !important;
-    }
+            #profile_dropdown:hover{background: transparent !important;}
+
+            .profile_btn{padding: 3px !important;}
+
+            .text-white:hover{color: white !important;}
+
+            .ellipsize_first_name {overflow: hidden;text-overflow: ellipsis;}
+
+            .lang_dropdown-menu {right : -1px !important;left : auto !important;}
+
+            #lang_ul{width: max-content;font-size: unset !important;}
+
+            .lang{cursor: pointer;}
+
+            .breadcrumb{background-color: transparent !important;padding: 0 !important;margin-top: 15px !important;margin-left: 17% !important;}
+
+            .text-small{font-size: 14px;}
+
+            .submit-btn { border: none;background: none;color: white; }
+
+            blockquote {font-size: 14px !important;}
+
+            .form-helper {margin-bottom: 50px;display: inline-block;}
+
+            .alert { width: 100% !important; }
+
+            .has-error .form-control { border-color : #dd4b39; }
         </style>
-        <div id="page" class="hfeed site">
+
+        <div id="page" class="hfeed site text-small">
         
             <header id="masthead" class="site-header" role="banner">
         
@@ -315,7 +307,7 @@
             <div id="main" class="site-main clearfix">
                 <div class="container">
                     <div class="content-area">
-                        <div class="row">
+                        <div>
                             @if(Session::has('success'))
                             <div class="alert alert-success alert-dismissable">
                                 <i class="fa  fa-check-circle"></i>
@@ -343,17 +335,11 @@
                             </div>
                             <?php a: ?>
                             @endif
+                        </div>
+                        <div class="row">
                             @yield('content')
-                            <div id="sidebar" class="site-sidebar col-md-3">
-                                <div class="widget-area">
-                                    <section id="section-banner" class="section">
-                                        @yield('check')
-                                    </section><!-- #section-banner -->
-                                    <section id="section-categories" class="section">
-                                        @yield('category')
-                                    </section><!-- #section-categories -->
-                                </div>
-                            </div><!-- #sidebar -->
+                             @yield('check')
+                             @yield('category')
                         </div>
                     </div>
                 </div>
@@ -522,6 +508,8 @@
             <script src="{{asset("lb-faveo/js/languagechanger.js")}}" type="text/javascript"></script>
 
             <script src="{{asset("lb-faveo/js/languagechanger.js")}}" type="text/javascript"></script>
+
+            <script src="lb-faveo/plugins/summernote/summernote-bs4.min.js"></script>
             
             <script>
 $(function () {
