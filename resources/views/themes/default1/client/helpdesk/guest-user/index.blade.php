@@ -35,8 +35,8 @@
     </div>
     @endif
 <div id="content" class="site-content col-md-12">
-    <div id="corewidgetbox">
-        <div class="widgetrow text-center">
+    <div id="corewidgetbox" class="wid">
+        <div id="wbox" class="widgetrow text-center">
         @if(Auth::user())
         @else
             <span onclick="javascript: window.location.href='{{url('auth/register')}}';">

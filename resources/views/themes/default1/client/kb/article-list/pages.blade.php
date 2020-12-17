@@ -9,26 +9,20 @@ class = "nav-item  active"
 @stop
 
 @section('content')
+    
+    <div id="content" class="site-content col-sm-12">
+                    
+        <article class="hentry">
+            
+            <header class="entry-header">
+                
+                <h1 class="entry-title">{{$page->name}}</h1>
+            </header>
 
-<!-- Start of Page Container -->
-<div class="col-md-12">
-    <div class="row home-listing-area">
-        <div class="span8">
-            <h2>{{$page->name}}</h2>
-        </div>
+            <div class="entry-content clearfix">
+                
+                {!! $page->description !!}                
+            </div>
+        </article>
     </div>
-
-    <div class="row separator">
-
-
-        <section>
-            {!! $page->description !!}
-        </section>
-
-
-    </div>
-
-
-    <!-- end of page content -->
-</div>
 @stop
