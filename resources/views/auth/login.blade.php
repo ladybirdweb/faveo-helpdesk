@@ -1,7 +1,7 @@
 @extends('themes.default1.client.layout.logclient')
 
 @section('home')
-    class = "active"
+    class = "nav-item active"
 @stop
 
 @section('breadcrumb')

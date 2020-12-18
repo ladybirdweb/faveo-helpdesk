@@ -71,6 +71,10 @@
             .alert { width: 100% !important; }
 
             .has-error .form-control { border-color : #dd4b39; }
+
+            .help-block { color : #dd4b39; }
+
+             .text-red { color: red; }
         </style>
 
         <div id="page" class="hfeed site text-small">
