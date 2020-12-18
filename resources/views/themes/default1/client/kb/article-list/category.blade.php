@@ -6,54 +6,70 @@
 @stop
 
 @section('kb')
-class = "active"
+class = "nav-item active"
 @stop
 
 @section('content')
 <div id="content" class="site-content col-md-9">
+
     <header class="archive-header">
-        <h1 >{!! $category->name !!}</h1>
-    </header><!-- .archive-header -->
-    <blockquote class="archive-description" style="display: none;">
-        <p>{!! $category->description !!}</p>
-    </blockquote>
+        <h1 class="archive-title">{!! $category->name !!}</h1>
+    </header>
+
     <div class="archive-list archive-article">
         <?php foreach ($article_id as $id) { ?>
-            <?php
-            $article = App\Model\kb\Article::where('id', $id);
-            if (!Auth::user() || Auth::user()->role == 'user') {
-                $article = $article->where('status', 1);
-                $article = $article->where('type', 1);
-            }
-            $article = $article->orderBy('publish_time', 'desc');
-            $article = $article->get();
-            ?>
-            @forelse($article as $arti)
-            <article class="hentry">
+        <?php
+        $article = App\Model\kb\Article::where('id', $id);
+        if (!Auth::user() || Auth::user()->role == 'user') {
+            $article = $article->where('status', 1);
+            $article = $article->where('type', 1);
+        }
+        $article = $article->orderBy('publish_time', 'desc');
+        $article = $article->get();
+        ?>
+        @forelse($article as $arti)
+
+             <article class="hentry">
+            
                 <header class="entry-header">
-                    <i class="fa fa-list-alt fa-2x fa-fw pull-left text-muted"></i>
-                    <h2 class="entry-title h4"><a href="{{url('show/'.$arti->slug)}}" onclick="toggle_visibility('foo');">{{$arti->name}}</a></h2>
-                </header><!-- .entry-header -->
+                        
+                    <i class="fa fa-list-alt fa-2x fa-fw float-left text-muted"></i>
+                
+                    <h2 class="entry-title h4">
+
+                        <a href="{{url('show/'.$arti->slug)}}" onclick="toggle_visibility('foo');">{{$arti->name}}</a>
+                    </h2>
+                </header>
+
                 <?php $str = $arti->description; ?>
                 <?php $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 400); ?>
-                <blockquote class="archive-description">
+
+                <blockquote class="blockquote archive-description" id="block" style="margin-bottom: 10px; margin-top: 10px;">
+                
                     <?php $content = trim(preg_replace("/<img[^>]+\>/i", "", $excerpt), " \t.") ?>
                     <p>{!! strip_tags($content) !!}</p>
-                    <a class="readmore-link" href="{{url('show/'.$arti->slug)}}">{!! Lang::get('lang.read_more') !!}</a>
-                </blockquote>	
+
+                    <p><a href="{{url('show/'.$arti->slug)}}">{!! Lang::get('lang.read_more') !!}</a></p>
+                </blockquote>
+
                 <footer class="entry-footer">
+                        
                     <div class="entry-meta text-muted">
-                        <span class="date"><i class="fa fa-clock-o fa-fw"></i> <time datetime="2013-10-22T20:01:58+00:00">{{$arti->created_at->format('l, d-m-Y')}}</time></span>
-                    </div><!-- .entry-meta -->
-                </footer><!-- .entry-footer -->
-            </article><!-- .hentry -->
+                        
+                        <span style="margin-right:0px;"><i class="far fa-clock fa-fw"></i> 
+
+                            <span>{{$arti->created_at->format('l, d-m-Y')}}</span>
+                        </span>
+                    </div>
+                </footer>  
+            </article>
             @empty
             <p>No articles available</p>
-            @endforelse
-            <?php
+        @endforelse
+        <?php
         }
         //echo $all->render();
-        ?>                      
+        ?>
     </div>
 </div>
 <script type="text/javascript">
@@ -70,19 +86,45 @@ class = "active"
 
 @stop
 
-
-
-
 @section('category')
-<h2 class="section-title h4 clearfix">{!! Lang::get('lang.categories') !!}<small class="pull-right"><i class="fa fa-hdd-o fa-fw"></i></small></h2>
-<ul class="nav nav-pills nav-stacked nav-categories">
-    @foreach($categorys as $category)
-    <?php
-    $num = \App\Model\kb\Relationship::where('category_id', '=', $category->id)->get();
-    $article_id = $num->pluck('article_id');
-    $numcount = count($article_id);
-    ?>
-    <li><a href="{{url('category-list/'.$category->slug)}}"><span class="badge pull-right">{{$numcount}}</span>{{$category->name}}</a></li>
-    @endforeach
-</ul>
+
+    <div id="sidebar" class="site-sidebar col-md-3">
+
+        <div class="col-sm-12">
+        
+            <div class="widget-area">
+            
+                <section id="section-categories" class="section">
+                    
+                    <h2 class="section-title h4 clearfix">
+
+                        <i class="line"></i>{!! Lang::get('lang.categories') !!}
+                    
+                        <small class="float-right"><i class="far fa-hdd fa-fw"></i></small>
+                    </h2>
+
+                    <ul class="nav nav-pills nav-stacked nav-categories">
+        
+                        @foreach($categorys as $category)
+                        <?php
+                        $num = \App\Model\kb\Relationship::where('category_id','=', $category->id)->get();
+                        $article_id = $num->pluck('article_id');
+                        $numcount = count($article_id);
+                        ?>
+
+                        <li class="d-flex justify-content-between align-items-center">
+                            
+                            <a href="{{url('category-list/'.$category->slug)}}" class="list-group-item list-group-item-action" style="padding: 5px;">
+                                        
+                                <span class="badge badge-pill float-right" style="margin-top: 2px;">{{$numcount}}</span>
+
+                                {{$category->name}}
+                            </a>
+                        </li>
+                         @endforeach
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
 @stop
