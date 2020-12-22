@@ -75,6 +75,10 @@
              .help-block { color : #dd4b39; }
 
              .text-red { color: red; }
+
+              .nav-item .dropdown-menu{right: unset !important; left: unset!important;margin-left: -6px;}
+
+              .btn-primary { background-color:#009aba !important;border-color:#00c0ef !important; }
         </style>
 
         <div id="page" class="hfeed site text-small">
@@ -199,7 +203,7 @@
                     
                     <div id="header-search" class="site-search clearfix"><!-- #header-search -->
                         {!!Form::open(['method'=>'get','action'=>'Client\kb\UserController@search','class'=>'search-form clearfix'])!!}
-                        <div class="form-border">
+                        <div class="form-border" style="z-index: 0;">
                             <div class="form-inline ">
                                 <div class="form-group input-group" style="width: 88%;">
                                     <input type="text" name="s" class="search-field form-control input-lg" title="Enter search term" placeholder="{!! Lang::get('lang.have_a_question?_type_your_search_term_here') !!}" required/>

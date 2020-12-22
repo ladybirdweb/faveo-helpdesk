@@ -7,67 +7,136 @@
     
     <link rel="shortcut icon" href="{{asset("lb-faveo/media/images/favicon.ico")}}">
     
-    <link href="{{asset("lb-faveo/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
-    
-    <link href="{{asset("lb-faveo/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset("lb-faveo/css/bootstrap4.min.css")}}" rel="stylesheet" type="text/css" />
+    <!-- Font Awesome Icons -->
+    <link href="{{asset("lb-faveo/css/font-awesome-5.min.css")}}" rel="stylesheet" type="text/css" />
     <!-- Theme style -->
-    <link href="{{asset("lb-faveo/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />
-    <!-- iCheck -->
-    <link href="{{asset("lb-faveo/plugins/iCheck/square/blue.css")}}" rel="stylesheet" type="text/css" />
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
+    <link href="{{asset("lb-faveo/css/client.min.css")}}" rel="stylesheet" type="text/css" />
+
+    <link href="{{asset("lb-faveo/css/widgetbox.min.css")}}" rel="stylesheet" type="text/css" />
+    
   </head>
-  <body class="login-page">
-    <div class="login-box">
-      <div class="login-logo">
-        <?php
-                $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
-        $system = App\Model\helpdesk\Settings\System::where('id', '=', '1')->first();
-        ?>
-        @if($system->url)
-          <a href="{!! $system->url !!}" rel="home">
-        @else
-          <a href="{{url('/')}}" rel="home">
-        @endif
-                @if($company->use_logo == 1)
-                  <img src="{{asset('uploads/company')}}{{'/'}}{{$company->logo}}" alt="User Image" width="200px" />
-                @else
-                  @if($system->name)
-                    {!! $system->name !!}
-                  @else
-                    <b>SUPPORT</b> CENTER
-                  @endif
-                @endif
-                </a>
-      </div><!-- /.login-logo -->
-        <div class="login-box-body">
-       @yield('body')
-    </div><!-- /.login-box -->
-    <div class="login-box-msg">
-    </br>
-      <p class="text-muted">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}">{!! $company->company_name !!}</a>. {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/"  target="_blank">Faveo</a></p>
+  <body>
+
+     <style type="text/css">
+      
+      .site-hero {
+          padding: 35px 0;
+          padding-top: 1px !important;
+          background: rgb(0, 154, 186) !important;
+      }
+      .breadcrumb {
+            width: 80%;
+            margin: 20px 0% !important;
+        }
+
+        .form-helper {margin-bottom: 50px;display: inline-block;}
+
+      .alert { width: 100% !important; }
+
+      .has-error .form-control { border-color : #dd4b39; }
+
+       .help-block { color : #dd4b39; }
+
+       .text-red { color: red; }
+
+       .btn-primary { background-color:#009aba !important;border-color:#00c0ef !important; }
+    </style>
+
+    <div id="page" class="hfeed site">
+    
+    <header id="masthead" class="site-header" role="banner">
+      
+      <div class="container">
+
+        <div id="logo" class="col-md-12 site-logo text-center">
+          
+          <?php
+            
+            $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
+            $system = App\Model\helpdesk\Settings\System::where('id', '=', '1')->first();
+          ?>
+         
+          @if($system->url)
+            <a href="{!! $system->url !!}" rel="home">
+          @else
+            <a href="{{url('/')}}" rel="home">
+            @endif
+            
+            @if($company->use_logo == 1)
+              
+              <img src="{{asset('uploads/company')}}{{'/'}}{{$company->logo}}" alt="User Image" width="200px" />
+            @else
+              @if($system->name)
+                <h1>{!! $system->name !!}</h1>
+              @else
+                <h1><b>SUPPORT</b> CENTER</h1>
+              @endif
+            @endif
+          </a>
+        </div>
+
+        <div id="header-search" class="site-search clearfix"></div>
+
+      </div>
+    </header>
+
+    <div class="site-hero clearfix">
+
+      <div class="container">
+      
+        <ol class="breadcrumb breadcrumb-custom">
+      
+          <li class="text">You are here :</li>
+      
+          <li class="active" id="active_breadcrumb"></li>
+        </ol>
+      </div>
     </div>
+
+    <div id="main" class="site-main clearfix">
+      
+      <div class="container">
+  
+        <div class="content-area">
+
+           @yield('body')
+        </div>
+      </div>
     </div>
 
-    <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}" type="text/javascript"></script>
+    <footer id="colophon" class="site-footer" role="contentinfo">
+      
+      <div class="container">
 
-    <script src="{{asset("lb-faveo/js/bootstrap.min.js")}}" type="text/javascript"></script>
-    <!-- iCheck -->
-    <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
+        <div class="col-sm-12 text-center">
+          
+          <div class="site-info">
 
-    <script>
-        $(function () {
-            $('input').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'iradio_square-blue',
-                increaseArea: '20%' // optional
-            });
-        });
+            <p class="text-muted">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}">{!! $company->company_name !!}</a>. {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/"  target="_blank">Faveo</a></p>
+          </div>
+        </div>
+      </div>
+    </footer> 
+  </div>
+
+    <script src="{{asset("lb-faveo/js/jquery-3.4.1.min.js")}}" type="text/javascript"></script>
+
+    <script src="{{asset("lb-faveo/js/bootstrap4.min.js")}}" type="text/javascript"></script>
+            
+    <script src="{{asset("lb-faveo/js/client.min.js")}}" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+      var locale = window.location.pathname.split('/');
+
+      if(locale[locale.length - 3] === 'password'){
+
+        document.getElementById('active_breadcrumb').innerText = 'Reset Password';
+      } else {
+
+        document.getElementById('active_breadcrumb').innerText = 'License';
+      }
     </script>
-
   </body>
 </html>

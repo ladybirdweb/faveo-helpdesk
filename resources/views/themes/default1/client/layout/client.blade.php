@@ -28,7 +28,7 @@
 
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
 
-         <link rel="stylesheet" href="lb-faveo/plugins/summernote/summernote-bs4.min.css">
+        <link href="{{asset("lb-faveo/plugins/summernote/summernote-bs4.min.css")}}" rel="stylesheet" type="text/css" />
 
         <script src="{{asset("lb-faveo/js/jquery-3.4.1.min.js")}}" type="text/javascript"></script>
 
@@ -75,6 +75,10 @@
             .help-block { color : #dd4b39; }
 
              .text-red { color: red; }
+
+              .nav-item .dropdown-menu{right: unset !important; left: unset!important;;margin-left: -6px;}
+
+              .btn-primary { background-color:#009aba !important;border-color:#00c0ef !important; }
         </style>
 
         <div id="page" class="hfeed site text-small">
@@ -222,7 +226,7 @@
                                             aria-expanded="false">
                                             <img src="{{asset("lb-faveo/flags/$src")}}"></img>
                                         </a>
-                                        <ul class="dropdown-menu lang_dropdown-menu" role="menu" aria-labelledby="dropdownMenu" id="lang_ul">
+                                        <ul class="dropdown-menu" style="right: -1px !important;left: auto !important;" role="menu" aria-labelledby="dropdownMenu" id="lang_ul">
                                             @foreach($langs as $key => $value)
                                                 <?php $src = $key.".png"; ?>
                                                 <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)" class="lang dropdown-item">
@@ -286,7 +290,7 @@
                 
                     <div id="header-search" class="site-search clearfix"><!-- #header-search -->
                         {!!Form::open(['method'=>'get','action'=>'Client\kb\UserController@search','class'=>'search-form clearfix'])!!}
-                        <div class="form-border">
+                        <div class="form-border" style="z-index: 0;">
                             <div class="form-inline ">
                                 <div class="form-group input-group" style="width: 88%;">
                                     <input type="text" name="s" class="search-field form-control input-lg" title="Enter search term" placeholder="{!! Lang::get('lang.have_a_question?_type_your_search_term_here') !!}" required/>
@@ -507,14 +511,16 @@
 
             <script src="{{asset("lb-faveo/js/mobilemenu.min.js")}}" type="text/javascript"></script>
 
+            <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
+
             <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
 
             <script src="{{asset("lb-faveo/js/languagechanger.js")}}" type="text/javascript"></script>
 
             <script src="{{asset("lb-faveo/js/languagechanger.js")}}" type="text/javascript"></script>
 
-            <script src="lb-faveo/plugins/summernote/summernote-bs4.min.js"></script>
-            
+            <script src="{{asset("lb-faveo/plugins/summernote/summernote-bs4.min.js")}}" type="text/javascript"></script>
+           
             <script>
 $(function () {
 //Enable check and uncheck all functionality
