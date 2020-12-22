@@ -9,6 +9,11 @@ class="nav-item active"
 @stop
 
 @section('content')
+<style type="text/css">
+    .table th {
+            border-top: none !important;
+    }
+</style>
 <!-- Main content -->
 <div id="content" class="site-content col-md-12">
     <?php
@@ -24,24 +29,46 @@ class="nav-item active"
             ->paginate(20);
     ?>
     <div class="nav-tabs-custom">
+
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">{!! Lang::get('lang.opened') !!} <small class="label bg-orange">{!! $open->total() !!}</small></a></li>
-            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">{!! Lang::get('lang.closed') !!} <small class="label bg-green">{!! $close->total() !!}</small></a></li>
+                    
+            <li class="nav-item">
+                
+                <a style="cursor: pointer;" class="nav-link text-dark active" href="#tab_1" data-toggle="tab">
+                
+                    <b>{!! Lang::get('lang.opened') !!}</b>
+                
+                    <span class="badge badge-pill" style="background: #337ab7; color: white;">{!! $open->total() !!}</span>
+                
+                </a>
+            </li>
+
+            <li class="nav-item">
+                
+                <a style="cursor: pointer;" class="nav-link text-dark" href="#tab_2" data-toggle="tab">
+                
+                    <b>{!! Lang::get('lang.closed') !!}</b>
+                
+                    <span class="badge badge-pill" style="background: #337ab7; color: white;">{!! $close->total() !!}</span>
+                
+                </a>
+            </li>
         </ul>
+
         <div class="tab-content">
             <div class="tab-pane active" id="tab_1">
                 {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
-                <div class="mailbox-controls">
+                <div class="mailbox-controls mt-3">
                     <!-- Check all button -->
-                    <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
-                    <a class="btn btn-default btn-sm" id="click1"><i class="fa fa-refresh"></i></a>
-                    <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
-                    <div class="pull-right" id="refresh21">
+                    <a class="btn btn-light btn-sm checkbox-toggle"><i class="far fa-square"></i></a>
+                    <a class="btn btn-light btn-sm" id="click1"><i class="fas fa-sync"></i></a>
+                    <input type="submit" class="btn btn-light text-warning btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
+                    <div class="float-right" id="refresh21">
                         {!! $open->count().'-'.$open->total(); !!}
                     </div>
                 </div>
                 <div class=" table-responsive mailbox-messages"  id="refresh1">
-                    <p style="display:none;text-align:center; position:fixed; margin-left:37%;margin-top:-80px;" id="show1" class="text-red"><b>Loading...</b></p>
+                    <p style="display:none;text-align:center;" id="show1" class="text-red"><b>Loading...</b></p>
                     <!-- table -->
                     <table class="table table-hover table-striped">
                         <thead>
@@ -98,10 +125,10 @@ class="nav-item active"
                                     $title = $title;
                                 }
                                 ?>
-                                <td class="mailbox-name"><a href="{!! URL('check_ticket',[Crypt::encrypt($ticket->id)]) !!}" title="{!! $title->title !!}">{{$string}}   </a> ({!! $count!!}) <i class="fa fa-comment"></i></td>
+                                <td class="mailbox-name"><a href="{!! URL('check_ticket',[Crypt::encrypt($ticket->id)]) !!}" title="{!! $title->title !!}">{{$string}}   </a> ({!! $count!!}) <i class="fas fa-comment"></i></td>
                                 <td class="mailbox-Id">#{!! $ticket->ticket_number !!}</td>
                                 <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $ticket->priority_id)->first(); ?>
-                                <td class="mailbox-priority"><spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam></td>
+                                <td class="mailbox-priority"><spam>{{$priority->priority}}</spam></td>
 
                         <td class="mailbox-last-reply" style="color: {!! $rep !!}">{!! $username !!}</td>
                         <td class="mailbox-last-activity">{!! $title->updated_at !!}</td>
@@ -111,7 +138,7 @@ class="nav-item active"
                         @endforeach
                         </tbody>
                     </table><!-- /.table -->
-                    <div class="pull-right">
+                    <div class="float-right">
                         <?php echo $open->setPath(url('mytickets'))->render(); ?>&nbsp;
                     </div>
                 </div><!-- /.mail-box-messages -->
@@ -120,17 +147,17 @@ class="nav-item active"
             {{-- /.tab_1 --}}
             <div class="tab-pane" id="tab_2">
                 {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
-                <div class="mailbox-controls">
+                <div class="mailbox-controls mt-3">
                     <!-- Check all button -->
-                    <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
-                    <a class="btn btn-default btn-sm" id="click2"><i class="fa fa-refresh"></i></a>
-                    <input type="submit" class="btn btn-default text-blue btn-sm" name="submit" value="{!! Lang::get('lang.open') !!}">
-                    <div class="pull-right" id="refresh22">
+                    <a class="btn btn-light btn-sm checkbox-toggle"><i class="far fa-square"></i></a>
+                    <a class="btn btn-light btn-sm" id="click2"><i class="fas fa-sync"></i></a>
+                    <input type="submit" class="btn btn-light text-primary btn-sm" name="submit" value="{!! Lang::get('lang.open') !!}">
+                    <div class="float-right" id="refresh22">
                         {!! $close->count().'-'.$close->total(); !!}
                     </div>
                 </div>
                 <div class=" table-responsive mailbox-messages" id="refresh2">
-                    <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show2" class="text-red"><b>Loading...</b></p>
+                    <p style="display:none;text-align:center;" id="show2" class="text-red"><b>Loading...</b></p>
                     <!-- table -->
                     <table class="table table-hover table-striped">
                         <thead>
@@ -185,10 +212,10 @@ class="nav-item active"
                                     $title = $title;
                                 }
                                 ?>
-                                <td class="mailbox-name"><a href="{!! URL('check_ticket',[Crypt::encrypt($ticket->id)]) !!}" title="{!! $title->title !!}">{{$string}}   </a> ({!! $count!!}) <i class="fa fa-comment"></i></td>
+                                <td class="mailbox-name"><a href="{!! URL('check_ticket',[Crypt::encrypt($ticket->id)]) !!}" title="{!! $title->title !!}">{{$string}}   </a> ({!! $count!!}) <i class="fas fa-comment"></i></td>
                                 <td class="mailbox-Id">#{!! $ticket->ticket_number !!}</td>
                                 <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $ticket->priority_id)->first(); ?>
-                                <td class="mailbox-priority"><spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam></td>
+                                <td class="mailbox-priority"><spam>{{$priority->priority}}</spam></td>
                         <td class="mailbox-last-reply" style="color: {!! $rep !!}">{!! $username !!}</td>
                         <td class="mailbox-last-activity">{!! $title->updated_at !!}</td>
                         <?php $status = App\Model\helpdesk\Ticket\Ticket_Status::where('id', '=', $ticket->status)->first(); ?>
@@ -197,7 +224,7 @@ class="nav-item active"
                         @endforeach
                         </tbody>
                     </table><!-- /.table -->
-                    <div class="pull-right">
+                    <div class="float-right">
                         <?php echo $close->setPath(url('mytickets'))->render(); ?>&nbsp;
                     </div>
                 </div><!-- /.mail-box-messages -->
@@ -214,11 +241,11 @@ class="nav-item active"
             if (clicks) {
                 //Uncheck all checkboxes
                 $(".mailbox-messages input[type='checkbox']").iCheck("uncheck");
-                $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
+                $(".far", this).removeClass("fa-check-square").addClass('fa-square');
             } else {
                 //Check all checkboxes
                 $(".mailbox-messages input[type='checkbox']").iCheck("check");
-                $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+                $(".far", this).removeClass("fa-square").addClass('fa-check-square');
             }
             $(this).data("clicks", !clicks);
         });
