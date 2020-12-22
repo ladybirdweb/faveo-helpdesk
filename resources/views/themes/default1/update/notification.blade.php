@@ -1,14 +1,18 @@
+<li class="nav-item dropdown notifications-menu">
 
-<li class="dropdown notifications-menu">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <i class="fa fa-refresh"></i>
-        <span class="label label-danger" id="count">{!! $notification->count() !!}</span>
+    <a href="#" class="nav-link" data-toggle="dropdown">
+
+        <i class="fas fa-sync"></i>
+
+        <span class="badge badge-warning navbar-badge" id="count">{!! $notification->count() !!}</span>
     </a>
-    <ul class="dropdown-menu" style="width:500px">
-        
-        <li class="header">You have {!! $notification->count() !!} update(s).</li>
+
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+
+        <span class="dropdown-header">You have {!! $notification->count() !!} update(s).</span>
 
         <ul class="menu list-unstyled">
+
             @if($notification->count()>0)
             @foreach($notification as $notify)
             @if($notify->value)
@@ -18,14 +22,7 @@
             @endif
             @endforeach
             @endif
-
         </ul>
-        <!--<li class="footer no-border"><div class="col-md-5"></div><div class="col-md-2">
-                <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="display: none;" id="notification-loader">
-            </div><div class="col-md-5"></div></li>
-        <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
-        </li>-->
-
-    </ul>
+    </div>
 </li>
 

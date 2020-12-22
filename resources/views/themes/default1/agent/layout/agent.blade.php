@@ -1,311 +1,406 @@
 <!DOCTYPE html>
 <html>
+    
     <head>
+    
         <meta charset="UTF-8" ng-app="myApp">
+    
         <title>Faveo | HELP DESK</title>
+    
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    
         <meta name="_token" content="{!! csrf_token() !!}"/>
+    
         <!-- faveo favicon -->
         <link href="{{asset("lb-faveo/media/images/favicon.ico")}}" rel="shortcut icon">
-        <!-- Bootstrap 3.3.2 -->
-        <link href="{{asset("lb-faveo/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
+    
+       <!-- Bootstrap 4.3.1 -->
+        <link href="{{asset("lb-faveo/css/bootstrap4.min.css")}}" rel="stylesheet" type="text/css" />
+    
         <!-- Font Awesome Icons -->
-        <link href="{{asset("lb-faveo/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/css/font-awesome-5.min.css")}}" rel="stylesheet" type="text/css" />
+    
         <!-- Ionicons -->
         <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet"  type="text/css" />
+    
         <!-- Theme style -->
-        <link href="{{asset("lb-faveo/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" />
-        <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
-        <link href="{{asset("lb-faveo/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css" />
-        <!-- iCheck -->
-        <link href="{{asset("lb-faveo/plugins/iCheck/flat/blue.css")}}" rel="stylesheet" type="text/css" />
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <link href="{{asset("lb-faveo/css/tabby.css")}}" rel="stylesheet" type="text/css"/>
+        <link href="{{asset("lb-faveo/adminlte3/css/adminlte3.min.css")}}" rel="stylesheet" type="text/css" />
 
-        <link href="{{asset("lb-faveo/css/jquerysctipttop.css")}}" rel="stylesheet" type="text/css"/>
+        <link href="{{asset("lb-faveo/adminlte3/plugins/overlayScrollbars/overlayScrollbars.min.css")}}" rel="stylesheet"  type="text/css" />
+
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <link href="{{asset("lb-faveo/css/editor.css")}}" rel="stylesheet" type="text/css"/>
 
-        <link href="{{asset("lb-faveo/css/jquery.ui.css")}}" rel="stylesheet" rel="stylesheet"/>
-
         <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet"  type="text/css"/>
 
-        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css"/>
-
-        <link href="{{asset("lb-faveo/css/faveo-css.css")}}" rel="stylesheet" type="text/css" />
-
-        <link href="{{asset("lb-faveo/css/notification-style.css")}}" rel="stylesheet" type="text/css" >
-
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
+    
         <!-- Select2 -->
         <link href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}" rel="stylesheet" type="text/css" />
+
         <link href="{{asset("css/close-button.css")}}" rel="stylesheet" type="text/css" />
 
         <!--Daterangepicker-->
         <link rel="stylesheet" href="{{asset("lb-faveo/plugins/daterangepicker/daterangepicker.css")}}" rel="stylesheet" type="text/css" />
         <!--calendar -->
+    
         <!-- fullCalendar 2.2.5-->
         <link href="{{asset('lb-faveo/plugins/fullcalendar/fullcalendar.min.css')}}" rel="stylesheet" type="text/css" />
 
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-        <![endif]-->
-        <script src="{{asset("lb-faveo/js/jquery-2.1.4.js")}}" type="text/javascript"></script>
-
-        <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
+         <script src="{{asset("lb-faveo/js/jquery-3.4.1.min.js")}}" type="text/javascript"></script>
 
         @yield('HeadInclude')
+      
         <style type="text/css">
-            #bar {
-                border-right: 1px solid rgba(204, 204, 204, 0.41);
-            }
-            #bar a{
-                color: #FFF;
-            }
-            #bar a:hover, #bar a:focus{
-                background-color: #357CA5;
-            }
+        
+            .product-description { overflow: visible !important;white-space: unset !important; }
 
+            .noti_User { color: #6c757d !important; }
+
+            .brand-image{float: none !important; margin-left: 0 !important;}
         </style>
     </head>
-    <body class="skin-blue fixed">
+    
+    <body class="skin-yellow sidebar-mini layout-fixed layout-navbar-fixed text-sm">
+        
         <div class="wrapper">
-            <header class="main-header">
-                <a href="http://www.faveohelpdesk.com" class="logo"><img src="{{ asset('lb-faveo/media/images/logo.png')}}" width="100px;"></a>
-                <?php
-                $replacetop = \Event::fire('service.desk.agent.topbar.replace', array());
 
-                if (count($replacetop) == 0) {
-                    $replacetop = 0;
-                } else {
-                    $replacetop = $replacetop[0];
-                }
+            <?php
+            $replacetop = \Event::fire('service.desk.agent.topbar.replace', array());
 
-                $replaceside = \Event::fire('service.desk.agent.sidebar.replace', array());
+            if (count($replacetop) == 0) {
+                $replacetop = 0;
+            } else {
+                $replacetop = $replacetop[0];
+            }
 
-                if (count($replaceside) == 0) {
-                    $replaceside = 0;
-                } else {
-                    $replaceside = $replaceside[0];
-                }
-                ?>
+            $replaceside = \Event::fire('service.desk.agent.sidebar.replace', array());
 
-                <!-- Header Navbar: style can be found in header.less -->
-                <nav class="navbar navbar-static-top">
-                    <!-- Sidebar toggle button-->
-                    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <div class="collapse navbar-collapse" id="navbar-collapse">
-                        @if($replacetop==0)
-                        <ul class="tabs tabs-horizontal nav navbar-nav navbar-left">
-                            <li @yield('Dashboard')><a id="dash" data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard(event);">{!! Lang::get('lang.dashboard') !!}</a></li>
-                            <li @yield('Users')><a data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
-                            <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
-                            <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
-                            @if($auth_user_role == 'admin')
-                            <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">Report</a></li>
-                            @endif
-                            <?php \Event::fire('calendar.topbar', array()); ?>
-                        </ul>
-                        @else
-                        <?php \Event::fire('service.desk.agent.topbar', array()); ?>
-                        @endif
+            if (count($replaceside) == 0) {
+                $replaceside = 0;
+            } else {
+                $replaceside = $replaceside[0];
+            }
+            ?>
 
-                        <ul class="nav navbar-nav navbar-right">
-                            @if($auth_user_role == 'admin')
-                            <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
+             <nav class="main-header navbar navbar-expand navbar-dark navbar-custom">
+                
+                <!-- Sidebar toggle button-->
+                <ul class="navbar-nav">
+                  
+                    <li class="nav-item">
+                
+                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                    </li>
+                </ul>
 
-                            @endif
-                            @include('themes.default1.update.notification')
-                            <!-- User Account: style can be found in dropdown.less -->
-                            <li class="dropdown notifications-menu" id="myDropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
-                                    <i class="fa fa-bell-o"></i>
-                                    <span class="label label-danger" id="count">{!! $notifications->count() !!}</span>
-                                </a>
-                                <ul class="dropdown-menu" style="width:500px">
+                @if($replacetop==0)
+                <ul class="navbar-nav">
 
-                                    <div id="alert11" class="alert alert-success alert-dismissable" style="display:none;">
-                                        <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                        <h4><i class="icon fa fa-check"></i>Alert!</h4>
-                                        <div id="message-success1"></div>
+                    <li @yield('Dashboard') class="nav-item d-none d-sm-inline-block">
+
+                        <a id="dash" data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard(event);" class="nav-link">
+                            {!! Lang::get('lang.dashboard') !!}
+                        </a>
+                    </li>
+                    
+                    <li @yield('Users') class="nav-item d-none d-sm-inline-block">
+                        <a data-target="#tabB" href="#" class="nav-link">{!! Lang::get('lang.users') !!}</a>
+                    </li>
+                    
+                    <li @yield('Tickets') class="nav-item d-none d-sm-inline-block">
+                        <a data-target="#tabC" href="#" class="nav-link">{!! Lang::get('lang.tickets') !!}</a>
+                    </li>
+                    
+                    <li @yield('Tools') class="nav-item d-none d-sm-inline-block">
+                        <a data-target="#tabD" href="#" class="nav-link">{!! Lang::get('lang.tools') !!}</a>
+                    </li>
+                    
+                    @if($auth_user_role == 'admin')
+                    <li @yield('Report') class="nav-item d-none d-sm-inline-block">
+                        <a href="{{URL::route('report.index')}}" onclick="clickReport(event);"  class="nav-link">Report</a>
+                    </li>
+                    @endif
+                    
+                    <?php \Event::fire('calendar.topbar', array()); ?>
+                </ul>
+                @else
+                <?php \Event::fire('service.desk.agent.topbar', array()); ?>
+                @endif
+
+                <ul class="navbar-nav ml-auto">
+                    
+                    @if($auth_user_role == 'admin')
+
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="{{url('admin')}}" class="nav-link">{!! Lang::get('lang.admin_panel') !!}</a>
+                    </li>
+                    @endif
+
+                    @include('themes.default1.update.notification')
+
+                    <li class="nav-item dropdown notifications-menu" id="myDropdown">
+
+                        <a href="#" class="nav-link" data-toggle="dropdown" onclick="myFunction()">
+                            
+                            <i class="fas fa-bell"></i>
+                            
+                            <span class="badge badge-warning navbar-badge" id="count">{!! $notifications->count() !!}</span>
+                        </a>
+                               
+                        <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
+
+                            <div id="alert11" class="alert alert-success alert-dismissable" style="display:none;">
+
+                                <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                
+                                <h4><i class="icon fas fa-check"></i>Alert!</h4>
+
+                                <div id="message-success1"></div>
+                            </div>
+
+                            <ul class="products-list product-list-in-card pl-2 pr-2" style="height: 350px;overflow-y: scroll;">
+
+                                 <li class="dropdown-header">You have {!! $notifications->count() !!} notifications. 
+
+                                    <a class="float-right" id="read-all" href="#">Mark all as read.</a>
+                                </li>
+
+                                @if($notifications->count())
+                                @foreach($notifications->orderBy('created_at', 'desc')->get()->take(10) as $notification)
+                                @if($notification->notification->type->type == 'registration')
+                                @if($notification->is_read == 1)
+
+                                <li class="item" class="task">
+                                
+                                    <div class="product-img">
+                                        
+                                        <img src="{{$notification -> users -> profile_pic}}" alt="Product Image" class="img-size-50 img-circle">
                                     </div>
+                                    
+                                    <div class="product-info">
+                                      
+                                        <span class="product-description">
+                                            
+                                            <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" 
+                                                class='noti_User'>{!! $notification->notification->type->message !!}
+                                            </a>
+                                        </span>
+                                    </div>
+                                </li>
 
-                                    <li id="refreshNote">
+                                @else
 
-                                    <li class="header">You have {!! $notifications->count() !!} notifications. <a class="pull-right" id="read-all" href="#">Mark all as read.</a></li>
-
-                                    <ul class="menu">
-
-                                        @if($notifications->count())
-                                        @foreach($notifications->orderBy('created_at', 'desc')->get()->take(10) as $notification)
-
-                                        @if($notification->notification->type->type == 'registration')
-                                        @if($notification->is_read == 1)
-                                        <li class="task" style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
-                                                    {!! $notification->notification->type->message !!}
-                                                </a></span>
-                                        </li>
-                                        @else
-                                        <li style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
-                                                    {!! $notification->notification->type->message !!}
-                                                </a></span>
-                                        </li>
-                                        @endif
-                                        @else
-                                        @if($notification->is_read == 1)
-                                        <li  class="task" style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
-                                                    {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
-                                                </a></span>
-                                        </li>
-                                        @elseif($notification->notification->model)
-                                        <li style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
-                                                    {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
-                                                </a></span>
-                                        </li>
-                                        @endif
-                                        @endif
-                                        @endforeach
-                                        @endif
-                                    </ul>
-                            </li>
-                            <li class="footer no-border"><div class="col-md-5"></div><div class="col-md-2">
-                                    <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="display: none;" id="notification-loader">
-                                </div><div class="col-md-5"></div></li>
-                            <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
-                            </li>
-                        </ul>
-                        </li>
-                        <li class="dropdown">
-                            <?php $src = Lang::getLocale().'.png'; ?>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><img src="{{asset("lb-faveo/flags/$src")}}"></img> &nbsp;<span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                @foreach($langs as $key => $value)
-                                            <?php $src = $key.".png"; ?>
-                                            <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}"></img>&nbsp;{{$value[0]}}&nbsp;
-                                            @if(Lang::getLocale() == "ar")
-                                            &rlm;
-                                            @endif
-                                            ({{$value[1]}})</a></li>
-                                @endforeach      
-                            </ul>
-                        </li>
-                        <!-- User Account: style can be found in dropdown.less -->
-                        <li class="dropdown user user-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                @if($auth_user_id)
-                                <img src="{{$auth_user_profile_pic}}"class="user-image" alt="User Image"/>
-                                <span class="hidden-xs">{{$auth_name}}</span>
+                                <li class="item">
+                                
+                                    <div class="product-img">
+                                        
+                                        <img src="{{$notification -> users -> profile_pic}}" alt="Product Image" class="img-size-50 img-circle">
+                                    </div>
+                                    
+                                    <div class="product-info">
+                                      
+                                        <span class="product-description">
+                                            
+                                            <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" 
+                                                class='noti_User'>{!! $notification->notification->type->message !!}
+                                            </a>
+                                        </span>
+                                    </div>
+                                </li>
                                 @endif
-                            </a>
-                            <ul class="dropdown-menu">
-                                <!-- User image -->
-                                <li class="user-header"  style="background-color:#343F44;">
-                                    <img src="{{$auth_user_profile_pic}}" class="img-circle" alt="User Image" />
-                                    <p>
-                                        {{$auth_name}} - {{$auth_user_role}}
-                                        <small></small>
-                                    </p>
-                                </li>
-                                <!-- Menu Footer-->
-                                <li class="user-footer" style="background-color:#1a2226;">
-                                    <div class="pull-left">
-                                        <a href="{{URL::route('profile')}}" class="btn btn-info btn-sm"><b>{!! Lang::get('lang.profile') !!}</b></a>
-                                    </div>
-                                    <div class="pull-right">
-                                        <a href="{{url('auth/logout')}}" class="btn btn-danger btn-sm"><b>{!! Lang::get('lang.sign_out') !!}</b></a>
-                                    </div>
-                                </li>
+                                @else
+                                @if($notification->is_read == 1)
 
+                                <li class="item" class="task">
+                                
+                                    <div class="product-img">
+                                        
+                                        <img src="{{$notification -> users -> profile_pic}}" alt="Product Image" class="img-size-50 img-circle">
+                                    </div>
+                                    
+                                    <div class="product-info">
+                                      
+                                        <span class="product-description">
+                                            
+                                            <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' 
+                                                class='noti_User'>
+                                                {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
+                                            </a>
+                                        </span>
+                                    </div>
+                                </li>
+                           
+                                @elseif($notification->notification->model)
+                                
+                                <li class="item">
+                                
+                                    <div class="product-img">
+                                        
+                                        <img src="{{$notification -> users -> profile_pic}}" alt="Product Image" class="img-size-50 img-circle">
+                                    </div>
+                                    
+                                    <div class="product-info">
+                                      
+                                        <span class="product-description">
+                                            
+                                            <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' 
+                                                class='noti_User'>
+                                                {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
+                                            </a>
+                                        </span>
+                                    </div>
+                                </li>
+                                @endif
+                                @endif
+                                @endforeach
+                                @endif
+
+                                <li class="item" style="position: relative;top: -5px;">
+
+                                    <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="display: none;margin-left: 100px;" id="notification-loader" 
+                                        class="img-size-50">
+                                </li>
+                                
+                                <li class="dropdown-footer"><a class="text-dark" href="{{ url('notifications-list')}}">View all</a>
                             </ul>
+                        </div>
+                    </li>
 
-                        </li>
+                    <li class="nav-item dropdown">
 
+                        <?php $src = Lang::getLocale().'.png'; ?>
+
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                            <img src="{{asset("lb-faveo/flags/$src")}}">
+                        </a>
+                       
+                       <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right p-0" style="width: 290px;">
+                           
+                           @foreach($langs as $key => $value)
+                            <?php $src = $key.".png"; ?>
+                            <a href="#" class="dropdown-item" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}">&nbsp;{{$value[0]}}&nbsp;
+                            @if(Lang::getLocale() == "ar")
+                            &rlm;
+                            @endif
+                            ({{$value[1]}})</a>
+                            @endforeach      
+                       </div>
+                    </li>
+
+                    <li class="nav-item dropdown user-menu">
+
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                            @if($auth_user_id)
+                            <img src="{{$auth_user_profile_pic}}"class="user-image img-circle elevation-2" alt="User Image"/>
+                            <span class="d-none d-md-inline">{{$auth_name}}</span>
+                            @endif
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <!-- User image -->
+                            <li class="user-header bg-secondary"  style="background-color:#343F44;">
+
+                                <img src="{{$auth_user_profile_pic}}" class="img-circle elevation-2" alt="User Image" />
+
+                                <p style="margin-top: 0px;">{{$auth_name}}
+                                    <small class="text-capitalize">{{$auth_user_role}}</small>
+                                </p>
+                            </li>
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                
+                                <a href="{{URL::route('profile')}}" class="btn btn-primary btn-flat">{!! Lang::get('lang.profile') !!}</a>
+                                
+                                <a href="{{url('auth/logout')}}" class="btn btn-danger btn-flat float-right">{!! Lang::get('lang.sign_out') !!}</a>
+                            </li>
                         </ul>
+                    </li>
+                </ul>
+            </nav>
 
-                    </div>
-
-                </nav>
-            </header>
             <!-- Left side column. contains the logo and sidebar -->
-            <aside class="main-sidebar">
-                <!-- sidebar: style can be found in sidebar.less -->
-                <section class="sidebar">
-                    <div class="user-panel">
+            <aside class="main-sidebar sidebar-dark-custom elevation-4">
+
+                <a href="http://www.faveohelpdesk.com" class="brand-link" style="text-align: center;">
+                    <img src="{{ asset('lb-faveo/media/images/logo.png')}}" class="brand-image" alt="Company Log0" style="opacity: .8">
+                </a>
+
+                <div class="sidebar">
+        
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                         @if (trim($__env->yieldContent('profileimg')))
                         <h1>@yield('profileimg')</h1>
                         @else
-                        <div class = "row">
-                            <div class="col-xs-3"></div>
-                            <div class="col-xs-2" style="width:50%;">
-                                <a href="{!! url('profile') !!}">
-                                    <img src="{{$auth_user_profile_pic}}" class="img-circle" alt="User Image" />
-                                </a>
-                            </div>
+                       <div class="image">
+
+                            <img id="sidebar-profile-img" src="{{$auth_user_profile_pic}}" alt="User Image" width="auto" height="auto" 
+                                class="img-circle elevation-2">
                         </div>
                         @endif
-                        <div class="info" style="text-align:center;">
+                       <div class="info">
                             @if($auth_user_id)
-                            <p>{{$auth_name}}</p>
+                           <a class="d-block" href="{!! url('profile') !!}">{{$auth_name}}</a>
                             @endif
-                            @if($auth_user_id && $auth_user_active==1)
-                            <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-                            @else
-                            <a href="#"><i class="fa fa-circle"></i> Offline</a>
-                            @endif
-                        </div>
+                       </div>
                     </div>
-                    <ul id="side-bar" class="sidebar-menu">
-                        @if($replaceside==0)
-                        @yield('sidebar')
-                        <li class="header">{!! Lang::get('lang.Tickets') !!}</li>
 
-                        <li @yield('inbox')>
-                             <a href="{{ url('tickets')}}" id="load-inbox">
-                                <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green">{{$tickets -> count()}}</small>
-                            </a>
-                        </li>
-                        <li @yield('myticket')>
-                             <a href="{{url('/tickets?show=mytickets')}}" id="load-myticket">
-                                <i class="fa fa-user"></i> <span>{!! Lang::get('lang.my_tickets') !!} </span>
-                                <small class="label pull-right bg-green">{{$myticket -> count()}}</small>
-                            </a>
-                        </li>
-                        <li @yield('unassigned')>
-                             <a href="{{url('/tickets?assigned[]=0')}}" id="load-unassigned">
-                                <i class="fa fa-th"></i> <span>{!! Lang::get('lang.unassigned') !!}</span>
-                                <small class="label pull-right bg-green">{{$unassigned -> count()}}</small>
-                            </a>
-                        </li>
-                        <li @yield('overdue')>
-                             <a href="{{url('/tickets?show=overdue')}}" id="load-unassigned">
-                                <i class="fa fa-calendar-times-o"></i> <span>{!! Lang::get('lang.overdue') !!}</span>
-                                <small class="label pull-right bg-green">{{$overdues->count()}}</small>
-                            </a>
-                        </li>
+                    <nav class="mt-2">
+                        
+                        <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+                            
+                            @if($replaceside==0)
+                            @yield('sidebar')
+                            <li class="nav-header">{!! Lang::get('lang.Tickets') !!}</li>
 
-                        <li @yield('trash')>
-                             <a href="{{url('/tickets?show=trash')}}">
-                                <i class="fa fa-trash-o"></i> <span>{!! Lang::get('lang.trash') !!}</span>
-                                <small class="label pull-right bg-green">{{$deleted -> count()}}</small>
-                            </a>
-                        </li>
-                        <li class="header">{!! Lang::get('lang.Departments') !!}</li>
-                        <?php
-            $flattened = $department->flatMap(function ($values) {
-                return $values->keyBy('status');
-            });
-            $statuses = $flattened->keys();
-            ?>
+                            <li @yield('inbox') class="nav-item">
+                                <a href="{{ url('tickets')}}" id="load-inbox" class="nav-link">
+                                    <i class="fas fa-envelope"></i> 
+                                    <p>{!! Lang::get('lang.inbox') !!}</p> 
+                                    <small class="right badge badge-success">{{$tickets -> count()}}</small>
+                                </a>
+                            </li>
+
+                            <li @yield('myticket') class="nav-item">
+                                <a href="{{url('/tickets?show=mytickets')}}" id="load-myticket" class="nav-link">
+                                    <i class="fas fa-user"></i> 
+                                    <p>{!! Lang::get('lang.my_tickets') !!} </p>
+                                    <small class="right badge badge-success">{{$myticket -> count()}}</small>
+                                </a>
+                            </li>
+
+                            <li @yield('unassigned') class="nav-item">
+                                 <a href="{{url('/tickets?assigned[]=0')}}" id="load-unassigned" class="nav-link">
+                                    <i class="fas fa-th"></i> 
+                                    <p>{!! Lang::get('lang.unassigned') !!}</p>
+                                    <small class="right badge badge-success">{{$unassigned -> count()}}</small>
+                                </a>
+                            </li>
+
+                            <li @yield('overdue') class="nav-item">
+                                 <a href="{{url('/tickets?show=overdue')}}" id="load-unassigned" class="nav-link">
+                                    <i class="fas fa-calendar-times"></i> 
+                                    <p>{!! Lang::get('lang.overdue') !!}</p>
+                                    <small class="right badge badge-success">{{$overdues->count()}}</small>
+                                </a>
+                            </li>
+
+                            <li @yield('trash') class="nav-item">
+                                 <a href="{{url('/tickets?show=trash')}}" class="nav-link">
+                                    <i class="fas fa-trash"></i> 
+                                    <p>{!! Lang::get('lang.trash') !!}</p>
+                                    <small class="right badge badge-success">{{$deleted -> count()}}</small>
+                                </a>
+                            </li>
+
+                            <li class="nav-header">{!! Lang::get('lang.Departments') !!}</li>
+
+                            <?php
+                            $flattened = $department->flatMap(function ($values) {
+                                return $values->keyBy('status');
+                            });
+                            $statuses = $flattened->keys();
+                            ?>
                             <?php
                                 $segments = \Request::segments();
                                 $segment = "";
@@ -320,29 +415,40 @@
                                     $status2 = '';
                                 }
                             ?>
-                        @foreach($department as $name=>$dept)
 
-                        <li class="treeview @if($dept2 === $name) @yield('ticket-bar') @endif ">
-                            <a href="#">
-                                <i class="fa fa-folder-open"></i> <span>{!! $name !!}</span> <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                           @foreach($statuses as $status)
-                           @if($dept->get($status))
-                           <ul class="treeview-menu">
-                                <li @if($status2 == $dept->get($status)->status && $dept2 === $name) @yield('inbox') @endif><a href="{!! url('tickets?departments='.$name.'&status='.$dept->get($status)->status) !!}"><i class="fa fa-circle-o"></i> {!!$dept->get($status)->status !!}<small class="label pull-right bg-green">{{$dept->get($status)->count}}</small></a></li>
-                            </ul>
-                           @endif
+                            @foreach($department as $name=>$dept)
+
+                            <li class="nav-item @if($dept2 === $name) @yield('ticket-bar') @endif ">
+                                
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-folder-open"></i>
+                                    <p>{!! $name !!}<i class="right fas fa-angle-left"></i></p>
+                                </a>
+                                
+                                @foreach($statuses as $status)
+                                @if($dept->get($status))
+
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item" @if($status2 == $dept->get($status)->status && $dept2 === $name) @yield('inbox') @endif>
+                                        <a href="{!! url('tickets?departments='.$name.'&status='.$dept->get($status)->status) !!}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>{!!$dept->get($status)->status !!}</p>
+                                            <small class="right badge badge-success">{{$dept->get($status)->count}}</small>
+                                        </a>
+                                    </li>
+                                </ul>
+                                @endif
+                                @endforeach
+                            </li>
                             @endforeach
+                            @else
 
-                        </li>
-                        @endforeach
-                        @else
-
-<?php \Event::fire('service.desk.agent.sidebar', array()); ?>
-                        @endif
-                    </ul>
-                </section>
-                <!-- /.sidebar -->
+                            <?php \Event::fire('service.desk.agent.sidebar', array()); ?>
+                            @endif
+                        </ul>
+                    </nav>
+                </div>
             </aside>
 <?php
 $agent_group = $auth_user_assign_group;
@@ -436,30 +542,21 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
             </footer>
         </div><!-- ./wrapper -->
 
-        <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}" type="text/javascript"></script>
-
         <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
+        
+        <script src="{{asset("lb-faveo/js/popper.min.js")}}" type="text/javascript"></script>
         <!-- Bootstrap 3.3.2 JS -->
-        <script src="{{asset("lb-faveo/js/bootstrap.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/bootstrap4.min.js")}}" type="text/javascript"></script>
+
+        <script src="{{asset("lb-faveo/adminlte3/js/adminlte3.min.js")}}" type="text/javascript"></script>
         <!-- Slimscroll -->
-        <script src="{{asset("lb-faveo/plugins/slimScroll/jquery.slimscroll.min.js")}}" type="text/javascript"></script>
-        <!-- FastClick -->
-        <script src="{{asset("lb-faveo/plugins/fastclick/fastclick.min.js")}}"  type="text/javascript"></script>
-        <!-- AdminLTE App -->
-        <script src="{{asset("lb-faveo/js/app.min.js")}}" type="text/javascript"></script>
-
-        <!-- iCheck -->
-        <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
-        <!-- jquery ui -->
-        <script src="{{asset("lb-faveo/js/jquery.ui.js")}}" type="text/javascript"></script>
-
+        <script src="{{asset("lb-faveo/adminlte3/plugins/overlayScrollbars/overlayScrollbars.min.js")}}" type="text/javascript"></script>
+       
         <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
 
         <script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
         <!-- Page Script -->
         <script src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}" type="text/javascript" ></script>
-
-        <script type="text/javascript" src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"  type="text/javascript"></script>
 
         <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
 
@@ -469,6 +566,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
 
         <!-- full calendar-->
         <script src="{{asset('lb-faveo/plugins/fullcalendar/fullcalendar.min.js')}}" type="text/javascript"></script>
+
         <script src="{{asset('lb-faveo/plugins/daterangepicker/daterangepicker.js')}}" type="text/javascript"></script>
         <script>
                     $(document).ready(function () {
@@ -545,11 +643,8 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                     });
                     });</script>
 
-        <script src="{{asset("lb-faveo/js/tabby.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/js/languagechanger.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" type="text/javascript"></script>
-
-        <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
 
         <script type="text/javascript">
                     $.ajaxSetup({
