@@ -1,11 +1,11 @@
 @if (isset($breadcrumbs))
-<ol class="breadcrumb breadcrumb-custom">
-    <li class="text"> {!! Lang::get('lang.you_are_here') !!} :</li>
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
     @foreach($breadcrumbs as $breadcrumb)
     @if (!$breadcrumb->last)
-    <li><a href="{{ $breadcrumb->url }}">{{ $breadcrumb->title }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ $breadcrumb->url }}">{{ $breadcrumb->title }}</a></li>
     @else
-    <li class="text">{{ $breadcrumb->title }}</li>
+    <li class="breadcrumb-item active">{{ $breadcrumb->title }}</li>
     @endif
     @endforeach
 </ol>

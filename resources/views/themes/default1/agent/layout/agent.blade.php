@@ -83,7 +83,7 @@
             }
             ?>
 
-             <nav class="main-header navbar navbar-expand navbar-dark navbar-custom">
+             <nav class="main-header navbar navbar-expand navbar-dark navbar-lightblue">
                 
                 <!-- Sidebar toggle button-->
                 <ul class="navbar-nav">
@@ -95,30 +95,33 @@
                 </ul>
 
                 @if($replacetop==0)
+
+
                 <ul class="navbar-nav">
 
-                    <li @yield('Dashboard') class="nav-item d-none d-sm-inline-block">
+                    <li class="nav-item d-none d-sm-inline-block">
 
-                        <a id="dash" data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard(event);" class="nav-link">
+                        <a id="dash" @yield('Dashboard') data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard(event);" 
+                            class="nav-link">
                             {!! Lang::get('lang.dashboard') !!}
                         </a>
                     </li>
                     
-                    <li @yield('Users') class="nav-item d-none d-sm-inline-block">
-                        <a data-target="#tabB" href="#" class="nav-link">{!! Lang::get('lang.users') !!}</a>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#tab_user" data-toggle="tab" @yield('Users') class="nav-link">{!! Lang::get('lang.users') !!}</a>
                     </li>
                     
-                    <li @yield('Tickets') class="nav-item d-none d-sm-inline-block">
-                        <a data-target="#tabC" href="#" class="nav-link">{!! Lang::get('lang.tickets') !!}</a>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#tab_ticket" data-toggle="tab" @yield('Tickets') class="nav-link">{!! Lang::get('lang.tickets') !!}</a>
                     </li>
                     
-                    <li @yield('Tools') class="nav-item d-none d-sm-inline-block">
-                        <a data-target="#tabD" href="#" class="nav-link">{!! Lang::get('lang.tools') !!}</a>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#tab_tools" data-toggle="tab" @yield('Tools') class="nav-link">{!! Lang::get('lang.tools') !!}</a>
                     </li>
                     
                     @if($auth_user_role == 'admin')
-                    <li @yield('Report') class="nav-item d-none d-sm-inline-block">
-                        <a href="{{URL::route('report.index')}}" onclick="clickReport(event);"  class="nav-link">Report</a>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="{{URL::route('report.index')}}" onclick="clickReport(event);" @yield('Report') class="nav-link">Report</a>
                     </li>
                     @endif
                     
@@ -320,7 +323,7 @@
             </nav>
 
             <!-- Left side column. contains the logo and sidebar -->
-            <aside class="main-sidebar sidebar-dark-custom elevation-4">
+            <aside class="main-sidebar elevation-4 sidebar-dark-lightblue">
 
                 <a href="http://www.faveohelpdesk.com" class="brand-link" style="text-align: center;">
                     <img src="{{ asset('lb-faveo/media/images/logo.png')}}" class="brand-image" alt="Company Log0" style="opacity: .8">
@@ -450,95 +453,156 @@
                     </nav>
                 </div>
             </aside>
-<?php
-$agent_group = $auth_user_assign_group;
-$group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first();
-?>
+
+            <?php
+            $agent_group = $auth_user_assign_group;
+            $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first();
+            ?>
             <!-- Right side column. Contains the navbar and content of the page -->
             <div class="content-wrapper">
+
+                <div class="tab-content" style="position: fixed;z-index: 1;width: 100%;">
+                  @if($replacetop==0)
+                  <div class="tab-pane" id="tab_user">
+                        
+                        <nav class="navbar navbar-expand navbar-dark navbar-lightblue">
+                          
+                          <ul class="navbar-nav">
+                            
+                            <li class="nav-item d-none d-sm-inline-block">
+                              <a href="{{ url('user')}}" @yield('user') class="nav-link">{!! Lang::get('lang.user_directory') !!}</a>
+                            </li>
+
+                            <li class="nav-item d-none d-sm-inline-block">
+                              <a href="{{ url('organizations')}}" @yield('organizations') class="nav-link">{!! Lang::get('lang.organizations') !!}</a>
+                            </li>
+                          </ul>
+                        </nav>
+                    </div>
+
+                    <div class="tab-pane" id="tab_ticket">
+                        
+                        <nav class="navbar navbar-expand navbar-dark navbar-lightblue">
+                          
+                          <ul class="navbar-nav">
+                            
+                            <li class="nav-item d-none d-sm-inline-block">
+                              <a href="{{ url('/tickets?last-response-by[]=Client') }}" @yield('open') class="nav-link" id="load-open">{!! Lang::get('lang.not-answered') !!}</a>
+                            </li>
+
+                            <li class="nav-item d-none d-sm-inline-block">
+                              <a href="{{ url('/tickets?last-response-by[]=Agent')}}" @yield('answered') class="nav-link" id="load-answered">{!! Lang::get('lang.answered') !!}</a>
+                            </li>
+
+                            <li class="nav-item d-none d-sm-inline-block">
+                              <a href="{{ url('/tickets?assigned[]=1') }}"  @yield('assigned') class="nav-link" id="load-assigned">{!! Lang::get('lang.assigned') !!}</a>
+                            </li>
+
+                            <li class="nav-item d-none d-sm-inline-block">
+                              <a href="{{ url('/tickets?show=closed') }}" @yield('closed') class="nav-link">{!! Lang::get('lang.closed') !!}</a>
+                            </li>
+
+                            <?php if ($group->can_create_ticket == 1) { ?>
+                            <li class="nav-item d-none d-sm-inline-block">
+                              <a href="{{ url('/newticket')}}" @yield('newticket') class="nav-link">{!! Lang::get('lang.create_ticket') !!}</a>
+                            </li>
+                            <?php } ?>
+                          </ul>
+                        </nav>
+                    </div>
+
+                    <div class="tab-pane" id="tab_tools">
+                        
+                        <nav class="navbar navbar-expand navbar-dark navbar-lightblue">
+                          
+                          <ul class="navbar-nav">
+                            
+                            <li class="nav-item d-none d-sm-inline-block">
+                              <a href="{{ url('/canned/list')}}" @yield('tools') class="nav-link">{!! Lang::get('lang.canned_response') !!}</a>
+                            </li>
+
+                            <li class="nav-item d-none d-sm-inline-block">
+                              <a href="{{ url('/comment')}}" @yield('kb') class="nav-link">{!! Lang::get('lang.knowledge_base') !!}</a>
+                            </li>
+                          </ul>
+                        </nav>
+                    </div>
+                    @endif
+                    <?php \Event::fire('service.desk.agent.topsubbar', array()); ?>
+                  <!-- /.tab-pane -->
+                </div>
                 <!-- Content Header (Page header) -->
                 <div class="tab-content" style="background-color: #80B5D3; position: fixed; width:100% ;padding: 0 0px 0 0px; z-index:999">
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         <div class="tabs-content">
                             @if($replacetop==0)
-                            <div class="tabs-pane @yield('dashboard-bar')"  id="tabA">
-                                <ul class="nav navbar-nav">
-                                </ul>
-                            </div>
-                            <div class="tabs-pane @yield('user-bar')" id="tabB">
-                                <ul class="nav navbar-nav">
-                                    <li id="bar" @yield('user')><a href="{{ url('user')}}" >{!! Lang::get('lang.user_directory') !!}</a></li></a></li>
-                                    <li id="bar" @yield('organizations')><a href="{{ url('organizations')}}" >{!! Lang::get('lang.organizations') !!}</a></li></a></li>
-
-                                </ul>
-                            </div>
-                            <div class="tabs-pane @yield('ticket-bar')" id="tabC">
-                                <ul class="nav navbar-nav">
-                                    <li id="bar" @yield('open')><a href="{{ url('/tickets?last-response-by[]=Client') }}" id="load-open">{!! Lang::get('lang.not-answered') !!}</a></li>
-                                    <li id="bar" @yield('answered')><a href="{{ url('/tickets?last-response-by[]=Agent')}}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
-                                    <li id="bar" @yield('assigned')><a href="{{ url('/tickets?assigned[]=1') }}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
-                                    <li id="bar" @yield('closed')><a href="{{ url('/tickets?show=closed') }}" >{!! Lang::get('lang.closed') !!}</a></li>
-<?php if ($group->can_create_ticket == 1) { ?>
-                                        <li id="bar" @yield('newticket')><a href="{{ url('/newticket')}}" >{!! Lang::get('lang.create_ticket') !!}</a></li>
-                                    <?php } ?>
-                                </ul>
-                            </div>
-                            <div class="tabs-pane @yield('tools-bar')" id="tabD">
-                                <ul class="nav navbar-nav">
-                                    <li id="bar" @yield('tools')><a href="{{ url('/canned/list')}}" >{!! Lang::get('lang.canned_response') !!}</a></li>
-                                    <li id="bar" @yield('kb')><a href="{{ url('/comment')}}" >{!! Lang::get('lang.knowledge_base') !!}</a></li>
-                                </ul>
-                            </div>
-                            @if($auth_user_role == 'admin')
-                            <div class="tabs-pane @yield('report-bar')" id="tabD">
-                                <ul class="nav navbar-nav">
-                                </ul>
-                            </div>
-                            @endif
+                            
+                          
+                      
+                            
                             @endif
 <?php \Event::fire('service.desk.agent.topsubbar', array()); ?>
                         </div>
                     </div>
                 </div>
-                <section class="content-header">
-                    @yield('PageHeader')
-                    {!! Breadcrumbs::renderIfExists() !!}
-                </section>
-                <!-- Main content -->
+
+                <div class="content-header">
+                  <div class="container-fluid">
+                    <div class="row mb-2">
+                      <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">@yield('PageHeader')</h1>
+                      </div><!-- /.col -->
+                      <div class="col-sm-6">
+
+                        {!! Breadcrumbs::renderIfExists() !!}
+                      </div><!-- /.col -->
+                    </div><!-- /.row -->
+                  </div><!-- /.container-fluid -->
+                </div>
+
                 <section class="content">
-                @if($dummy_installation == 1 || $dummy_installation == '1')
-                    <div class="alert alert-info alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <i class="icon fa  fa-exclamation-triangle"></i> @if (\Auth::user()->role == 'admin')
-                            {{Lang::get('lang.dummy_data_installation_message')}} <a href="{{route('clean-database')}}">{{Lang::get('lang.click')}}</a> {{Lang::get('lang.clear-dummy-data')}}
-                        @else
-                            {{Lang::get('lang.clear-dummy-data-agent-message')}}
-                        @endif
-                    </div>
-                @elseif (!$is_mail_conigured)
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="callout callout-warning lead">
-                                <h4><i class="fa fa-exclamation-triangle"></i>&nbsp;{{Lang::get('Alert')}}</h4>
-                                <p style="font-size:0.8em">
-                                @if (\Auth::user()->role == 'admin')
-                                    {{Lang::get('lang.system-outgoing-incoming-mail-not-configured')}}&nbsp;<a href="{{URL::route('emails.create')}}">{{Lang::get('lang.confihure-the-mail-now')}}</a>
-                                @else
-                                    {{Lang::get('lang.system-mail-not-configured-agent-message')}}
-                                @endif
-                                </p>
+
+                    <div class="container-fluid">
+                        
+                        @if($dummy_installation == 1 || $dummy_installation == '1')
+                        <div class="alert alert-info alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <i class="icon fas  fa-exclamation-triangle"></i> @if (\Auth::user()->role == 'admin')
+                                {{Lang::get('lang.dummy_data_installation_message')}} <a href="{{route('clean-database')}}">{{Lang::get('lang.click')}}</a> {{Lang::get('lang.clear-dummy-data')}}
+                            @else
+                                {{Lang::get('lang.clear-dummy-data-agent-message')}}
+                            @endif
+                        </div>
+                        @elseif (!$is_mail_conigured)
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="callout callout-warning bg-warning">    
+                                    <p>
+                                        <i class="fa fa-exclamation-triangle"></i>
+                                        @if (\Auth::user()->role == 'admin')
+                                            {{Lang::get('lang.system-outgoing-incoming-mail-not-configured')}}&nbsp;<a href="{{URL::route('emails.create')}}">{{Lang::get('lang.confihure-the-mail-now')}}</a>
+                                        @else
+                                            {{Lang::get('lang.system-mail-not-configured-agent-message')}}
+                                        @endif
+                                    </p>
+                                </div>
                             </div>
                         </div>
+                        @endif
+
+                        @yield('content')
                     </div>
-                @endif
-                    @yield('content')
-                </section><!-- /.content -->
+                </section>
             </div>
+
             <footer class="main-footer">
-                <div class="pull-right hidden-xs">
-                    <b>{!! Lang::get('lang.version') !!}</b> {!! Config::get('app.version') !!}
+
+                <div class="float-right d-none d-sm-block">
+                     
+                    <span style="font-weight: 500">{!! Lang::get('lang.version') !!}</span> {!! Config::get('app.version') !!}
                 </div>
-                <strong>{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>.</strong> {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/" target="_blank">Faveo</a>
+
+                <span style="font-weight: 500">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>.</span> {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/" target="_blank">Faveo</a>
             </footer>
         </div><!-- ./wrapper -->
 
