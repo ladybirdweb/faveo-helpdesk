@@ -1,11 +1,11 @@
 @extends('themes.default1.agent.layout.agent')
 
 @section('Dashboard')
-class="active"
+class="nav-link active"
 @stop
 
 @section('dashboard-bar')
-active
+class="nav-link active"
 @stop
 
 @section('PageHeader')
@@ -13,7 +13,7 @@ active
 @stop
 
 @section('dashboard')
-class="active"
+class="nav-item d-none d-sm-inline-block active"
 @stop
 
 @section('content')
