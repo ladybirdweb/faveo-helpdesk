@@ -39,14 +39,11 @@
         <link href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}" rel="stylesheet" type="text/css" />
 
         <link href="{{asset("css/close-button.css")}}" rel="stylesheet" type="text/css" />
-
         <!--Daterangepicker-->
-        <link rel="stylesheet" href="{{asset("lb-faveo/plugins/daterangepicker/daterangepicker.css")}}" rel="stylesheet" type="text/css" />
-        <!--calendar -->
-    
-        <!-- fullCalendar 2.2.5-->
-        <link href="{{asset('lb-faveo/plugins/fullcalendar/fullcalendar.min.css')}}" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet" type="text/css" />
 
+        <link href="{{asset("lb-faveo/plugins/summernote/summernote-bs4.min.css")}}" rel="stylesheet" type="text/css" />
+        
          <script src="{{asset("lb-faveo/js/jquery-3.4.1.min.js")}}" type="text/javascript"></script>
 
         @yield('HeadInclude')
@@ -58,6 +55,10 @@
             .noti_User { color: #6c757d !important; }
 
             .brand-image{float: none !important; margin-left: 0 !important;}
+
+            .table { display: block;width: 100%;overflow-x: auto; }
+
+            td{ word-break: break-all !important; }
         </style>
     </head>
     
@@ -101,22 +102,28 @@
 
                     <li class="nav-item d-none d-sm-inline-block">
 
-                        <a id="dash" @yield('Dashboard') data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard(event);" 
+                        <a id="dash" @yield('Dashboard') href="{{URL::route('dashboard')}}" onclick="clickDashboard(event);" 
                             class="nav-link">
                             {!! Lang::get('lang.dashboard') !!}
                         </a>
                     </li>
                     
                     <li class="nav-item d-none d-sm-inline-block">
-                        <a href="#tab_user" data-toggle="tab" @yield('Users') class="nav-link">{!! Lang::get('lang.users') !!}</a>
+                        <a href="#tab_user" data-toggle="tab" @yield('Users') class="nav-link" onclick="clickUser(event);" id="user_tab">
+                            {!! Lang::get('lang.users') !!}
+                        </a>
                     </li>
                     
                     <li class="nav-item d-none d-sm-inline-block">
-                        <a href="#tab_ticket" data-toggle="tab" @yield('Tickets') class="nav-link">{!! Lang::get('lang.tickets') !!}</a>
+                        <a href="#tab_ticket" data-toggle="tab" @yield('Tickets') class="nav-link" onclick="clickTickets(event);" id="ticket_tab">
+                            {!! Lang::get('lang.tickets') !!}
+                        </a>
                     </li>
                     
                     <li class="nav-item d-none d-sm-inline-block">
-                        <a href="#tab_tools" data-toggle="tab" @yield('Tools') class="nav-link">{!! Lang::get('lang.tools') !!}</a>
+                        <a href="#tab_tools" data-toggle="tab" @yield('Tools') class="nav-link" onclick="clickTools(event);" id="tools_tab">
+                            {!! Lang::get('lang.tools') !!}
+                        </a>
                     </li>
                     
                     @if($auth_user_role == 'admin')
@@ -463,14 +470,14 @@
 
                 <div class="tab-content" style="position: fixed;z-index: 1;width: 100%;">
                   @if($replacetop==0)
-                  <div class="tab-pane" id="tab_user">
+                  <div @yield('user') class="tab-pane" id="tab_user">
                         
                         <nav class="navbar navbar-expand navbar-dark navbar-lightblue">
                           
                           <ul class="navbar-nav">
                             
                             <li class="nav-item d-none d-sm-inline-block">
-                              <a href="{{ url('user')}}" @yield('user') class="nav-link">{!! Lang::get('lang.user_directory') !!}</a>
+                              <a href="{{ url('user')}}" @yield('user-directory') class="nav-link">{!! Lang::get('lang.user_directory') !!}</a>
                             </li>
 
                             <li class="nav-item d-none d-sm-inline-block">
@@ -606,8 +613,6 @@
             </footer>
         </div><!-- ./wrapper -->
 
-        <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
-        
         <script src="{{asset("lb-faveo/js/popper.min.js")}}" type="text/javascript"></script>
         <!-- Bootstrap 3.3.2 JS -->
         <script src="{{asset("lb-faveo/js/bootstrap4.min.js")}}" type="text/javascript"></script>
@@ -616,11 +621,9 @@
         <!-- Slimscroll -->
         <script src="{{asset("lb-faveo/adminlte3/plugins/overlayScrollbars/overlayScrollbars.min.js")}}" type="text/javascript"></script>
        
-        <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
-
         <script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
-        <!-- Page Script -->
-        <script src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}" type="text/javascript" ></script>
+
+        <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
 
         <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
 
@@ -632,6 +635,13 @@
         <script src="{{asset('lb-faveo/plugins/fullcalendar/fullcalendar.min.js')}}" type="text/javascript"></script>
 
         <script src="{{asset('lb-faveo/plugins/daterangepicker/daterangepicker.js')}}" type="text/javascript"></script>
+
+        <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
+
+        <script src="{{asset("lb-faveo/plugins/summernote/summernote-bs4.min.js")}}" type="text/javascript"></script>
+
+        <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
+
         <script>
                     $(document).ready(function () {
 
@@ -721,6 +731,36 @@
                     } else {
                     window.location = "{{URL::route('dashboard')}}";
                     }
+                    }
+
+                    function clickUser(e) {
+                        $("#ticket_tab").removeClass("active");
+                        $("#tools_tab").removeClass("active");
+                        $("#tab_ticket").removeClass("active");
+                        $("#tab_ticket").css('display',"none");
+                        $("#tab_tools").removeClass("active");
+                        $("#tab_tools").css('display',"none");
+                        $("#tab_user").css('display',"block");
+                    }
+
+                    function clickTickets(e) {
+                        $("#user_tab").removeClass("active");
+                        $("#tools_tab").removeClass("active");
+                        $("#tab_user").removeClass("active");
+                        $("#tab_user").css('display',"none");
+                        $("#tab_tools").removeClass("active");
+                        $("#tab_tools").css('display',"none");
+                        $("#tab_ticket").css('display',"block");
+                    }
+
+                    function clickTools(e) {
+                        $("#ticket_tab").removeClass("active");
+                        $("#user_tab").removeClass("active");
+                        $("#tab_ticket").removeClass("active");
+                        $("#tab_ticket").css('display',"none");
+                        $("#tab_tools").css('display',"block");
+                        $("#tab_user").removeClass("active");
+                        $("#tab_user").css('display',"none");
                     }
 
             function clickReport(e) {
