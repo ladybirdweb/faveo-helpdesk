@@ -24,9 +24,9 @@ foreach($segments as $seg){
         function myFunction()
         {
             return jQuery('#chumper').dataTable({
-                "sDom": "<'row'<'col-xs-6'l><'col-xs-6'f>r>"+
+                "sDom": "<'row'<'col-sm-6'l><'col-sm-6'f>r>"+
                         "t"+
-                        "<'row'<'col-xs-6'i><'col-xs-6'p>>",
+                        "<'row'<'col-sm-6'i><'col-sm-6'p>>",
                 "sPaginationType": "full_numbers",
                 "bProcessing": true,
                 "bServerSide": true,
