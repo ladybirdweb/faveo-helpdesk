@@ -12,11 +12,11 @@ var filterClick = 0;
                     if (clicks) {
                     //Uncheck all checkboxes
                         $(".mailbox-messages input[type='checkbox']").iCheck("uncheck");
-                        $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
+                        $(".far", this).removeClass("fa-check-square").addClass('fa-square');
                     } else {
                     //Check all checkboxes
                         $(".mailbox-messages input[type='checkbox']").iCheck("check");
-                        $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+                        $(".far", this).removeClass("fa-square").addClass('fa-check-square');
                     }
                     $(this).data("clicks", !clicks);
                 });
@@ -52,18 +52,22 @@ var filterClick = 0;
 
             $(".closemodal, .no").click(function () {
                 $("#myModal").css("display", "none");
+                $('#myModal').modal('toggle');
             });
             
             $(".closemodal, .no").click(function () {
                 $("#myModal").css("display", "none");
+                $('#myModal').modal('toggle');
             });
             
             $('.yes').click(function () {
                 var values = getValues();
                 if (values == "") {
                     $("#myModal").css("display", "none");
+                    $('#myModal').modal('toggle');
                 } else {
                     $("#myModal").css("display", "none");
+                    $('#myModal').modal('toggle');
                     if (c_status != 'hard-delete') {
                         var url = '{{url("select_all")}}/';
                         $.ajax({
@@ -77,6 +81,8 @@ var filterClick = 0;
                             beforeSend: function() {
                                 $('.loader1').css('display','block');
                                 $('.loader').css('display','block');
+                                $('#refresh').css('display','none');
+                                $('#loader1').css('display','block');
                                 $('#d1').prop('disabled', true);
                                 $("#hidespin").hide();
                                 $("#spin").show();
@@ -86,6 +92,8 @@ var filterClick = 0;
                             success: function(response) {
                                 $('.loader1').css('display','none');
                                 $('.loader').css('display','none');
+                                $('#refresh').css('display','block');
+                                $('#loader1').css('display','none');
                                 $('#d1').prop('disabled', false);
                                 $("#hide2").show();
                                 $("#show2").hide();
@@ -146,6 +154,7 @@ var filterClick = 0;
                 }
                 $('#custom-alert-body').html(msg);
                 $("#myModal").css("display", "block");
+                $('#myModal').modal('toggle');
             }
 
             $('#modalpopup').on('submit', function(e){

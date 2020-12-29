@@ -27,7 +27,7 @@ class="nav-link active"
 @section('content')
 @if(Session::has('fails'))
 <div class="alert alert-danger alert-dismissable">
-    <i class="fa fa-ban"></i>
+    <i class="fas fa-ban"></i>
     <b>{!! Lang::get('lang.alert') !!}!</b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {{Session::get('fails')}}
@@ -180,14 +180,6 @@ class="nav-link active"
             ['height', ['height']]
           ]
           });
-
-        $('input[type="checkbox"]').iCheck({
-            checkboxClass: 'icheckbox_flat-blue'
-        });
-        $('input[type="radio"]').iCheck({
-            radioClass: 'iradio_flat-blue'
-        });
-    
     });        
 </script>
 @stop

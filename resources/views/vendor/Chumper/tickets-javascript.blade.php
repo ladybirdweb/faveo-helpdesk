@@ -35,7 +35,6 @@ $path = public_path();
                 "oLanguage": {
                     "sLengthMenu": "_MENU_ Records per page",
                     "sSearch"    : "Search: ",
-                    "sProcessing": '<img id="blur-bg" class="backgroundfadein" style="top:40%;left:50%; width: 50px; height:50 px; display: block; position:    fixed;" src="{!! asset("lb-faveo/media/images/gifloader3.gif") !!}">'
                 },
                 "stateLoadParams": function (settings, data) {
                     if ('{{$load_old_state}}') {

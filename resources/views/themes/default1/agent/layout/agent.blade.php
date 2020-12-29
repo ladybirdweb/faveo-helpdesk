@@ -59,6 +59,10 @@
             .table { display: block;width: 100%;overflow-x: auto; }
 
             td{ word-break: break-all !important; }
+
+            .table { width: 100% !important;display: table !important; }
+
+            .list-group-item{ margin-bottom: auto !important; }
         </style>
     </head>
     
@@ -487,7 +491,7 @@
                         </nav>
                     </div>
 
-                    <div class="tab-pane" id="tab_ticket">
+                    <div @yield('ticket') class="tab-pane" id="tab_ticket">
                         
                         <nav class="navbar navbar-expand navbar-dark navbar-lightblue">
                           
@@ -725,7 +729,8 @@
                     headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
                     });</script>
         <script type="text/javascript">
-                    function clickDashboard(e) {
+
+              function clickDashboard(e) {
                     if (e.ctrlKey === true) {
                     window.open('{{URL::route("dashboard")}}', '_blank');
                     } else {
@@ -772,17 +777,6 @@
             }
         </script>
         <script>
-    $(function() {
-
-
-        $('input[type="checkbox"]').iCheck({
-            checkboxClass: 'icheckbox_flat-blue'
-        });
-        $('input[type="radio"]:not(.not-apply)').iCheck({
-            radioClass: 'iradio_flat-blue'
-        });
-
-    });
 </script>
 <?php Event::fire('show.calendar.script', array()); ?>
 <?php Event::fire('load-calendar-scripts', array()); ?>

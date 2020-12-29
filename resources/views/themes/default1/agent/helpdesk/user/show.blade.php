@@ -98,7 +98,7 @@ class="nav-link active"
             <div class="card-body ">
                 <div>
                     <center>
-                        <img src="{{ $users->profile_pic }}" class="img-circle" alt="User Image" style="border:3px solid #CBCBDA;padding:3px;">  
+                        <img src="{{ $users->profile_pic }}" class="img-circle" alt="User Image" style="border:3px solid #CBCBDA;padding:3px;width: 100px;height:100px;">  
                         @if($users->first_name || $users->last_name)
                         <?php $name_of_user = $users->first_name.' '.$users->last_name; ?>
                         @else
@@ -111,11 +111,11 @@ class="nav-link active"
                 <ul class="list-group list-group-unbordered mb-3 mt-3">
                      @if($users->user_name)
                     <li class="list-group-item mb-0">
-                        <b>{{Lang::get('lang.user_name')}}</b> <a class="float-right">{{str_limit($users->user_name,10) }}</a>
+                        <b>{{Lang::get('lang.user_name')}}</b> <a class="float-right" title="{{$users->user_name}}">{{str_limit($users->user_name,10) }}</a>
                     </li>
                      @endif
                      <li class="list-group-item mb-0">
-                        <b>{{Lang::get('lang.email')}}</b> <a class="float-right"> {{str_limit($users->email,10) }}</a>
+                        <b>{{Lang::get('lang.email')}}</b> <a class="float-right" title="{{$users->email}}"> {{str_limit($users->email,10) }}</a>
                     </li>
 
                     @if($users->is_delete != '1')
@@ -193,25 +193,26 @@ class="nav-link active"
 
                     @if($users->country_code)
                     <li class="list-group-item mb-0">
-                        <b>{{Lang::get('lang.country_code')}}</b> <a class="float-right"> {{$users->country_code}}</a>
+                        <b>{{Lang::get('lang.country_code')}}</b> <a class="float-right" title="{{$users->country_code}}"> 
+                            {{str_limit($users->country_code,10) }}</a>
                     </li>
                     @endif
 
                     @if($users->ext)
                     <li class="list-group-item mb-0">
-                        <b>{{Lang::get('lang.ext')}}</b> <a class="float-right"> {{$users->ext}}</a>
+                        <b>{{Lang::get('lang.ext')}}</b> <a class="float-right" title="{{$users->ext}}"> {{str_limit($users->ext,10)}}</a>
                     </li>
                     @endif
 
                     @if($users->mobile)
                     <li class="list-group-item mb-0">
-                        <b>{{Lang::get('lang.mobile')}}</b> <a class="float-right"> {{$users->mobile}}</a>
+                        <b>{{Lang::get('lang.mobile')}}</b> <a class="float-right" title="{{$users->mobile}}"> {{str_limit($users->mobile,10)}}</a>
                     </li>
                     @endif
 
                     @if($users->phone_number)
                     <li class="list-group-item mb-0">
-                        <b>{{Lang::get('lang.phone')}}</b> <a class="float-right"> {{$users->phone_number}}</a>
+                        <b>{{Lang::get('lang.phone')}}</b><a class="float-right" title="{{$users->phone_number}}">{{str_limit($users->phone_number,10)}}</a>
                     </li>
                     @endif
 
