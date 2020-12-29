@@ -163,7 +163,7 @@ class SettingsController extends Controller
                         })
 
                         ->addColumn('Actions', function ($model) {
-                            return '<div class="row"><div class="col-md-12"><a href=comment/delete/'.$model->id.' class="btn btn-danger btn-xs">'.\Lang::get('lang.delete').'</a></div><div class="col-md-12"><a href=published/'.$model->id.' class="btn btn-warning btn-xs">'.\Lang::get('lang.publish').'</a></div></div>';
+                            return '<div class="row"><a href=comment/delete/'.$model->id.' class="btn btn-danger btn-xs">'.\Lang::get('lang.delete').'</a>&nbsp;<a href=published/'.$model->id.' class="btn btn-warning btn-xs">'.\Lang::get('lang.publish').'</a></div>';
                         })
                         ->make();
     }

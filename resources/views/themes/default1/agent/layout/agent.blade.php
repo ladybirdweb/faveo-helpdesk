@@ -522,7 +522,7 @@
                         </nav>
                     </div>
 
-                    <div class="tab-pane" id="tab_tools">
+                    <div @yield('tool') class="tab-pane" id="tab_tools">
                         
                         <nav class="navbar navbar-expand navbar-dark navbar-lightblue">
                           
