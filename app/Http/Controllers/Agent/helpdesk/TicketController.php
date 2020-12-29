@@ -2676,7 +2676,7 @@ class TicketController extends Controller
     {
         return \Datatable::table()
             ->addColumn(
-                '<a class="checkbox-toggle"><i class="fa fa-square-o fa-2x"></i></a>',
+                '<a class="checkbox-toggle"><i class="far fa-square fa-2x"></i></a>',
                 Lang::get('lang.subject'),
                 Lang::get('lang.ticket_id'),
                 Lang::get('lang.from'),

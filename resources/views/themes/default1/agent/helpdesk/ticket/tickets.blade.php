@@ -1,11 +1,15 @@
 @extends('themes.default1.agent.layout.agent')
 
 @section('Tickets')
-class="active"
+class="nav-link active"
 @stop
 
 @section('ticket-bar')
 active
+@stop
+
+@section('ticket')
+class="active"
 @stop
 
 <?php
@@ -21,47 +25,47 @@ if (\Input::has('assigned'))
 
 @if($activepage == 'trash')
     @section('trash')
-        class="active"
+        class="nav-link active"
     @stop
 @elseif ($activepage == 'mytickets')
     @section('myticket')
-        class="active"
+        class="nav-link active"
     @stop
 @elseif ($activepage == 'followup')
     @section('followup')
-        class="active"
+        class="nav-link active"
     @stop
 @elseif($activepage == 'inbox')
     @section('inbox')
-        class="active"
+        class="nav-link active"
     @stop
 @elseif($activepage == 'overdue')
     @section('overdue')
-        class="active"
+        class="nav-link active"
     @stop
 @elseif($activepage == 'closed')
     @section('closed')
-        class="active"
+        class="nav-link active"
     @stop
 @elseif($activepage == 'approval')
     @section('approval')
-        class="active"
+        class="nav-link active"
     @stop
 @elseif($activepage == 'Agent')
     @section('answered')
-        class="active"
+        class="nav-link active"
     @stop
 @elseif($activepage == 'Client')
     @section('open')
-        class="active"
+        class="nav-link active"
     @stop
 @elseif($activepage == 0)
     @section('unassigned')
-        class="active"
+        class="nav-link active"
     @stop
 @else
     @section('assigned')
-        class="active"
+        class="nav-link active"
     @stop
 @endif
 
@@ -95,9 +99,9 @@ if (\Input::has('assigned'))
 @stop
 @section('content')
 <!-- Main content -->
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <h3 class="box-title">
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">
             @if($activepage == 'trash')
             {{Lang::get('lang.trash')}}
             @elseif ($activepage == 'mytickets')
@@ -129,10 +133,10 @@ if (\Input::has('assigned'))
         </h3>
     </div><!-- /.box-header -->
 
-    <div class="box-body ">
+    <div class="card-body ">
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
-            <i class="fa fa-check-circle"> </i>
+            <i class="fas fa-check-circle"> </i>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('success')}}
         </div>
@@ -140,46 +144,69 @@ if (\Input::has('assigned'))
         <!-- failure message -->
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!}! </b>
+            <i class="fas fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!}! </b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('fails')}}
         </div>
         @endif
 
         <div class="alert alert-success alert-dismissable" style="display: none;">
-            <i class="fa fa-check-circle"> </i> <span class="success-message"></span>
+            <i class="fas fa-check-circle"> </i> <span class="success-message"></span>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('success')}}
         </div>
         <div class="alert alert-danger alert-dismissable" style="display: none;">
-            <i class="fa fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!}!</b> <span class="error-message"></span>
+            <i class="fas fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!}!</b> <span class="error-message"></span>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('fails')}}
         </div>
         <!--<div class="mailbox-controls">-->
         <!-- Check all button -->
 
-        <button type="button" class="btn btn-sm btn-default text-green" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets"><i class="fa fa-code-fork"> </i> {!! Lang::get('lang.merge') !!}</button>
-            <?php $inputs   = Input::all(); ?>
+        <button type="button" class="btn btn-sm btn-default text-green" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets">
+            <i class="fas fa-cogs"> </i> {!! Lang::get('lang.merge') !!}
+        </button>
+        
+        <?php $inputs   = Input::all(); ?>
+        
         <div class="btn-group">
-<?php $statuses = Finder::getCustomedStatus(); ?>
-            <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="d1"><i class="fa fa-exchange" style="color:teal;" id="hidespin"> </i><i class="fa fa-spinner fa-spin" style="color:teal; display:none;" id="spin"></i>
+        <?php $statuses = Finder::getCustomedStatus(); ?>
+            <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="d1">
+                <i class="fas fa-exchange-alt" style="color:teal;" id="hidespin"> </i>
+                <i class="fas fa-spinner fa-spin" style="color:teal; display:none;" id="spin"></i>
                 {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu">
+
+            <div class="dropdown-menu">
                 @foreach($statuses as $ticket_status)    
-                <li onclick="changeStatus({!! $ticket_status -> id !!}, '{!! $ticket_status->name !!}')"><a href="#"><i class="{!! $ticket_status->icon !!}" style="color:{!! $ticket_status->icon_color !!};"> </i>{!! $ticket_status->name !!}</a></li>
+                <a href="javascript:;"  class="dropdown-item" onclick="changeStatus({!! $ticket_status -> id !!}, '{!! $ticket_status->name !!}')" 
+                    data-toggle="modal" data-target="#myModal">
+                    {!! $ticket_status->name !!}
+                </a>
                 @endforeach
-            </ul>
+            </div>
         </div>
 
-        <button type="button" class="btn btn-sm btn-default" id="assign_Ticket" data-toggle="modal" data-target="#AssignTickets" style="display: none;"><i class="fa fa-hand-o-right"> </i> {!! Lang::get('lang.assign') !!}</button>
+        <button type="button" class="btn btn-sm btn-default" id="assign_Ticket" data-toggle="modal" data-target="#AssignTickets" style="display: none;">
+            <i class="fas fa-hand-point-right"> </i> {!! Lang::get('lang.assign') !!}
+        </button>
+
         @if($activepage == 'trash')
-        <button form="modalpopup" class="btn btn-sm btn-danger" id="hard-delete" name="submit" type="submit"><i class="fa fa-trash"></i>&nbsp;{{Lang::get('lang.clean-up')}}</button>
+        <button form="modalpopup" class="btn btn-sm btn-danger" id="hard-delete" name="submit" type="submit">
+            <i class="fas fa-trash"></i>&nbsp;{{Lang::get('lang.clean-up')}}
+        </button>
         @endif
         <p><p/>
         
+        <div class="row">
+            <div class="col-md-5">
+            </div>
+            <div class="col-md-6" id="loader1" style="display:none;">
+                <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
+            </div>
+        </div>
         <div class="mailbox-messages" id="refresh">
+
             <!--datatable-->
             {!! Form::open(['id'=>'modalpopup', 'route'=>'select_all','method'=>'post']) !!}
             {!!$table->render('vendor.Chumper.template')!!}
