@@ -94,14 +94,14 @@ class CategoryController extends Controller
         			<div class="modal-dialog">
             			<div class="modal-content">
                 			<div class="modal-header">
+                                <h4 class="modal-title">'.Lang::get('lang.delete').'</h4>
                     			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    			<h4 class="modal-title">'.Lang::get('lang.are_you_sure_you_want_to_delete').'</h4>
                 			</div>
                 			<div class="modal-body">
-                				'.$model->name.'
+                				<span>'.Lang::get('lang.are_you_sure_you_want_to_delete').'</span>&nbsp;<b>'.$model->name.'</b>
                 			</div>
-                			<div class="modal-footer">
-                    			<button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">'.Lang::get('lang.close').'</button>
+                			<div class="modal-footer justify-content-between">
+                    			<button type="button" class="btn btn-default" data-dismiss="modal" id="dismis2">'.Lang::get('lang.close').'</button>
                     			<a href="category/delete/'.$model->id.'"><button class="btn btn-danger">'.Lang::get('lang.delete').'</button></a>
                 			</div>
             			</div>

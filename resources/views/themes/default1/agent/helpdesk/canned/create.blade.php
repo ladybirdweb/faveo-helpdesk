@@ -1,15 +1,19 @@
 @extends('themes.default1.agent.layout.agent')
 
 @section('Tools')
-class="active"
+class="nav-link active"
 @stop
 
 @section('tools-bar')
 active
 @stop
 
-@section('tools')
+@section('tool')
 class="active"
+@stop
+
+@section('tools')
+class="nav-link active"
 @stop
 
 @section('PageHeader')
@@ -20,15 +24,15 @@ class="active"
 @section('content')
 <!-- open a form -->
 {!! Form::open(['route'=>'canned.store','method' => 'patch']) !!}
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.create') !!} </h3>
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.create') !!} </h3>
     </div>
-    <div class="box-body">
+    <div class="card-body">
         @if(Session::has('errors'))
         <?php //dd($errors); ?>
         <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"></i>
+            <i class="fas fa-ban"></i>
             <b>{!! Lang::get('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <br/>
@@ -42,25 +46,36 @@ class="active"
         @endif
         <div class="row">
             <!-- username -->
-            <div class="col-xs-6 form-group {{ $errors->has('title') ? 'has-error' : '' }}">
+            <div class="col-sm-6 form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                 {!! Form::label('title',Lang::get('lang.title')) !!}    <span class="text-red"> *</span>           
                 {!! Form::text('title',null,['class' => 'form-control']) !!}
             </div>
             <!-- firstname -->
-            <div class="col-xs-12 form-group {{ $errors->has('message') ? 'has-error' : '' }}">
+            <div class="col-sm-12 form-group {{ $errors->has('message') ? 'has-error' : '' }}">
                 {!! Form::label('message',Lang::get('lang.message')) !!}<span class="text-red"> *</span>
                 {!! Form::textarea('message',null,['class' => 'form-control']) !!}
             </div>
         </div>
     </div>
-    <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.submit'),['class'=>'form-group btn btn-primary'])!!}
+    <div class="card-footer">
+        {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
     </div>
 </div>
 <script>
     $(function() {
         //Add text editor
-        $("textarea").wysihtml5();
+        $("textarea").summernote({
+            height: 300,
+            tabsize: 2,
+            toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']]
+          ]
+          });
     });
 </script>
 @stop

@@ -8,48 +8,95 @@
     class="active"
 @stop
 @section('sidebar')
-                        <li class="header">KNOWLEDGE BASE</li>
-                        <li class="treeview @yield('category')">
-                            <a href="#">
-                                <i class="fa fa-list-ul"></i> <span>{{Lang::get('lang.category')}}</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                                    <ul class="treeview-menu">
-                                        <li @yield('add-category')><a href="{{url('category/create')}}"><i class="fa fa-circle-o"></i> {{Lang::get('lang.addcategory')}}</a></li>
-                                         <li @yield('all-category')><a href="{{url('category')}}"><i class="fa fa-circle-o"></i> {{Lang::get('lang.allcategory')}}</a></li>
-                                     </ul>
-                        </li>
-                        <li class="treeview @yield('article')">
-                            <a href="#">
-                                <i class="fa fa-edit"></i> <span>{{Lang::get('lang.article')}}</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                                    <ul class="treeview-menu">
-                                        <li @yield('add-article')><a href="{{url('article/create')}}"><i class="fa fa-circle-o"></i> {{Lang::get('lang.addarticle')}}</a></li>
-                                         <li @yield('all-article')><a href="{{url('article')}}"><i class="fa fa-circle-o"></i> {{Lang::get('lang.allarticle')}}</a></li>
-                                     </ul>
-                        </li>
-                        <li class="treeview @yield('pages')">
-                            <a href="#">
-                                <i class="fa fa-file-text"></i> <span>{{Lang::get('lang.pages')}}</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                                    <ul class="treeview-menu">
-                                        <li @yield('add-pages')><a href="{{url('page/create')}}"><i class="fa fa-circle-o"></i> {{Lang::get('lang.addpages')}}</a></li>
-                                         <li @yield('all-pages')><a href="{{url('page')}}"><i class="fa fa-circle-o"></i> {{Lang::get('lang.allpages')}}</a></li>
-                                     </ul>
-                        </li>
-                    
-                        <li @yield('comment')>
-                            <a href="{{url('comment')}}">
-                                <i class="fa fa-comments-o"></i>
-                                <span>{{Lang::get('lang.comments')}}</span>
-                            </a>
-                        </li>
-                        <li @yield('settings')>
-                            <a href="{{url('kb/settings')}}">
-                                 <i class="fa fa-wrench"></i>
-                                <span>{{Lang::get('lang.settings')}}</span>
-                            </a>
-                        </li>
-                    @stop
+
+<li class="nav-header">KNOWLEDGE BASE</li>
+
+<li @yield('menu-parent') class="nav-item">
+                                
+    <a href="#" @yield('category') class="nav-link">
+        <i class="nav-icon fas fa-list-ul"></i>
+        <p>{{Lang::get('lang.category')}}<i class="right fas fa-angle-left"></i></p>
+    </a>
+
+    <ul @yield('menu-open') class="nav nav-treeview">
+
+        <li class="nav-item">
+            <a @yield('add-category') href="{{url('category/create')}}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>{{Lang::get('lang.addcategory')}}</p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a @yield('all-category') href="{{url('category')}}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>{{Lang::get('lang.allcategory')}}</p>
+            </a>
+        </li>
+    </ul>
+</li>
+
+<li class="nav-item">
+                                
+    <a href="#" @yield('article') class="nav-link">
+        <i class="nav-icon fas fa-edit"></i>
+        <p>{{Lang::get('lang.article')}}<i class="right fas fa-angle-left"></i></p>
+    </a>
+
+    <ul class="nav nav-treeview">
+
+        <li class="nav-item">
+            <a @yield('add-article') href="{{url('article/create')}}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>{{Lang::get('lang.addarticle')}}</p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a @yield('all-article') href="{{url('article')}}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>{{Lang::get('lang.allarticle')}}</p>
+            </a>
+        </li>
+    </ul>
+</li>
+
+<li class="nav-item">
+                                
+    <a href="#" @yield('pages') class="nav-link">
+        <i class="nav-icon far fa-file-code"></i>
+        <p>{{Lang::get('lang.pages')}}<i class="right fas fa-angle-left"></i></p>
+    </a>
+
+    <ul class="nav nav-treeview">
+
+        <li class="nav-item">
+            <a @yield('add-pages') href="{{url('page/create')}}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>{{Lang::get('lang.addpages')}}</p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a @yield('all-pages') href="{{url('page')}}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>{{Lang::get('lang.allpages')}}</p>
+            </a>
+        </li>
+    </ul>
+</li>
+
+<li class="nav-item">
+    <a href="{{url('comment')}}" @yield('comment')  class="nav-link">
+        <i class="fas fa-comment"></i>
+        <p>{{Lang::get('lang.comments')}}</p>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="{{url('kb/settings')}}" @yield('settings') class="nav-link">
+         <i class="fas fa-cog"></i>
+        <p>{{Lang::get('lang.settings')}}</p>
+    </a>
+</li>
+@stop
