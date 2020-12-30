@@ -11,14 +11,14 @@
 
 <li class="nav-header">KNOWLEDGE BASE</li>
 
-<li @yield('menu-parent') class="nav-item">
+<li @yield('category-menu-parent') class="nav-item">
                                 
     <a href="#" @yield('category') class="nav-link">
         <i class="nav-icon fas fa-list-ul"></i>
         <p>{{Lang::get('lang.category')}}<i class="right fas fa-angle-left"></i></p>
     </a>
 
-    <ul @yield('menu-open') class="nav nav-treeview">
+    <ul @yield('category-menu-open') class="nav nav-treeview">
 
         <li class="nav-item">
             <a @yield('add-category') href="{{url('category/create')}}" class="nav-link">
@@ -36,14 +36,14 @@
     </ul>
 </li>
 
-<li class="nav-item">
+<li @yield('article-menu-parent') class="nav-item">
                                 
     <a href="#" @yield('article') class="nav-link">
         <i class="nav-icon fas fa-edit"></i>
         <p>{{Lang::get('lang.article')}}<i class="right fas fa-angle-left"></i></p>
     </a>
 
-    <ul class="nav nav-treeview">
+    <ul @yield('article-menu-open') class="nav nav-treeview">
 
         <li class="nav-item">
             <a @yield('add-article') href="{{url('article/create')}}" class="nav-link">
@@ -61,14 +61,14 @@
     </ul>
 </li>
 
-<li class="nav-item">
+<li @yield('page-menu-parent') class="nav-item">
                                 
     <a href="#" @yield('pages') class="nav-link">
         <i class="nav-icon far fa-file-code"></i>
         <p>{{Lang::get('lang.pages')}}<i class="right fas fa-angle-left"></i></p>
     </a>
 
-    <ul class="nav nav-treeview">
+    <ul @yield('page-menu-open') class="nav nav-treeview">
 
         <li class="nav-item">
             <a @yield('add-pages') href="{{url('page/create')}}" class="nav-link">

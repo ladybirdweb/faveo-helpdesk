@@ -21,11 +21,11 @@ class="nav-link active"
 class="nav-link active"
 @stop
 
-@section('menu-open')
+@section('category-menu-open')
 class="nav nav-treeview menu-open"
 @stop
 
-@section('menu-parent')
+@section('category-menu-parent')
 class="nav-item menu-open"
 @stop
 

@@ -1,19 +1,16 @@
 @extends('themes.default1.agent.layout.agent')
 
 @section('sidebar')
-<li class="header">{!! Lang::get('lang.Report') !!}</li>
-<li>
-    <a href="">
-        <i class="fa fa-area-chart"></i> <span>{!! Lang::get('lang.help_topic') !!}</span> <small class="label pull-right bg-green"></small>
+<li class="nav-header">{!! Lang::get('lang.Report') !!}</li>
+<li class="nav-item">
+    <a href="" class="nav-link active">
+        <i class="fas fa-chart-area"></i> <p>{!! Lang::get('lang.help_topic') !!}</p>
     </a>
-</li>
-<li>
-
 </li>
 @stop 
 
 @section('Report')
-class="active"
+class="nav-link active"
 @stop
 
 @section('dashboard-bar')
@@ -33,7 +30,7 @@ class="active"
 {{-- Success message --}}
 @if(Session::has('success'))
 <div class="alert alert-success alert-dismissable">
-    <i class="fa  fa-check-circle"></i>
+    <i class="fas  fa-check-circle"></i>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {{Session::get('success')}}
 </div>
@@ -41,25 +38,29 @@ class="active"
 {{-- failure message --}}
 @if(Session::has('fails'))
 <div class="alert alert-danger alert-dismissable">
-    <i class="fa fa-ban"></i>
+    <i class="fas fa-ban"></i>
     <b>{!! Lang::get('lang.alert') !!}!</b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {{Session::get('fails')}}
 </div>
 @endif
-<link type="text/css" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet">
-{{-- <script src="{{asset("lb-faveo/dist/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script> --}}
- 
-<div class="box box-info">
-    <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.help_topic') !!}</h3>
+
+<div class="card card-light">
+    
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.help_topic') !!}</h3>
     </div>
-    <div class="box-body">
+    
+    <div class="card-body">
+        
         <form id="foo">
             <input type="hidden" name="duration" value="" id="duration">
             <input type="hidden" name="default" value="false" id="default">
+         
             <div  class="form-group">
+         
                 <div class="row">
+         
                     <div class='col-sm-2'>
                         {!! Form::label('helptopic', Lang::get('lang.help_topic')) !!}
                         <select name="help_topic" id="help_topic" class="form-control">
@@ -69,6 +70,7 @@ class="active"
                             @endforeach
                         </select>
                     </div>
+
                     <div class='col-sm-2 form-group' id="start_date">
                         {!! Form::label('date', Lang::get('lang.start_date').':') !!}
                         {!! Form::text('start_date',null,['class'=>'form-control','id'=>'datepicker4'])!!}
@@ -95,6 +97,7 @@ class="active"
                             });
                         });
                     </script>
+
                     <div class='col-sm-2 form-group' id="end_date">
                         {!! Form::label('start_time', Lang::get('lang.end_date').':') !!}
                         {!! Form::text('end_date',null,['class'=>'form-control','id'=>'datetimepicker3'])!!}
@@ -110,38 +113,41 @@ class="active"
                             });
                         });
                     </script>
-                    <div class='col-sm-1' style="padding-right:0px;padding-left:0px">
+
+                    <div class='col-sm-1'>
                         <label>{!! Lang::get('lang.status') !!}</label>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default">{!! Lang::get('lang.select') !!}</button>
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
+                                {!! Lang::get('lang.select') !!}
                             </button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="#" id="stop"><input type="checkbox" name="open" id="open"> {!! lang::get('lang.created') !!} {!! lang::get('lang.tickets') !!}</a></li>
-                                <li><a href="#" id="stop"><input type="checkbox" name="closed" id="closed"> {!! lang::get('lang.closed') !!} {!! lang::get('lang.tickets') !!}</a></li>
-                                <li><a href="#" id="stop"><input type="checkbox" name="reopened" id="reopened"> {!! lang::get('lang.reopened') !!} {!! lang::get('lang.tickets') !!}</a></li>
-                            </ul>
+                            <div class="dropdown-menu" role="menu">
+                                <a href="#" id="stop" class="dropdown-item">
+                                    <input type="checkbox" name="open" id="open"> {!! lang::get('lang.created') !!} {!! lang::get('lang.tickets') !!}
+                                </a>
+
+                                <a href="#" id="stop" class="dropdown-item">
+                                    <input type="checkbox" name="closed" id="closed"> {!! lang::get('lang.closed') !!} {!! lang::get('lang.tickets') !!}
+                                </a>
+
+                                <a href="#" id="stop" class="dropdown-item">
+                                    <input type="checkbox" name="reopened" id="reopened"> {!! lang::get('lang.reopened') !!} {!! lang::get('lang.tickets') !!}
+                                </a>
+                            </div>
                         </div>
                     </div>
+
                     <div class='col-sm-1'>
-                        {!! Form::label('filter', 'Filter:') !!}<br>
+                        {!! Form::label('filter', 'Filter:',['style' => 'visibility:hidden;']) !!}<br>
                         <input type="submit" class="btn btn-primary" value="Submit" id="submit">
                     </div>
                     <br/>
                     <div class="col-md-4">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default">{!! Lang::get('lang.generate') !!}</button>
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="#" id="pdf">{!! Lang::get('lang.generate_pdf') !!}</a></li>
-                            </ul>
-                        </div>
-                        <div class="pull-right">
+
+                        {!! Form::label('filter', 'Filter:',['style' => 'visibility:hidden;']) !!}<br>
+
+                        <a class="btn btn-primary" href="#" id="pdf">{!! Lang::get('lang.generate_pdf') !!}</a>
+
+                        <div class="float-right">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default" id="click_day">Day</button>
                                 <button type="button" class="btn btn-default" id="click_week">Week</button>
@@ -152,9 +158,6 @@ class="active"
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-1" style="margin-bottom:0px;">
-                        <label>{!! Lang::get('lang.Legend') !!}:</label>
-                    </div>
                     <style>
                         #legend-holder { float: left; width: 32px; height: 16px;}
                     </style>
@@ -164,40 +167,54 @@ class="active"
                 </div>
             </div>
         </form>
-        <!--<div id="legendDiv"></div>-->
         <div class="chart">
             <canvas class="chart-data" id="tickets-graph" width="1000" height="250"></canvas>   
         </div>
-    </div><!-- /.box-body -->
-    <div class="box-footer">
+    </div>
+
+    <div class="card-footer">
         <div class="row">
-            <div class="col-sm-3 col-xs-6">
+            <div class="col-sm-3">
                 <div class="description-block border-right">
-                    <h3><span class="description-percentage text-yellow" ><i class="fa fa-file-text-o"> </i> <small class="text-yellow"><i class="fa fa-random"> </i></small> <span id="total-inprogress-tickets"> </span> </span></h3>
+                    <h3>
+                        <span class="description-percentage text-yellow" >
+                            <i class="fas fa-file-alt"> </i> 
+                            <small class="text-yellow"><i class="fa fa-random"> </i></small> 
+                            <span id="total-inprogress-tickets"> </span> 
+                        </span>
+                    </h3>
                     <span class="">{!! Lang::get('lang.Currnet_In_Progress') !!}</span>
                 </div>
                 <!-- /.description-block -->
             </div>
             <!-- /.col -->
-            <div class="col-sm-3 col-xs-6">
+            <div class="col-sm-3">
                 <div class="description-block border-right">
-                    <h3><span class="description-percentage text-blue" ><i class="fa fa-file-text-o"> </i> + <span id="total-created-tickets"> </span> </span></h3>
+                    <h3>
+                        <span class="description-percentage text-blue" ><i class="fas fa-file-alt"> </i> <small class="text-blue"><i class="fas fa-plus"> </i>
+                        </small><span id="total-created-tickets"> </span> </span>
+                    </h3>
                     <span class="">{!! Lang::get('lang.Total_Created') !!}</span>
                 </div>
                 <!-- /.description-block -->
             </div>
             <!-- /.col -->
-            <div class="col-sm-3 col-xs-6">
+            <div class="col-sm-3">
                 <div class="description-block border-right">
-                    <h3><span class="description-percentage text-yellow" ><i class="fa fa-file-text-o"></i> <small class="text-yellow"><i class="fa fa-refresh"> </i></small> <span id="total-reopen-tickets"> </span> </span></h3>
+                    <h3>
+                        <span class="description-percentage text-yellow" ><i class="fas fa-file-alt"></i> <small class="text-yellow"><i class="fas fa-sync"> </i>
+                        </small> <span id="total-reopen-tickets"> </span> </span>
+                    </h3>
                     <span class="">{!! Lang::get('lang.Total_Reopened') !!}</span>
                 </div>
                 <!-- /.description-block -->
             </div>
             <!-- /.col -->
-            <div class="col-sm-3 col-xs-6">
+            <div class="col-sm-3">
                 <div class="description-block">
-                    <h3><span class="description-percentage text-green" ><i class="fa fa-file-text-o"> </i> <small class="text-green"><i class="fa fa-times"> </i></small> <span id="total-closed-tickets"> </span> </span></h3>
+                    <h3>
+                        <span class="description-percentage text-green" ><i class="fas fa-file-alt"> </i> <small class="text-green"><i class="fas fa-times"> </i></small> <span id="total-closed-tickets"> </span> </span>
+                    </h3>
                     <span class="">{!! Lang::get('lang.Total_Closed') !!}</span>
                 </div>
                 <!-- /.description-block -->
@@ -207,11 +224,11 @@ class="active"
     </div>
 </div><!-- /.box -->
 
-<div class="box box-info">
-    <div class="box-header with-border">
-        <h3 class="box-title">Tabular</h3>
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">Tabular</h3>
     </div>
-    <div class="box-body">
+    <div class="card-body">
         <table class="table table-bordered" id="tabular">
         </table>
     </div>
@@ -226,7 +243,6 @@ class="active"
 <div id="refresh"> 
     <script src="{{asset("lb-faveo/plugins/chartjs/Chart.min.js")}}" type="text/javascript"></script>
 </div>
-<script src="{{asset("lb-faveo/plugins/chartjs/Chart.min.js")}}" type="text/javascript"></script>
 <script type="text/javascript">
     var result1a;
 //    var help_topic_global;
@@ -681,9 +697,4 @@ class="active"
         });
     });
 </script>
-
-
-
-<script src="{{asset("lb-faveo/plugins/moment-develop/moment.js")}}" type="text/javascript"></script>
-<script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
 @stop
