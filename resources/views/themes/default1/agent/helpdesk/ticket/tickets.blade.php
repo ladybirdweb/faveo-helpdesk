@@ -8,6 +8,10 @@ class="nav-link active"
 active
 @stop
 
+@section('dept-ticket-bar')
+class="nav-link active"
+@stop
+
 @section('ticket')
 class="active"
 @stop

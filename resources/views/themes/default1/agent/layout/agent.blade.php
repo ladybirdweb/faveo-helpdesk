@@ -352,7 +352,9 @@
         
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                         @if (trim($__env->yieldContent('profileimg')))
-                        <h1>@yield('profileimg')</h1>
+                        <div class="image">
+                            @yield('profileimg')
+                        </div>
                         @else
                        <div class="image">
 
@@ -375,40 +377,40 @@
                             @yield('sidebar')
                             <li class="nav-header">{!! Lang::get('lang.Tickets') !!}</li>
 
-                            <li @yield('inbox') class="nav-item">
-                                <a href="{{ url('tickets')}}" id="load-inbox" class="nav-link">
+                            <li class="nav-item">
+                                <a href="{{ url('tickets')}}" id="load-inbox" @yield('inbox') class="nav-link">
                                     <i class="fas fa-envelope"></i> 
                                     <p>{!! Lang::get('lang.inbox') !!}</p> 
                                     <small class="right badge badge-success">{{$tickets -> count()}}</small>
                                 </a>
                             </li>
 
-                            <li @yield('myticket') class="nav-item">
-                                <a href="{{url('/tickets?show=mytickets')}}" id="load-myticket" class="nav-link">
+                            <li class="nav-item">
+                                <a href="{{url('/tickets?show=mytickets')}}" id="load-myticket" @yield('myticket') class="nav-link">
                                     <i class="fas fa-user"></i> 
                                     <p>{!! Lang::get('lang.my_tickets') !!} </p>
                                     <small class="right badge badge-success">{{$myticket -> count()}}</small>
                                 </a>
                             </li>
 
-                            <li @yield('unassigned') class="nav-item">
-                                 <a href="{{url('/tickets?assigned[]=0')}}" id="load-unassigned" class="nav-link">
+                            <li class="nav-item">
+                                 <a href="{{url('/tickets?assigned[]=0')}}" id="load-unassigned" @yield('unassigned')  class="nav-link">
                                     <i class="fas fa-th"></i> 
                                     <p>{!! Lang::get('lang.unassigned') !!}</p>
                                     <small class="right badge badge-success">{{$unassigned -> count()}}</small>
                                 </a>
                             </li>
 
-                            <li @yield('overdue') class="nav-item">
-                                 <a href="{{url('/tickets?show=overdue')}}" id="load-unassigned" class="nav-link">
+                            <li class="nav-item">
+                                 <a href="{{url('/tickets?show=overdue')}}" id="load-unassigned" @yield('overdue') class="nav-link">
                                     <i class="fas fa-calendar-times"></i> 
                                     <p>{!! Lang::get('lang.overdue') !!}</p>
                                     <small class="right badge badge-success">{{$overdues->count()}}</small>
                                 </a>
                             </li>
 
-                            <li @yield('trash') class="nav-item">
-                                 <a href="{{url('/tickets?show=trash')}}" class="nav-link">
+                            <li class="nav-item">
+                                 <a href="{{url('/tickets?show=trash')}}" @yield('trash') class="nav-link">
                                     <i class="fas fa-trash"></i> 
                                     <p>{!! Lang::get('lang.trash') !!}</p>
                                     <small class="right badge badge-success">{{$deleted -> count()}}</small>
@@ -440,9 +442,9 @@
 
                             @foreach($department as $name=>$dept)
 
-                            <li class="nav-item @if($dept2 === $name) @yield('ticket-bar') @endif ">
+                            <li class="nav-item">
                                 
-                                <a href="#" class="nav-link">
+                                <a href="#" @if($dept2 === $name) @yield('ticket-bar') @endif class="nav-link">
                                     <i class="nav-icon fas fa-folder-open"></i>
                                     <p>{!! $name !!}<i class="right fas fa-angle-left"></i></p>
                                 </a>
@@ -452,8 +454,8 @@
 
                                 <ul class="nav nav-treeview">
 
-                                    <li class="nav-item" @if($status2 == $dept->get($status)->status && $dept2 === $name) @yield('inbox') @endif>
-                                        <a href="{!! url('tickets?departments='.$name.'&status='.$dept->get($status)->status) !!}" class="nav-link">
+                                    <li class="nav-item">
+                                        <a href="{!! url('tickets?departments='.$name.'&status='.$dept->get($status)->status) !!}" @if($status2 == $dept->get($status)->status && $dept2 === $name) @yield('inbox') @endif class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>{!!$dept->get($status)->status !!}</p>
                                             <small class="right badge badge-success">{{$dept->get($status)->count}}</small>

@@ -2768,7 +2768,7 @@ class TicketController extends Controller
                             return "<div class='tooltip1' id='tool".$tickets->id."'>
                             <a href='".route('ticket.thread', [$tickets->id])."'>".$string."&nbsp;<span style='color:green'>".$thread_count."</span>
                             </a> <span><i style='color:green' title='".Lang::get('lang.ticket_created_source', ['source' => $source])."' class='".$css."'></i></span>".$collabString.$attachString.$due.$tooltip_script.
-                                    "<span class='tooltiptext' id='tooltip".$tickets->id."' style='height:auto;width:300px;background-color:#fff;color:black;border-radius:3px;border:2px solid gainsboro;position:absolute;z-index:1;top:150%;left:50%;margin-left:-23px;word-wrap:break-word;'>".Lang::get('lang.loading').'</span></div>';
+                                    "<span class='tooltiptext' id='tooltip".$tickets->id."' style='height:auto;width:300px;height:200px;overflow:scroll;background-color:#fff;color:black;border-radius:3px;border:2px solid gainsboro;position:absolute;z-index:1;top:150%;left:50%;margin-left:-23px;word-wrap:break-word;padding:10px;'>".Lang::get('lang.loading').'</span></div>';
                         })
                         ->editColumn('ticket_number', function ($tickets) {
                             return "<a href='".route('ticket.thread', [$tickets->id])."' class='$".ucfirst($tickets->priority)."*' title='".Lang::get('lang.click-here-to-see-more-details')."'>#".$tickets->ticket_number.'</a>';
