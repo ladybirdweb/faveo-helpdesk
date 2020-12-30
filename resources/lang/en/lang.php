@@ -1646,5 +1646,5 @@ return [
     'ticket-has-x-priority'                        => 'This ticket has :priority priority',
     'clean-forever'                                => 'delete permanently',
     'mail-sent-to-job-for-process'                 => 'Mail has been sent to job for process, it will appear in your mailbox once it gets processed by your selected queue service. If you don\'t recieve the mail check logs for errors or warnings.',
-    'click-here-to-see-more-details' => 'Click here to see more details',
+    'click-here-to-see-more-details'               => 'Click here to see more details',
 ];
