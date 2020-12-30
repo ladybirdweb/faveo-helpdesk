@@ -79,6 +79,8 @@
               .nav-item .dropdown-menu{right: unset !important; left: unset!important;;margin-left: -6px;}
 
               .btn-primary { background-color:#009aba !important;border-color:#00c0ef !important; }
+
+            .breadcrumb-item+.breadcrumb-item::before {color: #ffffff !important;}
         </style>
 
         <div id="page" class="hfeed site text-small">

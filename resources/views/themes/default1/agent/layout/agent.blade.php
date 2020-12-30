@@ -63,6 +63,14 @@
             .table { width: 100% !important;display: table !important; }
 
             .list-group-item{ margin-bottom: auto !important; }
+
+            .help-block { color : #dd4b39; }
+
+             .text-red { color: red; }
+
+             .nav-sidebar .nav-header:not(:first-of-type) {
+                padding: 0.5rem;
+            }
         </style>
     </head>
     

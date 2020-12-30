@@ -2,6 +2,14 @@
 
 @extends('themes.default1.agent.layout.sidebar')    
 
+@section('category-menu-open')
+class="nav nav-treeview menu-open"
+@stop
+
+@section('category-menu-parent')
+class="nav-item menu-open"
+@stop
+
 @section('Tools')
 class="nav-link active"
 @stop
@@ -11,6 +19,14 @@ class="active"
 @stop
 
 @section('kb')
+class="nav-link active"
+@stop
+
+@section('all-category')
+class="nav-link active"
+@stop
+
+@section('category')
 class="nav-link active"
 @stop
 

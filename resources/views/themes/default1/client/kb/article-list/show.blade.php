@@ -138,12 +138,6 @@ $category_id = $all->pluck('category_id')->toArray();
     </div>
 </div>						
 
-<script type="text/javascript">
-        $(function () {
-            $("textarea").summernote();
-        });
-</script>
-
 @stop
 
 @section('category')

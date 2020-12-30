@@ -90,14 +90,14 @@ class ArticleController extends Controller
         			<div class="modal-dialog">
             			<div class="modal-content">
                 			<div class="modal-header">
+                                <h4 class="modal-title">Delete</h4>
                     			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    			<h4 class="modal-title">Are You Sure ?</h4>
                 			</div>
                 			<div class="modal-body">
-                				'.$model->name.'
+                				Are you sure you want to delete <b> '.$model->name.' </b> ?
                 			</div>
-                			<div class="modal-footer">
-                    			<button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">Close</button>
+                			<div class="modal-footer justify-content-between">
+                    			<button type="button" class="btn btn-default" data-dismiss="modal" id="dismis2">Close</button>
                     			<a href='.url("article/delete/$model->slug").'><button class="btn btn-danger">delete</button></a>
                 			</div>
             			</div>
