@@ -6,48 +6,66 @@
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- faveo favicon -->
         <link href="{{asset("lb-faveo/media/images/favicon.ico")}}" rel="shortcut icon">
-        <!-- Bootstrap 3.3.2 -->
-        <link href="{{asset("lb-faveo/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
+               <!-- Bootstrap 4.3.1 -->
+        <link href="{{asset("lb-faveo/css/bootstrap4.min.css")}}" rel="stylesheet" type="text/css" />
+    
         <!-- Font Awesome Icons -->
-        <link href="{{asset("lb-faveo/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/css/font-awesome-5.min.css")}}" rel="stylesheet" type="text/css" />
+    
         <!-- Ionicons -->
-        <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet" type="text/css" >
+        <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet"  type="text/css" />
+    
         <!-- Theme style -->
-        <link href="{{asset("lb-faveo/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" />
-        <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
-        <link href="{{asset("lb-faveo/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css" />
-        <!-- iCheck -->
-        <link href="{{asset("lb-faveo/plugins/iCheck/flat/blue.css")}}" rel="stylesheet" type="text/css" />
-        <!-- This controlls the top tabs -->
-        <link href="{{asset("lb-faveo/css/tabby.css")}}" rel="stylesheet" type="text/css" >
-        <!-- In app notification style -->
-        <link href="{{asset("css/notification-style.css")}}" rel="stylesheet" type="text/css">
+        <link href="{{asset("lb-faveo/adminlte3/css/adminlte3.min.css")}}" rel="stylesheet" type="text/css" />
 
-        <link href="{{asset("lb-faveo/css/jquerysctipttop.css")}}" rel="stylesheet" type="text/css">
+        <link href="{{asset("lb-faveo/adminlte3/plugins/overlayScrollbars/overlayScrollbars.min.css")}}" rel="stylesheet"  type="text/css" />
 
-        <link  href="{{asset("lb-faveo/css/editor.css")}}" rel="stylesheet" type="text/css">
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <link href="{{asset("lb-faveo/css/editor.css")}}" rel="stylesheet" type="text/css"/>
 
-        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet"  type="text/css"/>
 
-        <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet" type="text/css" >
-        <!-- select2 -->
-        <link href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}" rel="stylesheet" type="text/css">
-        <!-- Colorpicker -->
+        <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
+    
+        <!-- Select2 -->
+        <link href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}" rel="stylesheet" type="text/css" />
 
-        <link href="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("css/close-button.css")}}" rel="stylesheet" type="text/css" />
+        <!--Daterangepicker-->
+        <link rel="stylesheet" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet" type="text/css" />
 
-        <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" type="text/javascript"></script>
-
-        <script src="{{asset("lb-faveo/js/jquery-2.1.4.js")}}" type="text/javascript"></script>
-
-        <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-        <![endif]-->
+        <link href="{{asset("lb-faveo/plugins/summernote/summernote-bs4.min.css")}}" rel="stylesheet" type="text/css" />
+        
+         <script src="{{asset("lb-faveo/js/jquery-3.4.1.min.js")}}" type="text/javascript"></script>
         @yield('HeadInclude')
+
+        <style type="text/css">
+        
+            .product-description { overflow: visible !important;white-space: unset !important; }
+
+            .noti_User { color: #6c757d !important; }
+
+            .brand-image{float: none !important; margin-left: 0 !important;}
+
+            .table { display: block;width: 100%;overflow-x: auto; }
+
+            td{ word-break: break-all !important; }
+
+            .table { width: 100% !important;display: table !important; }
+
+            .list-group-item{ margin-bottom: auto !important; }
+
+            .help-block { color : #dd4b39; }
+
+             .text-red { color: red; }
+
+             .nav-sidebar .nav-header:not(:first-of-type) {
+                padding: 0.5rem;
+            }
+        </style>
     </head>
-    <body class="skin-yellow fixed">
+    <body class="skin-yellow sidebar-mini layout-fixed layout-navbar-fixed text-sm">
+
         <?php
         $replacetop = 0;
         $replacetop = \Event::fire('service.desk.admin.topbar.replace', array());
@@ -65,389 +83,711 @@
         }
         //dd($replacetop);
         ?>
+
         <div class="wrapper">
-            <header class="main-header">
-                <a href="http://www.faveohelpdesk.com" class="logo"><img src="{{ asset('lb-faveo/media/images/logo.png') }}" width="100px"></a>
-                <!-- Header Navbar: style can be found in header.less -->
-                <nav class="navbar navbar-static-top" role="navigation">
-                    <!-- Sidebar toggle button-->
-                    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <?php $notifications = App\Http\Controllers\Common\NotificationController::getNotifications(); ?>
-                    <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" id="navbar-collapse">
 
-                        <ul class="nav navbar-nav navbar-left">
-                            @if($replacetop==0)
-                            <li @yield('settings')><a href="{!! url('dashboard') !!}">{!! Lang::get('lang.agent_panel') !!}</a></li>
-                            @else
-                            <?php \Event::fire('service.desk.admin.topbar', array()); ?>
-                            @endif
-                        </ul>
-                        <ul class="nav navbar-nav navbar-right">
-                            <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
-                            @include('themes.default1.update.notification')
-                            <!-- User Account: style can be found in dropdown.less -->
-                            <ul class="nav navbar-nav navbar-right">
-                            <!-- User Account: style can be found in dropdown.less -->
-                            <li class="dropdown notifications-menu" id="myDropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
-                                    <i class="fa fa-bell-o"></i>
-                                    <span class="label label-danger" id="count">{!! $notifications->count() !!}</span>
-                                </a>
-                                <ul class="dropdown-menu" style="width:500px">
+            <nav class="main-header navbar navbar-expand navbar-dark navbar-orange">
+                
+                <!-- Sidebar toggle button-->
+                <ul class="navbar-nav">
+                  
+                    <li class="nav-item">
+                
+                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                    </li>
+                </ul>
 
-                                    <div id="alert11" class="alert alert-success alert-dismissable" style="display:none;">
-                                        <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                        <h4><i class="icon fa fa-check"></i>Alert!</h4>
-                                        <div id="message-success1"></div>
+                <?php $notifications = App\Http\Controllers\Common\NotificationController::getNotifications(); ?>
+
+                <ul class="navbar-nav">
+
+                    @if($replacetop==0)
+                    <li class="nav-item d-none d-sm-inline-block">
+
+                        <a id="dash" @yield('settings') href="{!! url('dashboard') !!}"  class="nav-link">
+                            {!! Lang::get('lang.agent_panel') !!}
+                        </a>
+                    </li>
+                    @else
+                    <?php \Event::fire('service.desk.admin.topbar', array()); ?>
+                    @endif
+                </ul>
+
+                <ul class="navbar-nav ml-auto">
+                    
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="{{url('admin')}}" class="nav-link">{!! Lang::get('lang.admin_panel') !!}</a>
+                    </li>
+
+                    @include('themes.default1.update.notification')
+
+                    <li class="nav-item dropdown notifications-menu" id="myDropdown">
+
+                        <a href="#" class="nav-link" data-toggle="dropdown" onclick="myFunction()">
+                            
+                            <i class="fas fa-bell"></i>
+                            
+                            <span class="badge badge-warning navbar-badge" id="count">{!! $notifications->count() !!}</span>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
+                            
+                            <div id="alert11" class="alert alert-success alert-dismissable" style="display:none;">
+
+                                <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                
+                                <h4><i class="icon fas fa-check"></i>Alert!</h4>
+
+                                <div id="message-success1"></div>
+                            </div>
+
+                            <ul class="products-list product-list-in-card pl-2 pr-2" style="height: 350px;overflow-y: scroll;">
+                                
+                                <li class="dropdown-header">You have {!! $notifications->count() !!} notifications.
+
+                                    <a class="float-right" id="read-all" href="#">Mark all as read.</a>
+                                </li>
+
+                                @if($notifications->count())
+                                @foreach($notifications->orderBy('created_at', 'desc')->get()->take(10) as $notification)
+
+                                @if($notification->notification->type->type == 'registration')
+                                @if($notification->is_read == 1)
+
+                                <li class="item" class="task">
+                                
+                                    <div class="product-img">
+                                        
+                                        <img src="{{$notification -> users -> profile_pic}}" alt="Product Image" class="img-size-50 img-circle">
                                     </div>
+                                    
+                                    <div class="product-info">
+                                      
+                                        <span class="product-description">
+                                            
+                                            <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" 
+                                                class='noti_User'>{!! $notification->notification->type->message !!}
+                                            </a>
+                                        </span>
+                                    </div>
+                                </li>
 
-                                    <li id="refreshNote">
+                                @else
 
-                                    <li class="header">You have {!! $notifications->count() !!} notifications. <a class="pull-right" id="read-all" href="#">Mark all as read.</a></li>
-
-                                    <ul class="menu">
-
-                                        @if($notifications->count())
-                                        @foreach($notifications->orderBy('created_at', 'desc')->get()->take(10) as $notification)
-
-                                        @if($notification->notification->type->type == 'registration')
-                                        @if($notification->is_read == 1)
-                                        <li class="task" style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
-                                                    {!! $notification->notification->type->message !!}
-                                                </a></span>
-                                        </li>
-                                        @else
-                                        <li style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
-                                                    {!! $notification->notification->type->message !!}
-                                                </a></span>
-                                        </li>
-                                        @endif
-                                        @else
-                                        @if($notification->is_read == 1)
-                                        <li  class="task" style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
-                                                    {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
-                                                </a></span>
-                                        </li>
-                                        @elseif($notification->notification->model)
-                                        <li style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
-                                                    {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
-                                                </a></span>
-                                        </li>
-                                        @endif
-                                        @endif
-                                        @endforeach
-                                        @endif
-                                    </ul>
-                            </li>
-                            <li class="footer no-border"><div class="col-md-5"></div><div class="col-md-2">
-                                    <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="display: none;" id="notification-loader">
-                                </div><div class="col-md-5"></div></li>
-                            <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
-                            </li>
-                        </ul>
-                        </li>
-                        <li class="dropdown">
-                            <?php $src = Lang::getLocale().'.png'; ?>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><img src="{{asset("lb-faveo/flags/$src")}}"></img> &nbsp;<span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                @foreach($langs as $key => $value)
-                                            <?php $src = $key.".png"; ?>
-                                            <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}"></img>&nbsp;{{$value[0]}}&nbsp;
-                                            @if(Lang::getLocale() == "ar")
-                                            &rlm;
-                                            @endif
-                                            ({{$value[1]}})</a></li>
-                                @endforeach       
-                            </ul>
-                        </li>
-                        <li class="dropdown user user-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                @if(Auth::user())
-
-                                <img src="{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
-
-                                <span class="hidden-xs">{!! Auth::user()->first_name." ".Auth::user()->last_name !!}</span>
+                                <li class="item">
+                                
+                                    <div class="product-img">
+                                        
+                                        <img src="{{$notification -> users -> profile_pic}}" alt="Product Image" class="img-size-50 img-circle">
+                                    </div>
+                                    
+                                    <div class="product-info">
+                                      
+                                        <span class="product-description">
+                                            
+                                            <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" 
+                                                class='noti_User'>{!! $notification->notification->type->message !!}
+                                            </a>
+                                        </span>
+                                    </div>
+                                </li>
                                 @endif
-                            </a>
-                            <ul class="dropdown-menu">
-                                <!-- User image -->
-                                <li class="user-header" style="background-color:#343F44;">
-                                    @if(Auth::user())
-                                    <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
-                                    <p>
-                                        {!! Auth::user()->first_name !!}{!! " ". Auth::user()->last_name !!} - {{Auth::user()->role}}
-                                        <small></small>
-                                    </p>
-                                    @endif
-                                </li>
-                                <!-- Menu Footer-->
-                                <li class="user-footer"  style="background-color:#1a2226;">
-                                    <div class="pull-left">
-                                        <a href="{{url('admin-profile')}}" class="btn btn-info btn-sm"><b>{!! Lang::get('lang.profile') !!}</b></a>
+                                @else
+                                @if($notification->is_read == 1)
+
+                                <li class="item" class="task">
+                                
+                                    <div class="product-img">
+                                        
+                                        <img src="{{$notification -> users -> profile_pic}}" alt="Product Image" class="img-size-50 img-circle">
                                     </div>
-                                    <div class="pull-right">
-                                        <a href="{{url('auth/logout')}}" class="btn btn-danger btn-sm"><b>{!! Lang::get('lang.sign_out') !!}</b></a>
+                                    
+                                    <div class="product-info">
+                                      
+                                        <span class="product-description">
+                                            
+                                            <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' 
+                                                class='noti_User'>
+                                                {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
+                                            </a>
+                                        </span>
                                     </div>
                                 </li>
+
+                                @elseif($notification->notification->model)
+                                
+                                <li class="item">
+                                
+                                    <div class="product-img">
+                                        
+                                        <img src="{{$notification -> users -> profile_pic}}" alt="Product Image" class="img-size-50 img-circle">
+                                    </div>
+                                    
+                                    <div class="product-info">
+                                      
+                                        <span class="product-description">
+                                            
+                                            <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' 
+                                                class='noti_User'>
+                                                {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
+                                            </a>
+                                        </span>
+                                    </div>
+                                </li>
+                                @endif
+                                @endif
+                                @endforeach
+                                @endif
+
+                                <li class="item" style="position: relative;top: -5px;">
+
+                                    <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="display: none;margin-left: 100px;" id="notification-loader" 
+                                        class="img-size-50">
+                                </li>
+                                
+                                <li class="dropdown-footer"><a class="text-dark" href="{{ url('notifications-list')}}">View all</a>
                             </ul>
-                        </li>
+                        </div>
+                    </li>    
+
+                    <li class="nav-item dropdown">
+
+                        <?php $src = Lang::getLocale().'.png'; ?>
+
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                            <img src="{{asset("lb-faveo/flags/$src")}}">
+                        </a>
+                       
+                       <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right p-0" style="width: 290px;">
+                           
+                           @foreach($langs as $key => $value)
+                            <?php $src = $key.".png"; ?>
+                            <a href="#" class="dropdown-item" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}">&nbsp;{{$value[0]}}&nbsp;
+                            @if(Lang::getLocale() == "ar")
+                            &rlm;
+                            @endif
+                            ({{$value[1]}})</a>
+                            @endforeach      
+                       </div>
+                    </li>
+
+                    <li class="nav-item dropdown user-menu">
+
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                            @if(Auth::user())
+                            <img src="{{Auth::user()->profile_pic}}"class="user-image img-circle elevation-2" alt="User Image"/>
+                            <span class="d-none d-md-inline">{!! Auth::user()->first_name." ".Auth::user()->last_name !!}</span>
+                            @endif
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <!-- User image -->
+                            <li class="user-header bg-secondary"  style="background-color:#343F44;">
+                                @if(Auth::user())
+                                <img src="{{Auth::user()->profile_pic}}" class="img-circle elevation-2" alt="User Image" />
+
+                                <p style="margin-top: 0px;">{!! Auth::user()->first_name !!}{!! " ". Auth::user()->last_name !!}
+                                    <small class="text-capitalize">{{Auth::user()->role}}</small>
+                                </p>
+                                @endif
+                            </li>
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                
+                                <a href="{{url('admin-profile')}}" class="btn btn-primary btn-flat">{!! Lang::get('lang.profile') !!}</a>
+                                
+                                <a href="{{url('auth/logout')}}" class="btn btn-danger btn-flat float-right">{!! Lang::get('lang.sign_out') !!}</a>
+                            </li>
                         </ul>
-                    </div>
-                </nav>
-            </header>
+                    </li>
+                </ul>
+            </nav>
             <!-- Left side column. contains the logo and sidebar -->
-            <aside class="main-sidebar">
+            <aside class="main-sidebar elevation-4 sidebar-dark-orange">
+
+                <a href="http://www.faveohelpdesk.com" class="brand-link navbar-orange" style="text-align: center;">
+                    <img src="{{ asset('lb-faveo/media/images/logo.png')}}" class="brand-image" alt="Company Log0" style="opacity: .8">
+                </a>
+
                 <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar">
-                    <div class="user-panel">
-                        <div class = "row">
-                            <div class="col-xs-3"></div>
-                            <div class="col-xs-2" style="width:50%;">
-                                <a href="{!! url('profile') !!}">
-                                    <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
-                                </a>
-                            </div>
+
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                        
+                       <div class="image">
+
+                            <img id="sidebar-profile-img" src="{{Auth::user()->profile_pic}}" alt="User Image" width="auto" height="auto" 
+                                class="img-circle elevation-2">
                         </div>
-                        <div class="info" style="text-align:center;">
+
+                       <div class="info">
                             @if(Auth::user())
-                            <p>{!! Auth::user()->first_name !!}{!! " ". Auth::user()->last_name !!}</p>
+                           <a class="d-block" href="{!! url('profile') !!}">{!! Auth::user()->first_name !!}{!! " ". Auth::user()->last_name !!}</a>
                             @endif
-                            @if(Auth::user() && Auth::user()->active==1)
-                            <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-                            @else
-                            <a href="#"><i class="fa fa-circle"></i> Offline</a>
-                            @endif
-                        </div>
+                       </div>
                     </div>
-                    <!-- /.search form -->
-                    <!-- sidebar menu: : style can be found in sidebar.less -->
-                    <ul class="sidebar-menu">
-                        @if($replaceside==0)
-                        <center><a href="{{url('admin')}}"><li class="header"><span style="font-size:1.5em;">{{ Lang::get('lang.admin_panel') }}</span></li></a></center>
-                        <li class="header">{!! Lang::get('lang.settings-2') !!}</li>
-                        <li class="treeview @yield('Staffs')">
-                            <a  href="#">
-                                <i class="fa fa-users"></i> <span>{!! Lang::get('lang.staffs') !!}</span> <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li @yield('agents')><a href="{{ url('agents') }}"><i class="fa fa-user "></i>{!! Lang::get('lang.agents') !!}</a></li>
-                                <li @yield('departments')><a href="{{ url('departments') }}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.departments') !!}</a></li>
-                                <li @yield('teams')><a href="{{ url('teams') }}"><i class="fa fa-users"></i>{!! Lang::get('lang.teams') !!}</a></li>
-                                <li @yield('groups')><a href="{{ url('groups') }}"><i class="fa fa-users"></i>{!! Lang::get('lang.groups') !!}</a></li>
-                            </ul>
-                        </li>
 
-                        <li class="treeview @yield('Emails')">
-                            <a href="#">
-                                <i class="fa fa-envelope-o"></i>
-                                <span>{!! Lang::get('lang.email') !!}</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li @yield('emails')><a href="{{ url('emails') }}"><i class="fa fa-envelope"></i>{!! Lang::get('lang.emails') !!}</a></li>
-                                <li @yield('ban')><a href="{{ url('banlist') }}"><i class="fa fa-ban"></i>{!! Lang::get('lang.ban_lists') !!}</a></li>
-                                <li @yield('template')><a href="{{ url('template-sets') }}"><i class="fa fa-mail-forward"></i>{!! Lang::get('lang.templates') !!}</a></li>
-                                <li @yield('email')><a href="{{url('getemail')}}"><i class="fa fa-at"></i>{!! Lang::get('lang.email-settings') !!}</a></li>
-                                <li @yield('queue')><a href="{{ url('queue') }}"><i class="fa fa-upload"></i>{!! Lang::get('lang.queues') !!}</a></li>
-                                <li @yield('diagnostics')><a href="{{ url('getdiagno') }}"><i class="fa fa-plus"></i>{!! Lang::get('lang.diagnostics') !!}</a></li>
+                    <nav class="mt-2">
+                        
+                        <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+                            @if($replaceside==0)
+                            
+                            <li class="nav-header">{!! Lang::get('lang.settings-2') !!}</li>
 
-                                <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Auto Response</a></li> -->
-                                <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Rules/a></li> -->
-                                <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Breaklines</a></li> -->
-                                <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Log</a></li> -->
-                            </ul>
-                        </li>
+                            <li class="nav-item">
 
-                        <li class="treeview @yield('Manage')">
-                            <a href="#">
-                                <i class="fa  fa-cubes"></i>
-                                <span>{!! Lang::get('lang.manage') !!}</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li @yield('help')><a href="{{url('helptopic')}}"><i class="fa fa-file-text-o"></i>{!! Lang::get('lang.help_topics') !!}</a></li>
-                                <li @yield('sla')><a href="{{url('sla')}}"><i class="fa fa-clock-o"></i>{!! Lang::get('lang.sla_plans') !!}</a></li>
-                                <li @yield('forms')><a href="{{url('forms')}}"><i class="fa fa-file-text"></i>{!! Lang::get('lang.forms') !!}</a></li>
-                                <li @yield('workflow')><a href="{{url('workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.workflow') !!}</a></li>
-                                <li @yield('priority')><a href="{{url('ticket/priority')}}"><i class="fa fa-asterisk"></i>{!! Lang::get('lang.priority') !!}</a></li>
-                                <li @yield('url')><a href="{{url('url/settings')}}"><i class="fa fa-server"></i>{!! Lang::get('lang.url') !!}</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview @yield('Tickets')">
-                            <a  href="#">
-                                <i class="fa fa-ticket"></i> <span>{!! Lang::get('lang.tickets') !!}</span> <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li @yield('tickets')><a href="{{url('getticket')}}"><i class="fa fa-file-text"></i>{!! Lang::get('lang.ticket') !!}</a></li>
-                                <li @yield('auto-response')><a href="{{url('getresponder')}}"><i class="fa fa-reply-all"></i>{!! Lang::get('lang.auto_response') !!}</a></li>
-                                <li @yield('alert')><a href="{{url('getalert')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.alert_notices') !!}</a></li>
-                                <li @yield('status')><a href="{{url('setting-status')}}"><i class="fa fa-plus-square-o"></i>{!! Lang::get('lang.status') !!}</a></li>
-                                <li @yield('ratings')><a href="{{url('getratings')}}"><i class="fa fa-star"></i>{!! Lang::get('lang.ratings') !!}</a></li>
-                                <li @yield('close-workflow')><a href="{{url('close-workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.close-workflow') !!}</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview @yield('Settings')">
-                            <a href="#">
-                                <i class="fa fa-cog"></i>
-                                <span>{!! Lang::get('lang.settings') !!}</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li @yield('company')><a href="{{url('getcompany')}}"><i class="fa fa-building"></i>{!! Lang::get('lang.company') !!}</a></li>
-                                <li @yield('system')><a href="{{url('getsystem')}}"><i class="fa fa-laptop"></i>{!! Lang::get('lang.system') !!}</a></li>
-                                <li @yield('social-login')><a href="{{ url('social/media') }}"><i class="fa fa-globe"></i> {!! Lang::get('lang.social-login') !!}</a></li>
-                                <li @yield('languages')><a href="{{url('languages')}}"><i class="fa fa-language"></i>{!! Lang::get('lang.language') !!}</a></li>
-                                <li @yield('cron')><a href="{{url('job-scheduler')}}"><i class="fa fa-hourglass"></i>{!! Lang::get('lang.cron') !!}</a></li>
-                                <li @yield('security')><a href="{{url('security')}}"><i class="fa fa-lock"></i>{!! Lang::get('lang.security') !!}</a></li>
-                                <li @yield('notification')><a href="{{url('settings-notification')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.notifications') !!}</a></li>
-                                <li @yield('storage')><a href="{{url('storage')}}"><i class="fa fa-save"></i>{!! Lang::get('storage::lang.storage') !!}</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview @yield('error-bugs')">
-                            <a href="#">
-                                <i class="fa fa-heartbeat"></i>
-                                <span>{!! Lang::get('lang.error-debug') !!}</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
-                                <!-- <li @yield('error-logs')><a href="{{ route('error.logs') }}"><i class="fa fa-list-alt"></i> {!! Lang::get('lang.view-logs') !!}</a></li> -->
-                                <li @yield('debugging-option')><a href="{{ route('err.debug.settings') }}"><i class="fa fa-bug"></i> {!! Lang::get('lang.debug-options') !!}</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview @yield('Themes')">
-                            <a href="#">
-                                <i class="fa fa-pie-chart"></i>
-                                <span>{!! Lang::get('lang.widgets') !!}</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li @yield('widget')><a href="{{ url('widgets') }}"><i class="fa fa-list-alt"></i> {!! Lang::get('lang.widgets') !!}</a></li>
-                                <li @yield('socail')><a href="{{ url('social-buttons') }}"><i class="fa fa-cubes"></i> {!! Lang::get('lang.social') !!}</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview @yield('Plugins')">
-                            <a href="{{ url('plugins') }}">
-                                <i class="fa fa-plug"></i>
-                                <span>{!! Lang::get('lang.plugin') !!}</span>
-                            </a>
-                        </li>
-                        <li class="treeview @yield('API')">
-                            <a href="{{ url('api') }}">
-                                <i class="fa fa-cogs"></i>
-                                <span>{!! Lang::get('lang.api') !!}</span>
-                            </a>
-                        </li>
-                        <li class="treeview @yield('Log')">
-                            <a href="{{ url('logs') }}">
-                                <i class="fa fa-lock"></i>
-                                <span>Logs</span>
-                            </a>
-                        </li>
-                        @endif
-                        <?php \Event::fire('service.desk.admin.sidebar', array()); ?>
-                    </ul>
+                                <a  href="#" @yield('Staffs') class="nav-link">
+                                    <i class="nav-icon fas fa-users"></i> 
+                                    <p>{!! Lang::get('lang.staffs') !!} <i class="right fas fa-angle-left"></i></p> 
+                                </a>
+
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a href="{{ url('agents') }}" @yield('agents') class="nav-link">
+                                            <i class="nav-icon fas fa-user "></i>
+                                            <p>{!! Lang::get('lang.agents') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{ url('departments') }}" @yield('departments') class="nav-link">
+                                            <i class="nav-icon fas fa-sitemap"></i>
+                                            <p>{!! Lang::get('lang.departments') !!}</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{ url('teams') }}" @yield('teams') class="nav-link">
+                                            <i class="nav-icon fas fa-users"></i>
+                                            <p>{!! Lang::get('lang.teams') !!}</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{ url('groups') }}" @yield('groups') class="nav-link">
+                                            <i class="nav-icon fas fa-users"></i>
+                                            <p>{!! Lang::get('lang.groups') !!}</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                
+                                <a href="#" @yield('Emails') class="nav-link">
+                                    <i class="nav-icon fas fa-envelope"></i>
+                                    <p>{!! Lang::get('lang.email') !!} <i class="fas fa-angle-left right"></i></p>
+                                </a>
+
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a href="{{ url('emails') }}" @yield('emails') class="nav-link">
+                                            <i class="nav-icon fas fa-envelope"></i>
+                                            <p>{!! Lang::get('lang.emails') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{ url('banlist') }}" @yield('ban') class="nav-link">
+                                            <i class="nav-icon fas fa-ban"></i>
+                                            <p>{!! Lang::get('lang.ban_lists') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{ url('template-sets') }}" @yield('template') class="nav-link">
+                                            <i class="nav-icon fas fa-reply"></i>
+                                            <p>{!! Lang::get('lang.templates') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{url('getemail')}}" @yield('email') class="nav-link">
+                                            <i class="nav-icon fas fa-at"></i>
+                                            <p>{!! Lang::get('lang.email-settings') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{ url('queue') }}" @yield('queue') class="nav-link">
+                                            <i class="nav-icon fas fa-upload"></i>
+                                            <p>{!! Lang::get('lang.queues') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{ url('getdiagno') }}" @yield('diagnostics') class="nav-link">
+                                            <i class="nav-icon fas fa-plus"></i>
+                                            <p>{!! Lang::get('lang.diagnostics') !!}</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                
+                                <a href="#" @yield('Manage') class="nav-link">
+                                    <i class="nav-icon fas fa-cubes"></i>
+                                    <p>{!! Lang::get('lang.manage') !!} <i class="fas fa-angle-left right"></i></p>
+                                </a>
+
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a href="{{url('helptopic')}}" @yield('help') class="nav-link">
+                                            <i class="nav-icon fas fa-file-alt"></i>
+                                            <p>{!! Lang::get('lang.help_topics') !!}</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{url('sla')}}" @yield('sla') class="nav-link">
+                                            <i class="nav-icon fas fa-clock"></i>
+                                            <p>{!! Lang::get('lang.sla_plans') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{url('forms')}}" @yield('forms') class="nav-link">
+                                            <i class="nav-icon fas fa-file-alt"></i>
+                                            <p>{!! Lang::get('lang.forms') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{url('workflow')}}" @yield('workflow') class="nav-link">
+                                            <i class="nav-icon fas fa-sitemap"></i>
+                                            <p>{!! Lang::get('lang.workflow') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{url('ticket/priority')}}" @yield('priority') class="nav-link">
+                                            <i class="nav-icon fas fa-asterisk"></i>
+                                            <p>{!! Lang::get('lang.priority') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{url('url/settings')}}" @yield('url') class="nav-link">
+                                            <i class="nav-icon fas fa-server"></i>
+                                            <p>{!! Lang::get('lang.url') !!}</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                
+                                <a href="#" @yield('Tickets') class="nav-link">
+                                    <i class="nav-icon fas fa-ticket-alt"></i>
+                                    <p>{!! Lang::get('lang.tickets') !!} <i class="fas fa-angle-left right"></i></p>
+                                </a>
+                                
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a href="{{url('getticket')}}" @yield('tickets') class="nav-link">
+                                            <i class="nav-icon fas fa-file-alt"></i>
+                                            <p>{!! Lang::get('lang.ticket') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{url('getresponder')}}" @yield('auto-response') class="nav-link">
+                                            <i class="nav-icon fas fa-reply-all"></i>
+                                            <p>{!! Lang::get('lang.auto_response') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{url('getalert')}}" @yield('alert') class="nav-link">
+                                            <i class="nav-icon fas fa-bell"></i>
+                                            {!! Lang::get('lang.alert_notices') !!}
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{url('setting-status')}}" @yield('status') class="nav-link">
+                                            <i class="nav-icon fas fa-plus-square"></i>
+                                            <p>{!! Lang::get('lang.status') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{url('getratings')}}" @yield('ratings') class="nav-link">
+                                            <i class="nav-icon fas fa-star"></i>
+                                            <p>{!! Lang::get('lang.ratings') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{url('close-workflow')}}" @yield('close-workflow') class="nav-link">
+                                            <i class="nav-icon fa fa-sitemap"></i>
+                                            <p>{!! Lang::get('lang.close-workflow') !!}</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                
+                                <a href="#" @yield('Settings') class="nav-link">
+                                    <i class="nav-icon fas fa-cog"></i>
+                                    <p>{!! Lang::get('lang.settings') !!} <i class="fas fa-angle-left right"></i></p>
+                                </a>
+                                
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a href="{{url('getcompany')}}" @yield('company') class="nav-link">
+                                            <i class="nav-icon fas fa-building"></i>
+                                            <p>{!! Lang::get('lang.company') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{url('getsystem')}}" @yield('system') class="nav-link">
+                                            <i class="nav-icon fas fa-laptop"></i>
+                                            <p>{!! Lang::get('lang.system') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{ url('social/media') }}" @yield('social-login') class="nav-link">
+                                            <i class="nav-icon fas fa-globe"></i> 
+                                            <p>{!! Lang::get('lang.social-login') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{url('languages')}}" @yield('languages') class="nav-link">
+                                            <i class="nav-icon fas fa-language"></i>
+                                            <p>{!! Lang::get('lang.language') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{url('job-scheduler')}}" @yield('cron') class="nav-link">
+                                            <i class="nav-icon fas fa-hourglass"></i>
+                                            <p>{!! Lang::get('lang.cron') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{url('security')}}" @yield('security') class="nav-link">
+                                            <i class="nav-icon fas fa-lock"></i>
+                                            <p>{!! Lang::get('lang.security') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{url('settings-notification')}}" @yield('notification') class="nav-link">
+                                            <i class="nav-icon fas fa-bell"></i>
+                                            <p>{!! Lang::get('lang.notifications') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{url('storage')}}" @yield('storage') class="nav-link">
+                                            <i class="nav-icon fas fa-save"></i>
+                                            <p>{!! Lang::get('storage::lang.storage') !!}</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                
+                                <a href="#" @yield('error-bugs') class="nav-link">
+                                    <i class="nav-icon fas fa-heartbeat"></i>
+                                    <p>{!! Lang::get('lang.error-debug') !!} <i class="fas fa-angle-left right"></i></p>
+                                </a>
+                                
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a href="{{ route('err.debug.settings') }}" @yield('debugging-option') class="nav-link">
+                                            <i class="nav-icon fas fa-bug"></i> 
+                                            <p>{!! Lang::get('lang.debug-options') !!}</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                
+                                <a href="#" @yield('Themes') class="nav-link">
+                                    <i class="nav-icon fas fa-chart-pie"></i>
+                                    <p>{!! Lang::get('lang.widgets') !!} <i class="fas fa-angle-left right"></i></p>
+                                </a>
+                                
+                                <ul class="nav nav-treeview">
+                                
+                                    <li class="nav-item">
+                                        <a href="{{ url('widgets') }}" @yield('widget') class="nav-link">
+                                            <i class="nav-icon fas fa-list-alt"></i> 
+                                            <p>{!! Lang::get('lang.widgets') !!}</p>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{ url('social-buttons') }}" @yield('socail') class="nav-link">
+                                            <i class="nav-icon fas fa-cubes"></i> 
+                                            <p>{!! Lang::get('lang.social') !!}</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ url('plugins') }}" @yield('Plugins') class="nav-link">
+                                    <i class="nav-icon fas fa-plug"></i>
+                                    <p>{!! Lang::get('lang.plugin') !!}</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ url('api') }}" @yield('API') class="nav-link">
+                                    <i class="nav-icon fas fa-cogs"></i>
+                                    <p>{!! Lang::get('lang.api') !!}</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ url('logs') }}" @yield('Log') class="nav-link">
+                                    <i class="nav-icon fas fa-lock"></i>
+                                    <p>Logs</p>
+                                </a>
+                            </li>
+                            @endif
+                            <?php \Event::fire('service.desk.admin.sidebar', array()); ?>
+                        </ul>
+                    </nav>
                 </section>
                 <!-- /.sidebar -->
             </aside>
 
             <!-- Right side column. Contains the navbar and content of the page -->
             <div class="content-wrapper">
-                <!-- Content Header (Page header) -->
-                <section class="content-header">
-                    <!--<div class="row">-->
-                    <!--<div class="col-md-6">-->
-                    @yield('PageHeader')
-                    <!--</div>-->
-                    {!! Breadcrumbs::renderIfExists() !!}
-                    <!--</div>-->
-                </section>
+           
+                <div class="content-header">
+                  <div class="container-fluid">
+                    <div class="row mb-2">
+                      <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">@yield('PageHeader')</h1>
+                      </div><!-- /.col -->
+                      <div class="col-sm-6">
 
+                        {!! Breadcrumbs::renderIfExists() !!}
+                      </div><!-- /.col -->
+                    </div><!-- /.row -->
+                  </div><!-- /.container-fluid -->
+                </div>
+
+                <section class="content">
+
+                    <div class="container-fluid">
+                        
+                    </div>
+                </section>
+                
                 <!-- Main content -->
                 <section class="content">
+                    
                     @if($dummy_installation == 1 || $dummy_installation == '1')
+                    
                     <div class="alert alert-info alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <i class="icon fa  fa-exclamation-triangle"></i> {{Lang::get('lang.dummy_data_installation_message')}} <a href="{{route('clean-database')}}">{{Lang::get('lang.click')}}</a> {{Lang::get('lang.clear-dummy-data')}}
+                        <i class="icon fas  fa-exclamation-triangle"></i> {{Lang::get('lang.dummy_data_installation_message')}} 
+                        <a href="{{route('clean-database')}}">{{Lang::get('lang.click')}}</a> {{Lang::get('lang.clear-dummy-data')}}
                     </div>
+                    
                     @elseif (!$is_mail_conigured)
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="callout callout-warning lead">
-                                <h4><i class="fa fa-exclamation-triangle"></i>&nbsp;{{Lang::get('Alert')}}</h4>
-                                <p style="font-size:0.8em">
-                                @if (\Auth::user()->role == 'admin')
-                                    {{Lang::get('lang.system-outgoing-incoming-mail-not-configured')}}&nbsp;<a href="{{URL::route('emails.create')}}">{{Lang::get('lang.confihure-the-mail-now')}}</a>
-                                @else
-                                    {{Lang::get('lang.system-mail-not-configured-agent-message')}}
-                                @endif
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="callout callout-warning bg-warning">
+                                <p>
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    @if (\Auth::user()->role == 'admin')
+                                        {{Lang::get('lang.system-outgoing-incoming-mail-not-configured')}}&nbsp;<a href="{{URL::route('emails.create')}}">{{Lang::get('lang.confihure-the-mail-now')}}</a>
+                                    @else
+                                        {{Lang::get('lang.system-mail-not-configured-agent-message')}}
+                                    @endif
                                 </p>
-                                </div>
                             </div>
                         </div>
+                    </div>
                     @endif
+
                     @yield('content')
                 </section><!-- /.content -->
                 <!-- /.content-wrapper -->
             </div>
+
             <footer class="main-footer">
-                <div class="pull-right hidden-xs">
-                    <b>{!! Lang::get('lang.version') !!}</b> {!! Config::get('app.version') !!}
+
+                <div class="float-right d-none d-sm-block">
+                     
+                    <span style="font-weight: 500">{!! Lang::get('lang.version') !!}</span> {!! Config::get('app.version') !!}
                 </div>
-                <?php
-                $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
-                ?>
-                <strong>{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>.</strong> {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/" target="_blank">Faveo</a>
+
+                <span style="font-weight: 500">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>.</span> {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/" target="_blank">Faveo</a>
             </footer>
         </div><!-- ./wrapper -->
-        <!-- jQuery 2.1.3 -->
-        <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}" type="text/javascript"></script>
+
+        <script src="{{asset("lb-faveo/js/popper.min.js")}}" type="text/javascript"></script>
         <!-- Bootstrap 3.3.2 JS -->
-        <script src="{{asset("lb-faveo/js/bootstrap.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/bootstrap4.min.js")}}" type="text/javascript"></script>
+
+        <script src="{{asset("lb-faveo/adminlte3/js/adminlte3.min.js")}}" type="text/javascript"></script>
         <!-- Slimscroll -->
-        <script src="{{asset("lb-faveo/plugins/slimScroll/jquery.slimscroll.min.js")}}" type="text/javascript"></script>
-        <!-- FastClick -->
-        <script src="{{asset("lb-faveo/plugins/fastclick/fastclick.min.js")}}" type="text/javascript"></script>
-        <!-- AdminLTE App -->
-        <script src="{{asset("lb-faveo/js/app.min.js")}}" type="text/javascript"></script>
-        <!-- iCheck -->
-        <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/adminlte3/plugins/overlayScrollbars/overlayScrollbars.min.js")}}" type="text/javascript"></script>
+       
+        <script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
 
         <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
 
-        <script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
-        <!-- Page Script -->
-        <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
 
-        <script src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}"  type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" type="text/javascript"></script>
 
-        <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"  type="text/javascript"></script>
-        <!-- Colorpicker -->
-        <script src="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.js")}}" ></script>
-        <!--date time picker-->
+        <script src="{{asset("lb-faveo/plugins/moment/moment.js")}}" type="text/javascript"></script>
+
+        <!-- full calendar-->
+        <script src="{{asset('lb-faveo/plugins/fullcalendar/fullcalendar.min.js')}}" type="text/javascript"></script>
+
+        <script src="{{asset('lb-faveo/plugins/daterangepicker/daterangepicker.js')}}" type="text/javascript"></script>
+
         <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
-        <!-- select2 -->
-         <script src="{{asset("lb-faveo/plugins/select2/select2.min.js")}}" ></script>
 
-@if (trim($__env->yieldContent('no-toolbar')))
-    <h1>@yield('no-toolbar')</h1>
-@else
-    <script>
-    $(function () {
-    //Add text editor
-        $("textarea").wysihtml5();
-    });
-    </script>
-@endif
+        <script src="{{asset("lb-faveo/plugins/summernote/summernote-bs4.min.js")}}" type="text/javascript"></script>
+
+        <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
+
+        @if (trim($__env->yieldContent('no-toolbar')))
+            <h1>@yield('no-toolbar')</h1>
+        @else
+            <script>
+            $(function () {
+            //Add text editor
+                $("textarea").summernote({
+                    height: 300,
+                    tabsize: 2,
+                    toolbar: [
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']]
+                  ]
+                  });
+            });
+            </script>
+        @endif
     <script>
         $('#read-all').click(function () {
 
@@ -474,23 +814,9 @@
                     });
         });</script>
 
-    <script src="{{asset("lb-faveo/js/tabby.js")}}"></script>
     <!-- CK Editor -->
     <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
     <script src="{{asset("lb-faveo/js/languagechanger.js")}}" type="text/javascript"></script>
     @yield('FooterInclude')
 </body>
-<script>
-    $(function() {
-
-
-        $('input[type="checkbox"]').iCheck({
-            checkboxClass: 'icheckbox_flat-blue'
-        });
-        $('input[type="radio"]').iCheck({
-            radioClass: 'iradio_flat-blue'
-        });
-
-    });
-</script>
 </html>
