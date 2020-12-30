@@ -1,7 +1,7 @@
 @extends('themes.default1.agent.layout.agent')
 
 @section('Dashboard')
-class="active"
+class="nav-link active"
 @stop
 
 @section('dashboard-bar')
@@ -9,7 +9,7 @@ active
 @stop
 
 @section('profile')
-class="active"
+class="nav-link active"
 @stop
 
 @section('PageHeader')
@@ -17,49 +17,67 @@ class="active"
 @stop
 
 @section('content')
+
+@if(Session::has('success1'))
+<div class="alert alert-success alert-dismissable">
+    <i class="fas fa-check-circle"></i>
+    <b>Success</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('success1')}}
+</div>
+@endif
+<!-- fail message -->
+@if(Session::has('fails1'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fas fa-ban"></i>
+    <b>Fail!</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('fails1')}}
+</div>
+@endif
+@if(Session::has('success'))
+<div class="alert alert-success alert-dismissable">
+    <i class="fas fa-check-circle"></i>
+    <b>Success</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('success')}}
+</div>
+@endif
+<!-- fail message -->
+@if(Session::has('fails'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fas fa-ban"></i>
+    <b>Fail!</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('fails')}}
+</div>
+@endif
+@if(Session::has('errors'))
+<?php //dd($errors); ?>
+
+<div class="alert alert-danger alert-dismissable">
+    <i class="fa fa-ban"></i>
+    <b>{!! Lang::get('lang.alert') !!}!</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <br/>
+    @if($errors->first('first_name'))
+    <li class="error-message-padding">{!! $errors->first('first_name', ':message') !!}</li>
+    @endif
+    @if($errors->first('mobile'))
+    <li class="error-message-padding">{!! $errors->first('mobile', ':message') !!}</li>
+    @endif
+</div>
+@endif
 <div class="row">
     <div class="col-md-6">
         {!! Form::model($user,['url'=>'agent-profile', 'id' => 'agent-profile', 'method' => 'PATCH','files'=>true]) !!}
-        <div class="box box-primary">
-            <div class="box-header with-border">
-                <h3 class="box-title">
+        <div class="card card-light">
+            <div class="card-header">
+                <h3 class="card-title">
                     {!! Lang::get('lang.profile') !!}
                 </h3>
             </div>
-            <div class="box-body">
-                @if(Session::has('success'))
-                <div class="alert alert-success alert-dismissable">
-                    <i class="fa fa-ban"></i>
-                    <b>Success</b>
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    {{Session::get('success')}}
-                </div>
-                @endif
-                <!-- fail message -->
-                @if(Session::has('fails'))
-                <div class="alert alert-danger alert-dismissable">
-                    <i class="fa fa-ban"></i>
-                    <b>Fail!</b>
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    {{Session::get('fails')}}
-                </div>
-                @endif
-                @if(Session::has('errors'))
-                <?php //dd($errors); ?>
-               
-                <div class="alert alert-danger alert-dismissable">
-                    <i class="fa fa-ban"></i>
-                    <b>{!! Lang::get('lang.alert') !!}!</b>
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <br/>
-                    @if($errors->first('first_name'))
-                    <li class="error-message-padding">{!! $errors->first('first_name', ':message') !!}</li>
-                    @endif
-                    @if($errors->first('mobile'))
-                    <li class="error-message-padding">{!! $errors->first('mobile', ':message') !!}</li>
-                    @endif
-                </div>
-                @endif
+            <div class="card-body">
                 <!-- first name -->
                 <div class="form-group {{ $errors->has('first_name') ? 'has-error' : '' }}">
                     {!! Form::label('first_name',Lang::get('lang.first_name')) !!} <span class="text-red"> *</span>
@@ -74,10 +92,10 @@ class="active"
                 <div class="form-group">
                     {!! Form::label('gender',Lang::get('lang.gender')) !!}
                     <div class="row">
-                        <div class="col-xs-3">
+                        <div class="col-sm-3">
                             {!! Form::radio('gender','1',true) !!} {{Lang::get('lang.male')}}
                         </div>
-                        <div class="col-xs-3">
+                        <div class="col-sm-3">
                             {!! Form::radio('gender','0') !!} {{Lang::get('lang.female')}}
                         </div>
                     </div>
@@ -96,16 +114,16 @@ class="active"
                 </div>
                 <div class="row">
                     <!-- phone extension -->
-                    <div class="col-xs-2 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
+                    <div class="col-sm-2 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
                         {!! Form::label('country_code',Lang::get('lang.country-code')) !!}
                         {!! Form::text('country_code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code'), 'id' => 'code']) !!}
                     </div>
                     <!-- phone number -->
-                    <div class="col-xs-8 form-group {{ $errors->has('phone_number') ? 'has-error' : '' }}">
+                    <div class="col-sm-8 form-group {{ $errors->has('phone_number') ? 'has-error' : '' }}">
                         {!! Form::label('phone_number',Lang::get('lang.phone')) !!}
                         {!! Form::text('phone_number',null,['class' => 'form-control']) !!}
                     </div>
-                    <div class="col-xs-2 form-group {{ $errors->has('ext') ? 'has-error' : '' }}">
+                    <div class="col-sm-2 form-group {{ $errors->has('ext') ? 'has-error' : '' }}">
                         {!! Form::label('ext',Lang::get('lang.ext')) !!}
                         {!! Form::text('ext',null,['class' => 'form-control']) !!}
                     </div>
@@ -123,79 +141,62 @@ class="active"
                     <!-- profile pic -->
                     <div type="file" class="btn btn-default btn-file" style="color:orange">
                         <i class="fa fa-user"> </i>
-                        {!! Form::label('profile_pic',Lang::get('lang.profile_pic')) !!}
+                        {!! Form::label('profile_pic',Lang::get('lang.profile_pic'),['style'=>'font-weight:400;margin-bottom:0px;']) !!}
                         {!! Form::file('profile_pic',['class' => 'form-file']) !!}
                     </div>  
                 </div>
                 {!! Form::token() !!}
                 {!! Form::close() !!}
             </div>
-            <div class="box-footer">
-                {!! Form::submit(Lang::get('lang.update'),['class'=>'form-group btn btn-primary'])!!}
+            <div class="card-footer">
+                {!! Form::submit(Lang::get('lang.update'),['class'=>'btn btn-primary'])!!}
             </div>
         </div>
     </div>
     <div class="col-md-6">
         {!! Form::model($user,['url'=>'agent-profile-password/'.$user->id , 'method' => 'PATCH']) !!}
-        <div class="box box-primary">
-            <div class="box-header with-border">
-                <h4 class="box-title">{!! Lang::get('lang.change_password') !!}</h4> 
+        <div class="card card-light">
+            <div class="card-header">
+                <h3 class="card-title">{!! Lang::get('lang.change_password') !!}</h3> 
             </div>
-            <div class="box-body">
-                @if(Session::has('success1'))
-                <div class="alert alert-success alert-dismissable">
-                    <i class="fa fa-ban"></i>
-                    <b>Success</b>
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    {{Session::get('success1')}}
-                </div>
-                @endif
-                <!-- fail message -->
-                @if(Session::has('fails1'))
-                <div class="alert alert-danger alert-dismissable">
-                    <i class="fa fa-ban"></i>
-                    <b>Fail!</b>
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    {{Session::get('fails1')}}
-                </div>
-                @endif
+            <div class="card-body pb-0">
                 <!-- old password -->
                 <div class="form-group has-feedback {{ $errors->has('old_password') ? 'has-error' : '' }}">
                     {!! Form::label('old_password',Lang::get('lang.old_password')) !!} <span class="text-red"> *</span>
                     {!! Form::password('old_password',['class' => 'form-control']) !!}
                     {!! $errors->first('old_password', '<spam class="help-block">:message</spam>') !!}
-                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    <span class="glyphicon glyphicon-lock form-control-feedback" style="float: right;top: -46px;left: -10px;"></span>
                 </div>
                 <!-- new password -->
                 <div class="form-group has-feedback {{ $errors->has('new_password') ? 'has-error' : '' }}">
                     {!! Form::label('new_password',Lang::get('lang.new_password')) !!} <span class="text-red"> *</span>
                     {!! Form::password('new_password',['class' => 'form-control']) !!}
                     {!! $errors->first('new_password', '<spam class="help-block">:message</spam>') !!}
-                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    <span class="glyphicon glyphicon-lock form-control-feedback" style="float: right;top: -46px;left: -10px;"></span>
                 </div>
                 <!-- confirm password -->
                 <div class="form-group has-feedback {{ $errors->has('confirm_password') ? 'has-error' : '' }}">
                     {!! Form::label('confirm_password',Lang::get('lang.confirm_password')) !!} <span class="text-red"> *</span>
                     {!! Form::password('confirm_password',['class' => 'form-control']) !!}
                     {!! $errors->first('confirm_password', '<spam class="help-block">:message</spam>') !!}
-                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    <span class="glyphicon glyphicon-lock form-control-feedback" style="float: right;top: -46px;left: -10px;"></span>
                 </div>
             </div>
-            <div class="box-footer">
-                {!! Form::submit(Lang::get('lang.update'),['class'=>'form-group btn btn-primary'])!!}
+            <div class="card-footer">
+                {!! Form::submit(Lang::get('lang.update'),['class'=>'btn btn-primary'])!!}
             </div>
         </div>
     </div>
 </div>
 {!! Form::close() !!}
 <!-- Modal for last step of setting -->
-<div class="modal fade in" id="last-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: none; padding-right: 15px;background-color: rgba(0, 0, 0, 0.7);">
+<div class="modal fade" id="last-modal">
     <div class="modal-dialog" role="document">
         <div class="col-md-2"></div>
         <div class="col-md-12" style="height:40%">
             <div class="modal-content">
                 <div class="modal-header">
-                    <span style="font-size:1.2em">{{Lang::get('lang.verify-number')}}</span> 
+                    <h4 class="modal-title">{{Lang::get('lang.verify-number')}}</h4> 
                     <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
@@ -228,9 +229,9 @@ class="active"
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" id="close-last" class="btn btn-default closemodal pull-left">{{Lang::get('lang.close')}}</button>
-                    <div id="last-submit"><input  type="submit" id="merge-btn" class="btn btn-primary pull-right" value="{!! Lang::get('lang.verify') !!}"></input></div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" id="close-last" class="btn btn-default closemodal">{{Lang::get('lang.close')}}</button>
+                    <div id="last-submit"><input  type="submit" id="merge-btn" class="btn btn-primary" value="{!! Lang::get('lang.verify') !!}"></input></div>
                 </div>
                 {!! Form::close() !!}
             </div>

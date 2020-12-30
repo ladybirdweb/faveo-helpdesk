@@ -1,7 +1,7 @@
 @extends('themes.default1.agent.layout.agent')
 
 @section('Dashboard')
-class="active"
+class="nav-link active"
 @stop
 
 @section('dashboard-bar')
@@ -17,31 +17,35 @@ class="active"
 @stop
 
 @section('profileimg')
-<img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" width="100%"/>
+<img src="{{Auth::user()->profile_pic}}" id="sidebar-profile-img" class="img-circle elevation-2" alt="User Image" width="auto" height="auto" />
 @stop
 
 @section('content')
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <h3 class="box-title"><b>{!! Lang::get('lang.profile') !!}</b>&nbsp;&nbsp;<a href="{{URL::route('agent-profile-edit')}}"><i class="fa fa-fw fa-edit"> </i></a></h3>
-        @if(Session::has('success'))
-        <br><br>
-        <div class="alert alert-success alert-dismissable">
-            <i class="fa fa-check-circle"></i>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('success')}}
-        </div>
-        @endif
-        <!-- fail message -->
-        @if(Session::has('fails'))
-        <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!} !</b>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('fails')}}
-        </div>
-        @endif
+
+@if(Session::has('success'))
+<div class="alert alert-success alert-dismissable">
+    <i class="fa fa-check-circle"></i>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('success')}}
+</div>
+@endif
+<!-- fail message -->
+@if(Session::has('fails'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fa fa-ban"></i>
+    <b>{!! Lang::get('lang.alert') !!} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('fails')}}
+</div>
+@endif
+
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.profile') !!}&nbsp;&nbsp;
+            <a href="{{URL::route('agent-profile-edit')}}"><i class="fas fa-fw fa-edit"> </i></a>
+        </h3>
     </div>
+
     <?php
     if ($user->primary_dpt) {
         $dept = App\Model\helpdesk\Agent\Department::where('id', '=', $user->primary_dpt)->first();
@@ -62,46 +66,59 @@ class="active"
         $timezone = "";
     }
     ?>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="box-header  with-border">
-                <h3 class="box-title"><b>{!! Lang::get('lang.user_information') !!}</b></h3>
+    
+    <div class="card-body">
+        
+        <div class="row">
+            <div class="col-md-6">
+                
+                <div class="card card-light">
+                    
+                    <div class="card-header">
+                        <h3 class="card-title">{!! Lang::get('lang.user_information') !!}</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            @if($user->gender == 1)
+                            <div class='col-sm-4'><label>{!! Lang::get('lang.gender') !!}:</label></div> <div class='col-sm-7'>{{ 'Male' }}</div>
+                            @else
+                            <div class='col-sm-4'><label>{!! Lang::get('lang.gender') !!}:</label></div> <div class='col-sm-7'>{{ 'Female' }}</div>
+                            @endif
+                        </div>
+                        <div class="form-group  row">
+                            <div class='col-sm-4'><label>{!! Lang::get('lang.department') !!}:</label></div> <div class='col-sm-7'> {{ $dept }}</div>
+                        </div>
+                        <div class="form-group  row">
+                            <div class='col-sm-4'><label>{!! Lang::get('lang.group') !!}:</label></div> <div class='col-sm-7'> {{ $grp }}</div>
+                        </div>
+                        <div class="form-group  row">
+                            <div class='col-sm-4'><label>{!! Lang::get('lang.company') !!}:</label></div> <div class='col-sm-7'> {{ $user->company }}</div>
+                        </div>
+                        <div class="form-group  row">
+                            <div class='col-sm-4'><label>{!! Lang::get('lang.role') !!}:</label></div> <div class='col-sm-7'>  {{ $user->role }}</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="box-body">
-                <div class="form-group row">
-                    @if($user->gender == 1)
-                    <div class='col-xs-4'><label>{!! Lang::get('lang.gender') !!}:</label></div> <div class='col-xs-7'>{{ 'Male' }}</div>
-                    @else
-                    <div class='col-xs-4'><label>{!! Lang::get('lang.gender') !!}:</label></div> <div class='col-xs-7'>{{ 'Female' }}</div>
-                    @endif
-                </div>
-                <div class="form-group  row">
-                    <div class='col-xs-4'><label>{!! Lang::get('lang.department') !!}:</label></div> <div class='col-xs-7'> {{ $dept }}</div>
-                </div>
-                <div class="form-group  row">
-                    <div class='col-xs-4'><label>{!! Lang::get('lang.group') !!}:</label></div> <div class='col-xs-7'> {{ $grp }}</div>
-                </div>
-                <div class="form-group  row">
-                    <div class='col-xs-4'><label>{!! Lang::get('lang.company') !!}:</label></div> <div class='col-xs-7'> {{ $user->company }}</div>
-                </div>
-                <div class="form-group  row">
-                    <div class='col-xs-4'><label>{!! Lang::get('lang.role') !!}:</label></div> <div class='col-xs-7'>  {{ $user->role }}</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="box-header  with-border">
-                <h3 class="box-title"><b>{!! Lang::get('lang.contact_information') !!}</b></h3>
-            </div>
-            <div class="box-body">
-                <div class="form-group row">
-                    <div class='col-xs-4'><label>{!! Lang::get('lang.email') !!}:</label></div> <div class='col-xs-7'> {{ $user->email }}</div>
-                </div>
-                <div class="form-group row">
-                    <div class='col-xs-4'><label>{!! Lang::get('lang.phone_number') !!}:</label></div> <div class='col-xs-7'> {{ $user->ext }}{{ $user->phone_number }}</div>
-                </div>
-                <div class="form-group row">
-                    <div class='col-xs-4'><label>{!! Lang::get('lang.mobile') !!}:</label></div> <div class='col-xs-7'> {{ $user->mobile }}</div>
+
+            <div class="col-md-6">
+                
+                <div class="'card card-light">
+                    
+                    <div class="card-header">
+                        <h3 class="card-title">{!! Lang::get('lang.contact_information') !!}</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class='col-sm-4'><label>{!! Lang::get('lang.email') !!}:</label></div> <div class='col-sm-7'> {{ $user->email }}</div>
+                        </div>
+                        <div class="form-group row">
+                            <div class='col-sm-4'><label>{!! Lang::get('lang.phone_number') !!}:</label></div> <div class='col-sm-7'> {{ $user->ext }}{{ $user->phone_number }}</div>
+                        </div>
+                        <div class="form-group row">
+                            <div class='col-sm-4'><label>{!! Lang::get('lang.mobile') !!}:</label></div> <div class='col-sm-7'> {{ $user->mobile }}</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
