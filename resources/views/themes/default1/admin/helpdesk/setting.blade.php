@@ -9,489 +9,538 @@
 <!-- breadcrumbs -->
 @section('breadcrumbs')
 @stop
+
+<style type="text/css">
+    
+    .content-wrapper { min-height: auto !important; }
+
+    .settingiconblue {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+     .settingdivblue {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto;
+        text-align: center;
+        border: 5px solid #C4D8E4;
+        border-radius: 100%;
+        padding-top: 5px;
+    }
+
+     .settingdivblue span { margin-top: 3px; }
+
+     .fw_600 { font-weight: 600; }
+    .settingiconblue p{
+        text-align: center;
+        font-size: 16px;
+        word-wrap: break-word;
+        font-variant: small-caps;
+        font-weight: 500;
+        line-height: 30px;
+    }
+</style>
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
 <!-- failure message -->
-        @if(Session::has('fails'))
-        <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!}! </b>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('fails')}}
-        </div>
-        @endif
-<div class="box">
-    <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.staffs') !!}</h3>
+@if(Session::has('fails'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fas fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!}! </b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('fails')}}
+</div>
+@endif
+
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.staffs') !!}</h3>
     </div>
     <!-- /.box-header -->
-    <div class="box-body">
+    <div class="card-body">
         <div class="row">
-            <div class="col-md-12">
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{ url('agents') }}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-user fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.agents') !!}</p>
+
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{ url('agents') }}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-user fa-stack-1x"></i>
+                            </span>
+                        </a>
                     </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.agents') !!}</div>
                 </div>
-                <!--/.col-md-2-->
-                <!--col-md-2-->
-                <div class="col-md-2 col-sm-6">
+            </div>
+
+            <div class="col-md-2 col-sm-6">
                     <div class="settingiconblue">
                         <div class="settingdivblue">
                             <a href="{{ url('departments') }}">
                                 <span class="fa-stack fa-2x">
-                                    <i class="fa fa-sitemap fa-stack-1x"></i>
+                                    <i class="fas fa-sitemap fa-stack-1x"></i>
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.departments') !!}</p>
+                        <div class="text-center text-sm">{!! Lang::get('lang.departments') !!}</div>
                     </div>
                 </div>
-                <!--/.col-md-2-->
-                <!--col-md-2-->
+
                 <div class="col-md-2 col-sm-6">
                     <div class="settingiconblue">
                         <div class="settingdivblue">
                             <a href="{{ url('teams') }}">
                                 <span class="fa-stack fa-2x">
-                                    <i class="fa fa-users fa-stack-1x"></i>
+                                    <i class="fas fa-users fa-stack-1x"></i>
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.teams') !!}</p>
+                        <div class="text-center text-sm">{!! Lang::get('lang.teams') !!}</div>
                     </div>
                 </div>
-                <!--/.col-md-2-->
-                <!--col-md-2-->
+
                 <div class="col-md-2 col-sm-6">
                     <div class="settingiconblue">
                         <div class="settingdivblue">
                             <a href="{{ url('groups') }}">
                                 <span class="fa-stack fa-2x">
-                                    <i class="fa fa-group fa-stack-1x"></i>
+                                    <i class="fas fa-object-group fa-stack-1x"></i>
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.groups') !!}</p>
+                        <div class="text-center text-sm">{!! Lang::get('lang.groups') !!}</div>
                     </div>
                 </div>
-                <!--/.col-md-2-->
+        </div>
+    </div>
+</div>
+
+<div class="card card-light">
+    
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.email') !!}</h3>
+    </div>
+    
+    <div class="card-body">
+        
+        <div class="row">
+            <!--col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{ url('emails') }}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-envelope fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.emails') !!}</div>
+                </div>
+            </div>
+            <!--/.col-md-2-->
+            <!--col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{ url('banlist') }}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-ban fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.ban_lists') !!}</div>
+                </div>
+            </div>
+            <!--/.col-md-2-->
+            <!--col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{ url('template-sets') }}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-reply fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.templates') !!}</div>
+                </div>
+            </div>
+            <!--/.col-md-2-->
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('getemail')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-at fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.email-settings') !!}</div>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('queue')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-upload fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.queues') !!}</div>
+                </div>
+            </div>
+
+            <!--col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{ url('getdiagno') }}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-plus fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.diagnostics') !!}</div>
+                </div>
             </div>
         </div>
         <!-- /.row -->
     </div>
     <!-- ./box-body -->
 </div>
-<!-- /.box -->
 
-<div class="box">
-    <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.email') !!}</h3>
+<div class="card card-light">
+    
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.manage') !!}</h3>
     </div>
+    
     <!-- /.box-header -->
-    <div class="box-body">
+    <div class="card-body">
         <div class="row">
-            <div class="col-md-12">
-                <!--col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{ url('emails') }}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-envelope-o fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.emails') !!}</p>
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('helptopic')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-file-alt fa-stack-1x"></i>
+                            </span>
+                        </a>
                     </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.help_topics') !!}</div>
                 </div>
-                <!--/.col-md-2-->
-                <!--col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{ url('banlist') }}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-ban fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.ban_lists') !!}</p>
-                    </div>
-                </div>
-                <!--/.col-md-2-->
-                <!--col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{ url('template-sets') }}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-mail-forward fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.templates') !!}</p>
-                    </div>
-                </div>
-                <!--/.col-md-2-->
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('getemail')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-at fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.email-settings') !!}</p>
-                    </div>
-                </div>
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('queue')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-upload fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.queues') !!}</p>
-                    </div>
-                </div>
-                <!--col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{ url('getdiagno') }}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-plus fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.diagnostics') !!}</p>
-                    </div>
-                </div>
-                <!--/.col-md-2-->
             </div>
-        </div>
-        <!-- /.row -->
-    </div>
-    <!-- ./box-body -->
-</div>
+            <!--/.col-md-2-->
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('sla')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-clock fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.sla_plans') !!}</div>
+                </div>
+            </div>
+            <!--/.col-md-2-->
 
-<div class="box">
-    <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.manage') !!}</h3>
-    </div>
-    <!-- /.box-header -->
-    <div class="box-body">
-        <div class="row">
-            <div class="col-md-12">
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('helptopic')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-file-text-o fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.help_topics') !!}</p>
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('forms')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-file-alt fa-stack-1x"></i>
+                            </span>
+                        </a>
                     </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.forms') !!}</div>
                 </div>
-                <!--/.col-md-2-->
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('sla')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-clock-o fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.sla_plans') !!}</p>
+            </div>
+            <!--/.col-md-2-->
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('workflow')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-sitemap fa-stack-1x"></i>
+                            </span>
+                        </a>
                     </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.workflow') !!}</div>
                 </div>
-                <!--/.col-md-2-->
-
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('forms')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-file-text fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.forms') !!}</p>
-                    </div>
-                </div>
-                <!--/.col-md-2-->
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('workflow')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-sitemap fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.workflow') !!}</p>
-                    </div>
-                </div>
+            </div>
                 <!-- priority -->
-                 <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('ticket/priority')}}">
-                                <span class="fa-stack fa-2x">
-                                    
-                                    <i class="fa fa-asterisk fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.priority') !!}</p>
-                    </div>
-                </div>
-                <!--/.col-md-2-->
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('url/settings')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-server fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >Url</p>
-                    </div>
-                </div>
-                <!--/.col-md-2-->
-            </div>
-        </div>
-        <!-- /.row -->
-    </div>
-    <!-- ./box-body -->
-</div>
-<div class="box">
-    <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.ticket') !!}</h3>
-    </div>
-    <!-- /.box-header -->
-    <div class="box-body">
-        <div class="row">
-            <div class="col-md-12">
-                
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('getticket')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-file-text-o fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.ticket') !!}</p>
-                    </div>
-                </div>
-                <!--/.col-md-2-->
-                
-                 <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('getresponder')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-reply-all fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.auto_response') !!}</p>
-                    </div>
-                </div>
-                <!--/.col-md-2-->
-                
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('getalert')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-bell-o fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.alert_notices') !!}</p>
-                    </div>
-                </div>
-                <!--/.col-md-2-->
-                
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('setting-status')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-plus-square-o"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >Statuses</p>
-                    </div>
-                </div>
+             <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('ticket/priority')}}">
+                            <span class="fa-stack fa-2x">
                                 
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('getratings')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-star"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.ratings') !!}</p>
+                                <i class="fas fa-asterisk fa-stack-1x"></i>
+                            </span>
+                        </a>
                     </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.priority') !!}</div>
                 </div>
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('close-workflow')}}">
-                                <span class="fa-stack fa-2x">    
-                                    <i class="fa fa-sitemap"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.close_ticket_workflow') !!}</p>
+            </div>
+            <!--/.col-md-2-->
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('url/settings')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-server fa-stack-1x"></i>
+                            </span>
+                        </a>
                     </div>
+                    <div class="text-center text-sm">Url</div>
                 </div>
-               <?php \Event::fire('settings.ticket.view',[]); ?>
-                <!--/.col-md-2-->
             </div>
         </div>
         <!-- /.row -->
     </div>
     <!-- ./box-body -->
 </div>
-<div class="box">
-    <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.settings') !!}</h3>
+
+<div class="card card-light">
+    
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.ticket') !!}</h3>
     </div>
     <!-- /.box-header -->
-    <div class="box-body">
+    <div class="card-body">
         <div class="row">
-            <div class="col-md-12">
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{!! url('getcompany') !!}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-building-o fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.company') !!}</p>
-                    </div>
-                </div>
-                <!--/.col-md-2-->
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('getsystem')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-laptop fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.system') !!}</p>
-                    </div>
-                </div>
-                <!--/.col-md-2-->
-
                 
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{ url('social/media') }}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-globe fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{{Lang::get('lang.social-login')}}</p>
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('getticket')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-file-alt fa-stack-1x"></i>
+                            </span>
+                        </a>
                     </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.ticket') !!}</div>
                 </div>
+            </div>
                 <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('languages')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-language fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title">{!! Lang::get('lang.language') !!}</p>
+            
+             <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('getresponder')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-reply-all fa-stack-1x"></i>
+                            </span>
+                        </a>
                     </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.auto_response') !!}</div>
                 </div>
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('job-scheduler')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa  fa-hourglass-o fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.cron') !!}</p>
+            </div>
+            <!--/.col-md-2-->
+            
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('getalert')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-bell fa-stack-1x"></i>
+                            </span>
+                        </a>
                     </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.alert_notices') !!}</div>
                 </div>
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('security')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa  fa-lock fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.security') !!}</p>
+            </div>
+            <!--/.col-md-2-->
+            
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('setting-status')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-plus-square fa-stack-1x"></i>
+                            </span>
+                        </a>
                     </div>
+                    <div class="text-center text-sm">Statuses</div>
                 </div>
-                <!--/.col-md-2-->
-                
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('settings-notification')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-bell"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.notification') !!}</p>
+            </div>
+                            
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('getratings')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-star fa-stack-1x"></i>
+                            </span>
+                        </a>
                     </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.ratings') !!}</div>
                 </div>
-                
-                <?php \Event::fire('settings.system',[]); ?>
+            </div>
+
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('close-workflow')}}">
+                            <span class="fa-stack fa-2x">    
+                                <i class="fas fa-sitemap fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.close_ticket_workflow') !!}</div>
+                </div>
+            </div>
+           <?php \Event::fire('settings.ticket.view',[]); ?>
+
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- ./box-body -->
+</div>
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.settings') !!}</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="card-body">
+        <div class="row">
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{!! url('getcompany') !!}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-building fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.company') !!}</div>
+                </div>
+            </div>
+            <!--/.col-md-2-->
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('getsystem')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-laptop fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.system') !!}</div>
+                </div>
+            </div>
+            <!--/.col-md-2-->
+
+            
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{ url('social/media') }}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-globe fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{{Lang::get('lang.social-login')}}</div>
+                </div>
+            </div>
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('languages')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-language fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.language') !!}</div>
+                </div>
+            </div>
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('job-scheduler')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas  fa-hourglass fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.cron') !!}</div>
+                </div>
+            </div>
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('security')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-lock fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.security') !!}</div>
+                </div>
+            </div>
+            <!--/.col-md-2-->
+            
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{url('settings-notification')}}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-bell fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.notification') !!}</div>
+                </div>
+            </div>
+            
+            <?php \Event::fire('settings.system',[]); ?>
+     
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- ./box-body -->
+</div>
+
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.error-debug') !!}</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{ route('err.debug.settings') }}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-bug fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.debug-options') !!}</div>
+                </div>
             </div>
         </div>
         <!-- /.row -->
@@ -499,173 +548,117 @@
     <!-- ./box-body -->
 </div>
 
-<div class="box">
-    <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.error-debug') !!}</h3>
+
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.widgets') !!}</h3>
     </div>
     <!-- /.box-header -->
-    <div class="box-body">
+    <div class="card-body">
         <div class="row">
-            <div class="col-md-12">
-                <!--/.col-md-2-->
-                <!-- <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{ route('error.logs') }}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-list-alt fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.view-logs') !!}</p>
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{ url('widgets') }}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-list-alt fa-stack-1x"></i>
+                            </span>
+                        </a>
                     </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.widgets') !!}</div>
                 </div>
-         -->        <!--/.col-md-2-->                                        
-                <!--col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{ route('err.debug.settings') }}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-bug fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.debug-options') !!}</p>
-                    </div>
-                </div>
-                <!--/.col-md-2-->                                        
             </div>
+            <!--/.col-md-2-->                                        
+            <!--col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{ url('social-buttons') }}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-cubes fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.social') !!}</div>
+                </div>
+            </div>
+            
         </div>
         <!-- /.row -->
     </div>
     <!-- ./box-body -->
 </div>
 
-
-<div class="box">
-    <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.widgets') !!}</h3>
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.plugin') !!}</h3>
     </div>
     <!-- /.box-header -->
-    <div class="box-body">
+    <div class="card-body">
         <div class="row">
-            <div class="col-md-12">
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{ url('widgets') }}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-list-alt fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.widgets') !!}</p>
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{ url('plugins') }}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-plug fa-stack-1x"></i>
+                            </span>
+                        </a>
                     </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.plugin') !!}</div>
                 </div>
-                <!--/.col-md-2-->                                        
-                <!--col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{ url('social-buttons') }}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-cubes fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.social') !!}</p>
-                    </div>
-                </div>
-                
-                <!--/.col-md-2-->                                        
             </div>
         </div>
         <!-- /.row -->
     </div>
     <!-- ./box-body -->
 </div>
-
-<div class="box">
-    <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.plugin') !!}</h3>
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.api') !!}</h3>
     </div>
     <!-- /.box-header -->
-    <div class="box-body">
+    <div class="card-body">
         <div class="row">
-            <div class="col-md-12">
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{ url('plugins') }}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-plug fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.plugin') !!}</p>
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{ url('api') }}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-cogs fa-stack-1x"></i>
+                            </span>
+                        </a>
                     </div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.api') !!}</div>
                 </div>
-                <!--/.col-md-2-->
-
             </div>
         </div>
         <!-- /.row -->
     </div>
     <!-- ./box-body -->
 </div>
-<div class="box">
-    <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.api') !!}</h3>
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">Logs</h3>
     </div>
     <!-- /.box-header -->
-    <div class="box-body">
+    <div class="card-body">
         <div class="row">
-            <div class="col-md-12">
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{ url('api') }}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-cogs"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.api') !!}</p>
+            <!--/.col-md-2-->
+            <div class="col-md-2 col-sm-6">
+                <div class="settingiconblue">
+                    <div class="settingdivblue">
+                        <a href="{{ url('logs') }}">
+                            <span class="fa-stack fa-2x">
+                                <i class="fas fa-lock fa-stack-1x"></i>
+                            </span>
+                        </a>
                     </div>
+                    <div class="text-center text-sm">Logs</div>
                 </div>
-                <!--/.col-md-2-->
-            </div>
-        </div>
-        <!-- /.row -->
-    </div>
-    <!-- ./box-body -->
-</div>
-<div class="box">
-    <div class="box-header with-border">
-        <h3 class="box-title">Logs</h3>
-    </div>
-    <!-- /.box-header -->
-    <div class="box-body">
-        <div class="row">
-            <div class="col-md-12">
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{ url('logs') }}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-lock"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >Logs</p>
-                    </div>
-                </div>
-                <!--/.col-md-2-->
             </div>
         </div>
         <!-- /.row -->

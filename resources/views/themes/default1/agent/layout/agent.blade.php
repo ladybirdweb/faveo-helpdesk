@@ -103,7 +103,7 @@
                   
                     <li class="nav-item">
                 
-                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="nav-icon fas fa-bars"></i></a>
                     </li>
                 </ul>
 
@@ -165,7 +165,7 @@
 
                         <a href="#" class="nav-link" data-toggle="dropdown" onclick="myFunction()">
                             
-                            <i class="fas fa-bell"></i>
+                            <i class="nav-icon  fas fa-bell"></i>
                             
                             <span class="badge badge-warning navbar-badge" id="count">{!! $notifications->count() !!}</span>
                         </a>
@@ -344,7 +344,7 @@
             <!-- Left side column. contains the logo and sidebar -->
             <aside class="main-sidebar elevation-4 sidebar-dark-lightblue">
 
-                <a href="http://www.faveohelpdesk.com" class="brand-link" style="text-align: center;">
+                <a href="http://www.faveohelpdesk.com" class="brand-link navbar-lightblue" style="text-align: center;">
                     <img src="{{ asset('lb-faveo/media/images/logo.png')}}" class="brand-image" alt="Company Log0" style="opacity: .8">
                 </a>
 
@@ -379,7 +379,7 @@
 
                             <li class="nav-item">
                                 <a href="{{ url('tickets')}}" id="load-inbox" @yield('inbox') class="nav-link">
-                                    <i class="fas fa-envelope"></i> 
+                                    <i class="nav-icon fas fa-envelope"></i> 
                                     <p>{!! Lang::get('lang.inbox') !!}</p> 
                                     <small class="right badge badge-success">{{$tickets -> count()}}</small>
                                 </a>
@@ -387,7 +387,7 @@
 
                             <li class="nav-item">
                                 <a href="{{url('/tickets?show=mytickets')}}" id="load-myticket" @yield('myticket') class="nav-link">
-                                    <i class="fas fa-user"></i> 
+                                    <i class="nav-icon fas fa-user"></i> 
                                     <p>{!! Lang::get('lang.my_tickets') !!} </p>
                                     <small class="right badge badge-success">{{$myticket -> count()}}</small>
                                 </a>
@@ -395,7 +395,7 @@
 
                             <li class="nav-item">
                                  <a href="{{url('/tickets?assigned[]=0')}}" id="load-unassigned" @yield('unassigned')  class="nav-link">
-                                    <i class="fas fa-th"></i> 
+                                    <i class="nav-icon fas fa-th"></i> 
                                     <p>{!! Lang::get('lang.unassigned') !!}</p>
                                     <small class="right badge badge-success">{{$unassigned -> count()}}</small>
                                 </a>
@@ -403,7 +403,7 @@
 
                             <li class="nav-item">
                                  <a href="{{url('/tickets?show=overdue')}}" id="load-unassigned" @yield('overdue') class="nav-link">
-                                    <i class="fas fa-calendar-times"></i> 
+                                    <i class="nav-icon fas fa-calendar-times"></i> 
                                     <p>{!! Lang::get('lang.overdue') !!}</p>
                                     <small class="right badge badge-success">{{$overdues->count()}}</small>
                                 </a>
@@ -411,7 +411,7 @@
 
                             <li class="nav-item">
                                  <a href="{{url('/tickets?show=trash')}}" @yield('trash') class="nav-link">
-                                    <i class="fas fa-trash"></i> 
+                                    <i class="nav-icon fas fa-trash"></i> 
                                     <p>{!! Lang::get('lang.trash') !!}</p>
                                     <small class="right badge badge-success">{{$deleted -> count()}}</small>
                                 </a>
