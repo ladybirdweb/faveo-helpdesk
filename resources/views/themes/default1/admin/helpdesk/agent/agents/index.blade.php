@@ -1,15 +1,19 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Staffs')
-active
+class="nav-link active"
 @stop
 
-@section('staffs-bar')
-active
+@section('staff-menu-parent')
+class="nav-item menu-open"
+@stop
+
+@section('staff-menu-open')
+class="nav nav-treeview menu-open"
 @stop
 
 @section('agents')
-class="active"
+class="nav-link active"
 @stop
 
 @section('HeadInclude')
@@ -27,40 +31,49 @@ class="active"
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-<div class="box box-primary">
-    <div class="box-header">
-        <h2 class="box-title">{!! Lang::get('lang.list_of_agents') !!} </h2><a href="{{route('agents.create')}}" class="btn btn-primary pull-right">
-        <span class="glyphicon glyphicon-plus"></span> &nbsp;{!! Lang::get('lang.create_an_agent') !!}</a></div>
-    <div class="box-body table-responsive">
+     <!-- check whether success or not -->
+@if(Session::has('success'))
+<div class="alert alert-success alert-dismissable">
+    <i class="fas  fa-check-circle"></i>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('success')}}
+</div>
+@endif
+<!-- failure message -->
+@if(Session::has('fails'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fas fa-ban"></i>
+    <b>{!! Lang::get('lang.fails') !!}!</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('fails')}}
+</div>
+@endif
+<!-- Warning Message -->
+@if(Session::has('warning'))
+<div class="alert alert-warning alert-dismissable">
+    <i class="fas fa-exclamation-triangle"></i>
+    <b>{!! Lang::get('lang.warning') !!}!</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('warning')}}
+</div>
+@endif
+
+<div class="card card-light">
+    
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.list_of_agents') !!} </h3>
+
+        <div class="card-tools">
+                    
+            <a href="{{route('agents.create')}}" class="btn btn-default btn-tool">
+                <span class="fas fa-plus"></span> &nbsp;{!! Lang::get('lang.create_an_agent') !!}
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
         <?php
         $user = App\User::where('role', '!=', 'user')->orderBy('id', 'ASC')->paginate(10);
         ?>
-        <!-- check whether success or not -->
-        @if(Session::has('success'))
-        <div class="alert alert-success alert-dismissable">
-            <i class="fa  fa-check-circle"></i>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('success')}}
-        </div>
-        @endif
-        <!-- failure message -->
-        @if(Session::has('fails'))
-        <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.fails') !!}!</b>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('fails')}}
-        </div>
-        @endif
-        <!-- Warning Message -->
-        @if(Session::has('warning'))
-        <div class="alert alert-warning alert-dismissable">
-            <i class="fa fa-warning"></i>
-            <b>{!! Lang::get('lang.warning') !!}!</b>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('warning')}}
-        </div>
-        @endif
         <!-- Agent table -->
         <table class="table table-bordered dataTable" style="overflow:hidden;">
             <tr>
@@ -102,16 +115,16 @@ class="active"
                 {{-- <td>{{$use->Lastlogin_at}}</td> --}}
                 <td>
                     {!! Form::open(['route'=>['agents.destroy', $use->id],'method'=>'DELETE']) !!}
-                    <a href="{{route('agents.edit', $use->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!} </a>
+                    <a href="{{route('agents.edit', $use->id)}}" class="btn btn-primary btn-xs"><i class="fas fa-edit"> </i> {!! Lang::get('lang.edit') !!} </a>
                     <!-- To pop up a confirm Message -->
-                    {{-- {!! Form::button(' <i class="fa fa-trash" style="color:black;"> </i> '  . Lang::get('lang.delete') ,['type' => 'submit', 'class'=> 'btn btn-warning btn-xs btn-flat','onclick'=>'return confirm("Are you sure?")']) !!} --}}
+                    {{-- {!! Form::button(' <i class="fas fa-trash"> </i> '  . Lang::get('lang.delete') ,['type' => 'submit', 'class'=> 'btn btn-danger btn-xs','onclick'=>'return confirm("Are you sure?")']) !!} --}}
                     {!! Form::close() !!}
                 </td>
             </tr>
             @endif
             @endforeach
         </table>
-        <div class="pull-right" style="margin-top : -10px; margin-bottom : -10px;">
+        <div class="float-right">
             {!! $user->links() !!}
         </div>
     </div>

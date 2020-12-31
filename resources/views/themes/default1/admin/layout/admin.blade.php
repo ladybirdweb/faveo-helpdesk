@@ -334,14 +334,14 @@
                             
                             <li class="nav-header">{!! Lang::get('lang.settings-2') !!}</li>
 
-                            <li class="nav-item">
+                            <li @yield('staff-menu-parent') class="nav-item">
 
                                 <a  href="#" @yield('Staffs') class="nav-link">
                                     <i class="nav-icon fas fa-users"></i> 
                                     <p>{!! Lang::get('lang.staffs') !!} <i class="right fas fa-angle-left"></i></p> 
                                 </a>
 
-                                <ul class="nav nav-treeview">
+                                <ul @yield('staff-menu-open') class="nav nav-treeview">
 
                                     <li class="nav-item">
                                         <a href="{{ url('agents') }}" @yield('agents') class="nav-link">
@@ -671,7 +671,7 @@
             </aside>
 
             <!-- Right side column. Contains the navbar and content of the page -->
-            <div class="content-wrapper">
+            <div class="content-wrapper" style="padding-bottom: 1px;">
            
                 <div class="content-header">
                   <div class="container-fluid">

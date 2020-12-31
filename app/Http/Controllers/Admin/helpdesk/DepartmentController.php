@@ -157,7 +157,7 @@ class DepartmentController extends Controller
                     ->first();
             $slas = $sla->where('status', '=', 1)
                     ->select('grace_period', 'id')->get();
-            $user = $user->where('primary_dpt', $id)
+            $user = $user->where('role', '<>', 'user')
             ->where('active', '=', 1)
             ->get();
             $emails = $email->select('email_name', 'id')->get();
