@@ -1,15 +1,19 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Staffs')
-active
+class="nav-link active"
 @stop
 
-@section('staffs-bar')
-active
+@section('staff-menu-parent')
+class="nav-item menu-open"
+@stop
+
+@section('staff-menu-open')
+class="nav nav-treeview menu-open"
 @stop
 
 @section('departments')
-class="active"
+class="nav-link active"
 @stop
 
 @section('HeadInclude')
@@ -28,29 +32,41 @@ class="active"
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-<div class="box box-primary">
-    <div class="box-header">
-        <h2 class="box-title">{!! Lang::get('lang.list_of_departments') !!}</h2><a href="{{route('departments.create')}}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> &nbsp;{{Lang::get('lang.create_a_department')}}</a></div>
-    <div class="box-body table-responsive ">
-        <!-- check whether success or not -->
-        @if(Session::has('success'))
-        <div class="alert alert-success alert-dismissable">
-            <i class="fa  fa-check-circle"></i>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {!! Session::get('success') !!}
-        </div>
-        @endif
-        <!-- failure message -->
-        @if(Session::has('fails'))
-        <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.fails') !!}!</b>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {!! Session::get('fails') !!}
-        </div>
-        @endif
+
+<!-- check whether success or not -->
+@if(Session::has('success'))
+<div class="alert alert-success alert-dismissable">
+    <i class="fa  fa-check-circle"></i>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {!! Session::get('success') !!}
+</div>
+@endif
+<!-- failure message -->
+@if(Session::has('fails'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fa fa-ban"></i>
+    <b>{!! Lang::get('lang.fails') !!}!</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {!! Session::get('fails') !!}
+</div>
+@endif
+
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.list_of_departments') !!}</h3>
+
+        <div class="card-tools">
+            
+            <a href="{{route('departments.create')}}" class="btn btn-default btn-tool">
+                <span class="fas fa-plus"></span>&nbsp;{{Lang::get('lang.create_a_department')}}
+            </a>        
+        </div>    
+    </div>
+
+    <div class="card-body">
+       
         <!-- table -->
-        <table class="table table-bordered dataTable" style="overflow:hidden;">
+        <table class="table table-bordered dataTable" style="overflow:scroll;">
             <tr>
                 <th>{{Lang::get('lang.name')}}</th>
                 <th>{{Lang::get('lang.type')}}</th>
@@ -103,15 +119,23 @@ class="active"
                 <td>{{ $manager }}</td>
                 <td>
                     {!! Form::open(['route'=>['departments.destroy', $department->id],'method'=>'DELETE']) !!}
-                    <a href="{{route('departments.edit', $department->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a>
+                    <a href="{{route('departments.edit', $department->id)}}" class="btn btn-primary btn-xs"><i class="fas fa-edit"> </i> {!! Lang::get('lang.edit') !!}</a>
                     {{-- @if($default_department == $department->id) --}}
                     {{-- @else --}}
                     <!-- To pop up a confirm Message -->
-                    {!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> '.Lang::get('lang.delete'),
+                   
+                    @if($default_department == $department->id)
+                    {!! Form::button('<i class="fas fa-trash"> </i> '.Lang::get('lang.delete'),
+                    ['class'=> 'btn btn-danger btn-xs '.$disable])
+                    !!}
+                    @else
+                     {!! Form::button('<i class="fas fa-trash"> </i> '.Lang::get('lang.delete'),
                     ['type' => 'submit',
-                    'class'=> 'btn btn-warning btn-xs btn-flat '.$disable,
+                    'class'=> 'btn btn-danger btn-xs',
                     'onclick'=>'return confirm("Are you sure?")'])
                     !!}
+                    @endif
+
                     {{-- @endif --}}
 
                     {!! Form::close() !!}

@@ -480,7 +480,7 @@
             $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first();
             ?>
             <!-- Right side column. Contains the navbar and content of the page -->
-            <div class="content-wrapper">
+            <div class="content-wrapper" style="padding-bottom: 1px;">
 
                 <div class="tab-content" style="position: fixed;z-index: 1;width: 100%;">
                   @if($replacetop==0)

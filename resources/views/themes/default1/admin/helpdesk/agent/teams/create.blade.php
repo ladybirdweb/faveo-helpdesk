@@ -1,15 +1,19 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Staffs')
-active
+class="nav-link active"
 @stop
 
-@section('staffs-bar')
-active
+@section('staff-menu-parent')
+class="nav-item menu-open"
+@stop
+
+@section('staff-menu-open')
+class="nav nav-treeview menu-open"
 @stop
 
 @section('teams')
-class="active"
+class="nav-link active"
 @stop
 
 @section('HeadInclude')
@@ -30,60 +34,68 @@ class="active"
 @section('content')
 <!-- open a form -->
 {!! Form::open(array('action' => 'Admin\helpdesk\TeamController@store' , 'method' => 'post') )!!}
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.create_a_team') !!}	</h3>
-    </div>
-    <div class="box-body">
-        @if(Session::has('errors'))
-            <div class="alert alert-danger alert-dismissable">
-                <i class="fa fa-ban"></i>
-                <b>Alert!</b>
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <br/>
-                @if($errors->first('name'))
-                <li class="error-message-padding">{!! $errors->first('name', ':message') !!}</li>
-                @endif
-                @if($errors->first('team_lead'))
-                <li class="error-message-padding">{!! $errors->first('team_lead', ':message') !!}</li>
-                @endif
-                @if($errors->first('status'))
-                <li class="error-message-padding">{!! $errors->first('status', ':message') !!}</li>
-                @endif
-            </div>
+
+@if(Session::has('errors'))
+    <div class="alert alert-danger alert-dismissable">
+        <i class="fa fa-ban"></i>
+        <b>Alert!</b>
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <br/>
+        @if($errors->first('name'))
+        <li class="error-message-padding">{!! $errors->first('name', ':message') !!}</li>
         @endif
+        @if($errors->first('team_lead'))
+        <li class="error-message-padding">{!! $errors->first('team_lead', ':message') !!}</li>
+        @endif
+        @if($errors->first('status'))
+        <li class="error-message-padding">{!! $errors->first('status', ':message') !!}</li>
+        @endif
+    </div>
+@endif
+
+<div class="card card-light">
+    
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.create_a_team') !!}	</h3>
+    </div>
+
+    <div class="card-body">
+
         <div class="row">
             <!-- name -->
-            <div class="col-xs-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
+            <div class="col-sm-5 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                 {!! Form::label('name',Lang::get('lang.name')) !!} <span class="text-red"> *</span>
                 {!! Form::text('name',null,['class' => 'form-control']) !!}
             </div>
             <!-- team lead -->
-            <div class="col-xs-6 form-group {{ $errors->has('team_lead') ? 'has-error' : '' }}">
+            <div class="col-sm-4 form-group {{ $errors->has('team_lead') ? 'has-error' : '' }}">
                 {!! Form::label('team_lead',Lang::get('lang.team_lead')) !!} 
                 {!! Form::select('team_lead',[''=>Lang::get('lang.select_a_team_lead'), Lang::get('lang.members')=>$user->pluck('full_name','id')->toArray()],null,['class' => 'form-control']) !!}	
             </div>
-        </div>
-        <!-- status -->
-        <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
-            {!! Form::label('status',Lang::get('lang.status')) !!}
-            <div class="row">
-                <div class="col-xs-1">
-                    {!! Form::radio('status','1',true) !!} {{Lang::get('lang.active')}}
-                </div>
-                <div class="col-xs-2">
-                    {!! Form::radio('status','0',null) !!} {{Lang::get('lang.inactive')}}
+
+            <div class="col-sm-3">
+                <!-- status -->
+                <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
+                    {!! Form::label('status',Lang::get('lang.status')) !!}
+                    <div class="row">
+                        <div class="col-sm-6">
+                            {!! Form::radio('status','1',true) !!} {{Lang::get('lang.active')}}
+                        </div>
+                        <div class="col-sm-6">
+                            {!! Form::radio('status','0',null) !!} {{Lang::get('lang.inactive')}}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- admin notes -->
-        <div class="form-group">
+        <div>
             {!! Form::label('admin_notes',Lang::get('lang.admin_notes')) !!}
             {!! Form::textarea('admin_notes',null,['class' => 'form-control','size' => '30x5']) !!}
         </div>
     </div>
-    <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.submit'),['class'=>'form-group btn btn-primary'])!!}
+    <div class="card-footer">
+        {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
     </div>
 </div>
 {!!Form::close()!!}
