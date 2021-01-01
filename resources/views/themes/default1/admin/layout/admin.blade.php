@@ -437,7 +437,7 @@
                                     <p>{!! Lang::get('lang.manage') !!} <i class="fas fa-angle-left right"></i></p>
                                 </a>
 
-                                <ul @yield('email-menu-open') class="nav nav-treeview">
+                                <ul @yield('manage-menu-open') class="nav nav-treeview">
 
                                     <li class="nav-item">
                                         <a href="{{url('helptopic')}}" @yield('help') class="nav-link">
@@ -603,14 +603,14 @@
                                 </ul>
                             </li>
 
-                            <li class="nav-item">
+                            <li @yield('error-menu-parent') class="nav-item">
                                 
                                 <a href="#" @yield('error-bugs') class="nav-link">
                                     <i class="nav-icon fas fa-heartbeat"></i>
                                     <p>{!! Lang::get('lang.error-debug') !!} <i class="fas fa-angle-left right"></i></p>
                                 </a>
                                 
-                                <ul class="nav nav-treeview">
+                                <ul @yield('error-menu-open') class="nav nav-treeview">
 
                                     <li class="nav-item">
                                         <a href="{{ route('err.debug.settings') }}" @yield('debugging-option') class="nav-link">
@@ -621,14 +621,14 @@
                                 </ul>
                             </li>
 
-                            <li class="nav-item">
+                            <li @yield('widget-menu-parent') class="nav-item">
                                 
                                 <a href="#" @yield('Themes') class="nav-link">
                                     <i class="nav-icon fas fa-chart-pie"></i>
                                     <p>{!! Lang::get('lang.widgets') !!} <i class="fas fa-angle-left right"></i></p>
                                 </a>
                                 
-                                <ul class="nav nav-treeview">
+                                <ul @yield('widget-menu-open') class="nav nav-treeview">
                                 
                                     <li class="nav-item">
                                         <a href="{{ url('widgets') }}" @yield('widget') class="nav-link">
@@ -638,7 +638,7 @@
                                     </li>
                                     
                                     <li class="nav-item">
-                                        <a href="{{ url('social-buttons') }}" @yield('socail') class="nav-link">
+                                        <a href="{{ url('social-buttons') }}" @yield('social') class="nav-link">
                                             <i class="nav-icon fas fa-cubes"></i> 
                                             <p>{!! Lang::get('lang.social') !!}</p>
                                         </a>

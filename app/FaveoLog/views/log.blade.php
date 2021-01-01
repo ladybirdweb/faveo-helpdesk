@@ -1,10 +1,6 @@
 @extends('themes.default1.admin.layout.admin')
 @section('Log')
-active
-@stop
-
-@section('logs')
-class="active"
+class="nav-link active"
 @stop
 
 @section('HeadInclude')
@@ -25,6 +21,7 @@ class="active"
 
     .stack {
         font-size: 0.85em;
+        font-style: italic;
     }
     .date {
         min-width: 75px;
@@ -37,14 +34,20 @@ class="active"
         background-color: #f5f5f5;
         border-color: #777;
     }
+    .list-group-item+.list-group-item {
+        border-top-width: 1px !important;
+    }
 </style>
 <div class="container-fluid">
-    <div class="box box-primary">
-        <div class="box-header with-border">
-            <h4>System Logs</h4>
-            
+    <div class="card card-light">
+        <div class="card-header">
+            <h3 class="card-title">System Logs</h3>
+            <div class="card-tools">
+                <a href="?dl={{ base64_encode($current_file) }}" class="btn btn-primary btn-sm text-white"><span class="fas fa-download"></span> Download file</a>
+                <a id="delete-log" href="?del={{ base64_encode($current_file) }}" class="btn btn-danger btn-sm text-white"><span class="fas fa-trash"></span> Delete file</a>
+            </div>
         </div>
-        <div class="box-body">
+        <div class="card-body">
             <div class="row">
                 <div class="col-md-2">
                     <div class="list-group">
@@ -74,7 +77,7 @@ class="active"
 
                             @foreach($logs as $key => $log)
                             <tr>
-                                <td class="text-{{{$log['level_class']}}}"><span class="glyphicon glyphicon-{{{$log['level_img']}}}-sign" aria-hidden="true"></span> &nbsp;{{ucfirst($log['level'])}}</td>
+                                <td class="text-{{{$log['level_class']}}}" style="width: 90px;"><span class="glyphicon glyphicon-{{{$log['level_img']}}}-sign" aria-hidden="true"></span> &nbsp;{{ucfirst($log['level'])}}</td>
                                 <td class="text">{{ucfirst($log['context'])}}</td>
                                 <td class="date">{{{$log['date']}}}</td>
                                 <td class="text">
@@ -89,11 +92,6 @@ class="active"
                         </tbody>
                     </table>
                     @endif
-                    <div>
-                        <a href="?dl={{ base64_encode($current_file) }}"><span class="glyphicon glyphicon-download-alt"></span> Download file</a>
-                        -
-                        <a id="delete-log" href="?del={{ base64_encode($current_file) }}"><span class="glyphicon glyphicon-trash"></span> Delete file</a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -103,9 +101,6 @@ class="active"
 
 @stop
 @section('FooterInclude')
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
-<!--<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>-->
-<script src="https://cdn.datatables.net/plug-ins/9dcbecd42ad/integration/bootstrap/3/dataTables.bootstrap.js"></script>
 <script>
 $(document).ready(function () {
     $('#table-log').DataTable({
