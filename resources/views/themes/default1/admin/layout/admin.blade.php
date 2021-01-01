@@ -35,6 +35,10 @@
         <link rel="stylesheet" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet" type="text/css" />
 
         <link href="{{asset("lb-faveo/plugins/summernote/summernote-bs4.min.css")}}" rel="stylesheet" type="text/css" />
+
+        <!-- Colorpicker -->
+
+        <link href="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.css")}}" rel="stylesheet" type="text/css" />
         
          <script src="{{asset("lb-faveo/js/jquery-3.4.1.min.js")}}" type="text/javascript"></script>
         @yield('HeadInclude')
@@ -426,14 +430,14 @@
                                 </ul>
                             </li>
 
-                            <li class="nav-item">
+                            <li @yield('manage-menu-parent') class="nav-item">
                                 
                                 <a href="#" @yield('Manage') class="nav-link">
                                     <i class="nav-icon fas fa-cubes"></i>
                                     <p>{!! Lang::get('lang.manage') !!} <i class="fas fa-angle-left right"></i></p>
                                 </a>
 
-                                <ul class="nav nav-treeview">
+                                <ul @yield('email-menu-open') class="nav nav-treeview">
 
                                     <li class="nav-item">
                                         <a href="{{url('helptopic')}}" @yield('help') class="nav-link">
@@ -766,6 +770,9 @@
         <script src="{{asset("lb-faveo/plugins/summernote/summernote-bs4.min.js")}}" type="text/javascript"></script>
 
         <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
+
+        <!-- Colorpicker -->
+        <script src="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.js")}}" ></script>
 
         @if (trim($__env->yieldContent('no-toolbar')))
             <h1>@yield('no-toolbar')</h1>

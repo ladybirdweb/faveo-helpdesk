@@ -1,15 +1,19 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Manage')
-active
+class="nav-link active"
 @stop
 
-@section('manage-bar')
-active
+@section('manage-menu-parent')
+class="nav-item menu-open"
+@stop
+
+@section('manage-menu-open')
+class="nav nav-treeview menu-open"
 @stop
 
 @section('forms')
-class="active"
+class="nav-link active"
 @stop
 
 @section('HeadInclude')
@@ -20,8 +24,14 @@ class="active"
 @stop
 @section('content')
 
-<div class="box box-primary">
-    <div class="box-body">
+<div class="card card-light">
+
+    <div class="card-header">
+        
+        <h3 class="card-title">Add Child</h3>    
+    </div>
+    
+    <div class="card-body">
         <div class="row">
                 @foreach($fields as $field)
                 <?php
