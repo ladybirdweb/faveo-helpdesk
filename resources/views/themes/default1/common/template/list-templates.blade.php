@@ -1,30 +1,47 @@
 @extends('themes.default1.admin.layout.admin')
 
+@section('Emails')
+class="nav-link active"
+@stop
+
+@section('email-menu-parent')
+class="nav-item menu-open"
+@stop
+
+@section('email-menu-open')
+class="nav nav-treeview menu-open"
+@stop
+
+@section('template')
+class="nav-link active"
+@stop
+
 @section('PageHeader')
 <h1>{!! Lang::get('lang.templates') !!}</h1>
 @stop
 
 @section('content')
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.edit_templates') !!}</h3>
+ @if(Session::has('success'))
+<div class="alert alert-success alert-dismissable">
+    <i class="fas fa-check-circle"></i>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('success')}}
+</div>
+@endif
+@if(Session::has('failed'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fas fa-ban"></i>
+    <b>{!! Lang::get('lang.alert') !!}!</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <p>{{Session::get('failed')}}</p>                
+</div>
+@endif
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.edit_templates') !!}</h3>
     </div><!-- /.box-header -->
-    <div class="box-body">
-        @if(Session::has('success'))
-        <div class="alert alert-success alert-dismissable">
-            <i class="fa fa-check"></i>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('success')}}
-        </div>
-        @endif
-        @if(Session::has('failed'))
-        <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <p>{{Session::get('failed')}}</p>                
-        </div>
-        @endif
+    <div class="card-body">
+       
         <table id="example1" class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -63,6 +80,4 @@ $(function() {
     });
 });
 </script>
-<script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
-<script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
 @stop

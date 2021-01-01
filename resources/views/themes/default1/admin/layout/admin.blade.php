@@ -373,14 +373,14 @@
                                 </ul>
                             </li>
 
-                            <li class="nav-item">
+                            <li @yield('email-menu-parent') class="nav-item">
                                 
                                 <a href="#" @yield('Emails') class="nav-link">
                                     <i class="nav-icon fas fa-envelope"></i>
                                     <p>{!! Lang::get('lang.email') !!} <i class="fas fa-angle-left right"></i></p>
                                 </a>
 
-                                <ul class="nav nav-treeview">
+                                <ul @yield('email-menu-open') class="nav nav-treeview">
 
                                     <li class="nav-item">
                                         <a href="{{ url('emails') }}" @yield('emails') class="nav-link">

@@ -1,15 +1,19 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Emails')
-active
+class="nav-link active"
 @stop
 
-@section('emails-bar')
-active
+@section('email-menu-parent')
+class="nav-item menu-open"
+@stop
+
+@section('email-menu-open')
+class="nav nav-treeview menu-open"
 @stop
 
 @section('ban')
-class="active"
+class="nav-link active"
 @stop
 
 @section('HeadInclude')
@@ -28,29 +32,33 @@ class="active"
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <h2 class="box-title">{{Lang::get('lang.list_of_banned_emails')}}</h2><a href="{{route('banlist.create')}}" class="pull-right btn btn-primary">{{Lang::get('lang.ban_email')}}</a>
+<!-- check whether success or not -->
+@if(Session::has('success'))
+<div class="alert alert-success alert-dismissable">
+    <i class="fa  fa-check-circle"></i>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('success')}}
+</div>
+@endif
+<!-- failure message -->
+@if(Session::has('fails'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fa fa-ban"></i>
+    <b>{!! Lang::get('lang.fails') !!} ! </b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('fails')}}
+</div>
+@endif
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{{Lang::get('lang.list_of_banned_emails')}}</h3>
+        <div class="card-tools">
+            <a href="{{route('banlist.create')}}" class="btn btn-default btn-tool"><i class="fas fa-ban"> </i> {{Lang::get('lang.ban_email')}}</a>
+        </div>
     </div>
-    <div class="box-body">
-        <!-- check whether success or not -->
-        @if(Session::has('success'))
-        <div class="alert alert-success alert-dismissable">
-            <i class="fa  fa-check-circle"></i>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('success')}}
-        </div>
-        @endif
-        <!-- failure message -->
-        @if(Session::has('fails'))
-        <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.fails') !!} ! </b>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('fails')}}
-        </div>
-        @endif
-        <table class="table table-bordered dataTable" style="overflow:hidden;">
+    <div class="card-body">
+        
+        <table class="table table-bordered dataTable" style="overflow:scroll;">
             <tr>
                 <th width="100px">{{Lang::get('lang.email_address')}}</th>
                 <th width="100px">{{Lang::get('lang.last_updated')}}</th>
@@ -65,7 +73,8 @@ class="active"
                 <td> {!! UTC::usertimezone($ban->updated_at) !!} </td>
                 <!-- Deleting Fields -->
                 <td>
-                    <a href="{{route('banlist.edit',$ban->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a> <a href="{{route('banlist.delete',$ban->id)}}" class="btn btn-danger btn-xs btn-flat"><i class="fa fa-trash" style="color:black;"> </i> {!! Lang::get('lang.delete') !!}</a>
+                    <a href="{{route('banlist.edit',$ban->id)}}" class="btn btn-primary btn-xs"><i class="fas fa-edit"> </i> {!! Lang::get('lang.edit') !!}</a> 
+                    <a href="{{route('banlist.delete',$ban->id)}}" class="btn btn-danger btn-xs"><i class="fas fa-trash"> </i> {!! Lang::get('lang.delete') !!}</a>
                 </td>
                 @endforeach
             </tr>
