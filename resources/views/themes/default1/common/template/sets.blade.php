@@ -1,36 +1,54 @@
 @extends('themes.default1.admin.layout.admin')
 
+@section('Emails')
+class="nav-link active"
+@stop
+
+@section('email-menu-parent')
+class="nav-item menu-open"
+@stop
+
+@section('email-menu-open')
+class="nav nav-treeview menu-open"
+@stop
+
+@section('template')
+class="nav-link active"
+@stop
+
 @section('PageHeader')
 <h1>{!! Lang::get('lang.template_set') !!}</h1>
 @stop
 
 @section('content')
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.list_of_templates_sets') !!}</h3>
-        <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-toggle="modal" data-target="#create" title="Create" id="2create"><i class="fa fa-plus-circle fa-2x"></i></button>
 
+@if(Session::has('success'))
+<div class="alert alert-success alert-dismissable">
+    <i class="fa fa-check-circle"></i>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('success')}}
+</div>
+@endif
+
+@if(Session::has('failed'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fa fa-ban"></i>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <b>{!! Lang::get('lang.alert') !!} !</b> <br>
+    <li>{{Session::get('failed')}}</li>
+</div>
+@endif
+
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.list_of_templates_sets') !!}</h3>
+        <div class="card-tools">
+            <button class="btn btn-default btn-tool" data-toggle="modal" data-target="#create" title="Create" id="2create">
+                <i class="fas fa-plus"> </i> Create
+            </button>
         </div>
     </div><!-- /.box-header -->
-    <div class="box-body">
-
-        @if(Session::has('success'))
-        <div class="alert alert-success alert-dismissable">
-            <i class="fa fa-check-circle"></i>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('success')}}
-        </div>
-        @endif
-
-        @if(Session::has('failed'))
-        <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"></i>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <b>{!! Lang::get('lang.alert') !!} !</b> <br>
-            <li>{{Session::get('failed')}}</li>
-        </div>
-        @endif
+    <div class="card-body">
         <table id="example1" class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -80,8 +98,8 @@
                                 <div class="modal-content">
                                     {!! Form::model($set,['route'=>['template-sets.update', $set->id],'method'=>'PATCH','files' => true]) !!}
                                     <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         <h4 class="modal-title">{!! Lang::get('lang.edit_details') !!}</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="form-group">
@@ -91,11 +109,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <div class="form-group">
-                                            {!! Form::submit('Update Details',['class'=>'btn btn-primary'])!!}
-                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                        </div></div>
+                                    <div class="modal-footer justify-content-between">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        {!! Form::submit('Update Details',['class'=>'btn btn-primary'])!!}
+                                    </div>
                                     {!! Form::close() !!}
                                 </div> 
                             </div>
@@ -108,19 +125,19 @@
                             $dis = "";
                         }
                         ?>
-                        <button class="btn btn-danger btn-sm {!! $dis !!}" data-toggle="modal" data-target="#{{$set->id}}delete">{!! Lang::get('lang.delete') !!}</button>
-                        <div class="modal fade" id="{{$set->id}}delete">
+                        <button class="btn btn-danger btn-sm {!! $dis !!}" data-toggle="modal" data-target="#delete{{$set->id}}">{!! Lang::get('lang.delete') !!}</button>
+                        <div class="modal fade" id="delete{{$set->id}}">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         <h4 class="modal-title">{!! Lang::get('lang.delete') !!}</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
-                                        <p>Are you sure you want to Delete ?</p>
+                                        <span>Are you sure you want to Delete ?</span>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                    <div class="modal-footer justify-content-between">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                         {!! link_to_route('sets.delete',Lang::get('lang.delete'),[$set->id],['id'=>'delete','class'=>'btn btn-danger btn-sm']) !!}
                                     </div>
                                 </div> 
@@ -139,13 +156,13 @@
         <div class="modal-content">
             {!! Form::open(['route'=>'template-sets.store']) !!}
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">{!! Lang::get('lang.create') !!}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 @foreach ($errors->all() as $error)
                 <div class="alert alert-danger alert-dismissable">
-                    <i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <i class="fas fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     <b>{!! Lang::get('lang.alert') !!} !</b><br>
                     <li style="list-style: none">{{ $error }}</li>
                 </div>
@@ -162,11 +179,10 @@
                     {!! Form::text('name',null,['class'=>'form-control'])!!}
                 </div>
             </div>
-            <div class="modal-footer">
-                <div class="form-group">
-                    {!! Form::submit(Lang::get('lang.create_set'),['class'=>'btn btn-primary'])!!}
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">{!! Lang::get('lang.close') !!}</button>
-                </div></div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{!! Lang::get('lang.close') !!}</button>
+                {!! Form::submit(Lang::get('lang.create_set'),['class'=>'btn btn-primary'])!!}
+            </div>
             {!! Form::close() !!}
         </div> 
     </div>
