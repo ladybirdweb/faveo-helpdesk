@@ -76,8 +76,8 @@ class SettingsController extends Controller
                             <form action="'.url('edit-widget/'.$model->id).'" method="POST">
                             '.csrf_field().'
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     <h4 class="modal-title">'.strtoupper($model->name).' </h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group" style="width:100%">
@@ -90,13 +90,24 @@ class SettingsController extends Controller
                                         <textarea name="content" class="form-control" style="width:100%" id="Content'.$model->id.'">'.$model->value.'</textarea>
                                     </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">'.\Lang::get('lang.close').'</button>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" id="dismis2">'.\Lang::get('lang.close').'</button>
                                     <input type="submit" class="btn btn-primary" value="'.\Lang::get('lang.update').'">
                                 </div>
                                 <script>
                                     $(function () {
-                                        $("#Content'.$model->id.'").wysihtml5();
+                                        $("#Content'.$model->id.'").summernote({
+                                        height: 300,
+                                        tabsize: 2,
+                                        toolbar: [
+                                        ["style", ["bold", "italic", "underline", "clear"]],
+                                        ["font", ["strikethrough", "superscript", "subscript"]],
+                                        ["fontsize", ["fontsize"]],
+                                        ["color", ["color"]],
+                                        ["para", ["ul", "ol", "paragraph"]],
+                                        ["height", ["height"]]
+                                      ]
+                                      });
                                     });
                                 </script>
                             </form>
@@ -164,18 +175,17 @@ class SettingsController extends Controller
                             <form action="'.url('edit-widget/'.$model->id).'" method="POST">
                             '.csrf_field().'
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     <h4 class="modal-title">'.strtoupper($model->name).' </h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 </div>
                                 <div class="modal-body">
-                                    <br/>
                                     <div class="form-group" style="width:100%">
                                         <label>'.\Lang::get('lang.link').'</label><br/>
                                         <input type="url" name="content" class="form-control" style="width:100%" value="'.$model->value.'">
                                     </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">'.\Lang::get('lang.close').'</button>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" id="dismis2">'.\Lang::get('lang.close').'</button>
                                     <input type="submit" class="btn btn-primary" value="'.\Lang::get('lang.update').'">
                                 </div>
                             </form>
