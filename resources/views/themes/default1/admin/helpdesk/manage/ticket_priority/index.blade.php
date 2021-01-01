@@ -1,15 +1,19 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Manage')
-active
+class="nav-link active"
 @stop
 
-@section('manage-bar')
-active
+@section('manage-menu-parent')
+class="nav-item menu-open"
+@stop
+
+@section('manage-menu-open')
+class="nav nav-treeview menu-open"
 @stop
 
 @section('priority')
-class="active"
+class="nav-link active"
 @stop
 
 @section('HeadInclude')
@@ -30,7 +34,7 @@ class="active"
 
 @if(Session::has('success'))
 <div class="alert alert-success alert-dismissable">
-    <i class="fa  fa-check-circle"></i>
+    <i class="fas fa-check-circle"></i>
     <b>Success!</b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {!! Session::get('success') !!}
@@ -39,42 +43,37 @@ class="active"
 <!-- failure message -->
 @if(Session::has('fails'))
 <div class="alert alert-danger alert-dismissable">
-    <i class="fa fa-ban"></i>
+    <i class="fas fa-ban"></i>
     <b>Fail!</b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {!! Session::get('fails') !!}
 </div>
 @endif
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <span class="lead border-right">{!! Lang::get('lang.priority') !!}</span>
-        <div class="pull-right">
-             <a href="{{route('priority.create')}}" class="btn btn-primary"> <span class="glyphicon glyphicon-plus"></span> &nbsp;{{Lang::get('lang.create_ticket_priority')}}</a>
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.priority') !!}</h3>
+        <div class="card-tools">
+             <a href="{{route('priority.create')}}" class="btn btn-default btn-tool"> 
+                <span class="fas fa-plus"></span>&nbsp;{{Lang::get('lang.create_ticket_priority')}}
+            </a>
         </div>
     </div>
 
-      <div class="box-header with-border">
-    <a class="right" title="" data-placement="right" data-toggle="tooltip" href="#" data-original-title="{{Lang::get('lang.active_user_can_select_the_priority_while_creating_ticket')}}">
+    <div class="card-body">
 
-        <span class="lead border-right" >{!! Lang::get('lang.current') !!}{!! Lang::get('lang.user_priority_status') !!}</span>
-       
+        <div class="mb-3">
+            
+            <a class="right" title="" data-placement="right" data-toggle="tooltip" href="#" data-original-title="{{Lang::get('lang.active_user_can_select_the_priority_while_creating_ticket')}}">
+
+                <span class="lead" >{!! Lang::get('lang.current') !!}{!! Lang::get('lang.user_priority_status') !!}</span> - 
            </a>
 
-                            <div class="btn-group pull-right" id="toggle_event_editing">
-                                <button type="button"  class="btn {{$user_status->status == '0' ? 'btn-info' : 'btn-default'}} locked_active">Inactive</button>
-                                <button type="button"  class="btn {{$user_status->status == '1' ? 'btn-info' : 'btn-default'}} unlocked_inactive">Active</button>
-                            </div>
-                            <!-- <div class="alert alert-info" id="switch_status"></div> -->
-                      
-             <!-- <a href="{{route('priority.create')}}" class="btn btn-primary">{{Lang::get('lang.create_ticket_priority')}}</a> -->
-        
-    </div>
+            <div class="btn-group" id="toggle_event_editing">
+                <button type="button"  class="btn {{$user_status->status == '0' ? 'btn-info' : 'btn-default'}} locked_active">Inactive</button>
+                <button type="button"  class="btn {{$user_status->status == '1' ? 'btn-info' : 'btn-default'}} unlocked_inactive">Active</button>
+            </div>
+        </div>
 
-
-
-
-
-    <div class="box-body">
         {!! Datatable::table()
         ->addColumn(
         Lang::get('lang.priority'),
@@ -84,8 +83,6 @@ class="active"
         Lang::get('lang.action'))
         ->setUrl(route('priority.index1')) // this is the route where data will be retrieved
         ->render() !!}
-    </div>
-    <div class="box-footer">
     </div>
 </div>
 <script type="text/javascript">

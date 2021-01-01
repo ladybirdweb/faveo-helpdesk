@@ -1,15 +1,19 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Manage')
-active
+class="nav-link active"
 @stop
 
-@section('manage-bar')
-active
+@section('manage-menu-parent')
+class="nav-item menu-open"
+@stop
+
+@section('manage-menu-open')
+class="nav nav-treeview menu-open"
 @stop
 
 @section('help')
-class="active"
+class="nav-link active"
 @stop
 
 @section('HeadInclude')
@@ -28,29 +32,34 @@ class="active"
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.help_topic')}}</h3>
-        <a href="{{route('helptopic.create')}}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> &nbsp;{{Lang::get('lang.create_help_topic')}}</a>
+<!-- check whether success or not -->
+@if(Session::has('success'))
+<div class="alert alert-success alert-dismissable">
+    <i class="fa  fa-check-circle"></i>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {!! Session::get('success') !!}
+</div>
+@endif
+<!-- failure message -->
+@if(Session::has('fails'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fa fa-ban"></i>
+    <b>{!! Lang::get('lang.alert') !!} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {!! Session::get('fails') !!}
+</div>
+@endif
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{{Lang::get('lang.help_topic')}}</h3>
+        <div class="card-tools">
+            <a href="{{route('helptopic.create')}}" class="btn btn-default btn-tool">
+                <span class="fas fa-plus"></span>&nbsp;{{Lang::get('lang.create_help_topic')}}
+            </a>        
+        </div>
     </div>
-    <div class="box-body table-responsive">
-        <!-- check whether success or not -->
-        @if(Session::has('success'))
-        <div class="alert alert-success alert-dismissable">
-            <i class="fa  fa-check-circle"></i>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {!! Session::get('success') !!}
-        </div>
-        @endif
-        <!-- failure message -->
-        @if(Session::has('fails'))
-        <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!} !</b>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {!! Session::get('fails') !!}
-        </div>
-        @endif
+    <div class="card-body">
+        
         <table class="table table-bordered dataTable">
             <tr>
                 <th width="100px">{{Lang::get('lang.topic')}}</th>
@@ -118,13 +127,19 @@ class="active"
                 <!-- Deleting Fields -->
                 <td>
                     {!! Form::open(['route'=>['helptopic.destroy', $topic->id],'method'=>'DELETE']) !!}
-                    <a href="{{route('helptopic.edit',$topic->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-trash" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a>
+                    <a href="{{route('helptopic.edit',$topic->id)}}" class="btn btn-primary btn-xs"><i class="fas fa-edit"> </i> {!! Lang::get('lang.edit') !!}</a>
                     <!-- To pop up a confirm Message -->
-                    {!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> '.Lang::get('lang.delete'),
-                    ['type' => 'submit',
-                    'class'=> 'btn btn-warning btn-xs btn-flat '.$disable,
-                    'onclick'=>'return confirm("Are you sure?")'])
-                    !!}
+                    @if($topic->id == $default_helptopic)
+                        {!! Form::button('<i class="fas fa-trash"> </i> '.Lang::get('lang.delete'),
+                        ['class'=> 'btn btn-danger btn-xs '.$disable])
+                        !!}
+                    @else
+                        {!! Form::button('<i class="fas fa-trash"> </i> '.Lang::get('lang.delete'),
+                        ['type' => 'submit',
+                        'class'=> 'btn btn-danger btn-xs',
+                        'onclick'=>'return confirm("Are you sure?")'])
+                        !!}
+                    @endif
                     </div>
                     {!! Form::close() !!}
                 </td>

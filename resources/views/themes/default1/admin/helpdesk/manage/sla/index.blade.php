@@ -1,15 +1,19 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Manage')
-active
+class="nav-link active"
 @stop
 
-@section('manage-bar')
-active
+@section('manage-menu-parent')
+class="nav-item menu-open"
+@stop
+
+@section('manage-menu-open')
+class="nav nav-treeview menu-open"
 @stop
 
 @section('sla')
-class="active"
+class="nav-link active"
 @stop
 
 @section('HeadInclude')
@@ -28,49 +32,53 @@ class="active"
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-	<div class="row">
-<div class="col-md-12">
-<div class="box box-primary">
-<div class="box-header">
-	<h2 class="box-title">{{Lang::get('lang.SLA_plan')}}</h2><a href="{{route('sla.create')}}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> &nbsp;{{Lang::get('lang.create_SLA')}}</a></div>
-
-<div class="box-body table-responsive">
-
 <!-- check whether success or not -->
-
 @if(Session::has('success'))
-    <div class="alert alert-success alert-dismissable">
-        <i class="fa  fa-check-circle"></i>
-        <b>Success!</b>
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {!! Session::get('success') !!}
-    </div>
-    @endif
-    <!-- failure message -->
-    @if(Session::has('fails'))
-    <div class="alert alert-danger alert-dismissable">
-        <i class="fa fa-ban"></i>
-        <b>Fail!</b>
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {!! Session::get('fails') !!}
-    </div>
-    @endif
+<div class="alert alert-success alert-dismissable">
+  <i class="fa  fa-check-circle"></i>
+  <b>Success!</b>
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  {!! Session::get('success') !!}
+</div>
+@endif
+<!-- failure message -->
+@if(Session::has('fails'))
+<div class="alert alert-danger alert-dismissable">
+  <i class="fa fa-ban"></i>
+  <b>Fail!</b>
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  {!! Session::get('fails') !!}
+</div>
+@endif
 
-<table class="table table-bordered dataTable" style="overflow:hidden;">
+<div class="card card-light">
+	
+	<div class="card-header">
+		<h3 class="card-title">{{Lang::get('lang.SLA_plan')}}</h3>
+		<div class="card-tools">
+			<a href="{{route('sla.create')}}" class="btn btn-default btn-tool">
+				<span class="fas fa-plus"></span>&nbsp;{{Lang::get('lang.create_SLA')}}
+			</a>
+		</div>
+	</div>
+	
+	<div class="card-body ">
 
-	<tr>
-		<th width="100px">{{Lang::get('lang.name')}}</th>
-		<th width="100px">{{Lang::get('lang.status')}}</th>
-		<th width="100px">{{Lang::get('lang.grace_period')}}</th>
-		<th width="100px">{{Lang::get('lang.created')}}</th>
-		<th width="100px">{{Lang::get('lang.last_updated')}}</th>
-		<th width="100px">{{Lang::get('lang.action')}}</th>
-	</tr>
+		<table class="table table-bordered dataTable" style="overflow:scroll;">
 
-<?php
-$default_sla = App\Model\helpdesk\Settings\Ticket::where('id','=','1')->first();
-$default_sla = $default_sla->sla;
-?>
+			<tr>
+				<th width="100px">{{Lang::get('lang.name')}}</th>
+				<th width="100px">{{Lang::get('lang.status')}}</th>
+				<th width="100px">{{Lang::get('lang.grace_period')}}</th>
+				<th width="100px">{{Lang::get('lang.created')}}</th>
+				<th width="100px">{{Lang::get('lang.last_updated')}}</th>
+				<th width="100px">{{Lang::get('lang.action')}}</th>
+			</tr>
+
+			<?php
+			$default_sla = App\Model\helpdesk\Settings\Ticket::where('id','=','1')->first();
+			$default_sla = $default_sla->sla;
+			?>
 
 	<!-- Foreach @var$slas as @var sla -->
 		@foreach($slas as $sla)
@@ -105,13 +113,20 @@ $default_sla = $default_sla->sla;
 		<!-- Deleting Fields -->
 		<td>
 			{!! Form::open(['route'=>['sla.destroy', $sla->id],'method'=>'DELETE']) !!}
-			<a href="{{route('sla.edit',$sla->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> Edit</a>
+			<a href="{{route('sla.edit',$sla->id)}}" class="btn btn-primary btn-xs"><i class="fas fa-edit"> </i> Edit</a>
 			<!-- To pop up a confirm Message -->
-				{!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> Delete',
-            		['type' => 'submit',
-            		'class'=> 'btn btn-warning btn-xs btn-flat '.$disable,
-            		'onclick'=>'return confirm("Are you sure?")'])
-            	!!}
+			@if($sla->id == $default_sla)
+				{!! Form::button('<i class="fas fa-trash"> </i> Delete',
+		   		['class'=> 'btn btn-danger btn-xs '.$disable])
+		   	!!}
+			@else
+			{!! Form::button('<i class="fas fa-trash"> </i> Delete',
+	   		['type' => 'submit',
+	   		'class'=> 'btn btn-danger btn-xs',
+	   		'onclick'=>'return confirm("Are you sure?")'])
+	   	!!}
+			@endif
+				
 			{!! Form::close() !!}
 		</td>
 		@endforeach
@@ -120,8 +135,6 @@ $default_sla = $default_sla->sla;
 
 </table>
 
-</div>
-</div>
 </div>
 </div>
 @stop

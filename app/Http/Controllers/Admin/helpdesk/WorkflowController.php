@@ -132,7 +132,7 @@ class WorkflowController extends Controller
                         ->addColumn('Actions', function ($model) {
                             $confirmation = 'Are you sure?';
 
-                            return "<a class='btn btn-info btn-xs btn-flat' href='".route('workflow.edit', $model->id)."'><i class='fa fa-edit text-black'></i> Edit</a>  <a class='btn btn-danger btn-xs btn-flat' href='".route('workflow.delete', $model->id)."'><i class='fa fa-trash text-black'></i> Delete</a>";
+                            return "<a class='btn btn-primary btn-xs' href='".route('workflow.edit', $model->id)."'><i class='fas fa-edit'></i> Edit</a>  <a class='btn btn-danger btn-xs' href='".route('workflow.delete', $model->id)."'><i class='fas fa-trash'></i> Delete</a>";
                         })
                         ->make();
     }
