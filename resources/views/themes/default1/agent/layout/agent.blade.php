@@ -345,7 +345,7 @@
             <aside class="main-sidebar elevation-4 sidebar-dark-lightblue">
 
                 <a href="http://www.faveohelpdesk.com" class="brand-link navbar-lightblue" style="text-align: center;">
-                    <img src="{{ asset('lb-faveo/media/images/logo.png')}}" class="brand-image" alt="Company Log0" style="opacity: .8">
+                    <img src="{{ asset('lb-faveo/media/images/logo.png')}}" class="brand-image" alt="Company Log0">
                 </a>
 
                 <div class="sidebar">

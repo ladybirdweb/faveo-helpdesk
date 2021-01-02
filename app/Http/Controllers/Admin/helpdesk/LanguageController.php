@@ -114,11 +114,11 @@ class LanguageController extends Controller
                         })
                         ->addColumn('Action', function ($model) use ($sysLanguage) {
                             if ($model === $sysLanguage) {
-                                return "<a href='change-language/".$model."' disabled><input type='button' class='btn btn-info btn-xs btn-flat' disabled value='".Lang::trans('lang.set_as_sys_lang')."'/></a>  
-                <a href='change-language/".$model."' class='btn btn-danger btn-xs btn-flat' disabled><i class='fa fa-trash' style='color:black;'> </i> ".Lang::trans('lang.delete').'</a>';
+                                return "<a href='change-language/".$model."' disabled><input type='button' class='btn btn-primary btn-xs' disabled value='".Lang::trans('lang.set_as_sys_lang')."'/></a>  
+                <button disabled class='btn btn-danger btn-xs'><i class='fas fa-trash'> </i> ".Lang::trans('lang.delete').'</button>';
                             } else {
-                                return "<a href='change-language/".$model."'><input type='button' class='btn btn-info btn-xs btn-flat' value='".Lang::trans('lang.set_as_sys_lang')."'/></a>  
-                <a href='delete-language/".$model."' class='btn btn-danger btn-xs btn-flat'><i class='fa fa-trash' style='color:black;'> </i> ".Lang::trans('lang.delete').'</a>';
+                                return "<a href='change-language/".$model."'><input type='button' class='btn btn-primary btn-xs' value='".Lang::trans('lang.set_as_sys_lang')."'/></a>  
+                <a href='delete-language/".$model."' class='btn btn-danger btn-xs'><i class='fas fa-trash'> </i> ".Lang::trans('lang.delete').'</a>';
                             }
                         })
                         ->searchColumns('language', 'id')
