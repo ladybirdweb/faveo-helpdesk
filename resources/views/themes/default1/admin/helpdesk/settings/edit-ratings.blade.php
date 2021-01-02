@@ -1,11 +1,19 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Tickets')
-active
+class="nav-link active"
+@stop
+
+@section('ticket-menu-parent')
+class="nav-item menu-open"
+@stop
+
+@section('ticket-menu-open')
+class="nav nav-treeview menu-open"
 @stop
 
 @section('ratings')
-class="active"
+class="nav-link active"
 @stop
 
 @section('HeadInclude')
@@ -18,46 +26,46 @@ class="active"
 
 <!-- content -->
 @section('content')
-{!! Form::model($rating,['route'=>['settings.rating', $rating->id],'method'=>'PATCH','files' => true]) !!} 
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.edit')}}</h3>
+{!! Form::model($rating,['route'=>['settings.rating', $rating->id],'method'=>'PATCH','files' => true]) !!}
+@if(Session::has('success'))
+<div class="alert alert-success alert-dismissable">
+    <i class="fas fa-check-circle"></i>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('success')}}
+</div>
+@endif
+@if(Session::has('errors'))
+<?php //dd($errors); ?>
+<div class="alert alert-danger alert-dismissable">
+    <i class="fas fa-ban"></i>
+    <b>{!! Lang::get('lang.alert') !!}!</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <br/>
+    @if($errors->first('name'))
+    <li class="error-message-padding">{!! $errors->first('name', ':message') !!}</li>
+    @endif
+    @if($errors->first('display_order'))
+    <li class="error-message-padding">{!! $errors->first('display_order', ':message') !!}</li>
+    @endif
+    @if($errors->first('rating_scale'))
+    <li class="error-message-padding">{!! $errors->first('rating_scale', ':message') !!}</li>
+    @endif
+    @if($errors->first('rating_area'))
+    <li class="error-message-padding">{!! $errors->first('rating_area', ':message') !!}</li>
+    @endif
+    @if($errors->first('restrict'))
+    <li class="error-message-padding">{!! $errors->first('restrict', ':message') !!}</li>
+    @endif
+    @if($errors->first('allow_modification'))
+    <li class="error-message-padding">{!! $errors->first('allow_modification', ':message') !!}</li>
+    @endif
+</div>
+@endif 
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{{Lang::get('lang.edit')}}</h3>
     </div>
-    <div class="box-body">
-        @if(Session::has('success'))
-        <div class="alert alert-success alert-dismissable">
-            <i class="fa fa-check-circle"></i>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('success')}}
-        </div>
-        @endif
-        @if(Session::has('errors'))
-        <?php //dd($errors); ?>
-        <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <br/>
-            @if($errors->first('name'))
-            <li class="error-message-padding">{!! $errors->first('name', ':message') !!}</li>
-            @endif
-            @if($errors->first('display_order'))
-            <li class="error-message-padding">{!! $errors->first('display_order', ':message') !!}</li>
-            @endif
-            @if($errors->first('rating_scale'))
-            <li class="error-message-padding">{!! $errors->first('rating_scale', ':message') !!}</li>
-            @endif
-            @if($errors->first('rating_area'))
-            <li class="error-message-padding">{!! $errors->first('rating_area', ':message') !!}</li>
-            @endif
-            @if($errors->first('restrict'))
-            <li class="error-message-padding">{!! $errors->first('restrict', ':message') !!}</li>
-            @endif
-            @if($errors->first('allow_modification'))
-            <li class="error-message-padding">{!! $errors->first('allow_modification', ':message') !!}</li>
-            @endif
-        </div>
-        @endif
+    <div class="card-body">
         <div class="row">
             <div class="col-md-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                 {!! Form::label('name',Lang::get('lang.rating_label')) !!}<span style="color:red;">*</span>
@@ -88,16 +96,16 @@ class="active"
             {!! Form::label('allow_modification',Lang::get('lang.rating_change')) !!}<span style="color:red;">*</span>
             <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.rating-msg3') !!}</div>
             <div class="row">
-                <div class="col-xs-2">
+                <div class="col-sm-2">
                     {!! Form::radio('allow_modification','1') !!} {{Lang::get('lang.yes')}}
                 </div>
-                <div class="col-xs-2">
+                <div class="col-sm-2">
                     {!! Form::radio('allow_modification','0') !!} {{Lang::get('lang.no')}}
                 </div>
             </div>        
         </div>
     </div>
-    <div class="box-footer">
+    <div class="card-footer">
         {!! Form::submit(Lang::get('lang.update'),['class'=>'btn btn-primary'])!!}
     </div>
 </div>

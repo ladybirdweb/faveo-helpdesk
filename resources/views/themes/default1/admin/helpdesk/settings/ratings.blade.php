@@ -1,11 +1,19 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Tickets')
-active
+class="nav-link active"
+@stop
+
+@section('ticket-menu-parent')
+class="nav-item menu-open"
+@stop
+
+@section('ticket-menu-open')
+class="nav nav-treeview menu-open"
 @stop
 
 @section('ratings')
-class="active"
+class="nav-link active"
 @stop
 
 @section('PageHeader')
@@ -16,22 +24,22 @@ class="active"
 @stop
 
 @section('content')
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.current_ratings') !!}</h3>
-        <div class="box-tools pull-right">
-            <div class="box-tools pull-right">
-                <a class="btn btn-box-tool" href="{{ route('rating.create') }}" title="{!! Lang::get('lang.create') !!}"><i class="fa fa-plus-circle fa-2x"></i></a>
-            </div>
+@if(Session::has('success'))
+<div class="alert alert-success alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <span>{{Session::get('success')}}</span>                
+</div>
+@endif
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.current_ratings') !!}</h3>
+        <div class="card-tools">
+            <a class="btn btn-default btn-tool" href="{{ route('rating.create') }}" title="{!! Lang::get('lang.create') !!}">
+                <i class="fas fa-plus"></i> {!! Lang::get('lang.create') !!}
+            </a>
         </div><!-- /.box-header -->
     </div>
-    <div class="box-body">
-        @if(Session::has('success'))
-        <div class="alert alert-success alert-dismissable">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <p>{{Session::get('success')}}</p>                
-        </div>
-        @endif
+    <div class="card-body">
         <table id="example1" class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -48,20 +56,20 @@ class="active"
                     <td>{!! $rating->display_order !!}</td>
                     <td>{!! $rating->rating_area !!}</td>
                     <td>
-                        {!! link_to_route('rating.edit','Edit Ratings',[$rating->id],['class'=>'btn btn-info btn-sm']) !!}
-                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#{{$rating->id}}delete">Delete</button>
-                        <div class="modal fade" id="{{$rating->id}}delete">
+                        {!! link_to_route('rating.edit','Edit Ratings',[$rating->id],['class'=>'btn btn-primary btn-sm']) !!}
+                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete{{$rating->id}}">Delete</button>
+                        <div class="modal fade" id="delete{{$rating->id}}">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         <h4 class="modal-title">{!! Lang::get('lang.delete') !!}</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
-                                        <p>{!! Lang::get('lang.are_you_sure_you_want_to_delete') !!} ?</p>
+                                        <span>{!! Lang::get('lang.are_you_sure_you_want_to_delete') !!} ?</span>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">{!! Lang::get('lang.close') !!}</button>
+                                    <div class="modal-footer justify-content-between">
+                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">{!! Lang::get('lang.close') !!}</button>
                                         {!! link_to_route('ratings.delete',Lang::get('lang.delete'),[$rating->id],['id'=>'delete','class'=>'btn btn-danger btn-sm']) !!}
                                     </div>
                                 </div> 
@@ -76,10 +84,7 @@ class="active"
 </div>
 @stop
 @section('footer')
-<script src="{{asset("lb-sample/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
-<script src="{{asset("lb-sample/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
 
-<!-- page script -->
 <script type="text/javascript">
 $(function() {
     $("#example1").dataTable();

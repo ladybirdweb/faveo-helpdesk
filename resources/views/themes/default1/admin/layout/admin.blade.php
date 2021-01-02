@@ -483,14 +483,14 @@
                                 </ul>
                             </li>
 
-                            <li class="nav-item">
+                            <li @yield('ticket-menu-parent') class="nav-item">
                                 
                                 <a href="#" @yield('Tickets') class="nav-link">
                                     <i class="nav-icon fas fa-ticket-alt"></i>
                                     <p>{!! Lang::get('lang.tickets') !!} <i class="fas fa-angle-left right"></i></p>
                                 </a>
                                 
-                                <ul class="nav nav-treeview">
+                                <ul @yield('ticket-menu-open') class="nav nav-treeview">
 
                                     <li class="nav-item">
                                         <a href="{{url('getticket')}}" @yield('tickets') class="nav-link">
