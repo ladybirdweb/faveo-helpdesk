@@ -310,7 +310,7 @@
             <aside class="main-sidebar elevation-4 sidebar-dark-orange">
 
                 <a href="http://www.faveohelpdesk.com" class="brand-link navbar-orange" style="text-align: center;">
-                    <img src="{{ asset('lb-faveo/media/images/logo.png')}}" class="brand-image" alt="Company Log0" style="opacity: .8">
+                    <img src="{{ asset('lb-faveo/media/images/logo.png')}}" class="brand-image" alt="Company Log0">
                 </a>
 
                 <!-- sidebar: style can be found in sidebar.less -->
@@ -536,14 +536,14 @@
                                 </ul>
                             </li>
 
-                            <li class="nav-item">
+                            <li @yield('settings-menu-parent') class="nav-item">
                                 
                                 <a href="#" @yield('Settings') class="nav-link">
                                     <i class="nav-icon fas fa-cog"></i>
                                     <p>{!! Lang::get('lang.settings') !!} <i class="fas fa-angle-left right"></i></p>
                                 </a>
                                 
-                                <ul class="nav nav-treeview">
+                                <ul @yield('settings-menu-open') class="nav nav-treeview">
 
                                     <li class="nav-item">
                                         <a href="{{url('getcompany')}}" @yield('company') class="nav-link">
@@ -591,13 +591,6 @@
                                         <a href="{{url('settings-notification')}}" @yield('notification') class="nav-link">
                                             <i class="nav-icon fas fa-bell"></i>
                                             <p>{!! Lang::get('lang.notifications') !!}</p>
-                                        </a>
-                                    </li>
-                                    
-                                    <li class="nav-item">
-                                        <a href="{{url('storage')}}" @yield('storage') class="nav-link">
-                                            <i class="nav-icon fas fa-save"></i>
-                                            <p>{!! Lang::get('storage::lang.storage') !!}</p>
                                         </a>
                                     </li>
                                 </ul>

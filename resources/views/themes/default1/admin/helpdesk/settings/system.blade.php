@@ -1,15 +1,19 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Settings')
-active
+class="nav-link active"
 @stop
 
-@section('settings-bar')
-active
+@section('settings-menu-parent')
+class="nav-item menu-open"
+@stop
+
+@section('settings-menu-open')
+class="nav nav-treeview menu-open"
 @stop
 
 @section('system')
-class="active"
+class="nav-link active"
 @stop
 
 @section('HeadInclude')
@@ -29,49 +33,49 @@ class="active"
 @section('content')
 <!-- open a form -->
 {!! Form::model($systems,['url' => 'postsystem/'.$systems->id, 'method' => 'PATCH' , 'id'=>'formID']) !!}
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.system-settings')}}</h3> 
+<!-- check whether success or not -->
+@if(Session::has('success'))
+<div class="alert alert-success alert-dismissable">
+    <i class="fas fa-check-circle"></i>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {!!Session::get('success')!!}
+</div>
+@endif
+<!-- failure message -->
+@if(Session::has('fails'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fas fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <b>{!! Lang::get('lang.alert') !!}!</b><br/>
+    <li class="error-message-padding">{!!Session::get('fails')!!}</li>
+</div>
+@endif
+@if(Session::has('errors'))
+<?php //dd($errors); ?>
+<div class="alert alert-danger alert-dismissable">
+    <i class="fas fa-ban"></i>
+    <b>{!! Lang::get('lang.alert') !!}!</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <br/>
+    @if($errors->first('user_name'))
+    <li class="error-message-padding">{!! $errors->first('user_name', ':message') !!}</li>
+    @endif
+    @if($errors->first('first_name'))
+    <li class="error-message-padding">{!! $errors->first('first_name', ':message') !!}</li>
+    @endif
+    @if($errors->first('last_name'))
+    <li class="error-message-padding">{!! $errors->first('last_name', ':message') !!}</li>
+    @endif
+    @if($errors->first('email'))
+    <li class="error-message-padding">{!! $errors->first('email', ':message') !!}</li>
+    @endif
+</div>
+@endif
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{{Lang::get('lang.system-settings')}}</h3> 
     </div>
     <!-- Helpdesk Status: radio Online Offline -->
-    <div class="box-body">
-        <!-- check whether success or not -->
-        @if(Session::has('success'))
-        <div class="alert alert-success alert-dismissable">
-            <i class="fa fa-check-circle"></i>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {!!Session::get('success')!!}
-        </div>
-        @endif
-        <!-- failure message -->
-        @if(Session::has('fails'))
-        <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <b>{!! Lang::get('lang.alert') !!}!</b><br/>
-            <li class="error-message-padding">{!!Session::get('fails')!!}</li>
-        </div>
-        @endif
-        @if(Session::has('errors'))
-        <?php //dd($errors); ?>
-        <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <br/>
-            @if($errors->first('user_name'))
-            <li class="error-message-padding">{!! $errors->first('user_name', ':message') !!}</li>
-            @endif
-            @if($errors->first('first_name'))
-            <li class="error-message-padding">{!! $errors->first('first_name', ':message') !!}</li>
-            @endif
-            @if($errors->first('last_name'))
-            <li class="error-message-padding">{!! $errors->first('last_name', ':message') !!}</li>
-            @endif
-            @if($errors->first('email'))
-            <li class="error-message-padding">{!! $errors->first('email', ':message') !!}</li>
-            @endif
-        </div>
-        @endif
+    <div class="card-body">
         <div class="row">
            
             <!-- Helpdesk Name/Title: text Required   -->
@@ -113,10 +117,10 @@ class="active"
                 <div class="form-group">
                     {!! Form::label('status',Lang::get('lang.status')) !!}
                     <div class="row">
-                        <div class="col-xs-5">
+                        <div class="col-sm-5">
                             {!! Form::radio('status','1',true) !!} {{Lang::get('lang.online')}}
                         </div>
-                        <div class="col-xs-6">
+                        <div class="col-sm-6">
                             {!! Form::radio('status','0') !!} {{Lang::get('lang.offline')}}
                         </div>
                     </div>
@@ -126,10 +130,10 @@ class="active"
                 <div class="form-group">
                     {!! Form::label('user_set_ticket_status',Lang::get('lang.user_set_ticket_status')) !!}
                     <div class="row">
-                        <div class="col-xs-5">
+                        <div class="col-sm-5">
                             <input type="radio" name="user_set_ticket_status" value="0" @if($common_setting->status == '0')checked="true" @endif>&nbsp;{{Lang::get('lang.no')}}
                         </div>
-                        <div class="col-xs-6">
+                        <div class="col-sm-6">
                             <input type="radio" name="user_set_ticket_status" value="1" @if($common_setting->status == '1')checked="true" @endif>&nbsp;{{Lang::get('lang.yes')}}
                         </div>
                     </div>
@@ -141,7 +145,7 @@ class="active"
                 <div class="form-group">
                     {!! Form::label('status',Lang::get('lang.rtl')) !!}
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-sm-12">
                             <?php
                             $rtl = App\Model\helpdesk\Settings\CommonSettings::where('option_name', '=', 'enable_rtl')->first();
                             ?>
@@ -154,10 +158,10 @@ class="active"
                 <div class="form-group">
                     {!! Form::label('send_otp',Lang::get('lang.allow_unverified_users_to_create_ticket')) !!}
                     <div class="row">
-                        <div class="col-xs-5">
+                        <div class="col-sm-5">
                             <input type="radio" name="send_otp" value="0" @if($send_otp->status == '0')checked="true" @endif>&nbsp;{{Lang::get('lang.yes')}}
                         </div>
-                        <div class="col-xs-6">
+                        <div class="col-sm-6">
                             <input type="radio" name="send_otp" value="1" @if($send_otp->status == '1')checked="true" @endif>&nbsp;{{Lang::get('lang.no')}}
                         </div>
                     </div>
@@ -167,10 +171,10 @@ class="active"
                 <div class="form-group">
                     {!! Form::label('email_mandatory',Lang::get('lang.make-email-mandatroy')) !!}
                     <div class="row">
-                        <div class="col-xs-5">
+                        <div class="col-sm-5">
                             <input type="radio" name="email_mandatory" value="1" @if($email_mandatory->status == '1')checked="true" @endif>&nbsp;{{Lang::get('lang.yes')}}
                         </div>
-                        <div class="col-xs-6">
+                        <div class="col-sm-6">
                             <input type="radio" name="email_mandatory" value="0" @if($email_mandatory->status == '0')checked="true" @endif>&nbsp;{{Lang::get('lang.no')}}
                         </div>
                     </div>
@@ -180,7 +184,7 @@ class="active"
             
         </div>
     </div>
-    <div class="box-footer">
+    <div class="card-footer">
         {!! Form::submit(Lang::get('lang.submit'),['onclick'=>'sendForm()','class'=>'btn btn-primary'])!!}
     </div>
 </div>

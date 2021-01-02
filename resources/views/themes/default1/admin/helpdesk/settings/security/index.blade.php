@@ -1,11 +1,19 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Settings')
-active
+class="nav-link active"
+@stop
+
+@section('settings-menu-parent')
+class="nav-item menu-open"
+@stop
+
+@section('settings-menu-open')
+class="nav nav-treeview menu-open"
 @stop
 
 @section('security')
-class="active"
+class="nav-link active"
 @stop
 
 @section('PageHeader')
@@ -16,43 +24,43 @@ class="active"
 @stop
 
 @section('content')
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.security_settings') !!}</h3>
-    </div><!-- /.box-header -->
-    <div class="box-body">
-        @if(Session::has('success'))
-        <div class="alert alert-success alert-dismissable">
-            <i class="fa fa-check-circle"></i>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {!! Session::get('success') !!}
-        </div>
-        @endif
-        @if(Session::has('failed'))
-        <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang/alert') !!}!</b>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <p>{{Session::get('failed')}}</p>                
-        </div>
-        @endif
-        @if(Session::has('errors'))
-        <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <br/>
-            @if($errors->first('lockout_message'))
-            <li class="error-message-padding">{!! $errors->first('lockout_message', ':message') !!}</li>
-            @endif
-            @if($errors->first('backlist_threshold'))
-            <li class="error-message-padding">{!! $errors->first('backlist_threshold', ':message') !!}</li>
-            @endif
-            @if($errors->first('lockout_period'))
-            <li class="error-message-padding">{!! $errors->first('lockout_period', ':message') !!}</li>
-            @endif
-        </div>
-        @endif
+@if(Session::has('success'))
+<div class="alert alert-success alert-dismissable">
+    <i class="fas fa-check-circle"></i>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {!! Session::get('success') !!}
+</div>
+@endif
+@if(Session::has('failed'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fas fa-ban"></i>
+    <b>{!! Lang::get('lang/alert') !!}!</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <p>{{Session::get('failed')}}</p>                
+</div>
+@endif
+@if(Session::has('errors'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fas fa-ban"></i>
+    <b>{!! Lang::get('lang.alert') !!}!</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <br/>
+    @if($errors->first('lockout_message'))
+    <li class="error-message-padding">{!! $errors->first('lockout_message', ':message') !!}</li>
+    @endif
+    @if($errors->first('backlist_threshold'))
+    <li class="error-message-padding">{!! $errors->first('backlist_threshold', ':message') !!}</li>
+    @endif
+    @if($errors->first('lockout_period'))
+    <li class="error-message-padding">{!! $errors->first('lockout_period', ':message') !!}</li>
+    @endif
+</div>
+@endif
+<div class="card card-light">
+    <div class="card-header">
+        <h3 class="card-title">{!! Lang::get('lang.security_settings') !!}</h3>
+    </div><!-- /.card-header -->
+    <div class="card-body">
         {!! Form::model($security,['route'=>['securitys.update', $security->id],'method'=>'PATCH','files' => true]) !!}
         <div class="form-group {{ $errors->has('lockout_message') ? 'has-error' : '' }}">
             <div class="row">
@@ -87,8 +95,8 @@ class="active"
                 </div>
             </div>
         </div>
-    </div><!-- /.box-body -->
-    <div class="box-footer">
+    </div><!-- /.card-body -->
+    <div class="card-footer">
         <button type="submit" class="btn btn-primary">{!! lang::get('lang.submit') !!}</button>
     </div>
     {!! Form::close() !!}

@@ -1,15 +1,19 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Settings')
-active
+class="nav-link active"
 @stop
 
-@section('settings-bar')
-active
+@section('settings-menu-parent')
+class="nav-item menu-open"
+@stop
+
+@section('settings-menu-open')
+class="nav nav-treeview menu-open"
 @stop
 
 @section('cron')
-class="active"
+class="nav-link active"
 @stop
 
 @section('HeadInclude')
@@ -27,6 +31,20 @@ class="active"
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
+<style type="text/css">
+    pre{
+        background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #333;
+    display: block;
+    font-size: 13px;
+    line-height: 1.42857;
+    margin: 0 0 10px;
+    padding: 9.5px;
+    word-break: break-all;
+    }
+</style>
 <!-- open a form -->
 
 @if($warn!=="")
