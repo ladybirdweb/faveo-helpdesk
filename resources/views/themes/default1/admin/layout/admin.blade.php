@@ -321,7 +321,7 @@
                        <div class="image">
 
                             <img id="sidebar-profile-img" src="{{Auth::user()->profile_pic}}" alt="User Image" width="auto" height="auto" 
-                                class="img-circle elevation-2">
+                                class="img-circle elevation-2" style="width: 30px;height: 30px;">
                         </div>
 
                        <div class="info">
