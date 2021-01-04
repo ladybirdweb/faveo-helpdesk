@@ -103,7 +103,8 @@ class="active"
 
             <div class="col-md-6">
                 
-                <div class="'card card-light">
+                <div class="'card card-light" style="    box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+    margin-bottom: 1rem;">
                     
                     <div class="card-header">
                         <h3 class="card-title">{!! Lang::get('lang.contact_information') !!}</h3>
