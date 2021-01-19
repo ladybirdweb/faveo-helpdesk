@@ -15,7 +15,6 @@ class SettingsController extends Controller
 {
     public function settingsIcon()
     {
-
         return ' <div class="col-md-2 col-sm-6">
                     <div class="settingiconblue">
                         <div class="settingdivblue">
