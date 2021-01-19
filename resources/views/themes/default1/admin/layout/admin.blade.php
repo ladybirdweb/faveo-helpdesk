@@ -66,6 +66,22 @@
              .nav-sidebar .nav-header:not(:first-of-type) {
                 padding: 0.5rem;
             }
+
+           .has-error label {
+                color: #dd4b39 !important;
+            }
+
+            .has-error .form-control {
+                border-color: #dd4b39 !important;
+                box-shadow: none;
+            }
+
+            .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+                box-shadow: none;
+                cursor: not-allowed;
+                opacity: 0.65;
+                pointer-events: none;
+            }
         </style>
     </head>
     <body class="skin-yellow sidebar-mini layout-fixed layout-navbar-fixed text-sm">
@@ -370,7 +386,7 @@
 
                                     <li class="nav-item">
                                         <a href="{{ url('groups') }}" @yield('groups') class="nav-link">
-                                            <i class="nav-icon fas fa-users"></i>
+                                            <i class="nav-icon fas fa-object-group"></i>
                                             <p>{!! Lang::get('lang.groups') !!}</p>
                                         </a>
                                     </li>
@@ -591,6 +607,13 @@
                                         <a href="{{url('settings-notification')}}" @yield('notification') class="nav-link">
                                             <i class="nav-icon fas fa-bell"></i>
                                             <p>{!! Lang::get('lang.notifications') !!}</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{url('storage')}}" @yield('storage') class="nav-link">
+                                            <i class="nav-icon fas fa-save"></i>
+                                            <p>{!! Lang::get('storage::lang.storage') !!}</p>
                                         </a>
                                     </li>
                                 </ul>

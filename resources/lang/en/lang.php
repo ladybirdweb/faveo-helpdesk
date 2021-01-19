@@ -533,7 +533,7 @@ return [
     'priority'          => 'Priority',
     'last_updated'      => 'Last updated',
     'create_help_topic' => 'Create help topic',
-    'action'            => 'Action',
+    'action'            => 'Actions',
     /*
       |--------------------------------------
       |  Help Topic Create Page

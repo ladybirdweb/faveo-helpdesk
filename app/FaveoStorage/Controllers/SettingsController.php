@@ -15,16 +15,17 @@ class SettingsController extends Controller
 {
     public function settingsIcon()
     {
+
         return ' <div class="col-md-2 col-sm-6">
                     <div class="settingiconblue">
                         <div class="settingdivblue">
                             <a href="'.url('storage').'">
                                 <span class="fa-stack fa-2x">
-                                    <i class="fa fa-save fa-stack-1x"></i>
+                                    <i class="fas fa-save fa-stack-1x"></i>
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >'.Lang::get('storage::lang.storage').'</p>
+                        <div class="text-center text-sm">'.Lang::get('storage::lang.storage').'</div>
                     </div>
                 </div>';
     }

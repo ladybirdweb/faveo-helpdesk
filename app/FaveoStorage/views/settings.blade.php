@@ -1,15 +1,19 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Settings')
-active
+class="nav-link active"
 @stop
 
-@section('settings-bar')
-active
+@section('settings-menu-parent')
+class="nav-item menu-open"
+@stop
+
+@section('settings-menu-open')
+class="nav nav-treeview menu-open"
 @stop
 
 @section('storage')
-class="active"
+class="nav-link active"
 @stop
 
 @section('PageHeader')
@@ -19,40 +23,43 @@ class="active"
 @section('HeadInclude')
 @stop
 @section('content')
-<div class="box box-primary">
 
-    <div class="box-header with-border">
-        <h4> {{Lang::get('storage::lang.storage')}} </h4>
-        @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-        @endif
+ @if (count($errors) > 0)
+<div class="alert alert-danger">
+    <strong>Whoops!</strong> There were some problems with your input.<br><br>
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
 
-        @if(Session::has('success'))
-        <div class="alert alert-success alert-dismissable">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('success')}}
-        </div>
-        @endif
-        <!-- fail message -->
-        @if(Session::has('fails'))
-        <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"></i>
-            <b>{{Lang::get('message.alert')}}!</b> {{Lang::get('message.failed')}}.
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('fails')}}
-        </div>
-        @endif
+@if(Session::has('success'))
+<div class="alert alert-success alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('success')}}
+</div>
+@endif
+<!-- fail message -->
+@if(Session::has('fails'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fa fa-ban"></i>
+    <b>{{Lang::get('message.alert')}}!</b> {{Lang::get('message.failed')}}.
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('fails')}}
+</div>
+@endif
+
+<div class="card card-light">
+
+    <div class="card-header">
+        <h3 class="card-title"> {{Lang::get('storage::lang.storage')}} </h3>
+       
         {!! Form::open(['url'=>'storage','method'=>'post']) !!}
     </div><!-- /.box-header -->
     <!-- /.box-header -->
-    <div class="box-body">
+    <div class="card-body">
         <div class="row">
             <div class="form-group col-md-8 {{ $errors->has('default') ? 'has-error' : '' }}">
                 {!! Form::label('default',Lang::get('storage::lang.default')) !!}
@@ -106,7 +113,7 @@ class="active"
         </div>
         <!-- /.box-body -->
     </div>
-    <div class="box-footer">
+    <div class="card-footer">
         {!! Form::submit('Save',['class'=>'btn btn-success']) !!}
         {!! Form::close() !!}
     </div>

@@ -102,7 +102,7 @@ class="nav-link active"
 
                         <label>{!! Lang::get('lang.address') !!}</label> 
                         <br>
-                        <center>{!! $orgs->address !!}</center>
+                        {!! $orgs->address !!}
                     </li>
                     @endif
 
@@ -111,7 +111,7 @@ class="nav-link active"
 
                         <label>{!! Lang::get('lang.internal_notes') !!}</label> 
                         <br>
-                        <center>{!! $orgs->internal_notes !!}</center>
+                        {!! $orgs->internal_notes !!}
                     </li>
                     @endif
                 </ul>

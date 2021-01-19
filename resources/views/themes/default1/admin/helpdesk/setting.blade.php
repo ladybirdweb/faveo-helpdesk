@@ -511,7 +511,7 @@
                             </span>
                         </a>
                     </div>
-                    <div class="text-center text-sm">{!! Lang::get('lang.notification') !!}</div>
+                    <div class="text-center text-sm">{!! Lang::get('lang.notifications') !!}</div>
                 </div>
             </div>
             

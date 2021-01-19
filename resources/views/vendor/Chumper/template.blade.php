@@ -1,4 +1,4 @@
-<table id="{!! $id !!}" class="{!! $class !!}" style="width:100%">
+<table id="{!! $id !!}" class="{!! $class !!}" style="width:100%;display:block !important;">
     <colgroup>
         @for ($i = 0; $i < count($columns); $i++)
         <col class="con{!! $i !!}" />
