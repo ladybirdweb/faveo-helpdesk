@@ -71,6 +71,22 @@
              .nav-sidebar .nav-header:not(:first-of-type) {
                 padding: 0.5rem;
             }
+
+            .has-error label {
+                color: #dd4b39 !important;
+            }
+
+            .has-error .form-control {
+                border-color: #dd4b39 !important;
+                box-shadow: none;
+            }
+
+            .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+                box-shadow: none;
+                cursor: not-allowed;
+                opacity: 0.65;
+                pointer-events: none;
+            }
         </style>
     </head>
     

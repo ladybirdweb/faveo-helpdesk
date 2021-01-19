@@ -75,14 +75,14 @@ class="nav-link active"
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group {{ $errors->has('client_id') ? 'has-error' : '' }}">
-                    {!! Form::label('client_id',Lang::get('lang.client_id')) !!}
+                    {!! Form::label('client_id',Lang::get('lang.client_id')) !!}<spam class="help-block"> *</spam>
                     {!! Form::text('client_id',$social->getvalueByKey($provider,'client_id'),['class' => 'form-control']) !!}
                     {!! $errors->first('client_id', '<spam class="help-block">:message</spam>') !!}
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group {{ $errors->has('client_secret') ? 'has-error' : '' }}">
-                    {!! Form::label('client_secret',Lang::get('lang.client_secret')) !!}
+                    {!! Form::label('client_secret',Lang::get('lang.client_secret')) !!}<spam class="help-block"> *</spam>
                     {!! Form::text('client_secret',$social->getvalueByKey($provider,'client_secret'),['class' => 'form-control']) !!}
                      {!! $errors->first('client_secret', '<spam class="help-block">:message</spam>') !!}
                 </div>
