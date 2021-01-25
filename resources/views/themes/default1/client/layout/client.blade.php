@@ -298,7 +298,7 @@
                                     <input type="text" name="s" class="search-field form-control input-lg" title="Enter search term" placeholder="{!! Lang::get('lang.have_a_question?_type_your_search_term_here') !!}" required/>
                                 </div>
                                 <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-custom btn-md" style="margin-left: 8px;">{!! Lang::get('lang.search') !!}</button>
+                                    <button type="submit" class="btn btn-custom btn-md" style="margin-left: 2px;">{!! Lang::get('lang.search') !!}</button>
                                 </span>
                             </div>
                         </div>

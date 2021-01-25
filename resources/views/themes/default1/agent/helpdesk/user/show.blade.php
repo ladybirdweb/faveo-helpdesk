@@ -41,6 +41,8 @@ class="nav-link active"
 .tooltip1:hover .tooltiptext {
     visibility: visible;
 }
+
+.dataTables_wrapper table { display:block !important; }
 </style>
 @stop
 <!-- header -->
