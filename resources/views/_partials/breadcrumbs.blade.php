@@ -5,7 +5,7 @@
     @if (!$breadcrumb->last)
     <li class="breadcrumb-item"><a href="{{ $breadcrumb->url }}">{{ $breadcrumb->title }}</a></li>
     @else
-    <li class="breadcrumb-item active">{{ $breadcrumb->title }}</li>
+    <li class="breadcrumb-item active">{{ str_replace("&nbsp;", "", $breadcrumb->title) }}</li>
     @endif
     @endforeach
 </ol>

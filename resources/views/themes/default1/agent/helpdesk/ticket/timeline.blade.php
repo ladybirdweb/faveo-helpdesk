@@ -245,7 +245,7 @@ if ($thread->title != "") {
             </div>
         </div>
 
-        <div id="hide2" class="row">
+        <div id="hide2" class="row" style="width: 100%;">
             <div class="col-md-6">
                 <table class="table table-hover">
                     <div id="refresh">
