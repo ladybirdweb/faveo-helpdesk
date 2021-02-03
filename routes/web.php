@@ -11,7 +11,7 @@
   |
  */
 Route::group(['middleware' => ['web']], function () {
-    Route::group(['middleware' => 'update', 'middleware' => 'install'], function () {
+    Route::group(['middleware' => ['install', 'update']], function () {
         Auth::routes();
         Route::post('login', ['uses' => 'Auth\AuthController@postLogin', 'as' => 'post.login']);
         Route::post('auth/register', ['uses' => 'Auth\AuthController@postRegister', 'as' => 'post.register']);
@@ -65,7 +65,7 @@ Route::group(['middleware' => ['web']], function () {
       | Here is defining entire routes for the Admin Panel
       |
      */
-    Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => 'install', 'middleware' => 'update'], function () {
+    Route::group(['middleware' => ['install', 'roles', 'auth', 'update']], function () {
         //Notification marking
         Route::post('mark-read/{id}', 'Common\NotificationController@markRead');
         Route::post('mark-all-read/{id}', 'Common\NotificationController@markAllRead');
@@ -290,7 +290,7 @@ Route::group(['middleware' => ['web']], function () {
       |
       |
      */
-    Route::group(['middleware' => 'role.agent', 'middleware' => 'auth', 'middleware' => 'install', 'middleware' => 'update'], function () {
+    Route::group(['middleware' => ['install', 'update', 'auth', 'role.agent']], function () {
         Route::post('chart-range/{date1}/{date2}', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
         Route::get('agen1', 'Agent\helpdesk\DashboardController@ChartData');
         Route::post('chart-range', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
@@ -529,7 +529,7 @@ Route::group(['middleware' => ['web']], function () {
 
 //testing ckeditor
     //===================================================================================
-    Route::group(['middleware' => 'role.user', 'middleware' => 'auth'], function () {
+    Route::group(['middleware' => ['auth', 'role.user']], function () {
         Route::get('client-profile', ['as' => 'client.profile', 'uses' => 'Client\helpdesk\GuestController@getProfile']); /*  User profile get  */
 
         Route::get('mytickets', ['as' => 'ticket2', 'uses' => 'Client\helpdesk\GuestController@getMyticket']);
