@@ -1,8 +1,8 @@
 @extends('themes.default1.client.layout.client')
 @section('content')               
 <?php
-$tickets = App\Model\helpdesk\Ticket\Tickets::where('id', '=', \Crypt::decrypt($id))->first();
-$thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Crypt::decrypt($id))->first();
+$tickets = App\Model\helpdesk\Ticket\Tickets::where('id', '=', \Crypt::decrypt($id, false))->first();
+$thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Crypt::decrypt($id, false))->first();
 //$user = App\User::where('id','=',$id1)->first();
 ?>
 <!-- Main content -->
@@ -461,7 +461,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
             </div>
             @endif
             
-            <?php $id2 = Crypt::decrypt($id); ?>
+            <?php $id2 = Crypt::decrypt($id, false); ?>
             
             <div id="respond" class="comment-respond form-border">
                 
