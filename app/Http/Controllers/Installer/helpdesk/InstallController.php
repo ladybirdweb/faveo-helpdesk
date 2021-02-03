@@ -427,6 +427,7 @@ class InstallController extends Controller
         $ENV['APP_DEBUG'] = 'false';
         $ENV['APP_BUGSNAG'] = 'true';
         $ENV['APP_URL'] = url('/');
+        $ENV['APP_KEY'] = "base64:h3KjrHeVxyE+j6c8whTAs2YI+7goylGZ/e2vElgXT6I=";
         $ENV['DB_TYPE'] = $default;
         $ENV['DB_HOST'] = '"'.$host.'"';
         $ENV['DB_PORT'] = '"'.$port.'"';
@@ -559,6 +560,7 @@ class InstallController extends Controller
     {
         $env = base_path().DIRECTORY_SEPARATOR.'.env';
         if (is_file($env)) {
+            Artisan::call('key:generate', ['--force' => true]);
             $txt = 'DB_INSTALL=1';
             $txt1 = 'APP_ENV=production';
             file_put_contents($env, $txt.PHP_EOL, FILE_APPEND | LOCK_EX);
