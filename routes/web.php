@@ -529,7 +529,7 @@ Route::group(['middleware' => ['web']], function () {
 
 //testing ckeditor
     //===================================================================================
-    Route::group(['middleware' => ['auth', 'role.user']], function () {
+    Route::group(['middleware' => ['auth']], function () {
         Route::get('client-profile', ['as' => 'client.profile', 'uses' => 'Client\helpdesk\GuestController@getProfile']); /*  User profile get  */
 
         Route::get('mytickets', ['as' => 'ticket2', 'uses' => 'Client\helpdesk\GuestController@getMyticket']);
