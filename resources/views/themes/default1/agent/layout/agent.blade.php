@@ -49,7 +49,9 @@
         @yield('HeadInclude')
       
         <style type="text/css">
-        
+            
+             .dataTables_wrapper table {display: table !important;}
+             
             .product-description { overflow: visible !important;white-space: unset !important; }
 
             .noti_User { color: #6c757d !important; }
@@ -58,7 +60,7 @@
 
             .table { display: block;width: 100%;overflow-x: auto; }
 
-            td{ word-break: break-all !important; }
+            td{ word-break: break-word !important; }
 
             .table { width: 100% !important;display: table !important; }
 

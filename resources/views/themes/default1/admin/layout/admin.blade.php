@@ -44,6 +44,8 @@
         @yield('HeadInclude')
 
         <style type="text/css">
+
+            .dataTables_wrapper table {display: table !important;}
         
             .product-description { overflow: visible !important;white-space: unset !important; }
 
