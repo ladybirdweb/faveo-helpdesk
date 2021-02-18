@@ -117,9 +117,9 @@ $bootstrapPermission = substr(sprintf('%o', fileperms($basePath.DIRECTORY_SEPARA
                 <?php
                 echo '<tr>';
                 if (version_compare(phpversion(), '7.1') == -1 || version_compare('7.1.50', phpversion()) == -1) {
-                  echo "<td>PHP Version</td>  <td style='color:red'>".phpversion().'<p>Recommended PHP version 7.1</p></td>';
+                    echo "<td>PHP Version</td>  <td style='color:red'>".phpversion().'<p>Recommended PHP version 7.1</p></td>';
                 } else {
-                  echo "<td>PHP Version</td>  <td style='color:green'>".phpversion().'</td>'; 
+                    echo "<td>PHP Version</td>  <td style='color:green'>".phpversion().'</td>';
                 }
                 echo '</tr>';
                 echo '<tr>';
