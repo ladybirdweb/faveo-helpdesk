@@ -16,8 +16,8 @@
 
 @section('content')               
 <?php  
-$tickets = App\Model\helpdesk\Ticket\Tickets::where('id','=',\Crypt::decrypt($id, false))->first(); 
-$thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt::decrypt($id, false))->first();
+$tickets = App\Model\helpdesk\Ticket\Tickets::where('id','=',\Crypt::decrypt($id))->first(); 
+$thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt::decrypt($id))->first();
 //$user = App\User::where('id','=',$id1)->first();?>
 
                     <!-- Main content -->
@@ -350,7 +350,7 @@ foreach ($conversations as $conversation) {
                             {{Session::get('fails1')}}
                         </div>
                     @endif
-<?php $id2 = Crypt::decrypt($id, false); ?>
+<?php $id2 = Crypt::decrypt($id); ?>
 <div id="respond" class="comment-respond form-border">
     <h3 id="reply-title" class="comment-reply-title section-title"><i class="line"></i>{!! Lang::get('lang.leave_a_reply') !!}</h3>
     @if(Auth::user()) 
