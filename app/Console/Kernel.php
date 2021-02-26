@@ -23,6 +23,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\Install::class,
         \App\Console\Commands\InstallDB::class,
         \App\Console\Commands\SetupTestEnv::class,
+        \App\Console\Commands\SecureFaveoAPPKey::class
     ];
 
     /**
