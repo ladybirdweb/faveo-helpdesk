@@ -5,7 +5,7 @@ php:
 - 7.1
 - 7.2
 before_script:
-- composer self-update
+- composer self-update --1
 - composer install --prefer-source --no-interaction --dev
 - php artisan testing-setup --username="root"
 script: vendor/bin/phpunit
