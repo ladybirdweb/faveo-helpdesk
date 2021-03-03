@@ -82,7 +82,8 @@ class InstallerApiController extends Controller
                 $ENV['APP_ENV'] = 'development';
                 $ENV['APP_DEBUG'] = 'false';
                 $ENV['APP_KEY'] = 'SomeRandomString';
-                $ENV['APP_URL'] = 'http://localhost';
+                $ENV['APP_URL'] = url('/');
+                $ENV['APP_KEY'] = 'base64:h3KjrHeVxyE+j6c8whTAs2YI+7goylGZ/e2vElgXT6I=';
                 $ENV['APP_BUGSNAG'] = 'true';
                 $ENV['DB_TYPE'] = $default;
                 $ENV['DB_HOST'] = $host;
@@ -171,7 +172,7 @@ class InstallerApiController extends Controller
             // Migrate database
             Artisan::call('migrate', ['--force' => true]);
             Artisan::call('db:seed', ['--force' => true]);
-            Artisan::call('key:generate');
+            Artisan::call('key:generate', ['--force' => true]);
             Artisan::call('jwt:secret');
             // checking requested timezone for the admin and system
             $timezones = Timezones::where('name', '=', $timezone)->first();
