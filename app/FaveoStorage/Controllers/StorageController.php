@@ -140,6 +140,7 @@ class StorageController extends Controller
             }
             Config::set("filesystems.$key", $con);
         }
+
         return Config::get('filesystems');
     }
 
