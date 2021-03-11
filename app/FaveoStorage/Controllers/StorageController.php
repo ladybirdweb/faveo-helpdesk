@@ -135,13 +135,12 @@ class StorageController extends Controller
         foreach ($config as $key => $con) {
             if (is_array($con)) {
                 foreach ($con as $k => $v) {
-                    Config::set("filesystem.$key.$k", $v);
+                    Config::set("filesystems.$key.$k", $v);
                 }
             }
-            Config::set("filesystem.$key", $con);
+            Config::set("filesystems.$key", $con);
         }
-
-        return Config::get('filesystem');
+        return Config::get('filesystems');
     }
 
     protected function config()
