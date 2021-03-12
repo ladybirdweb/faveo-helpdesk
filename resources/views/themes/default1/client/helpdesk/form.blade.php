@@ -208,7 +208,6 @@ class = "nav-item active"
                             {!! Form::textarea('Details',null,['class' => 'form-control']) !!}
                         </div>
                         <div class="col-md-12 form-group">
-                            <label>{!! Lang::get('lang.attachment') !!}</label>
                             <input type="file" name="attachment[]" multiple/><br/>
                             {!! Lang::get('lang.max') !!}. {!! $max_size_in_actual !!}
                         </div>

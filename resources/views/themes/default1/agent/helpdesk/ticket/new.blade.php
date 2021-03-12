@@ -270,6 +270,8 @@ class="active"
     </div>
 </div><!-- /. box -->
 {!! Form::close() !!}
+@stop
+@push('scripts')
 <script type="text/javascript">
     $(document).ready(function () {
         var helpTopic = $("#selectid").val();
@@ -357,9 +359,7 @@ class="active"
         });
     });
 </script>
-
-@stop
-
+@endpush
 
 
 

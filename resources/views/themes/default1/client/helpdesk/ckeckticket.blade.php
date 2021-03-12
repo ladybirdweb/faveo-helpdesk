@@ -24,7 +24,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
 
     .mailbox-attachment-icon,.mailbox-attachment-info,.mailbox-attachment-size{display:block}
 
-    .mailbox-attachment-info{padding:10px;background:#f4f4f4;height: 80px;}
+    .mailbox-attachment-info{padding:10px;background:#f4f4f4;height: auto;}
 
     .mailbox-attachment-size{color:#999;font-size:12px}
 
@@ -420,7 +420,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                                                 echo '<li><span class="mailbox-attachment-icon has-img">' . $var . '</span><div class="mailbox-attachment-info"><a class="mailbox-attachment-name">' . $attachment->name . '</a><span class="mailbox-attachment-size">' . $value . '</span></div></li>';
                                             } else {
                                                 //$var = '<a href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><img style="max-width:200px;height:133px;" src="data:'.$attachment->type.';base64,' . base64_encode($data) . '"/></a>';
-                                                $var = '<a style="width:200px;height:120px;" href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"></a><span class="mailbox-attachment-icon" style="background:#fff;height:120px;font-size:16px;">' . strtoupper($attachment->type) . '</span><div class="mailbox-attachment-info"><a class="mailbox-attachment-name">' . $attachment->name . '</a><span class="mailbox-attachment-size">' . $value . '</span></div>';
+                                                $var = '<a style="width:200px;height:120px;text-decoration: none;" href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><span class="mailbox-attachment-icon" style="background:#fff;height:120px;font-size:16px;">' . strtoupper($attachment->type) . '</span></a><div class="mailbox-attachment-info">' . $attachment->name . '<span class="mailbox-attachment-size">' . $value . '</span></div>';
 
                                                 echo '<li style="background-color:#f4f4f4;">' . $var . '</li>';
                                             }

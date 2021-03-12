@@ -92,7 +92,7 @@ class SettingsController extends Controller
     public function directories($root = '')
     {
         if ($root == '') {
-            $root = base_path();
+            $root = storage_path();
         }
 
         $iter = new RecursiveIteratorIterator(

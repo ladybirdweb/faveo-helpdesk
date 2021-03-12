@@ -241,8 +241,14 @@
                                         </ul>
                                     </li>
                                 </ul>
-
-                            <div id="login-form" class="login-form collapse fade clearfix" @if(isset($errors))<?php if ($errors->first('email') || $errors->first('password')) { ?> class="login-form collapse fade clearfix in" <?php } else { ?> class="login-form collapse fade clearfix" <?php } ?>@endif >
+                                <?php 
+                                    $loginFormClass = "login-form collapse fade clearfix";
+                                    if(isset($errors) && ($errors->first('email') || $errors->first('password')))
+                                    {
+                                        $loginFormClass .= " show";
+                                    }
+                                ?>
+                            <div id="login-form" class="{{$loginFormClass}}">
                                  <div class="row">
                                     <div class="col-md-12">
                                         {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}
