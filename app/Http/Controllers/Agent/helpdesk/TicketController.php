@@ -2786,7 +2786,7 @@ class TicketController extends Controller
                                 $color = "<i class='fa fa-exclamation-triangle'  title='".Lang::get('lang.accoutn-not-verified')."'></i>";
                             }
 
-                            return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.$name.'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:#508983'>".str_limit($name, 30).' <span style="color:#f75959">'.$color.'</span></span></a>';
+                            return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.strip_tags($name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:#508983'>".str_limit(strip_tags($name), 30).' <span style="color:#f75959">'.$color.'</span></span></a>';
                         })
                         ->editColumn('a_uname', function ($tickets) {
                             if ($tickets->assigned_to == null && $tickets->name == null) {
@@ -2797,11 +2797,11 @@ class TicketController extends Controller
                                     $assign = utfEncoding($tickets->a_fname).' '.utfEncoding($tickets->a_lname);
                                     $url = route('user.show', $tickets->assigned_to);
 
-                                    return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.$assign.'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:green'>".mb_substr($assign, 0, 30, 'UTF-8').'</span></a>';
+                                    return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.strip_tags($assign).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:green'>".mb_substr(strip_tags($assign), 0, 30, 'UTF-8').'</span></a>';
                                 } else {
                                     $url1 = '#';
 
-                                    return "<a href='".$url1."' title='".Lang::get('lang.see-profile1').' '.ucfirst($tickets->name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:green'>".mb_substr(ucfirst($tickets->name), 0, 30, 'UTF-8').'</span></a>';
+                                    return "<a href='".$url1."' title='".Lang::get('lang.see-profile1').' '.ucfirst(strip_tags($tickets->name)).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:green'>".mb_substr(ucfirst(strip_tags($tickets->name)), 0, 30, 'UTF-8').'</span></a>';
                                 }
                             }
                         })

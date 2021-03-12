@@ -1219,7 +1219,7 @@ if ($thread->title != "") {
 
                                     <select class="form-control" id="select-merge-parent"  name='p_id' data-placeholder="{!! Lang::get('lang.select_tickets') !!}" style="width: 100%;"><option value="{{$tickets->id}}"><?php
                                        $ticket_data = App\Model\helpdesk\Ticket\Ticket_Thread::select('title')->where('ticket_id', "=", $tickets->id)->first();
-                                       echo $ticket_data->title;
+                                       echo strip_tags($ticket_data->title);
                                        ?></option></select>
                                 </div>
                             </div>
