@@ -41,8 +41,8 @@ class ClientRequest extends Request
             'Email'   => 'required|email',
             'Subject' => 'required',
             'Details' => 'required',
-            'mobile' => 'numeric',
-            'Phone' => 'numeric',
+            'mobile'  => 'numeric',
+            'Phone'   => 'numeric',
         ];
         $custom_rule = $this->getCustomRule();
         $rules = array_merge($current_rule, $custom_rule);
@@ -136,7 +136,7 @@ class ClientRequest extends Request
                     'Subject' => 'required',
                     'Details' => 'required',
                     'mobile'  => 'required|numeric',
-                    'Phone' => 'numeric',
+                    'Phone'   => 'numeric',
                 ];
             } else {
                 return [
