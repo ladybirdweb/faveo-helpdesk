@@ -193,18 +193,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function setFirstNameAttribute($value)
     {
-        $this->attributes['first_name']=strip_tags($value);
+        $this->attributes['first_name'] = strip_tags($value);
     }
 
     public function setLastNameAttribute($value)
     {
-        $this->attributes['last_name']= strip_tags($value);
+        $this->attributes['last_name'] = strip_tags($value);
     }
 
     public function setUserNameAttribute($value)
     {
-        $this->attributes['user_name']= strip_tags($value);
+        $this->attributes['user_name'] = strip_tags($value);
     }
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *

@@ -15,21 +15,21 @@ class Comment extends BaseModel
 
     public function setNameAttribute($value)
     {
-    	$this->attributes['name'] = strip_tags($value);
+        $this->attributes['name'] = strip_tags($value);
     }
 
     public function setCommentAttribute($value)
     {
-    	$this->attributes['comment'] = strip_tags($value);
+        $this->attributes['comment'] = strip_tags($value);
     }
 
     public function getNameAttribute($value)
     {
-    	return strip_tags($value);
+        return strip_tags($value);
     }
 
     public function getCommentAttribute($value)
     {
-    	return strip_tags($value);
+        return strip_tags($value);
     }
 }
