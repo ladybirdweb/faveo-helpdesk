@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class MailController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'roles']);
+    }
+
     public function serviceForm(Request $request)
     {
         $serviceid = $request->input('service');

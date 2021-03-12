@@ -31,7 +31,7 @@ class PriorityController extends Controller
     {
         $this->PhpMailController = $PhpMailController;
         $this->NotificationController = $NotificationController;
-        $this->middleware('auth');
+        $this->middleware('roles');
     }
 
     /**

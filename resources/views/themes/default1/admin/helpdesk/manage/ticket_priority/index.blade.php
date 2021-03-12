@@ -58,14 +58,11 @@ class="nav-link active"
             </a>
         </div>
     </div>
+    <div class="card-header">
+        <div class="card-tools" style="color:#fff">
+         <a class="right" title="" data-placement="right" data-toggle="tooltip" href="#" data-original-title="{{Lang::get('lang.active_user_can_select_the_priority_while_creating_ticket')}}">
 
-    <div class="card-body">
-
-        <div class="mb-3">
-            
-            <a class="right" title="" data-placement="right" data-toggle="tooltip" href="#" data-original-title="{{Lang::get('lang.active_user_can_select_the_priority_while_creating_ticket')}}">
-
-                <span class="lead" >{!! Lang::get('lang.current') !!}{!! Lang::get('lang.user_priority_status') !!}</span> - 
+                <span class="lead" >{!! Lang::get('lang.user_priority_status') !!}</span>
            </a>
 
             <div class="btn-group" id="toggle_event_editing">
@@ -73,7 +70,8 @@ class="nav-link active"
                 <button type="button"  class="btn {{$user_status->status == '1' ? 'btn-info' : 'btn-default'}} unlocked_inactive">Active</button>
             </div>
         </div>
-
+    </div>
+    <div class="card-body">
         {!! Datatable::table()
         ->addColumn(
         Lang::get('lang.priority'),
@@ -85,6 +83,8 @@ class="nav-link active"
         ->render() !!}
     </div>
 </div>
+@stop
+@push('scripts')
 <script type="text/javascript">
     $('a').tooltip()
 </script>
@@ -133,5 +133,4 @@ class="nav-link active"
         });
     });
 </script>
-
-@stop
+@endpush

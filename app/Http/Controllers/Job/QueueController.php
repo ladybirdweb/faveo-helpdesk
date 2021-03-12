@@ -12,6 +12,11 @@ use Illuminate\Http\Request;
 
 class QueueController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'roles']);
+    }
+
     public function index()
     {
         try {
