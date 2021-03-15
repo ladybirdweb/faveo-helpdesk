@@ -263,6 +263,6 @@ class ReportController extends Controller
         $html = view('themes.default1.agent.helpdesk.report.pdf', compact('table_datas', 'table_help_topic'))->render();
         $html1 = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 
-        return PDF::load($html1)->show();
+        return @PDF::load($html1)->show();
     }
 }

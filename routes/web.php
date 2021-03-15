@@ -347,9 +347,6 @@ Route::group(['middleware' => ['web']], function () {
         Route::patch('/ticket/assign/{id}', ['as' => 'assign.ticket', 'uses' => 'Agent\helpdesk\TicketController@assign']); /*  Patch Ticket assigned to whom */
         Route::patch('/ticket/post/edit/{id}', ['as' => 'ticket.post.edit', 'uses' => 'Agent\helpdesk\TicketController@ticketEditPost']); /*  Patchi Ticket Edit */
         Route::get('/ticket/print/{id}', ['as' => 'ticket.print', 'uses' => 'Agent\helpdesk\TicketController@ticket_print']); /*  Get Print Ticket */
-        Route::post('/ticket/close/{id}', ['as' => 'ticket.close', 'uses' => 'Agent\helpdesk\TicketController@close']); /*  Get Ticket Close */
-        Route::post('/ticket/resolve/{id}', ['as' => 'ticket.resolve', 'uses' => 'Agent\helpdesk\TicketController@resolve']); /*  Get ticket Resolve */
-        Route::post('/ticket/open/{id}', ['as' => 'ticket.open', 'uses' => 'Agent\helpdesk\TicketController@open']); /*  Get Ticket Open */
         Route::post('/ticket/delete/{id}', ['as' => 'ticket.delete', 'uses' => 'Agent\helpdesk\TicketController@delete']); /*  Get Ticket Delete */
         Route::get('/email/ban/{id}', ['as' => 'ban.email', 'uses' => 'Agent\helpdesk\TicketController@ban']); /*  Get Ban Email */
         Route::get('/ticket/surrender/{id}', ['as' => 'ticket.surrender', 'uses' => 'Agent\helpdesk\TicketController@surrender']); /*  Get Ticket Surrender */
@@ -357,7 +354,6 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'Agent\helpdesk\DashboardController@index']); /* To show dashboard pages */
 
         Route::get('agen', 'Agent\helpdesk\DashboardController@ChartData');
-        Route::get('image/{id}', ['as' => 'image', 'uses' => 'Agent\helpdesk\MailController@get_data']); /* get image */
         Route::get('thread/auto/{id}', 'Agent\helpdesk\TicketController@autosearch');
         Route::get('auto', 'Agent\helpdesk\TicketController@autosearch2');
         Route::patch('search-user', 'Agent\helpdesk\TicketController@usersearch');
@@ -372,8 +368,6 @@ Route::group(['middleware' => ['web']], function () {
         Route::patch('/user-org/{id}', 'Agent\helpdesk\UserController@User_Create_Org');
         Route::patch('/head-org/{id}', 'Agent\helpdesk\OrganizationController@Head_Org');
 
-        Route::post('rating/{id}', ['as' => 'ticket.rating', 'uses' => 'Agent\helpdesk\TicketController@rating']); /* Get overall Ratings */
-        Route::post('rating2/{id}', ['as' => 'ticket.rating2', 'uses' => 'Agent\helpdesk\TicketController@ratingReply']); /* Get reply Ratings */
         // To check and lock tickets
         Route::get('check/lock/{id}', ['as' => 'lock', 'uses' => 'Agent\helpdesk\TicketController@checkLock']);
         Route::patch('/change-owner/{id}', ['as' => 'change.owner.ticket', 'uses' => 'Agent\helpdesk\TicketController@changeOwner']); /* change owner */
@@ -540,6 +534,12 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('verify-client-number', ['as' => 'client-verify-number', 'uses' => 'Client\helpdesk\GuestController@resendOTP']);
 
         Route::post('verify-client-number2', ['as' => 'post-client-verify-number', 'uses' => 'Client\helpdesk\GuestController@verifyOTP']);
+        Route::post('/ticket/close/{id}', ['as' => 'ticket.close', 'uses' => 'Agent\helpdesk\TicketController@close']); /*  Get Ticket Close */
+        Route::post('/ticket/resolve/{id}', ['as' => 'ticket.resolve', 'uses' => 'Agent\helpdesk\TicketController@resolve']); /*  Get ticket Resolve */
+        Route::post('/ticket/open/{id}', ['as' => 'ticket.open', 'uses' => 'Agent\helpdesk\TicketController@open']); /*  Get Ticket Open */
+        Route::get('image/{id}', ['as' => 'image', 'uses' => 'Agent\helpdesk\MailController@get_data']); /* get image */
+        Route::post('rating/{id}', ['as' => 'ticket.rating', 'uses' => 'Agent\helpdesk\TicketController@rating']); /* Get overall Ratings */
+        Route::post('rating2/{id}', ['as' => 'ticket.rating2', 'uses' => 'Agent\helpdesk\TicketController@ratingReply']); /* Get reply Ratings */
     });
     //====================================================================================
     Route::get('checkticket', 'Client\helpdesk\ClientTicketController@getCheckTicket'); /* Check your Ticket */

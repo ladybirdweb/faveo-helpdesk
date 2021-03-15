@@ -8,6 +8,39 @@
                                           | |                         
                                           |_|                         
 |=====================================================
+| v1.11.0 Urgent security patch and theme update
+|=====================================================
+This is an urgent patch for several security vulnerabilities found and reported by [Securized](https://github.com/securized) in the system. We highly recommend updating the system to get rid of all the security issues in your system and secure your system from vulnerabilities and attackers.
+
+Along with some urgent security updates, this release also updates the frontend framework and theme version to the latest which enhances the UI design of the system, keeping the same user experience.
+
+#### Updates
+- Updated jQuery version to v3
+- Updated Bootstrap version to v4
+- Updated AdminLTE theme to v3
+- Updated Russian translation to cover 80% of the system. Thanks, @maranqz for raising the PR and providing proper translation files.
+
+#### Bugfixes
+- Various UI bugs and issues
+- Generate PDF error
+- Laravel route middleware grouping correction
+- Storage option functionality corrections
+- Clients are not able to change ticket status
+- Report PDF generation
+- Security issues reported by @securized. More details can be found on their [gist](https://gist.github.com/securized/7c702ca002d3d72f3100bc5eb17ec0dd)
+
+**Important**: The system was not generating the unique APP_KEY in the environment which makes your system vulnerable to expose sensitive data due to a hardcoded encryption key. This can simply be fixed by generating your own Laravel APP_KEY using Laravel's artisan commands. 
+Faveo also introduced its own artisan command to alter the APP_KEY to replace your old key with the new key. The advantage of this command is it allows you to update the application's key and updates the required encrypted data in the system so you do not need to update configurations in the system manually. But we still recommend you update system configurations manually to minimize the possibility of attacks on your data. You can use this command from your Faveo root directory as below
+```
+php artisan faveo:secure-key
+```
+
+> NOTE: This security patch requires all agents and admin to login and start their session again. Also, all the old encrypted URLs will be reset and will not work any longer.
+
+Follow this [Upgrade Guide](https://github.com/ladybirdweb/faveo-helpdesk/wiki/General-Faveo-Upgrade-Guide---Manual) to update your system. This update does not require any database update. After the update, we highly recommend running the below commands to secure your Faveo system.
+`php artisan key:generate` or `php artisan faveo:secure-key`
+ 
+|=====================================================
 | v1.10.7 Security patch
 |=====================================================
 - Updates symfony/http-foundation to 4.4.1

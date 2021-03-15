@@ -167,7 +167,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                                 $time = $tickets->created_at;
                                 $time = date_create($time);
                                 date_add($time, date_interval_create_from_date_string($SlaPlan->grace_period));
-                                echo UTC::usertimezone(date_format($time, 'd/m/Y H:i:s'));
+                                echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
                                 ?>
                             </div>
                             <div class="col-md-3">
@@ -594,8 +594,9 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
         // Close a ticket
         $('#close').on('click', function (e) {
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "../ticket/close/{{$tickets->id}}",
+                data:{"_token": "{{ csrf_token() }}"},
                 beforeSend: function () {
                     $("#refresh").hide();
                     $("#loader").show();
@@ -625,8 +626,9 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
         // Resolved  a ticket
         $('#resolved').on('click', function (e) {
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "../ticket/resolve/{{$tickets->id}}",
+                data:{"_token": "{{ csrf_token() }}"},
                 beforeSend: function () {
                     $("#refresh").hide();
                     $("#loader").show();
@@ -655,8 +657,9 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
         // Open a ticket
         $('#open').on('click', function (e) {
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "../ticket/open/{{$tickets->id}}",
+                data:{"_token": "{{ csrf_token() }}"},
                 beforeSend: function () {
                     $("#refresh").hide();
                     $("#loader").show();
