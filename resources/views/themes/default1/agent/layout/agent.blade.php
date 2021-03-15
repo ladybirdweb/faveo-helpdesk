@@ -44,7 +44,11 @@
 
         <link href="{{asset("lb-faveo/plugins/summernote/summernote-bs4.min.css")}}" rel="stylesheet" type="text/css" />
         <link href="{{asset("lb-faveo/css/jquery.ui.css")}}" rel="stylesheet" type="text/css" />
-         <script src="{{asset("lb-faveo/js/jquery-3.4.1.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/jquery-3.4.1.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/jquery-migrate.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/popper.min.js")}}" type="text/javascript"></script>
+        <!-- Bootstrap 3.3.2 JS -->
+        <script src="{{asset("lb-faveo/js/bootstrap4.min.js")}}" type="text/javascript"></script>
 
         @yield('HeadInclude')
       
@@ -644,11 +648,6 @@
                 <span style="font-weight: 500">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>.</span> {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/" target="_blank">Faveo</a>
             </footer>
         </div><!-- ./wrapper -->
-        <script src="{{asset("lb-faveo/js/jquery-migrate.js")}}" type="text/javascript"></script>
-        <script src="{{asset("lb-faveo/js/popper.min.js")}}" type="text/javascript"></script>
-        <!-- Bootstrap 3.3.2 JS -->
-        <script src="{{asset("lb-faveo/js/bootstrap4.min.js")}}" type="text/javascript"></script>
-
         <script src="{{asset("lb-faveo/adminlte3/js/adminlte3.min.js")}}" type="text/javascript"></script>
         <!-- Slimscroll -->
         <script src="{{asset("lb-faveo/adminlte3/plugins/overlayScrollbars/overlayScrollbars.min.js")}}" type="text/javascript"></script>

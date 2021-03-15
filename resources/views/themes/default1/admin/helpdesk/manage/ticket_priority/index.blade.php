@@ -58,20 +58,19 @@ class="nav-link active"
             </a>
         </div>
     </div>
-    <div class="card-header">
-        <div class="card-tools" style="color:#fff">
-         <a class="right" title="" data-placement="right" data-toggle="tooltip" href="#" data-original-title="{{Lang::get('lang.active_user_can_select_the_priority_while_creating_ticket')}}">
+    <div class="card-body">
+        <div class="test" style="border-bottom:1px solid #F4F4F4;padding-bottom: 10px">
+            <a class="right" title="" data-placement="right" data-toggle="tooltip" href="#" data-original-title="{{Lang::get('lang.active_user_can_select_the_priority_while_creating_ticket')}}">
 
                 <span class="lead" >{!! Lang::get('lang.user_priority_status') !!}</span>
            </a>
 
-            <div class="btn-group" id="toggle_event_editing">
+            <div class="btn-group" id="toggle_event_editing" style="float: right; margin-bottom: 10">
                 <button type="button"  class="btn {{$user_status->status == '0' ? 'btn-info' : 'btn-default'}} locked_active">Inactive</button>
                 <button type="button"  class="btn {{$user_status->status == '1' ? 'btn-info' : 'btn-default'}} unlocked_inactive">Active</button>
             </div>
         </div>
-    </div>
-    <div class="card-body">
+        <div class="priority-table" style="padding-top: 10px">
         {!! Datatable::table()
         ->addColumn(
         Lang::get('lang.priority'),
@@ -81,10 +80,9 @@ class="nav-link active"
         Lang::get('lang.action'))
         ->setUrl(route('priority.index1')) // this is the route where data will be retrieved
         ->render() !!}
+        </div>
     </div>
 </div>
-@stop
-@push('scripts')
 <script type="text/javascript">
     $('a').tooltip()
 </script>
@@ -133,4 +131,4 @@ class="nav-link active"
         });
     });
 </script>
-@endpush
+@stop
