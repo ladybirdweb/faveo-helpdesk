@@ -66,12 +66,6 @@ class="nav-link active"
         <div class="card card-light card-outline">
 
             <div class="card-body box-profile">
-
-                <div class="text-center">
-
-                    <img id="org_img" src="{{asset("lb-faveo/media/images/org.png")}}" alt="Org Image" class="profile-user-img img-fluid img-circle">
-                </div>
-
                 <h3 class="profile-username text-center has-tooltip" title="{{$orgs->name}}">{{str_limit($orgs->name,15)}}</h3> 
 
                 <p class="text-muted text-center">Organization</p> 

@@ -237,6 +237,7 @@ class="active"
 <form action="{!! route('help.topic.pdf') !!}" method="POST" id="form_pdf">
     <input type="hidden" name="pdf_form" value="" id="pdf_form">
     <input type="hidden" name="pdf_form_help_topic" value="" id="pdf_form_help_topic">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
     <input type="submit" style="display:none;">
 </form>
 

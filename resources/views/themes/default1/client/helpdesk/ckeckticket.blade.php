@@ -594,8 +594,9 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
         // Close a ticket
         $('#close').on('click', function (e) {
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "../ticket/close/{{$tickets->id}}",
+                data:{"_token": "{{ csrf_token() }}"},
                 beforeSend: function () {
                     $("#refresh").hide();
                     $("#loader").show();
@@ -625,8 +626,9 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
         // Resolved  a ticket
         $('#resolved').on('click', function (e) {
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "../ticket/resolve/{{$tickets->id}}",
+                data:{"_token": "{{ csrf_token() }}"},
                 beforeSend: function () {
                     $("#refresh").hide();
                     $("#loader").show();
@@ -655,8 +657,9 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
         // Open a ticket
         $('#open').on('click', function (e) {
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "../ticket/open/{{$tickets->id}}",
+                data:{"_token": "{{ csrf_token() }}"},
                 beforeSend: function () {
                     $("#refresh").hide();
                     $("#loader").show();
