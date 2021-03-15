@@ -125,7 +125,7 @@ class TicketController extends Controller
             $source = Ticket_source::where('name', '=', 'agent')->first();
             $headers = null;
             $help = Help_topic::where('id', '=', $helptopic)->first();
-            $form_data = $request->except('name', 'phone', 'email', 'subject', 'body', 'helptopic', '_wysihtml5_mode', '_token', 'mobile', 'code', 'priority', 'attachment', 'first_name', 'last_name', 'sla', 'duedate', 'assignto', 'files');//added "files" in exception list because some fool has added a new editor 'summernote' to impress his boss and screwed the functional code with his genius ability. Hence to make world capable of handling this genius's work I am adding a shitty workaround for it. After looking for solution everywhere and referring to https://stackoverflow.com/questions/59938588/summernote-adds-files-field-to-post
+            $form_data = $request->except('name', 'phone', 'email', 'subject', 'body', 'helptopic', '_wysihtml5_mode', '_token', 'mobile', 'code', 'priority', 'attachment', 'first_name', 'last_name', 'sla', 'duedate', 'assignto', 'files'); //added "files" in exception list because some fool has added a new editor 'summernote' to impress his boss and screwed the functional code with his genius ability. Hence to make world capable of handling this genius's work I am adding a shitty workaround for it. After looking for solution everywhere and referring to https://stackoverflow.com/questions/59938588/summernote-adds-files-field-to-post
             $auto_response = 0;
             $status = 1;
             if ($phone != null || $mobile_number != null) {
@@ -499,9 +499,10 @@ class TicketController extends Controller
         $html = view('themes.default1.agent.helpdesk.ticket.pdf', compact('id', 'ticket', 'tickets'))->render();
         $html1 = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
         /**
-         * This statement throws error with php7.1
+         * This statement throws error with php7.1.
+         *
          * @see https://github.com/dompdf/dompdf/issues/1272
-         * For time bieng we are silencing the error using "@" operator in front of it 
+         * For time bieng we are silencing the error using "@" operator in front of it
          */
         return @PDF::load($html1)->show();
     }
@@ -2435,9 +2436,10 @@ class TicketController extends Controller
             $html = view('themes.default1.agent.helpdesk.ticket.thread-pdf', compact('thread', 'system', 'company', 'ticket'))->render();
             $html1 = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
             /**
-             * This statement throws error with php7.1
+             * This statement throws error with php7.1.
+             *
              * @see https://github.com/dompdf/dompdf/issues/1272
-             * For time bieng we are silencing the error using "@" operator in front of it 
+             * For time bieng we are silencing the error using "@" operator in front of it
              */
             return @PDF::load($html1)->show();
         } catch (Exception $ex) {
