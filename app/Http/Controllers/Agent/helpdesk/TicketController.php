@@ -498,8 +498,12 @@ class TicketController extends Controller
         $ticket = Tickets::where('tickets.id', '=', $id)->first();
         $html = view('themes.default1.agent.helpdesk.ticket.pdf', compact('id', 'ticket', 'tickets'))->render();
         $html1 = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
-
-        return PDF::load($html1)->show();
+        /**
+         * This statement throws error with php7.1
+         * @see https://github.com/dompdf/dompdf/issues/1272
+         * For time bieng we are silencing the error using "@" operator in front of it 
+         */
+        return @PDF::load($html1)->show();
     }
 
     /**
@@ -2430,8 +2434,12 @@ class TicketController extends Controller
             $ticket = Tickets::where('id', $thread->ticket_id)->first();
             $html = view('themes.default1.agent.helpdesk.ticket.thread-pdf', compact('thread', 'system', 'company', 'ticket'))->render();
             $html1 = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
-
-            return PDF::load($html1)->show();
+            /**
+             * This statement throws error with php7.1
+             * @see https://github.com/dompdf/dompdf/issues/1272
+             * For time bieng we are silencing the error using "@" operator in front of it 
+             */
+            return @PDF::load($html1)->show();
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
