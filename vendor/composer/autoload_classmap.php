@@ -53,6 +53,7 @@ return array(
     'Codacy\\Coverage\\Util\\CodacyApiClient' => $vendorDir . '/codacy/coverage/src/Codacy/Coverage/Util/CodacyApiClient.php',
     'Codacy\\Coverage\\Util\\GitClient' => $vendorDir . '/codacy/coverage/src/Codacy/Coverage/Util/GitClient.php',
     'Codacy\\Coverage\\Util\\JsonProducer' => $vendorDir . '/codacy/coverage/src/Codacy/Coverage/Util/JsonProducer.php',
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'CreateApiSettingsTable' => $baseDir . '/database/migrations/2016_05_11_105244_create_api_settings_table.php',
     'CreateBanlistTable' => $baseDir . '/database/migrations/2016_02_16_140450_create_banlist_table.php',
     'CreateBarNotificationsTable' => $baseDir . '/database/migrations/2016_05_10_102604_create_bar_notifications_table.php',

@@ -25,6 +25,6 @@ class CheckRoleUser
             return $next($request);
         }
 
-        return redirect('guest')->with('fails', 'You are not Autherised');
+        return redirect('guest')->with('fails', 'You are not Authorised');
     }
 }

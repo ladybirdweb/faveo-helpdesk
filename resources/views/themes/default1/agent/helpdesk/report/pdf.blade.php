@@ -65,9 +65,9 @@
             <tbody>
                 <?php
 //dd($table_datas[1]);
-                $table_open = '';
-                $table_closed = '';
-                $table_reopened = '';
+                $table_open = 0;
+                $table_closed = 0;
+                $table_reopened = 0;
                 foreach ($table_datas as $table_data) {
                     echo '<tr>';
                     echo '<td>' . $table_data->date . '</td>';
