@@ -656,7 +656,7 @@ class UserController extends Controller
             // $org_name=Organization::where('id','=',$org_id)->pluck('name')->first();
             // dd($org_name);
 
-            return view('themes.default1.agent.helpdesk.user.edit', compact('users', 'orgs', '$settings', '$email_mandatory', 'organization_id'))->with('phonecode', $phonecode->phonecode);
+            return view('themes.default1.agent.helpdesk.user.edit', compact('users', 'orgs', 'settings', 'email_mandatory', 'organization_id'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
