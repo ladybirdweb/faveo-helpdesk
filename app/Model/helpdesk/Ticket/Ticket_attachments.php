@@ -36,7 +36,7 @@ class Ticket_attachments extends Model
                 $value = base64_encode($content);
                 if (mime($this->type) != 'image') {
                     $root = $root.'/'.$name;
-                    chmod($root, 1204);
+                    chmod($root, 0644);
                 }
             }
         }

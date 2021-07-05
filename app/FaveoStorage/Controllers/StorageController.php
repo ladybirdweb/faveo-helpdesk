@@ -194,7 +194,7 @@ class StorageController extends Controller
             Storage::disk($this->default)->put($filename, $data);
             $storagePath = Storage::disk($this->default)->getDriver()->getAdapter()->getPathPrefix().$filename;
             if (mime(\File::mimeType($storagePath)) != 'image' || mime(\File::extension($storagePath)) != 'image') {
-                chmod($storagePath, 1204);
+                chmod($storagePath, 0644);
             }
         } else {
             $upload->file = $data;
