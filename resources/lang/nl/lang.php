@@ -1469,6 +1469,7 @@ return [
      */
     'client_id'     => 'Klant ID',
     'client_secret' => 'Klant geheim',
+    'base_url'      => 'Baseren URL',
     'redirect'      => 'Verwijs URL',
     'details'       => 'Details',
     'social-media'  => 'Social media',

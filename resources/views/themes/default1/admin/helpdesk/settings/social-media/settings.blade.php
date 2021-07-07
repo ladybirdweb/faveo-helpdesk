@@ -87,6 +87,13 @@ class="nav-link active"
                      {!! $errors->first('client_secret', '<spam class="help-block">:message</spam>') !!}
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="form-group {{ $errors->has('base_url') ? 'has-error' : '' }}">
+                    {!! Form::label('base_url',Lang::get('lang.base_url')) !!}<spam class="help-block"> *</spam>
+                    {!! Form::text('base_url',$social->getvalueByKey($provider,'base_url'),['class' => 'form-control']) !!}
+                    {!! $errors->first('base_url', '<spam class="help-block">:message</spam>') !!}
+                </div>
+            </div>
         </div> 
         <div class="row">
             <div class="col-md-6">

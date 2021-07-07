@@ -1445,6 +1445,7 @@ return [
      */
     'client_id'                                                                        => '客户id',
     'client_secret'                                                                    => '客户密钥',
+    'base_url'                                                                         => '基本网址',
     'redirect'                                                                         => '跳转URL',
     'details'                                                                          => '详情',
     'social-media'                                                                     => '社会媒体',

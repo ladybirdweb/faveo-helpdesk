@@ -2897,6 +2897,7 @@
             "SSO",
             "authorization",
             "bitbucket",
+            "openid_connect",
             "identity",
             "idp",
             "oauth",

@@ -61,5 +61,10 @@ return [
         'client_secret' => '', //'dD7HerXuELJR3uZQv93ZYuXsg5vLSzLR', //client secrete,
         'redirect'      => '', //'http://localhost/FaveoVersions/faveo-helpdesk/public/social/login/bitbucket', //redirect
     ],
-
+    'openid_connect' => [
+        'client_id'     => '',
+        'client_secret' => '',
+        'redirect'      => '',
+        'base_url'      => '', // Specify your provider URL here
+    ],
 ];

@@ -151,6 +151,19 @@ class="nav-link active"
                             <a href="{{url('social/media/bitbucket')}}" class="btn btn-primary">Settings</a>
                         </td>
                     </tr>
+                    <tr>
+                        <td>OpenID Connect</td>
+                        <td>
+                            @if($social->checkActive('openid_connect')===true)
+                            <span style="color: green">Active</span>
+                            @else 
+                            <span style="color: red">Inactive</span>
+                            @endif
+                        </td>
+                        <td>
+                            <a href="{{url('social/media/openid_connect')}}" class="btn btn-primary">Settings</a>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

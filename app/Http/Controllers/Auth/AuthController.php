@@ -87,6 +87,9 @@ class AuthController extends Controller
                 // stroing data to our use table and logging them in
                 $username = $user->getEmail();
                 $first_name = $user->getName();
+                $last_name = $user->getLastname();
+                $role = $user->getRole();
+
                 if ($user->nickname) {
                     $username = $user->nickname;
                 }
@@ -95,11 +98,17 @@ class AuthController extends Controller
                 }
                 $data = [
                     'first_name' => $first_name,
+                    'last_name'  => $last_name,
                     'email'      => $user->getEmail(),
                     'user_name'  => $username,
                     'role'       => 'user',
                     'active'     => 1,
                 ];
+                if ($role == 'admin' || $role == 'agent') {
+                    $data['role'] = $role;
+                    $data['assign_group'] = 1;
+                    $data['primary_dpt'] = 1;
+                }
                 $user = User::where('email', $data['email'])->first();
                 if (!$user) {
                     $user = User::where('user_name', $data['user_name'])->first();
@@ -244,7 +253,7 @@ class AuthController extends Controller
     /**
      * Get mail function.
      *
-     * @param type      $token
+     * @param type $token
      * @param type User $user
      *
      * @return type Response
@@ -653,8 +662,15 @@ class AuthController extends Controller
     {
         \Event::fire('user.logout', []);
         $login = new LoginController();
-
-        return $login->logout($request);
+        $social = new \App\Model\helpdesk\Settings\SocialMedia();
+        if ($social->checkActive('openid_connect')) {
+            $logoutUrl = Socialite::driver('openid_connect')->getLogoutUrl();
+            $login->logout($request);
+            header('Location: '.$logoutUrl);
+            exit();
+        } else {
+            return $login->logout($request);
+        }
     }
 
     public function redirectPath()

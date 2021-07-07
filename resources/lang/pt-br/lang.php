@@ -1410,6 +1410,7 @@ return [
      */
     'client_id'     => 'Id do cliente',
     'client_secret' => 'Secret do cliente',
+    'base_url'      => 'Base URL',
     'redirect'      => 'URL de redirecionamento',
     'details'       => 'Detalhes',
     'social-media'  => 'Mídia social',

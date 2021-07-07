@@ -90,6 +90,7 @@ class SocialMediaController extends Controller
             \Config::set("services.$service.client_id", $social->getvalueByKey($service, 'client_id'));
             \Config::set("services.$service.client_secret", $social->getvalueByKey($service, 'client_secret'));
             \Config::set("services.$service.redirect", $social->getvalueByKey($service, 'redirect'));
+            \Config::set("services.$service.base_url", $social->getvalueByKey($service, 'base_url'));
         }
         // dd(\Config::get('services'));
     }
@@ -103,6 +104,7 @@ class SocialMediaController extends Controller
             'twitter',
             'linkedin',
             'bitbucket',
+            'openid_connect',
         ];
     }
 }

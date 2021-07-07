@@ -1,3 +1,14 @@
+@if(!Auth::user())
+    <?php
+        $social = new \App\Model\helpdesk\Settings\SocialMedia();
+        if($social->checkActive('openid_connect') && !isset($_GET['disable_redirect'])) {
+            $redirectUrl = $social->getvalueByKey('openid_connect', 'redirect');
+            $redirectUrl = str_replace("/openid_connect", "/redirect/openid_connect", $redirectUrl); 
+            header("Location: " . $redirectUrl);
+            exit();    
+        }
+    ?>
+@endif
 <!DOCTYPE html>
 <html>
     <head>

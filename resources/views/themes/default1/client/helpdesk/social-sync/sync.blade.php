@@ -30,6 +30,11 @@ $redirect = 'social-sync';
         <span class="fa fa-bitbucket"></span> Sign in with Bitbucket
     </a>
     @endif
+    @if($social->checkActive('openid_connect'))
+    <a class="btn btn-block btn-social btn-openid_connect" href="{{ route('social.login', ['openid_connect',$redirect]) }}" style="background-color: blue;color: white;">
+        <span class="fa fa-openid_connect"></span> Sign in with OpenID Connect
+    </a>
+    @endif
     @if($social->checkActive('github'))
     <a class="btn btn-block btn-social btn-github" href="{{ route('social.login', ['github',$redirect]) }}" style="background-color: black;color: white;">
         <span class="fa fa-github"></span> Sign in with Github

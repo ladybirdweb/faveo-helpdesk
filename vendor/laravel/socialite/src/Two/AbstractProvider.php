@@ -41,6 +41,13 @@ abstract class AbstractProvider implements ProviderContract
     protected $clientSecret;
 
     /**
+     * The provider base URL.
+     *
+     * @var string
+     */
+    protected $base_url;
+
+    /**
      * The redirect URL.
      *
      * @var string
@@ -95,17 +102,19 @@ abstract class AbstractProvider implements ProviderContract
      * @param  \Illuminate\Http\Request  $request
      * @param  string  $clientId
      * @param  string  $clientSecret
+     * @param  string  $base_url
      * @param  string  $redirectUrl
      * @param  array  $guzzle
      * @return void
      */
-    public function __construct(Request $request, $clientId, $clientSecret, $redirectUrl, $guzzle = [])
+    public function __construct(Request $request, $clientId, $clientSecret, $base_url, $redirectUrl, $guzzle = [])
     {
         $this->guzzle = $guzzle;
         $this->request = $request;
         $this->clientId = $clientId;
         $this->redirectUrl = $redirectUrl;
         $this->clientSecret = $clientSecret;
+        $this->base_url = $base_url;
     }
 
     /**
@@ -277,7 +286,7 @@ abstract class AbstractProvider implements ProviderContract
     {
         return [
             'client_id' => $this->clientId, 'client_secret' => $this->clientSecret,
-            'code' => $code, 'redirect_uri' => $this->redirectUrl,
+            'base_url' => $this->base_url, 'code' => $code, 'redirect_uri' => $this->redirectUrl,
         ];
     }
 

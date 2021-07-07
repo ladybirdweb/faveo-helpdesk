@@ -1458,6 +1458,7 @@ return [
      */
     'client_id'     => 'ID клиента',
     'client_secret' => 'Секрет клиента',
+    'base_url'      => 'URL база',
     'redirect'      => 'URL перенаправления',
     'details'       => 'Подробности',
     'social-media'  => 'Социальные медиа',

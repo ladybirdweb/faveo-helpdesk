@@ -1456,6 +1456,7 @@ return [
      */
     'client_id'     => 'Client ID',
     'client_secret' => 'Client segreto',
+    'base_url'      => 'Base URL',
     'redirect'      => 'URL di reindirizzamento',
     'details'       => 'Dettagli',
     'social-media'  => 'Social media',

@@ -1469,6 +1469,7 @@ Puede ingresar el número de días de registros de base de datos que se eliminar
      */
     'client_id'     => 'Client id',
     'client_secret' => 'Client secret',
+    'base_url'      => 'Base URL',
     'redirect'      => 'Redirect URL',
     'details'       => 'Details',
     'social-media'  => 'Social media',

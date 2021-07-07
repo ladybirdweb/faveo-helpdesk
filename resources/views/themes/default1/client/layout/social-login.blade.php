@@ -1,7 +1,7 @@
 <?php
 $social = new \App\Model\helpdesk\Settings\SocialMedia();
 ?>
-@if($social->checkActive('twitter') || $social->checkActive('facebook') || $social->checkActive('google') || $social->checkActive('linkedin') || $social->checkActive('bitbucket') || $social->checkActive('github'))
+@if($social->checkActive('twitter') || $social->checkActive('facebook') || $social->checkActive('google') || $social->checkActive('linkedin') || $social->checkActive('bitbucket') || $social->checkActive('openid_connect') || $social->checkActive('github'))
 <center>{{Lang::get('lang.or')}}</center>
 @endif
 
@@ -28,6 +28,11 @@ $social = new \App\Model\helpdesk\Settings\SocialMedia();
 @if($social->checkActive('bitbucket'))
 <a class="btn btn-block btn-social btn-bitbucket" href="{{ route('social.login', ['bitbucket']) }}" style="background-color: blue;color: white;">
     <span class="fab fa-bitbucket"></span> Sign in with Bitbucket
+</a>
+@endif
+@if($social->checkActive('openid_connect'))
+<a class="btn btn-block btn-social btn-openid_connect" href="{{ route('social.login', ['openid_connect']) }}" style="background-color: blue;color: white;">
+    <span class="fab fa-openid_connect"></span> Sign in with OpenID Connect
 </a>
 @endif
 @if($social->checkActive('github'))

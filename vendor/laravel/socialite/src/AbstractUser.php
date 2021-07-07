@@ -28,6 +28,20 @@ abstract class AbstractUser implements ArrayAccess, Contracts\User
     public $name;
 
     /**
+     * The user's last name.
+     *
+     * @var string
+     */
+    public $lastname;
+
+    /**
+     * The user's role.
+     *
+     * @var string
+     */
+    public $role;
+
+    /**
      * The user's e-mail address.
      *
      * @var string
@@ -76,6 +90,26 @@ abstract class AbstractUser implements ArrayAccess, Contracts\User
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Get the last name of the user.
+     *
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * Get the role of the user.
+     *
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->role;
     }
 
     /**

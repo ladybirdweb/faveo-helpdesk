@@ -1460,6 +1460,7 @@ return [
      */
     'client_id'     => 'Client id',
     'client_secret' => 'Client secret',
+    'base_url'      => 'Base URL',
     'redirect'      => 'Redirect URL',
     'details'       => 'Details',
     'social-media'  => 'Social media',
