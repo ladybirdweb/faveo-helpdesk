@@ -229,7 +229,7 @@ function timezone()
  * formats the error message into json error response.
  *
  * @param string/array $errorMsg     errorMsg can be an array of errors or string
- * @param int          $responseCode
+ * @param int $responseCode
  *
  * @return json
  */
@@ -243,9 +243,9 @@ function errorResponse($errorMsg, $responseCode = 400)
 /**
  * formats success message/data into json success response.
  *
- * @param string       $successMsg
+ * @param string $successMsg
  * @param array/string $data         data of the response
- * @param int          $responseCode
+ * @param int $responseCode
  *
  * @return json
  */

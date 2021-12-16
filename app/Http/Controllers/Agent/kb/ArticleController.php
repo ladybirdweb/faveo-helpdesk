@@ -259,7 +259,7 @@ class ArticleController extends Controller
     /**
      * Delete an Agent by id.
      *
-     * @param type         $id
+     * @param type $id
      * @param type Article $article
      *
      * @return Response
