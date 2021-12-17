@@ -486,9 +486,9 @@ class TicketController extends Controller
     public function ticket_print($id)
     {
         $tickets = Tickets::leftJoin('ticket_thread', function ($join) {
-                    $join->on('tickets.id', '=', 'ticket_thread.ticket_id')
+            $join->on('tickets.id', '=', 'ticket_thread.ticket_id')
                         ->whereNotNull('ticket_thread.title');
-                })
+        })
                 ->leftJoin('department', 'tickets.dept_id', '=', 'department.id')
                 ->leftJoin('help_topic', 'tickets.help_topic_id', '=', 'help_topic.id')
                 ->where('tickets.id', '=', $id)
