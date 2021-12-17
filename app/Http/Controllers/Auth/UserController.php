@@ -246,7 +246,7 @@ class UserController extends Controller
             $users = $user->whereId($id)->first();
             /* Update the value by selected field  */
             /* Check whether function success or not */
-            if ($users->fill($request->input())->save() == true) {
+            if ($users->fill($request->except('active','role','is_delete','ban'))->save() == true) {
                 /* redirect to Index page with Success Message */
                 return redirect('user')->with('success', 'User  Updated Successfully');
             } else {
@@ -344,11 +344,11 @@ class UserController extends Controller
             Input::file('profile_pic')->move($destinationPath, $fileName);
             $user->profile_pic = $fileName;
         } else {
-            $user->fill($request->except('profile_pic', 'gender'))->save();
+            $user->fill($request->except('profile_pic', 'gender','active','role','is_delete','ban'))->save();
 
             return Redirect::route('profile')->with('success', 'Profile Updated sucessfully');
         }
-        if ($user->fill($request->except('profile_pic'))->save()) {
+        if ($user->fill($request->except('profile_pic','active','role','is_delete','ban'))->save()) {
             return Redirect::route('profile')->with('success', 'Profile Updated sucessfully');
         }
     }

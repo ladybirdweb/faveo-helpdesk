@@ -92,7 +92,7 @@ class GuestController extends Controller
                 }
                 $user->country_code = $request->country_code;
             }
-            $user->fill($request->except('profile_pic', 'mobile'));
+            $user->fill($request->except('profile_pic', 'mobile','active','role','is_delete','ban'));
             $user->gender = $request->input('gender');
             $user->save();
             if (Input::file('profile_pic')) {
