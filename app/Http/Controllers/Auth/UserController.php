@@ -6,9 +6,7 @@ namespace App\Http\Controllers\Agent\helpdesk;
 use App\Http\Controllers\Controller;
 // requests
 /*  Include Sys_user Model  */
-use App\Http\Requests\helpdesk\ProfilePassword;
 /* For validation include Sys_userRequest in create  */
-use App\Http\Requests\helpdesk\ProfileRequest;
 /* For validation include Sys_userUpdate in update  */
 use App\Http\Requests\helpdesk\Sys_userRequest;
 /*  include guest_note model */
@@ -23,9 +21,7 @@ use App\Model\helpdesk\Agent_panel\User_org;
 use App\User;
 // classes
 /* include ticket_thred model */
-use Auth;
 /* include tickets model */
-use Hash;
 /* TicketRequest to validate the ticket response */
 /* Validate post check ticket */
 use Input;
@@ -246,7 +242,7 @@ class UserController extends Controller
             $users = $user->whereId($id)->first();
             /* Update the value by selected field  */
             /* Check whether function success or not */
-            if ($users->fill($request->except('active','role','is_delete','ban'))->save() == true) {
+            if ($users->fill($request->except('active', 'role', 'is_delete', 'ban'))->save() == true) {
                 /* redirect to Index page with Success Message */
                 return redirect('user')->with('success', 'User  Updated Successfully');
             } else {

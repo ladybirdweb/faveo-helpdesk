@@ -167,7 +167,7 @@ class OrganizationController extends Controller
     /**
      * Display the specified organization.
      *
-     * @param type              $id
+     * @param type $id
      * @param type Organization $org
      *
      * @return type view
@@ -187,7 +187,7 @@ class OrganizationController extends Controller
     /**
      * Show the form for editing the specified organization.
      *
-     * @param type              $id
+     * @param type $id
      * @param type Organization $org
      *
      * @return type view
@@ -207,7 +207,7 @@ class OrganizationController extends Controller
     /**
      * Update the specified organization in storage.
      *
-     * @param type                    $id
+     * @param type $id
      * @param type Organization       $org
      * @param type OrganizationUpdate $request
      *

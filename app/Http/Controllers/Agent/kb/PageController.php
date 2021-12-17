@@ -160,7 +160,7 @@ class PageController extends Controller
     /**
      * To update a page.
      *
-     * @param type            $slug
+     * @param type $slug
      * @param type PageUpdate $request
      *
      * @return type redirect

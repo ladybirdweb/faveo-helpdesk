@@ -6,19 +6,15 @@ namespace App\Http\Controllers\Agent\kb;
 use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
 // Request
-use App\Http\Requests\kb\ProfilePassword;
-use App\Http\Requests\kb\ProfileRequest;
 use App\Http\Requests\kb\SettingsRequests;
 use App\Model\helpdesk\Utility\Date_format;
 // Model
 use App\Model\helpdesk\Utility\Timezones;
 use App\Model\kb\Comment;
 use App\Model\kb\Settings;
-use Auth;
 // Classes
 use Config;
 use Exception;
-use Hash;
 use Illuminate\Http\Request;
 use Image;
 use Input;
@@ -171,7 +167,7 @@ class SettingsController extends Controller
     /**
      * Admin can publish the comment.
      *
-     * @param type         $id
+     * @param type $id
      * @param type Comment $comment
      *
      * @return bool
@@ -190,7 +186,7 @@ class SettingsController extends Controller
     /**
      * delete the comment.
      *
-     * @param type         $id
+     * @param type $id
      * @param type Comment $comment
      *
      * @return type

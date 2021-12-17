@@ -73,7 +73,7 @@ class GuestController extends Controller
     /**
      * Save profile data.
      *
-     * @param type                $id
+     * @param type $id
      * @param type ProfileRequest $request
      *
      * @return type Response
@@ -92,7 +92,7 @@ class GuestController extends Controller
                 }
                 $user->country_code = $request->country_code;
             }
-            $user->fill($request->except('profile_pic', 'mobile','active','role','is_delete','ban'));
+            $user->fill($request->except('profile_pic', 'mobile', 'active', 'role', 'is_delete', 'ban'));
             $user->gender = $request->input('gender');
             $user->save();
             if (Input::file('profile_pic')) {
@@ -226,7 +226,7 @@ class GuestController extends Controller
     /**
      * Post porfile password.
      *
-     * @param type                 $id
+     * @param type $id
      * @param type ProfilePassword $request
      *
      * @return type Response
