@@ -341,11 +341,11 @@ class UserController extends Controller
             Input::file('profile_pic')->move($destinationPath, $fileName);
             $user->profile_pic = $fileName;
         } else {
-            $user->fill($request->except('profile_pic', 'gender'))->save();
+            $user->fill($request->except('profile_pic', 'gender','active','role','is_delete','ban'))->save();
 
             return redirect('guest')->with('success', Lang::get('lang.profile_updated_sucessfully'));
         }
-        if ($user->fill($request->except('profile_pic'))->save()) {
+        if ($user->fill($request->except('profile_pic', 'active','role','is_delete','ban'))->save()) {
             return redirect('guest')->with('success', Lang::get('lang.sorry_not_proprofile_updated_sucessfullycessed'));
         }
     }
