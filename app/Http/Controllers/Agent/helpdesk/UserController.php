@@ -690,7 +690,7 @@ class UserController extends Controller
                 }
             }
             $users->mobile = ($request->input('mobile') == '') ? null : $request->input('mobile');
-            $users->fill($request->except('mobile','active','role','is_delete','ban'));
+            $users->fill($request->except('mobile', 'active', 'role', 'is_delete', 'ban'));
             $users->save();
             if ($request->input('org_id') != '') {
                 $orgid = $request->input('org_id');
@@ -765,7 +765,7 @@ class UserController extends Controller
                 }
                 $user->country_code = $request->country_code;
             }
-            $user->fill($request->except('profile_pic', 'mobile','active','role','is_delete','ban'));
+            $user->fill($request->except('profile_pic', 'mobile', 'active', 'role', 'is_delete', 'ban'));
             $user->gender = $request->input('gender');
             $user->save();
             if (Input::file('profile_pic')) {

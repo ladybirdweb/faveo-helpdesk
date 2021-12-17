@@ -513,7 +513,7 @@ class SettingsController extends Controller
     /**
      * Update the specified alert in storage.
      *
-     * @param type         $id
+     * @param type $id
      * @param type Alert   $alert
      * @param type Request $request
      *

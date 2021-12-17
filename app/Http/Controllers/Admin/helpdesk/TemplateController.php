@@ -115,7 +115,7 @@ class TemplateController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param type           $id
+     * @param type $id
      * @param type Template  $template
      * @param type Languages $language
      *
