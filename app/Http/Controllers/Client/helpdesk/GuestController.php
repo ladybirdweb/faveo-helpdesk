@@ -73,7 +73,7 @@ class GuestController extends Controller
     /**
      * Save profile data.
      *
-     * @param type                $id
+     * @param type $id
      * @param type ProfileRequest $request
      *
      * @return type Response
@@ -226,7 +226,7 @@ class GuestController extends Controller
     /**
      * Post porfile password.
      *
-     * @param type                 $id
+     * @param type $id
      * @param type ProfilePassword $request
      *
      * @return type Response

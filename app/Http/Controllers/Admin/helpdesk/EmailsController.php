@@ -387,7 +387,7 @@ class EmailsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param type                   $id
+     * @param type $id
      * @param type Emails            $email
      * @param type EmailsEditRequest $request
      *

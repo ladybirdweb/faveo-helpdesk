@@ -922,7 +922,9 @@ class FilterController extends Controller
         return $table->whereIn('tickets.source', $sources);
     }
 
-    /**    DEPRICATED.
+    /**
+     *    DEPRICATED.
+     *
      * @category function to get array of status to filter tickets
      *
      * @param string $status
