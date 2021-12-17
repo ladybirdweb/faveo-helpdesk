@@ -158,7 +158,7 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified category.
      *
-     * @param type          $slug
+     * @param type $slug
      * @param type Category $category
      *
      * @return type view
@@ -175,7 +175,7 @@ class CategoryController extends Controller
     /**
      * Update the specified Category in storage.
      *
-     * @param type                $slug
+     * @param type $slug
      * @param type Category       $category
      * @param type CategoryUpdate $request
      *
@@ -204,7 +204,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified category from storage.
      *
-     * @param type              $id
+     * @param type $id
      * @param type Category     $category
      * @param type Relationship $relation
      *

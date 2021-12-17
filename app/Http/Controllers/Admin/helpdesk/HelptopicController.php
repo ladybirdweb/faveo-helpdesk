@@ -130,7 +130,7 @@ class HelptopicController extends Controller
     /**
      * Show the form for editing the specified helptopic.
      *
-     * @param type            $id
+     * @param type $id
      * @param type Priority   $priority
      * @param type Department $department
      * @param type Help_topic $topic
@@ -162,7 +162,7 @@ class HelptopicController extends Controller
     /**
      * Update the specified helptopic in storage.
      *
-     * @param type                 $id
+     * @param type $id
      * @param type Help_topic      $topic
      * @param type HelptopicUpdate $request
      *

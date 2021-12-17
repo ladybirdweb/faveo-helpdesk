@@ -244,7 +244,7 @@ class AuthController extends Controller
     /**
      * Get mail function.
      *
-     * @param type      $token
+     * @param type $token
      * @param type User $user
      *
      * @return type Response
