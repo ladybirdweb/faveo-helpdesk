@@ -8,6 +8,17 @@
                                           | |                         
                                           |_|                         
 |=====================================================
+| v1.11.1 Urgent security patch
+|=====================================================
+This release is a patch update for the high-level security risk found and reported by [Shahrir Shafie](https://www.linkedin.com/in/shahrir-shafie-884293117) in the vulnerable API endpoints.
+
+We categorized this vulnerability as a Severe level issue and recommend everyone to update the system ASAP.
+
+Follow this [Upgrade Guide](https://github.com/ladybirdweb/faveo-helpdesk/wiki/General-Faveo-Upgrade-Guide---Manual) to update your system. 
+
+> Note the issue is affecting all the older version of the system, if in any case you are not able to update the system, we request you to get in touch with support and get your system patched.
+
+|=====================================================
 | v1.11.0 Urgent security patch and theme update
 |=====================================================
 This is an urgent patch for several security vulnerabilities found and reported by [Securized](https://github.com/securized) in the system. We highly recommend updating the system to get rid of all the security issues in your system and secure your system from vulnerabilities and attackers.
