@@ -665,12 +665,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('published/{id}', ['as' => 'published', 'uses' => 'Agent\kb\SettingsController@publish']);
     /* Route for deleting comments */
     Route::delete('deleted/{id}', ['as' => 'deleted', 'uses' => 'Agent\kb\SettingsController@delete']);
-    /* Route for Profile  */
-    // $router->get('profile', ['as' => 'profile', 'uses' => 'Agent\kb\SettingsController@getProfile']);
-    /* Profile Update */
-    // $router->patch('post-profile', ['as' => 'post-profile', 'uses' =>'Agent\kb\SettingsController@postProfile'] );
-    /* Profile password Update */
-    // $router->patch('post-profile-password/{id}',['as' => 'post-profile-password', 'uses' => 'Agent\kb\SettingsController@postProfilepassword']);
     /* delete Logo */
     Route::get('delete-logo/{id}', ['as' => 'delete-logo', 'uses' => 'Agent\kb\SettingsController@deleteLogo']);
     /* delete Background */
@@ -720,10 +714,6 @@ Route::group(['middleware' => ['web']], function () {
     //to get the value for page content
     Route::get('pages/{name}', ['as' => 'pages', 'uses' => 'Client\kb\UserController@getPage']);
 
-    //profile
-    // $router->get('client-profile',['as' => 'client-profile', 'uses' => 'Client\kb\UserController@clientProfile']);
-    // Route::patch('client-profile-edit',['as' => 'client-profile-edit', 'uses' => 'Client\kb\UserController@postClientProfile']);
-    // Route::patch('client-profile-password/{id}',['as' => 'client-profile-password', 'uses' => 'Client\kb\UserController@postClientProfilePassword']);
     Route::get('/inbox/data', ['as' => 'api.inbox', 'uses' => 'Agent\helpdesk\TicketController@get_inbox']);
 //    Route::get('/report', 'HomeController@getreport');
 //    Route::get('/reportdata', 'HomeController@pushdata');
