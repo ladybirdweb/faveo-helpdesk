@@ -39,6 +39,7 @@ class FilterController extends Controller
      * @category constructor function
      *
      * @param Array/Object $request
+     *
      * @return null
      */
     public function __construct(Request $req)
@@ -52,6 +53,7 @@ class FilterController extends Controller
      * @category function to handle ticket table/filteration request and build tables
      *
      * @param Array/Object $request
+     *
      * @return json response //build by getTable() function in TicketController
      */
     public function getFilter(Request $request)
@@ -140,7 +142,8 @@ class FilterController extends Controller
     /**
      * @category function to check of all the parameters passed to the URL are correct or not
      *
-     * @param  array  $inputs
+     * @param array $inputs
+     *
      * @return bool true/false
      */
     public function checkRequestIsCorrect($table, $inputs)
@@ -171,7 +174,7 @@ class FilterController extends Controller
         }
         ksort($inputs);
         foreach ($inputs as $key => $input) {
-            if (! in_array($key, $available_options)) {
+            if (!in_array($key, $available_options)) {
                 // dd('here '.$key);
                 $table = $table->where('tickets.id', '=', null);
             } else {
@@ -185,7 +188,8 @@ class FilterController extends Controller
     /**
      * @category function to filter tickets based on user input requests
      *
-     * @param  string  $input, $value, $table
+     * @param string $input, $value, $table
+     *
      * @return builder $table
      */
     public function filterByInputs($input, $value, $table, $is_mytickets)
@@ -354,7 +358,8 @@ class FilterController extends Controller
     /**
      * @category function to filter the tickets based on show value in the request
      *
-     * @param  array  $value(), builder object $table
+     * @param array $value(), builder object $table
+     *
      * @return builder object $table
      */
     public function showPage($value, $table)
@@ -431,7 +436,7 @@ class FilterController extends Controller
     /**
      * @category function to filter tickets builder based on agent/admin departments
      *
-     * @param  array  $value //requested department, $table
+     * @param array $value //requested department, $table
      *
      * @var array
      *
@@ -461,7 +466,7 @@ class FilterController extends Controller
     /**
      * @category function to return department ids and access right of departments for agents
      *
-     * @param  array  $departments
+     * @param array $departments
      *
      * @var array
      *
@@ -485,7 +490,7 @@ class FilterController extends Controller
     /**
      * @category function to filter and return ticket query builder based on priority
      *
-     * @param  array  $priority, builder $table
+     * @param array $priority, builder $table
      *
      * @var array
      *
@@ -578,7 +583,7 @@ class FilterController extends Controller
     /**
      * @category function to filter table for various date option like created, last modified, duo date and overdue
      *
-     * @param  string  $type (to check type of filter to apply on date), string $value for filters, builder $table
+     * @param string $type (to check type of filter to apply on date), string $value for filters, builder $table
      *
      * @var array [start and end dates]
      *
@@ -620,7 +625,7 @@ class FilterController extends Controller
     /**
      * @category function to get start and end date to apply date filter
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @var date string, date string
      *
@@ -867,7 +872,7 @@ class FilterController extends Controller
      * @category function to apply date filters in table builder after
      * getting start and end date based on the type of date filter
      *
-     * @param  array  $dates, builder $table, $column (type of filter based on which column is being chosen), $value
+     * @param array $dates, builder $table, $column (type of filter based on which column is being chosen), $value
      *
      * @var string (name of column), array
      *
@@ -901,7 +906,7 @@ class FilterController extends Controller
     /**
      * @category function to filter ticket by source of creation
      *
-     * @param  array  $name of source, builder $table
+     * @param array $name of source, builder $table
      *
      * @var array
      *
@@ -922,7 +927,8 @@ class FilterController extends Controller
      *
      * @category function to get array of status to filter tickets
      *
-     * @param  string  $status
+     * @param string $status
+     *
      * @return array $status_array
      */
     // public function getStatusArray($status)
@@ -968,6 +974,7 @@ class FilterController extends Controller
      * @category function to filter table builder based on requested status
      *
      * @param string array $status_array, builder $table
+     *
      * @return builder $table
      */
     public function filterByStatus($status_array, $table)
@@ -983,7 +990,8 @@ class FilterController extends Controller
     /**
      * @category function to format and return user tickets
      *
-     * @param  string  $segment
+     * @param string $segment
+     *
      * @return builder
      */
     public function formatUserTickets($segment)
@@ -1029,6 +1037,7 @@ class FilterController extends Controller
      * @category function to filter results on basis of last replier
      *
      * @param string array $value, builder $ticket
+     *
      * @return builder
      */
     public function filterByLastResponder($value, $tickets)
@@ -1066,7 +1075,8 @@ class FilterController extends Controller
     /**
      * @category function to apply help topic filter
      *
-     * @param  array  $value, object $table
+     * @param array $value, object $table
+     *
      * @return builder
      */
     public function filterByHelpTopic($value, $table)
@@ -1080,8 +1090,9 @@ class FilterController extends Controller
      * @category function to return builder for show filter after checking if input
      * request has status or not
      *
-     * @param  bool  $has_status(if request has status filter values or not),
+     * @param bool $has_status(if request has status filter values or not),
      *                            Object $table, string $status(basic pupose if status)
+     *
      * @return object $table;
      */
     public function returnShowPageWithStatus($has_status, $table, $status)

@@ -58,7 +58,8 @@ class MailController extends Controller
     /**
      * separate reply.
      *
-     * @param  type  $body
+     * @param type $body
+     *
      * @return type string
      */
     public function separate_reply($body)
@@ -70,13 +71,14 @@ class MailController extends Controller
     }
 
     /**
-     * @param  object  $email
+     * @param object $email
+     *
      * @return int
      */
     public function priority($email)
     {
         $priority = $email->priority;
-        if (! $priority) {
+        if (!$priority) {
             $priority = $this->ticketController()->getSystemDefaultPriority();
         }
 
@@ -86,13 +88,14 @@ class MailController extends Controller
     /**
      * get department.
      *
-     * @param  object  $email
+     * @param object $email
+     *
      * @return int
      */
     public function department($email)
     {
         $department = $email->department;
-        if (! $department) {
+        if (!$department) {
             $department = $this->ticketController()->getSystemDefaultDepartment();
         }
 
@@ -102,14 +105,15 @@ class MailController extends Controller
     /**
      * get help topic.
      *
-     * @param  object  $email
+     * @param object $email
+     *
      * @return int
      */
     public function helptopic($email)
     {
         //dd($email);
         $helptopic = $email->help_topic;
-        if (! $helptopic) {
+        if (!$helptopic) {
             $helptopic = $this->ticketController()->getSystemDefaultHelpTopic();
         }
 
@@ -119,7 +123,8 @@ class MailController extends Controller
     /**
      * get sla.
      *
-     * @param  object  $email
+     * @param object $email
+     *
      * @return int
      */
     public function sla($email)
@@ -129,7 +134,7 @@ class MailController extends Controller
         if ($help) {
             $sla = $help->sla_plan;
         }
-        if (! $sla) {
+        if (!$sla) {
             $sla = $this->ticketController()->getSystemDefaultSla();
         }
 
@@ -185,17 +190,17 @@ class MailController extends Controller
     public function getMessageContent($message, $email)
     {
         $body = $message->getMessageBody(true);
-        if (! $body) {
+        if (!$body) {
             $body = $message->getMessageBody();
         }
         $body = $this->separateReply($body);
         $subject = $message->getSubject();
         $address = $message->getAddresses('reply-to');
-        if (! $address) {
+        if (!$address) {
             $address = $message->getAddresses('from');
         }
         $collaborators = $this->collaburators($message, $email);
-        $attachments = (! $message->getAttachments()) ? [] : $message->getAttachments();
+        $attachments = (!$message->getAttachments()) ? [] : $message->getAttachments();
         //dd(['body' => $body, 'subject' => $subject, 'address' => $address, 'cc' => $collaborator, 'attachments' => $attachments]);
         $this->workflow($address, $subject, $body, $collaborators, $attachments, $email);
     }
@@ -341,7 +346,8 @@ class MailController extends Controller
     /**
      * function to load data.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return type file
      */
     public function get_data($id)
@@ -365,7 +371,8 @@ class MailController extends Controller
     /**
      * separate reply.
      *
-     * @param  type  $body
+     * @param type $body
+     *
      * @return type string
      */
     public function separateReply($body)

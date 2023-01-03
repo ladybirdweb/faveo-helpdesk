@@ -41,10 +41,10 @@ class NotificationController extends Controller
     /**
      * This function is used to create in app notifications.
      *
-     * @param  type  $model_id
-     * @param  type  $userid_created
-     * @param  type  $type_id
-     * @param  type  $forwhome
+     * @param type $model_id
+     * @param type $userid_created
+     * @param type $type_id
+     * @param type $forwhome
      */
     public function create($model_id, $userid_created, $type_id, $forwhome = [])
     {
@@ -70,7 +70,8 @@ class NotificationController extends Controller
     /**
      * This function is to mark all ticket to read status.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return int
      */
     public function markAllRead($id)
@@ -87,7 +88,8 @@ class NotificationController extends Controller
     /**
      * This function to mark read.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return int
      */
     public function markRead($id)
@@ -116,7 +118,8 @@ class NotificationController extends Controller
     /**
      * function to delete notifications.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return int
      */
     public function delete($id)

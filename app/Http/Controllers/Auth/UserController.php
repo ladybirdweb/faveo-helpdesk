@@ -54,6 +54,7 @@ class UserController extends Controller
      * Display a listing of the resource.
      *
      * @param type User $user
+     *
      * @return type Response
      */
     public function index()
@@ -156,6 +157,7 @@ class UserController extends Controller
      *
      * @param type User            $user
      * @param type Sys_userRequest $request
+     *
      * @return type Response
      */
     public function store(User $user, Sys_userRequest $request)
@@ -189,6 +191,7 @@ class UserController extends Controller
      *
      * @param type int  $id
      * @param type User $user
+     *
      * @return type Response
      */
     public function show($id, User $user)
@@ -208,6 +211,7 @@ class UserController extends Controller
      *
      * @param type int  $id
      * @param type User $user
+     *
      * @return type Response
      */
     public function edit($id, User $user)
@@ -228,6 +232,7 @@ class UserController extends Controller
      * @param type int            $id
      * @param type User           $user
      * @param type Sys_userUpdate $request
+     *
      * @return type Response
      */
     public function update($id, User $user, Sys_userUpdate $request)
@@ -255,6 +260,7 @@ class UserController extends Controller
      *
      * @param type int  $id
      * @param type User $user
+     *
      * @return type Response
      */
     public function destroy($id, User $user)
@@ -280,7 +286,8 @@ class UserController extends Controller
     /**
      * User Assign Org.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return type boolean
      */
     public function UserAssignOrg($id)
