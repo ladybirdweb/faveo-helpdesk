@@ -59,7 +59,7 @@ if (DB_HOST && DB_USER && DB_NAME) {
     ?>
     <?php
     $mysqli_ok = true;
-    $results = array();
+    $results = [];
     // error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
     error_reporting(0);
     if ($default == 'mysql') {

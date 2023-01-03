@@ -143,12 +143,12 @@ function validate_memory_limit(&$results) {
  * @return string
  */
 function format_file_size($value) {
-    $data = array(
+    $data = [
         'TB' => 1099511627776,
         'GB' => 1073741824,
         'MB' => 1048576,
         'kb' => 1024,
-    );
+    ];
 
     // commented because of integer overflow on 32bit sistems
     // http://php.net/manual/en/language.types.integer.php#language.types.integer.overflow
@@ -206,7 +206,7 @@ function validate_extensions(&$results) {
         $ok = false;
     } // if
 
-    $recommended_extensions = array(
+    $recommended_extensions = [
         // 'imap' => 'IMAP extension is used for connecting to mail server using IMAP settings to fetch emails in the system.',
         // 'mcrypt' => 'Optional extension',
         // 'gd' => 'GD is used for image manipulation. Without it, system is not able to create thumbnails for files or manage avatars, logos and project icons. Please refer to <a href="http://www.php.net/manual/en/image.installation.php">this</a> page for installation instructions',
@@ -216,7 +216,7 @@ function validate_extensions(&$results) {
         // 'imap' => 'IMAP is used to connect to POP3 and IMAP servers. Without it, Incoming Mail module will not work. Please refer to <a href="http://www.php.net/manual/en/imap.installation.php">this</a> page for installation instructions',
         // 'zlib' => 'ZLIB is used to read and write gzip (.gz) compressed files',
         // SVN extension ommited, to avoid confusion
-    );
+    ];
 
     foreach ($recommended_extensions as $recommended_extension => $recommended_extension_desc) {
         if (extension_loaded($recommended_extension)) {
@@ -268,7 +268,7 @@ function checkMaxExecutiontime(&$results)
 //  Do the magic
 // ---------------------------------------------------
 
-$results = array();
+$results = [];
 
 $php_ok = validate_php($results);
 $memory_ok = validate_memory_limit($results);

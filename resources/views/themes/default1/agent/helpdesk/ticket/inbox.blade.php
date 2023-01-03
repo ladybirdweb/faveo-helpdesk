@@ -52,9 +52,9 @@ class="nav-link active"
 $date_time_format = UTC::getDateTimeFormat();
 if (Auth::user()->role == 'agent') {
     $dept = App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
-    $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status', array(1, 7))->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->count();
+    $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status', [1, 7])->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->count();
 } else {
-    $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status', array(1, 7))->orderBy('id', 'DESC')->count();
+    $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status', [1, 7])->orderBy('id', 'DESC')->count();
 }
 ?>
 <!-- Main content -->

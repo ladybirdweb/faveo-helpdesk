@@ -1368,8 +1368,8 @@ class="nav-link active"
                     <div class="modal-body">
 
                         <?php
-                        $groups = App\Model\helpdesk\Agent\Groups::all(array('id', 'name'));
-                        $departments = App\Model\helpdesk\Agent\Department::all(array('id', 'name'));
+                        $groups = App\Model\helpdesk\Agent\Groups::all(['id', 'name']);
+                        $departments = App\Model\helpdesk\Agent\Department::all(['id', 'name']);
                         ?>
 
                         <!-- <div class="col-sm-4 form-group {{ $errors->has('group') ? 'has-error' : '' }}"> -->
@@ -1440,8 +1440,8 @@ class="nav-link active"
                     <div class="modal-body">
 
                         <?php
-                        $groups = App\Model\helpdesk\Agent\Groups::all(array('id', 'name'));
-                        $departments = App\Model\helpdesk\Agent\Department::all(array('id', 'name'));
+                        $groups = App\Model\helpdesk\Agent\Groups::all(['id', 'name']);
+                        $departments = App\Model\helpdesk\Agent\Department::all(['id', 'name']);
                         ?>
 
                         <!-- <div class="col-sm-4 form-group {{ $errors->has('group') ? 'has-error' : '' }}"> -->

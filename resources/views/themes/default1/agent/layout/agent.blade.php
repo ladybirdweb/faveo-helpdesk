@@ -101,7 +101,7 @@
         <div class="wrapper">
 
             <?php
-            $replacetop = \Event::fire('service.desk.agent.topbar.replace', array());
+            $replacetop = \Event::fire('service.desk.agent.topbar.replace', []);
 
             if (count($replacetop) == 0) {
                 $replacetop = 0;
@@ -109,7 +109,7 @@
                 $replacetop = $replacetop[0];
             }
 
-            $replaceside = \Event::fire('service.desk.agent.sidebar.replace', array());
+            $replaceside = \Event::fire('service.desk.agent.sidebar.replace', []);
 
             if (count($replaceside) == 0) {
                 $replaceside = 0;
@@ -166,10 +166,10 @@
                     </li>
                     @endif
                     
-                    <?php \Event::fire('calendar.topbar', array()); ?>
+                    <?php \Event::fire('calendar.topbar', []); ?>
                 </ul>
                 @else
-                <?php \Event::fire('service.desk.agent.topbar', array()); ?>
+                <?php \Event::fire('service.desk.agent.topbar', []); ?>
                 @endif
 
                 <ul class="navbar-nav ml-auto">
@@ -490,7 +490,7 @@
                             @endforeach
                             @else
 
-                            <?php \Event::fire('service.desk.agent.sidebar', array()); ?>
+                            <?php \Event::fire('service.desk.agent.sidebar', []); ?>
                             @endif
                         </ul>
                     </nav>
@@ -571,7 +571,7 @@
                         </nav>
                     </div>
                     @endif
-                    <?php \Event::fire('service.desk.agent.topsubbar', array()); ?>
+                    <?php \Event::fire('service.desk.agent.topsubbar', []); ?>
                   <!-- /.tab-pane -->
                 </div>
                 <!-- Content Header (Page header) -->
@@ -584,7 +584,7 @@
                       
                             
                             @endif
-<?php \Event::fire('service.desk.agent.topsubbar', array()); ?>
+<?php \Event::fire('service.desk.agent.topsubbar', []); ?>
                         </div>
                     </div>
                 </div>
@@ -806,8 +806,8 @@
         </script>
         <script>
 </script>
-<?php Event::fire('show.calendar.script', array()); ?>
-<?php Event::fire('load-calendar-scripts', array()); ?>
+<?php Event::fire('show.calendar.script', []); ?>
+<?php Event::fire('load-calendar-scripts', []); ?>
         @yield('FooterInclude')
     </body>
 </html>

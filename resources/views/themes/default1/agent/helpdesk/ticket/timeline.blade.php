@@ -149,7 +149,7 @@ if ($thread->title != "") {
             @endif
 
 
-            <?php Event::fire('show-add-event-btn', array()); ?>
+            <?php Event::fire('show-add-event-btn', []); ?>
 
             <a href="{{url('ticket/print/'.$tickets->id)}}" target="_blank" class="btn btn-default btn-tool btn-sm"><i class="fas fa-print" > </i> {!! Lang::get('lang.generate_pdf') !!}</a>
             <div class="btn-group">
@@ -311,7 +311,7 @@ if ($thread->title != "") {
             </div>
         </div>
 
-        <?php Event::fire('ticket.timeline.marble',array($TicketData));?>
+        <?php Event::fire('ticket.timeline.marble',[$TicketData]);?>
         <div id="gifshow" style="display:none" class="text-center">
             <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}">
         </div>  <!-- added 05/05/2016-->
@@ -1072,7 +1072,7 @@ if ($thread->title != "") {
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    <?php \Event::fire('show-add-calendar-model', array('id' => $tickets->id))?>
+    <?php \Event::fire('show-add-calendar-model', ['id' => $tickets->id])?>
     <!-- add or search user Modal -->
     <div class="modal fade" id="addccc">
         <div class="modal-dialog">

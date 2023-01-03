@@ -665,7 +665,7 @@
     </div>
     <!-- ./box-body -->
 </div>
-<?php \Event::fire('service.desk.admin.settings', array()); ?>
+<?php \Event::fire('service.desk.admin.settings', []); ?>
 
 
 @stop
