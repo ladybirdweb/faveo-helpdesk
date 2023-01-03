@@ -9,6 +9,7 @@ class Security extends BaseModel
     /* Using auto_response table  */
 
     protected $table = 'settings_security';
+
     /* Set fillable fields in table */
     protected $fillable = [
 

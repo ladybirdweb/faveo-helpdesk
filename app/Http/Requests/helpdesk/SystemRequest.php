@@ -30,7 +30,7 @@ class SystemRequest extends Request
     {
         return [
             'name' => 'max:50',
-            'url'  => 'url',
+            'url' => 'url',
         ];
     }
 }

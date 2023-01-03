@@ -38,8 +38,7 @@ class ForgotPasswordController extends Controller
     /**
      * Send a reset link to the given user.
      *
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function sendResetLinkEmail(Request $request)
@@ -69,10 +68,10 @@ class ForgotPasswordController extends Controller
                         $name = $user->user_name;
                     }
                     $value = [
-                        'url'    => url('password/reset/'.$code),
-                        'name'   => $name,
+                        'url' => url('password/reset/'.$code),
+                        'name' => $name,
                         'mobile' => $user->mobile,
-                        'code'   => $user->country_code, ];
+                        'code' => $user->country_code, ];
                     \Event::fire('reset.password2', [$value]);
                 }
 

@@ -46,7 +46,6 @@ class UnAuthController extends Controller
      * @param type User          $user
      * @param type Tickets       $ticket
      * @param type Ticket_Thread $thread
-     *
      * @return type Response
      */
     public function PostCheckTicket(Request $request)
@@ -119,8 +118,7 @@ class UnAuthController extends Controller
     /**
      * generate random string token for ticket.
      *
-     * @param type $length
-     *
+     * @param  type  $length
      * @return string
      */
     public function generate_random_ticket_token($length = 10)
@@ -138,9 +136,8 @@ class UnAuthController extends Controller
     /**
      * function to check the ticket without loggin In.
      *
-     * @param type $ticket_id
-     * @param type $token
-     *
+     * @param  type  $ticket_id
+     * @param  type  $token
      * @return type view
      */
     public function showTicketCode($ticket_id, $token)
@@ -237,9 +234,8 @@ class UnAuthController extends Controller
     /**
      * function to change the status of the ticket.
      *
-     * @param type $status
-     * @param type $id
-     *
+     * @param  type  $status
+     * @param  type  $id
      * @return string
      */
     public function changeStatus($status, $id)
@@ -326,8 +322,7 @@ class UnAuthController extends Controller
     /**
      *@category function to change system's language
      *
-     *@param string $lang //desired language's iso code
-     *
+     *@param  string  $lang //desired language's iso code
      *@return response
      */
     public static function changeLanguage($lang)
@@ -423,7 +418,7 @@ class UnAuthController extends Controller
     /**
      * Function to chnage user language preference.
      *
-     * @param string $lang //desired language's iso code
+     * @param  string  $lang //desired language's iso code
      *
      * @category function to change system's language
      *

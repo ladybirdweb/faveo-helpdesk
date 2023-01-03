@@ -9,9 +9,13 @@ class ClientTicketForm extends Event
     use SerializesModels;
 
     public $para1;
+
     public $para2;
+
     public $para3;
+
     public $para4;
+
     public $para5;
 
     public function __construct($para1 = '', $para2 = '', $para3 = '', $para4 = '', $para5 = '')

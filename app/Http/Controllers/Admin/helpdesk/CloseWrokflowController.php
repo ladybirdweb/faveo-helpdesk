@@ -25,8 +25,7 @@ class CloseWrokflowController extends Controller
     /**
      * get the workflow settings page.
      *
-     * @param \App\Model\helpdesk\Workflow\WorkflowClose $securitys
-     *
+     * @param  \App\Model\helpdesk\Workflow\WorkflowClose  $securitys
      * @return type view
      */
     public function index(WorkflowClose $securitys)
@@ -43,9 +42,8 @@ class CloseWrokflowController extends Controller
     /**
      * updating the workflow settings for closing ticket.
      *
-     * @param type                                             $id
-     * @param \App\Http\Requests\helpdesk\WorkflowCloseRequest $request
-     *
+     * @param  type  $id
+     * @param  \App\Http\Requests\helpdesk\WorkflowCloseRequest  $request
      * @return type redirect
      */
     public function update($id, WorkflowCloseRequest $request)

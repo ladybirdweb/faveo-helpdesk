@@ -7,6 +7,7 @@ use App\BaseModel;
 class Emails extends BaseModel
 {
     protected $table = 'emails';
+
     protected $fillable = [
         'email_address', 'email_name', 'department', 'priority', 'help_topic',
         'user_name', 'password', 'fetching_host', 'fetching_port', 'fetching_protocol', 'fetching_encryption', 'mailbox_protocol',

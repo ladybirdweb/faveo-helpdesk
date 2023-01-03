@@ -17,14 +17,15 @@ class Article extends BaseModel
      */
     protected $searchable = [
         'columns' => [
-            'name'        => 10,
-            'slug'        => 10,
+            'name' => 10,
+            'slug' => 10,
             'description' => 10,
         ],
     ];
 
     /*  define the table name to get the properties of article model as protected  */
     protected $table = 'kb_article';
+
     /* define the fillable field in the table */
     protected $fillable = ['name', 'slug', 'description', 'type', 'status', 'publish_time'];
 }

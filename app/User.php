@@ -45,7 +45,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if ($info) {
             $pic = $this->checkArray('avatar', $info);
         }
-        if (!$pic && $value) {
+        if (! $pic && $value) {
             $pic = '';
             $file = asset('uploads/profilepic/'.$value);
             if ($file) {
@@ -54,7 +54,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $pic = 'data:image/'.$type.';base64,'.base64_encode($data);
             }
         }
-        if (!$value) {
+        if (! $value) {
             $pic = \Gravatar::src($this->attributes['email']);
         }
 
@@ -113,7 +113,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getEmailAttribute($value)
     {
-        if (!$value) {
+        if (! $value) {
             $value = \Lang::get('lang.not-available');
         }
 

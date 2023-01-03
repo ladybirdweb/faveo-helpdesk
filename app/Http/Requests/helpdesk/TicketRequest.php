@@ -47,7 +47,7 @@ class TicketRequest extends Request
     public function size()
     {
         $files = $this->file('attachment');
-        if (!$files) {
+        if (! $files) {
             throw new \Exception('exceeded', 422);
         }
         $size = 0;

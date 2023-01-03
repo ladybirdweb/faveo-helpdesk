@@ -24,12 +24,12 @@ class RatingRequest extends Request
     public function rules()
     {
         return [
-            'name'               => 'required|unique:ratings|max:20',
-            'display_order'      => 'required|integer',
+            'name' => 'required|unique:ratings|max:20',
+            'display_order' => 'required|integer',
             'allow_modification' => 'required',
-            'rating_scale'       => 'required',
-            'rating_area'        => 'required',
-            'restrict'           => 'required',
+            'rating_scale' => 'required',
+            'rating_area' => 'required',
+            'restrict' => 'required',
         ];
     }
 }

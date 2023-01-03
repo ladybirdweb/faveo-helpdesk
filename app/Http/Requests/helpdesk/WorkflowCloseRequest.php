@@ -24,10 +24,10 @@ class WorkflowCloseRequest extends Request
     public function rules()
     {
         return [
-            'days'              => 'required|integer|min:1',
+            'days' => 'required|integer|min:1',
             // 'condition'         => 'required|integer',
-            'send_email'        => 'required|integer',
-            'status'            => 'required|integer',
+            'send_email' => 'required|integer',
+            'status' => 'required|integer',
         ];
     }
 }

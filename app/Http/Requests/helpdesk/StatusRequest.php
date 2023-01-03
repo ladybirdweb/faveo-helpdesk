@@ -24,9 +24,9 @@ class StatusRequest extends Request
     public function rules()
     {
         return [
-            'name'            => 'required',
-            'sort'            => 'required|numeric',
-            'icon_class'      => 'required',
+            'name' => 'required',
+            'sort' => 'required|numeric',
+            'icon_class' => 'required',
 
         ];
     }

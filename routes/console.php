@@ -19,7 +19,7 @@ Artisan::command('inspire', function () {
 
 Artisan::command('mac-update', function () {
     $emails = new App\Model\helpdesk\Email\Emails();
-    $emails->update(['password'=>encrypt('')]);
+    $emails->update(['password' => encrypt('')]);
 })->describe('Updating encrypted value to null');
 
 /*

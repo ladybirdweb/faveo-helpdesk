@@ -9,6 +9,7 @@ class System extends BaseModel
     /* Using System Table */
 
     protected $table = 'settings_system';
+
     protected $fillable = [
 
         'id', 'status', 'url', 'name', 'department', 'page_size', 'log_level', 'purge_log', 'name_format',

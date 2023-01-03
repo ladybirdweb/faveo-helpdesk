@@ -29,12 +29,12 @@ class DatabaseRequest extends Request
     public function rules()
     {
         return [
-            'default'       => 'required',
-            'host'          => 'required',
-            'databasename'  => 'required',
-            'username'      => 'required',
+            'default' => 'required',
+            'host' => 'required',
+            'databasename' => 'required',
+            'username' => 'required',
             // 'password'      =>  '',
-            'port'          => 'integer|min:0',
+            'port' => 'integer|min:0',
         ];
     }
 }

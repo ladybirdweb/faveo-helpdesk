@@ -33,7 +33,7 @@ class QueueRequest extends Request
     {
         $rules = [];
         if (count($request) > 0) {
-            foreach ($request as $key=>$value) {
+            foreach ($request as $key => $value) {
                 $rules[$key] = 'required';
             }
         }

@@ -29,9 +29,9 @@ class SecurityRequest extends Request
     public function rules()
     {
         return [
-            'lockout_message'     => 'required',
-            'backlist_threshold'  => 'required|numeric',
-            'lockout_period'      => 'required|numeric',
+            'lockout_message' => 'required',
+            'backlist_threshold' => 'required|numeric',
+            'lockout_period' => 'required|numeric',
         ];
     }
 }

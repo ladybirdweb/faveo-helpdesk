@@ -121,7 +121,6 @@ class PageController extends Controller
      * To insert a value to the table Page.
      *
      * @param type Request $request
-     *
      * @return type
      */
     public function store(PageRequest $request)
@@ -142,8 +141,7 @@ class PageController extends Controller
     /**
      * To edit a page.
      *
-     * @param type $slug
-     *
+     * @param  type  $slug
      * @return type view
      */
     public function edit($slug)
@@ -160,9 +158,8 @@ class PageController extends Controller
     /**
      * To update a page.
      *
-     * @param type $slug
+     * @param  type  $slug
      * @param type PageUpdate $request
-     *
      * @return type redirect
      */
     public function update($slug, PageRequest $request)
@@ -186,8 +183,7 @@ class PageController extends Controller
     /**
      * To Delete a Page.
      *
-     * @param type $id
-     *
+     * @param  type  $id
      * @return type redirect
      */
     public function destroy($id)

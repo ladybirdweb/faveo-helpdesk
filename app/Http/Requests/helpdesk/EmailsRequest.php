@@ -30,7 +30,7 @@ class EmailsRequest extends Request
     {
         return [
             'email_address' => 'required|email|unique:emails',
-            'email_name'    => 'required',
+            'email_name' => 'required',
             // 'department' => 'required',
             // 'priority' => 'required',
             // 'help_topic' => 'required',

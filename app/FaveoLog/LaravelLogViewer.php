@@ -16,31 +16,33 @@ class LaravelLogViewer
      * @var string file
      */
     private static $file;
+
     private static $levels_classes = [
-        'debug'     => 'info',
-        'info'      => 'info',
-        'notice'    => 'info',
-        'warning'   => 'warning',
-        'error'     => 'danger',
-        'critical'  => 'danger',
-        'alert'     => 'danger',
+        'debug' => 'info',
+        'info' => 'info',
+        'notice' => 'info',
+        'warning' => 'warning',
+        'error' => 'danger',
+        'critical' => 'danger',
+        'alert' => 'danger',
         'emergency' => 'danger',
     ];
+
     private static $levels_imgs = [
-        'debug'     => 'info',
-        'info'      => 'info',
-        'notice'    => 'info',
-        'warning'   => 'warning',
-        'error'     => 'warning',
-        'critical'  => 'warning',
-        'alert'     => 'warning',
+        'debug' => 'info',
+        'info' => 'info',
+        'notice' => 'info',
+        'warning' => 'warning',
+        'error' => 'warning',
+        'critical' => 'warning',
+        'alert' => 'warning',
         'emergency' => 'warning',
     ];
 
     const MAX_FILE_SIZE = 52428800; // Why? Uh... Sorry
 
     /**
-     * @param string $file
+     * @param  string  $file
      */
     public static function setFile($file)
     {
@@ -88,9 +90,9 @@ class LaravelLogViewer
 
         $pattern = '/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\].*/';
 
-        if (!self::$file) {
+        if (! self::$file) {
             $log_file = self::getFiles();
-            if (!count($log_file)) {
+            if (! count($log_file)) {
                 return [];
             }
             self::$file = $log_file[0];
@@ -104,7 +106,7 @@ class LaravelLogViewer
 
         preg_match_all($pattern, $file, $headings);
 
-        if (!is_array($headings)) {
+        if (! is_array($headings)) {
             return $log;
         }
 
@@ -120,7 +122,7 @@ class LaravelLogViewer
                     if (strpos(strtolower($h[$i]), '.'.$level_value)) {
                         preg_match('/^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\].*?(\w+)\.'.$level_key.': (.*?)( in .*?:[0-9]+)?$/', $h[$i], $current);
 
-                        if (!isset($current[3])) {
+                        if (! isset($current[3])) {
                             continue;
                         }
 
@@ -140,14 +142,14 @@ class LaravelLogViewer
                         }
                         //dd($current);
                         $log[] = [
-                            'context'     => $context,
-                            'level'       => $level_value,
+                            'context' => $context,
+                            'level' => $level_value,
                             'level_class' => self::$levels_classes[$level_value],
-                            'level_img'   => self::$levels_imgs[$level_value],
-                            'date'        => self::date($current[1]),
-                            'text'        => $message,
-                            'in_file'     => isset($current[4]) ? $current[4] : null,
-                            'stack'       => preg_replace("/^\n*/", '', $log_data[$i]),
+                            'level_img' => self::$levels_imgs[$level_value],
+                            'date' => self::date($current[1]),
+                            'text' => $message,
+                            'in_file' => isset($current[4]) ? $current[4] : null,
+                            'stack' => preg_replace("/^\n*/", '', $log_data[$i]),
                         ];
                     }
                 }
@@ -158,8 +160,7 @@ class LaravelLogViewer
     }
 
     /**
-     * @param bool $basename
-     *
+     * @param  bool  $basename
      * @return array
      */
     public static function getFiles($basename = false)

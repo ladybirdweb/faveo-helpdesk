@@ -7,6 +7,7 @@ use App\BaseModel;
 class Groups extends BaseModel
 {
     protected $table = 'groups';
+
     protected $fillable = [
         'name', 'group_status', 'can_create_ticket', 'can_edit_ticket',
         'can_post_ticket', 'can_close_ticket', 'can_assign_ticket',

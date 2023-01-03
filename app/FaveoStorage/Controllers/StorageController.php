@@ -12,17 +12,29 @@ use Storage;
 class StorageController extends Controller
 {
     protected $default;
+
     protected $driver;
+
     protected $root;
+
     protected $s3_key;
+
     protected $s3_region;
+
     protected $s3_secret;
+
     protected $s3_bucket;
+
     protected $rackspace_key;
+
     protected $rackspace_region;
+
     protected $rackspace_username;
+
     protected $rackspace_container;
+
     protected $rackspace_endpoint;
+
     protected $rackspace_url_type;
 
     public function __construct()
@@ -148,8 +160,8 @@ class StorageController extends Controller
     {
         return [
             'default' => $this->default,
-            'cloud'   => 's3',
-            'disks'   => $this->disks(),
+            'cloud' => 's3',
+            'disks' => $this->disks(),
         ];
     }
 
@@ -158,23 +170,23 @@ class StorageController extends Controller
         return [
             'local' => [
                 'driver' => 'local',
-                'root'   => $this->root.'/attachments',
+                'root' => $this->root.'/attachments',
             ],
             's3' => [
                 'driver' => 's3',
-                'key'    => $this->s3_key,
+                'key' => $this->s3_key,
                 'secret' => $this->s3_secret,
                 'region' => $this->s3_region,
                 'bucket' => $this->s3_bucket,
             ],
             'rackspace' => [
-                'driver'    => 'rackspace',
-                'username'  => $this->rackspace_username,
-                'key'       => $this->rackspace_key,
+                'driver' => 'rackspace',
+                'username' => $this->rackspace_username,
+                'key' => $this->rackspace_key,
                 'container' => $this->rackspace_container,
-                'endpoint'  => $this->rackspace_endpoint,
-                'region'    => $this->rackspace_region,
-                'url_type'  => $this->rackspace_url_type,
+                'endpoint' => $this->rackspace_endpoint,
+                'region' => $this->rackspace_region,
+                'url_type' => $this->rackspace_url_type,
             ],
         ];
     }

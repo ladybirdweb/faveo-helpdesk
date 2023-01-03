@@ -28,8 +28,8 @@ class Version1079table extends Migration
 
         if (Schema::hasTable('common_settings')) {
             $settings = DB::table('common_settings')->where('option_name', 'itil')->first();
-            if (!$settings) {
-                DB::table('common_settings')->insert(['option_name'=>'itil', 'status'=>'0']);
+            if (! $settings) {
+                DB::table('common_settings')->insert(['option_name' => 'itil', 'status' => '0']);
             }
         }
     }

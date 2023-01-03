@@ -18,8 +18,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('password/reset', ['uses' => 'Auth\PasswordController@reset', 'as' => 'post.reset']);
         Route::get('auth/logout', ['uses' => 'Auth\AuthController@getLogout', 'as' => 'get.logout']);
         Route::get('social/login/redirect/{provider}/{redirect?}', ['uses' => 'Auth\AuthController@redirectToProvider', 'as' => 'social.login']);
-        Route::get('social/login/{provider}', ['as'=>'social.login.callback', 'uses'=>'Auth\AuthController@handleProviderCallback']);
-        Route::get('social-sync', ['as'=>'social.sync', 'uses'=>'Client\helpdesk\GuestController@sync']);
+        Route::get('social/login/{provider}', ['as' => 'social.login.callback', 'uses' => 'Auth\AuthController@handleProviderCallback']);
+        Route::get('social-sync', ['as' => 'social.sync', 'uses' => 'Client\helpdesk\GuestController@sync']);
     });
 
     /*
@@ -126,11 +126,11 @@ Route::group(['middleware' => ['web']], function () {
         Route::resource('forms', 'Admin\helpdesk\FormController');
         Route::get('forms/add-child/{formid}', ['as' => 'forms.add.child', 'uses' => 'Admin\helpdesk\FormController@addChildForm']);
         Route::post('forms/field/{fieldid}/child', [
-            'as'   => 'forms.field.child',
+            'as' => 'forms.field.child',
             'uses' => 'Admin\helpdesk\FormController@addChild',
         ]);
         Route::get('forms/render/child', [
-            'as'   => 'forms.field.child',
+            'as' => 'forms.field.child',
             'uses' => 'Admin\helpdesk\FormController@renderChild',
         ]);
 
@@ -152,7 +152,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::patch('postticket/{id}', 'Admin\helpdesk\SettingsController@postticket'); // Updating the Ticket table with requests
         Route::get('getemail', ['as' => 'getemail', 'uses' => 'Admin\helpdesk\SettingsController@getemail']); // direct to email setting page
 
-        Route::get('ticket/tooltip', ['as'=>'ticket.tooltip', 'uses'=>'Agent\helpdesk\TicketController@getTooltip']);
+        Route::get('ticket/tooltip', ['as' => 'ticket.tooltip', 'uses' => 'Agent\helpdesk\TicketController@getTooltip']);
 
         Route::patch('postemail/{id}', 'Admin\helpdesk\SettingsController@postemail'); // Updating the Email table with requests
         // Route::get('getaccess', 'Admin\helpdesk\SettingsController@getaccess'); // direct to access setting page
@@ -253,10 +253,10 @@ Route::group(['middleware' => ['web']], function () {
 
         //route for submit error and debugging setting form page
         Route::post('post-settings', ['as' => 'post.error.debug.settings',
-            'uses'                         => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings', ]);
+            'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings', ]);
         //route to error logs table page
         Route::get('show-error-logs', [
-            'as'   => 'error.logs',
+            'as' => 'error.logs',
             'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showErrorLogs',
         ]);
 
@@ -276,7 +276,7 @@ Route::group(['middleware' => ['web']], function () {
          */
 
         Route::resource('labels', 'Admin\helpdesk\Label\LabelController');
-        Route::get('labels-ajax', ['as'=>'labels.ajax', 'uses'=>'Admin\helpdesk\Label\LabelController@ajaxTable']);
+        Route::get('labels-ajax', ['as' => 'labels.ajax', 'uses' => 'Admin\helpdesk\Label\LabelController@ajaxTable']);
         Route::get('labels/delete/{id}', ['as' => 'labels.destroy', 'uses' => 'Admin\helpdesk\Label\LabelController@destroy']);
 
         Route::get('clean-dummy-data', ['as' => 'clean-database', 'uses' => 'Admin\helpdesk\SettingsController@getCleanUpView']);
@@ -398,19 +398,19 @@ Route::group(['middleware' => ['web']], function () {
         /*
          * Label
          */
-        Route::get('labels-ticket', ['as'=>'labels.ticket', 'uses'=>'Admin\helpdesk\Label\LabelController@attachTicket']);
-        Route::get('json-labels', ['as'=>'labels.json', 'uses'=>'Admin\helpdesk\Label\LabelController@getLabel']);
+        Route::get('labels-ticket', ['as' => 'labels.ticket', 'uses' => 'Admin\helpdesk\Label\LabelController@attachTicket']);
+        Route::get('json-labels', ['as' => 'labels.json', 'uses' => 'Admin\helpdesk\Label\LabelController@getLabel']);
 
         /*
          * Tags
          */
-        Route::get('add-tag', ['as'=>'tag.add', 'uses'=>'Agent\helpdesk\Filter\TagController@addToFilter']);
-        Route::get('get-tag', ['as'=>'tag.get', 'uses'=>'Agent\helpdesk\Filter\TagController@getTag']);
+        Route::get('add-tag', ['as' => 'tag.add', 'uses' => 'Agent\helpdesk\Filter\TagController@addToFilter']);
+        Route::get('get-tag', ['as' => 'tag.get', 'uses' => 'Agent\helpdesk\Filter\TagController@getTag']);
 
         Route::group(['middleware' => ['force.option', 'role.agent']], function () {
             Route::get('tickets', ['as' => 'tickets-view', 'uses' => 'Agent\helpdesk\TicketController@getTicketsView']);
         });
-        Route::get('get-filtered-tickets', ['as'=>'get-filtered-tickets', 'uses'=>'Agent\helpdesk\Filter\FilterController@getFilter']);
+        Route::get('get-filtered-tickets', ['as' => 'get-filtered-tickets', 'uses' => 'Agent\helpdesk\Filter\FilterController@getFilter']);
 
         /*
          *=======================================================================
@@ -444,10 +444,10 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/ticket/get-assigned', ['as' => 'get.assigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_assigned']);  /* Get tickets in datatable */
 
         //due today ticket
-        Route::get('duetoday', ['as' => 'ticket.duetoday',  'uses' =>'Agent\helpdesk\TicketController@dueTodayTicketlist']);
+        Route::get('duetoday', ['as' => 'ticket.duetoday',  'uses' => 'Agent\helpdesk\TicketController@dueTodayTicketlist']);
 
         // Route::post('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']);
-        Route::get('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']); /*  Get Open Ticket */
+        Route::get('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' => 'Agent\helpdesk\TicketController@getDueToday']); /*  Get Open Ticket */
         Route::get('trash', ['as' => 'get-trash', 'uses' => 'Agent\helpdesk\TicketController@trash']); /* To show Deleted Tickets */
 
         Route::get('/ticket/trash', ['as' => 'get.trash.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_trash']);  /* Get tickets in datatable */
@@ -468,7 +468,7 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('/ticket/get-followup', ['as' => 'get.followup.ticket', 'uses' => 'Agent\helpdesk\TicketController@getFollowup']);  // Get tickets in datatable /
             Route::get('/ticket/close/get-approval/{id}', ['as' => 'get.close.approval.ticket', 'uses' => 'Agent\helpdesk\TicketController@getCloseapproval']);  // Get tickets in datatable /
-            Route::get('filter', ['as'=>'filter', 'uses'=>'Agent\helpdesk\Filter\FilterControllerOld@getFilter']);
+            Route::get('filter', ['as' => 'filter', 'uses' => 'Agent\helpdesk\Filter\FilterControllerOld@getFilter']);
 
         /*
          *=======================================================================
@@ -503,7 +503,7 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::post('postform/{id}', 'Client\helpdesk\FormController@postForm'); /* post the AJAX form for create a ticket by guest user */
-    Route::post('postedform', ['as'=>'client.form.post', 'uses'=>'Client\helpdesk\FormController@postedForm']); /* post the form to store the value */
+    Route::post('postedform', ['as' => 'client.form.post', 'uses' => 'Client\helpdesk\FormController@postedForm']); /* post the form to store the value */
     //Route::get('check', 'CheckController@getcheck'); //testing checkbox auto-populate
     //Route::post('postcheck/{id}', 'CheckController@postcheck');
     Route::get('get-helptopic-form', 'Client\helpdesk\FormController@getCustomForm')->name('get-helptopic-form');
@@ -760,9 +760,9 @@ Route::group(['middleware' => ['web']], function () {
      * Social media settings
      */
 
-    Route::get('social/media', ['as'=>'social', 'uses'=>'Admin\helpdesk\SocialMedia\SocialMediaController@index']);
-    Route::get('social/media/{provider}', ['as'=>'social.media', 'uses'=>'Admin\helpdesk\SocialMedia\SocialMediaController@settings']);
-    Route::post('social/media/{provider}', ['as'=>'social.media.post', 'uses'=>'Admin\helpdesk\SocialMedia\SocialMediaController@postSettings']);
+    Route::get('social/media', ['as' => 'social', 'uses' => 'Admin\helpdesk\SocialMedia\SocialMediaController@index']);
+    Route::get('social/media/{provider}', ['as' => 'social.media', 'uses' => 'Admin\helpdesk\SocialMedia\SocialMediaController@settings']);
+    Route::post('social/media/{provider}', ['as' => 'social.media.post', 'uses' => 'Admin\helpdesk\SocialMedia\SocialMediaController@postSettings']);
     /*
      * Ticket_Priority Settings
      */
@@ -776,12 +776,12 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('ticket/priority/{ticket_priority}/edit', ['as' => 'priority.edit', 'uses' => 'Admin\helpdesk\PriorityController@priorityEdit']);
     Route::get('ticket/priority/{ticket_priority}/destroy', ['as' => 'priority.destroy', 'uses' => 'Admin\helpdesk\PriorityController@destroy']);
     // user---arindam
-    Route::post('rolechangeadmin/{id}', ['as' => 'user.post.rolechangeadmin',  'uses' =>'Agent\helpdesk\UserController@changeRoleAdmin']);
-    Route::post('rolechangeagent/{id}', ['as' => 'user.post.rolechangeagent',  'uses' =>'Agent\helpdesk\UserController@changeRoleAgent']);
-    Route::post('rolechangeuser/{id}', ['as' => 'user.post.rolechangeuser',  'uses' =>'Agent\helpdesk\UserController@changeRoleUser']);
-    Route::get('password', ['as' => 'user.changepassword',  'uses' =>'Agent\helpdesk\UserController@randomPassword']);
-    Route::post('changepassword/{id}', ['as' => 'user.post.changepassword',  'uses' =>'Agent\helpdesk\UserController@randomPostPassword']);
-    Route::post('delete/{id}', ['as' => 'user.post.delete',  'uses' =>'Agent\helpdesk\UserController@deleteAgent']);
+    Route::post('rolechangeadmin/{id}', ['as' => 'user.post.rolechangeadmin',  'uses' => 'Agent\helpdesk\UserController@changeRoleAdmin']);
+    Route::post('rolechangeagent/{id}', ['as' => 'user.post.rolechangeagent',  'uses' => 'Agent\helpdesk\UserController@changeRoleAgent']);
+    Route::post('rolechangeuser/{id}', ['as' => 'user.post.rolechangeuser',  'uses' => 'Agent\helpdesk\UserController@changeRoleUser']);
+    Route::get('password', ['as' => 'user.changepassword',  'uses' => 'Agent\helpdesk\UserController@randomPassword']);
+    Route::post('changepassword/{id}', ['as' => 'user.post.changepassword',  'uses' => 'Agent\helpdesk\UserController@randomPostPassword']);
+    Route::post('delete/{id}', ['as' => 'user.post.delete',  'uses' => 'Agent\helpdesk\UserController@deleteAgent']);
 
     // deleted user list
     Route::get('deleted/user', ['as' => 'user.deleted', 'uses' => 'Agent\helpdesk\UserController@deletedUser']);

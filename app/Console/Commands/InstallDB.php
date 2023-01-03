@@ -21,6 +21,7 @@ class InstallDB extends Command
      * @var string
      */
     protected $description = 'installing database';
+
     protected $install;
 
     /**
@@ -44,12 +45,12 @@ class InstallDB extends Command
         try {
             if ($this->confirm('Do you want to migrate tables now?')) {
                 $env = base_path().DIRECTORY_SEPARATOR.'.env';
-                if (!is_file($env)) {
+                if (! is_file($env)) {
                     throw new \Exception("Please run 'php artisan install:faveo'");
                 }
                 $dummy_confirm = $this->confirm('Would you like to install dummy data in database to test before going live?');
                 $this->call('key:generate', ['--force' => true]);
-                if (!$dummy_confirm) {
+                if (! $dummy_confirm) {
                     $this->call('install:migrate');
                     $this->call('install:seed');
                 } else {
@@ -60,8 +61,8 @@ class InstallDB extends Command
                 $data = [
                     [
                         'user_name' => 'demo_admin',
-                        'email'     => '',
-                        'password'  => 'demopass',
+                        'email' => '',
+                        'password' => 'demopass',
                     ],
                 ];
                 $this->table($headers, $data);

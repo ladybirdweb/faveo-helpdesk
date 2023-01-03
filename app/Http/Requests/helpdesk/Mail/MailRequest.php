@@ -30,10 +30,10 @@ class MailRequest extends Request
         }
 
         $rules = [
-            'email_address'   => $email_address_rule,
-            'email_name'      => 'required',
-            'password'        => 'required',
-            'sending_protocol'=> 'required_if:sending_status,on',
+            'email_address' => $email_address_rule,
+            'email_name' => 'required',
+            'password' => 'required',
+            'sending_protocol' => 'required_if:sending_status,on',
         ];
         $driver = $this->input('sending_protocol');
         $driver_rules = $this->getDriver($driver);
@@ -61,14 +61,14 @@ class MailRequest extends Request
         switch ($short) {
             case 'mailgun':
                 $rules = [
-                    'domain'=> 'required',
-                    'secret'=> 'required',
+                    'domain' => 'required',
+                    'secret' => 'required',
                 ];
 
                 return $rules;
             case 'mandrill':
                 $rules = [
-                    'secret'=> 'required',
+                    'secret' => 'required',
                 ];
 
                 return $rules;

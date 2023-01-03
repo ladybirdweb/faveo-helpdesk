@@ -29,7 +29,7 @@ class CannedRequest extends Request
     public function rules()
     {
         return [
-            'title'   => 'required|min:2|max:50',
+            'title' => 'required|min:2|max:50',
             'message' => 'required',
         ];
     }

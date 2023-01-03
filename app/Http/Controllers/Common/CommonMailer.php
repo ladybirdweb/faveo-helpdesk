@@ -9,7 +9,7 @@ class CommonMailer
     public function setSmtpDriver($config)
     {
         try {
-            if (!$config) {
+            if (! $config) {
                 return false;
             }
             $https = [];
@@ -34,7 +34,7 @@ class CommonMailer
 
     public function setMailGunDriver($config)
     {
-        if (!$config) {
+        if (! $config) {
             return false;
         }
 

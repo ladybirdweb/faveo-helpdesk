@@ -7,11 +7,17 @@ use Illuminate\Queue\SerializesModels;
 class FaveoAfterReply extends Event
 {
     use SerializesModels;
+
     public $para1;
+
     public $para2;
+
     public $para3;
+
     public $para4;
+
     public $para5;
+
     public $para6;
 
     /**

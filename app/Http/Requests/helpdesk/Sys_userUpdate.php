@@ -30,10 +30,10 @@ class Sys_userUpdate extends Request
     public function rules()
     {
         return [
-            'first_name'    => 'required',
-            'user_name'     => 'required|min:3|unique:users,user_name,'.$this->segment(2),
-            'email'         => 'required|email|unique:users,email,'.$this->segment(2),
-            'mobile'        => 'unique:users,mobile,'.$this->segment(2),
+            'first_name' => 'required',
+            'user_name' => 'required|min:3|unique:users,user_name,'.$this->segment(2),
+            'email' => 'required|email|unique:users,email,'.$this->segment(2),
+            'mobile' => 'unique:users,mobile,'.$this->segment(2),
         ];
     }
 }

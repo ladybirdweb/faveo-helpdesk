@@ -26,7 +26,7 @@ class CategoryRequest extends Request
         $id = $this->segment(2);
 
         return [
-            'name'        => 'required|max:250|unique:kb_category,name,'.$id,
+            'name' => 'required|max:250|unique:kb_category,name,'.$id,
             'description' => 'required',
         ];
     }

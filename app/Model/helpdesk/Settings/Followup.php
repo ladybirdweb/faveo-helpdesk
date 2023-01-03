@@ -9,6 +9,7 @@ class Followup extends BaseModel
     /* Using auto_response table  */
 
     protected $table = 'followup';
+
     /* Set fillable fields in table */
     protected $fillable = [
 

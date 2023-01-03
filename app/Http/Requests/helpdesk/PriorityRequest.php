@@ -30,13 +30,13 @@ class PriorityRequest extends Request
     {
         return [
 
-            'priority'                                      => 'required|max:10',
-            'status'                                        => 'required',
-            'priority_desc'                                 => 'required|max:255',
-            'priority_color'                                => 'required',
-            'ispublic'                                      => 'required',
-            'priority_successfully_updated'                 => 'priority successfully updated',
-            'priority_successfully_created!!!'              => 'priority successfully created',
+            'priority' => 'required|max:10',
+            'status' => 'required',
+            'priority_desc' => 'required|max:255',
+            'priority_color' => 'required',
+            'ispublic' => 'required',
+            'priority_successfully_updated' => 'priority successfully updated',
+            'priority_successfully_created!!!' => 'priority successfully created',
 
         ];
     }

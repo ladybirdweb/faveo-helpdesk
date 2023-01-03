@@ -20,6 +20,7 @@ class Install extends Command
      * @var string
      */
     protected $description = 'to install faveo';
+
     protected $install;
 
     /**
@@ -85,7 +86,7 @@ class Install extends Command
         $result = [];
         foreach ($extensions as $key => $extension) {
             $result[$key]['extension'] = $extension;
-            if (!extension_loaded($extension)) {
+            if (! extension_loaded($extension)) {
                 $result[$key]['status'] = "Not Loading, Please open '".php_ini_loaded_file()."' and add 'extension = ".$extension;
             } else {
                 $result[$key]['status'] = 'Loading';

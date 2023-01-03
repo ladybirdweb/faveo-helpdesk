@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Filter extends Model
 {
     protected $table = 'filters';
+
     protected $fillable = ['ticket_id', 'key', 'value'];
 
     public function getLabelTitle($ticketid)
@@ -18,7 +19,7 @@ class Filter extends Model
             $labels = new Label();
             $label = $labels->whereIn('title', $labelids)->get();
             if ($label->count() > 0) {
-                foreach ($label as $key=>$l) {
+                foreach ($label as $key => $l) {
                     $output[$key] = $l->titleWithColor();
                 }
             }

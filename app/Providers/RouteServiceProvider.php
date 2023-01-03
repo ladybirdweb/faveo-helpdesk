@@ -52,7 +52,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::group([
             'middleware' => 'web',
-            'namespace'  => $this->namespace,
+            'namespace' => $this->namespace,
         ], function ($router) {
             require base_path('routes/web.php');
         });
@@ -69,8 +69,8 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::group([
             'middleware' => 'api',
-            'namespace'  => $this->namespace,
-            'prefix'     => 'api',
+            'namespace' => $this->namespace,
+            'prefix' => 'api',
         ], function ($router) {
             require base_path('routes/api.php');
         });
@@ -87,7 +87,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::group([
             'middleware' => ['web', 'installer'],
-            'namespace'  => $this->namespace,
+            'namespace' => $this->namespace,
         ], function ($router) {
             require base_path('routes/installer.php');
         });
@@ -104,8 +104,8 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::group([
             'middleware' => ['web', 'redirect', 'install'],
-            'namespace'  => $this->namespace,
-            'prefix'     => 'app/update',
+            'namespace' => $this->namespace,
+            'prefix' => 'app/update',
         ], function ($router) {
             require base_path('routes/update.php');
         });

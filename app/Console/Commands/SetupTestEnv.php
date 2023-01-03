@@ -73,9 +73,8 @@ class SetupTestEnv extends Command
     /**
      * Sets up DB config for testing.
      *
-     * @param string $dbUsername mysql username
-     * @param string $dbPassword mysql password
-     *
+     * @param  string  $dbUsername mysql username
+     * @param  string  $dbPassword mysql password
      * @return null
      */
     private function setupConfig($dbUsername, $dbPassword)
@@ -98,7 +97,7 @@ class SetupTestEnv extends Command
     {
         try {
             echo "\nMigrating...\n";
-            Artisan::call('migrate', ['--force'=>true]);
+            Artisan::call('migrate', ['--force' => true]);
 
             echo Artisan::output();
 
@@ -129,7 +128,7 @@ class SetupTestEnv extends Command
 
             if (file_exists($migrationPath)) {
                 echo "\nMigrating $plugin tables\n";
-                Artisan::call('migrate', ['--path'=>$migrationRelativePath, '--force'=>true]);
+                Artisan::call('migrate', ['--path' => $migrationRelativePath, '--force' => true]);
                 echo Artisan::output();
             }
         }
@@ -144,7 +143,7 @@ class SetupTestEnv extends Command
     {
         try {
             echo "\nSeeding...\n";
-            Artisan::call('db:seed', ['--force'=>true]);
+            Artisan::call('db:seed', ['--force' => true]);
             echo Artisan::output();
             echo "\nSeeded Successfully!\n";
         } catch (\Exception $e) {
@@ -159,15 +158,14 @@ class SetupTestEnv extends Command
      */
     private function updateAppUrl()
     {
-        return System::first()->update(['url'=>'http://localhost:8000']);
+        return System::first()->update(['url' => 'http://localhost:8000']);
     }
 
     /**
      * Creates an env file if not exists already.
      *
-     * @param string $dbUsername
-     * @param string $dbPassword
-     *
+     * @param  string  $dbUsername
+     * @param  string  $dbPassword
      * @return null
      */
     private function createEnv(string $dbUsername, string $dbPassword)

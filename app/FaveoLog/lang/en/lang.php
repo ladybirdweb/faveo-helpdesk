@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'logs'=> 'Logs',
+    'logs' => 'Logs',
 ];
