@@ -68,6 +68,7 @@ class Kernel extends HttpKernel
         'installer' => \App\Http\Middleware\IsInstalled::class,
         'force.option' => \App\Http\Middleware\TicketViewURL::class,
     ];
+
     /**
      * The priority-sorted list of middleware.
      *
