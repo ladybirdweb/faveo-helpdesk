@@ -441,7 +441,7 @@ class InstallController extends Controller
         $ENV['CACHE_DRIVER'] = 'file';
         $ENV['SESSION_DRIVER'] = 'file';
         $ENV['SESSION_COOKIE_NAME'] = 'faveo_'.rand(0, 10000);
-        $ENV['QUEUE_DRIVER'] = 'sync';
+        $ENV['QUEUE_CONNECTION'] = 'sync';
         $ENV['JWT_TTL'] = 4;
         $ENV['FCM_SERVER_KEY'] = 'AIzaSyCyx5OFnsRFUmDLTMbPV50ZMDUGSG-bLw4';
         $ENV['FCM_SENDER_ID'] = '661051343223';
