@@ -9,8 +9,8 @@
     "type": "project",
     "require": {
         "php": ">=7.1.3",
-        "laravel/framework": "5.6.*",
-        "laravelcollective/html": "5.*",
+        "laravel/framework": "5.7.*",
+        "laravelcollective/html": "5.7.*",
         "vsmoraes/laravel-pdf": "1.0.1",
         "propaganistas/laravel-phone": "~2.0",
         "bugsnag/bugsnag-laravel": "1.*",
@@ -35,18 +35,23 @@
         "torann/geoip": "^1.0",
         "yajra/laravel-datatables-oracle": "~6.0",
         "flowjs/flow-php-server": "^1.0",
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "fideloper/proxy": "^4.0",
+        "laravel/tinker": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^7",
         "phpspec/phpspec": "^4.0",
         "symfony/dom-crawler": "3.1.*",
         "symfony/css-selector": "3.1.*",
-        "fzaninotto/faker": "1.*",
+        "fzaninotto/faker": "^1.4",
         "filp/whoops": "~2.0",
         "laravel/dusk": "~3.0",
         "laravel/tinker": "^1.0",
-        "codacy/coverage": "dev-master"
+        "codacy/coverage": "dev-master",
+        "beyondcode/laravel-dump-server": "^1.0",
+        "nunomaduro/collision": "^2.0",
+        "mockery/mockery": "^1.0"
     },
     "autoload": {
         "classmap": [
@@ -82,7 +87,7 @@
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover"
+            "@php artisan package:discover --ansi"
         ]
     },
     "config": {
