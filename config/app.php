@@ -163,11 +163,11 @@ return [
         /*
          * Application Service Providers...
          */
-        'App\Providers\AppServiceProvider',
-        'App\Providers\EventServiceProvider',
-        'App\Providers\RouteServiceProvider',
-        'App\Providers\ConfigServiceProvider',
-        'App\Providers\ComposerServiceProvider',
+        App\Providers\AppServiceProvider::class,
+        App\Providers\EventServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
+        App\Providers\ConfigServiceProvider::class,
+        App\Providers\ComposerServiceProvider::class,
         'Propaganistas\LaravelPhone\LaravelPhoneServiceProvider',
         'Bugsnag\BugsnagLaravel\BugsnagLaravelServiceProvider',
         'Vsmoraes\Pdf\PdfServiceProvider',
@@ -238,9 +238,9 @@ return [
         'Bugsnag' => 'Bugsnag\BugsnagLaravel\BugsnagFacade',
         'PDF' => 'Vsmoraes\Pdf\PdfFacade',
         'Gravatar' => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
-        'UTC' => 'App\Http\Controllers\Agent\helpdesk\TicketController',
-        'Ttable' => 'App\Http\Controllers\Agent\helpdesk\TicketController', //to use getTable function.
-        'SMTPS' => 'App\Http\Controllers\HomeController',
+        'UTC' => App\Http\Controllers\Agent\helpdesk\TicketController::class,
+        'Ttable' => App\Http\Controllers\Agent\helpdesk\TicketController::class, //to use getTable function.
+        'SMTPS' => App\Http\Controllers\HomeController::class,
         'Datatable' => 'Chumper\Datatable\Facades\DatatableFacade',
         'Zipper' => 'Chumper\Zipper\Zipper',
         'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth',
@@ -253,7 +253,7 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-        'UnAuth' => 'App\Http\Controllers\Client\helpdesk\UnAuthController',
+        'UnAuth' => App\Http\Controllers\Client\helpdesk\UnAuthController::class,
         'Finder' => App\Helper\Finder::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Notification' => Illuminate\Support\Facades\Notification::class,

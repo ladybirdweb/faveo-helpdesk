@@ -17,7 +17,7 @@ class Fields extends BaseModel
 
     public function valueRelation()
     {
-        $related = "App\Model\helpdesk\Form\FieldValue";
+        $related = \App\Model\helpdesk\Form\FieldValue::class;
 
         return $this->hasMany($related, 'field_id');
     }

@@ -15,7 +15,7 @@ class Notification extends BaseModel
 
     public function type()
     {
-        $related = 'App\Model\helpdesk\Notification\NotificationType';
+        $related = \App\Model\helpdesk\Notification\NotificationType::class;
         $id = 'type_id';
 
         return $this->belongsTo($related, $id);
@@ -23,7 +23,7 @@ class Notification extends BaseModel
 
     public function model()
     {
-        $related = 'App\Model\helpdesk\Ticket\Tickets';
+        $related = \App\Model\helpdesk\Ticket\Tickets::class;
         $id = 'model_id';
 
         return $this->belongsTo($related, $id);
@@ -31,7 +31,7 @@ class Notification extends BaseModel
 
     public function userNotification()
     {
-        $related = 'App\Model\helpdesk\Notification\UserNotification';
+        $related = \App\Model\helpdesk\Notification\UserNotification::class;
         $foreignKey = 'notification_id';
 
         return $this->hasMany($related, $foreignKey);

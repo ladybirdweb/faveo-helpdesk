@@ -63,7 +63,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function avatar()
     {
-        $related = 'App\UserAdditionalInfo';
+        $related = \App\UserAdditionalInfo::class;
         $foreignKey = 'owner';
 
         return $this->hasMany($related, $foreignKey)->select('value')->where('key', 'avatar')->first();
@@ -71,7 +71,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getOrganizationRelation()
     {
-        $related = "App\Model\helpdesk\Agent_panel\User_org";
+        $related = \App\Model\helpdesk\Agent_panel\User_org::class;
         $user_relation = $this->hasMany($related, 'user_id');
         $relation = $user_relation->first();
         if ($relation) {

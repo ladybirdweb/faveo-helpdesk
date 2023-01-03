@@ -16,7 +16,7 @@ class Ticket_Thread extends Model
 
     public function attach()
     {
-        return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_attachments', 'thread_id');
+        return $this->hasMany(\App\Model\helpdesk\Ticket\Ticket_attachments::class, 'thread_id');
     }
 
     public function delete()
@@ -149,7 +149,7 @@ class Ticket_Thread extends Model
 
     public function user()
     {
-        $related = 'App\User';
+        $related = \App\User::class;
         $foreignKey = 'user_id';
 
         return $this->belongsTo($related, $foreignKey);

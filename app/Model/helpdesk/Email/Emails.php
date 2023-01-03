@@ -44,7 +44,7 @@ class Emails extends BaseModel
 
     public function extraFieldRelation()
     {
-        $related = "App\Model\MailJob\FaveoMail";
+        $related = \App\Model\MailJob\FaveoMail::class;
 
         return $this->hasMany($related, 'email_id');
     }

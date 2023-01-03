@@ -16,17 +16,17 @@ class Tickets extends BaseModel
 //        }
     public function thread()
     {
-        return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_Thread', 'ticket_id');
+        return $this->hasMany(\App\Model\helpdesk\Ticket\Ticket_Thread::class, 'ticket_id');
     }
 
     public function collaborator()
     {
-        return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_Collaborator', 'ticket_id');
+        return $this->hasMany(\App\Model\helpdesk\Ticket\Ticket_Collaborator::class, 'ticket_id');
     }
 
     public function helptopic()
     {
-        $related = 'App\Model\helpdesk\Manage\Help_topic';
+        $related = \App\Model\helpdesk\Manage\Help_topic::class;
         $foreignKey = 'help_topic_id';
 
         return $this->belongsTo($related, $foreignKey);
@@ -34,7 +34,7 @@ class Tickets extends BaseModel
 
     public function formdata()
     {
-        return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_Form_Data', 'ticket_id');
+        return $this->hasMany(\App\Model\helpdesk\Ticket\Ticket_Form_Data::class, 'ticket_id');
     }
 
     public function extraFields()
@@ -96,7 +96,7 @@ class Tickets extends BaseModel
 
     public function user()
     {
-        $related = "App\User";
+        $related = \App\User::class;
         $foreignKey = 'user_id';
 
         return $this->belongsTo($related, $foreignKey);

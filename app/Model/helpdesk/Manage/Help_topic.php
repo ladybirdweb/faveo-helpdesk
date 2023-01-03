@@ -16,7 +16,7 @@ class Help_topic extends BaseModel
 
     public function department()
     {
-        $related = 'App\Model\helpdesk\Agent\Department';
+        $related = \App\Model\helpdesk\Agent\Department::class;
         $foreignKey = 'department';
 
         return $this->belongsTo($related, $foreignKey);

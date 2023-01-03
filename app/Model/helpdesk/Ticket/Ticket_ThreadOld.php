@@ -16,7 +16,7 @@ class Ticket_ThreadOld extends Model
 
     public function attach()
     {
-        return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_attachments', 'thread_id');
+        return $this->hasMany(\App\Model\helpdesk\Ticket\Ticket_attachments::class, 'thread_id');
     }
 
     public function delete()

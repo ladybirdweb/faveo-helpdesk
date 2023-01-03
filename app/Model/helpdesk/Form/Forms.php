@@ -17,7 +17,7 @@ class Forms extends BaseModel
 
     public function fieldRelation()
     {
-        $related = "App\Model\helpdesk\Form\Fields";
+        $related = \App\Model\helpdesk\Form\Fields::class;
 
         return $this->hasMany($related);
     }
@@ -41,7 +41,7 @@ class Forms extends BaseModel
 
     public function formValueRelation()
     {
-        $related = "App\Model\helpdesk\Form\FieldValue";
+        $related = \App\Model\helpdesk\Form\FieldValue::class;
 
         return $this->hasMany($related, 'child_id');
     }

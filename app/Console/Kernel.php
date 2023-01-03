@@ -14,11 +14,11 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        'App\Console\Commands\Inspire',
-        'App\Console\Commands\SendReport',
-        'App\Console\Commands\CloseWork',
-        'App\Console\Commands\TicketFetch',
-        'App\Console\Commands\UpdateEncryption',
+        \App\Console\Commands\Inspire::class,
+        \App\Console\Commands\SendReport::class,
+        \App\Console\Commands\CloseWork::class,
+        \App\Console\Commands\TicketFetch::class,
+        \App\Console\Commands\UpdateEncryption::class,
         \App\Console\Commands\DropTables::class,
         \App\Console\Commands\Install::class,
         \App\Console\Commands\InstallDB::class,
