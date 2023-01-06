@@ -202,6 +202,7 @@ return [
      */
     'aliases' => [
         'App' => 'Illuminate\Support\Facades\App',
+        'Arr' => Illuminate\Support\Arr::class,
         'Artisan' => 'Illuminate\Support\Facades\Artisan',
         'Auth' => 'Illuminate\Support\Facades\Auth',
         'Blade' => 'Illuminate\Support\Facades\Blade',
@@ -229,6 +230,7 @@ return [
         'Schema' => 'Illuminate\Support\Facades\Schema',
         'Session' => 'Illuminate\Support\Facades\Session',
         'Storage' => 'Illuminate\Support\Facades\Storage',
+        'Str' => Illuminate\Support\Str::class,
         'URL' => 'Illuminate\Support\Facades\URL',
         'Validator' => 'Illuminate\Support\Facades\Validator',
         'View' => 'Illuminate\Support\Facades\View',
