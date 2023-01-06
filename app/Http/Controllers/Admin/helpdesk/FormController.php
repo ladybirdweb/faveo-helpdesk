@@ -63,7 +63,6 @@ class FormController extends Controller
      * list of forms.
      *
      * @param type Forms $forms
-     *
      * @return Response
      */
     public function index(Forms $forms)
@@ -92,8 +91,7 @@ class FormController extends Controller
     /**
      * Show a new form.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -123,9 +121,9 @@ class FormController extends Controller
     {
         $this->validate($request, [
             'formname' => 'required|unique:custom_forms,formname',
-            'label.*'  => 'required',
-            'name.*'   => 'required',
-            'type.*'   => 'required',
+            'label.*' => 'required',
+            'name.*' => 'required',
+            'type.*' => 'required',
         ]);
 
         try {
@@ -137,13 +135,13 @@ class FormController extends Controller
             $count = count(Input::get('name'));
             $fields = [];
             for ($i = 0; $i <= $count; $i++) {
-                if (!empty(Input::get('name')[$i])) {
+                if (! empty(Input::get('name')[$i])) {
                     $name = str_slug(Input::get('name')[$i], '_');
                     $field = Fields::create([
                         'forms_id' => $forms->id,
-                        'label'    => Input::get('label')[$i],
-                        'name'     => $name,
-                        'type'     => Input::get('type')[$i],
+                        'label' => Input::get('label')[$i],
+                        'name' => $name,
+                        'type' => Input::get('type')[$i],
                         'required' => $require[$i],
                     ]);
                     $field_id = $field->id;
@@ -162,11 +160,10 @@ class FormController extends Controller
     /**
      * Delete Form.
      *
-     * @param type                           $id
-     * @param \App\Model\helpdesk\Form\Forms $forms
-     * @param type                           $field
-     * @param type                           $help_topic
-     *
+     * @param  type  $id
+     * @param  \App\Model\helpdesk\Form\Forms  $forms
+     * @param  type  $field
+     * @param  type  $help_topic
      * @return type redirect
      */
     public function delete($id, Forms $forms, Fields $field, Help_topic $help_topic)
@@ -228,18 +225,18 @@ class FormController extends Controller
     {
         $this->validate($request, [
             'formname' => 'required|unique:custom_forms,formname,'.$id,
-            'label.*'  => 'required',
-            'name.*'   => 'required',
-            'type.*'   => 'required',
+            'label.*' => 'required',
+            'name.*' => 'required',
+            'type.*' => 'required',
         ]);
 
         try {
-            if (!$request->input('formname')) {
+            if (! $request->input('formname')) {
                 throw new Exception(Lang::get('lang.please_fill_form_name'));
             }
             $form = new Forms();
             $forms = $form->find($id);
-            if (!$forms) {
+            if (! $forms) {
                 throw new Exception('Sorry we can not find your request');
             }
             $forms->formname = Input::get('formname');
@@ -257,9 +254,9 @@ class FormController extends Controller
                 $name = str_slug(Input::get('name')[$i], '_');
                 $field = $field->create([
                     'forms_id' => $forms->id,
-                    'label'    => Input::get('label')[$i],
-                    'name'     => $name,
-                    'type'     => Input::get('type')[$i],
+                    'label' => Input::get('label')[$i],
+                    'name' => $name,
+                    'type' => Input::get('type')[$i],
                     'required' => Input::get('required')[$i],
                 ]);
                 $field_id = $field->id;
@@ -384,9 +381,9 @@ class FormController extends Controller
             if (count($values_array) > 0) {
                 foreach ($values_array as $value) {
                     $field_values->create([
-                        'field_id'    => $fieldid,
-                        'child_id'    => $childid,
-                        'field_key'   => $key,
+                        'field_id' => $fieldid,
+                        'child_id' => $childid,
+                        'field_key' => $key,
                         'field_value' => str_slug($value, '_'),
                     ]);
                 }

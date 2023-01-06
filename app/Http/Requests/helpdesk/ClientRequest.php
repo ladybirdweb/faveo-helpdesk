@@ -37,12 +37,12 @@ class ClientRequest extends Request
             return $rules;
         }
         $current_rule = [
-            'Name'    => 'required',
-            'Email'   => 'required|email',
+            'Name' => 'required',
+            'Email' => 'required|email',
             'Subject' => 'required',
             'Details' => 'required',
-            'mobile'  => 'numeric',
-            'Phone'   => 'numeric',
+            'mobile' => 'numeric',
+            'Phone' => 'numeric',
         ];
         $custom_rule = $this->getCustomRule();
         $rules = array_merge($current_rule, $custom_rule);
@@ -129,14 +129,14 @@ class ClientRequest extends Request
         $settings = $settings->select('status')->where('option_name', '=', 'send_otp')->first();
         $email_mandatory = $settings->select('status')->where('option_name', '=', 'email_mandatory')->first();
         if (($email_mandatory->status == 0 || $email_mandatory->status == '0')) {
-            if (!\Auth::check()) {
+            if (! \Auth::check()) {
                 return [
-                    'Name'    => 'required',
-                    'Email'   => 'email',
+                    'Name' => 'required',
+                    'Email' => 'email',
                     'Subject' => 'required',
                     'Details' => 'required',
-                    'mobile'  => 'required|numeric',
-                    'Phone'   => 'numeric',
+                    'mobile' => 'required|numeric',
+                    'Phone' => 'numeric',
                 ];
             } else {
                 return [

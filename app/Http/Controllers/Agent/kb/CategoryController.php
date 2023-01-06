@@ -47,7 +47,6 @@ class CategoryController extends Controller
      * Indexing all Category.
      *
      * @param type Category $category
-     *
      * @return Response
      */
     public function index()
@@ -115,7 +114,6 @@ class CategoryController extends Controller
      * Create a Category.
      *
      * @param type Category $category
-     *
      * @return type view
      */
     public function create(Category $category)
@@ -136,7 +134,6 @@ class CategoryController extends Controller
      *
      * @param type Category        $category
      * @param type CategoryRequest $request
-     *
      * @return type Redirect
      */
     public function store(Category $category, CategoryRequest $request)
@@ -158,9 +155,8 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified category.
      *
-     * @param type $slug
+     * @param  type  $slug
      * @param type Category $category
-     *
      * @return type view
      */
     public function edit($id)
@@ -175,10 +171,9 @@ class CategoryController extends Controller
     /**
      * Update the specified Category in storage.
      *
-     * @param type $slug
+     * @param  type  $slug
      * @param type Category       $category
      * @param type CategoryUpdate $request
-     *
      * @return type redirect
      */
     public function update($id, CategoryRequest $request)
@@ -204,10 +199,9 @@ class CategoryController extends Controller
     /**
      * Remove the specified category from storage.
      *
-     * @param type $id
+     * @param  type  $id
      * @param type Category     $category
      * @param type Relationship $relation
-     *
      * @return type Redirect
      */
     public function destroy($id, Category $category, Relationship $relation)

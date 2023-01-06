@@ -30,12 +30,12 @@ class UpgradeController extends Controller
             $order_number = '44596328';
             $url = env('APP_URL');
             $data = [
-                'serial_key'   => $serial_key,
+                'serial_key' => $serial_key,
                 'order_number' => $order_number,
-                'name'         => $name,
-                'version'      => Utility::getFileVersion(),
+                'name' => $name,
+                'version' => Utility::getFileVersion(),
                 'request_type' => 'check_update',
-                'url'          => $url,
+                'url' => $url,
             ];
             $data = Utility::encryptByFaveoPublicKey(json_encode($data));
             //dd($data);
@@ -90,12 +90,12 @@ class UpgradeController extends Controller
         );
 
         $newUpdate = file_get_contents($download_url, false, $context);
-        if (!is_dir("$this->dir/UPDATES/")) {
+        if (! is_dir("$this->dir/UPDATES/")) {
             \File::makeDirectory($this->dir.'/UPDATES/', 0777);
         }
 
         $dlHandler = fopen($this->dir.'/UPDATES/'.'/faveo-helpdesk-master.zip', 'w');
-        if (!fwrite($dlHandler, $newUpdate)) {
+        if (! fwrite($dlHandler, $newUpdate)) {
             echo '<p>Could not save new update. Operation aborted.</p>';
             exit();
         }
@@ -114,7 +114,7 @@ class UpgradeController extends Controller
 
                 return 0;
             }
-            if (!extension_loaded('zip')) {
+            if (! extension_loaded('zip')) {
                 echo '<ul class=list-unstyled>';
                 echo "<li style='color:red;'>Sorry we can not process your request because you don't have ZIP extension contact your system admin</li>";
                 echo '</ul>';
@@ -138,14 +138,14 @@ class UpgradeController extends Controller
                 }
 
                 //Make the directory if we need to...
-                if (!is_dir($update.'/'.$thisFileDir.'/')) {
+                if (! is_dir($update.'/'.$thisFileDir.'/')) {
                     \File::makeDirectory($update.'/'.$thisFileDir, 0775, true, true);
                     // mkdir($update.'/'. $thisFileDir, 0775);
                     echo '<li style="color:white;">Created Directory '.$thisFileDir.'</li>';
                 }
 
                 //Overwrite the file
-                if (!is_dir($update.'/'.$thisFileName)) {
+                if (! is_dir($update.'/'.$thisFileName)) {
                     echo '<li style="color:white;">'.$thisFileName.'...........';
                     $contents = zip_entry_read($aF, zip_entry_filesize($aF));
                     $contents = str_replace("\r\n", "\n", $contents);
@@ -282,7 +282,7 @@ class UpgradeController extends Controller
                 if ($latest_version > $current_version) {
                     echo '<p>New Update Found: v'.$latest_version.'</p>';
                     $found = true;
-                    if (!is_file("$this->dir/UPDATES/faveo-helpdesk-master.zip")) {
+                    if (! is_file("$this->dir/UPDATES/faveo-helpdesk-master.zip")) {
                         if ($request->get('dodownload') == true) {
                             $download_url = $this->downloadLatestCode();
                             if ($download_url != null) {
@@ -324,7 +324,7 @@ class UpgradeController extends Controller
     {
         try {
             $curl = Utility::_isCurl();
-            if (!$curl) {
+            if (! $curl) {
                 throw new Exception('Please enable your curl function to check latest update');
             }
             $ch = curl_init();
@@ -346,7 +346,7 @@ class UpgradeController extends Controller
     {
         try {
             $curl = Utility::_isCurl();
-            if (!$curl) {
+            if (! $curl) {
                 throw new Exception('Please enable your curl function to check latest update');
             }
             $ch = curl_init();
@@ -370,7 +370,7 @@ class UpgradeController extends Controller
     {
         try {
             $curl = Utility::_isCurl();
-            if (!$curl) {
+            if (! $curl) {
                 throw new Exception('Please enable your curl function to check latest update');
             }
             $ch = curl_init();

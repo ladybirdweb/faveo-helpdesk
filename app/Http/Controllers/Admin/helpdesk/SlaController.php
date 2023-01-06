@@ -37,7 +37,6 @@ class SlaController extends Controller
      * Display a listing of the resource.
      *
      * @param type Sla_plan $sla
-     *
      * @return type Response
      */
     public function index(Sla_plan $sla)
@@ -72,7 +71,6 @@ class SlaController extends Controller
      *
      * @param type Sla_plan   $sla
      * @param type SlaRequest $request
-     *
      * @return type Response
      */
     public function store(Sla_plan $sla, SlaRequest $request)
@@ -94,7 +92,6 @@ class SlaController extends Controller
      *
      * @param type int      $id
      * @param type Sla_plan $sla
-     *
      * @return type Response
      */
     public function edit($id)
@@ -117,7 +114,6 @@ class SlaController extends Controller
      * @param type int       $id
      * @param type Sla_plan  $sla
      * @param type SlaUpdate $request
-     *
      * @return type Response
      */
     public function update($id, SlaUpdate $request)
@@ -151,7 +147,6 @@ class SlaController extends Controller
      *
      * @param type int      $id
      * @param type Sla_plan $sla
-     *
      * @return type Response
      */
     public function destroy($id)

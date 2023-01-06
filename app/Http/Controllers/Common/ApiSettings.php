@@ -56,9 +56,9 @@ class ApiSettings extends Controller
             // dd($request->input());
             DB::table('settings_system')
             ->where('id', 1)
-            ->update(['api_enable'  => Input::get('api_enable'),
+            ->update(['api_enable' => Input::get('api_enable'),
                 'api_key_mandatory' => Input::get('api_key_mandatory'),
-                'api_key'           => Input::get('api_key'), ]);
+                'api_key' => Input::get('api_key'), ]);
             $settings = $this->api;
             if ($settings->get()->count() > 0) {
                 foreach ($settings->get() as $set) {

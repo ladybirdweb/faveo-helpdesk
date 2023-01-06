@@ -30,9 +30,9 @@ class TemplateUdate2 extends Request
     {
         return [
 
-            'ban_status'            => 'required',
+            'ban_status' => 'required',
             'template_set_to_clone' => 'required',
-            'language'              => 'required',
+            'language' => 'required',
         ];
     }
 }

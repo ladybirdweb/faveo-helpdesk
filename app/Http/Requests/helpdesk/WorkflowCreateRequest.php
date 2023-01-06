@@ -29,11 +29,11 @@ class WorkflowCreateRequest extends Request
     public function rules()
     {
         return [
-            'name'            => 'required|unique:workflow_name,name|max:50',
+            'name' => 'required|unique:workflow_name,name|max:50',
             'execution_order' => 'required',
-            'target_channel'  => 'required',
-            'rule'            => 'required',
-            'action'          => 'required',
+            'target_channel' => 'required',
+            'rule' => 'required',
+            'action' => 'required',
         ];
     }
 }

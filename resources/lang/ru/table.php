@@ -13,14 +13,14 @@ return [
     |
     */
 
-    'filename'   => 'ISO CODE',
-    'language'   => 'Язык',
-    'Action'     => 'Действие',
-    'status'     => 'stature',
+    'filename' => 'ISO CODE',
+    'language' => 'Язык',
+    'Action' => 'Действие',
+    'status' => 'stature',
     'not-active' => 'Не Активный',
-    'active'     => 'Активный',
-    'hello'      => 'Привет',
-    'enable'     => 'Включен',
-    'disable'    => 'Выключен',
+    'active' => 'Активный',
+    'hello' => 'Привет',
+    'enable' => 'Включен',
+    'disable' => 'Выключен',
 
 ];

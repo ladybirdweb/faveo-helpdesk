@@ -96,11 +96,10 @@ class SettingsController2 extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @param $compant instance of company table
      *
      * get the form for company setting page
-     *
      * @return Response
      */
     public function getStatuses()
@@ -116,11 +115,10 @@ class SettingsController2 extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @param $compant instance of company table
      *
      * get the form for company setting page
-     *
      * @return Response
      */
     public function editStatuses($id)
@@ -187,11 +185,10 @@ class SettingsController2 extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @param $compant instance of company table
      *
      * get the form for company setting page
-     *
      * @return Response
      */
     public function getcompany(Company $company)
@@ -212,7 +209,6 @@ class SettingsController2 extends Controller
      * @param type int            $id
      * @param type Company        $company
      * @param type CompanyRequest $request
-     *
      * @return Response
      */
     public function postcompany($id, Company $company, CompanyRequest $request)
@@ -248,7 +244,7 @@ class SettingsController2 extends Controller
     public function deleteLogo()
     {
         $path = $_GET['data1']; //get file path of logo image
-        if (!unlink($path)) {
+        if (! unlink($path)) {
             return 'false';
         } else {
             $companys = Company::where('id', '=', 1)->first();
@@ -270,7 +266,6 @@ class SettingsController2 extends Controller
      * @param type Date_format      $date
      * @param type Date_time_format $date_time
      * @param type Time_format      $time
-     *
      * @return type Response
      */
     public function getsystem(System $system, Department $department, Timezones $timezone, Date_format $date, Date_time_format $date_time, Time_format $time)
@@ -295,7 +290,6 @@ class SettingsController2 extends Controller
      * @param type int           $id
      * @param type System        $system
      * @param type SystemRequest $request
-     *
      * @return type Response
      */
     public function postsystem($id, System $system, SystemRequest $request)
@@ -322,7 +316,6 @@ class SettingsController2 extends Controller
      * @param type Sla_plan   $sla
      * @param type Help_topic $topic
      * @param type Priority   $priority
-     *
      * @return type Response
      */
     public function getticket(Ticket $ticket, Sla_plan $sla, Help_topic $topic, Ticket_Priority $priority)
@@ -347,7 +340,6 @@ class SettingsController2 extends Controller
      * @param type int     $id
      * @param type Ticket  $ticket
      * @param type Request $request
-     *
      * @return type Response
      */
     public function postticket($id, Ticket $ticket, Request $request)
@@ -382,7 +374,6 @@ class SettingsController2 extends Controller
      * @param type Email    $email
      * @param type Template $template
      * @param type Emails   $email1
-     *
      * @return type Response
      */
     public function getemail(Email $email, Template $template, Emails $email1)
@@ -407,7 +398,6 @@ class SettingsController2 extends Controller
      * @param type int          $id
      * @param type Email        $email
      * @param type EmailRequest $request
-     *
      * @return type Response
      */
     public function postemail($id, Email $email, EmailRequest $request)
@@ -440,7 +430,6 @@ class SettingsController2 extends Controller
      * @param type Email    $email
      * @param type Template $template
      * @param type Emails   $email1
-     *
      * @return type Response
      */
     public function getSchedular(Email $email, Template $template, Emails $email1)
@@ -464,7 +453,6 @@ class SettingsController2 extends Controller
      *
      * @param type Email        $email
      * @param type EmailRequest $request
-     *
      * @return type Response
      */
     public function postSchedular(Email $email, Template $template, Emails $email1, Request $request)
@@ -496,7 +484,6 @@ class SettingsController2 extends Controller
      * get the form for Access setting page.
      *
      * @param type Access $access
-     *
      * @return type Response
      */
     // public function getaccess(Access $access) {
@@ -515,7 +502,6 @@ class SettingsController2 extends Controller
      *
      * @param type Access  $access
      * @param type Request $request
-     *
      * @return type Response
      */
     // public function postaccess(Access $access, Request $request) {
@@ -547,7 +533,6 @@ class SettingsController2 extends Controller
      * get the form for Responder setting page.
      *
      * @param type Responder $responder
-     *
      * @return type Response
      */
     public function getresponder(Responder $responder)
@@ -567,7 +552,6 @@ class SettingsController2 extends Controller
      *
      * @param type Responder $responder
      * @param type Request   $request
-     *
      * @return type
      */
     public function postresponder(Responder $responder, Request $request)
@@ -596,7 +580,6 @@ class SettingsController2 extends Controller
      * get the form for Alert setting page.
      *
      * @param type Alert $alert
-     *
      * @return type Response
      */
     public function getalert(Alert $alert)
@@ -614,10 +597,9 @@ class SettingsController2 extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param type $id
+     * @param  type  $id
      * @param type Alert   $alert
      * @param type Request $request
-     *
      * @return type Response
      */
     public function postalert($id, Alert $alert, Request $request)

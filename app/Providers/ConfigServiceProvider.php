@@ -20,8 +20,8 @@ class ConfigServiceProvider extends ServiceProvider
         config([
             'lfm.images_url' => url('uploads').'/',
             'lfm.images_dir' => '/public/uploads/',
-            'lfm.files_url'  => url('uploads').'/',
-            'lfm.files_dir'  => '/public/uploads/',
+            'lfm.files_url' => url('uploads').'/',
+            'lfm.files_dir' => '/public/uploads/',
         ]);
     }
 }
