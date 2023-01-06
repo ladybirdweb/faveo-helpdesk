@@ -29,7 +29,7 @@ class OtpVerifyRequest extends Request
     public function rules()
     {
         return [
-            'email' => 'required',
+            'email'  => 'required',
             'mobile' => 'required',
         ];
     }
