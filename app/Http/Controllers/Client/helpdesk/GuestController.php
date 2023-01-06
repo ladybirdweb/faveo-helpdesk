@@ -380,7 +380,7 @@ class GuestController extends Controller
         if (\Schema::hasTable('sms')) {
             $sms = DB::table('sms')->get();
             if (count($sms) > 0) {
-                \Event::fire(new \App\Events\LoginEvent($request));
+                event(new \App\Events\LoginEvent($request));
 
                 return 1;
             }

@@ -274,7 +274,7 @@ class TicketController extends Controller
      */
     public function reply(Ticket_Thread $thread, Request $request, Ticket_attachments $ta, $mail = true, $system_reply = true, $user_id = '')
     {
-        \Event::fire('reply.request', [$request]);
+        event('reply.request', [$request]);
 
         try {
             if (is_array($request->file('attachment'))) {
@@ -301,7 +301,7 @@ class TicketController extends Controller
             $emailadd = User::where('id', $eventuserid)->first()->email;
             $source = $eventthread->source;
             $form_data = $request->except('reply_content', 'ticket_ID', 'attachment');
-            \Event::fire(new \App\Events\ClientTicketFormPost($form_data, $emailadd, $source));
+            event(new \App\Events\ClientTicketFormPost($form_data, $emailadd, $source));
             $reply_content = $request->input('reply_content');
 
             $thread->ticket_id = $request->input('ticket_ID');
@@ -335,7 +335,7 @@ class TicketController extends Controller
                     $data = [
                         'id' => $tickets->id,
                     ];
-                    \Event::fire('ticket-assignment', [$data]);
+                    event('ticket-assignment', [$data]);
                 }
                 if ($tickets->status > 1) {
                     $this->open($ticket_id, new Tickets());
@@ -380,7 +380,7 @@ class TicketController extends Controller
             }
 
             // Event
-            \Event::fire(new \App\Events\FaveoAfterReply($reply_content, $user->mobile, $user->country_code, $request, $tickets, $thread));
+            event(new \App\Events\FaveoAfterReply($reply_content, $user->mobile, $user->country_code, $request, $tickets, $thread));
             if (Auth::user()) {
                 $u_id = Auth::user()->first_name.' '.Auth::user()->last_name;
             } else {
@@ -392,7 +392,7 @@ class TicketController extends Controller
                 'body' => $request->input('reply_content'),
             ];
             if (! $request->has('do-not-send')) {
-                \Event::fire('Reply-Ticket', [$data]);
+                event('Reply-Ticket', [$data]);
             }
             // sending attachments via php mail function
             $message = '';
@@ -681,10 +681,10 @@ class TicketController extends Controller
                         'user_name' => $unique,
                         'password' => $password,
                     ];
-                    \Event::fire(new \App\Events\LoginEvent($value));
+                    event(new \App\Events\LoginEvent($value));
                 }
                 // Event fire
-                \Event::fire(new \App\Events\ReadMailEvent($user_id, $password));
+                event(new \App\Events\ReadMailEvent($user_id, $password));
 
                 try {
                     if ($auto_response == 0) {
@@ -701,7 +701,7 @@ class TicketController extends Controller
             $username = $checkemail->first_name;
             $user_id = $checkemail->id;
         }
-        \Event::fire(new \App\Events\ClientTicketFormPost($from_data, $emailadd, $source));
+        event(new \App\Events\ClientTicketFormPost($from_data, $emailadd, $source));
         $ticket_number = $this->check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $status);
 
         $ticket_number2 = $ticket_number[0];
@@ -841,11 +841,11 @@ class TicketController extends Controller
                 'status' => $status,
                 'Priority' => $priority,
             ];
-            \Event::fire('Create-Ticket', [$data]);
+            event('Create-Ticket', [$data]);
             $data = [
                 'id' => $ticketdata->id,
             ];
-            \Event::fire('ticket-assignment', [$data]);
+            event('ticket-assignment', [$data]);
             $this->NotificationController->create($ticketdata->id, $user_id, '3');
 
             return ['0' => $ticket_number2, '1' => true];
@@ -943,7 +943,7 @@ class TicketController extends Controller
                         'first_name' => $username,
                         'last_name' => '',
                     ];
-                    \Event::fire('change-status', [$data]);
+                    event('change-status', [$data]);
                 }
                 if (isset($id)) {
                     if ($this->ticketThread($subject, $body, $id, $user_id)) {
@@ -1050,7 +1050,7 @@ class TicketController extends Controller
                 }
             }
         }
-        \Event::fire('after.ticket.created', [['ticket' => $ticket, 'form_data' => $form_data]]);
+        event('after.ticket.created', [['ticket' => $ticket, 'form_data' => $form_data]]);
 
         // store collaborators
         $this->storeCollaborators($headers, $id);
@@ -1077,7 +1077,7 @@ class TicketController extends Controller
         $thread->title = $subject;
         $thread->body = $body;
         if ($thread->save()) {
-            \Event::fire('ticket.details', ['ticket' => $thread]); //get the ticket details
+            event('ticket.details', ['ticket' => $thread]); //get the ticket details
 
             return true;
         }
@@ -1159,7 +1159,7 @@ class TicketController extends Controller
             'first_name' => Auth::user()->first_name,
             'last_name' => Auth::user()->last_name,
         ];
-        \Event::fire('change-status', [$data]);
+        event('change-status', [$data]);
 
         return 'your ticket'.$ticket_status->ticket_number.' has been closed';
     }
@@ -1204,7 +1204,7 @@ class TicketController extends Controller
             'first_name' => Auth::user()->first_name,
             'last_name' => Auth::user()->last_name,
         ];
-        \Event::fire('change-status', [$data]);
+        event('change-status', [$data]);
 
         return 'your ticket'.$ticket_status->ticket_number.' has been resolved';
     }
@@ -1243,7 +1243,7 @@ class TicketController extends Controller
             'first_name' => Auth::user()->first_name,
             'last_name' => Auth::user()->last_name,
         ];
-        \Event::fire('change-status', [$data]);
+        event('change-status', [$data]);
 
         return 'your ticket'.$ticket_status->ticket_number.' has been opened';
     }
@@ -1274,7 +1274,7 @@ class TicketController extends Controller
                 'first_name' => Auth::user()->first_name,
                 'last_name' => Auth::user()->last_name,
             ];
-            \Event::fire('change-status', [$data]);
+            event('change-status', [$data]);
 
             return 'your ticket has been delete';
         } else {
@@ -1294,7 +1294,7 @@ class TicketController extends Controller
                 'first_name' => Auth::user()->first_name,
                 'last_name' => Auth::user()->last_name,
             ];
-            \Event::fire('change-status', [$data]);
+            event('change-status', [$data]);
 
             return 'your ticket'.$ticket_delete->ticket_number.' has been delete';
         }
@@ -1365,7 +1365,7 @@ class TicketController extends Controller
                 $data = [
                     'id' => $id,
                 ];
-                \Event::fire('ticket-assignment', [$data]);
+                event('ticket-assignment', [$data]);
                 $ticket_thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
                 $ticket_subject = $ticket_thread->title;
                 $thread = new Ticket_Thread();
@@ -1414,7 +1414,7 @@ class TicketController extends Controller
             'u_id' => Auth::user()->first_name.' '.Auth::user()->last_name,
             'body' => $InternalContent,
         ];
-        \Event::fire('Reply-Ticket', [$data]);
+        event('Reply-Ticket', [$data]);
 
         return 1;
     }
@@ -1757,7 +1757,7 @@ class TicketController extends Controller
                     $tickets = Tickets::find($ticket->id);
                     $tickets->delete();
                     $data = ['id' => $ticket->id];
-                    \Event::fire('ticket-permanent-delete', [$data]);
+                    event('ticket-permanent-delete', [$data]);
                 }
             }
             if ($value == 'Delete') {
@@ -2214,7 +2214,7 @@ class TicketController extends Controller
             Tickets::where('id', '=', $value)
                     ->update(['status' => 3]);
             //event has $p_id and $value
-            \Event::fire('ticket.merge', [['parent' => $p_id, 'child' => $value]]);
+            event('ticket.merge', [['parent' => $p_id, 'child' => $value]]);
             if (! empty(Input::get('reason'))) {
                 $reason = Input::get('reason');
             } else {

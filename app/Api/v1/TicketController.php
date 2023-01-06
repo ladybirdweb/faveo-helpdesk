@@ -269,7 +269,7 @@ class TicketController extends Controller
             $source = $eventthread->source;
 
             $form_data = $request->except('reply_content', 'ticket_ID', 'attachment');
-            \Event::fire(new \App\Events\ClientTicketFormPost($form_data, $emailadd, $source));
+            event(new \App\Events\ClientTicketFormPost($form_data, $emailadd, $source));
             $reply_content = $request->input('reply_content');
             $thread->ticket_id = $request->input('ticket_id');
             $thread->poster = 'support';
@@ -317,7 +317,7 @@ class TicketController extends Controller
             } else {
                 $agentsign = null;
             }
-            \Event::fire(new \App\Events\FaveoAfterReply($reply_content, $user->phone_number, $request, $tickets));
+            event(new \App\Events\FaveoAfterReply($reply_content, $user->phone_number, $request, $tickets));
 
 //             Mail::send(array('html' => 'emails.ticket_re-reply'), ['content' => $reply_content, 'ticket_number' => $ticket_number, 'From' => $company, 'name' => $username, 'Agent_Signature' => $agentsign], function ($message) use ($email, $user_name, $ticket_number, $ticket_subject, $check_attachment) {
 //                 $message->to($email, $user_name)->subject($ticket_subject . '[#' . $ticket_number . ']');

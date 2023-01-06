@@ -330,7 +330,7 @@ class UserController extends Controller
                 // returns for the success case
                 $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
                 if (($request->input('active') == '0' || $request->input('active') == 0) || ($email_mandatory->status == '0') || $email_mandatory->status == 0) {
-                    \Event::fire(new \App\Events\LoginEvent($request));
+                    event(new \App\Events\LoginEvent($request));
                 }
 
                 return redirect('user')->with('success', Lang::get('lang.User-Created-Successfully'));
@@ -1012,7 +1012,7 @@ class UserController extends Controller
         if (\Schema::hasTable('sms')) {
             $sms = DB::table('sms')->get();
             if (count($sms) > 0) {
-                \Event::fire(new \App\Events\LoginEvent($request));
+                event(new \App\Events\LoginEvent($request));
 
                 return 1;
             }

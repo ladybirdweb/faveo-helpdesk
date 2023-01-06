@@ -227,7 +227,7 @@ class FormController extends Controller
                     }
                 }
             }
-            \Event::fire(new \App\Events\ClientTicketFormPost($form_extras, $email, $source));
+            event(new \App\Events\ClientTicketFormPost($form_extras, $email, $source));
             $result = $this->TicketWorkflowController->workflow($email, $name, $subject, $details, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $department, $assignto, $team_assign, $status, $form_extras, $auto_response);
             // dd($result);
             if ($result[1] == 1) {
