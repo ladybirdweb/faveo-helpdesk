@@ -126,7 +126,8 @@ class PriorityController extends Controller
     }
 
     /**
-     * @param  type  $priority_id
+     * @param type $priority_id
+     *
      * @return type
      */
     public function priorityEdit($priority_id)
@@ -137,7 +138,8 @@ class PriorityController extends Controller
     }
 
     /**
-     * @param  PriorityRequest  $request
+     * @param PriorityRequest $request
+     *
      * @return type
      */
     public function priorityEdit1(PriorityRequest $request)
@@ -161,7 +163,8 @@ class PriorityController extends Controller
     }
 
     /**
-     * @param  type  $priority_id
+     * @param type $priority_id
+     *
      * @return type
      */
     public function destroy($priority_id)
