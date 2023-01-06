@@ -43,6 +43,7 @@ class HelptopicController extends Controller
      * Display a listing of the helptopic.
      *
      * @param type Help_topic $topic
+     *
      * @return type Response
      */
     public function index(Help_topic $topic)
@@ -65,6 +66,7 @@ class HelptopicController extends Controller
      * @param type Form_name  $form
      * @param type Agents     $agent
      * @param type Sla_plan   $sla
+     *
      * @return type Response
      */
     /*
@@ -98,6 +100,7 @@ class HelptopicController extends Controller
      *
      * @param type Help_topic       $topic
      * @param type HelptopicRequest $request
+     *
      * @return type Response
      */
     public function store(Help_topic $topic, HelptopicRequest $request)
@@ -127,13 +130,14 @@ class HelptopicController extends Controller
     /**
      * Show the form for editing the specified helptopic.
      *
-     * @param  type  $id
+     * @param type $id
      * @param type Priority   $priority
      * @param type Department $department
      * @param type Help_topic $topic
      * @param type Form_name  $form
      * @param type Agents     $agent
      * @param type Sla_plan   $sla
+     *
      * @return type Response
      */
     public function edit($id, Ticket_Priority $priority, Department $department, Help_topic $topic, Forms $form, Sla_plan $sla)
@@ -158,9 +162,10 @@ class HelptopicController extends Controller
     /**
      * Update the specified helptopic in storage.
      *
-     * @param  type  $id
+     * @param type $id
      * @param type Help_topic      $topic
      * @param type HelptopicUpdate $request
+     *
      * @return type Response
      */
     public function update($id, Help_topic $topic, HelptopicUpdate $request)
@@ -200,6 +205,7 @@ class HelptopicController extends Controller
      *
      * @param type int        $id
      * @param type Help_topic $topic
+     *
      * @return type Response
      */
     public function destroy($id, Help_topic $topic, Ticket $ticket_setting)

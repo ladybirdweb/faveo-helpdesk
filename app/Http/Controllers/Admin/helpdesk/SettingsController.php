@@ -62,10 +62,11 @@ class SettingsController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @param $compant instance of company table
      *
      * get the form for company setting page
+     *
      * @return Response
      */
     public function getcompany(Company $company)
@@ -86,6 +87,7 @@ class SettingsController extends Controller
      * @param type int            $id
      * @param type Company        $company
      * @param type CompanyRequest $request
+     *
      * @return Response
      */
     public function postcompany($id, Company $company, CompanyRequest $request)
@@ -121,7 +123,7 @@ class SettingsController extends Controller
     public function deleteLogo()
     {
         $path = $_GET['data1']; //get file path of logo image
-        if (! unlink($path)) {
+        if (!unlink($path)) {
             return 'false';
         } else {
             $companys = Company::where('id', '=', 1)->first();
@@ -143,6 +145,7 @@ class SettingsController extends Controller
      * @param type Date_format      $date
      * @param type Date_time_format $date_time
      * @param type Time_format      $time
+     *
      * @return type Response
      */
     public function getsystem(System $system, Department $department, Timezones $timezone, Date_format $date, Date_time_format $date_time, Time_format $time, CommonSettings $common_settings)
@@ -177,6 +180,7 @@ class SettingsController extends Controller
      * @param type int           $id
      * @param type System        $system
      * @param type SystemRequest $request
+     *
      * @return type Response
      */
     public function postsystem($id, System $system, SystemRequest $request)
@@ -226,6 +230,7 @@ class SettingsController extends Controller
      * @param type Sla_plan   $sla
      * @param type Help_topic $topic
      * @param type Priority   $priority
+     *
      * @return type Response
      */
     public function getticket(Ticket $ticket, Sla_plan $sla, Help_topic $topic, Ticket_Priority $priority)
@@ -250,6 +255,7 @@ class SettingsController extends Controller
      * @param type int     $id
      * @param type Ticket  $ticket
      * @param type Request $request
+     *
      * @return type Response
      */
     public function postticket($id, Ticket $ticket, Request $request)
@@ -284,6 +290,7 @@ class SettingsController extends Controller
      * @param type Email    $email
      * @param type Template $template
      * @param type Emails   $email1
+     *
      * @return type Response
      */
     public function getemail(Email $email, Template $template, Emails $email1)
@@ -308,6 +315,7 @@ class SettingsController extends Controller
      * @param type int          $id
      * @param type Email        $email
      * @param type EmailRequest $request
+     *
      * @return type Response
      */
     public function postemail($id, Email $email, EmailRequest $request)
@@ -340,6 +348,7 @@ class SettingsController extends Controller
      * @param type Email    $email
      * @param type Template $template
      * @param type Emails   $email1
+     *
      * @return type Response
      */
     public function getSchedular(Email $email, Template $template, Emails $email1, WorkflowClose $workflow)
@@ -360,29 +369,29 @@ class SettingsController extends Controller
         $condition = new \App\Model\MailJob\Condition();
         $job = $condition->checkActiveJob();
         $commands = [
-            '' => 'Select',
-            'everyMinute' => 'Every Minute',
-            'everyFiveMinutes' => 'Every Five Minute',
-            'everyTenMinutes' => 'Every Ten Minute',
+            ''                   => 'Select',
+            'everyMinute'        => 'Every Minute',
+            'everyFiveMinutes'   => 'Every Five Minute',
+            'everyTenMinutes'    => 'Every Ten Minute',
             'everyThirtyMinutes' => 'Every Thirty Minute',
-            'hourly' => 'Every Hour',
-            'daily' => 'Every Day',
-            'dailyAt' => 'Daily at',
-            'weekly' => 'Every Week',
-            'monthly' => 'Monthly',
-            'yearly' => 'Yearly',
+            'hourly'             => 'Every Hour',
+            'daily'              => 'Every Day',
+            'dailyAt'            => 'Daily at',
+            'weekly'             => 'Every Week',
+            'monthly'            => 'Monthly',
+            'yearly'             => 'Yearly',
         ];
         $followupcommands = [
-            '' => 'Select',
-            'everyMinute' => 'Every Minute',
-            'everyFiveMinutes' => 'Every Five Minute',
-            'everyTenMinutes' => 'Every Ten Minute',
+            ''                   => 'Select',
+            'everyMinute'        => 'Every Minute',
+            'everyFiveMinutes'   => 'Every Five Minute',
+            'everyTenMinutes'    => 'Every Ten Minute',
             'everyThirtyMinutes' => 'Every Thirty Minute',
-            'hourly' => 'Every Hour',
-            'daily' => 'Every Day',
-            'weekly' => 'Every Week',
-            'monthly' => 'Monthly',
-            'yearly' => 'Yearly',
+            'hourly'             => 'Every Hour',
+            'daily'              => 'Every Day',
+            'weekly'             => 'Every Week',
+            'monthly'            => 'Monthly',
+            'yearly'             => 'Yearly',
         ];
         if (ini_get('register_argc_argv') == '') {
             //$warn = "Please make 'register_argc_argv' flag as on. Or you can set all your job url in cron";
@@ -398,6 +407,7 @@ class SettingsController extends Controller
      *
      * @param type Email        $email
      * @param type EmailRequest $request
+     *
      * @return type Response
      */
     public function postSchedular(Email $email, Template $template, Emails $email1, TaskRequest $request, WorkflowClose $workflow)
@@ -437,6 +447,7 @@ class SettingsController extends Controller
      * get the form for Responder setting page.
      *
      * @param type Responder $responder
+     *
      * @return type Response
      */
     public function getresponder(Responder $responder)
@@ -456,6 +467,7 @@ class SettingsController extends Controller
      *
      * @param type Responder $responder
      * @param type Request   $request
+     *
      * @return type
      */
     public function postresponder(Responder $responder, Request $request)
@@ -484,6 +496,7 @@ class SettingsController extends Controller
      * get the form for Alert setting page.
      *
      * @param type Alert $alert
+     *
      * @return type Response
      */
     public function getalert(Alert $alert)
@@ -501,9 +514,10 @@ class SettingsController extends Controller
     /**
      * Update the specified alert in storage.
      *
-     * @param  type  $id
+     * @param type $id
      * @param type Alert   $alert
      * @param type Request $request
+     *
      * @return type Response
      */
     public function postalert($id, Alert $alert, Request $request)
@@ -589,10 +603,11 @@ class SettingsController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @param $compant instance of company table
      *
      * get the form for company setting page
+     *
      * @return Response
      */
     public function getStatuses()
@@ -608,10 +623,11 @@ class SettingsController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @param $compant instance of company table
      *
      * get the form for company setting page
+     *
      * @return Response
      */
     public function getEditStatuses($id)
@@ -627,10 +643,11 @@ class SettingsController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @param $compant instance of company table
      *
      * get the form for company setting page
+     *
      * @return Response
      */
     public function editStatuses($id, StatusRequest $request)
@@ -660,8 +677,9 @@ class SettingsController extends Controller
     /**
      * create a status.
      *
-     * @param  \App\Model\helpdesk\Ticket\Ticket_Status  $statuss
-     * @param  \App\Http\Requests\helpdesk\StatusRequest  $request
+     * @param \App\Model\helpdesk\Ticket\Ticket_Status  $statuss
+     * @param \App\Http\Requests\helpdesk\StatusRequest $request
+     *
      * @return type redirect
      */
     public function createStatuses(\App\Model\helpdesk\Ticket\Ticket_Status $statuss, StatusRequest $request)
@@ -690,7 +708,8 @@ class SettingsController extends Controller
     /**
      * delete a status.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return type redirect
      */
     public function deleteStatuses($id)
@@ -777,7 +796,8 @@ class SettingsController extends Controller
     /**
      * edit a rating.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return type view
      */
     public function editRatingSettings($id)
@@ -831,9 +851,10 @@ class SettingsController extends Controller
     /**
      * store a rating value.
      *
-     * @param  \App\Model\helpdesk\Ratings\Rating  $rating
-     * @param  \App\Model\helpdesk\Ratings\RatingRef  $ratingrefs
-     * @param  \App\Http\Requests\helpdesk\RatingRequest  $request
+     * @param \App\Model\helpdesk\Ratings\Rating        $rating
+     * @param \App\Model\helpdesk\Ratings\RatingRef     $ratingrefs
+     * @param \App\Http\Requests\helpdesk\RatingRequest $request
+     *
      * @return type redirect
      */
     public function storeRating(Rating $rating, \App\Model\helpdesk\Ratings\RatingRef $ratingrefs, \App\Http\Requests\helpdesk\RatingRequest $request)
@@ -902,7 +923,7 @@ class SettingsController extends Controller
         if (count($array) > 0) {
             foreach ($array as $key => $save) {
                 $command->create([
-                    'job' => $key,
+                    'job'   => $key,
                     'value' => $save,
                 ]);
             }
@@ -913,7 +934,7 @@ class SettingsController extends Controller
     {
         $this->validate($request, [
             'format' => ['required', 'regex:/^(?=.*[$|-|#]).+$/'],
-            'type' => 'required',
+            'type'   => 'required',
         ]);
 
         $format = $request->input('format');
@@ -1034,6 +1055,7 @@ class SettingsController extends Controller
      * @category function to return clean data view
      *
      * @param null
+     *
      * @return respone/view
      */
     public function getCleanUpView()
@@ -1052,6 +1074,7 @@ class SettingsController extends Controller
      * @category function to handle clean dummy data ajax request
      *
      * @param null
+     *
      * @return json
      */
     public function postCleanDummyData(Request $request)
@@ -1069,6 +1092,7 @@ class SettingsController extends Controller
      * @category function to clean dummy database and reseed tables with default options
      *
      * @param null
+     *
      * @return
      * Very dangerous function should be call by admin only
      */
@@ -1105,16 +1129,16 @@ class SettingsController extends Controller
             DB::commit();
             \Artisan::call('db:seed', ['--force' => true]);
             $user2 = \App\User::updateOrCreate(['id' => 1], [
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name,
-                'email' => $user->email,
-                'user_name' => $user->user_name,
-                'password' => $user->password,
+                'first_name'   => $user->first_name,
+                'last_name'    => $user->last_name,
+                'email'        => $user->email,
+                'user_name'    => $user->user_name,
+                'password'     => $user->password,
                 'assign_group' => 1,
-                'primary_dpt' => 1,
-                'active' => 1,
-                'agent_tzone' => $user->agent_tzone,
-                'role' => 'admin',
+                'primary_dpt'  => 1,
+                'active'       => 1,
+                'agent_tzone'  => $user->agent_tzone,
+                'role'         => 'admin',
             ]);
             $system2 = System::find(1);
             $system2->time_zone = $system->time_zone;

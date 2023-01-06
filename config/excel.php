@@ -32,7 +32,7 @@ return [
         'settings' => [
 
             'memoryCacheSize' => '32MB',
-            'cacheTime' => 600,
+            'cacheTime'       => 600,
 
         ],
 
@@ -58,15 +58,15 @@ return [
     ],
 
     'properties' => [
-        'creator' => 'Maatwebsite',
+        'creator'        => 'Maatwebsite',
         'lastModifiedBy' => 'Maatwebsite',
-        'title' => 'Spreadsheet',
-        'description' => 'Default spreadsheet export',
-        'subject' => 'Spreadsheet export',
-        'keywords' => 'maatwebsite, excel, export',
-        'category' => 'Excel',
-        'manager' => 'Maatwebsite',
-        'company' => 'Maatwebsite',
+        'title'          => 'Spreadsheet',
+        'description'    => 'Default spreadsheet export',
+        'subject'        => 'Spreadsheet export',
+        'keywords'       => 'maatwebsite, excel, export',
+        'category'       => 'Excel',
+        'manager'        => 'Maatwebsite',
+        'company'        => 'Maatwebsite',
     ],
 
     /*
@@ -82,18 +82,18 @@ return [
         |--------------------------------------------------------------------------
         */
         'pageSetup' => [
-            'orientation' => 'portrait',
-            'paperSize' => '9',
-            'scale' => '100',
-            'fitToPage' => false,
-            'fitToHeight' => true,
-            'fitToWidth' => true,
+            'orientation'           => 'portrait',
+            'paperSize'             => '9',
+            'scale'                 => '100',
+            'fitToPage'             => false,
+            'fitToHeight'           => true,
+            'fitToWidth'            => true,
             'columnsToRepeatAtLeft' => ['', ''],
-            'rowsToRepeatAtTop' => [0, 0],
-            'horizontalCentered' => false,
-            'verticalCentered' => false,
-            'printArea' => null,
-            'firstPageNumber' => null,
+            'rowsToRepeatAtTop'     => [0, 0],
+            'horizontalCentered'    => false,
+            'verticalCentered'      => false,
+            'printArea'             => null,
+            'firstPageNumber'       => null,
         ],
     ],
 
@@ -425,7 +425,7 @@ return [
 
         'encoding' => [
 
-            'input' => 'UTF-8',
+            'input'  => 'UTF-8',
             'output' => 'UTF-8',
 
         ],
@@ -583,7 +583,7 @@ return [
             'i' => [
                 'font' => [
                     'italic' => true,
-                    'size' => 12,
+                    'size'   => 12,
                 ],
             ],
 
@@ -667,7 +667,7 @@ return [
             'a' => [
                 'font' => [
                     'underline' => true,
-                    'color' => ['argb' => 'FF0000FF'],
+                    'color'     => ['argb' => 'FF0000FF'],
                 ],
             ],
 
