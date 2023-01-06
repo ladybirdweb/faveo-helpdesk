@@ -2,9 +2,9 @@
 
 namespace App\Api\v1;
 
-use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ApiExceptAuthController extends Controller
 {

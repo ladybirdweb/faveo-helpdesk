@@ -3,24 +3,24 @@
 namespace App\Http\Controllers\Agent\kb;
 
 // Controllers
-use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
-// Requests
 use App\Http\Requests\kb\ArticleRequest;
+// Requests
 use App\Http\Requests\kb\ArticleUpdate;
-// Models
 use App\Model\kb\Article;
+// Models
 use App\Model\kb\Category;
 use App\Model\kb\Comment;
 use App\Model\kb\Relationship;
 use App\Model\kb\Settings;
-// Classes
 use Auth;
+// Classes
 use Chumper\Datatable\Table;
 use Datatable;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Lang;
 use Redirect;
 

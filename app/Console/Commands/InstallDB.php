@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Support\Str;
 use App\Http\Controllers\Installer\helpdesk\InstallController;
 use DB;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 class InstallDB extends Command
 {

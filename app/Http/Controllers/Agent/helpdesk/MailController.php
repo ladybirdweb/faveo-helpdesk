@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Agent\helpdesk;
 
 // models
-use Illuminate\Support\Str;
 use App\Http\Controllers\Admin\MailFetch as Fetch;
 use App\Http\Controllers\Controller;
 use App\Model\helpdesk\Email\Emails;
@@ -14,8 +13,9 @@ use App\Model\helpdesk\Settings\Ticket;
 use App\Model\helpdesk\Ticket\Ticket_attachments;
 use App\Model\helpdesk\Ticket\Ticket_source;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
-// classes
 use App\Model\helpdesk\Ticket\Tickets;
+// classes
+use Illuminate\Support\Str;
 
 /**
  * MailController.

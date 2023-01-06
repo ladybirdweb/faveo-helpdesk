@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Admin\helpdesk;
 
 // Controller
-use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
-// Model
 use App\Model\helpdesk\Form\Fields;
+// Model
 use App\Model\helpdesk\Form\Forms;
 use App\Model\helpdesk\Manage\Help_topic;
-// Request
 use Exception;
-// Class
+// Request
 use Form;
+// Class
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Input;
 use Lang;
 use Redirect;

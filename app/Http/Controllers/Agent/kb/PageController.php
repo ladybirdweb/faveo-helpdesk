@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Agent\kb;
 
-use Illuminate\Support\Str;
 use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
-// request
 use App\Http\Requests\kb\PageRequest;
+// request
 use App\Http\Requests\kb\PageUpdate;
 use App\Model\kb\Page;
-// Model
 use Datatable;
-// classes
+// Model
 use Exception;
+// classes
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Lang;
 
 /**

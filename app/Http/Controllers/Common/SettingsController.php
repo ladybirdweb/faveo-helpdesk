@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Common;
 
 // controllers
-use Illuminate\Support\Arr;
 use App\Http\Controllers\Controller;
-// requests
 use App\Http\Requests;
+// requests
 use App\Http\Requests\helpdesk\SmtpRequest;
 use App\Model\helpdesk\Email\Smtp;
-// models
 use App\Model\helpdesk\Settings\Plugin;
+// models
 use App\Model\helpdesk\Theme\Widgets;
 use Config;
-// classes
 use Crypt;
+// classes
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Input;
 use Lang;

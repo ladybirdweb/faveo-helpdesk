@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Admin\helpdesk;
 
 // controllers
-use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
-// requests
 use App\Http\Requests\helpdesk\CompanyRequest;
+// requests
 use App\Http\Requests\helpdesk\EmailRequest;
 use App\Http\Requests\helpdesk\SystemRequest;
-// models
 use App\Model\helpdesk\Agent\Department;
+// models
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Email\Template;
 use App\Model\helpdesk\Manage\Help_topic;
@@ -29,10 +28,11 @@ use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use DateTime;
-// classes
 use DB;
+// classes
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Input;
 use Lang;
 

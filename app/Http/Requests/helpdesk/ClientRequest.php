@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\helpdesk;
 
-use Illuminate\Support\Arr;
 use App\Http\Requests\Request;
 use App\Model\helpdesk\Settings\CommonSettings;
+use Illuminate\Support\Arr;
 
 /**
  * CompanyRequest.

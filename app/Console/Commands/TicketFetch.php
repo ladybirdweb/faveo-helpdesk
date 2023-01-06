@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Http\Controllers\Agent\helpdesk\MailController;
 use App\Http\Controllers\Agent\helpdesk\TicketWorkflowController;
-use Event;
 use Illuminate\Console\Command;
 
 class TicketFetch extends Command

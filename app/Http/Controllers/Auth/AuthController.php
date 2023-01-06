@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 // controllers
-use Illuminate\Support\Str;
 use App\Http\Controllers\Admin\helpdesk\SocialMedia\SocialMediaController;
 use App\Http\Controllers\Common\PhpMailController;
-// requests
 use App\Http\Controllers\Controller;
+// requests
 use App\Http\Requests\helpdesk\LoginRequest;
 use App\Http\Requests\helpdesk\OtpVerifyRequest;
 use App\Http\Requests\helpdesk\RegisterRequest;
@@ -15,8 +14,8 @@ use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Plugin;
 use App\Model\helpdesk\Settings\Security;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
-// classes
 use App\Model\helpdesk\Ticket\Tickets;
+// classes
 use App\Model\helpdesk\Utility\Otp;
 use App\User;
 use Auth;
@@ -24,6 +23,7 @@ use DateTime;
 use DB;
 use Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Lang;
 use Socialite;
 

@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Agent\kb;
 
 // Controllers
-use Illuminate\Support\Str;
 use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
-// Requests
 use App\Http\Requests\kb\CategoryRequest;
+// Requests
 use App\Http\Requests\kb\CategoryUpdate;
-// Model
 use App\Model\kb\Category;
+// Model
 use App\Model\kb\Relationship;
-// Classes
 use Datatable;
+// Classes
 use Exception;
+use Illuminate\Support\Str;
 use Lang;
 use Redirect;
 

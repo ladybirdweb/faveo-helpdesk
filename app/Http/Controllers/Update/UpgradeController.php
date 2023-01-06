@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Update;
 
-use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Utility\LibraryController as Utility;
 use App\Model\Update\BarNotification;
 use Artisan;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class UpgradeController extends Controller
 {

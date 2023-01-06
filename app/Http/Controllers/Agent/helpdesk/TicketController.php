@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\Agent\helpdesk;
 
 // controllers
-use Illuminate\Support\Str;
 use App\Http\Controllers\Common\FileuploadController;
 use App\Http\Controllers\Common\NotificationController as Notify;
 use App\Http\Controllers\Common\PhpMailController;
 use App\Http\Controllers\Controller;
-// requests
 use App\Http\Requests\helpdesk\CreateTicketRequest;
+// requests
 use App\Http\Requests\helpdesk\TicketRequest;
-// models
 use App\Model\helpdesk\Agent\Department;
+// models
 use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Form\Fields;
@@ -40,11 +39,12 @@ use Auth;
 use Crypt;
 use DB;
 use Exception;
-// classes
 use GeoIP;
+// classes
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\support\Collection;
+use Illuminate\Support\Str;
 use Input;
 use Lang;
 use Mail;

@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 // controllers
-use Illuminate\Support\Str;
 use App\Http\Controllers\Common\PhpMailController;
 use App\Http\Controllers\Controller;
-// request
 use App\User;
+// request
+use Illuminate\Foundation\Auth\ResetsPasswords;
 // model
 // classes
-use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Lang;
 
 /**
