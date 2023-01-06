@@ -41,6 +41,7 @@ class GroupController extends Controller
      * @param type Groups                  $group
      * @param type Department              $department
      * @param type Group_assign_department $group_assign_department
+     *
      * @return type Response
      */
     public function index(Groups $group, Department $department, Group_assign_department $group_assign_department)
@@ -74,6 +75,7 @@ class GroupController extends Controller
      *
      * @param type Groups       $group
      * @param type GroupRequest $request
+     *
      * @return type Response
      */
     public function store(Groups $group, GroupRequest $request)
@@ -94,6 +96,7 @@ class GroupController extends Controller
      *
      * @param type int    $id
      * @param type Groups $group
+     *
      * @return type Response
      */
     public function edit($id, Groups $group)
@@ -113,6 +116,7 @@ class GroupController extends Controller
      * @param type int     $id
      * @param type Groups  $group
      * @param type Request $request
+     *
      * @return type Response
      */
     public function update($id, Groups $group, GroupUpdateRequest $request)
@@ -181,6 +185,7 @@ class GroupController extends Controller
      * @param type int                     $id
      * @param type Groups                  $group
      * @param type Group_assign_department $group_assign_department
+     *
      * @return type Response
      */
     public function destroy($id, Groups $group, Group_assign_department $group_assign_department)

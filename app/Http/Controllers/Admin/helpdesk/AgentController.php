@@ -67,11 +67,12 @@ class AgentController extends Controller
     /**
      * creating a new agent.
      *
-     * @param  Assign_team_agent  $team_assign_agent
-     * @param  Timezones  $timezone
-     * @param  Groups  $group
-     * @param  Department  $department
-     * @param  Teams  $team_all
+     * @param Assign_team_agent $team_assign_agent
+     * @param Timezones         $timezone
+     * @param Groups            $group
+     * @param Department        $department
+     * @param Teams             $team_all
+     *
      * @return type view
      */
     public function create(Timezones $timezone, Groups $group, Department $department, Teams $team_all, CountryCode $code)
@@ -102,9 +103,10 @@ class AgentController extends Controller
     /**
      * store a new agent.
      *
-     * @param  User  $user
-     * @param  AgentRequest  $request
-     * @param  Assign_team_agent  $team_assign_agent
+     * @param User              $user
+     * @param AgentRequest      $request
+     * @param Assign_team_agent $team_assign_agent
+     *
      * @return type Response
      */
     public function store(User $user, AgentRequest $request)
@@ -113,7 +115,7 @@ class AgentController extends Controller
             return redirect()->back()->with(['fails2' => Lang::get('lang.country-code-required-error'), 'country_code' => 1])->withInput();
         } else {
             $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
-            if (! count($code)) {
+            if (!count($code)) {
                 return redirect()->back()->with(['fails2' => Lang::get('lang.incorrect-country-code-error'), 'country_code' => 1])->withInput();
             }
         }
@@ -175,6 +177,7 @@ class AgentController extends Controller
      * @param type Groups            $group
      * @param type Department        $department
      * @param type Teams             $team
+     *
      * @return type Response
      */
     public function edit($id, User $user, Assign_team_agent $team_assign_agent, Timezones $timezone, Groups $group, Department $department, Teams $team, CountryCode $code)
@@ -205,6 +208,7 @@ class AgentController extends Controller
      * @param type User              $user
      * @param type AgentUpdate       $request
      * @param type Assign_team_agent $team_assign_agent
+     *
      * @return type Response
      */
     public function update($id, User $user, AgentUpdate $request, Assign_team_agent $team_assign_agent)
@@ -213,7 +217,7 @@ class AgentController extends Controller
             return redirect()->back()->with(['fails2' => Lang::get('lang.country-code-required-error'), 'country_code' => 1])->withInput();
         } else {
             $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
-            if (! count($code)) {
+            if (!count($code)) {
                 return redirect()->back()->with(['fails2' => Lang::get('lang.incorrect-country-code-error'), 'country_code' => 1])->withInput();
             }
         }
@@ -252,12 +256,13 @@ class AgentController extends Controller
     /**
      * Remove the specified agent from storage.
      *
-     * @param  type  $id
-     * @param  User  $user
-     * @param  Assign_team_agent  $team_assign_agent
-     * @return type Response
+     * @param type              $id
+     * @param User              $user
+     * @param Assign_team_agent $team_assign_agent
      *
      * @throws Exception
+     *
+     * @return type Response
      */
     public function destroy($id, User $user, Assign_team_agent $team_assign_agent)
     {
@@ -283,7 +288,8 @@ class AgentController extends Controller
     /**
      * Generate a random string for password.
      *
-     * @param  type  $length
+     * @param type $length
+     *
      * @return string
      */
     public function generateRandomString($length = 10)
