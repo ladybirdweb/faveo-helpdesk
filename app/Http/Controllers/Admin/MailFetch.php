@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Fetch\Server as Server;
+use Fetch\Server;
 
 class MailFetch extends Server
 {
