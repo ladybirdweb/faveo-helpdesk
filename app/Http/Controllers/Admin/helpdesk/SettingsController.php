@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\helpdesk;
 
 // controllers
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\CompanyRequest;
@@ -572,7 +573,7 @@ class SettingsController extends Controller
      */
     public function generateApiKey()
     {
-        $key = str_random(32);
+        $key = Str::random(32);
 
         return $key;
     }

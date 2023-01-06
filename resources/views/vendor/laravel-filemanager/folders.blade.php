@@ -7,7 +7,7 @@
   <div class="caption text-center">
     <div class="btn-group">
       <button type="button" data-id="{{ $dir_name['long'] }}" class="btn btn-default btn-xs folder-item">
-        {{ str_limit($dir_name['short'], $limit = 10, $end = '...') }}
+        {{ Str::limit($dir_name['short'], $limit = 10, $end = '...') }}
       </button>
       <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">
         <span class="caret"></span>

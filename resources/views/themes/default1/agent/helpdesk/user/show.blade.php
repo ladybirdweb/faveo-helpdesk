@@ -106,18 +106,18 @@ class="nav-link active"
                         @else
                         <?php  $name_of_user = $users->user_name; ?>
                         @endif
-                        <h4 class="" title="{{$name_of_user}}">{{str_limit($name_of_user, 25)}}</h4>
+                        <h4 class="" title="{{$name_of_user}}">{{Str::limit($name_of_user, 25)}}</h4>
                     </center>
                 </div>
 
                 <ul class="list-group list-group-unbordered mb-3 mt-3">
                      @if($users->user_name)
                     <li class="list-group-item mb-0">
-                        <b>{{Lang::get('lang.user_name')}}</b> <a class="float-right" title="{{$users->user_name}}">{{str_limit($users->user_name,10) }}</a>
+                        <b>{{Lang::get('lang.user_name')}}</b> <a class="float-right" title="{{$users->user_name}}">{{Str::limit($users->user_name,10) }}</a>
                     </li>
                      @endif
                      <li class="list-group-item mb-0">
-                        <b>{{Lang::get('lang.email')}}</b> <a class="float-right" title="{{$users->email}}"> {{str_limit($users->email,10) }}</a>
+                        <b>{{Lang::get('lang.email')}}</b> <a class="float-right" title="{{$users->email}}"> {{Str::limit($users->email,10) }}</a>
                     </li>
 
                     @if($users->is_delete != '1')
@@ -144,7 +144,7 @@ class="nav-link active"
 
                         &nbsp;&nbsp;&nbsp;
 
-                        <a href=""  data-toggle="modal" data-target="#editassign" title="{{$organization->name}}"> <span style="color:green;">{{str_limit($organization->name,10)}}</span> </a>
+                        <a href=""  data-toggle="modal" data-target="#editassign" title="{{$organization->name}}"> <span style="color:green;">{{Str::limit($organization->name,10)}}</span> </a>
 
 
                         <a class="float-right" href="#" data-toggle="modal" data-target="#delete-{{$org_id}}" title="{!! Lang::get('lang.remove') !!}"><i class="fas fa-times" style="color:red;"> </i></a> 
@@ -196,25 +196,25 @@ class="nav-link active"
                     @if($users->country_code)
                     <li class="list-group-item mb-0">
                         <b>{{Lang::get('lang.country_code')}}</b> <a class="float-right" title="{{$users->country_code}}"> 
-                            {{str_limit($users->country_code,10) }}</a>
+                            {{Str::limit($users->country_code,10) }}</a>
                     </li>
                     @endif
 
                     @if($users->ext)
                     <li class="list-group-item mb-0">
-                        <b>{{Lang::get('lang.ext')}}</b> <a class="float-right" title="{{$users->ext}}"> {{str_limit($users->ext,10)}}</a>
+                        <b>{{Lang::get('lang.ext')}}</b> <a class="float-right" title="{{$users->ext}}"> {{Str::limit($users->ext,10)}}</a>
                     </li>
                     @endif
 
                     @if($users->mobile)
                     <li class="list-group-item mb-0">
-                        <b>{{Lang::get('lang.mobile')}}</b> <a class="float-right" title="{{$users->mobile}}"> {{str_limit($users->mobile,10)}}</a>
+                        <b>{{Lang::get('lang.mobile')}}</b> <a class="float-right" title="{{$users->mobile}}"> {{Str::limit($users->mobile,10)}}</a>
                     </li>
                     @endif
 
                     @if($users->phone_number)
                     <li class="list-group-item mb-0">
-                        <b>{{Lang::get('lang.phone')}}</b><a class="float-right" title="{{$users->phone_number}}">{{str_limit($users->phone_number,10)}}</a>
+                        <b>{{Lang::get('lang.phone')}}</b><a class="float-right" title="{{$users->phone_number}}">{{Str::limit($users->phone_number,10)}}</a>
                     </li>
                     @endif
 

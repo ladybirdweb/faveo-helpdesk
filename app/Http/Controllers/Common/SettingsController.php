@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Common;
 
 // controllers
+use Illuminate\Support\Arr;
 use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests;
@@ -303,7 +304,7 @@ class SettingsController extends Controller
         return \Datatable::collection(new Collection($plugins))
                         ->searchColumns('name')
                         ->addColumn('name', function ($model) {
-                            if (array_has($model, 'path')) {
+                            if (Arr::has($model, 'path')) {
                                 if ($model['status'] == 0) {
                                     $activate = '<a href='.url('plugin/status/'.$model['path']).'>Activate</a>';
                                     $settings = ' ';

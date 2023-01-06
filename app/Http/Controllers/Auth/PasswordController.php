@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 // controllers
+use Illuminate\Support\Str;
 use App\Http\Controllers\Common\PhpMailController;
 use App\Http\Controllers\Controller;
 // request
@@ -58,7 +59,7 @@ class PasswordController extends Controller
             if (isset($user)) {
                 $user1 = $user->email;
                 //gen new code and pass
-                $code = str_random(60);
+                $code = Str::random(60);
                 $password_reset_table = \DB::table('password_resets')->where('email', '=', $user->email)->first();
                 if (isset($password_reset_table)) {
                     $password_reset_table = \DB::table('password_resets')->where('email', '=', $user->email)->update(['token' => $code, 'created_at' => $date]);

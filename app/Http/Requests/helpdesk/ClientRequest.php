@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\helpdesk;
 
+use Illuminate\Support\Arr;
 use App\Http\Requests\Request;
 use App\Model\helpdesk\Settings\CommonSettings;
 
@@ -158,6 +159,6 @@ class ClientRequest extends Request
 //                $purified[] = $this->purifyArray($value);
 //            }
 //        }
-//        return array_dot($purified);
+//        return Arr::dot($purified);
 //    }
 }

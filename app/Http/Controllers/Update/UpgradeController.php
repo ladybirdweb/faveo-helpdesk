@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Update;
 
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Utility\LibraryController as Utility;
 use App\Model\Update\BarNotification;
@@ -43,7 +44,7 @@ class UpgradeController extends Controller
                 'data' => $data,
             ];
             $url = 'http://faveohelpdesk.com/billing/public/verification';
-            if (str_contains($url, ' ')) {
+            if (Str::contains($url, ' ')) {
                 $url = str_replace(' ', '%20', $url);
             }
             $curl = $this->postCurl($url, $post_data);
@@ -65,7 +66,7 @@ class UpgradeController extends Controller
     {
         $name = \Config::get('app.name');
         $durl = 'http://www.faveohelpdesk.com/billing/public/download-url';
-        if (str_contains($durl, ' ')) {
+        if (Str::contains($durl, ' ')) {
             $durl = str_replace(' ', '%20', $durl);
         }
         $data = [

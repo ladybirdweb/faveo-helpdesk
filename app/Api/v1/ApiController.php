@@ -2,6 +2,7 @@
 
 namespace App\Api\v1;
 
+use Illuminate\Support\Str;
 use App\Http\Controllers\Agent\helpdesk\TicketController as CoreTicketController;
 use App\Http\Controllers\Controller;
 //use Illuminate\Support\Facades\Request as Value;
@@ -729,8 +730,8 @@ class ApiController extends Controller
             }
 
             $url = $this->request->input('url');
-            if (! str_is('*/', $url)) {
-                $url = str_finish($url, '/');
+            if (! Str::is('*/', $url)) {
+                $url = Str::finish($url, '/');
             }
 
             $url = $url.'/api/v1/helpdesk/check-url?api_key='.$this->request->input('api_key').'&token='.\Config::get('app.token');
@@ -817,7 +818,7 @@ class ApiController extends Controller
             $set = $this->setting->where('id', '1')->first();
             //dd($set);
             if ($set->api_enable == 1) {
-                $key = str_random(32);
+                $key = Str::random(32);
                 $set->api_key = $key;
                 $set->save();
                 $result = $set->api_key;
@@ -1661,7 +1662,7 @@ class ApiController extends Controller
 
                 return response()->json(compact('error'));
             }
-            $str = str_random(8);
+            $str = Str::random(8);
             $array = ['password' => $str, 'password_confirmation' => $str, 'email' => $this->request->input('email'), 'full_name' => $this->request->input('first_name')];
             $all = $this->request->input();
             $merged = $array + $all;

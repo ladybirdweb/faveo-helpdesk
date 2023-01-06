@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Agent\helpdesk;
 
 // controllers
+use Illuminate\Support\Str;
 use App\Http\Controllers\Common\FileuploadController;
 use App\Http\Controllers\Common\NotificationController as Notify;
 use App\Http\Controllers\Common\PhpMailController;
@@ -665,7 +666,7 @@ class TicketController extends Controller
             }
             $user->role = 'user';
             $user->active = $user_status;
-            $token = str_random(60);
+            $token = Str::random(60);
             $user->remember_token = $token;
             // mail user his/her password
             //\Event::fire(new \App\Events\ClientTicketFormPost($from_data, $emailadd, $source));
@@ -2688,7 +2689,7 @@ class TicketController extends Controller
                             if (isset($tickets->ticket_title)) {
                                 $string = utfEncoding($tickets->ticket_title);
                                 if (strlen($string) > 25) {
-                                    $string = str_limit($string, 30).'...';
+                                    $string = Str::limit($string, 30).'...';
                                 }
                             } else {
                                 $string = Lang::get('lang.no-subject');
@@ -2757,7 +2758,7 @@ class TicketController extends Controller
                                 $color = "<i class='fa fa-exclamation-triangle'  title='".Lang::get('lang.accoutn-not-verified')."'></i>";
                             }
 
-                            return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.strip_tags($name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:#508983'>".str_limit(strip_tags($name), 30).' <span style="color:#f75959">'.$color.'</span></span></a>';
+                            return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.strip_tags($name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:#508983'>".Str::limit(strip_tags($name), 30).' <span style="color:#f75959">'.$color.'</span></span></a>';
                         })
                         ->editColumn('a_uname', function ($tickets) {
                             if ($tickets->assigned_to == null && $tickets->name == null) {
@@ -3126,7 +3127,7 @@ class TicketController extends Controller
             })
             ->addColumn('title', function ($tickets) {
                 if (isset($tickets->ticket_title)) {
-                    $string = str_limit($tickets->ticket_title, 20);
+                    $string = Str::limit($tickets->ticket_title, 20);
                 } else {
                     $string = '(no subject)';
                 }
@@ -3182,7 +3183,7 @@ class TicketController extends Controller
                     $color = "<i class='fa fa-exclamation-triangle'  title='".Lang::get('lang.accoutn-not-verified')."'></i>";
                 }
 
-                return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.ucfirst($tickets->user_name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:#508983'>".ucfirst(str_limit($name, 30)).' <span style="color:#f75959">'.$color.'</span></span></a>';
+                return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.ucfirst($tickets->user_name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:#508983'>".ucfirst(Str::limit($name, 30)).' <span style="color:#f75959">'.$color.'</span></span></a>';
             })
             ->addColumn('assign_user_name', function ($tickets) {
                 if ($tickets->assigned_to == null) {

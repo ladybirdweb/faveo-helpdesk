@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Agent\kb;
 
+use Illuminate\Support\Str;
 use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
 // request
@@ -126,7 +127,7 @@ class PageController extends Controller
     public function store(PageRequest $request)
     {
         $sl = $request->input('name');
-        $slug = str_slug($sl, '-');
+        $slug = Str::slug($sl, '-');
         $this->page->slug = $slug;
 
         try {
@@ -167,7 +168,7 @@ class PageController extends Controller
         // get pages with respect to slug
         $pages = $this->page->where('slug', $slug)->first();
         $sl = $request->input('name');
-        $slug = str_slug($sl, '-');
+        $slug = Str::slug($sl, '-');
 
         try {
             $pages->fill($request->all())->save();

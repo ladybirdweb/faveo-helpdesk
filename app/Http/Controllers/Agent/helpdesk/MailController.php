@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Agent\helpdesk;
 
 // models
+use Illuminate\Support\Str;
 use App\Http\Controllers\Admin\MailFetch as Fetch;
 use App\Http\Controllers\Controller;
 use App\Model\helpdesk\Email\Emails;
@@ -253,7 +254,7 @@ class MailController extends Controller
                     $disposition = $structure->disposition;
                 }
 
-                $filename = str_random(16).'-'.$attachment->getFileName();
+                $filename = Str::random(16).'-'.$attachment->getFileName();
                 $type = $attachment->getMimeType();
                 $size = $attachment->getSize();
                 $data = $attachment->getData();

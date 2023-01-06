@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 // controllers
+use Illuminate\Support\Str;
 use App\Http\Controllers\Admin\helpdesk\SocialMedia\SocialMediaController;
 use App\Http\Controllers\Common\PhpMailController;
 // requests
@@ -179,7 +180,7 @@ class AuthController extends Controller
                 $user->user_name = $request->input('email');
             }
             $user->role = 'user';
-            $code = str_random(60);
+            $code = Str::random(60);
             $user->remember_token = $code;
             $user->save();
             $message12 = '';

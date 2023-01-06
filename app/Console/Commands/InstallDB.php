@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Support\Str;
 use App\Http\Controllers\Installer\helpdesk\InstallController;
 use DB;
 use Illuminate\Console\Command;
@@ -78,7 +79,7 @@ class InstallDB extends Command
     public function updateAppUrl()
     {
         $url = $this->ask('Enter your app url (with http/https and www/non www)');
-        if (str_finish($url, '/')) {
+        if (Str::finish($url, '/')) {
             $url = rtrim($url, '/ ');
         }
         $systems = new \App\Model\helpdesk\Settings\System();

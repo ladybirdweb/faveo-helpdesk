@@ -266,7 +266,7 @@ if ($thread->title != "") {
                             @if($dept123)
                             <td title="{{$dept123->name}}">{{$dept123->name}}</td></tr>
                             @endif
-                        <tr><td><b>{!! Lang::get('lang.email') !!}:</b></td>        <td>{{str_limit($user->email,30)}}</td></tr>
+                        <tr><td><b>{!! Lang::get('lang.email') !!}:</b></td>        <td>{{Str::limit($user->email,30)}}</td></tr>
                         @if($user->ban > 0)  <tr><td style="color:orange;"><i class="fa fa-warning"></i><b>
                                     {!!  Lang::get('lang.this_ticket_is_under_banned_user')!!}</td><td></td></tr>@endif
                     </div>
@@ -303,7 +303,7 @@ if ($thread->title != "") {
                         @if($user->mobile !=null)<tr><td><b>{!! Lang::get('lang.mobile') !!}:</b></td>          <td>{{$user->ext . $user->mobile}}</td></tr>@endif
                         <tr><td><b>{!! Lang::get('lang.source') !!}:</b></td>         <td>{{$ticket_source}}</td></tr>
                         <tr><td><b>{!! Lang::get('lang.help_topic') !!}:</b></td>     <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first(); ?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
-                        <tr><td><b>{!! Lang::get('lang.last_message') !!}:</b></td>   <td>{{str_limit($username,30)}}</td></tr>
+                        <tr><td><b>{!! Lang::get('lang.last_message') !!}:</b></td>   <td>{{Str::limit($username,30)}}</td></tr>
                         <tr><td><b>{!! Lang::get('lang.organization') !!}:</b></td>   <td>{!!$LastResponse->getOrgWithLink()!!}</td></tr>
                         <?php Event::fire(new App\Events\TicketDetailTable($TicketData)); ?>
                     </div>
@@ -661,9 +661,9 @@ if ($thread->title != "") {
                                             @endif
                                             
                                             @if($conversation->user_id != null) 
-                                                <a href='{!! url("/user/".$role->id) !!}'>{!! str_limit($usernam,30) !!}</a>
+                                                <a href='{!! url("/user/".$role->id) !!}'>{!! Str::limit($usernam,30) !!}</a>
                                             @else
-                                                {!! str_limit($usernam,30) !!}
+                                                {!! Str::limit($usernam,30) !!}
                                             @endif
 
                                             @if($conversation->id == $ij->id)

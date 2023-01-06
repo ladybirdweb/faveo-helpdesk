@@ -14,7 +14,7 @@
                     <div class="caption text-center">
                         <div class="btn-group">
                             <button type="button" onclick="clickFolder('folder_{{ $key }}',0)" class="btn btn-default btn-xs">
-                                {{ str_limit($dir_name, $limit = 10, $end = '...') }}
+                                {{ Str::limit($dir_name, $limit = 10, $end = '...') }}
                             </button>
                             <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">
                                 <span class="caret"></span>
@@ -44,7 +44,7 @@
                     <div class="caption text-center">
                         <div class="btn-group ">
                             <button type="button" onclick="useFile('{{ $file_name }}')" class="btn btn-default btn-xs">
-                                {{ str_limit($file_name, $limit = 10, $end = '...') }}
+                                {{ Str::limit($file_name, $limit = 10, $end = '...') }}
                             </button>
                             <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">
                                 <span class="caret"></span>

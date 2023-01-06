@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Str;
+
 function loging($context, $message, $level = 'error', $array = [])
 {
     \Log::$level($message.':-:-:-'.$context, $array);
@@ -30,14 +32,14 @@ function mime($type)
             $type == 'image/gif' ||
            // $type == "application/octet-stream" ||
             $type == 'image/png' ||
-            starts_with($type, 'image')) {
+            Str::startsWith($type, 'image')) {
         return 'image';
     }
 }
 
 function removeUnderscore($string)
 {
-    if (str_contains($string, '_') === true) {
+    if (Str::contains($string, '_') === true) {
         $string = str_replace('_', ' ', $string);
     }
 
