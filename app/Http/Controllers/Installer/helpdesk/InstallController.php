@@ -256,7 +256,7 @@ class InstallController extends Controller
             return redirect()->back()->with('fails', 'invalid date-time format');
         }
 
-        $lang_path = base_path('resources/lang');
+        $lang_path = base_path('lang');
 
         //check user input language package is available or not in the system
         if (array_key_exists($language, \Config::get('languages')) && in_array($language, scandir($lang_path))) {
