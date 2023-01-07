@@ -33,7 +33,8 @@
         "flowjs/flow-php-server": "^1.0",
         "doctrine/dbal": "^2.6",
         "fideloper/proxy": "^4.4",
-        "laravel/tinker": "^1.0.10"
+        "laravel/tinker": "^1.0.10",
+        "laravel/ui": "^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5.8|^9.3.3",
