@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddForeignKeysToUserAssignOrganizationTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -30,4 +30,4 @@ class AddForeignKeysToUserAssignOrganizationTable extends Migration
             $table->dropForeign('user_assign_organization_ibfk_2');
         });
     }
-}
+};

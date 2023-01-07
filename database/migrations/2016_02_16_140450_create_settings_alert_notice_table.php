@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateSettingsAlertNoticeTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -56,4 +56,4 @@ class CreateSettingsAlertNoticeTable extends Migration
     {
         Schema::drop('settings_alert_notice');
     }
-}
+};

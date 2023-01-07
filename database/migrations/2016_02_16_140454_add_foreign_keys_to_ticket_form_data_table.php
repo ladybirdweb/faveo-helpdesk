@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddForeignKeysToTicketFormDataTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -28,4 +28,4 @@ class AddForeignKeysToTicketFormDataTable extends Migration
             $table->dropForeign('ticket_form_data_ibfk_1');
         });
     }
-}
+};

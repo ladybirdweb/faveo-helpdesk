@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateTicketStatusTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -36,4 +36,4 @@ class CreateTicketStatusTable extends Migration
     {
         Schema::drop('ticket_status');
     }
-}
+};

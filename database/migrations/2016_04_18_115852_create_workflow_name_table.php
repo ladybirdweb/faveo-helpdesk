@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateWorkflowNameTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -32,4 +32,4 @@ class CreateWorkflowNameTable extends Migration
     {
         Schema::drop('workflow_name');
     }
-}
+};
