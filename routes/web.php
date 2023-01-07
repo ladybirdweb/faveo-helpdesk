@@ -10,7 +10,8 @@ use App\Http\Controllers\Job;
 use App\Http\Controllers\Update;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
-
+use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
+use Illuminate\Support\Facades\Lang;
 /*
   |--------------------------------------------------------------------------
   | Application Routes
@@ -23,7 +24,7 @@ use Illuminate\Support\Facades\Route;
  */
 Route::middleware('web')->group(function () {
     Route::middleware('install', 'update')->group(function () {
-        Auth::routes();
+        \Illuminate\Support\Facades\Auth::routes();
         Route::post('login', [Auth\AuthController::class, 'postLogin'])->name('post.login');
         Route::post('auth/register', [Auth\AuthController::class, 'postRegister'])->name('post.register');
         Route::post('password/reset', [Auth\PasswordController::class, 'reset'])->name('post.reset');
@@ -277,8 +278,8 @@ Route::middleware('web')->group(function () {
          */
 
         Route::resource('labels', 'Admin\helpdesk\Label\LabelController');
-        Route::get('labels-ajax', [Admin\helpdesk\Label\LabelController::class, 'ajaxTable'])->name('labels.ajax');
-        Route::get('labels/delete/{id}', [Admin\helpdesk\Label\LabelController::class, 'destroy'])->name('labels.destroy');
+//        Route::get('labels-ajax', [Admin\helpdesk\Label\LabelController::class, 'ajaxTable'])->name('labels.ajax');
+//        Route::get('labels/delete/{id}', [Admin\helpdesk\Label\LabelController::class, 'destroy'])->name('labels.destroy');
 
         Route::get('clean-dummy-data', [Admin\helpdesk\SettingsController::class, 'getCleanUpView'])->name('clean-database');
         Route::post('post-clean-dummy-data', [Admin\helpdesk\SettingsController::class, 'postCleanDummyData'])->name('post-clean-database');
@@ -378,12 +379,12 @@ Route::middleware('web')->group(function () {
         Route::get('/get-parent-tickets/{id}', [Agent\helpdesk\TicketController::class, 'getParentTickets'])->name('get.parent.ticket');
         Route::patch('/merge-tickets/{id}', [Agent\helpdesk\TicketController::class, 'mergeTickets'])->name('merge.tickets');
         //To get department tickets data
-        //open tickets of department
-        Route::get('/get-open-tickets/{id}', [Agent\helpdesk\Ticket2Controller::class, 'getOpenTickets'])->name('get.dept.open');
-        //close tickets of deartment
-        Route::get('/get-closed-tickets/{id}', [Agent\helpdesk\Ticket2Controller::class, 'getCloseTickets'])->name('get.dept.close');
-        //in progress ticket of department
-        Route::get('/get-under-process-tickets/{id}', [Agent\helpdesk\Ticket2Controller::class, 'getInProcessTickets'])->name('get.dept.inprocess');
+//        //open tickets of department
+//        Route::get('/get-open-tickets/{id}', [Agent\helpdesk\Ticket2Controller::class, 'getOpenTickets'])->name('get.dept.open');
+//        //close tickets of deartment
+//        Route::get('/get-closed-tickets/{id}', [Agent\helpdesk\Ticket2Controller::class, 'getCloseTickets'])->name('get.dept.close');
+//        //in progress ticket of department
+//        Route::get('/get-under-process-tickets/{id}', [Agent\helpdesk\Ticket2Controller::class, 'getInProcessTickets'])->name('get.dept.inprocess');
 
         // route for graphical reporting
         Route::get('report', [Agent\helpdesk\ReportController::class, 'index'])->name('report.index'); /* To show dashboard pages */
@@ -399,14 +400,14 @@ Route::middleware('web')->group(function () {
         /*
          * Label
          */
-        Route::get('labels-ticket', [Admin\helpdesk\Label\LabelController::class, 'attachTicket'])->name('labels.ticket');
-        Route::get('json-labels', [Admin\helpdesk\Label\LabelController::class, 'getLabel'])->name('labels.json');
+//        Route::get('labels-ticket', [Admin\helpdesk\Label\LabelController::class, 'attachTicket'])->name('labels.ticket');
+//        Route::get('json-labels', [Admin\helpdesk\Label\LabelController::class, 'getLabel'])->name('labels.json');
 
         /*
          * Tags
          */
-        Route::get('add-tag', [Agent\helpdesk\Filter\TagController::class, 'addToFilter'])->name('tag.add');
-        Route::get('get-tag', [Agent\helpdesk\Filter\TagController::class, 'getTag'])->name('tag.get');
+//        Route::get('add-tag', [Agent\helpdesk\Filter\TagController::class, 'addToFilter'])->name('tag.add');
+//        Route::get('get-tag', [Agent\helpdesk\Filter\TagController::class, 'getTag'])->name('tag.get');
 
         Route::middleware('force.option', 'role.agent')->group(function () {
             Route::get('tickets', [Agent\helpdesk\TicketController::class, 'getTicketsView'])->name('tickets-view');
@@ -729,12 +730,12 @@ Route::middleware('web')->group(function () {
     /*
      * Webhook
      */
-    \Event::listen('ticket.details', function ($details) {
+    \Illuminate\Support\Facades\Event::listen('ticket.details', function ($details) {
         $api_control = new \App\Http\Controllers\Common\ApiSettings();
         $api_control->ticketDetailEvent($details);
     });
 
-    Route::get('test', [Common\PushNotificationController::class, 'response'])->name('test');
+//    Route::get('test', [Common\PushNotificationController::class, 'response'])->name('test');
 
     Route::get('mail/config/service', [Job\MailController::class, 'serviceForm'])->name('mail.config.service');
     /*
