@@ -138,11 +138,12 @@ class CacheManager implements FactoryContract
     /**
      * Create an instance of the array cache driver.
      *
+     * @param  array  $config
      * @return \Illuminate\Cache\Repository
      */
-    protected function createArrayDriver()
+    protected function createArrayDriver(array $config)
     {
-        return $this->repository(new ArrayStore);
+        return $this->repository(new ArrayStore($config['serialize'] ?? false));
     }
 
     /**
@@ -213,7 +214,11 @@ class CacheManager implements FactoryContract
 
         return $this->repository(
             new DatabaseStore(
-                $connection, $config['table'], $this->getPrefix($config)
+                $connection,
+                $config['table'],
+                $this->getPrefix($config),
+                $config['lock_table'] ?? 'cache_locks',
+                $config['lock_lottery'] ?? [2, 100]
             )
         );
     }
@@ -226,11 +231,21 @@ class CacheManager implements FactoryContract
      */
     protected function createDynamodbDriver(array $config)
     {
-        $client = $this->newDynamodbClient($config);
+        $dynamoConfig = [
+            'region' => $config['region'],
+            'version' => 'latest',
+            'endpoint' => $config['endpoint'] ?? null,
+        ];
+
+        if ($config['key'] && $config['secret']) {
+            $dynamoConfig['credentials'] = Arr::only(
+                $config, ['key', 'secret', 'token']
+            );
+        }
 
         return $this->repository(
             new DynamoDbStore(
-                $client,
+                new DynamoDbClient($dynamoConfig),
                 $config['table'],
                 $config['attributes']['key'] ?? 'key',
                 $config['attributes']['value'] ?? 'value',
@@ -238,28 +253,6 @@ class CacheManager implements FactoryContract
                 $this->getPrefix($config)
             )
         );
-    }
-
-    /**
-     * Create new DynamoDb Client instance.
-     *
-     * @return DynamoDbClient
-     */
-    protected function newDynamodbClient(array $config)
-    {
-        $dynamoConfig = [
-            'region' => $config['region'],
-            'version' => 'latest',
-            'endpoint' => $config['endpoint'] ?? null,
-        ];
-
-        if (isset($config['key']) && isset($config['secret'])) {
-            $dynamoConfig['credentials'] = Arr::only(
-                $config, ['key', 'secret', 'token']
-            );
-        }
-
-        return new DynamoDbClient($dynamoConfig);
     }
 
     /**

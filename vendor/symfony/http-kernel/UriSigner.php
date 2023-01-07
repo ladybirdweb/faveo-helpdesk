@@ -11,6 +11,8 @@
 
 namespace Symfony\Component\HttpKernel;
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * Signs URIs.
  *
@@ -37,11 +39,9 @@ class UriSigner
      * The given URI is signed by adding the query string parameter
      * which value depends on the URI and the secret.
      *
-     * @param string $uri A URI to sign
-     *
-     * @return string The signed URI
+     * @return string
      */
-    public function sign($uri)
+    public function sign(string $uri)
     {
         $url = parse_url($uri);
         if (isset($url['query'])) {
@@ -59,11 +59,9 @@ class UriSigner
     /**
      * Checks that a URI contains the correct hash.
      *
-     * @param string $uri A signed URI
-     *
-     * @return bool True if the URI is signed correctly, false otherwise
+     * @return bool
      */
-    public function check($uri)
+    public function check(string $uri)
     {
         $url = parse_url($uri);
         if (isset($url['query'])) {
@@ -80,6 +78,14 @@ class UriSigner
         unset($params[$this->parameter]);
 
         return hash_equals($this->computeHash($this->buildUrl($url, $params)), $hash);
+    }
+
+    public function checkRequest(Request $request): bool
+    {
+        $qs = ($qs = $request->server->get('QUERY_STRING')) ? '?'.$qs : '';
+
+        // we cannot use $request->getUri() here as we want to work with the original URI (no query string reordering)
+        return $this->check($request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo().$qs);
     }
 
     private function computeHash(string $uri): string

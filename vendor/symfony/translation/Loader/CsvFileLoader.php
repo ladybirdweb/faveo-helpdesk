@@ -27,7 +27,7 @@ class CsvFileLoader extends FileLoader
     /**
      * {@inheritdoc}
      */
-    protected function loadResource($resource)
+    protected function loadResource(string $resource)
     {
         $messages = [];
 
@@ -55,12 +55,8 @@ class CsvFileLoader extends FileLoader
 
     /**
      * Sets the delimiter, enclosure, and escape character for CSV.
-     *
-     * @param string $delimiter Delimiter character
-     * @param string $enclosure Enclosure character
-     * @param string $escape    Escape character
      */
-    public function setCsvControl($delimiter = ';', $enclosure = '"', $escape = '\\')
+    public function setCsvControl(string $delimiter = ';', string $enclosure = '"', string $escape = '\\')
     {
         $this->delimiter = $delimiter;
         $this->enclosure = $enclosure;

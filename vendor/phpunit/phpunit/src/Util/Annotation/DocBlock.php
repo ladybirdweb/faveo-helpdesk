@@ -18,16 +18,12 @@ use function array_merge;
 use function array_pop;
 use function array_slice;
 use function array_values;
-use function constant;
 use function count;
-use function defined;
 use function explode;
 use function file;
 use function implode;
 use function is_array;
 use function is_int;
-use function is_numeric;
-use function is_string;
 use function json_decode;
 use function json_last_error;
 use function json_last_error_msg;
@@ -43,7 +39,6 @@ use function strlen;
 use function strpos;
 use function strtolower;
 use function substr;
-use function substr_count;
 use function trim;
 use PharIo\Version\VersionConstraintParser;
 use PHPUnit\Framework\InvalidDataProviderException;
@@ -83,8 +78,6 @@ final class DocBlock
     private const REGEX_REQUIRES = '/@requires\s+(?P<name>function|extension)\s+(?P<value>([^\s<>=!]+))\s*(?P<operator>[<>=!]{0,2})\s*(?P<version>[\d\.-]+[\d\.]?)?[ \t]*\r?$/m';
 
     private const REGEX_TEST_WITH = '/@testWith\s+/';
-
-    private const REGEX_EXPECTED_EXCEPTION = '(@expectedException\s+([:.\w\\\\x7f-\xff]+)(?:[\t ]+(\S*))?(?:[\t ]+(\S*))?\s*$)m';
 
     /** @var string */
     private $docComment;
@@ -239,7 +232,6 @@ final class DocBlock
                     ];
                     $recordedOffsets[$matches['name'] . '_constraint'] = $offset;
                 } catch (\PharIo\Version\Exception $e) {
-                    /* @TODO this catch is currently not valid, see https://github.com/phar-io/version/issues/16 */
                     throw new Warning($e->getMessage(), $e->getCode(), $e);
                 }
             }
@@ -278,61 +270,6 @@ final class DocBlock
                 'extension_versions' => $extensionVersions,
             ])
         );
-    }
-
-    /**
-     * @return array|bool
-     *
-     * @psalm-return false|array{
-     *   class: class-string,
-     *   code: int|string|null,
-     *   message: string,
-     *   message_regex: string
-     * }
-     */
-    public function expectedException()
-    {
-        $docComment = (string) substr($this->docComment, 3, -2);
-
-        if (1 !== preg_match(self::REGEX_EXPECTED_EXCEPTION, $docComment, $matches)) {
-            return false;
-        }
-
-        /** @psalm-var class-string $class */
-        $class         = $matches[1];
-        $annotations   = $this->symbolAnnotations();
-        $code          = null;
-        $message       = '';
-        $messageRegExp = '';
-
-        if (isset($matches[2])) {
-            $message = trim($matches[2]);
-        } elseif (isset($annotations['expectedExceptionMessage'])) {
-            $message = $this->parseAnnotationContent($annotations['expectedExceptionMessage'][0]);
-        }
-
-        if (isset($annotations['expectedExceptionMessageRegExp'])) {
-            $messageRegExp = $this->parseAnnotationContent($annotations['expectedExceptionMessageRegExp'][0]);
-        }
-
-        if (isset($matches[3])) {
-            $code = $matches[3];
-        } elseif (isset($annotations['expectedExceptionCode'])) {
-            $code = $this->parseAnnotationContent($annotations['expectedExceptionCode'][0]);
-        }
-
-        if (is_numeric($code)) {
-            $code = (int) $code;
-        } elseif (is_string($code) && defined($code)) {
-            $code = (int) constant($code);
-        }
-
-        return [
-            'class'         => $class,
-            'code'          => $code,
-            'message'       => $message,
-            'message_regex' => $messageRegExp,
-        ];
     }
 
     /**
@@ -420,21 +357,14 @@ final class DocBlock
         return 1 === preg_match('/@after\b/', $this->docComment);
     }
 
-    /**
-     * Parse annotation content to use constant/class constant values.
-     *
-     * Constants are specified using a starting '@'. For example: @ClassName::CONST_NAME
-     *
-     * If the constant is not found the string is used as is to ensure maximum BC.
-     */
-    private function parseAnnotationContent(string $message): string
+    public function isToBeExecutedAsPreCondition(): bool
     {
-        if (defined($message) &&
-            (strpos($message, '::') !== false && substr_count($message, '::') + 1 === 2)) {
-            return constant($message);
-        }
+        return 1 === preg_match('/@preCondition\b/', $this->docComment);
+    }
 
-        return $message;
+    public function isToBeExecutedAsPostCondition(): bool
+    {
+        return 1 === preg_match('/@postCondition\b/', $this->docComment);
     }
 
     private function getDataFromDataProviderAnnotation(string $docComment): ?array
@@ -480,7 +410,7 @@ final class DocBlock
             } catch (ReflectionException $e) {
                 throw new Exception(
                     $e->getMessage(),
-                    (int) $e->getCode(),
+                    $e->getCode(),
                     $e
                 );
                 // @codeCoverageIgnoreEnd

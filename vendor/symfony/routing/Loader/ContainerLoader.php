@@ -22,15 +22,16 @@ class ContainerLoader extends ObjectLoader
 {
     private $container;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, string $env = null)
     {
         $this->container = $container;
+        parent::__construct($env);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supports($resource, $type = null)
+    public function supports($resource, string $type = null)
     {
         return 'service' === $type && \is_string($resource);
     }

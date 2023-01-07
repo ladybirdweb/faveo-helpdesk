@@ -14,6 +14,7 @@ use function get_class;
 use function method_exists;
 use function sprintf;
 use function str_replace;
+use function trim;
 use DOMDocument;
 use DOMElement;
 use PHPUnit\Framework\AssertionFailedError;
@@ -133,7 +134,7 @@ final class JUnit extends Printer implements TestListener
      */
     public function addError(Test $test, Throwable $t, float $time): void
     {
-        $this->doAddFault($test, $t, $time, 'error');
+        $this->doAddFault($test, $t, 'error');
         $this->testSuiteErrors[$this->testSuiteLevel]++;
     }
 
@@ -142,7 +143,7 @@ final class JUnit extends Printer implements TestListener
      */
     public function addWarning(Test $test, Warning $e, float $time): void
     {
-        $this->doAddFault($test, $e, $time, 'warning');
+        $this->doAddFault($test, $e, 'warning');
         $this->testSuiteWarnings[$this->testSuiteLevel]++;
     }
 
@@ -151,7 +152,7 @@ final class JUnit extends Printer implements TestListener
      */
     public function addFailure(Test $test, AssertionFailedError $e, float $time): void
     {
-        $this->doAddFault($test, $e, $time, 'failure');
+        $this->doAddFault($test, $e, 'failure');
         $this->testSuiteFailures[$this->testSuiteLevel]++;
     }
 
@@ -168,22 +169,11 @@ final class JUnit extends Printer implements TestListener
      */
     public function addRiskyTest(Test $test, Throwable $t, float $time): void
     {
-        if (!$this->reportRiskyTests || $this->currentTestCase === null) {
+        if (!$this->reportRiskyTests) {
             return;
         }
 
-        $error = $this->document->createElement(
-            'error',
-            Xml::prepareString(
-                "Risky Test\n" .
-                Filter::getFilteredStacktrace($t)
-            )
-        );
-
-        $error->setAttribute('type', get_class($t));
-
-        $this->currentTestCase->appendChild($error);
-
+        $this->doAddFault($test, $t, 'error');
         $this->testSuiteErrors[$this->testSuiteLevel]++;
     }
 
@@ -302,7 +292,7 @@ final class JUnit extends Printer implements TestListener
         } catch (ReflectionException $e) {
             throw new Exception(
                 $e->getMessage(),
-                (int) $e->getCode(),
+                $e->getCode(),
                 $e
             );
         }
@@ -317,7 +307,7 @@ final class JUnit extends Printer implements TestListener
             } catch (ReflectionException $e) {
                 throw new Exception(
                     $e->getMessage(),
-                    (int) $e->getCode(),
+                    $e->getCode(),
                     $e
                 );
             }
@@ -388,7 +378,7 @@ final class JUnit extends Printer implements TestListener
         return $this->document->saveXML();
     }
 
-    private function doAddFault(Test $test, Throwable $t, float $time, $type): void
+    private function doAddFault(Test $test, Throwable $t, string $type): void
     {
         if ($this->currentTestCase === null) {
             return;
@@ -400,8 +390,10 @@ final class JUnit extends Printer implements TestListener
             $buffer = '';
         }
 
-        $buffer .= TestFailure::exceptionToString($t) . "\n" .
-                   Filter::getFilteredStacktrace($t);
+        $buffer .= trim(
+            TestFailure::exceptionToString($t) . "\n" .
+            Filter::getFilteredStacktrace($t)
+        );
 
         $fault = $this->document->createElement(
             $type,

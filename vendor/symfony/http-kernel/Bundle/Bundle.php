@@ -58,7 +58,7 @@ abstract class Bundle implements BundleInterface
     /**
      * Returns the bundle's container extension.
      *
-     * @return ExtensionInterface|null The container extension
+     * @return ExtensionInterface|null
      *
      * @throws \LogicException
      */
@@ -69,7 +69,7 @@ abstract class Bundle implements BundleInterface
 
             if (null !== $extension) {
                 if (!$extension instanceof ExtensionInterface) {
-                    throw new \LogicException(sprintf('Extension "%s" must implement Symfony\Component\DependencyInjection\Extension\ExtensionInterface.', \get_class($extension)));
+                    throw new \LogicException(sprintf('Extension "%s" must implement Symfony\Component\DependencyInjection\Extension\ExtensionInterface.', get_debug_type($extension)));
                 }
 
                 // check naming convention

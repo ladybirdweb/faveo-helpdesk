@@ -62,7 +62,7 @@ final class NamePrettifier
      */
     private $useColor;
 
-    public function __construct($useColor = false)
+    public function __construct(bool $useColor = false)
     {
         $this->useColor = $useColor;
     }
@@ -122,7 +122,11 @@ final class NamePrettifier
      */
     public function prettifyTestCase(TestCase $test): string
     {
-        $annotations                = $test->getAnnotations();
+        $annotations = Test::parseTestMethodAnnotations(
+            get_class($test),
+            $test->getName(false)
+        );
+
         $annotationWithPlaceholders = false;
 
         $callback = static function (string $variable): string
@@ -238,7 +242,7 @@ final class NamePrettifier
         } catch (ReflectionException $e) {
             throw new UtilException(
                 $e->getMessage(),
-                (int) $e->getCode(),
+                $e->getCode(),
                 $e
             );
         }
@@ -258,7 +262,7 @@ final class NamePrettifier
                 } catch (ReflectionException $e) {
                     throw new UtilException(
                         $e->getMessage(),
-                        (int) $e->getCode(),
+                        $e->getCode(),
                         $e
                     );
                 }

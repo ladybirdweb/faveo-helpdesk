@@ -24,9 +24,7 @@ final class TraversableKeyValueMatcher extends BasicMatcher
      */
     private $presenter;
 
-    /**
-     * @param Presenter $presenter
-     */
+
     public function __construct(Presenter $presenter)
     {
         $this->presenter = $presenter;
@@ -41,6 +39,14 @@ final class TraversableKeyValueMatcher extends BasicMatcher
             && 2 === \count($arguments)
             && $subject instanceof \Traversable
         ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPriority(): int
+    {
+        return 101;
     }
 
     /**

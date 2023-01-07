@@ -4,14 +4,17 @@ namespace Dotenv;
 
 use Dotenv\Exception\ValidationException;
 use Dotenv\Regex\Regex;
+use Dotenv\Repository\RepositoryInterface;
 
-/**
- * This is the validator class.
- *
- * It's responsible for applying validations against a number of variables.
- */
 class Validator
 {
+    /**
+     * The environment repository instance.
+     *
+     * @var \Dotenv\Repository\RepositoryInterface
+     */
+    protected $repository;
+
     /**
      * The variables to validate.
      *
@@ -20,27 +23,20 @@ class Validator
     protected $variables;
 
     /**
-     * The loader instance.
-     *
-     * @var \Dotenv\Loader
-     */
-    protected $loader;
-
-    /**
      * Create a new validator instance.
      *
-     * @param string[]       $variables
-     * @param \Dotenv\Loader $loader
-     * @param bool           $required
+     * @param \Dotenv\Repository\RepositoryInterface $repository
+     * @param string[]                               $variables
+     * @param bool                                   $required
      *
      * @throws \Dotenv\Exception\ValidationException
      *
      * @return void
      */
-    public function __construct(array $variables, Loader $loader, $required = true)
+    public function __construct(RepositoryInterface $repository, array $variables, $required = true)
     {
+        $this->repository = $repository;
         $this->variables = $variables;
-        $this->loader = $loader;
 
         if ($required) {
             $this->assertCallback(
@@ -180,7 +176,7 @@ class Validator
         $failing = [];
 
         foreach ($this->variables as $variable) {
-            if ($callback($this->loader->getEnvironmentVariable($variable)) === false) {
+            if ($callback($this->repository->get($variable)) === false) {
                 $failing[] = sprintf('%s %s', $variable, $message);
             }
         }

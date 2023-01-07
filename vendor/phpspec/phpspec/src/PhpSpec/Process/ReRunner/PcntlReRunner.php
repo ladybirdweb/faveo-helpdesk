@@ -24,8 +24,6 @@ final class PcntlReRunner extends PhpExecutableReRunner
     private $executionContext;
 
     /**
-     * @param PhpExecutableFinder $phpExecutableFinder
-     * @param ExecutionContext $executionContext
      * @return static
      */
     public static function withExecutionContext(PhpExecutableFinder $phpExecutableFinder, ExecutionContext $executionContext)
@@ -36,9 +34,7 @@ final class PcntlReRunner extends PhpExecutableReRunner
         return $reRunner;
     }
 
-    /**
-     * @return bool
-     */
+    
     public function isSupported(): bool
     {
         return (php_sapi_name() == 'cli')
@@ -55,6 +51,11 @@ final class PcntlReRunner extends PhpExecutableReRunner
         $args = $_SERVER['argv'];
         $env = $this->executionContext ? $this->executionContext->asEnv() : array();
 
-        pcntl_exec($this->getExecutablePath(), $args, array_merge($env, $_SERVER));
+        $env = array_filter(
+            array_merge($env, $_SERVER),
+            function($x): bool { return !is_array($x); }
+        );
+
+        pcntl_exec($this->getExecutablePath(), $args, $env);
     }
 }

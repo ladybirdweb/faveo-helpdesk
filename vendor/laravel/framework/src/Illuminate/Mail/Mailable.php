@@ -4,8 +4,8 @@ namespace Illuminate\Mail;
 
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
+use Illuminate\Contracts\Mail\Factory as MailFactory;
 use Illuminate\Contracts\Mail\Mailable as MailableContract;
-use Illuminate\Contracts\Mail\Mailer as MailerContract;
 use Illuminate\Contracts\Queue\Factory as Queue;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Collection;
@@ -133,6 +133,20 @@ class Mailable implements MailableContract, Renderable
     public $callbacks = [];
 
     /**
+     * The name of the theme that should be used when formatting the message.
+     *
+     * @var string|null
+     */
+    public $theme;
+
+    /**
+     * The name of the mailer that should send the message.
+     *
+     * @var string
+     */
+    public $mailer;
+
+    /**
      * The callback that should be invoked while building the view data.
      *
      * @var callable
@@ -142,13 +156,17 @@ class Mailable implements MailableContract, Renderable
     /**
      * Send the message using the given mailer.
      *
-     * @param  \Illuminate\Contracts\Mail\Mailer  $mailer
+     * @param  \Illuminate\Contracts\Mail\Factory|\Illuminate\Contracts\Mail\Mailer  $mailer
      * @return void
      */
-    public function send(MailerContract $mailer)
+    public function send($mailer)
     {
         return $this->withLocale($this->locale, function () use ($mailer) {
             Container::getInstance()->call([$this, 'build']);
+
+            $mailer = $mailer instanceof MailFactory
+                            ? $mailer->mailer($this->mailer)
+                            : $mailer;
 
             return $mailer->send($this->buildView(), $this->buildViewData(), function ($message) {
                 $this->buildFrom($message)
@@ -623,6 +641,12 @@ class Mailable implements MailableContract, Renderable
     protected function normalizeRecipient($recipient)
     {
         if (is_array($recipient)) {
+            if (array_values($recipient) === $recipient) {
+                return (object) array_map(function ($email) {
+                    return compact('email');
+                }, $recipient);
+            }
+
             return (object) $recipient;
         } elseif (is_string($recipient)) {
             return (object) ['email' => $recipient];
@@ -821,6 +845,19 @@ class Mailable implements MailableContract, Renderable
     }
 
     /**
+     * Set the name of the mailer that should send the message.
+     *
+     * @param  string  $mailer
+     * @return $this
+     */
+    public function mailer($mailer)
+    {
+        $this->mailer = $mailer;
+
+        return $this;
+    }
+
+    /**
      * Register a callback to be called with the Swift message instance.
      *
      * @param  callable  $callback
@@ -842,6 +879,25 @@ class Mailable implements MailableContract, Renderable
     public static function buildViewDataUsing(callable $callback)
     {
         static::$viewDataCallback = $callback;
+    }
+
+    /**
+     * Apply the callback's message changes if the given "value" is true.
+     *
+     * @param  mixed  $value
+     * @param  callable  $callback
+     * @param  mixed  $default
+     * @return mixed|$this
+     */
+    public function when($value, $callback, $default = null)
+    {
+        if ($value) {
+            return $callback($this, $value) ?: $this;
+        } elseif ($default) {
+            return $default($this, $value) ?: $this;
+        }
+
+        return $this;
     }
 
     /**

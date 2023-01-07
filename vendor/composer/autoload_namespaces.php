@@ -10,8 +10,6 @@ return array(
     'PhpSpec' => array($vendorDir . '/phpspec/phpspec/src'),
     'Mremi\\UrlShortener' => array($vendorDir . '/mremi/url-shortener/src'),
     'Mockery' => array($vendorDir . '/mockery/mockery/library'),
-    'Highlight\\' => array($vendorDir . '/scrivo/highlight.php'),
-    'HighlightUtilities\\' => array($vendorDir . '/scrivo/highlight.php'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
     'Guzzle\\Tests' => array($vendorDir . '/guzzle/guzzle/tests'),
     'Guzzle' => array($vendorDir . '/guzzle/guzzle/src'),

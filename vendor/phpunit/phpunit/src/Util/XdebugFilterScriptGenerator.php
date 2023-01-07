@@ -16,16 +16,17 @@ use function implode;
 use function is_string;
 use function realpath;
 use function sprintf;
+use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\CodeCoverage as FilterConfiguration;
 
 /**
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
+ *
+ * @deprecated
  */
 final class XdebugFilterScriptGenerator
 {
-    public function generate(array $filterData): string
+    public function generate(FilterConfiguration $filter): string
     {
-        $items = $this->getWhitelistItems($filterData);
-
         $files = array_map(
             static function ($item)
             {
@@ -34,7 +35,7 @@ final class XdebugFilterScriptGenerator
                     $item
                 );
             },
-            $items
+            $this->getItems($filter)
         );
 
         $files = implode(",\n", $files);
@@ -56,27 +57,23 @@ if (!\\function_exists('xdebug_set_filter')) {
 EOF;
     }
 
-    private function getWhitelistItems(array $filterData): array
+    private function getItems(FilterConfiguration $filter): array
     {
         $files = [];
 
-        if (isset($filterData['include']['directory'])) {
-            foreach ($filterData['include']['directory'] as $directory) {
-                $path = realpath($directory['path']);
+        foreach ($filter->directories() as $directory) {
+            $path = realpath($directory->path());
 
-                if (is_string($path)) {
-                    $files[] = sprintf(
-                        addslashes('%s' . DIRECTORY_SEPARATOR),
-                        $path
-                    );
-                }
+            if (is_string($path)) {
+                $files[] = sprintf(
+                    addslashes('%s' . DIRECTORY_SEPARATOR),
+                    $path
+                );
             }
         }
 
-        if (isset($filterData['include']['directory'])) {
-            foreach ($filterData['include']['file'] as $file) {
-                $files[] = $file;
-            }
+        foreach ($filter->files() as $file) {
+            $files[] = $file->path();
         }
 
         return $files;

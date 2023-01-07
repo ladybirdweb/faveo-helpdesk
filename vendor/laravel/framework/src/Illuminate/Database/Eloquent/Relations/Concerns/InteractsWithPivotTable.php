@@ -184,7 +184,10 @@ trait InteractsWithPivotTable
      */
     public function updateExistingPivot($id, array $attributes, $touch = true)
     {
-        if ($this->using && empty($this->pivotWheres) && empty($this->pivotWhereIns)) {
+        if ($this->using &&
+            empty($this->pivotWheres) &&
+            empty($this->pivotWhereIns) &&
+            empty($this->pivotWhereNulls)) {
             return $this->updateExistingPivotUsingCustomClass($id, $attributes, $touch);
         }
 
@@ -220,14 +223,9 @@ trait InteractsWithPivotTable
 
         $updated = $pivot ? $pivot->fill($attributes)->isDirty() : false;
 
-        $pivot = $this->newPivot([
-            $this->foreignPivotKey => $this->parent->{$this->parentKey},
-            $this->relatedPivotKey => $this->parseId($id),
-        ], true);
-
-        $pivot->timestamps = $updated && in_array($this->updatedAt(), $this->pivotColumns);
-
-        $pivot->fill($attributes)->save();
+        if ($updated) {
+            $pivot->save();
+        }
 
         if ($touch) {
             $this->touchIfTouching();
@@ -414,7 +412,11 @@ trait InteractsWithPivotTable
      */
     public function detach($ids = null, $touch = true)
     {
-        if ($this->using && ! empty($ids) && empty($this->pivotWheres) && empty($this->pivotWhereIns)) {
+        if ($this->using &&
+            ! empty($ids) &&
+            empty($this->pivotWheres) &&
+            empty($this->pivotWhereIns) &&
+            empty($this->pivotWhereNulls)) {
             $results = $this->detachUsingCustomClass($ids);
         } else {
             $query = $this->newPivotQuery();
@@ -429,7 +431,7 @@ trait InteractsWithPivotTable
                     return 0;
                 }
 
-                $query->whereIn($this->getQualifiedRelatedPivotKeyName(), (array) $ids);
+                $query->whereIn($this->relatedPivotKey, (array) $ids);
             }
 
             // Once we have all of the conditions set on the statement, we are ready
@@ -475,7 +477,9 @@ trait InteractsWithPivotTable
         return $this->newPivotQuery()->get()->map(function ($record) {
             $class = $this->using ? $this->using : Pivot::class;
 
-            return (new $class)->setRawAttributes((array) $record, true);
+            $pivot = $class::fromRawAttributes($this->parent, (array) $record, $this->getTable(), true);
+
+            return $pivot->setPivotKeys($this->foreignPivotKey, $this->relatedPivotKey);
         });
     }
 
@@ -544,7 +548,11 @@ trait InteractsWithPivotTable
             $query->whereIn(...$arguments);
         }
 
-        return $query->where($this->getQualifiedForeignPivotKeyName(), $this->parent->{$this->parentKey});
+        foreach ($this->pivotWhereNulls as $arguments) {
+            $query->whereNull(...$arguments);
+        }
+
+        return $query->where($this->foreignPivotKey, $this->parent->{$this->parentKey});
     }
 
     /**

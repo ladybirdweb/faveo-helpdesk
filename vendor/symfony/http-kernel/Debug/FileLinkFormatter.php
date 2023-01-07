@@ -20,10 +20,20 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author Jérémy Romey <jeremy@free-agent.fr>
  *
- * @final since Symfony 4.3
+ * @final
  */
 class FileLinkFormatter
 {
+    private const FORMATS = [
+        'textmate' => 'txmt://open?url=file://%f&line=%l',
+        'macvim' => 'mvim://open?url=file://%f&line=%l',
+        'emacs' => 'emacs://open?url=file://%f&line=%l',
+        'sublime' => 'subl://open?url=file://%f&line=%l',
+        'phpstorm' => 'phpstorm://open?file=%f&line=%l',
+        'atom' => 'atom://core/open/file?filename=%f&line=%l',
+        'vscode' => 'vscode://file/%f:%l',
+    ];
+
     private $fileLinkFormat;
     private $requestStack;
     private $baseDir;
@@ -35,7 +45,7 @@ class FileLinkFormatter
      */
     public function __construct($fileLinkFormat = null, RequestStack $requestStack = null, string $baseDir = null, $urlFormat = null)
     {
-        if (!\is_array($fileLinkFormat) && $fileLinkFormat = $fileLinkFormat ?: \ini_get('xdebug.file_link_format') ?: get_cfg_var('xdebug.file_link_format')) {
+        if (!\is_array($fileLinkFormat) && $fileLinkFormat = (self::FORMATS[$fileLinkFormat] ?? $fileLinkFormat) ?: \ini_get('xdebug.file_link_format') ?: get_cfg_var('xdebug.file_link_format')) {
             $i = strpos($f = $fileLinkFormat, '&', max(strrpos($f, '%f'), strrpos($f, '%l'))) ?: \strlen($f);
             $fileLinkFormat = [substr($f, 0, $i)] + preg_split('/&([^>]++)>/', substr($f, $i), -1, \PREG_SPLIT_DELIM_CAPTURE);
         }
@@ -46,7 +56,7 @@ class FileLinkFormatter
         $this->urlFormat = $urlFormat;
     }
 
-    public function format($file, $line)
+    public function format(string $file, int $line)
     {
         if ($fmt = $this->getFileLinkFormat()) {
             for ($i = 1; isset($fmt[$i]); ++$i) {
@@ -75,7 +85,7 @@ class FileLinkFormatter
     /**
      * @internal
      */
-    public static function generateUrlFormat(UrlGeneratorInterface $router, $routeName, $queryString)
+    public static function generateUrlFormat(UrlGeneratorInterface $router, string $routeName, string $queryString): ?string
     {
         try {
             return $router->generate($routeName).$queryString;
@@ -91,7 +101,7 @@ class FileLinkFormatter
         }
 
         if ($this->requestStack && $this->baseDir && $this->urlFormat) {
-            $request = $this->requestStack->getMasterRequest();
+            $request = $this->requestStack->getMainRequest();
 
             if ($request instanceof Request && (!$this->urlFormat instanceof \Closure || $this->urlFormat = ($this->urlFormat)())) {
                 return [

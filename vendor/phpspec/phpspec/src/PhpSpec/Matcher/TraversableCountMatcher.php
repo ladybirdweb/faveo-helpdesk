@@ -28,9 +28,7 @@ final class TraversableCountMatcher implements Matcher
      */
     private $presenter;
 
-    /**
-     * @param Presenter $presenter
-     */
+
     public function __construct(Presenter $presenter)
     {
         $this->presenter = $presenter;
@@ -58,7 +56,7 @@ final class TraversableCountMatcher implements Matcher
             throw new FailureException(sprintf(
                 'Expected %s to have %s items, but got %s than that.',
                 $this->presenter->presentValue($subject),
-                $this->presenter->presentString((int) $arguments[0]),
+                $this->presenter->presentString((string) $arguments[0]),
                 self::MORE_THAN === $countDifference ? 'more' : 'less'
             ));
         }
@@ -77,7 +75,7 @@ final class TraversableCountMatcher implements Matcher
             throw new FailureException(sprintf(
                 'Expected %s not to have %s items, but got it.',
                 $this->presenter->presentValue($subject),
-                $this->presenter->presentString((int) $arguments[0])
+                $this->presenter->presentString((string) $arguments[0])
             ));
         }
 
@@ -89,13 +87,10 @@ final class TraversableCountMatcher implements Matcher
      */
     public function getPriority(): int
     {
-        return 100;
+        return 101;
     }
 
     /**
-     * @param \Traversable $subject
-     * @param int $expected
-     *
      * @return int self::*
      */
     private function countDifference(\Traversable $subject, int $expected): int

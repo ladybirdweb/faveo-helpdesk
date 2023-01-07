@@ -152,7 +152,7 @@ trait QueriesRelationships
      * Add a relationship count / exists condition to the query with where clauses and an "or".
      *
      * @param  string  $relation
-     * @param  \Closure  $callback
+     * @param  \Closure|null  $callback
      * @param  string  $operator
      * @param  int  $count
      * @return \Illuminate\Database\Eloquent\Builder|static
@@ -178,7 +178,7 @@ trait QueriesRelationships
      * Add a relationship count / exists condition to the query with where clauses and an "or".
      *
      * @param  string  $relation
-     * @param  \Closure  $callback
+     * @param  \Closure|null  $callback
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
     public function orWhereDoesntHave($relation, Closure $callback = null)
@@ -205,10 +205,10 @@ trait QueriesRelationships
 
         if ($types === ['*']) {
             $types = $this->model->newModelQuery()->distinct()->pluck($relation->getMorphType())->filter()->all();
+        }
 
-            foreach ($types as &$type) {
-                $type = Relation::getMorphedModel($type) ?? $type;
-            }
+        foreach ($types as &$type) {
+            $type = Relation::getMorphedModel($type) ?? $type;
         }
 
         return $this->where(function ($query) use ($relation, $callback, $operator, $count, $types) {
@@ -311,7 +311,7 @@ trait QueriesRelationships
      *
      * @param  string  $relation
      * @param  string|array  $types
-     * @param  \Closure  $callback
+     * @param  \Closure|null  $callback
      * @param  string  $operator
      * @param  int  $count
      * @return \Illuminate\Database\Eloquent\Builder|static
@@ -339,7 +339,7 @@ trait QueriesRelationships
      *
      * @param  string  $relation
      * @param  string|array  $types
-     * @param  \Closure  $callback
+     * @param  \Closure|null  $callback
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
     public function orWhereDoesntHaveMorph($relation, $types, Closure $callback = null)
@@ -389,6 +389,10 @@ trait QueriesRelationships
             $query->callScope($constraints);
 
             $query = $query->mergeConstraintsFrom($relation->getQuery())->toBase();
+
+            $query->orders = null;
+
+            $query->setBindings([], 'order');
 
             if (count($query->columns) > 1) {
                 $query->columns = [$query->columns[0]];

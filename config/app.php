@@ -53,7 +53,7 @@ return [
       | your application so that it is used when running Artisan tasks.
       |
      */
-    'url' => env('APP_URL'),
+    'url' => env('APP_URL', 'http://localhost'),
     /*
       |--------------------------------------------------------------------------
       | Application Timezone
@@ -173,8 +173,6 @@ return [
         \Torann\GeoIP\GeoIPServiceProvider::class,
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        Unisharp\Ckeditor\ServiceProvider::class,
-        LaravelFCM\FCMServiceProvider::class,
         //Collective\Bus\BusServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,

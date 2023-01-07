@@ -39,7 +39,7 @@ class NullSessionHandler extends AbstractSessionHandler
     /**
      * {@inheritdoc}
      */
-    protected function doRead($sessionId)
+    protected function doRead(string $sessionId)
     {
         return '';
     }
@@ -56,7 +56,7 @@ class NullSessionHandler extends AbstractSessionHandler
     /**
      * {@inheritdoc}
      */
-    protected function doWrite($sessionId, $data)
+    protected function doWrite(string $sessionId, string $data)
     {
         return true;
     }
@@ -64,7 +64,7 @@ class NullSessionHandler extends AbstractSessionHandler
     /**
      * {@inheritdoc}
      */
-    protected function doDestroy($sessionId)
+    protected function doDestroy(string $sessionId)
     {
         return true;
     }

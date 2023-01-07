@@ -23,9 +23,7 @@ final class TraversableContainMatcher extends BasicMatcher
      */
     private $presenter;
 
-    /**
-     * @param Presenter $presenter
-     */
+
     public function __construct(Presenter $presenter)
     {
         $this->presenter = $presenter;
@@ -40,6 +38,14 @@ final class TraversableContainMatcher extends BasicMatcher
             && 1 === \count($arguments)
             && $subject instanceof \Traversable
         ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPriority(): int
+    {
+        return 101;
     }
 
     /**

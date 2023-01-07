@@ -11,8 +11,8 @@
 
 namespace NunoMaduro\Collision\Contracts;
 
-use Whoops\Exception\Inspector;
 use Symfony\Component\Console\Output\OutputInterface;
+use Whoops\Exception\Inspector;
 
 /**
  * This is the Collision Writer contract.
@@ -25,7 +25,7 @@ interface Writer
      * Ignores traces where the file string matches one
      * of the provided regex expressions.
      *
-     * @param  string[] $ignore The regex expressions.
+     * @param string[] $ignore the regex expressions
      *
      * @return \NunoMaduro\Collision\Contracts\Writer
      */
@@ -34,16 +34,19 @@ interface Writer
     /**
      * Declares whether or not the Writer should show the trace.
      *
-     * @param  bool $show
-     *
      * @return \NunoMaduro\Collision\Contracts\Writer
      */
     public function showTrace(bool $show): Writer;
 
     /**
-     * Declares whether or not the Writer should show the editor.
+     * Declares whether or not the Writer should show the title.
      *
-     * @param  bool $show
+     * @return \NunoMaduro\Collision\Contracts\Writer
+     */
+    public function showTitle(bool $show): Writer;
+
+    /**
+     * Declares whether or not the Writer should show the editor.
      *
      * @return \NunoMaduro\Collision\Contracts\Writer
      */
@@ -51,15 +54,11 @@ interface Writer
 
     /**
      * Writes the details of the exception on the console.
-     *
-     * @param \Whoops\Exception\Inspector $inspector
      */
     public function write(Inspector $inspector): void;
 
     /**
      * Sets the output.
-     *
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
      *
      * @return \NunoMaduro\Collision\Contracts\Writer
      */
@@ -67,8 +66,6 @@ interface Writer
 
     /**
      * Gets the output.
-     *
-     * @return \Symfony\Component\Console\Output\OutputInterface
      */
     public function getOutput(): OutputInterface;
 }

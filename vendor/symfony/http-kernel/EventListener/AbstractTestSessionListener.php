@@ -15,9 +15,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+
+trigger_deprecation('symfony/http-kernel', '5.4', '"%s" is deprecated use "%s" instead.', AbstractTestSessionListener::class, AbstractSessionListener::class);
 
 /**
  * TestSessionListener.
@@ -27,7 +29,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
  * @author Bulat Shakirzyanov <mallluhuct@gmail.com>
  * @author Fabien Potencier <fabien@symfony.com>
  *
- * @internal since Symfony 4.3
+ * @internal
+ *
+ * @deprecated since Symfony 5.4, use AbstractSessionListener instead
  */
 abstract class AbstractTestSessionListener implements EventSubscriberInterface
 {
@@ -39,14 +43,16 @@ abstract class AbstractTestSessionListener implements EventSubscriberInterface
         $this->sessionOptions = $sessionOptions;
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 
         // bootstrap the session
-        if (!$session = $this->getSession()) {
+        if ($event->getRequest()->hasSession()) {
+            $session = $event->getRequest()->getSession();
+        } elseif (!$session = $this->getSession()) {
             return;
         }
 
@@ -59,12 +65,12 @@ abstract class AbstractTestSessionListener implements EventSubscriberInterface
     }
 
     /**
-     * Checks if session was initialized and saves if current request is master
+     * Checks if session was initialized and saves if current request is the main request
      * Runs on 'kernel.response' in test environment.
      */
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 
@@ -97,10 +103,10 @@ abstract class AbstractTestSessionListener implements EventSubscriberInterface
         }
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::REQUEST => ['onKernelRequest', 192],
+            KernelEvents::REQUEST => ['onKernelRequest', 127], // AFTER SessionListener
             KernelEvents::RESPONSE => ['onKernelResponse', -128],
         ];
     }
@@ -108,7 +114,7 @@ abstract class AbstractTestSessionListener implements EventSubscriberInterface
     /**
      * Gets the session object.
      *
-     * @return SessionInterface|null A SessionInterface instance or null if no session is available
+     * @return SessionInterface|null
      */
     abstract protected function getSession();
 }

@@ -15,11 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * MemoryDataCollector.
- *
  * @author Fabien Potencier <fabien@symfony.com>
  *
- * @final since Symfony 4.4
+ * @final
  */
 class MemoryDataCollector extends DataCollector implements LateDataCollectorInterface
 {
@@ -30,10 +28,8 @@ class MemoryDataCollector extends DataCollector implements LateDataCollectorInte
 
     /**
      * {@inheritdoc}
-     *
-     * @param \Throwable|null $exception
      */
-    public function collect(Request $request, Response $response/* , \Throwable $exception = null */)
+    public function collect(Request $request, Response $response, \Throwable $exception = null)
     {
         $this->updateMemoryUsage();
     }
@@ -57,29 +53,19 @@ class MemoryDataCollector extends DataCollector implements LateDataCollectorInte
         $this->updateMemoryUsage();
     }
 
-    /**
-     * Gets the memory.
-     *
-     * @return int The memory
-     */
-    public function getMemory()
+    public function getMemory(): int
     {
         return $this->data['memory'];
     }
 
     /**
-     * Gets the PHP memory limit.
-     *
-     * @return int The memory limit
+     * @return int|float
      */
     public function getMemoryLimit()
     {
         return $this->data['memory_limit'];
     }
 
-    /**
-     * Updates the memory usage data.
-     */
     public function updateMemoryUsage()
     {
         $this->data['memory'] = memory_get_peak_usage(true);
@@ -88,7 +74,7 @@ class MemoryDataCollector extends DataCollector implements LateDataCollectorInte
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'memory';
     }

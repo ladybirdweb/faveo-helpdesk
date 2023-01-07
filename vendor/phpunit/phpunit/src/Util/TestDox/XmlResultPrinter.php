@@ -12,6 +12,7 @@ namespace PHPUnit\Util\TestDox;
 use function array_filter;
 use function get_class;
 use function implode;
+use function strpos;
 use DOMDocument;
 use DOMElement;
 use PHPUnit\Framework\AssertionFailedError;
@@ -21,7 +22,9 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestListener;
 use PHPUnit\Framework\TestSuite;
 use PHPUnit\Framework\Warning;
+use PHPUnit\Framework\WarningTestCase;
 use PHPUnit\Util\Printer;
+use PHPUnit\Util\Test as TestUtil;
 use ReflectionClass;
 use ReflectionException;
 use Throwable;
@@ -152,7 +155,7 @@ final class XmlResultPrinter extends Printer implements TestListener
      */
     public function endTest(Test $test, float $time): void
     {
-        if (!$test instanceof TestCase) {
+        if (!$test instanceof TestCase || $test instanceof WarningTestCase) {
             return;
         }
 
@@ -160,7 +163,7 @@ final class XmlResultPrinter extends Printer implements TestListener
             $test->getGroups(),
             static function ($group)
             {
-                return !($group === 'small' || $group === 'medium' || $group === 'large');
+                return !($group === 'small' || $group === 'medium' || $group === 'large' || strpos($group, '__phpunit_') === 0);
             }
         );
 
@@ -183,7 +186,10 @@ final class XmlResultPrinter extends Printer implements TestListener
             $testNode->appendChild($groupNode);
         }
 
-        $annotations = $test->getAnnotations();
+        $annotations = TestUtil::parseTestMethodAnnotations(
+            get_class($test),
+            $test->getName(false)
+        );
 
         foreach (['class', 'method'] as $type) {
             foreach ($annotations[$type] as $annotation => $values) {
@@ -233,7 +239,7 @@ final class XmlResultPrinter extends Printer implements TestListener
             } catch (ReflectionException $e) {
                 throw new Exception(
                     $e->getMessage(),
-                    (int) $e->getCode(),
+                    $e->getCode(),
                     $e
                 );
             }

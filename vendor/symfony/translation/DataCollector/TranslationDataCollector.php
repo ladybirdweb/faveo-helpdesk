@@ -21,7 +21,7 @@ use Symfony\Component\VarDumper\Cloner\Data;
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  *
- * @final since Symfony 4.4
+ * @final
  */
 class TranslationDataCollector extends DataCollector implements LateDataCollectorInterface
 {
@@ -47,10 +47,8 @@ class TranslationDataCollector extends DataCollector implements LateDataCollecto
 
     /**
      * {@inheritdoc}
-     *
-     * @param \Throwable|null $exception
      */
-    public function collect(Request $request, Response $response/* , \Throwable $exception = null */)
+    public function collect(Request $request, Response $response, \Throwable $exception = null)
     {
         $this->data['locale'] = $this->translator->getLocale();
         $this->data['fallback_locales'] = $this->translator->getFallbackLocales();
@@ -72,26 +70,17 @@ class TranslationDataCollector extends DataCollector implements LateDataCollecto
         return $this->data['messages'] ?? [];
     }
 
-    /**
-     * @return int
-     */
-    public function getCountMissings()
+    public function getCountMissings(): int
     {
         return $this->data[DataCollectorTranslator::MESSAGE_MISSING] ?? 0;
     }
 
-    /**
-     * @return int
-     */
-    public function getCountFallbacks()
+    public function getCountFallbacks(): int
     {
         return $this->data[DataCollectorTranslator::MESSAGE_EQUALS_FALLBACK] ?? 0;
     }
 
-    /**
-     * @return int
-     */
-    public function getCountDefines()
+    public function getCountDefines(): int
     {
         return $this->data[DataCollectorTranslator::MESSAGE_DEFINED] ?? 0;
     }
@@ -102,7 +91,7 @@ class TranslationDataCollector extends DataCollector implements LateDataCollecto
     }
 
     /**
-     * @internal since Symfony 4.2
+     * @internal
      */
     public function getFallbackLocales()
     {
@@ -112,7 +101,7 @@ class TranslationDataCollector extends DataCollector implements LateDataCollecto
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'translation';
     }

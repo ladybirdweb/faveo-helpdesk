@@ -73,57 +73,67 @@ class PdoSessionHandler extends AbstractSessionHandler
     private $pdo;
 
     /**
-     * @var string|false|null DSN string or null for session.save_path or false when lazy connection disabled
+     * DSN string or null for session.save_path or false when lazy connection disabled.
+     *
+     * @var string|false|null
      */
     private $dsn = false;
 
     /**
-     * @var string Database driver
+     * @var string|null
      */
     private $driver;
 
     /**
-     * @var string Table name
+     * @var string
      */
     private $table = 'sessions';
 
     /**
-     * @var string Column for session id
+     * @var string
      */
     private $idCol = 'sess_id';
 
     /**
-     * @var string Column for session data
+     * @var string
      */
     private $dataCol = 'sess_data';
 
     /**
-     * @var string Column for lifetime
+     * @var string
      */
     private $lifetimeCol = 'sess_lifetime';
 
     /**
-     * @var string Column for timestamp
+     * @var string
      */
     private $timeCol = 'sess_time';
 
     /**
-     * @var string Username when lazy-connect
+     * Username when lazy-connect.
+     *
+     * @var string
      */
     private $username = '';
 
     /**
-     * @var string Password when lazy-connect
+     * Password when lazy-connect.
+     *
+     * @var string
      */
     private $password = '';
 
     /**
-     * @var array Connection options when lazy-connect
+     * Connection options when lazy-connect.
+     *
+     * @var array
      */
     private $connectionOptions = [];
 
     /**
-     * @var int The strategy for locking, see constants
+     * The strategy for locking, see constants.
+     *
+     * @var int
      */
     private $lockMode = self::LOCK_TRANSACTIONAL;
 
@@ -135,17 +145,23 @@ class PdoSessionHandler extends AbstractSessionHandler
     private $unlockStatements = [];
 
     /**
-     * @var bool True when the current session exists but expired according to session.gc_maxlifetime
+     * True when the current session exists but expired according to session.gc_maxlifetime.
+     *
+     * @var bool
      */
     private $sessionExpired = false;
 
     /**
-     * @var bool Whether a transaction is active
+     * Whether a transaction is active.
+     *
+     * @var bool
      */
     private $inTransaction = false;
 
     /**
-     * @var bool Whether gc() has been called
+     * Whether gc() has been called.
+     *
+     * @var bool
      */
     private $gcCalled = false;
 
@@ -252,7 +268,7 @@ class PdoSessionHandler extends AbstractSessionHandler
      *
      * Can be used to distinguish between a new session and one that expired due to inactivity.
      *
-     * @return bool Whether current session expired
+     * @return bool
      */
     public function isSessionExpired()
     {
@@ -305,7 +321,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     /**
      * {@inheritdoc}
      */
-    protected function doDestroy($sessionId)
+    protected function doDestroy(string $sessionId)
     {
         // delete the record associated with this id
         $sql = "DELETE FROM $this->table WHERE $this->idCol = :id";
@@ -326,7 +342,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     /**
      * {@inheritdoc}
      */
-    protected function doWrite($sessionId, $data)
+    protected function doWrite(string $sessionId, string $data)
     {
         $maxlifetime = (int) \ini_get('session.gc_maxlifetime');
 
@@ -430,6 +446,7 @@ class PdoSessionHandler extends AbstractSessionHandler
 
         if (false !== $this->dsn) {
             $this->pdo = null; // only close lazy-connection
+            $this->driver = null;
         }
 
         return true;
@@ -491,10 +508,32 @@ class PdoSessionHandler extends AbstractSessionHandler
             $driver = substr($driver, 4);
         }
 
+        $dsn = null;
         switch ($driver) {
             case 'mysql':
+                $dsn = 'mysql:';
+                if ('' !== ($params['query'] ?? '')) {
+                    $queryParams = [];
+                    parse_str($params['query'], $queryParams);
+                    if ('' !== ($queryParams['charset'] ?? '')) {
+                        $dsn .= 'charset='.$queryParams['charset'].';';
+                    }
+
+                    if ('' !== ($queryParams['unix_socket'] ?? '')) {
+                        $dsn .= 'unix_socket='.$queryParams['unix_socket'].';';
+
+                        if (isset($params['path'])) {
+                            $dbName = substr($params['path'], 1); // Remove the leading slash
+                            $dsn .= 'dbname='.$dbName.';';
+                        }
+
+                        return $dsn;
+                    }
+                }
+            // If "unix_socket" is not in the query, we continue with the same process as pgsql
+            // no break
             case 'pgsql':
-                $dsn = $driver.':';
+                $dsn ?? $dsn = 'pgsql:';
 
                 if (isset($params['host']) && '' !== $params['host']) {
                     $dsn .= 'host='.$params['host'].';';
@@ -611,11 +650,9 @@ class PdoSessionHandler extends AbstractSessionHandler
      * We need to make sure we do not return session data that is already considered garbage according
      * to the session.gc_maxlifetime setting because gc() is called after read() and only sometimes.
      *
-     * @param string $sessionId Session ID
-     *
-     * @return string The session data
+     * @return string
      */
-    protected function doRead($sessionId)
+    protected function doRead(string $sessionId)
     {
         if (self::LOCK_ADVISORY === $this->lockMode) {
             $this->unlockStatements[] = $this->doAdvisoryLock($sessionId);

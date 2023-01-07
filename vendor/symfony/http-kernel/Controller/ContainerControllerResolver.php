@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
- * A controller resolver searching for a controller in a psr-11 container when using the "service:method" notation.
+ * A controller resolver searching for a controller in a psr-11 container when using the "service::method" notation.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Maxime Steinhausser <maxime.steinhausser@gmail.com>
@@ -32,11 +32,11 @@ class ContainerControllerResolver extends ControllerResolver
         parent::__construct($logger);
     }
 
-    protected function createController($controller)
+    protected function createController(string $controller)
     {
         if (1 === substr_count($controller, ':')) {
             $controller = str_replace(':', '::', $controller);
-            // TODO deprecate this in 5.1
+            trigger_deprecation('symfony/http-kernel', '5.1', 'Referencing controllers with a single colon is deprecated. Use "%s" instead.', $controller);
         }
 
         return parent::createController($controller);
@@ -45,7 +45,7 @@ class ContainerControllerResolver extends ControllerResolver
     /**
      * {@inheritdoc}
      */
-    protected function instantiateController($class)
+    protected function instantiateController(string $class)
     {
         $class = ltrim($class, '\\');
 

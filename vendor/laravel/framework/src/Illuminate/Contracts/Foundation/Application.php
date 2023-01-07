@@ -2,7 +2,6 @@
 
 namespace Illuminate\Contracts\Foundation;
 
-use Closure;
 use Illuminate\Contracts\Container\Container;
 
 interface Application extends Container
@@ -25,7 +24,7 @@ interface Application extends Container
     /**
      * Get the path to the bootstrap directory.
      *
-     * @param  string  $path
+     * @param  string  $path  Optionally, a path to append to the bootstrap path
      * @return string
      */
     public function bootstrapPath($path = '');
@@ -33,7 +32,7 @@ interface Application extends Container
     /**
      * Get the path to the application configuration files.
      *
-     * @param  string  $path
+     * @param  string  $path  Optionally, a path to append to the config path
      * @return string
      */
     public function configPath($path = '');
@@ -41,17 +40,10 @@ interface Application extends Container
     /**
      * Get the path to the database directory.
      *
-     * @param  string  $path
+     * @param  string  $path  Optionally, a path to append to the database path
      * @return string
      */
     public function databasePath($path = '');
-
-    /**
-     * Get the path to the environment file directory.
-     *
-     * @return string
-     */
-    public function environmentPath();
 
     /**
      * Get the path to the resources directory.
@@ -162,63 +154,6 @@ interface Application extends Container
     public function bootstrapWith(array $bootstrappers);
 
     /**
-     * Determine if the application configuration is cached.
-     *
-     * @return bool
-     */
-    public function configurationIsCached();
-
-    /**
-     * Detect the application's current environment.
-     *
-     * @param  \Closure  $callback
-     * @return string
-     */
-    public function detectEnvironment(Closure $callback);
-
-    /**
-     * Get the environment file the application is using.
-     *
-     * @return string
-     */
-    public function environmentFile();
-
-    /**
-     * Get the fully qualified path to the environment file.
-     *
-     * @return string
-     */
-    public function environmentFilePath();
-
-    /**
-     * Get the path to the configuration cache file.
-     *
-     * @return string
-     */
-    public function getCachedConfigPath();
-
-    /**
-     * Get the path to the cached services.php file.
-     *
-     * @return string
-     */
-    public function getCachedServicesPath();
-
-    /**
-     * Get the path to the cached packages.php file.
-     *
-     * @return string
-     */
-    public function getCachedPackagesPath();
-
-    /**
-     * Get the path to the routes cache file.
-     *
-     * @return string
-     */
-    public function getCachedRoutesPath();
-
-    /**
      * Get the current application locale.
      *
      * @return string
@@ -255,21 +190,6 @@ interface Application extends Container
      * @return void
      */
     public function loadDeferredProviders();
-
-    /**
-     * Set the environment file to be loaded during bootstrapping.
-     *
-     * @param  string  $file
-     * @return $this
-     */
-    public function loadEnvironmentFrom($file);
-
-    /**
-     * Determine if the application routes are cached.
-     *
-     * @return bool
-     */
-    public function routesAreCached();
 
     /**
      * Set the current application locale.

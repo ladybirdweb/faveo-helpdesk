@@ -18,6 +18,7 @@ use PhpSpec\Console\ConsoleIO;
 use PhpSpec\Event\ExampleEvent;
 use PhpSpec\Event\MethodCallEvent;
 use PhpSpec\Event\SuiteEvent;
+use PhpSpec\Exception\Example\MethodFailureException;
 use PhpSpec\Exception\Example\NotEqualException;
 use PhpSpec\Locator\ResourceManager;
 use PhpSpec\Util\MethodAnalyser;
@@ -30,13 +31,10 @@ final class MethodReturnedNullListener implements EventSubscriberInterface
      */
     private $io;
 
-    /**
-     * @var MethodCallEvent[]
-     */
     private $nullMethods = array();
 
     /**
-     * @var MethodCallEvent|null
+     * @var null|MethodCallEvent
      */
     private $lastMethodCallEvent = null;
     /**
@@ -52,12 +50,7 @@ final class MethodReturnedNullListener implements EventSubscriberInterface
      */
     private $methodAnalyser;
 
-    /**
-     * @param ConsoleIO $io
-     * @param ResourceManager $resources
-     * @param GeneratorManager $generator
-     * @param MethodAnalyser $methodAnalyser
-     */
+    
     public function __construct(
         ConsoleIO $io,
         ResourceManager $resources,
@@ -107,11 +100,21 @@ final class MethodReturnedNullListener implements EventSubscriberInterface
         }
 
         if (!$this->lastMethodCallEvent) {
-            return;
-        }
 
-        $class = \get_class($this->lastMethodCallEvent->getSubject());
-        $method = $this->lastMethodCallEvent->getMethod();
+            if (!$exception instanceof MethodFailureException) {
+                return;
+            }
+
+            $subject = $exception->getSubject();
+            $method = $exception->getMethod();
+            if (is_null($subject) || is_null($method)) {
+                return;
+            }
+            $class = \get_class($subject);
+        } else {
+            $class = \get_class($this->lastMethodCallEvent->getSubject());
+            $method = $this->lastMethodCallEvent->getMethod();
+        }
 
         if (!$this->methodAnalyser->methodIsEmpty($class, $method)) {
             return;

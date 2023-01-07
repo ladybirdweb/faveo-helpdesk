@@ -1,6 +1,5 @@
 {
     "name": "guzzlehttp/guzzle",
-    "type": "library",
     "description": "Guzzle is a PHP HTTP client library",
     "keywords": [
         "framework",
@@ -9,9 +8,10 @@
         "web service",
         "curl",
         "client",
-        "HTTP client"
+        "HTTP client",
+        "PSR-7",
+        "PSR-18"
     ],
-    "homepage": "http://guzzlephp.org/",
     "license": "MIT",
     "authors": [
         {
@@ -51,29 +51,42 @@
         }
     ],
     "require": {
-        "php": ">=5.5",
+        "php": "^7.2.5 || ^8.0",
         "ext-json": "*",
-        "symfony/polyfill-intl-idn": "^1.17",
-        "guzzlehttp/promises": "^1.0",
-        "guzzlehttp/psr7": "^1.9"
+        "guzzlehttp/promises": "^1.5",
+        "guzzlehttp/psr7": "^1.9 || ^2.4",
+        "psr/http-client": "^1.0",
+        "symfony/deprecation-contracts": "^2.2 || ^3.0"
+    },
+    "provide": {
+        "psr/http-client-implementation": "1.0"
     },
     "require-dev": {
         "ext-curl": "*",
-        "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.4 || ^7.0",
-        "psr/log": "^1.1"
+        "bamarni/composer-bin-plugin": "^1.8.1",
+        "php-http/client-integration-tests": "^3.0",
+        "phpunit/phpunit": "^8.5.29 || ^9.5.23",
+        "psr/log": "^1.1 || ^2.0 || ^3.0"
     },
     "suggest": {
+        "ext-curl": "Required for CURL handler support",
+        "ext-intl": "Required for Internationalized Domain Name (IDN) support",
         "psr/log": "Required for using the Log middleware"
     },
     "config": {
-        "sort-packages": true,
         "allow-plugins": {
             "bamarni/composer-bin-plugin": true
-        }
+        },
+        "preferred-install": "dist",
+        "sort-packages": true
     },
     "extra": {
+        "bamarni-bin": {
+            "bin-links": true,
+            "forward-command": false
+        },
         "branch-alias": {
-            "dev-master": "6.5-dev"
+            "dev-master": "7.5-dev"
         }
     },
     "autoload": {

@@ -13,7 +13,9 @@
 
 namespace PhpSpec\Console\Command;
 
+use PhpSpec\Console\Application;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,6 +29,17 @@ use Symfony\Component\Console\Question\Question;
  */
 final class DescribeCommand extends Command
 {
+    public function getApplication() : Application
+    {
+        $application = parent::getApplication();
+
+        if (!$application instanceof Application) {
+            throw new \RuntimeException('PhpSpec commands require PhpSpec application');
+        }
+
+        return $application;
+    }
+
     protected function configure(): void
     {
         $this
@@ -55,10 +68,7 @@ EOF
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int|null|void
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -68,6 +78,7 @@ EOF
         if ($input->getArgument('class')) {
             $classname = $input->getArgument('class');
         } else {
+            /** @var QuestionHelper $questionHelper  */
             $questionHelper = $this->getApplication()->getHelperSet()->get('question');
             $question = new Question('<info>Enter class to describe: </info>');
 
@@ -78,6 +89,8 @@ EOF
         $resource = $container->get('locator.resource_manager')->createResource($classname);
 
         $container->get('code_generator')->generate($resource, 'specification');
+
+        return 0;
     }
 
     /**

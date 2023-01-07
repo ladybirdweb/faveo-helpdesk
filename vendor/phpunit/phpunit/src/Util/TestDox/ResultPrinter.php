@@ -12,20 +12,21 @@ namespace PHPUnit\Util\TestDox;
 use function get_class;
 use function in_array;
 use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\ErrorTestCase;
 use PHPUnit\Framework\Test;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\TestListener;
 use PHPUnit\Framework\TestSuite;
 use PHPUnit\Framework\Warning;
 use PHPUnit\Framework\WarningTestCase;
 use PHPUnit\Runner\BaseTestRunner;
+use PHPUnit\TextUI\ResultPrinter as ResultPrinterInterface;
 use PHPUnit\Util\Printer;
 use Throwable;
 
 /**
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract class ResultPrinter extends Printer implements TestListener
+abstract class ResultPrinter extends Printer implements ResultPrinterInterface
 {
     /**
      * @var NamePrettifier
@@ -289,7 +290,7 @@ abstract class ResultPrinter extends Printer implements TestListener
     /**
      * Handler for 'on test' event.
      */
-    protected function onTest($name, bool $success = true): void
+    protected function onTest(string $name, bool $success = true): void
     {
     }
 
@@ -313,7 +314,7 @@ abstract class ResultPrinter extends Printer implements TestListener
             return false;
         }
 
-        if ($test instanceof WarningTestCase) {
+        if ($test instanceof ErrorTestCase || $test instanceof WarningTestCase) {
             return false;
         }
 

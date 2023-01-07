@@ -16,6 +16,8 @@ use Throwable;
  * will be removed in PHPUnit 10. There is no alternative available in this
  * version of PHPUnit.
  *
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @deprecated
  * @see https://github.com/sebastianbergmann/phpunit/issues/4676
  */

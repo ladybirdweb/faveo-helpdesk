@@ -34,6 +34,24 @@ final class ProgressFormatter extends ConsoleFormatter
         }
     }
 
+    private function displayIgnoredResources(): void
+    {
+        $io = $this->getIO();
+        $stats = $this->getStatisticsCollector();
+        $ignoredResourceEvents = $stats->getIgnoredResourceEvents();
+        if (0 !== $ignoredResourcesCount = count($ignoredResourceEvents)) {
+            $io->writeln(sprintf('<ignored>%d ignored</ignored>', $ignoredResourcesCount));
+            foreach ($ignoredResourceEvents as $event) {
+                $resource = $event->getResource();
+                $io->writeln(sprintf(
+                    '  <ignored>! <label>%s</label> could not be loaded at path <label>%s</label>.</ignored>',
+                    $resource->getSpecClassname(),
+                    $resource->getSpecFilename()
+                ));
+            }
+        }
+    }
+
     public function afterSuite(SuiteEvent $event)
     {
         $this->drawStats();
@@ -43,6 +61,8 @@ final class ProgressFormatter extends ConsoleFormatter
 
         $io->freezeTemp();
         $io->writeln();
+
+        $this->displayIgnoredResources();
 
         $io->writeln(sprintf("%d specs", $stats->getTotalSpecs()));
 
@@ -66,7 +86,6 @@ final class ProgressFormatter extends ConsoleFormatter
     /**
      * @param $total
      * @param $counts
-     * @return array
      */
     private function getPercentages($total, $counts): array
     {
@@ -84,10 +103,7 @@ final class ProgressFormatter extends ConsoleFormatter
         );
     }
 
-    /**
-     * @param array $counts
-     * @return array
-     */
+    
     private function getBarLengths(array $counts): array
     {
         $stats = $this->getStatisticsCollector();
@@ -103,12 +119,7 @@ final class ProgressFormatter extends ConsoleFormatter
         return $barLengths;
     }
 
-    /**
-     * @param  array   $barLengths
-     * @param  array   $percents
-     * @param  boolean $isDecorated
-     * @return array
-     */
+    
     private function formatProgressOutput(array $barLengths, array $percents, bool $isDecorated): array
     {
         $size = $this->getIO()->getBlockWidth();
@@ -141,11 +152,7 @@ final class ProgressFormatter extends ConsoleFormatter
         return $progress;
     }
 
-    /**
-     * @param ConsoleIO $io
-     * @param array     $progress
-     * @param int       $total
-     */
+    
     private function updateProgressBar(ConsoleIO $io, array $progress, int $total): void
     {
         if ($io->isDecorated()) {

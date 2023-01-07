@@ -12,7 +12,6 @@
 namespace Symfony\Component\HttpKernel\Profiler;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\HttpFoundation\Exception\ConflictingHeadersException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,7 +63,7 @@ class Profiler implements ResetInterface
     /**
      * Loads the Profile for the given Response.
      *
-     * @return Profile|null A Profile instance
+     * @return Profile|null
      */
     public function loadProfileFromResponse(Response $response)
     {
@@ -78,11 +77,9 @@ class Profiler implements ResetInterface
     /**
      * Loads the Profile for the given token.
      *
-     * @param string $token A token
-     *
-     * @return Profile|null A Profile instance
+     * @return Profile|null
      */
-    public function loadProfile($token)
+    public function loadProfile(string $token)
     {
         return $this->storage->read($token);
     }
@@ -119,19 +116,15 @@ class Profiler implements ResetInterface
     /**
      * Finds profiler tokens for the given criteria.
      *
-     * @param string $ip         The IP
-     * @param string $url        The URL
-     * @param string $limit      The maximum number of tokens to return
-     * @param string $method     The request method
-     * @param string $start      The start date to search from
-     * @param string $end        The end date to search to
-     * @param string $statusCode The request status code
+     * @param string|null $limit The maximum number of tokens to return
+     * @param string|null $start The start date to search from
+     * @param string|null $end   The end date to search to
      *
-     * @return array An array of tokens
+     * @return array
      *
      * @see https://php.net/datetime.formats for the supported date/time formats
      */
-    public function find($ip, $url, $limit, $method, $start, $end, $statusCode = null)
+    public function find(?string $ip, ?string $url, ?string $limit, ?string $method, ?string $start, ?string $end, string $statusCode = null)
     {
         return $this->storage->find($ip, $url, $limit, $method, $this->getTimestamp($start), $this->getTimestamp($end), $statusCode);
     }
@@ -139,14 +132,10 @@ class Profiler implements ResetInterface
     /**
      * Collects data for the given Response.
      *
-     * @param \Throwable|null $exception
-     *
-     * @return Profile|null A Profile instance or null if the profiler is disabled
+     * @return Profile|null
      */
-    public function collect(Request $request, Response $response/* , \Throwable $exception = null */)
+    public function collect(Request $request, Response $response, \Throwable $exception = null)
     {
-        $exception = 2 < \func_num_args() ? func_get_arg(2) : null;
-
         if (false === $this->enabled) {
             return null;
         }
@@ -168,14 +157,9 @@ class Profiler implements ResetInterface
 
         $response->headers->set('X-Debug-Token', $profile->getToken());
 
-        $wrappedException = null;
         foreach ($this->collectors as $collector) {
-            if (($e = $exception) instanceof \Error) {
-                $r = new \ReflectionMethod($collector, 'collect');
-                $e = 2 >= $r->getNumberOfParameters() || !($p = $r->getParameters()[2])->hasType() || \Exception::class !== $p->getType()->getName() ? $e : ($wrappedException ?? $wrappedException = new FatalThrowableError($e));
-            }
+            $collector->collect($request, $response, $exception);
 
-            $collector->collect($request, $response, $e);
             // we need to clone for sub-requests
             $profile->addCollector(clone $collector);
         }
@@ -194,7 +178,7 @@ class Profiler implements ResetInterface
     /**
      * Gets the Collectors associated with this profiler.
      *
-     * @return array An array of collectors
+     * @return array
      */
     public function all()
     {
@@ -229,7 +213,7 @@ class Profiler implements ResetInterface
      *
      * @return bool
      */
-    public function has($name)
+    public function has(string $name)
     {
         return isset($this->collectors[$name]);
     }
@@ -239,11 +223,11 @@ class Profiler implements ResetInterface
      *
      * @param string $name A collector name
      *
-     * @return DataCollectorInterface A DataCollectorInterface instance
+     * @return DataCollectorInterface
      *
      * @throws \InvalidArgumentException if the collector does not exist
      */
-    public function get($name)
+    public function get(string $name)
     {
         if (!isset($this->collectors[$name])) {
             throw new \InvalidArgumentException(sprintf('Collector "%s" does not exist.', $name));

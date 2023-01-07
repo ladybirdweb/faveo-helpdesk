@@ -29,13 +29,13 @@ class SqlServerGrammar extends Grammar
     protected $serials = ['tinyInteger', 'smallInteger', 'mediumInteger', 'integer', 'bigInteger'];
 
     /**
-     * Compile the query to determine if a table or view exists.
+     * Compile the query to determine if a table exists.
      *
      * @return string
      */
     public function compileTableExists()
     {
-        return "select * from sysobjects where type in ('U', 'V') and name = ?";
+        return "select * from sysobjects where type = 'U' and name = ?";
     }
 
     /**
@@ -48,7 +48,7 @@ class SqlServerGrammar extends Grammar
     {
         return "select col.name from sys.columns as col
                 join sys.objects as obj on col.object_id = obj.object_id
-                where obj.type in ('U', 'V') and obj.name = '$table'";
+                where obj.type = 'U' and obj.object_id = object_id('$table')";
     }
 
     /**
@@ -212,7 +212,7 @@ class SqlServerGrammar extends Grammar
 
         $sql = "DECLARE @sql NVARCHAR(MAX) = '';";
         $sql .= "SELECT @sql += 'ALTER TABLE [dbo].[{$tableName}] DROP CONSTRAINT ' + OBJECT_NAME([default_object_id]) + ';' ";
-        $sql .= 'FROM sys.columns ';
+        $sql .= 'FROM SYS.COLUMNS ';
         $sql .= "WHERE [object_id] = OBJECT_ID('[dbo].[{$tableName}]') AND [name] in ({$columns}) AND [default_object_id] <> 0;";
         $sql .= 'EXEC(@sql)';
 

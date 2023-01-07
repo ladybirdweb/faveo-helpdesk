@@ -11,11 +11,11 @@
 
 namespace NunoMaduro\Collision\Adapters\Laravel;
 
-use Exception;
 use Illuminate\Contracts\Container\Container;
-use NunoMaduro\Collision\Contracts\Provider as ProviderContract;
 use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
+use NunoMaduro\Collision\Contracts\Provider as ProviderContract;
 use Symfony\Component\Console\Exception\ExceptionInterface as SymfonyConsoleExceptionInterface;
+use Throwable;
 
 /**
  * This is an Collision Laravel Adapter ExceptionHandler implementation.
@@ -42,20 +42,17 @@ class ExceptionHandler implements ExceptionHandlerContract
 
     /**
      * Creates a new instance of the ExceptionHandler.
-     *
-     * @param \Illuminate\Contracts\Container\Container $container
-     * @param \Illuminate\Contracts\Debug\ExceptionHandler $appExceptionHandler
      */
     public function __construct(Container $container, ExceptionHandlerContract $appExceptionHandler)
     {
-        $this->container = $container;
+        $this->container           = $container;
         $this->appExceptionHandler = $appExceptionHandler;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function report(Exception $e)
+    public function report(Throwable $e)
     {
         $this->appExceptionHandler->report($e);
     }
@@ -63,7 +60,7 @@ class ExceptionHandler implements ExceptionHandlerContract
     /**
      * {@inheritdoc}
      */
-    public function render($request, Exception $e)
+    public function render($request, Throwable $e)
     {
         return $this->appExceptionHandler->render($request, $e);
     }
@@ -71,7 +68,7 @@ class ExceptionHandler implements ExceptionHandlerContract
     /**
      * {@inheritdoc}
      */
-    public function renderForConsole($output, Exception $e)
+    public function renderForConsole($output, Throwable $e)
     {
         if ($e instanceof SymfonyConsoleExceptionInterface) {
             $this->appExceptionHandler->renderForConsole($output, $e);
@@ -90,10 +87,9 @@ class ExceptionHandler implements ExceptionHandlerContract
     /**
      * Determine if the exception should be reported.
      *
-     * @param  \Exception  $e
      * @return bool
      */
-    public function shouldReport(Exception $e)
+    public function shouldReport(Throwable $e)
     {
         return $this->appExceptionHandler->shouldReport($e);
     }

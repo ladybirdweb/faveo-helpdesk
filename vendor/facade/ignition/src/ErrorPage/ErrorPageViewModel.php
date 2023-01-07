@@ -34,6 +34,12 @@ class ErrorPageViewModel implements Arrayable
     /** @var array */
     protected $defaultTabProps = [];
 
+    /** @var string */
+    protected $appEnv;
+
+    /** @var bool */
+    protected $appDebug;
+
     public function __construct(?Throwable $throwable, IgnitionConfig $ignitionConfig, Report $report, array $solutions)
     {
         $this->throwable = $throwable;
@@ -43,6 +49,9 @@ class ErrorPageViewModel implements Arrayable
         $this->report = $report;
 
         $this->solutions = $solutions;
+
+        $this->appEnv = config('app.env');
+        $this->appDebug = config('app.debug');
     }
 
     public function throwableString(): string
@@ -51,7 +60,7 @@ class ErrorPageViewModel implements Arrayable
             return '';
         }
 
-        return sprintf(
+        $throwableString = sprintf(
             "%s: %s in file %s on line %d\n\n%s\n",
             get_class($this->throwable),
             $this->throwable->getMessage(),
@@ -59,6 +68,8 @@ class ErrorPageViewModel implements Arrayable
             $this->throwable->getLine(),
             $this->report->getThrowable()->getTraceAsString()
         );
+
+        return htmlspecialchars($throwableString);
     }
 
     public function telescopeUrl(): ?string
@@ -90,7 +101,9 @@ class ErrorPageViewModel implements Arrayable
 
     public function title(): string
     {
-        return "🧨 {$this->report->getMessage()}";
+        $message = htmlspecialchars($this->report->getMessage());
+
+        return "🧨 {$message}";
     }
 
     public function config(): array
@@ -126,13 +139,9 @@ class ErrorPageViewModel implements Arrayable
 
     public function jsonEncode($data): string
     {
-        $jsonOptions = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT;
+        $jsonOptions = JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT;
 
-        if (version_compare(phpversion(), '7.2', '>=')) {
-            return json_encode($data, JSON_PARTIAL_OUTPUT_ON_ERROR | $jsonOptions);
-        }
-
-        return json_encode($data, JSON_PARTIAL_OUTPUT_ON_ERROR | $jsonOptions);
+        return json_encode($data, $jsonOptions);
     }
 
     public function getAssetContents(string $asset): string
@@ -184,6 +193,8 @@ class ErrorPageViewModel implements Arrayable
             'getAssetContents' => Closure::fromCallable([$this, 'getAssetContents']),
             'defaultTab' => $this->defaultTab,
             'defaultTabProps' => $this->defaultTabProps,
+            'appEnv' => $this->appEnv,
+            'appDebug' => $this->appDebug,
         ];
     }
 }

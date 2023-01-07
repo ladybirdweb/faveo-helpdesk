@@ -21,7 +21,7 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * The route collection.
      *
-     * @var \Illuminate\Routing\RouteCollection
+     * @var \Illuminate\Routing\RouteCollectionInterface
      */
     protected $routes;
 
@@ -112,12 +112,12 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Create a new URL Generator instance.
      *
-     * @param  \Illuminate\Routing\RouteCollection  $routes
+     * @param  \Illuminate\Routing\RouteCollectionInterface  $routes
      * @param  \Illuminate\Http\Request  $request
      * @param  string|null  $assetRoot
      * @return void
      */
-    public function __construct(RouteCollection $routes, Request $request, $assetRoot = null)
+    public function __construct(RouteCollectionInterface $routes, Request $request, $assetRoot = null)
     {
         $this->routes = $routes;
         $this->assetRoot = $assetRoot;
@@ -320,9 +320,13 @@ class UrlGenerator implements UrlGeneratorContract
      */
     public function signedRoute($name, $parameters = [], $expiration = null, $absolute = true)
     {
-        $this->ensureSignedRouteParametersAreNotReserved(
-            $parameters = $this->formatParameters($parameters)
-        );
+        $parameters = Arr::wrap($parameters);
+
+        if (array_key_exists('signature', $parameters)) {
+            throw new InvalidArgumentException(
+                '"Signature" is a reserved parameter when generating signed routes. Please rename your route parameter.'
+            );
+        }
 
         if ($expiration) {
             $parameters = $parameters + ['expires' => $this->availableAt($expiration)];
@@ -335,27 +339,6 @@ class UrlGenerator implements UrlGeneratorContract
         return $this->route($name, $parameters + [
             'signature' => hash_hmac('sha256', $this->route($name, $parameters, $absolute), $key),
         ], $absolute);
-    }
-
-    /**
-     * Ensure the given signed route parameters are not reserved.
-     *
-     * @param  mixed  $parameters
-     * @return void
-     */
-    protected function ensureSignedRouteParametersAreNotReserved($parameters)
-    {
-        if (array_key_exists('signature', $parameters)) {
-            throw new InvalidArgumentException(
-                '"Signature" is a reserved parameter when generating signed routes. Please rename your route parameter.'
-            );
-        }
-
-        if (array_key_exists('expires', $parameters)) {
-            throw new InvalidArgumentException(
-                '"Expires" is a reserved parameter when generating signed routes. Please rename your route parameter.'
-            );
-        }
     }
 
     /**
@@ -449,6 +432,12 @@ class UrlGenerator implements UrlGeneratorContract
      */
     public function toRoute($route, $parameters, $absolute)
     {
+        $parameters = collect(Arr::wrap($parameters))->map(function ($value, $key) use ($route) {
+            return $value instanceof UrlRoutable && $route->bindingFieldFor($key)
+                    ? $value->{$route->bindingFieldFor($key)}
+                    : $value;
+        })->all();
+
         return $this->routeUrl()->to(
             $route, $this->formatParameters($parameters), $absolute
         );
@@ -627,25 +616,25 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Force the scheme for URLs.
      *
-     * @param  string  $scheme
+     * @param  string|null  $scheme
      * @return void
      */
     public function forceScheme($scheme)
     {
         $this->cachedScheme = null;
 
-        $this->forceScheme = $scheme.'://';
+        $this->forceScheme = $scheme ? $scheme.'://' : null;
     }
 
     /**
      * Set the forced root URL.
      *
-     * @param  string  $root
+     * @param  string|null  $root
      * @return void
      */
     public function forceRootUrl($root)
     {
-        $this->forcedRoot = rtrim($root, '/');
+        $this->forcedRoot = $root ? rtrim($root, '/') : null;
 
         $this->cachedRoot = null;
     }
@@ -710,16 +699,23 @@ class UrlGenerator implements UrlGeneratorContract
 
         $this->cachedRoot = null;
         $this->cachedScheme = null;
-        $this->routeGenerator = null;
+
+        tap(optional($this->routeGenerator)->defaultParameters ?: [], function ($defaults) {
+            $this->routeGenerator = null;
+
+            if (! empty($defaults)) {
+                $this->defaults($defaults);
+            }
+        });
     }
 
     /**
      * Set the route collection.
      *
-     * @param  \Illuminate\Routing\RouteCollection  $routes
+     * @param  \Illuminate\Routing\RouteCollectionInterface  $routes
      * @return $this
      */
-    public function setRoutes(RouteCollection $routes)
+    public function setRoutes(RouteCollectionInterface $routes)
     {
         $this->routes = $routes;
 

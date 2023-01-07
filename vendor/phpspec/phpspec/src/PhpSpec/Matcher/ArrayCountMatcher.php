@@ -23,21 +23,13 @@ final class ArrayCountMatcher extends BasicMatcher
      */
     private $presenter;
 
-    /**
-     * @param Presenter $presenter
-     */
+    
     public function __construct(Presenter $presenter)
     {
         $this->presenter = $presenter;
     }
 
-    /**
-     * @param string $name
-     * @param mixed  $subject
-     * @param array  $arguments
-     *
-     * @return bool
-     */
+    
     public function supports(string $name, $subject, array $arguments): bool
     {
         return 'haveCount' === $name
@@ -46,47 +38,30 @@ final class ArrayCountMatcher extends BasicMatcher
         ;
     }
 
-    /**
-     * @param mixed $subject
-     * @param array $arguments
-     *
-     * @return bool
-     */
+    
     protected function matches($subject, array $arguments): bool
     {
         return $arguments[0] === \count($subject);
     }
 
-    /**
-     * @param string $name
-     * @param mixed  $subject
-     * @param array  $arguments
-     *
-     * @return FailureException
-     */
+    
     protected function getFailureException(string $name, $subject, array $arguments): FailureException
     {
         return new FailureException(sprintf(
             'Expected %s to have %s items, but got %s.',
             $this->presenter->presentValue($subject),
-            $this->presenter->presentString(\intval($arguments[0])),
-            $this->presenter->presentString(\count($subject))
+            $this->presenter->presentString((string)\intval($arguments[0])),
+            $this->presenter->presentString((string)\count($subject))
         ));
     }
 
-    /**
-     * @param string $name
-     * @param mixed  $subject
-     * @param array  $arguments
-     *
-     * @return FailureException
-     */
+    
     protected function getNegativeFailureException(string $name, $subject, array $arguments): FailureException
     {
         return new FailureException(sprintf(
             'Expected %s not to have %s items, but got it.',
             $this->presenter->presentValue($subject),
-            $this->presenter->presentString(\intval($arguments[0]))
+            $this->presenter->presentString((string)\intval($arguments[0]))
         ));
     }
 }

@@ -15,17 +15,28 @@
     ],
     "require": {
         "php": "^7.2.5 || ^8.0",
-        "filp/whoops": "^2.1.4",
-        "symfony/console": "~2.8|~3.3|~4.0",
-        "php-parallel-lint/php-console-highlighter": "0.5.*"
+        "facade/ignition-contracts": "^1.0",
+        "filp/whoops": "^2.4",
+        "symfony/console": "^5.0"
     },
     "require-dev": {
-        "laravel/framework": "^6.0",
-        "phpunit/phpunit": "^8.0 || ^9.0"
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "facade/ignition": "^2.0",
+        "fideloper/proxy": "^4.2",
+        "fruitcake/laravel-cors": "^1.0",
+        "laravel/framework": "^7.0",
+        "laravel/tinker": "^2.0",
+        "nunomaduro/larastan": "^0.6",
+        "orchestra/testbench": "^5.0",
+        "phpstan/phpstan": "^0.12.3",
+        "phpunit/phpunit": "^8.5.1 || ^9.0"
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\Unit\\": "tests/Unit",
+            "Tests\\FakeProgram\\": "tests/FakeProgram",
+            "Tests\\": "tests/LaravelApp/tests",
+            "App\\": "tests/LaravelApp/app/"
         }
     },
     "minimum-stability": "dev",
@@ -45,5 +56,16 @@
                 "NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider"
             ]
         }
+    },
+    "scripts": {
+        "lint": "php-cs-fixer fix -v",
+        "test:types": "phpstan analyse --ansi",
+        "test:unit": "phpunit --colors=always",
+        "test:lint": "php-cs-fixer fix -v --dry-run",
+        "test": [
+            "@test:lint",
+            "@test:unit",
+            "@test:types"
+        ]
     }
 }

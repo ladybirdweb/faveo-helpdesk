@@ -14,13 +14,10 @@ use const PHP_VERSION;
 use function addcslashes;
 use function array_flip;
 use function array_key_exists;
-use function array_keys;
 use function array_merge;
 use function array_unique;
 use function array_unshift;
 use function class_exists;
-use function class_implements;
-use function class_parents;
 use function count;
 use function explode;
 use function extension_loaded;
@@ -34,14 +31,14 @@ use function method_exists;
 use function phpversion;
 use function preg_match;
 use function preg_replace;
-use function range;
 use function sprintf;
-use function str_replace;
 use function strncmp;
 use function strpos;
-use function trait_exists;
+use function strtolower;
+use function trim;
 use function version_compare;
 use PHPUnit\Framework\CodeCoverageException;
+use PHPUnit\Framework\ExecutionOrderDependency;
 use PHPUnit\Framework\InvalidCoversTargetException;
 use PHPUnit\Framework\SelfDescribing;
 use PHPUnit\Framework\TestCase;
@@ -50,8 +47,10 @@ use PHPUnit\Runner\Version;
 use PHPUnit\Util\Annotation\Registry;
 use ReflectionClass;
 use ReflectionException;
-use ReflectionFunction;
 use ReflectionMethod;
+use SebastianBergmann\CodeUnit\CodeUnitCollection;
+use SebastianBergmann\CodeUnit\InvalidCodeUnitException;
+use SebastianBergmann\CodeUnit\Mapper;
 use SebastianBergmann\Environment\OperatingSystem;
 
 /**
@@ -144,12 +143,16 @@ final class Test
 
     public static function requiresCodeCoverageDataCollection(TestCase $test): bool
     {
-        $annotations = $test->getAnnotations();
+        $annotations = self::parseTestMethodAnnotations(
+            get_class($test),
+            $test->getName(false)
+        );
 
         // If there is no @covers annotation but a @coversNothing annotation on
         // the test method then code coverage data does not need to be collected
         if (isset($annotations['method']['coversNothing'])) {
-            return false;
+            // @see https://github.com/sebastianbergmann/phpunit/issues/4947#issuecomment-1084480950
+            // return false;
         }
 
         // If there is at least one @covers annotation then
@@ -161,7 +164,8 @@ final class Test
         // If there is no @covers annotation but a @coversNothing annotation
         // then code coverage data does not need to be collected
         if (isset($annotations['class']['coversNothing'])) {
-            return false;
+            // @see https://github.com/sebastianbergmann/phpunit/issues/4947#issuecomment-1084480950
+            // return false;
         }
 
         // If there is no @coversNothing annotation then
@@ -313,22 +317,6 @@ final class Test
     }
 
     /**
-     * Returns the expected exception for a test.
-     *
-     * @return array|false
-     *
-     * @deprecated
-     *
-     * @codeCoverageIgnore
-     *
-     * @psalm-param class-string $className
-     */
-    public static function getExpectedException(string $className, string $methodName)
-    {
-        return Registry::getInstance()->forMethod($className, $methodName)->expectedException();
-    }
-
-    /**
      * Returns the provided data for a method.
      *
      * @throws Exception
@@ -389,7 +377,11 @@ final class Test
         ];
     }
 
-    /** @psalm-param class-string $className */
+    /**
+     * @psalm-param class-string $className
+     *
+     * @return ExecutionOrderDependency[]
+     */
     public static function getDependencies(string $className, string $methodName): array
     {
         $annotations = self::parseTestMethodAnnotations(
@@ -397,13 +389,20 @@ final class Test
             $methodName
         );
 
-        $dependencies = $annotations['class']['depends'] ?? [];
+        $dependsAnnotations = $annotations['class']['depends'] ?? [];
 
         if (isset($annotations['method']['depends'])) {
-            $dependencies = array_merge(
-                $dependencies,
+            $dependsAnnotations = array_merge(
+                $dependsAnnotations,
                 $annotations['method']['depends']
             );
+        }
+
+        // Normalize dependency name to className::methodName
+        $dependencies = [];
+
+        foreach ($dependsAnnotations as $value) {
+            $dependencies[] = ExecutionOrderDependency::createFromDependsAnnotation($className, $value);
         }
 
         return array_unique($dependencies);
@@ -447,6 +446,20 @@ final class Test
                     $groups[] = [$size];
 
                     break 2;
+                }
+            }
+        }
+
+        foreach (['method', 'class'] as $element) {
+            if (isset($annotations[$element]['covers'])) {
+                foreach ($annotations[$element]['covers'] as $coversTarget) {
+                    $groups[] = ['__phpunit_covers_' . self::canonicalizeName($coversTarget)];
+                }
+            }
+
+            if (isset($annotations[$element]['uses'])) {
+                foreach ($annotations[$element]['uses'] as $usesTarget) {
+                    $groups[] = ['__phpunit_uses_' . self::canonicalizeName($usesTarget)];
                 }
             }
         }
@@ -540,6 +553,17 @@ final class Test
                         );
                     }
 
+                    if ($docBlock->isToBeExecutedAsPreCondition()) {
+                        array_unshift(
+                            self::$hookMethods[$className]['preCondition'],
+                            $method->getName()
+                        );
+                    }
+
+                    if ($docBlock->isToBeExecutedAsPostCondition()) {
+                        self::$hookMethods[$className]['postCondition'][] = $method->getName();
+                    }
+
                     if ($docBlock->isToBeExecutedAfterTest()) {
                         self::$hookMethods[$className]['after'][] = $method->getName();
                     }
@@ -605,7 +629,8 @@ final class Test
             $list = array_merge($list, $annotations['method'][$mode]);
         }
 
-        $codeList = [];
+        $codeUnits = CodeUnitCollection::fromArray([]);
+        $mapper    = new Mapper;
 
         foreach (array_unique($list) as $element) {
             if ($classShortcut && strncmp($element, '::', 2) === 0) {
@@ -625,19 +650,33 @@ final class Test
                 );
             }
 
-            $codeList[] = self::resolveElementToReflectionObjects($element);
+            try {
+                $codeUnits = $codeUnits->mergeWith($mapper->stringToCodeUnits($element));
+            } catch (InvalidCodeUnitException $e) {
+                throw new InvalidCoversTargetException(
+                    sprintf(
+                        '"@%s %s" is invalid',
+                        $mode,
+                        $element
+                    ),
+                    $e->getCode(),
+                    $e
+                );
+            }
         }
 
-        return self::resolveReflectionObjectsToLines(array_merge([], ...$codeList));
+        return $mapper->codeUnitsToSourceLines($codeUnits);
     }
 
     private static function emptyHookMethodsArray(): array
     {
         return [
-            'beforeClass' => ['setUpBeforeClass'],
-            'before'      => ['setUp'],
-            'after'       => ['tearDown'],
-            'afterClass'  => ['tearDownAfterClass'],
+            'beforeClass'   => ['setUpBeforeClass'],
+            'before'        => ['setUp'],
+            'preCondition'  => ['assertPreConditions'],
+            'postCondition' => ['assertPostConditions'],
+            'after'         => ['tearDown'],
+            'afterClass'    => ['tearDownAfterClass'],
         ];
     }
 
@@ -670,200 +709,6 @@ final class Test
         }
 
         return null;
-    }
-
-    /**
-     * @throws InvalidCoversTargetException
-     */
-    private static function resolveElementToReflectionObjects(string $element): array
-    {
-        $codeToCoverList = [];
-
-        if (function_exists($element) && strpos($element, '\\') !== false) {
-            try {
-                $codeToCoverList[] = new ReflectionFunction($element);
-                // @codeCoverageIgnoreStart
-            } catch (ReflectionException $e) {
-                throw new Exception(
-                    $e->getMessage(),
-                    (int) $e->getCode(),
-                    $e
-                );
-            }
-            // @codeCoverageIgnoreEnd
-        } elseif (strpos($element, '::') !== false) {
-            [$className, $methodName] = explode('::', $element);
-
-            if (isset($methodName[0]) && $methodName[0] === '<') {
-                $classes = [$className];
-
-                foreach ($classes as $className) {
-                    if (!class_exists($className) &&
-                        !interface_exists($className) &&
-                        !trait_exists($className)) {
-                        throw new InvalidCoversTargetException(
-                            sprintf(
-                                'Trying to @cover or @use not existing class or ' .
-                                'interface "%s".',
-                                $className
-                            )
-                        );
-                    }
-
-                    try {
-                        $methods = (new ReflectionClass($className))->getMethods();
-                        // @codeCoverageIgnoreStart
-                    } catch (ReflectionException $e) {
-                        throw new Exception(
-                            $e->getMessage(),
-                            (int) $e->getCode(),
-                            $e
-                        );
-                    }
-                    // @codeCoverageIgnoreEnd
-
-                    $inverse    = isset($methodName[1]) && $methodName[1] === '!';
-                    $visibility = 'isPublic';
-
-                    if (strpos($methodName, 'protected')) {
-                        $visibility = 'isProtected';
-                    } elseif (strpos($methodName, 'private')) {
-                        $visibility = 'isPrivate';
-                    }
-
-                    foreach ($methods as $method) {
-                        if ($inverse && !$method->{$visibility}()) {
-                            $codeToCoverList[] = $method;
-                        } elseif (!$inverse && $method->{$visibility}()) {
-                            $codeToCoverList[] = $method;
-                        }
-                    }
-                }
-            } else {
-                $classes = [$className];
-
-                foreach ($classes as $className) {
-                    if ($className === '' && function_exists($methodName)) {
-                        try {
-                            $codeToCoverList[] = new ReflectionFunction(
-                                $methodName
-                            );
-                            // @codeCoverageIgnoreStart
-                        } catch (ReflectionException $e) {
-                            throw new Exception(
-                                $e->getMessage(),
-                                (int) $e->getCode(),
-                                $e
-                            );
-                        }
-                        // @codeCoverageIgnoreEnd
-                    } else {
-                        if (!((class_exists($className) || interface_exists($className) || trait_exists($className)) &&
-                            method_exists($className, $methodName))) {
-                            throw new InvalidCoversTargetException(
-                                sprintf(
-                                    'Trying to @cover or @use not existing method "%s::%s".',
-                                    $className,
-                                    $methodName
-                                )
-                            );
-                        }
-
-                        try {
-                            $codeToCoverList[] = new ReflectionMethod(
-                                $className,
-                                $methodName
-                            );
-                            // @codeCoverageIgnoreStart
-                        } catch (ReflectionException $e) {
-                            throw new Exception(
-                                $e->getMessage(),
-                                (int) $e->getCode(),
-                                $e
-                            );
-                        }
-                        // @codeCoverageIgnoreEnd
-                    }
-                }
-            }
-        } else {
-            $extended = false;
-
-            if (strpos($element, '<extended>') !== false) {
-                $element  = str_replace('<extended>', '', $element);
-                $extended = true;
-            }
-
-            $classes = [$element];
-
-            if ($extended) {
-                $classes = array_merge(
-                    $classes,
-                    class_implements($element),
-                    class_parents($element)
-                );
-            }
-
-            foreach ($classes as $className) {
-                if (!class_exists($className) &&
-                    !interface_exists($className) &&
-                    !trait_exists($className)) {
-                    throw new InvalidCoversTargetException(
-                        sprintf(
-                            'Trying to @cover or @use not existing class or ' .
-                            'interface "%s".',
-                            $className
-                        )
-                    );
-                }
-
-                try {
-                    $codeToCoverList[] = new ReflectionClass($className);
-                    // @codeCoverageIgnoreStart
-                } catch (ReflectionException $e) {
-                    throw new Exception(
-                        $e->getMessage(),
-                        (int) $e->getCode(),
-                        $e
-                    );
-                }
-                // @codeCoverageIgnoreEnd
-            }
-        }
-
-        return $codeToCoverList;
-    }
-
-    private static function resolveReflectionObjectsToLines(array $reflectors): array
-    {
-        $result = [];
-
-        foreach ($reflectors as $reflector) {
-            if ($reflector instanceof ReflectionClass) {
-                foreach ($reflector->getTraits() as $trait) {
-                    $reflectors[] = $trait;
-                }
-            }
-        }
-
-        foreach ($reflectors as $reflector) {
-            $filename = $reflector->getFileName();
-
-            if (!isset($result[$filename])) {
-                $result[$filename] = [];
-            }
-
-            $result[$filename] = array_merge(
-                $result[$filename],
-                range($reflector->getStartLine(), $reflector->getEndLine())
-            );
-        }
-
-        foreach ($result as $filename => $lineNumbers) {
-            $result[$filename] = array_keys(array_flip($lineNumbers));
-        }
-
-        return $result;
     }
 
     /**
@@ -929,5 +774,10 @@ final class Test
         }
 
         return $a;
+    }
+
+    private static function canonicalizeName(string $name): string
+    {
+        return strtolower(trim($name, '\\'));
     }
 }

@@ -11,13 +11,15 @@
 
 namespace NunoMaduro\Collision;
 
-use Whoops\Exception\Frame;
-use Whoops\Exception\Inspector;
+use NunoMaduro\Collision\Contracts\ArgumentFormatter as ArgumentFormatterContract;
+use NunoMaduro\Collision\Contracts\Highlighter as HighlighterContract;
+use NunoMaduro\Collision\Contracts\SolutionsRepository;
+use NunoMaduro\Collision\Contracts\Writer as WriterContract;
+use NunoMaduro\Collision\SolutionsRepositories\NullSolutionsRepository;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use NunoMaduro\Collision\Contracts\Writer as WriterContract;
-use NunoMaduro\Collision\Contracts\Highlighter as HighlighterContract;
-use NunoMaduro\Collision\Contracts\ArgumentFormatter as ArgumentFormatterContract;
+use Whoops\Exception\Frame;
+use Whoops\Exception\Inspector;
 
 /**
  * This is an Collision Writer implementation.
@@ -30,6 +32,13 @@ class Writer implements WriterContract
      * The number of frames if no verbosity is specified.
      */
     const VERBOSITY_NORMAL_FRAMES = 1;
+
+    /**
+     * Holds an instance of the solutions repository.
+     *
+     * @var \NunoMaduro\Collision\Contracts\SolutionsRepository
+     */
+    private $solutionsRepository;
 
     /**
      * Holds an instance of the Output.
@@ -68,6 +77,13 @@ class Writer implements WriterContract
     protected $showTrace = true;
 
     /**
+     * Declares whether or not the title should appear.
+     *
+     * @var bool
+     */
+    protected $showTitle = true;
+
+    /**
      * Declares whether or not the editor should appear.
      *
      * @var bool
@@ -76,19 +92,17 @@ class Writer implements WriterContract
 
     /**
      * Creates an instance of the writer.
-     *
-     * @param \Symfony\Component\Console\Output\OutputInterface|null $output
-     * @param \NunoMaduro\Collision\Contracts\ArgumentFormatter|null $argumentFormatter
-     * @param \NunoMaduro\Collision\Contracts\Highlighter|null $highlighter
      */
     public function __construct(
+        SolutionsRepository $solutionsRepository = null,
         OutputInterface $output = null,
         ArgumentFormatterContract $argumentFormatter = null,
         HighlighterContract $highlighter = null
     ) {
-        $this->output = $output ?: new ConsoleOutput;
-        $this->argumentFormatter = $argumentFormatter ?: new ArgumentFormatter;
-        $this->highlighter = $highlighter ?: new Highlighter;
+        $this->solutionsRepository = $solutionsRepository ?: new NullSolutionsRepository();
+        $this->output              = $output ?: new ConsoleOutput();
+        $this->argumentFormatter   = $argumentFormatter ?: new ArgumentFormatter();
+        $this->highlighter         = $highlighter ?: new Highlighter();
     }
 
     /**
@@ -96,16 +110,19 @@ class Writer implements WriterContract
      */
     public function write(Inspector $inspector): void
     {
-        $this->renderTitle($inspector);
+        $this->renderTitleAndDescription($inspector);
 
         $frames = $this->getFrames($inspector);
 
         $editorFrame = array_shift($frames);
+
         if ($this->showEditor && $editorFrame !== null) {
             $this->renderEditor($editorFrame);
         }
 
-        if ($this->showTrace && ! empty($frames)) {
+        $this->renderSolution($inspector);
+
+        if ($this->showTrace && !empty($frames)) {
             $this->renderTrace($frames);
         } else {
             $this->output->writeln('');
@@ -128,6 +145,16 @@ class Writer implements WriterContract
     public function showTrace(bool $show): WriterContract
     {
         $this->showTrace = $show;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function showTitle(bool $show): WriterContract
+    {
+        $this->showTitle = $show;
 
         return $this;
     }
@@ -162,16 +189,18 @@ class Writer implements WriterContract
 
     /**
      * Returns pertinent frames.
-     *
-     * @param  \Whoops\Exception\Inspector $inspector
-     *
-     * @return array
      */
     protected function getFrames(Inspector $inspector): array
     {
         return $inspector->getFrames()
             ->filter(
                 function ($frame) {
+                    // If we are in verbose mode, we always
+                    // display the full stack trace.
+                    if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+                        return true;
+                    }
+
                     foreach ($this->ignore as $ignore) {
                         if (preg_match($ignore, $frame->getFile())) {
                             return false;
@@ -186,18 +215,48 @@ class Writer implements WriterContract
 
     /**
      * Renders the title of the exception.
-     *
-     * @param \Whoops\Exception\Inspector $inspector
-     *
-     * @return \NunoMaduro\Collision\Contracts\Writer
      */
-    protected function renderTitle(Inspector $inspector): WriterContract
+    protected function renderTitleAndDescription(Inspector $inspector): WriterContract
     {
         $exception = $inspector->getException();
-        $message = $exception->getMessage();
-        $class = $inspector->getExceptionName();
+        $message   = rtrim($exception->getMessage());
+        $class     = $inspector->getExceptionName();
 
-        $this->render("<bg=red;options=bold> $class </> : <comment>$message</>");
+        if ($this->showTitle) {
+            $this->render("<bg=red;options=bold> $class </>");
+            $this->output->writeln('');
+        }
+
+        $this->output->writeln("<fg=default;options=bold>  $message</>");
+
+        return $this;
+    }
+
+    /**
+     * Renders the solution of the exception, if any.
+     */
+    protected function renderSolution(Inspector $inspector): WriterContract
+    {
+        $throwable = $inspector->getException();
+        $solutions = $this->solutionsRepository->getFromThrowable($throwable);
+
+        foreach ($solutions as $solution) {
+            /** @var \Facade\IgnitionContracts\Solution $solution */
+            $title       = $solution->getSolutionTitle();
+            $description = $solution->getSolutionDescription();
+            $links       = $solution->getDocumentationLinks();
+
+            $description = trim((string) preg_replace("/\n/", "\n    ", $description));
+
+            $this->render(sprintf(
+                '<fg=blue;options=bold>• </><fg=default;options=bold>%s</>: %s %s',
+                rtrim($title, '.'),
+                $description,
+                implode(', ', array_map(function (string $link) {
+                    return sprintf("\n    <fg=blue>%s</>", $link);
+                }, $links))
+            ));
+        }
 
         return $this;
     }
@@ -205,14 +264,14 @@ class Writer implements WriterContract
     /**
      * Renders the editor containing the code that was the
      * origin of the exception.
-     *
-     * @param \Whoops\Exception\Frame $frame
-     *
-     * @return \NunoMaduro\Collision\Contracts\Writer
      */
     protected function renderEditor(Frame $frame): WriterContract
     {
-        $this->render('at <fg=green>'.$frame->getFile().'</>'.':<fg=green>'.$frame->getLine().'</>');
+        $file = $this->getFileRelativePath((string) $frame->getFile());
+
+        // getLine() might return null so cast to int to get 0 instead
+        $line = (int) $frame->getLine();
+        $this->render('at <fg=green>' . $file . '</>' . ':<fg=green>' . $line . '</>');
 
         $content = $this->highlighter->highlight((string) $frame->getFileContents(), (int) $frame->getLine());
 
@@ -223,40 +282,55 @@ class Writer implements WriterContract
 
     /**
      * Renders the trace of the exception.
-     *
-     * @param  array $frames
-     *
-     * @return \NunoMaduro\Collision\Contracts\Writer
      */
     protected function renderTrace(array $frames): WriterContract
     {
-        $this->render('<comment>Exception trace:</comment>');
+        $vendorFrames = 0;
+        $userFrames   = 0;
         foreach ($frames as $i => $frame) {
-            if ($i > static::VERBOSITY_NORMAL_FRAMES && $this->output->getVerbosity(
-                ) < OutputInterface::VERBOSITY_VERBOSE) {
-                $this->render('<info>Please use the argument <fg=red>-v</> to see more details.</info>');
+            if ($this->output->getVerbosity() < OutputInterface::VERBOSITY_VERBOSE && strpos($frame->getFile(), '/vendor/') !== false) {
+                $vendorFrames++;
+                continue;
+            }
+
+            if ($userFrames > static::VERBOSITY_NORMAL_FRAMES && $this->output->getVerbosity() < OutputInterface::VERBOSITY_VERBOSE) {
                 break;
             }
 
-            $file = $frame->getFile();
-            $line = $frame->getLine();
-            $class = empty($frame->getClass()) ? '' : $frame->getClass().'::';
-            $function = $frame->getFunction();
-            $args = $this->argumentFormatter->format($frame->getArgs());
-            $pos = str_pad((int) $i + 1, 4, ' ');
+            $userFrames++;
 
-            $this->render("<comment><fg=cyan>$pos</>$class$function($args)</comment>");
-            $this->render("    <fg=green>$file</>:<fg=green>$line</>", false);
+            $file     = $this->getFileRelativePath($frame->getFile());
+            $line     = $frame->getLine();
+            $class    = empty($frame->getClass()) ? '' : $frame->getClass() . '::';
+            $function = $frame->getFunction();
+            $args     = $this->argumentFormatter->format($frame->getArgs());
+            $pos      = str_pad((string) ((int) $i + 1), 4, ' ');
+
+            if ($vendorFrames > 0) {
+                $this->output->write(
+                    sprintf("\n      \e[2m+%s vendor frames \e[22m", $vendorFrames)
+                );
+                $vendorFrames = 0;
+            }
+
+            $this->render("<fg=yellow>$pos</><fg=default;options=bold>$file</>:<fg=default;options=bold>$line</>");
+            $this->render("<fg=white>    $class$function($args)</>", false);
         }
+
+        /* Let's consider add this later...
+         * if ($vendorFrames > 0) {
+         * $this->output->write(
+         * sprintf("\n      \e[2m+%s vendor frames \e[22m\n", $vendorFrames)
+         * );
+         * $vendorFrames = 0;
+         * }.
+         */
 
         return $this;
     }
 
     /**
      * Renders an message into the console.
-     *
-     * @param  string $message
-     * @param  bool $break
      *
      * @return $this
      */
@@ -269,5 +343,19 @@ class Writer implements WriterContract
         $this->output->writeln("  $message");
 
         return $this;
+    }
+
+    /**
+     * Returns the relative path of the given file path.
+     */
+    protected function getFileRelativePath(string $filePath): string
+    {
+        $cwd = (string) getcwd();
+
+        if (!empty($cwd)) {
+            return str_replace("$cwd/", '', $filePath);
+        }
+
+        return $filePath;
     }
 }

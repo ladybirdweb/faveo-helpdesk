@@ -47,7 +47,7 @@ class FormFieldRegistry
     }
 
     /**
-     * Removes a field based on the fully qualifed name and its children from the registry.
+     * Removes a field based on the fully qualified name and its children from the registry.
      */
     public function remove(string $name)
     {
@@ -64,9 +64,9 @@ class FormFieldRegistry
     }
 
     /**
-     * Returns the value of the field based on the fully qualifed name and its children.
+     * Returns the value of the field based on the fully qualified name and its children.
      *
-     * @return FormField|FormField[]|FormField[][] The value of the field
+     * @return FormField|FormField[]|FormField[][]
      *
      * @throws \InvalidArgumentException if the field does not exist
      */
@@ -87,8 +87,6 @@ class FormFieldRegistry
 
     /**
      * Tests whether the form has the given field based on the fully qualified name.
-     *
-     * @return bool Whether the form has the given field
      */
     public function has(string $name): bool
     {
@@ -157,7 +155,7 @@ class FormFieldRegistry
      *
      *     getSegments('base[foo][3][]') = ['base', 'foo, '3', ''];
      *
-     * @return string[] The list of segments
+     * @return string[]
      */
     private function getSegments(string $name): array
     {

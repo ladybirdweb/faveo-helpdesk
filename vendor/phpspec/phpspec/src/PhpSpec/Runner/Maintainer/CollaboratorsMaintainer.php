@@ -14,6 +14,7 @@
 namespace PhpSpec\Runner\Maintainer;
 
 use PhpSpec\CodeAnalysis\DisallowedNonObjectTypehintException;
+use PhpSpec\CodeAnalysis\DisallowedUnionTypehintException;
 use PhpSpec\Exception\Fracture\CollaboratorNotFoundException;
 use PhpSpec\Exception\Wrapper\InvalidCollaboratorTypeException;
 use PhpSpec\Loader\Node\ExampleNode;
@@ -25,7 +26,7 @@ use PhpSpec\Wrapper\Collaborator;
 use PhpSpec\Wrapper\Unwrapper;
 use Prophecy\Exception\Doubler\ClassNotFoundException;
 use Prophecy\Prophet;
-use ReflectionException;
+use ReflectionNamedType;
 
 final class CollaboratorsMaintainer implements Maintainer
 {
@@ -47,32 +48,20 @@ final class CollaboratorsMaintainer implements Maintainer
      */
     private $typeHintIndex;
 
-    /**
-     * @param Unwrapper $unwrapper
-     * @param TypeHintIndex $typeHintIndex
-     */
+    
     public function __construct(Unwrapper $unwrapper, TypeHintIndex $typeHintIndex)
     {
         $this->unwrapper = $unwrapper;
         $this->typeHintIndex = $typeHintIndex;
     }
 
-    /**
-     * @param ExampleNode $example
-     *
-     * @return bool
-     */
+    
     public function supports(ExampleNode $example): bool
     {
         return true;
     }
 
-    /**
-     * @param ExampleNode            $example
-     * @param Specification $context
-     * @param MatcherManager         $matchers
-     * @param CollaboratorManager    $collaborators
-     */
+    
     public function prepare(
         ExampleNode $example,
         Specification $context,
@@ -90,12 +79,7 @@ final class CollaboratorsMaintainer implements Maintainer
         $this->generateCollaborators($collaborators, $example->getFunctionReflection(), $classRefl);
     }
 
-    /**
-     * @param ExampleNode            $example
-     * @param Specification $context
-     * @param MatcherManager         $matchers
-     * @param CollaboratorManager    $collaborators
-     */
+    
     public function teardown(
         ExampleNode $example,
         Specification $context,
@@ -105,19 +89,13 @@ final class CollaboratorsMaintainer implements Maintainer
         $this->prophet->checkPredictions();
     }
 
-    /**
-     * @return int
-     */
+    
     public function getPriority(): int
     {
         return 50;
     }
 
-    /**
-     * @param CollaboratorManager         $collaborators
-     * @param \ReflectionFunctionAbstract $function
-     * @param \ReflectionClass            $classRefl
-     */
+    
     private function generateCollaborators(CollaboratorManager $collaborators, \ReflectionFunctionAbstract $function, \ReflectionClass $classRefl): void
     {
         foreach ($function->getParameters() as $parameter) {
@@ -127,13 +105,15 @@ final class CollaboratorsMaintainer implements Maintainer
                 if ($this->isUnsupportedTypeHinting($parameter)) {
                     throw new InvalidCollaboratorTypeException($parameter, $function);
                 }
-                if (($indexedClass = $this->getParameterTypeFromIndex($classRefl, $parameter))
-                    || ($indexedClass = $this->getParameterTypeFromReflection($parameter))) {
+                if ($indexedClass = $this->getParameterTypeFromIndex($classRefl, $parameter)) {
                     $collaborator->beADoubleOf($indexedClass);
                 }
             }
             catch (ClassNotFoundException $e) {
                 $this->throwCollaboratorNotFound($e, null, $e->getClassname());
+            }
+            catch (DisallowedUnionTypehintException $e) {
+                throw new InvalidCollaboratorTypeException($parameter, $function, $e->getMessage(), 'Use a specific type');
             }
             catch (DisallowedNonObjectTypehintException $e) {
                 throw new InvalidCollaboratorTypeException($parameter, $function);
@@ -143,15 +123,16 @@ final class CollaboratorsMaintainer implements Maintainer
 
     private function isUnsupportedTypeHinting(\ReflectionParameter $parameter): bool
     {
-        return $parameter->isArray() || $parameter->isCallable();
+        $type = $parameter->getType();
+
+        if (null === $type) {
+            return false;
+        }
+
+        return !$type instanceof ReflectionNamedType || in_array($type->getName(), ['array', 'callable'], true);
     }
 
-    /**
-     * @param CollaboratorManager $collaborators
-     * @param string              $name
-     *
-     * @return Collaborator
-     */
+    
     private function getOrCreateCollaborator(CollaboratorManager $collaborators, string $name): Collaborator
     {
         if (!$collaborators->has($name)) {
@@ -163,9 +144,8 @@ final class CollaboratorsMaintainer implements Maintainer
     }
 
     /**
-     * @param \Exception $e
-     * @param \ReflectionParameter|null $parameter
      * @param string $className
+     *
      * @throws CollaboratorNotFoundException
      */
     private function throwCollaboratorNotFound(\Exception $e, \ReflectionParameter $parameter = null, string $className = null): void
@@ -178,13 +158,8 @@ final class CollaboratorsMaintainer implements Maintainer
         );
     }
 
-    /**
-     * @param \ReflectionClass $classRefl
-     * @param \ReflectionParameter $parameter
-     *
-     * @return string
-     */
-    private function getParameterTypeFromIndex(\ReflectionClass $classRefl, \ReflectionParameter $parameter): string
+    
+    private function getParameterTypeFromIndex(\ReflectionClass $classRefl, \ReflectionParameter $parameter): ?string
     {
         return $this->typeHintIndex->lookup(
             $classRefl->getName(),
@@ -192,24 +167,4 @@ final class CollaboratorsMaintainer implements Maintainer
             '$' . $parameter->getName()
         );
     }
-
-    /**
-     * @param \ReflectionParameter $parameter
-     *
-     * @return string|null
-     */
-    private function getParameterTypeFromReflection(\ReflectionParameter $parameter): string
-    {
-        try {
-            if (null === $class = $parameter->getClass()) {
-                return '';
-            }
-
-            return $class->getName();
-        }
-        catch (ReflectionException $e) {
-            $this->throwCollaboratorNotFound($e, $parameter);
-        }
-    }
-
 }

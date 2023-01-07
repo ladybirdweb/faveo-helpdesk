@@ -4,11 +4,14 @@ namespace PhpSpec\CodeGenerator\Generator;
 
 use PhpSpec\Event\FileCreationEvent;
 use PhpSpec\Locator\Resource;
+use PhpSpec\Util\DispatchTrait;
 use PhpSpec\Util\Filesystem;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class NewFileNotifyingGenerator implements Generator
 {
+    use DispatchTrait;
+
     /**
      * @var Generator
      */
@@ -24,11 +27,7 @@ final class NewFileNotifyingGenerator implements Generator
      */
     private $filesystem;
 
-    /**
-     * @param Generator $generator
-     * @param EventDispatcherInterface $dispatcher
-     * @param Filesystem $filesystem
-     */
+    
     public function __construct(Generator $generator, EventDispatcherInterface $dispatcher, Filesystem $filesystem)
     {
         $this->generator = $generator;
@@ -75,7 +74,7 @@ final class NewFileNotifyingGenerator implements Generator
     {
         if (!$fileExisted && $this->fileExists($filePath)) {
             $event = new FileCreationEvent($filePath);
-            $this->dispatcher->dispatch('afterFileCreation', $event);
+            $this->dispatch($this->dispatcher, $event, 'afterFileCreation');
         }
     }
 }

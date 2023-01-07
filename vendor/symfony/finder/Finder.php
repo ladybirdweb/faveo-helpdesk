@@ -36,6 +36,8 @@ use Symfony\Component\Finder\Iterator\SortableIterator;
  *     $finder = Finder::create()->files()->name('*.php')->in(__DIR__);
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ *
+ * @implements \IteratorAggregate<string, SplFileInfo>
  */
 class Finder implements \IteratorAggregate, \Countable
 {
@@ -337,13 +339,11 @@ class Finder implements \IteratorAggregate, \Countable
      *
      * This option is enabled by default.
      *
-     * @param bool $ignoreDotFiles Whether to exclude "hidden" files or not
-     *
      * @return $this
      *
      * @see ExcludeDirectoryFilterIterator
      */
-    public function ignoreDotFiles($ignoreDotFiles)
+    public function ignoreDotFiles(bool $ignoreDotFiles)
     {
         if ($ignoreDotFiles) {
             $this->ignore |= static::IGNORE_DOT_FILES;
@@ -359,13 +359,11 @@ class Finder implements \IteratorAggregate, \Countable
      *
      * This option is enabled by default.
      *
-     * @param bool $ignoreVCS Whether to exclude VCS files or not
-     *
      * @return $this
      *
      * @see ExcludeDirectoryFilterIterator
      */
-    public function ignoreVCS($ignoreVCS)
+    public function ignoreVCS(bool $ignoreVCS)
     {
         if ($ignoreVCS) {
             $this->ignore |= static::IGNORE_VCS_FILES;
@@ -433,19 +431,12 @@ class Finder implements \IteratorAggregate, \Countable
      *
      * This can be slow as all the matching files and directories must be retrieved for comparison.
      *
-     * @param bool $useNaturalSort Whether to use natural sort or not, disabled by default
-     *
      * @return $this
      *
      * @see SortableIterator
      */
-    public function sortByName(/* bool $useNaturalSort = false */)
+    public function sortByName(bool $useNaturalSort = false)
     {
-        if (\func_num_args() < 1 && __CLASS__ !== static::class && __CLASS__ !== (new \ReflectionMethod($this, __FUNCTION__))->getDeclaringClass()->getName() && !$this instanceof \PHPUnit\Framework\MockObject\MockObject && !$this instanceof \Prophecy\Prophecy\ProphecySubjectInterface && !$this instanceof \Mockery\MockInterface) {
-            @trigger_error(sprintf('The "%s()" method will have a new "bool $useNaturalSort = false" argument in version 5.0, not defining it is deprecated since Symfony 4.2.', __METHOD__), \E_USER_DEPRECATED);
-        }
-        $useNaturalSort = 0 < \func_num_args() && func_get_arg(0);
-
         $this->sort = $useNaturalSort ? Iterator\SortableIterator::SORT_BY_NAME_NATURAL : Iterator\SortableIterator::SORT_BY_NAME;
 
         return $this;
@@ -569,13 +560,11 @@ class Finder implements \IteratorAggregate, \Countable
      *
      * By default, scanning unreadable directories content throws an AccessDeniedException.
      *
-     * @param bool $ignore
-     *
      * @return $this
      */
-    public function ignoreUnreadableDirs($ignore = true)
+    public function ignoreUnreadableDirs(bool $ignore = true)
     {
-        $this->ignoreUnreadableDirs = (bool) $ignore;
+        $this->ignoreUnreadableDirs = $ignore;
 
         return $this;
     }
@@ -595,16 +584,16 @@ class Finder implements \IteratorAggregate, \Countable
 
         foreach ((array) $dirs as $dir) {
             if (is_dir($dir)) {
-                $resolvedDirs[] = $this->normalizeDir($dir);
+                $resolvedDirs[] = [$this->normalizeDir($dir)];
             } elseif ($glob = glob($dir, (\defined('GLOB_BRACE') ? \GLOB_BRACE : 0) | \GLOB_ONLYDIR | \GLOB_NOSORT)) {
                 sort($glob);
-                $resolvedDirs = array_merge($resolvedDirs, array_map([$this, 'normalizeDir'], $glob));
+                $resolvedDirs[] = array_map([$this, 'normalizeDir'], $glob);
             } else {
                 throw new DirectoryNotFoundException(sprintf('The "%s" directory does not exist.', $dir));
             }
         }
 
-        $this->dirs = array_merge($this->dirs, $resolvedDirs);
+        $this->dirs = array_merge($this->dirs, ...$resolvedDirs);
 
         return $this;
     }
@@ -614,7 +603,7 @@ class Finder implements \IteratorAggregate, \Countable
      *
      * This method implements the IteratorAggregate interface.
      *
-     * @return \Iterator|SplFileInfo[] An iterator
+     * @return \Iterator<string, SplFileInfo>
      *
      * @throws \LogicException if the in() method has not been called
      */
@@ -658,13 +647,11 @@ class Finder implements \IteratorAggregate, \Countable
      *
      * The set can be another Finder, an Iterator, an IteratorAggregate, or even a plain array.
      *
-     * @param iterable $iterator
-     *
      * @return $this
      *
      * @throws \InvalidArgumentException when the given argument is not iterable
      */
-    public function append($iterator)
+    public function append(iterable $iterator)
     {
         if ($iterator instanceof \IteratorAggregate) {
             $this->iterators[] = $iterator->getIterator();
@@ -720,14 +707,6 @@ class Finder implements \IteratorAggregate, \Countable
 
         if (static::IGNORE_DOT_FILES === (static::IGNORE_DOT_FILES & $this->ignore)) {
             $notPaths[] = '#(^|/)\..+(/|$)#';
-        }
-
-        if (static::IGNORE_VCS_IGNORED_FILES === (static::IGNORE_VCS_IGNORED_FILES & $this->ignore)) {
-            $gitignoreFilePath = sprintf('%s/.gitignore', $dir);
-            if (!is_readable($gitignoreFilePath)) {
-                throw new \RuntimeException(sprintf('The "ignoreVCSIgnored" option cannot be used by the Finder as the "%s" file is not readable.', $gitignoreFilePath));
-            }
-            $notPaths = array_merge($notPaths, [Gitignore::toRegex(file_get_contents($gitignoreFilePath))]);
         }
 
         $minDepth = 0;
@@ -796,6 +775,10 @@ class Finder implements \IteratorAggregate, \Countable
 
         if ($this->paths || $notPaths) {
             $iterator = new Iterator\PathFilterIterator($iterator, $this->paths, $notPaths);
+        }
+
+        if (static::IGNORE_VCS_IGNORED_FILES === (static::IGNORE_VCS_IGNORED_FILES & $this->ignore)) {
+            $iterator = new Iterator\VcsIgnoredFilterIterator($iterator, $dir);
         }
 
         return $iterator;

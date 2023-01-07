@@ -15,6 +15,8 @@ namespace PhpSpec\Formatter;
 
 use PhpSpec\Console\ConsoleIO;
 use PhpSpec\Event\ExampleEvent;
+use PhpSpec\Event\PhpSpecEvent;
+use PhpSpec\Event\ResourceEvent;
 use PhpSpec\Exception\Example\PendingException;
 use PhpSpec\Exception\Example\SkippingException;
 use PhpSpec\Formatter\Presenter\Presenter;
@@ -29,11 +31,7 @@ abstract class ConsoleFormatter extends BasicFormatter implements FatalPresenter
      */
     private $io;
 
-    /**
-     * @param Presenter           $presenter
-     * @param ConsoleIO           $io
-     * @param StatisticsCollector $stats
-     */
+    
     public function __construct(Presenter $presenter, ConsoleIO $io, StatisticsCollector $stats)
     {
         parent::__construct($presenter, $io, $stats);
@@ -41,16 +39,13 @@ abstract class ConsoleFormatter extends BasicFormatter implements FatalPresenter
     }
 
     /**
-     * @return IO
+     * @return ConsoleIO
      */
     protected function getIO(): IO
     {
         return $this->io;
     }
 
-    /**
-     * @param ExampleEvent $event
-     */
     protected function printException(ExampleEvent $event): void
     {
         if (null === $exception = $event->getException()) {
@@ -70,10 +65,19 @@ abstract class ConsoleFormatter extends BasicFormatter implements FatalPresenter
         }
     }
 
-    /**
-     * @param ExampleEvent $event
-     * @param string $type
-     */
+    protected function printIgnoredResource(ResourceEvent $event): void
+    {
+        $resource = $event->getResource();
+
+        $this->io->writeln(sprintf(
+            '<ignored-bg>%s</ignored-bg>',
+            str_pad($resource->getSpecClassname(), $this->io->getBlockWidth()),
+        ));
+        $this->io->writeln('      <ignored>- cannot be autoloaded</ignored>');
+        $this->io->writeln(sprintf('      <ignored>expected to find spec at path %s</ignored>.', $resource->getSpecFilename()));
+        $this->io->writeln();
+    }
+
     protected function printSpecificException(ExampleEvent $event, string $type): void
     {
         $title = str_replace('\\', DIRECTORY_SEPARATOR, $event->getSpecification()->getTitle());

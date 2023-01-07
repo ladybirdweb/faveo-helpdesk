@@ -15,6 +15,7 @@ trivial to integrate with web services.
 - Can send both synchronous and asynchronous requests using the same interface.
 - Uses PSR-7 interfaces for requests, responses, and streams. This allows you
   to utilize other PSR-7 compatible libraries with Guzzle.
+- Supports PSR-18 allowing interoperability between other PSR-18 HTTP Clients.
 - Abstracts away the underlying HTTP transport, allowing you to write
   environment and transport agnostic code; i.e., no hard dependency on cURL,
   PHP streams, sockets, or non-blocking event loops.
@@ -24,11 +25,11 @@ trivial to integrate with web services.
 $client = new \GuzzleHttp\Client();
 $response = $client->request('GET', 'https://api.github.com/repos/guzzle/guzzle');
 
-echo $response->getStatusCode(); # 200
-echo $response->getHeaderLine('content-type'); # 'application/json; charset=utf8'
-echo $response->getBody(); # '{"id": 1420053, "name": "guzzle", ...}'
+echo $response->getStatusCode(); // 200
+echo $response->getHeaderLine('content-type'); // 'application/json; charset=utf8'
+echo $response->getBody(); // '{"id": 1420053, "name": "guzzle", ...}'
 
-# Send an asynchronous request.
+// Send an asynchronous request.
 $request = new \GuzzleHttp\Psr7\Request('GET', 'http://httpbin.org');
 $promise = $client->sendAsync($request)->then(function ($response) {
     echo 'I completed! ' . $response->getBody();
@@ -53,27 +54,8 @@ The recommended way to install Guzzle is through
 [Composer](https://getcomposer.org/).
 
 ```bash
-# Install Composer
-curl -sS https://getcomposer.org/installer | php
-```
-
-Next, run the Composer command to install the latest stable version of Guzzle:
-
-```bash
 composer require guzzlehttp/guzzle
 ```
-
-After installing, you need to require Composer's autoloader:
-
-```php
-require 'vendor/autoload.php';
-```
-
-You can then later update Guzzle using composer:
-
- ```bash
-composer update
- ```
 
 
 ## Version Guidance
@@ -95,3 +77,18 @@ composer update
 [guzzle-5-docs]: https://docs.guzzlephp.org/en/5.3/
 [guzzle-6-docs]: https://docs.guzzlephp.org/en/6.5/
 [guzzle-7-docs]: https://docs.guzzlephp.org/en/latest/
+
+
+## Security
+
+If you discover a security vulnerability within this package, please send an email to security@tidelift.com. All security vulnerabilities will be promptly addressed. Please do not disclose security-related issues publicly until a fix has been announced. Please see [Security Policy](https://github.com/guzzle/guzzle/security/policy) for more information.
+
+## License
+
+Guzzle is made available under the MIT License (MIT). Please see [License File](LICENSE) for more information.
+
+## For Enterprise
+
+Available as part of the Tidelift Subscription
+
+The maintainers of Guzzle and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source dependencies you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use. [Learn more.](https://tidelift.com/subscription/pkg/packagist-guzzlehttp-guzzle?utm_source=packagist-guzzlehttp-guzzle&utm_medium=referral&utm_campaign=enterprise&utm_term=repo)

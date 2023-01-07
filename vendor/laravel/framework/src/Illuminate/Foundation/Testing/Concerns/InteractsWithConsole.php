@@ -4,8 +4,7 @@ namespace Illuminate\Foundation\Testing\Concerns;
 
 use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Console\Kernel;
-use Illuminate\Foundation\Testing\PendingCommand;
-use Illuminate\Support\Arr;
+use Illuminate\Testing\PendingCommand;
 
 trait InteractsWithConsole
 {
@@ -24,6 +23,13 @@ trait InteractsWithConsole
     public $expectedOutput = [];
 
     /**
+     * All of the expected ouput tables.
+     *
+     * @var array
+     */
+    public $expectedTables = [];
+
+    /**
      * All of the expected questions.
      *
      * @var array
@@ -31,27 +37,24 @@ trait InteractsWithConsole
     public $expectedQuestions = [];
 
     /**
+     * All of the expected choice questions.
+     *
+     * @var array
+     */
+    public $expectedChoices = [];
+
+    /**
      * Call artisan command and return code.
      *
      * @param  string  $command
      * @param  array  $parameters
-     * @return \Illuminate\Foundation\Testing\PendingCommand|int
+     * @return \Illuminate\Testing\PendingCommand|int
      */
     public function artisan($command, $parameters = [])
     {
         if (! $this->mockConsoleOutput) {
             return $this->app[Kernel::class]->call($command, $parameters);
         }
-
-        $this->beforeApplicationDestroyed(function () {
-            if (count($this->expectedQuestions)) {
-                $this->fail('Question "'.Arr::first($this->expectedQuestions)[0].'" was not asked.');
-            }
-
-            if (count($this->expectedOutput)) {
-                $this->fail('Output "'.Arr::first($this->expectedOutput).'" was not printed.');
-            }
-        });
 
         return new PendingCommand($this, $this->app, $command, $parameters);
     }

@@ -7,7 +7,6 @@ use Illuminate\Database\Query\Grammars\MySqlGrammar as QueryGrammar;
 use Illuminate\Database\Query\Processors\MySqlProcessor;
 use Illuminate\Database\Schema\Grammars\MySqlGrammar as SchemaGrammar;
 use Illuminate\Database\Schema\MySqlBuilder;
-use LogicException;
 
 class MySqlConnection extends Connection
 {
@@ -62,12 +61,6 @@ class MySqlConnection extends Connection
      */
     protected function getDoctrineDriver()
     {
-        if (! class_exists(DoctrineDriver::class)) {
-            throw new LogicException(
-                'Laravel v6 is only compatible with doctrine/dbal 2, in order to use this feature you must require the package "doctrine/dbal:^2.6".'
-            );
-        }
-
         return new DoctrineDriver;
     }
 }

@@ -28,11 +28,11 @@ class AnnotationDirectoryLoader extends AnnotationFileLoader
      * @param string      $path A directory path
      * @param string|null $type The resource type
      *
-     * @return RouteCollection A RouteCollection instance
+     * @return RouteCollection
      *
      * @throws \InvalidArgumentException When the directory does not exist or its routes cannot be parsed
      */
-    public function load($path, $type = null)
+    public function load($path, string $type = null)
     {
         if (!is_dir($dir = $this->locator->locate($path))) {
             return parent::supports($path, $type) ? parent::load($path, $type) : new RouteCollection();
@@ -74,7 +74,7 @@ class AnnotationDirectoryLoader extends AnnotationFileLoader
     /**
      * {@inheritdoc}
      */
-    public function supports($resource, $type = null)
+    public function supports($resource, string $type = null)
     {
         if ('annotation' === $type) {
             return true;

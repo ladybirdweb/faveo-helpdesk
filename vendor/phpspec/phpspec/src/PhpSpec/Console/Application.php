@@ -19,6 +19,7 @@ use PhpSpec\Matcher\Matcher;
 use PhpSpec\Process\Context\JsonExecutionContext;
 use PhpSpec\ServiceContainer;
 use Symfony\Component\Console\Application as BaseApplication;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -46,14 +47,12 @@ final class Application extends BaseApplication
         parent::__construct('phpspec', $version);
     }
 
-    public function getContainer(): ServiceContainer
+    public function getContainer(): IndexedServiceContainer
     {
         return $this->container;
     }
 
-    /**
-     * @return int
-     */
+
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
         $helperSet = $this->getHelperSet();
@@ -93,7 +92,7 @@ final class Application extends BaseApplication
      * Fixes an issue with definitions of the no-interaction option not being
      * completely shown in some cases
      */
-    protected function getDefaultInputDefinition()
+    protected function getDefaultInputDefinition(): InputDefinition
     {
         $description = 'Do not ask any interactive question (disables code generation).';
 
@@ -196,10 +195,6 @@ final class Application extends BaseApplication
     }
 
     /**
-     * @param InputInterface $input
-     *
-     * @return array
-     *
      * @throws \RuntimeException
      */
     protected function parseConfigurationFile(InputInterface $input): array
@@ -237,11 +232,7 @@ final class Application extends BaseApplication
         return array();
     }
 
-    /**
-     * @param string $path
-     *
-     * @return array
-     */
+
     private function parseConfigFromExistingPath(string $path): array
     {
         if (!file_exists($path)) {

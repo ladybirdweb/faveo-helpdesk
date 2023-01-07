@@ -36,7 +36,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * @return string|null The type of the value
+     * @return string|null
      */
     public function getType()
     {
@@ -65,9 +65,11 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
+     * Returns a native representation of the original value.
+     *
      * @param array|bool $recursive Whether values should be resolved recursively or not
      *
-     * @return string|int|float|bool|array|Data[]|null A native representation of the original value
+     * @return string|int|float|bool|array|Data[]|null
      */
     public function getValue($recursive = false)
     {
@@ -124,13 +126,13 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
     public function getIterator()
     {
         if (!\is_array($value = $this->getValue())) {
-            throw new \LogicException(sprintf('"%s" object holds non-iterable type "%s".', self::class, \gettype($value)));
+            throw new \LogicException(sprintf('"%s" object holds non-iterable type "%s".', self::class, get_debug_type($value)));
         }
 
         yield from $value;
     }
 
-    public function __get($key)
+    public function __get(string $key)
     {
         if (null !== $data = $this->seek($key)) {
             $item = $this->getStub($data->data[$data->position][$data->key]);
@@ -144,7 +146,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
     /**
      * @return bool
      */
-    public function __isset($key)
+    public function __isset(string $key)
     {
         return null !== $this->seek($key);
     }
@@ -202,14 +204,12 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
     /**
      * Returns a depth limited clone of $this.
      *
-     * @param int $maxDepth The max dumped depth level
-     *
      * @return static
      */
-    public function withMaxDepth($maxDepth)
+    public function withMaxDepth(int $maxDepth)
     {
         $data = clone $this;
-        $data->maxDepth = (int) $maxDepth;
+        $data->maxDepth = $maxDepth;
 
         return $data;
     }
@@ -217,14 +217,12 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
     /**
      * Limits the number of elements per depth level.
      *
-     * @param int $maxItemsPerDepth The max number of items dumped per depth level
-     *
      * @return static
      */
-    public function withMaxItemsPerDepth($maxItemsPerDepth)
+    public function withMaxItemsPerDepth(int $maxItemsPerDepth)
     {
         $data = clone $this;
-        $data->maxItemsPerDepth = (int) $maxItemsPerDepth;
+        $data->maxItemsPerDepth = $maxItemsPerDepth;
 
         return $data;
     }
@@ -236,7 +234,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @return static
      */
-    public function withRefHandles($useRefHandles)
+    public function withRefHandles(bool $useRefHandles)
     {
         $data = clone $this;
         $data->useRefHandles = $useRefHandles ? -1 : 0;
@@ -260,7 +258,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @param string|int $key The key to seek to
      *
-     * @return static|null Null if the key is not set
+     * @return static|null
      */
     public function seek($key)
     {

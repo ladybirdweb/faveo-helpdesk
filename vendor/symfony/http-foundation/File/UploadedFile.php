@@ -60,17 +60,10 @@ class UploadedFile extends File
      * @throws FileException         If file_uploads is disabled
      * @throws FileNotFoundException If the file does not exist
      */
-    public function __construct(string $path, string $originalName, string $mimeType = null, int $error = null, $test = false)
+    public function __construct(string $path, string $originalName, string $mimeType = null, int $error = null, bool $test = false)
     {
         $this->originalName = $this->getName($originalName);
         $this->mimeType = $mimeType ?: 'application/octet-stream';
-
-        if (4 < \func_num_args() ? !\is_bool($test) : null !== $error && @filesize($path) === $error) {
-            @trigger_error(sprintf('Passing a size as 4th argument to the constructor of "%s" is deprecated since Symfony 4.1.', __CLASS__), \E_USER_DEPRECATED);
-            $error = $test;
-            $test = 5 < \func_num_args() ? func_get_arg(5) : false;
-        }
-
         $this->error = $error ?: \UPLOAD_ERR_OK;
         $this->test = $test;
 
@@ -83,7 +76,7 @@ class UploadedFile extends File
      * It is extracted from the request from which the file has been uploaded.
      * Then it should not be considered as a safe value.
      *
-     * @return string The original name
+     * @return string
      */
     public function getClientOriginalName()
     {
@@ -96,7 +89,7 @@ class UploadedFile extends File
      * It is extracted from the original file name that was uploaded.
      * Then it should not be considered as a safe value.
      *
-     * @return string The extension
+     * @return string
      */
     public function getClientOriginalExtension()
     {
@@ -112,7 +105,7 @@ class UploadedFile extends File
      * For a trusted mime type, use getMimeType() instead (which guesses the mime
      * type based on the file content).
      *
-     * @return string The mime type
+     * @return string
      *
      * @see getMimeType()
      */
@@ -133,31 +126,18 @@ class UploadedFile extends File
      * For a trusted extension, use guessExtension() instead (which guesses
      * the extension based on the guessed mime type for the file).
      *
-     * @return string|null The guessed extension or null if it cannot be guessed
+     * @return string|null
      *
      * @see guessExtension()
      * @see getClientMimeType()
      */
     public function guessClientExtension()
     {
+        if (!class_exists(MimeTypes::class)) {
+            throw new \LogicException('You cannot guess the extension as the Mime component is not installed. Try running "composer require symfony/mime".');
+        }
+
         return MimeTypes::getDefault()->getExtensions($this->getClientMimeType())[0] ?? null;
-    }
-
-    /**
-     * Returns the file size.
-     *
-     * It is extracted from the request from which the file has been uploaded.
-     * Then it should not be considered as a safe value.
-     *
-     * @deprecated since Symfony 4.1, use getSize() instead.
-     *
-     * @return int|null The file sizes
-     */
-    public function getClientSize()
-    {
-        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.1. Use getSize() instead.', __METHOD__), \E_USER_DEPRECATED);
-
-        return $this->getSize();
     }
 
     /**
@@ -166,7 +146,7 @@ class UploadedFile extends File
      * If the upload was successful, the constant UPLOAD_ERR_OK is returned.
      * Otherwise one of the other UPLOAD_ERR_XXX constants is returned.
      *
-     * @return int The upload error
+     * @return int
      */
     public function getError()
     {
@@ -174,9 +154,9 @@ class UploadedFile extends File
     }
 
     /**
-     * Returns whether the file was uploaded successfully.
+     * Returns whether the file has been uploaded with HTTP and no error occurred.
      *
-     * @return bool True if the file has been uploaded with HTTP and no error occurred
+     * @return bool
      */
     public function isValid()
     {
@@ -188,14 +168,11 @@ class UploadedFile extends File
     /**
      * Moves the file to a new location.
      *
-     * @param string $directory The destination folder
-     * @param string $name      The new file name
-     *
-     * @return File A File object representing the new file
+     * @return File
      *
      * @throws FileException if, for any reason, the file could not have been moved
      */
-    public function move($directory, $name = null)
+    public function move(string $directory, string $name = null)
     {
         if ($this->isValid()) {
             if ($this->test) {
@@ -205,8 +182,11 @@ class UploadedFile extends File
             $target = $this->getTargetFile($directory, $name);
 
             set_error_handler(function ($type, $msg) use (&$error) { $error = $msg; });
-            $moved = move_uploaded_file($this->getPathname(), $target);
-            restore_error_handler();
+            try {
+                $moved = move_uploaded_file($this->getPathname(), $target);
+            } finally {
+                restore_error_handler();
+            }
             if (!$moved) {
                 throw new FileException(sprintf('Could not move the file "%s" to "%s" (%s).', $this->getPathname(), $target, strip_tags($error)));
             }
@@ -273,11 +253,11 @@ class UploadedFile extends File
 
         switch (substr($size, -1)) {
             case 't': $max *= 1024;
-            // no break
+                // no break
             case 'g': $max *= 1024;
-            // no break
+                // no break
             case 'm': $max *= 1024;
-            // no break
+                // no break
             case 'k': $max *= 1024;
         }
 
@@ -287,7 +267,7 @@ class UploadedFile extends File
     /**
      * Returns an informative upload error message.
      *
-     * @return string The error message regarding the specified error code
+     * @return string
      */
     public function getErrorMessage()
     {

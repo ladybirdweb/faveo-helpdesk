@@ -81,7 +81,7 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
     /**
      * {@inheritdoc}
      */
-    public function match($pathinfo)
+    public function match(string $pathinfo)
     {
         $this->allow = $this->allowSchemes = [];
 
@@ -120,13 +120,13 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
      *
      * @param string $pathinfo The path info to be parsed
      *
-     * @return array An array of parameters
+     * @return array
      *
      * @throws NoConfigurationException  If no routing configuration could be found
      * @throws ResourceNotFoundException If the resource could not be found
      * @throws MethodNotAllowedException If the resource was found but the request method is not allowed
      */
-    protected function matchCollection($pathinfo, RouteCollection $routes)
+    protected function matchCollection(string $pathinfo, RouteCollection $routes)
     {
         // HEAD and GET are equivalent as per RFC
         if ('HEAD' === $method = $this->context->getMethod()) {
@@ -205,12 +205,9 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
      * in matchers that do not have access to the matched Route instance
      * (like the PHP and Apache matcher dumpers).
      *
-     * @param string $name       The name of the route
-     * @param array  $attributes An array of attributes from the matcher
-     *
-     * @return array An array of parameters
+     * @return array
      */
-    protected function getAttributes(Route $route, $name, array $attributes)
+    protected function getAttributes(Route $route, string $name, array $attributes)
     {
         $defaults = $route->getDefaults();
         if (isset($defaults['_canonical_route'])) {
@@ -225,12 +222,9 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
     /**
      * Handles specific route requirements.
      *
-     * @param string $pathinfo The path
-     * @param string $name     The route name
-     *
      * @return array The first element represents the status, the second contains additional information
      */
-    protected function handleRouteRequirements($pathinfo, $name, Route $route)
+    protected function handleRouteRequirements(string $pathinfo, string $name, Route $route)
     {
         // expression condition
         if ($route->getCondition() && !$this->getExpressionLanguage()->evaluate($route->getCondition(), ['context' => $this->context, 'request' => $this->request ?: $this->createRequest($pathinfo)])) {
@@ -243,12 +237,9 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
     /**
      * Get merged default parameters.
      *
-     * @param array $params   The parameters
-     * @param array $defaults The defaults
-     *
-     * @return array Merged default parameters
+     * @return array
      */
-    protected function mergeDefaults($params, $defaults)
+    protected function mergeDefaults(array $params, array $defaults)
     {
         foreach ($params as $key => $value) {
             if (!\is_int($key) && null !== $value) {

@@ -25,8 +25,10 @@ use Symfony\Component\HttpFoundation\Response;
 class Store implements StoreInterface
 {
     protected $root;
+    /** @var \SplObjectStorage<Request, string> */
     private $keyCache;
-    private $locks;
+    /** @var array<string, resource> */
+    private $locks = [];
 
     /**
      * @throws \RuntimeException
@@ -34,11 +36,10 @@ class Store implements StoreInterface
     public function __construct(string $root)
     {
         $this->root = $root;
-        if (!file_exists($this->root) && !@mkdir($this->root, 0777, true) && !is_dir($this->root)) {
+        if (!is_dir($this->root) && !@mkdir($this->root, 0777, true) && !is_dir($this->root)) {
             throw new \RuntimeException(sprintf('Unable to create the store directory (%s).', $this->root));
         }
         $this->keyCache = new \SplObjectStorage();
-        $this->locks = [];
     }
 
     /**
@@ -66,7 +67,7 @@ class Store implements StoreInterface
 
         if (!isset($this->locks[$key])) {
             $path = $this->getPath($key);
-            if (!file_exists(\dirname($path)) && false === @mkdir(\dirname($path), 0777, true) && !is_dir(\dirname($path))) {
+            if (!is_dir(\dirname($path)) && false === @mkdir(\dirname($path), 0777, true) && !is_dir(\dirname($path))) {
                 return $path;
             }
             $h = fopen($path, 'c');
@@ -110,7 +111,7 @@ class Store implements StoreInterface
             return true; // shortcut if lock held by this process
         }
 
-        if (!file_exists($path = $this->getPath($key))) {
+        if (!is_file($path = $this->getPath($key))) {
             return false;
         }
 
@@ -125,7 +126,7 @@ class Store implements StoreInterface
     /**
      * Locates a cached Response for the Request provided.
      *
-     * @return Response|null A Response instance, or null if no cache entry was found
+     * @return Response|null
      */
     public function lookup(Request $request)
     {
@@ -166,7 +167,7 @@ class Store implements StoreInterface
      * Existing entries are read and any that match the response are removed. This
      * method calls write with the new list of cache entries.
      *
-     * @return string The key under which the response is stored
+     * @return string
      *
      * @throws \RuntimeException
      */
@@ -207,7 +208,7 @@ class Store implements StoreInterface
                 $entry[1]['vary'] = [''];
             }
 
-            if ($entry[1]['vary'][0] != $vary || !$this->requestsMatch($vary, $entry[0], $storedEnv)) {
+            if ($entry[1]['vary'][0] != $vary || !$this->requestsMatch($vary ?? '', $entry[0], $storedEnv)) {
                 $entries[] = $entry;
             }
         }
@@ -265,9 +266,9 @@ class Store implements StoreInterface
      * Determines whether two Request HTTP header sets are non-varying based on
      * the vary response header value provided.
      *
-     * @param string $vary A Response vary header
-     * @param array  $env1 A Request HTTP header array
-     * @param array  $env2 A Request HTTP header array
+     * @param string|null $vary A Response vary header
+     * @param array       $env1 A Request HTTP header array
+     * @param array       $env2 A Request HTTP header array
      */
     private function requestsMatch(?string $vary, array $env1, array $env2): bool
     {
@@ -306,11 +307,9 @@ class Store implements StoreInterface
      *
      * This method purges both the HTTP and the HTTPS version of the cache entry.
      *
-     * @param string $url A URL
-     *
      * @return bool true if the URL exists with either HTTP or HTTPS scheme and has been purged, false otherwise
      */
-    public function purge($url)
+    public function purge(string $url)
     {
         $http = preg_replace('#^https:#', 'http:', $url);
         $https = preg_replace('#^http:#', 'https:', $url);
@@ -333,7 +332,7 @@ class Store implements StoreInterface
             unset($this->locks[$key]);
         }
 
-        if (file_exists($path = $this->getPath($key))) {
+        if (is_file($path = $this->getPath($key))) {
             unlink($path);
 
             return true;
@@ -349,7 +348,7 @@ class Store implements StoreInterface
     {
         $path = $this->getPath($key);
 
-        return file_exists($path) && false !== ($contents = @file_get_contents($path)) ? $contents : null;
+        return is_file($path) && false !== ($contents = @file_get_contents($path)) ? $contents : null;
     }
 
     /**
@@ -374,7 +373,7 @@ class Store implements StoreInterface
                 return false;
             }
         } else {
-            if (!file_exists(\dirname($path)) && false === @mkdir(\dirname($path), 0777, true) && !is_dir(\dirname($path))) {
+            if (!is_dir(\dirname($path)) && false === @mkdir(\dirname($path), 0777, true) && !is_dir(\dirname($path))) {
                 return false;
             }
 
@@ -405,7 +404,7 @@ class Store implements StoreInterface
         return true;
     }
 
-    public function getPath($key)
+    public function getPath(string $key)
     {
         return $this->root.\DIRECTORY_SEPARATOR.substr($key, 0, 2).\DIRECTORY_SEPARATOR.substr($key, 2, 2).\DIRECTORY_SEPARATOR.substr($key, 4, 2).\DIRECTORY_SEPARATOR.substr($key, 6);
     }
@@ -420,7 +419,7 @@ class Store implements StoreInterface
      * headers, use a Vary header to indicate them, and each representation will
      * be stored independently under the same cache key.
      *
-     * @return string A key for the given Request
+     * @return string
      */
     protected function generateCacheKey(Request $request)
     {

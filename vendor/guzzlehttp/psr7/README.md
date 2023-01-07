@@ -4,8 +4,8 @@ This repository contains a full [PSR-7](https://www.php-fig.org/psr/psr-7/)
 message implementation, several stream decorators, and some helpful
 functionality like query string parsing.
 
-
-[![Build Status](https://travis-ci.org/guzzle/psr7.svg?branch=master)](https://travis-ci.org/guzzle/psr7)
+![CI](https://github.com/guzzle/psr7/workflows/CI/badge.svg)
+![Static analysis](https://github.com/guzzle/psr7/workflows/Static%20analysis/badge.svg)
 
 
 # Stream implementation
@@ -130,10 +130,9 @@ $fnStream->rewind();
 
 `GuzzleHttp\Psr7\InflateStream`
 
-Uses PHP's zlib.inflate filter to inflate deflate or gzipped content.
+Uses PHP's zlib.inflate filter to inflate zlib (HTTP deflate, RFC1950) or gzipped (RFC1952) content.
 
-This stream decorator skips the first 10 bytes of the given stream to remove
-the gzip header, converts the provided stream to a PHP stream resource,
+This stream decorator converts the provided stream to a PHP stream resource,
 then appends the zlib.inflate filter. The stream is then converted back
 to a Guzzle stream resource to be used as a Guzzle stream.
 
@@ -381,9 +380,27 @@ of the header. When a parameter does not contain a value, but just
 contains a key, this function will inject a key with a '' string value.
 
 
-## `GuzzleHttp\Psr7\Header::normalize`
+## `GuzzleHttp\Psr7\Header::splitList`
+
+`public static function splitList(string|string[] $header): string[]`
+
+Splits a HTTP header defined to contain a comma-separated list into
+each individual value:
+
+```
+$knownEtags = Header::splitList($request->getHeader('if-none-match'));
+```
+
+Example headers include `accept`, `cache-control` and `if-none-match`.
+
+
+## `GuzzleHttp\Psr7\Header::normalize` (deprecated)
 
 `public static function normalize(string|array $header): array`
+
+`Header::normalize()` is deprecated in favor of [`Header::splitList()`](README.md#guzzlehttppsr7headersplitlist)
+which performs the same operation with a cleaned up API and improved
+documentation.
 
 Converts an array of header values that may contain comma separated
 headers into an array of headers with no comma separated values.
@@ -528,6 +545,17 @@ When fopen fails, PHP normally raises a warning. This function adds an
 error handler that checks for errors and throws an exception instead.
 
 
+## `GuzzleHttp\Psr7\Utils::tryGetContents`
+
+`public static function tryGetContents(resource $stream): string`
+
+Safely gets the contents of a given stream.
+
+When stream_get_contents fails, PHP normally raises a warning. This
+function adds an error handler that checks for errors and throws an
+exception instead.
+
+
 ## `GuzzleHttp\Psr7\Utils::uriFor`
 
 `public static function uriFor(string|UriInterface $uri): UriInterface`
@@ -555,7 +583,7 @@ Maps a file extensions to a mimetype.
 
 ## Upgrading from Function API
 
-The static API was first introduced in 1.7.0, in order to mitigate problems with functions conflicting between global and local copies of the package. The function API will be removed in 2.0.0. A migration table has been provided here for your convenience:
+The static API was first introduced in 1.7.0, in order to mitigate problems with functions conflicting between global and local copies of the package. The function API was removed in 2.0.0. A migration table has been provided here for your convenience:
 
 | Original Function | Replacement Method |
 |----------------|----------------|

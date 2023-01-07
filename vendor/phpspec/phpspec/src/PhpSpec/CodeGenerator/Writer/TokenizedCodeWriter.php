@@ -13,6 +13,7 @@
 
 namespace PhpSpec\CodeGenerator\Writer;
 
+use PhpSpec\Exception\Generator\GenerationFailed;
 use PhpSpec\Util\ClassFileAnalyser;
 
 final class TokenizedCodeWriter implements CodeWriter
@@ -22,9 +23,7 @@ final class TokenizedCodeWriter implements CodeWriter
      */
     private $analyser;
 
-    /**
-     * @param ClassFileAnalyser $analyser
-     */
+    
     public function __construct(ClassFileAnalyser $analyser)
     {
         $this->analyser = $analyser;
@@ -83,7 +82,7 @@ final class TokenizedCodeWriter implements CodeWriter
         return implode("\n", $lines);
     }
 
-    private function writeAtEndOfClass(string $class, string $method, bool $prependNewLine = false): string
+    private function writeAtEndOfClass(string $class, string $method): string
     {
         $tokens = token_get_all($class);
         $searching = false;
@@ -108,8 +107,9 @@ final class TokenizedCodeWriter implements CodeWriter
             }
 
             if ($this->isWritePoint($token)) {
-                $line = $token[2];
-                return $this->insertStringAfterLine($class, $method, $line, $token[0] === T_COMMENT ?: $prependNewLine);
+                $line = (int) $token[2];
+                $prependNewLine = $token[0] === T_COMMENT || ($i != 0 && $tokens[$i-1][0] === T_COMMENT);
+                return $this->insertStringAfterLine($class, $method, $line, $prependNewLine);
             }
 
             array_unshift($searchPattern, \is_array($token) ? $token[1] : $token);
@@ -121,6 +121,8 @@ final class TokenizedCodeWriter implements CodeWriter
                 return substr_replace($class, "\n" . $method . "\n", $position, 0);
             }
         }
+
+        throw new GenerationFailed('Could not locate end of class');
     }
 
     /**

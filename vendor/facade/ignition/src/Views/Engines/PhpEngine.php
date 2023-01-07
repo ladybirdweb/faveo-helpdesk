@@ -5,6 +5,7 @@ namespace Facade\Ignition\Views\Engines;
 use Exception;
 use Facade\Ignition\Exceptions\ViewException;
 use Facade\Ignition\Views\Concerns\CollectsViewExceptions;
+use Throwable;
 
 class PhpEngine extends \Illuminate\View\Engines\PhpEngine
 {
@@ -27,14 +28,14 @@ class PhpEngine extends \Illuminate\View\Engines\PhpEngine
     /**
      * Handle a view exception.
      *
-     * @param  \Exception  $baseException
+     * @param  \Throwable  $baseException
      * @param  int  $obLevel
      *
      * @return void
      *
-     * @throws \Exception
+     * @throws \Throwable
      */
-    protected function handleViewException(Exception $baseException, $obLevel)
+    protected function handleViewException(Throwable $baseException, $obLevel)
     {
         $exception = new ViewException($baseException->getMessage(), 0, 1, $baseException->getFile(), $baseException->getLine(), $baseException);
 

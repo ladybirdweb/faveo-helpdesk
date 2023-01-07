@@ -53,7 +53,7 @@ class ConsoleIO implements IO
     private $config;
 
     /**
-     * @var integer
+     * @var int
      */
     private $consoleWidth;
 
@@ -254,7 +254,7 @@ class ConsoleIO implements IO
     public function getBootstrapPath(): ?string
     {
         if ($path = $this->input->getOption('bootstrap')) {
-            return $path;
+            return (string) $path;
         }
 
         if ($path = $this->config->getBootstrapPath()) {
@@ -280,10 +280,7 @@ class ConsoleIO implements IO
         return $width;
     }
 
-    /**
-     * @param string $message
-     * @param int $indent
-     */
+    
     public function writeBrokenCodeBlock(string $message, int $indent = 0): void
     {
         $message = wordwrap($message, $this->getBlockWidth() - ($indent * 2), "\n", true);

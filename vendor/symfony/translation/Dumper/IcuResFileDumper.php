@@ -28,7 +28,7 @@ class IcuResFileDumper extends FileDumper
     /**
      * {@inheritdoc}
      */
-    public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = [])
+    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = [])
     {
         $data = $indexes = $resources = '';
 

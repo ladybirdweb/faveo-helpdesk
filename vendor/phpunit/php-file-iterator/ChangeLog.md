@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.6] - 2021-12-02
+
+### Changed
+
+* [#73](https://github.com/sebastianbergmann/php-file-iterator/pull/73): Micro performance improvements on parsing paths
+
+## [3.0.5] - 2020-09-28
+
+### Changed
+
+* Changed PHP version constraint in `composer.json` from `^7.3 || ^8.0` to `>=7.3`
+
+## [3.0.4] - 2020-07-11
+
+### Fixed
+
+* [#67](https://github.com/sebastianbergmann/php-file-iterator/issues/67): `TypeError` in `SebastianBergmann\FileIterator\Iterator::accept()`
+
+## [3.0.3] - 2020-06-26
+
+### Added
+
+* This component is now supported on PHP 8
+
+## [3.0.2] - 2020-06-15
+
+### Changed
+
+* Tests etc. are now ignored for archive exports
+
+## [3.0.1] - 2020-04-18
+
+### Fixed
+
+* [#64](https://github.com/sebastianbergmann/php-file-iterator/issues/64): Release tarball contains Composer PHAR
+
+## [3.0.0] - 2020-02-07
+
+### Removed
+
+* This component is no longer supported on PHP 7.1 and PHP 7.2
+
 ## [2.0.5] - 2021-12-02
 
 ### Changed
@@ -80,14 +122,21 @@ No changes
 
 ### Added
 
-* [Added support for wildcards (glob) in exclude](https://github.com/sebastianbergmann/php-file-iterator/pull/23)
+* [#23](https://github.com/sebastianbergmann/php-file-iterator/pull/23): Added support for wildcards (glob) in exclude
 
+[3.0.6]: https://github.com/sebastianbergmann/php-file-iterator/compare/3.0.5...3.0.6
+[3.0.5]: https://github.com/sebastianbergmann/php-file-iterator/compare/3.0.4...3.0.5
+[3.0.4]: https://github.com/sebastianbergmann/php-file-iterator/compare/3.0.3...3.0.4
+[3.0.3]: https://github.com/sebastianbergmann/php-file-iterator/compare/3.0.2...3.0.3
+[3.0.2]: https://github.com/sebastianbergmann/php-file-iterator/compare/3.0.1...3.0.2
+[3.0.1]: https://github.com/sebastianbergmann/php-file-iterator/compare/3.0.0...3.0.1
+[3.0.0]: https://github.com/sebastianbergmann/php-file-iterator/compare/2.0.5...3.0.0
 [2.0.5]: https://github.com/sebastianbergmann/php-file-iterator/compare/2.0.4...2.0.5
 [2.0.4]: https://github.com/sebastianbergmann/php-file-iterator/compare/2.0.3...2.0.4
 [2.0.3]: https://github.com/sebastianbergmann/php-file-iterator/compare/2.0.2...2.0.3
 [2.0.2]: https://github.com/sebastianbergmann/php-file-iterator/compare/2.0.1...2.0.2
 [2.0.1]: https://github.com/sebastianbergmann/php-file-iterator/compare/2.0.0...2.0.1
-[2.0.0]: https://github.com/sebastianbergmann/php-file-iterator/compare/1.4...2.0.0
+[2.0.0]: https://github.com/sebastianbergmann/php-file-iterator/compare/1.4.5...2.0.0
 [1.4.5]: https://github.com/sebastianbergmann/php-file-iterator/compare/1.4.4...1.4.5
 [1.4.4]: https://github.com/sebastianbergmann/php-file-iterator/compare/1.4.3...1.4.4
 [1.4.3]: https://github.com/sebastianbergmann/php-file-iterator/compare/1.4.2...1.4.3

@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\HttpKernel\Fragment;
 
-use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
@@ -34,7 +33,7 @@ class InlineFragmentRenderer extends RoutableFragmentRenderer
     public function __construct(HttpKernelInterface $kernel, EventDispatcherInterface $dispatcher = null)
     {
         $this->kernel = $kernel;
-        $this->dispatcher = LegacyEventDispatcherProxy::decorate($dispatcher);
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -106,7 +105,7 @@ class InlineFragmentRenderer extends RoutableFragmentRenderer
         }
     }
 
-    protected function createSubRequest($uri, Request $request)
+    protected function createSubRequest(string $uri, Request $request)
     {
         $cookies = $request->cookies->all();
         $server = $request->server->all();

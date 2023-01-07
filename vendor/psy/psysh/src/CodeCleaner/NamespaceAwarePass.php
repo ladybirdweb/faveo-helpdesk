@@ -3,7 +3,7 @@
 /*
  * This file is part of Psy Shell.
  *
- * (c) 2012-2018 Justin Hileman
+ * (c) 2012-2022 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -29,10 +29,12 @@ abstract class NamespaceAwarePass extends CodeCleanerPass
      * use afterTraverse or call parent::beforeTraverse() when overloading.
      *
      * Reset the namespace and the current scope before beginning analysis
+     *
+     * @return Node[]|null Array of nodes
      */
     public function beforeTraverse(array $nodes)
     {
-        $this->namespace    = [];
+        $this->namespace = [];
         $this->currentScope = [];
     }
 
@@ -41,6 +43,8 @@ abstract class NamespaceAwarePass extends CodeCleanerPass
      * leaveNode or call parent::enterNode() when overloading
      *
      * @param Node $node
+     *
+     * @return int|Node|null Replacement node (or special return value)
      */
     public function enterNode(Node $node)
     {
@@ -56,7 +60,7 @@ abstract class NamespaceAwarePass extends CodeCleanerPass
      *
      * @return string
      */
-    protected function getFullyQualifiedName($name)
+    protected function getFullyQualifiedName($name): string
     {
         if ($name instanceof FullyQualifiedName) {
             return \implode('\\', $name->parts);

@@ -20,6 +20,8 @@ class StreamWrapper
 
     private static $specTransformers = array();
 
+    public $context;
+
     public static function register(): void
     {
         if (\in_array('phpspec', stream_get_wrappers())) {
@@ -87,5 +89,10 @@ class StreamWrapper
     public function stream_eof(): bool
     {
         return feof($this->fileResource);
+    }
+
+    public function stream_set_option(int $option, int $arg1, int $arg2): bool
+    {
+        return false;
     }
 }

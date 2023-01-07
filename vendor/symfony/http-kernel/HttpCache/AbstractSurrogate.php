@@ -41,7 +41,7 @@ abstract class AbstractSurrogate implements SurrogateInterface
     /**
      * Returns a new cache strategy instance.
      *
-     * @return ResponseCacheStrategyInterface A ResponseCacheStrategyInterface instance
+     * @return ResponseCacheStrategyInterface
      */
     public function createCacheStrategy()
     {
@@ -88,7 +88,7 @@ abstract class AbstractSurrogate implements SurrogateInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(HttpCache $cache, $uri, $alt, $ignoreErrors)
+    public function handle(HttpCache $cache, string $uri, string $alt, bool $ignoreErrors)
     {
         $subRequest = Request::create($uri, Request::METHOD_GET, [], $cache->getRequest()->cookies->all(), [], $cache->getRequest()->server->all());
 

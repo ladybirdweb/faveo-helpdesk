@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\HttpKernel;
 
-use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Symfony\Component\HttpFoundation\Exception\RequestExceptionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -34,7 +33,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 // Help opcache.preload discover always-needed symbols
-class_exists(LegacyEventDispatcherProxy::class);
 class_exists(ControllerArgumentsEvent::class);
 class_exists(ControllerEvent::class);
 class_exists(ExceptionEvent::class);
@@ -59,20 +57,16 @@ class HttpKernel implements HttpKernelInterface, TerminableInterface
 
     public function __construct(EventDispatcherInterface $dispatcher, ControllerResolverInterface $resolver, RequestStack $requestStack = null, ArgumentResolverInterface $argumentResolver = null)
     {
-        $this->dispatcher = LegacyEventDispatcherProxy::decorate($dispatcher);
+        $this->dispatcher = $dispatcher;
         $this->resolver = $resolver;
         $this->requestStack = $requestStack ?? new RequestStack();
-        $this->argumentResolver = $argumentResolver;
-
-        if (null === $this->argumentResolver) {
-            $this->argumentResolver = new ArgumentResolver();
-        }
+        $this->argumentResolver = $argumentResolver ?? new ArgumentResolver();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
+    public function handle(Request $request, int $type = HttpKernelInterface::MAIN_REQUEST, bool $catch = true)
     {
         $request->headers->set('X-Php-Ob-Level', (string) ob_get_level());
 
@@ -108,16 +102,16 @@ class HttpKernel implements HttpKernelInterface, TerminableInterface
      */
     public function terminateWithException(\Throwable $exception, Request $request = null)
     {
-        if (!$request = $request ?: $this->requestStack->getMasterRequest()) {
+        if (!$request = $request ?: $this->requestStack->getMainRequest()) {
             throw $exception;
         }
 
-        if ($pop = $request !== $this->requestStack->getMasterRequest()) {
+        if ($pop = $request !== $this->requestStack->getMainRequest()) {
             $this->requestStack->push($request);
         }
 
         try {
-            $response = $this->handleThrowable($exception, $request, self::MASTER_REQUEST);
+            $response = $this->handleThrowable($exception, $request, self::MAIN_REQUEST);
         } finally {
             if ($pop) {
                 $this->requestStack->pop();
@@ -138,7 +132,7 @@ class HttpKernel implements HttpKernelInterface, TerminableInterface
      * @throws \LogicException       If one of the listener does not behave as expected
      * @throws NotFoundHttpException When controller cannot be found
      */
-    private function handleRaw(Request $request, int $type = self::MASTER_REQUEST): Response
+    private function handleRaw(Request $request, int $type = self::MAIN_REQUEST): Response
     {
         // request
         $event = new RequestEvent($this, $request, $type);
