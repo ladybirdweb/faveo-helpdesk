@@ -7,9 +7,9 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
-Use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ForgotPasswordController extends Controller
 {
@@ -40,7 +40,8 @@ class ForgotPasswordController extends Controller
     /**
      * Send a reset link to the given user.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function sendResetLinkEmail(Request $request)
@@ -70,10 +71,10 @@ class ForgotPasswordController extends Controller
                         $name = $user->user_name;
                     }
                     $value = [
-                        'url' => url('password/reset/'.$code),
-                        'name' => $name,
+                        'url'    => url('password/reset/'.$code),
+                        'name'   => $name,
                         'mobile' => $user->mobile,
-                        'code' => $user->country_code, ];
+                        'code'   => $user->country_code, ];
                     event('reset.password2', [$value]);
                 }
 

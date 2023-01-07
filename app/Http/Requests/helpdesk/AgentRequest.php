@@ -35,18 +35,18 @@ class AgentRequest extends Request
         }
 
         return [
-            'user_name' => 'required|unique:users|max:30',
+            'user_name'  => 'required|unique:users|max:30',
             'first_name' => 'required|max:30',
             // 'last_name'  => 'required|max:30',
-            'email' => 'required|unique:users',
+            'email'  => 'required|unique:users',
             'active' => 'required',
             // 'account_status' => 'required',
-            'group' => 'required',
+            'group'              => 'required',
             'primary_department' => 'required',
-            'agent_time_zone' => 'required',
+            'agent_time_zone'    => 'required',
             // 'phone_number' => 'phone:IN',
             'mobile' => 'unique:users',
-            'team' => 'required',
+            'team'   => 'required',
         ];
     }
 
@@ -64,19 +64,19 @@ class AgentRequest extends Request
         $settings = $settings->select('status')->where('option_name', '=', 'send_otp')->first();
         if ($settings->status == '1' || $settings->status == 1) {
             return [
-                'user_name' => 'required|unique:users|max:30',
+                'user_name'  => 'required|unique:users|max:30',
                 'first_name' => 'required|max:30',
                 // 'last_name'           => 'required|max:30',
-                'email' => 'required|unique:users',
+                'email'  => 'required|unique:users',
                 'active' => 'required',
                 // 'account_status'       => 'required',
-                'group' => 'required',
+                'group'              => 'required',
                 'primary_department' => 'required',
-                'agent_time_zone' => 'required',
+                'agent_time_zone'    => 'required',
                 // 'phone_number' => 'phone:IN',
                 // 'mobile' => 'phone:IN',
-                'team' => 'required',
-                'mobile' => 'required|unique:users',
+                'team'         => 'required',
+                'mobile'       => 'required|unique:users',
                 'country_code' => 'required',
             ];
         } else {

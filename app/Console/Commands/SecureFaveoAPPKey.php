@@ -54,10 +54,10 @@ class SecureFaveoAPPKey extends Command
     {
         $username = $this->ask('Enter admin account username');
         $password = $this->secret('Enter admin account password');
-        if (! $username || ! $password) {
+        if (!$username || !$password) {
             throw new Exception('Username and password are required.', 1);
         }
-        if (! Hash::check($password, User::where('user_name', $username)->value('password'))) {
+        if (!Hash::check($password, User::where('user_name', $username)->value('password'))) {
             throw new Exception('We do not recognize you, make sure the username or password you provided are correct.', 1);
         }
 
@@ -85,14 +85,15 @@ class SecureFaveoAPPKey extends Command
      * This method also updates the LDAP passwords after new key generation
      * so that the LDAP plugin does not stop working after update
      *
-     * @param  string  $file
-     * @param  string  $datacontent
+     * @param string $file
+     * @param string $datacontent
+     *
      * @return voif
      */
     private function updateAppKey(string $file, string $datacontent): void
     {
         $this->fetchAndStoreEmailPassword();
-        if (! $this->doesEnvVaribaleExists($datacontent, 'APP_KEY')) {
+        if (!$this->doesEnvVaribaleExists($datacontent, 'APP_KEY')) {
             $datacontent = $datacontent."\r\nAPP_KEY=base64:h3KjrHeVxyE+j6c8whTAs2YI+7goylGZ/e2vElgXT6I=";
             File::put($file, $datacontent);
         }
@@ -111,13 +112,14 @@ class SecureFaveoAPPKey extends Command
     /**
      * Function checks if given $key exist in $envContent string.
      *
-     * @param  string  $envContent
-     * @param  string  $key
+     * @param string $envContent
+     * @param string $key
+     *
      * @return bool true if given key exist otherwise false
      */
     private function doesEnvVaribaleExists(string $envContent, string $key): bool
     {
-        return ! (strpos($envContent, $key) === false);
+        return !(strpos($envContent, $key) === false);
     }
 
     /**
@@ -147,10 +149,11 @@ class SecureFaveoAPPKey extends Command
     /**
      * Extract the encryption key from the given configuration.
      *
-     * @param  array  $config
-     * @return string
+     * @param array $config
      *
      * @throws \RuntimeException
+     *
+     * @return string
      */
     private function key()
     {

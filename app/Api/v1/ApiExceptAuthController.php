@@ -35,7 +35,7 @@ class ApiExceptAuthController extends Controller
             }
 
             $url = $this->request->input('url');
-            if (! Str::is('*/', $url)) {
+            if (!Str::is('*/', $url)) {
                 $url = Str::finish($url, '/');
             }
 
@@ -72,7 +72,8 @@ class ApiExceptAuthController extends Controller
     /**
      * Call curl function for Get Method.
      *
-     * @param  type  $url
+     * @param type $url
+     *
      * @return type int|string|json
      */
     public function callGetApi($url)
@@ -95,8 +96,9 @@ class ApiExceptAuthController extends Controller
     /**
      * Call curl function for POST Method.
      *
-     * @param  type  $url
-     * @param  type  $data
+     * @param type $url
+     * @param type $data
+     *
      * @return type int|string|json
      */
     public function callPostApi($url, $data)

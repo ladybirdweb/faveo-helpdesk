@@ -218,16 +218,17 @@ class InstallController extends Controller
      * checking prerequisites.
      *
      * @param type InstallerRequest $request
+     *
      * @return type view
      */
     public function accountcheck(Request $request)
     {
         $validator = \Validator::make($request->all(), [
-            'firstname' => 'required|max:20',
-            'Lastname' => 'required|max:20',
-            'email' => 'required|max:50|email',
-            'username' => 'required|max:50|min:3',
-            'password' => 'required|min:6',
+            'firstname'       => 'required|max:20',
+            'Lastname'        => 'required|max:20',
+            'email'           => 'required|max:50|email',
+            'username'        => 'required|max:50|min:3',
+            'password'        => 'required|min:6',
             'confirmpassword' => 'required|same:password',
         ]);
 
@@ -266,7 +267,7 @@ class InstallController extends Controller
         }
 
         $changed = UnAuth::changeLanguage($language);
-        if (! $changed) {
+        if (!$changed) {
             return \Redirect::back()->with('fails', 'Invalid language');
         }
 
@@ -285,14 +286,14 @@ class InstallController extends Controller
         // creating an user
         $user = User::updateOrCreate(['id' => 1], [
             'first_name' => $firstname,
-            'last_name' => $lastname,
-            'email' => $email,
-            'user_name' => $username,
-            'password' => Hash::make($password),
+            'last_name'  => $lastname,
+            'email'      => $email,
+            'user_name'  => $username,
+            'password'   => Hash::make($password),
             //'assign_group' => 1,
             'primary_dpt' => 1,
-            'active' => 1,
-            'role' => 'admin',
+            'active'      => 1,
+            'role'        => 'admin',
         ]);
 
         // checking if the user have been created
@@ -454,7 +455,7 @@ class InstallController extends Controller
         if (is_file(base_path().DIRECTORY_SEPARATOR.'.env')) {
             unlink(base_path().DIRECTORY_SEPARATOR.'.env');
         }
-        if (! is_file(base_path().DIRECTORY_SEPARATOR.'example.env')) {
+        if (!is_file(base_path().DIRECTORY_SEPARATOR.'example.env')) {
             fopen(base_path().DIRECTORY_SEPARATOR.'example.env', 'w');
         }
 
@@ -493,7 +494,7 @@ class InstallController extends Controller
         try {
             $tableNames = \Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
             if (count($tableNames) === 0) {
-                if (! Cache::get('dummy_data_installation')) {
+                if (!Cache::get('dummy_data_installation')) {
                     Artisan::call('migrate', ['--force' => true]);
                     $db_install_method = 'migrate';
                 } else {
