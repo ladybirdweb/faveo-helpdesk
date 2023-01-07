@@ -44,6 +44,7 @@ class EmailsController extends Controller
      * Display a listing of the Emails.
      *
      * @param type Emails $emails
+     *
      * @return type view
      */
     public function index(Emails $email)
@@ -65,6 +66,7 @@ class EmailsController extends Controller
      * @param type Help_topic      $help
      * @param type Priority        $priority
      * @param type MailboxProtocol $mailbox_protocol
+     *
      * @return type Response
      */
     public function create(Department $department, Help_topic $help, Ticket_Priority $ticket_priority, MailboxProtocol $mailbox_protocol)
@@ -93,7 +95,8 @@ class EmailsController extends Controller
     /**
      * Check for email input validation.
      *
-     * @param  EmailsRequest  $request
+     * @param EmailsRequest $request
+     *
      * @return int
      */
     public function validatingEmailSettings(MailRequest $request, $id = '')
@@ -158,6 +161,7 @@ class EmailsController extends Controller
      *
      * @param type Emails        $email
      * @param type EmailsRequest $request
+     *
      * @return type Redirect
      */
     public function store($request, $service_request = [], $id = '')
@@ -202,7 +206,7 @@ class EmailsController extends Controller
             $email->auto_response = 0;
         }
         $email->fetching_encryption = $request->input('fetching_encryption');
-        if (! $request->input('imap_validate')) {
+        if (!$request->input('imap_validate')) {
             $email->mailbox_protocol = 'novalidate-cert';
         }
         $email->department = $this->departmentValue($request->input('department'));
@@ -285,13 +289,13 @@ class EmailsController extends Controller
     public function setMailConfig($driver, $address, $name, $username, $password, $enc, $host, $port)
     {
         $configs = [
-            'username' => $username,
-            'from' => ['address' => $address, 'name' => $name],
-            'password' => $password,
+            'username'   => $username,
+            'from'       => ['address' => $address, 'name' => $name],
+            'password'   => $password,
             'encryption' => $enc,
-            'host' => $host,
-            'port' => $port,
-            'driver' => $driver,
+            'host'       => $host,
+            'port'       => $port,
+            'driver'     => $driver,
         ];
         foreach ($configs as $key => $config) {
             if (is_array($config)) {
@@ -325,6 +329,7 @@ class EmailsController extends Controller
      * @param type Emails          $email
      * @param type Priority        $priority
      * @param type MailboxProtocol $mailbox_protocol
+     *
      * @return type Response
      */
     public function edit($id, Department $department, Help_topic $help, Emails $email, Ticket_Priority $ticket_priority, MailboxProtocol $mailbox_protocol)
@@ -359,7 +364,8 @@ class EmailsController extends Controller
     /**
      * Check for email input validation.
      *
-     * @param  EmailsRequest  $request
+     * @param EmailsRequest $request
+     *
      * @return int
      */
     public function validatingEmailSettingsUpdate($id, MailRequest $request)
@@ -381,9 +387,10 @@ class EmailsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  type  $id
+     * @param type $id
      * @param type Emails            $email
      * @param type EmailsEditRequest $request
+     *
      * @return type Response
      */
     public function update($id, $request)
@@ -411,6 +418,7 @@ class EmailsController extends Controller
      *
      * @param type int    $id
      * @param type Emails $email
+     *
      * @return type Redirect
      */
     public function destroy($id, Emails $email)
@@ -440,7 +448,8 @@ class EmailsController extends Controller
     /**
      * Create imap connection.
      *
-     * @param  type  $request
+     * @param type $request
+     *
      * @return type int
      */
     public function getImapStream($request)
@@ -460,7 +469,7 @@ class EmailsController extends Controller
         if ($encryption != '') {
             $server->setFlag($encryption);
         }
-        if (! $validate) {
+        if (!$validate) {
             $server->setFlag('novalidate-cert');
         } else {
             $server->setFlag('validate-cert');
@@ -475,7 +484,8 @@ class EmailsController extends Controller
     /**
      * Check connection.
      *
-     * @param  type  $imap_stream
+     * @param type $imap_stream
+     *
      * @return type int
      */
     public function checkImapStream($imap_stream)
@@ -493,7 +503,8 @@ class EmailsController extends Controller
     /**
      * Get smtp connection.
      *
-     * @param  type  $request
+     * @param type $request
+     *
      * @return int
      */
     public function getSmtp($request)
@@ -509,12 +520,12 @@ class EmailsController extends Controller
             $mail->Password = $request->input('password');            // SMTP password
             $mail->SMTPSecure = $request->input('sending_encryption'); // Enable TLS encryption, `ssl` also accepted
             $mail->Port = $request->input('sending_port');            // TCP port to connect to
-            if (! $request->input('smtp_validate')) {
+            if (!$request->input('smtp_validate')) {
                 $mail->SMTPAuth = true;                               // Enable SMTP authentication
                 $mail->SMTPOptions = [
                     'ssl' => [
-                        'verify_peer' => false,
-                        'verify_peer_name' => false,
+                        'verify_peer'       => false,
+                        'verify_peer_name'  => false,
                         'allow_self_signed' => true,
                     ],
                 ];
@@ -542,7 +553,8 @@ class EmailsController extends Controller
     /**
      * Checking if department value is null.
      *
-     * @param  type  $dept
+     * @param type $dept
+     *
      * @return type string or null
      */
     public function departmentValue($dept)
@@ -559,7 +571,8 @@ class EmailsController extends Controller
     /**
      * Checking if priority value is null.
      *
-     * @param  type  $priority
+     * @param type $priority
+     *
      * @return type string or null
      */
     public function priorityValue($priority)
@@ -576,7 +589,8 @@ class EmailsController extends Controller
     /**
      * Checking if helptopic value is null.
      *
-     * @param  type  $help_topic
+     * @param type $help_topic
+     *
      * @return type string or null
      */
     public function helpTopicValue($help_topic)
@@ -622,9 +636,9 @@ class EmailsController extends Controller
             }
             foreach ($request as $key => $value) {
                 $mail_service->create([
-                    'drive' => $driver,
-                    'key' => $key,
-                    'value' => $value,
+                    'drive'    => $driver,
+                    'key'      => $key,
+                    'value'    => $value,
                     'email_id' => $emailid,
                 ]);
             }

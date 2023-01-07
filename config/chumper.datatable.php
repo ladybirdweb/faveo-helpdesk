@@ -44,7 +44,7 @@ return [
          */
         'options' => [
             'sPaginationType' => 'full_numbers',
-            'bProcessing' => true,
+            'bProcessing'     => true,
         ],
         /*
           |--------------------------------------------------------------------------
@@ -116,7 +116,7 @@ return [
      */
     'classmap' => [
         'CollectionEngine' => 'Chumper\Datatable\Engines\CollectionEngine',
-        'QueryEngine' => 'Chumper\Datatable\Engines\QueryEngine',
-        'Table' => 'Chumper\Datatable\Table',
+        'QueryEngine'      => 'Chumper\Datatable\Engines\QueryEngine',
+        'Table'            => 'Chumper\Datatable\Table',
     ],
 ];
