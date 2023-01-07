@@ -32,7 +32,8 @@
         "doctrine/dbal": "^2.13",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.0",
-        "guzzlehttp/guzzle": "^6.3.1|^7.0.1"
+        "guzzlehttp/guzzle": "^6.3.1|^7.0.1",
+        "league/flysystem-aws-s3-v3": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5.10",
