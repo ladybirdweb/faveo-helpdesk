@@ -35,9 +35,9 @@ class RegisterRequest extends Request
         }
 
         return [
-            'email'                 => 'required|max:50|email|unique:users',
-            'full_name'             => 'required',
-            'password'              => 'required|min:6',
+            'email' => 'required|max:50|email|unique:users',
+            'full_name' => 'required',
+            'password' => 'required|min:6',
             'password_confirmation' => 'required|same:password',
         ];
     }
@@ -60,21 +60,21 @@ class RegisterRequest extends Request
             return 0;
         } elseif (($settings->status == '1' || $settings->status == 1) && ($email_mandatory->status == 1 || $email_mandatory->status == '1')) {
             return [
-                'email'                 => 'required|max:50|email|unique:users',
-                'full_name'             => 'required',
-                'password'              => 'required|min:6',
+                'email' => 'required|max:50|email|unique:users',
+                'full_name' => 'required',
+                'password' => 'required|min:6',
                 'password_confirmation' => 'required|same:password',
-                'code'                  => 'required',
-                'mobile'                => 'required|unique:users',
+                'code' => 'required',
+                'mobile' => 'required|unique:users',
             ];
         } elseif (($settings->status == '1' || $settings->status == 1) && ($email_mandatory->status == 0 || $email_mandatory->status == '0')) {
             return [
-                'email'                 => 'max:50|email|unique:users',
-                'full_name'             => 'required',
-                'password'              => 'required|min:6',
+                'email' => 'max:50|email|unique:users',
+                'full_name' => 'required',
+                'password' => 'required|min:6',
                 'password_confirmation' => 'required|same:password',
-                'code'                  => 'required',
-                'mobile'                => 'required|unique:users',
+                'code' => 'required',
+                'mobile' => 'required|unique:users',
             ];
         } else {
             return 0;

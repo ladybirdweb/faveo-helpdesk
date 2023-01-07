@@ -63,8 +63,7 @@ class SettingsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function postSettings($id, Settings $settings, SettingsRequests $request)
@@ -81,8 +80,8 @@ class SettingsController extends Controller
                 $settings->logo = $fileName;
                 //$thDestinationPath = 'dist/th';
                 Image::make($destinationPath.'/'.$fileName, [
-                    'width'     => 300,
-                    'height'    => 300,
+                    'width' => 300,
+                    'height' => 300,
                     'grayscale' => false,
                 ])->save('lb-faveo/dist/image/'.$fileName);
             }
@@ -95,8 +94,8 @@ class SettingsController extends Controller
                 $settings->background = $fileName;
                 //$thDestinationPath = 'dist/th';
                 Image::make($destinationPath.'/'.$fileName, [
-                    'width'     => 300,
-                    'height'    => 300,
+                    'width' => 300,
+                    'height' => 300,
                     'grayscale' => false,
                 ])->save('lb-faveo/dist/image/'.$fileName);
             }
@@ -118,7 +117,6 @@ class SettingsController extends Controller
      * To Moderate the commenting.
      *
      * @param type Comment $comment
-     *
      * @return Response
      */
     public function comment(Comment $comment)
@@ -167,9 +165,8 @@ class SettingsController extends Controller
     /**
      * Admin can publish the comment.
      *
-     * @param type $id
+     * @param  type  $id
      * @param type Comment $comment
-     *
      * @return bool
      */
     public function publish($id, Comment $comment)
@@ -186,9 +183,8 @@ class SettingsController extends Controller
     /**
      * delete the comment.
      *
-     * @param type $id
+     * @param  type  $id
      * @param type Comment $comment
-     *
      * @return type
      */
     public function delete($id, Comment $comment)

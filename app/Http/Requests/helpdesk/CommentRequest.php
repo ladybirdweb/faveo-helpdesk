@@ -24,8 +24,8 @@ class CommentRequest extends Request
     public function rules()
     {
         return [
-            'name'    => 'required|max:10',
-            'email'   => 'required|email',
+            'name' => 'required|max:10',
+            'email' => 'required|email',
             'website' => 'url',
             'comment' => 'required|max:60',
         ];

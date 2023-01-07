@@ -17,8 +17,8 @@ class Article extends BaseModel
      */
     protected $searchable = [
         'columns' => [
-            'name'        => 10,
-            'slug'        => 10,
+            'name' => 10,
+            'slug' => 10,
             'description' => 10,
         ],
     ];

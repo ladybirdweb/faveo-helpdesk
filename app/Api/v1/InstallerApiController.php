@@ -37,21 +37,21 @@ class InstallerApiController extends Controller
     public function config_database(Request $request)
     {
         $rules = [
-            'database'     => 'required|min:1',
-            'host'         => 'required',
+            'database' => 'required|min:1',
+            'host' => 'required',
             'databasename' => 'required|min:1',
-            'dbusername'   => 'required|min:1',
+            'dbusername' => 'required|min:1',
         ];
         if ($request->port) {
             $rules['port'] = 'integer|min:0';
         }
         $validator = \Validator::make(
             [
-                'database'     => $request->database,
-                'host'         => $request->host,
+                'database' => $request->database,
+                'host' => $request->host,
                 'databasename' => $request->databasename,
-                'dbusername'   => $request->dbusername,
-                'port'         => $request->port,
+                'dbusername' => $request->dbusername,
+                'port' => $request->port,
             ],
             $rules
         );
@@ -132,21 +132,21 @@ class InstallerApiController extends Controller
         $validator = \Validator::make(
             [
                 'firstname' => $request->firstname,
-                'lastname'  => $request->lastname,
-                'email'     => $request->email,
-                'username'  => $request->username,
-                'password'  => $request->password,
-                'timezone'  => $request->timezone,
-                'datetime'  => $request->datetime,
+                'lastname' => $request->lastname,
+                'email' => $request->email,
+                'username' => $request->username,
+                'password' => $request->password,
+                'timezone' => $request->timezone,
+                'datetime' => $request->datetime,
             ],
             [
                 'firstname' => 'required|alpha|min:1',
-                'lastname'  => 'required|alpha|min:1',
-                'email'     => 'required|email|min:1',
-                'username'  => 'required|min:4',
-                'password'  => 'required|min:6',
-                'timezone'  => 'required|min:1',
-                'datetime'  => 'required|min:1',
+                'lastname' => 'required|alpha|min:1',
+                'email' => 'required|email|min:1',
+                'username' => 'required|min:4',
+                'password' => 'required|min:6',
+                'timezone' => 'required|min:1',
+                'datetime' => 'required|min:1',
             ]
         );
         if ($validator->fails()) {
@@ -202,15 +202,15 @@ class InstallerApiController extends Controller
 
             // Creating user
             $user = User::create([
-                'first_name'   => $firstname,
-                'last_name'    => $lastname,
-                'email'        => $email,
-                'user_name'    => $username,
-                'password'     => Hash::make($password),
-                'active'       => 1,
-                'role'         => 'admin',
+                'first_name' => $firstname,
+                'last_name' => $lastname,
+                'email' => $email,
+                'user_name' => $username,
+                'password' => Hash::make($password),
+                'active' => 1,
+                'role' => 'admin',
                 'assign_group' => 1,
-                'primary_dpt'  => 1,
+                'primary_dpt' => 1,
             ]);
 
             // Setting database installed status

@@ -24,8 +24,8 @@ class ProfileRequest extends Request
     public function rules()
     {
         return [
-            'firstname'   => 'required',
-            'lastname'    => 'required',
+            'firstname' => 'required',
+            'lastname' => 'required',
             'profile_pic' => 'mimes:png,jpeg',
         ];
     }
