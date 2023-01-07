@@ -14,8 +14,8 @@ return [
      */
 
     'password' => 'Le password devono essere almeno di sei carattere e devono corrispondere.',
-    'user' => "Non trovo nessun utente con l'email fornita.",
-    'token' => 'Il token di reset password non è valido.',
-    'sent' => 'Ti abbiamo inviato per email il link di reset della password!',
-    'reset' => 'La tua password è stata resettata!',
+    'user'     => "Non trovo nessun utente con l'email fornita.",
+    'token'    => 'Il token di reset password non è valido.',
+    'sent'     => 'Ti abbiamo inviato per email il link di reset della password!',
+    'reset'    => 'La tua password è stata resettata!',
 ];
