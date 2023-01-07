@@ -17,7 +17,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class,
     ];
 
     /**
@@ -27,7 +27,7 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+            \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class,
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
@@ -37,8 +37,8 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
         'api' => [
-            'throttle:60,1',
-            'bindings',
+            'throttle:api',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
 
@@ -62,7 +62,6 @@ class Kernel extends HttpKernel
         'board' => \App\Http\Middleware\CheckBoard::class,
         'install' => \App\Http\Middleware\Install::class,
         'redirect' => \App\Http\Middleware\Redirect::class,
-        'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'installer' => \App\Http\Middleware\IsInstalled::class,
         'force.option' => \App\Http\Middleware\TicketViewURL::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
