@@ -26,12 +26,11 @@ class JwtAuthenticate extends BaseMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
      *
      * @throws \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException
-     *
-     * @return mixed
      */
     public function handle($request, Closure $next)
     {

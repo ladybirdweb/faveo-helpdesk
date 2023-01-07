@@ -30,9 +30,9 @@ class FormRequest extends Request
     {
         return [
 
-            'title'      => 'required',
-            'label'      => 'required',
-            'type'       => 'required',
+            'title' => 'required',
+            'label' => 'required',
+            'type' => 'required',
             'visibility' => 'required',
         ];
     }

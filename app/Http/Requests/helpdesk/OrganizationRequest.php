@@ -30,7 +30,7 @@ class OrganizationRequest extends Request
     {
         return [
 
-            'name'    => 'required|unique:organization',
+            'name' => 'required|unique:organization',
             'website' => 'url',
             // 'phone' => 'size:10',
         ];

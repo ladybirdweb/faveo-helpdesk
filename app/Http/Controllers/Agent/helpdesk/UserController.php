@@ -73,7 +73,6 @@ class UserController extends Controller
      * Display all list of the users.
      *
      * @param type User $user
-     *
      * @return type view
      */
     public function index()
@@ -272,7 +271,6 @@ class UserController extends Controller
      *
      * @param type User            $user
      * @param type Sys_userRequest $request
-     *
      * @return type redirect
      */
     public function store(User $user, Sys_userRequest $request)
@@ -306,7 +304,7 @@ class UserController extends Controller
                 return redirect()->back()->with(['fails' => Lang::get('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
             } else {
                 $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
-                if (!count($code)) {
+                if (! count($code)) {
                     return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
                 }
             }
@@ -351,7 +349,6 @@ class UserController extends Controller
      *
      * @param type int  $id
      * @param type User $user
-     *
      * @return type view
      */
     public function randomPassword()
@@ -377,7 +374,6 @@ class UserController extends Controller
      *
      * @param type int  $id
      * @param type User $user
-     *
      * @return type view
      */
     public function randomPostPassword($id, ChangepasswordRequest $request)
@@ -401,9 +397,8 @@ class UserController extends Controller
     }
 
     /**
-     * @param type    $id
-     * @param Request $request
-     *
+     * @param  type  $id
+     * @param  Request  $request
      * @return type
      */
     public function changeRoleAdmin($id, Request $request)
@@ -423,9 +418,8 @@ class UserController extends Controller
     }
 
     /**
-     * @param type    $id
-     * @param Request $request
-     *
+     * @param  type  $id
+     * @param  Request  $request
      * @return type
      */
     public function changeRoleAgent($id, Request $request)
@@ -445,8 +439,7 @@ class UserController extends Controller
     }
 
     /**
-     * @param type $id
-     *
+     * @param  type  $id
      * @return type
      */
     public function changeRoleUser($id)
@@ -472,8 +465,7 @@ class UserController extends Controller
     }
 
     /**
-     * @param type $id
-     *
+     * @param  type  $id
      * @return type
      */
     public function deleteAgent($id)
@@ -609,7 +601,6 @@ class UserController extends Controller
      *
      * @param type int  $id
      * @param type User $user
-     *
      * @return type view
      */
     public function show($id)
@@ -633,7 +624,6 @@ class UserController extends Controller
      *
      * @param type int  $id
      * @param type User $user
-     *
      * @return type Response
      */
     public function edit($id, CountryCode $code)
@@ -668,7 +658,6 @@ class UserController extends Controller
      * @param type int            $id
      * @param type User           $user
      * @param type Sys_userUpdate $request
-     *
      * @return type Response
      */
     public function update($id, Sys_userUpdate $request)
@@ -683,7 +672,7 @@ class UserController extends Controller
                 return redirect()->back()->with(['fails' => Lang::get('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
             } else {
                 $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
-                if (!count($code)) {
+                if (! count($code)) {
                     return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
                 } else {
                     $users->country_code = $request->country_code;
@@ -737,7 +726,7 @@ class UserController extends Controller
         try {
             return view('themes.default1.agent.helpdesk.user.profile-edit', compact('user'))
                             ->with(['phonecode' => $phonecode->phonecode,
-                                'verify'        => $status, ]);
+                                'verify' => $status, ]);
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -748,7 +737,6 @@ class UserController extends Controller
      *
      * @param type int            $id
      * @param type ProfileRequest $request
-     *
      * @return type Redirect
      */
     public function postProfileedit(ProfileRequest $request)
@@ -760,7 +748,7 @@ class UserController extends Controller
                 return redirect()->back()->with(['fails' => Lang::get('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
             } else {
                 $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
-                if (!count($code)) {
+                if (! count($code)) {
                     return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
                 }
                 $user->country_code = $request->country_code;
@@ -802,7 +790,6 @@ class UserController extends Controller
      *
      * @param type int             $id
      * @param type ProfilePassword $request
-     *
      * @return type Redirect
      */
     public function postProfilePassword($id, ProfilePassword $request)
@@ -828,8 +815,7 @@ class UserController extends Controller
     /**
      * Assigning an user to an organization.
      *
-     * @param type $id
-     *
+     * @param  type  $id
      * @return type boolean
      */
     public function UserAssignOrg($id)
@@ -896,8 +882,7 @@ class UserController extends Controller
     /**
      * creating an organization in user profile page via modal popup.
      *
-     * @param type $id
-     *
+     * @param  type  $id
      * @return type
      */
     public function User_Create_Org($id)
@@ -940,8 +925,7 @@ class UserController extends Controller
     /**
      * Generate a random string for password.
      *
-     * @param type $length
-     *
+     * @param  type  $length
      * @return string
      */
     public function generateRandomString($length = 10)
@@ -969,7 +953,7 @@ class UserController extends Controller
         }
         $org_relations->create([
             'user_id' => $userid,
-            'org_id'  => $orgid,
+            'org_id' => $orgid,
         ]);
     }
 
@@ -1045,7 +1029,7 @@ class UserController extends Controller
                 ->first();
         if ($otp != null) {
             $otp_length = strlen(Input::get('otp'));
-            if (($otp_length == 6 && !preg_match('/[a-z]/i', Input::get('otp')))) {
+            if (($otp_length == 6 && ! preg_match('/[a-z]/i', Input::get('otp')))) {
                 $otp2 = Hash::make(Input::get('otp'));
                 $date1 = date_format($otp->updated_at, 'Y-m-d h:i:sa');
                 $date2 = date('Y-m-d h:i:sa');

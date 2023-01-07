@@ -29,8 +29,8 @@ class DiagnoRequest extends Request
     public function rules()
     {
         return [
-            'from'    => 'required|email',
-            'to'      => 'required|email',
+            'from' => 'required|email',
+            'to' => 'required|email',
             'subject' => 'required',
             'message' => 'required',
         ];
