@@ -209,6 +209,7 @@ return [
         'Event' => 'Illuminate\Support\Facades\Event',
         'File' => 'Illuminate\Support\Facades\File',
         'Hash' => 'Illuminate\Support\Facades\Hash',
+        'Http' => Illuminate\Support\Facades\Http::class,
         'Inspiring' => 'Illuminate\Foundation\Inspiring',
         'Lang' => 'Illuminate\Support\Facades\Lang',
         'Log' => 'Illuminate\Support\Facades\Log',
