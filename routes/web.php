@@ -278,7 +278,7 @@ Route::middleware('web')->group(function () {
          * Labels
          */
 
-       // Route::resource('labels', 'Admin\helpdesk\Label\LabelController');
+        // Route::resource('labels', 'Admin\helpdesk\Label\LabelController');
 //        Route::get('labels-ajax', [Admin\helpdesk\Label\LabelController::class, 'ajaxTable'])->name('labels.ajax');
 //        Route::get('labels/delete/{id}', [Admin\helpdesk\Label\LabelController::class, 'destroy'])->name('labels.destroy');
 
