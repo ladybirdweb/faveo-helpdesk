@@ -9,10 +9,11 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git\Tests;
 
 use Gitonomy\Git\Blob;
-use Gitonomy\Git\Repository;
+use Gitonomy\Git\Exception\RuntimeException;
 use Prophecy\Argument;
 
 class RepositoryTest extends AbstractTest
@@ -20,12 +21,17 @@ class RepositoryTest extends AbstractTest
     /**
      * @dataProvider provideFoobar
      */
-    public function testGetBlob_WithExisting_Works($repository)
+    public function testGetBlobWithExistingWorks($repository)
     {
         $blob = $repository->getCommit(self::LONGFILE_COMMIT)->getTree()->resolvePath('README.md');
 
-        $this->assertTrue($blob instanceof Blob, 'getBlob() returns a Blob object');
-        $this->assertContains('Foo Bar project', $blob->getContent(), 'file is correct');
+        $this->assertInstanceOf(Blob::class, $blob, 'getBlob() returns a Blob object');
+
+        if (method_exists($this, 'assertStringContainsString')) {
+            $this->assertStringContainsString('Foo Bar project', $blob->getContent(), 'file is correct');
+        } else {
+            $this->assertContains('Foo Bar project', $blob->getContent(), 'file is correct');
+        }
     }
 
     /**
@@ -34,7 +40,8 @@ class RepositoryTest extends AbstractTest
     public function testGetSize($repository)
     {
         $size = $repository->getSize();
-        $this->assertGreaterThan(70, $size, 'Repository is greater than 70KB');
+        $this->assertGreaterThanOrEqual(69, $size, 'Repository is at least 69KB');
+        $this->assertLessThan(80, $size, 'Repository is less than 80KB');
     }
 
     public function testIsBare()
@@ -66,12 +73,10 @@ class RepositoryTest extends AbstractTest
         $loggerProphecy = $this->prophesize('Psr\Log\LoggerInterface');
         $loggerProphecy
             ->info('run command: remote "" ')
-            ->shouldBeCalledTimes(1)
-        ;
+            ->shouldBeCalledTimes(1);
         $loggerProphecy
             ->debug(Argument::type('string')) // duration, return code and output
-            ->shouldBeCalledTimes(3)
-        ;
+            ->shouldBeCalledTimes(3);
 
         $repository->setLogger($loggerProphecy->reveal());
 
@@ -80,7 +85,6 @@ class RepositoryTest extends AbstractTest
 
     /**
      * @dataProvider provideFoobar
-     * @expectedException RuntimeException
      */
     public function testLoggerNOk($repository)
     {
@@ -88,19 +92,18 @@ class RepositoryTest extends AbstractTest
             $this->markTestSkipped();
         }
 
+        $this->expectException(RuntimeException::class);
+
         $loggerProphecy = $this->prophesize('Psr\Log\LoggerInterface');
         $loggerProphecy
             ->info(Argument::type('string'))
-            ->shouldBeCalledTimes(1)
-        ;
+            ->shouldBeCalledTimes(1);
         $loggerProphecy
             ->debug(Argument::type('string')) // duration, return code and output
-            ->shouldBeCalledTimes(3)
-        ;
+            ->shouldBeCalledTimes(3);
         $loggerProphecy
             ->error(Argument::type('string'))
-            ->shouldBeCalledTimes(1)
-        ;
+            ->shouldBeCalledTimes(1);
 
         $repository->setLogger($loggerProphecy->reveal());
 

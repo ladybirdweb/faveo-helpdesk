@@ -37,7 +37,7 @@ class MultipartUploader extends AbstractUploader
      *   operations. The callback should have a function signature like
      *   `function (Aws\Command $command) {...}`.
      * - bucket: (string, required) Name of the bucket to which the object is
-     *   being uploaded.
+     *   being uploaded, or an S3 access point ARN.
      * - concurrency: (int, default=int(5)) Maximum number of concurrent
      *   `UploadPart` operations allowed during the multipart upload.
      * - key: (string, required) Key to use for the object being uploaded.
@@ -113,8 +113,8 @@ class MultipartUploader extends AbstractUploader
             // Case 2: Stream is not seekable; must store in temp stream.
             $source = $this->limitPartStream($this->source);
             $source = $this->decorateWithHashes($source, $data);
-            $body = Psr7\stream_for();
-            Psr7\copy_to_stream($source, $body);
+            $body = Psr7\Utils::streamFor();
+            Psr7\Utils::copyToStream($source, $body);
         }
 
         $contentLength = $body->getSize();
@@ -139,7 +139,7 @@ class MultipartUploader extends AbstractUploader
     protected function getSourceMimeType()
     {
         if ($uri = $this->source->getMetadata('uri')) {
-            return Psr7\mimetype_from_filename($uri)
+            return Psr7\MimeType::fromFilename($uri)
                 ?: 'application/octet-stream';
         }
     }

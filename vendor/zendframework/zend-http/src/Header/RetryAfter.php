@@ -26,7 +26,7 @@ class RetryAfter extends AbstractDate
      * Create Retry-After header from string
      *
      * @param  string $headerLine
-     * @return RetryAfter
+     * @return static
      * @throws Exception\InvalidArgumentException
      */
     public static function fromString($headerLine)
@@ -55,7 +55,7 @@ class RetryAfter extends AbstractDate
      * Set number of seconds
      *
      * @param int $delta
-     * @return RetryAfter
+     * @return $this
      */
     public function setDeltaSeconds($delta)
     {

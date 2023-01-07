@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git;
 
 use Gitonomy\Git\Exception\LogicException;
@@ -23,6 +24,10 @@ class PushReference
 {
     const ZERO = '0000000000000000000000000000000000000000';
 
+    /**
+     * @var Repository
+     */
+    protected $repository;
     /**
      * @var string
      */
@@ -85,18 +90,21 @@ class PushReference
     }
 
     /**
-     * @return array
+     * @return Log
      */
-    public function getLog($excludes = array())
+    public function getLog($excludes = [])
     {
         return $this->repository->getLog(array_merge(
-            array($this->getRevision()),
+            [$this->getRevision()],
             array_map(function ($e) {
                 return '^'.$e;
             }, $excludes)
         ));
     }
 
+    /**
+     * @return string
+     */
     public function getRevision()
     {
         if ($this->isDelete()) {
@@ -159,10 +167,10 @@ class PushReference
             return false;
         }
 
-        $result = $this->repository->run('merge-base', array(
+        $result = $this->repository->run('merge-base', [
             $this->before,
             $this->after,
-        ));
+        ]);
 
         return $this->before !== trim($result);
     }

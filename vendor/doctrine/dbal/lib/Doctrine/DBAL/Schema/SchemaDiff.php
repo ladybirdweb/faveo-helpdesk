@@ -3,6 +3,7 @@
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+
 use function array_merge;
 
 /**
@@ -10,7 +11,7 @@ use function array_merge;
  */
 class SchemaDiff
 {
-    /** @var Schema */
+    /** @var Schema|null */
     public $fromSchema;
 
     /**
@@ -151,6 +152,7 @@ class SchemaDiff
                 $foreignKeySql[] = $platform->getCreateForeignKeySQL($foreignKey, $table);
             }
         }
+
         $sql = array_merge($sql, $foreignKeySql);
 
         if ($saveMode === false) {

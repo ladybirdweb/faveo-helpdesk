@@ -10,6 +10,9 @@ namespace Sly\NotificationPusher\Model;
 
 use Sly\NotificationPusher\Collection\PushCollection;
 
+/**
+ * @author Oleg Abrazhaev <seyferseed@gmail.com>
+ */
 interface ResponseInterface
 {
     /**
@@ -25,7 +28,7 @@ interface ResponseInterface
     public function addOriginalResponse(DeviceInterface $device, $originalResponse);
 
     /**
-     * @param \Sly\NotificationPusher\Model\PushInterface $push Push
+     * @param PushInterface $push Push
      */
     public function addPush(PushInterface $push);
 

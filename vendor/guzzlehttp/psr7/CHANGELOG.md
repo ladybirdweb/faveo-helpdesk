@@ -3,11 +3,104 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased]
+## Unreleased
+
+## 1.9.0 - 2022-06-20
+
+### Added
+
+- Added `UriComparator::isCrossOrigin` method
+
+## 1.8.5 - 2022-03-20
+
+### Fixed
+
+- Correct header value validation
+
+## 1.8.4 - 2022-03-20
+
+### Fixed
+
+- Validate header values properly
+
+## 1.8.3 - 2021-10-05
+
+### Fixed
+
+- Return `null` in caching stream size if remote size is `null`
+
+## 1.8.2 - 2021-04-26
+
+### Fixed
+
+- Handle possibly unset `url` in `stream_get_meta_data`
+
+## 1.8.1 - 2021-03-21
+
+### Fixed
+
+- Issue parsing IPv6 URLs
+- Issue modifying ServerRequest lost all its attributes
+
+## 1.8.0 - 2021-03-21
+
+### Added
+
+- Locale independent URL parsing
+- Most classes got a `@final` annotation to prepare for 2.0
+
+### Fixed
+
+- Issue when creating stream from `php://input` and curl-ext is not installed
+- Broken `Utils::tryFopen()` on PHP 8
+
+## 1.7.0 - 2020-09-30
+
+### Added
+
+- Replaced functions by static methods
+
+### Fixed
+
+- Converting a non-seekable stream to a string
+- Handle multiple Set-Cookie correctly
+- Ignore array keys in header values when merging
+- Allow multibyte characters to be parsed in `Message:bodySummary()`
+
+### Changed
+
+- Restored partial HHVM 3 support
+
+
+## [1.6.1] - 2019-07-02
+
+### Fixed
+
+- Accept null and bool header values again
+
+
+## [1.6.0] - 2019-06-30
+
+### Added
+
+- Allowed version `^3.0` of `ralouphie/getallheaders` dependency (#244)
+- Added MIME type for WEBP image format (#246)
+- Added more validation of values according to PSR-7 and RFC standards, e.g. status code range (#250, #272)
+
+### Changed
+
+- Tests don't pass with HHVM 4.0, so HHVM support got dropped. Other libraries like composer have done the same. (#262)
+- Accept port number 0 to be valid (#270)
+
+### Fixed
+
+- Fixed subsequent reads from `php://input` in ServerRequest (#247)
+- Fixed readable/writable detection for certain stream modes (#248)
+- Fixed encoding of special characters in the `userInfo` component of an URI (#253)
 
 
 ## [1.5.2] - 2018-12-04
@@ -209,7 +302,7 @@ Currently unsupported:
 
 
 
-[Unreleased]: https://github.com/guzzle/psr7/compare/1.5.2...HEAD
+[1.6.0]: https://github.com/guzzle/psr7/compare/1.5.2...1.6.0
 [1.5.2]: https://github.com/guzzle/psr7/compare/1.5.1...1.5.2
 [1.5.1]: https://github.com/guzzle/psr7/compare/1.5.0...1.5.1
 [1.5.0]: https://github.com/guzzle/psr7/compare/1.4.2...1.5.0

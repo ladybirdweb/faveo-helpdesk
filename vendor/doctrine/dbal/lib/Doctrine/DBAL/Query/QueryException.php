@@ -2,16 +2,20 @@
 
 namespace Doctrine\DBAL\Query;
 
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception;
+
 use function implode;
 
-class QueryException extends DBALException
+/**
+ * @psalm-immutable
+ */
+class QueryException extends Exception
 {
     /**
      * @param string   $alias
      * @param string[] $registeredAliases
      *
-     * @return \Doctrine\DBAL\Query\QueryException
+     * @return QueryException
      */
     public static function unknownAlias($alias, $registeredAliases)
     {
@@ -24,7 +28,7 @@ class QueryException extends DBALException
      * @param string   $alias
      * @param string[] $registeredAliases
      *
-     * @return \Doctrine\DBAL\Query\QueryException
+     * @return QueryException
      */
     public static function nonUniqueAlias($alias, $registeredAliases)
     {

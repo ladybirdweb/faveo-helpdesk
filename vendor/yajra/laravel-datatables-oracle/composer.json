@@ -1,37 +1,67 @@
 {
-    "name": "yajra/laravel-datatables-oracle",
-    "description": "jQuery DataTables API for Laravel 4|5",
-    "keywords" : ["laravel4","laravel5","laravel","datatables","datatable","datatables jquery plugin"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Arjay Angeles",
-            "email": "aqangeles@gmail.com"
-        }
-    ],
-    "require": {
-        "php": ">=5.5.9",
-        "illuminate/support": "~5.0",
-        "illuminate/database": "~5.0",
-        "illuminate/view": "~5.0",
-        "illuminate/http": "~5.0",
-        "illuminate/filesystem": "~5.0",
-        "league/fractal": "~0.12",
-        "laravelcollective/html": "~5.0",
-        "maatwebsite/excel": "^2.0",
-        "dompdf/dompdf": "^0.6.1"
+  "name": "yajra/laravel-datatables-oracle",
+  "description": "jQuery DataTables API for Laravel 4|5",
+  "keywords": [
+    "laravel",
+    "dataTables",
+    "jquery"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Arjay Angeles",
+      "email": "aqangeles@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.1.3",
+    "illuminate/database": "5.8.*|^6|^7",
+    "illuminate/filesystem": "5.8.*|^6|^7",
+    "illuminate/http": "5.8.*|^6|^7",
+    "illuminate/support": "5.8.*|^6|^7",
+    "illuminate/view": "5.8.*|^6|^7"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^3.8"
+  },
+  "suggest": {
+    "yajra/laravel-datatables-buttons": "Plugin for server-side exporting of dataTables.",
+    "yajra/laravel-datatables-html": "Plugin for server-side HTML builder of dataTables.",
+    "yajra/laravel-datatables-fractal": "Plugin for server-side response using Fractal.",
+    "yajra/laravel-datatables-editor": "Plugin to use DataTables Editor (requires a license)."
+  },
+  "autoload": {
+    "psr-4": {
+      "Yajra\\DataTables\\": "src/"
     },
-    "require-dev": {
-        "mockery/mockery": "~0.9",
-        "phpunit/phpunit": "~4.0"
+    "files": [
+      "src/helper.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Yajra\\DataTables\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "9.0-dev"
     },
-    "suggest": {
-        "barryvdh/laravel-snappy": "Allows exporting of dataTable to PDF using the print view."
-    },
-    "autoload": {
-        "psr-4": {
-            "Yajra\\Datatables\\": "src/"
-        }
-    },
-    "minimum-stability": "stable"
+    "laravel": {
+      "providers": [
+        "Yajra\\DataTables\\DataTablesServiceProvider"
+      ],
+      "aliases": {
+        "DataTables": "Yajra\\DataTables\\Facades\\DataTables"
+      }
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

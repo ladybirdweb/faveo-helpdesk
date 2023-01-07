@@ -14,11 +14,12 @@
 return array (
   'generalDesc' => 
   array (
-    'NationalNumberPattern' => '1\\d\\d(?:\\d{3})?',
+    'NationalNumberPattern' => '[168]\\d\\d(?:\\d(?:\\d{2})?)?',
     'PossibleLength' => 
     array (
       0 => 3,
-      1 => 6,
+      1 => 4,
+      2 => 6,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -26,7 +27,7 @@ return array (
   ),
   'tollFree' => 
   array (
-    'NationalNumberPattern' => '116\\d{3}|1(?:[12]2|33|44)',
+    'NationalNumberPattern' => '1(?:12|2[0238]|3[03]|4[0-247])|1(?:16\\d\\d|4[58])\\d',
     'ExampleNumber' => '112',
     'PossibleLength' => 
     array (
@@ -59,7 +60,7 @@ return array (
   ),
   'shortCode' => 
   array (
-    'NationalNumberPattern' => '116(?:00[06]|1(?:17|23))|1(?:[12]2|33|44)',
+    'NationalNumberPattern' => '1(?:1(?:2|6(?:00[06]|1(?:17|23)))|2[0238]|3[03]|4(?:[0-247]|5[05]|84))|(?:61|8108[1-3])0',
     'ExampleNumber' => '112',
     'PossibleLength' => 
     array (
@@ -80,9 +81,12 @@ return array (
   ),
   'carrierSpecific' => 
   array (
+    'NationalNumberPattern' => '610|810\\d{3}',
+    'ExampleNumber' => '610',
     'PossibleLength' => 
     array (
-      0 => -1,
+      0 => 3,
+      1 => 6,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -109,6 +113,5 @@ return array (
   array (
   ),
   'mainCountryForCode' => false,
-  'leadingZeroPossible' => false,
   'mobileNumberPortableRegion' => false,
 );

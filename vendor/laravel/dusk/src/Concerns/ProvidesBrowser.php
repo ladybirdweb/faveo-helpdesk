@@ -4,10 +4,10 @@ namespace Laravel\Dusk\Concerns;
 
 use Closure;
 use Exception;
-use Throwable;
-use ReflectionFunction;
-use Laravel\Dusk\Browser;
 use Illuminate\Support\Collection;
+use Laravel\Dusk\Browser;
+use ReflectionFunction;
+use Throwable;
 
 trait ProvidesBrowser
 {
@@ -56,6 +56,7 @@ trait ProvidesBrowser
      *
      * @param  \Closure  $callback
      * @return \Laravel\Dusk\Browser|void
+     *
      * @throws \Exception
      * @throws \Throwable
      */
@@ -85,6 +86,7 @@ trait ProvidesBrowser
      *
      * @param  \Closure  $callback
      * @return array
+     *
      * @throws \ReflectionException
      */
     protected function createBrowsersFor(Closure $callback)
@@ -118,6 +120,7 @@ trait ProvidesBrowser
      *
      * @param  \Closure  $callback
      * @return int
+     *
      * @throws \ReflectionException
      */
     protected function browsersNeededFor(Closure $callback)
@@ -134,7 +137,11 @@ trait ProvidesBrowser
     protected function captureFailuresFor($browsers)
     {
         $browsers->each(function ($browser, $key) {
-            $name = str_replace('\\', '_', get_class($this)).'_'.$this->getName(false);
+            if (property_exists($browser, 'fitOnFailure') && $browser->fitOnFailure) {
+                $browser->fitContent();
+            }
+
+            $name = $this->getCallerName();
 
             $browser->screenshot('failure-'.$name.'-'.$key);
         });
@@ -149,7 +156,7 @@ trait ProvidesBrowser
     protected function storeConsoleLogsFor($browsers)
     {
         $browsers->each(function ($browser, $key) {
-            $name = str_replace('\\', '_', get_class($this)).'_'.$this->getName(false);
+            $name = $this->getCallerName();
 
             $browser->storeConsoleLog($name.'-'.$key);
         });
@@ -184,6 +191,7 @@ trait ProvidesBrowser
      * Create the remote web driver instance.
      *
      * @return \Facebook\WebDriver\Remote\RemoteWebDriver
+     *
      * @throws \Exception
      */
     protected function createWebDriver()
@@ -191,6 +199,16 @@ trait ProvidesBrowser
         return retry(5, function () {
             return $this->driver();
         }, 50);
+    }
+
+    /**
+     * Get the browser caller name.
+     *
+     * @return string
+     */
+    protected function getCallerName()
+    {
+        return str_replace('\\', '_', get_class($this)).'_'.$this->getName(false);
     }
 
     /**

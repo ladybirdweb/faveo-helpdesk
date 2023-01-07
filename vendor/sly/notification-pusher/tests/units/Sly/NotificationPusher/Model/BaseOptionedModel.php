@@ -6,8 +6,6 @@ use mageekguy\atoum as Units;
 use Sly\NotificationPusher\Model\Message;
 
 /**
- * BaseOptionedModel.
- *
  * @uses atoum\test
  * @author Cédric Dugat <cedric@dugat.me>
  */
@@ -17,34 +15,29 @@ class BaseOptionedModel extends Units\Test
     {
         $this->if($object = new Message('Test', ['param' => 'test']))
             ->boolean($object->hasOption('param'))
-                ->isTrue()
+            ->isTrue()
             ->string($object->getOption('param'))
-                ->isEqualTo('test')
-
+            ->isEqualTo('test')
             ->boolean($object->hasOption('notExist'))
-                ->isFalse()
+            ->isFalse()
             ->variable($object->getOption('notExist'))
-                ->isNull()
+            ->isNull()
             ->string($object->getOption('renotExist', '12345'))
-                ->isEqualTo('12345')
-
+            ->isEqualTo('12345')
             ->when($object->setOptions(['chuck' => 'norris']))
             ->boolean($object->hasOption('chuck'))
-                ->isTrue()
+            ->isTrue()
             ->string($object->getOption('chuck'))
-                ->isEqualTo('norris')
-
+            ->isEqualTo('norris')
             ->when($object->setOption('poney', 'powerful'))
             ->boolean($object->hasOption('poney'))
-                ->isTrue()
+            ->isTrue()
             ->string($object->getOption('poney'))
-                ->isEqualTo('powerful')
-
+            ->isEqualTo('powerful')
             ->when($object->setOption('null', null))
             ->boolean($object->hasOption('null'))
-                ->isTrue()
+            ->isTrue()
             ->variable($object->getOption('null'))
-                ->isNull()
-        ;
+            ->isNull();
     }
 }

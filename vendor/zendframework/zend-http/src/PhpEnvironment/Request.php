@@ -107,7 +107,7 @@ class Request extends HttpRequest
      * Instantiate and set cookies.
      *
      * @param $cookie
-     * @return Request
+     * @return $this
      */
     public function setCookies($cookie)
     {
@@ -119,7 +119,7 @@ class Request extends HttpRequest
      * Set the request URI.
      *
      * @param  string $requestUri
-     * @return self
+     * @return $this
      */
     public function setRequestUri($requestUri)
     {
@@ -144,7 +144,7 @@ class Request extends HttpRequest
      * Set the base URL.
      *
      * @param  string $baseUrl
-     * @return self
+     * @return $this
      */
     public function setBaseUrl($baseUrl)
     {
@@ -169,7 +169,7 @@ class Request extends HttpRequest
      * Set the base path.
      *
      * @param  string $basePath
-     * @return self
+     * @return $this
      */
     public function setBasePath($basePath)
     {
@@ -196,7 +196,7 @@ class Request extends HttpRequest
      * (this is NOT the primary API for value setting, for that see getServer())
      *
      * @param  ParametersInterface $server
-     * @return Request
+     * @return $this
      */
     public function setServer(ParametersInterface $server)
     {
@@ -266,8 +266,9 @@ class Request extends HttpRequest
         $port = null;
 
         // Set the host
-        if ($this->getHeaders()->get('host')) {
-            $host = $this->getHeaders()->get('host')->getFieldValue();
+        $headerHost = $this->getHeaders()->get('host');
+        if ($headerHost) {
+            $host = $headerHost->getFieldValue();
 
             // works for regname, IPv4 & IPv6
             if (preg_match('|\:(\d+)$|', $host, $matches)) {
@@ -351,7 +352,7 @@ class Request extends HttpRequest
      * (this is NOT the primary API for value setting, for that see env())
      *
      * @param  ParametersInterface $env
-     * @return Request
+     * @return $this
      */
     public function setEnv(ParametersInterface $env)
     {
@@ -488,6 +489,15 @@ class Request extends HttpRequest
         } else {
             // Backtrack up the SCRIPT_FILENAME to find the portion
             // matching PHP_SELF.
+
+            // Only for CLI requests argv[0] contains script filename
+            // @see https://www.php.net/manual/en/reserved.variables.server.php
+            if (PHP_SAPI === 'cli') {
+                $argv = $this->getServer()->get('argv', []);
+                if (isset($argv[0]) && is_string($argv[0]) && $argv[0] !== '' && strpos($filename, $argv[0]) === 0) {
+                    $filename = substr($filename, strlen($argv[0]));
+                }
+            }
 
             $baseUrl  = '/';
             $basename = basename($filename);

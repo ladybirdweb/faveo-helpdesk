@@ -9,6 +9,9 @@ use Psr\Http\Message\RequestInterface;
  */
 class AnonymousSignature implements SignatureInterface
 {
+    /**
+     * /** {@inheritdoc}
+     */
     public function signRequest(
         RequestInterface $request,
         CredentialsInterface $credentials
@@ -16,10 +19,14 @@ class AnonymousSignature implements SignatureInterface
         return $request;
     }
 
+    /**
+     * /** {@inheritdoc}
+     */
     public function presign(
         RequestInterface $request,
         CredentialsInterface $credentials,
-        $expires
+        $expires,
+        array $options = []
     ) {
         return $request;
     }

@@ -14,28 +14,22 @@ namespace Sly\NotificationPusher\Model;
 use DateTime;
 use Sly\NotificationPusher\Adapter\AdapterInterface;
 use Sly\NotificationPusher\Collection\DeviceCollection;
+use Sly\NotificationPusher\Collection\ResponseCollection;
 
-/**
- * PushInterface
- */
 interface PushInterface
 {
     /**
      * Constants define available statuses
      */
     const STATUS_PENDING = 'pending';
-    const STATUS_PUSHED  = 'sent';
+    const STATUS_PUSHED = 'sent';
 
     /**
-     * Get Status.
-     *
      * @return string
      */
     public function getStatus();
 
     /**
-     * Set Status.
-     *
      * @param string $status Status
      *
      * @return PushInterface
@@ -43,29 +37,21 @@ interface PushInterface
     public function setStatus($status);
 
     /**
-     * isPushed.
-     *
      * @return boolean
      */
     public function isPushed();
 
     /**
-     * Declare as pushed.
-     *
      * @return PushInterface
      */
     public function pushed();
 
     /**
-     * Get Adapter.
-     *
      * @return AdapterInterface
      */
     public function getAdapter();
 
     /**
-     * Set Adapter.
-     *
      * @param AdapterInterface $adapter Adapter
      *
      * @return PushInterface
@@ -73,15 +59,11 @@ interface PushInterface
     public function setAdapter(AdapterInterface $adapter);
 
     /**
-     * Get Message.
-     *
      * @return MessageInterface
      */
     public function getMessage();
 
     /**
-     * Set Message.
-     *
      * @param MessageInterface $message Message
      *
      * @return PushInterface
@@ -89,15 +71,11 @@ interface PushInterface
     public function setMessage(MessageInterface $message);
 
     /**
-     * Get Devices.
-     *
      * @return DeviceCollection
      */
     public function getDevices();
 
     /**
-     * Set Devices.
-     *
      * @param DeviceCollection $devices Devices
      *
      * @return PushInterface
@@ -105,28 +83,22 @@ interface PushInterface
     public function setDevices(DeviceCollection $devices);
 
     /**
-     * Get Responses
-     * @return \Sly\NotificationPusher\Collection\ResponseCollection
+     * @return ResponseCollection
      */
     public function getResponses();
 
     /**
-     * adds a response
-     * @param \Sly\NotificationPusher\Model\DeviceInterface $device
+     * @param DeviceInterface $device
      * @param mixed $response
      */
     public function addResponse(DeviceInterface $device, $response);
 
     /**
-     * Get PushedAt.
-     *
      * @return DateTime
      */
     public function getPushedAt();
 
     /**
-     * Set PushedAt.
-     *
      * @param DateTime $pushedAt PushedAt
      *
      * @return PushInterface

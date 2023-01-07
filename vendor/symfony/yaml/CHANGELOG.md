@@ -1,6 +1,18 @@
 CHANGELOG
 =========
 
+4.4.0
+-----
+
+ * Added support for parsing the inline notation spanning multiple lines.
+ * Added support to dump `null` as `~` by using the `Yaml::DUMP_NULL_AS_TILDE` flag.
+ * deprecated accepting STDIN implicitly when using the `lint:yaml` command, use `lint:yaml -` (append a dash) instead to make it explicit.
+
+4.3.0
+-----
+
+ * Using a mapping inside a multi-line string is deprecated and will throw a `ParseException` in 5.0.
+
 4.2.0
 -----
 
@@ -148,7 +160,7 @@ CHANGELOG
  * Added support for customizing the dumped YAML string through an optional bit field:
 
    ```php
-   Yaml::dump(array('foo' => new A(), 'bar' => 1), 0, 0, Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE | Yaml::DUMP_OBJECT);
+   Yaml::dump(['foo' => new A(), 'bar' => 1], 0, 0, Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE | Yaml::DUMP_OBJECT);
    ```
 
 3.0.0

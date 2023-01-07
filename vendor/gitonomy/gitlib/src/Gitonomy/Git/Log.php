@@ -9,8 +9,10 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git;
 
+use Gitonomy\Git\Diff\Diff;
 use Gitonomy\Git\Exception\ProcessException;
 use Gitonomy\Git\Exception\ReferenceNotFoundException;
 use Gitonomy\Git\Util\StringHelper;
@@ -61,9 +63,9 @@ class Log implements \Countable, \IteratorAggregate
         }
 
         if (null === $paths) {
-            $paths = array();
+            $paths = [];
         } elseif (is_string($paths)) {
-            $paths = array($paths);
+            $paths = [$paths];
         } elseif (!is_array($paths)) {
             throw new \InvalidArgumentException(sprintf('Expected a string or an array, got a "%s".', is_object($paths) ? get_class($paths) : gettype($paths)));
         }
@@ -135,6 +137,9 @@ class Log implements \Countable, \IteratorAggregate
         return $this;
     }
 
+    /**
+     * @return Commit
+     */
     public function getSingleCommit()
     {
         $limit = $this->limit;
@@ -150,11 +155,11 @@ class Log implements \Countable, \IteratorAggregate
     }
 
     /**
-     * @return array
+     * @return Commit[]
      */
     public function getCommits()
     {
-        $args = array('--encoding='.StringHelper::getEncoding(), '--format=raw');
+        $args = ['--encoding='.StringHelper::getEncoding(), '--format=raw'];
 
         if (null !== $this->offset) {
             $args[] = '--skip='.((int) $this->offset);
@@ -184,7 +189,7 @@ class Log implements \Countable, \IteratorAggregate
         $parser = new Parser\LogParser();
         $parser->parse($output);
 
-        $result = array();
+        $result = [];
         foreach ($parser->log as $commitData) {
             $hash = $commitData['id'];
             unset($commitData['id']);
@@ -201,6 +206,7 @@ class Log implements \Countable, \IteratorAggregate
     /**
      * @see Countable
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->countCommits();
@@ -209,6 +215,7 @@ class Log implements \Countable, \IteratorAggregate
     /**
      * @see IteratorAggregate
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->getCommits());
@@ -222,9 +229,9 @@ class Log implements \Countable, \IteratorAggregate
     public function countCommits()
     {
         if (null !== $this->revisions && count($this->revisions)) {
-            $output = $this->repository->run('rev-list', array_merge(array('--count'), $this->revisions->getAsTextArray(), array('--'), $this->paths));
+            $output = $this->repository->run('rev-list', array_merge(['--count'], $this->revisions->getAsTextArray(), ['--'], $this->paths));
         } else {
-            $output = $this->repository->run('rev-list', array_merge(array('--count', '--all', '--'), $this->paths));
+            $output = $this->repository->run('rev-list', array_merge(['--count', '--all', '--'], $this->paths));
         }
 
         return (int) $output;

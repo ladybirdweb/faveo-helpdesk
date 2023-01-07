@@ -11,9 +11,8 @@
  */
 
 return array (
+  25561 => 'Viettel',
   25562 => 'Viettel',
-  25563 => 'MTC',
-  25564 => 'Cootel',
   25565 => 'tiGO',
   25566 => 'SMILE',
   25567 => 'tiGO',

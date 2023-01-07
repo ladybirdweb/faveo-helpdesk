@@ -9,10 +9,15 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git\Tests;
 
 use Gitonomy\Git\Commit;
 use Gitonomy\Git\Diff\Diff;
+use Gitonomy\Git\Exception\InvalidArgumentException;
+use Gitonomy\Git\Exception\ReferenceNotFoundException;
+use Gitonomy\Git\Repository;
+use Gitonomy\Git\Tree;
 
 class CommitTest extends AbstractTest
 {
@@ -25,7 +30,7 @@ class CommitTest extends AbstractTest
 
         $diff = $commit->getDiff();
 
-        $this->assertTrue($diff instanceof Diff, 'getDiff() returns a Diff object');
+        $this->assertInstanceOf(Diff::class, $diff, 'getDiff() returns a Diff object');
     }
 
     /**
@@ -40,13 +45,13 @@ class CommitTest extends AbstractTest
 
     /**
      * @dataProvider provideFoobar
-     *
-     * @expectedException Gitonomy\Git\Exception\ReferenceNotFoundException
-     * @expectedExceptionMessage Reference not found: "that-hash-doest-not-exists"
      */
     public function testInvalideHashThrowException($repository)
     {
-        $commit = new Commit($repository, 'that-hash-doest-not-exists');
+        $this->expectException(ReferenceNotFoundException::class);
+        $this->expectExceptionMessage('Reference not found: "that-hash-doest-not-exists"');
+
+        new Commit($repository, 'that-hash-doest-not-exists');
     }
 
     /**
@@ -66,7 +71,7 @@ class CommitTest extends AbstractTest
     {
         $commit = $repository->getCommit(self::INITIAL_COMMIT);
 
-        $this->assertEquals(0, count($commit->getParentHashes()), 'No parent on initial commit');
+        $this->assertCount(0, $commit->getParentHashes(), 'No parent on initial commit');
     }
 
     /**
@@ -77,7 +82,7 @@ class CommitTest extends AbstractTest
         $commit = $repository->getCommit(self::LONGFILE_COMMIT);
         $parents = $commit->getParentHashes();
 
-        $this->assertEquals(1, count($parents), 'One parent found');
+        $this->assertCount(1, $parents, 'One parent found');
         $this->assertEquals(self::BEFORE_LONGFILE_COMMIT, $parents[0], 'Parent hash is correct');
     }
 
@@ -89,8 +94,8 @@ class CommitTest extends AbstractTest
         $commit = $repository->getCommit(self::LONGFILE_COMMIT);
         $parents = $commit->getParents();
 
-        $this->assertEquals(1, count($parents), 'One parent found');
-        $this->assertTrue($parents[0] instanceof Commit, 'First parent is a Commit object');
+        $this->assertCount(1, $parents, 'One parent found');
+        $this->assertInstanceOf(Commit::class, $parents[0], 'First parent is a Commit object');
         $this->assertEquals(self::BEFORE_LONGFILE_COMMIT, $parents[0]->getHash(), "First parents's hash is correct");
     }
 
@@ -111,7 +116,7 @@ class CommitTest extends AbstractTest
     {
         $commit = $repository->getCommit(self::LONGFILE_COMMIT);
 
-        $this->assertInstanceOf('Gitonomy\Git\Tree', $commit->getTree(), 'Tree is a tree');
+        $this->assertInstanceOf(Tree::class, $commit->getTree(), 'Tree is a tree');
         $this->assertEquals('b06890c7b10904979d2f69613c2ccda30aafe262', $commit->getTree()->getHash(), 'Tree hash is correct');
     }
 
@@ -186,6 +191,31 @@ class CommitTest extends AbstractTest
     }
 
     /**
+     * @dataProvider provideFoobar
+     *
+     * @param $repository Repository
+     */
+    public function testGetEmptyMessage($repository)
+    {
+        $commit = $repository->getCommit(self::NO_MESSAGE_COMMIT);
+
+        $this->assertEquals('', $commit->getMessage());
+    }
+
+    /**
+     * @dataProvider provideFoobar
+     *
+     * @param $repository Repository
+     */
+    public function testGetEmptyMessageFromLog($repository)
+    {
+        $commit = $repository->getCommit(self::NO_MESSAGE_COMMIT);
+        $commitMessageFromLog = $commit->getLog()->getCommits()[0]->getMessage();
+
+        $this->assertEquals('', $commitMessageFromLog);
+    }
+
+    /**
      * This test ensures that GPG signed commits does not break the reading of a commit
      * message.
      *
@@ -223,14 +253,8 @@ class CommitTest extends AbstractTest
     public function testGetBodyMessage($repository)
     {
         $commit = $repository->getCommit(self::LONGMESSAGE_COMMIT);
-        $message = <<<EOL
-If you want to know everything,
-I ran something like `chmox +x test.sh`
-
-Hello and good bye.
-
-EOL;
-
+        $nl = chr(10);
+        $message = "If you want to know everything,{$nl}I ran something like `chmox +x test.sh`{$nl}{$nl}Hello and good bye.{$nl}";
         $this->assertEquals($message, $commit->getBodyMessage());
 
         $commit = $repository->getCommit(self::INITIAL_COMMIT);
@@ -239,11 +263,12 @@ EOL;
     }
 
     /**
-     * @expectedException InvalidArgumentException
      * @dataProvider provideFoobar
      */
     public function testGetIncludingBranchesException($repository)
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $commit = $repository->getCommit(self::INITIAL_COMMIT);
 
         $commit->getIncludingBranches(false, false);

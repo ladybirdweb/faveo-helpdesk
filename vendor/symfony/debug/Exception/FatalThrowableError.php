@@ -11,10 +11,14 @@
 
 namespace Symfony\Component\Debug\Exception;
 
+@trigger_error(sprintf('The "%s" class is deprecated since Symfony 4.4.', FatalThrowableError::class), \E_USER_DEPRECATED);
+
 /**
  * Fatal Throwable Error.
  *
  * @author Nicolas Grekas <p@tchwork.com>
+ *
+ * @deprecated since Symfony 4.4
  */
 class FatalThrowableError extends FatalErrorException
 {
@@ -25,11 +29,11 @@ class FatalThrowableError extends FatalErrorException
         $this->originalClassName = \get_class($e);
 
         if ($e instanceof \ParseError) {
-            $severity = E_PARSE;
+            $severity = \E_PARSE;
         } elseif ($e instanceof \TypeError) {
-            $severity = E_RECOVERABLE_ERROR;
+            $severity = \E_RECOVERABLE_ERROR;
         } else {
-            $severity = E_ERROR;
+            $severity = \E_ERROR;
         }
 
         \ErrorException::__construct(

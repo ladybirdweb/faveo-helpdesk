@@ -43,7 +43,7 @@ class AcceptEncoding extends AbstractAccept
      *
      * @param  string $type
      * @param  int|float $priority
-     * @return Accept
+     * @return $this
      */
     public function addEncoding($type, $priority = 1)
     {

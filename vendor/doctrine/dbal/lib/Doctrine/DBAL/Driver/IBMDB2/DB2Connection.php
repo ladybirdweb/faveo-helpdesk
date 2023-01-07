@@ -2,12 +2,16 @@
 
 namespace Doctrine\DBAL\Driver\IBMDB2;
 
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
+use Doctrine\DBAL\Driver\IBMDB2\Exception\ConnectionError;
+use Doctrine\DBAL\Driver\IBMDB2\Exception\ConnectionFailed;
+use Doctrine\DBAL\Driver\IBMDB2\Exception\PrepareFailed;
 use Doctrine\DBAL\Driver\ServerInfoAwareConnection;
 use Doctrine\DBAL\ParameterType;
+use Doctrine\Deprecations\Deprecation;
 use stdClass;
-use const DB2_AUTOCOMMIT_OFF;
-use const DB2_AUTOCOMMIT_ON;
+
+use function assert;
 use function db2_autocommit;
 use function db2_commit;
 use function db2_conn_error;
@@ -21,15 +25,24 @@ use function db2_pconnect;
 use function db2_prepare;
 use function db2_rollback;
 use function db2_server_info;
-use function db2_stmt_errormsg;
+use function error_get_last;
 use function func_get_args;
+use function is_bool;
 
-class DB2Connection implements Connection, ServerInfoAwareConnection
+use const DB2_AUTOCOMMIT_OFF;
+use const DB2_AUTOCOMMIT_ON;
+
+/**
+ * @deprecated Use {@link Connection} instead
+ */
+class DB2Connection implements ConnectionInterface, ServerInfoAwareConnection
 {
     /** @var resource */
-    private $conn = null;
+    private $conn;
 
     /**
+     * @internal The connection can be only instantiated by its driver.
+     *
      * @param mixed[] $params
      * @param string  $username
      * @param string  $password
@@ -42,13 +55,16 @@ class DB2Connection implements Connection, ServerInfoAwareConnection
         $isPersistent = (isset($params['persistent']) && $params['persistent'] === true);
 
         if ($isPersistent) {
-            $this->conn = db2_pconnect($params['dbname'], $username, $password, $driverOptions);
+            $conn = db2_pconnect($params['dbname'], $username, $password, $driverOptions);
         } else {
-            $this->conn = db2_connect($params['dbname'], $username, $password, $driverOptions);
+            $conn = db2_connect($params['dbname'], $username, $password, $driverOptions);
         }
-        if (! $this->conn) {
-            throw new DB2Exception(db2_conn_errormsg());
+
+        if ($conn === false) {
+            throw ConnectionFailed::new();
         }
+
+        $this->conn = $conn;
     }
 
     /**
@@ -56,8 +72,8 @@ class DB2Connection implements Connection, ServerInfoAwareConnection
      */
     public function getServerVersion()
     {
-        /** @var stdClass $serverInfo */
         $serverInfo = db2_server_info($this->conn);
+        assert($serverInfo instanceof stdClass);
 
         return $serverInfo->DBMS_VER;
     }
@@ -67,6 +83,12 @@ class DB2Connection implements Connection, ServerInfoAwareConnection
      */
     public function requiresQueryForServerVersion()
     {
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/4114',
+            'ServerInfoAwareConnection::requiresQueryForServerVersion() is deprecated and removed in DBAL 3.'
+        );
+
         return false;
     }
 
@@ -76,11 +98,12 @@ class DB2Connection implements Connection, ServerInfoAwareConnection
     public function prepare($sql)
     {
         $stmt = @db2_prepare($this->conn, $sql);
-        if (! $stmt) {
-            throw new DB2Exception(db2_stmt_errormsg());
+
+        if ($stmt === false) {
+            throw PrepareFailed::new(error_get_last());
         }
 
-        return new DB2Statement($stmt);
+        return new Statement($stmt);
     }
 
     /**
@@ -99,26 +122,26 @@ class DB2Connection implements Connection, ServerInfoAwareConnection
     /**
      * {@inheritdoc}
      */
-    public function quote($input, $type = ParameterType::STRING)
+    public function quote($value, $type = ParameterType::STRING)
     {
-        $input = db2_escape_string($input);
+        $value = db2_escape_string($value);
 
         if ($type === ParameterType::INTEGER) {
-            return $input;
+            return $value;
         }
 
-        return "'" . $input . "'";
+        return "'" . $value . "'";
     }
 
     /**
      * {@inheritdoc}
      */
-    public function exec($statement)
+    public function exec($sql)
     {
-        $stmt = @db2_exec($this->conn, $statement);
+        $stmt = @db2_exec($this->conn, $sql);
 
         if ($stmt === false) {
-            throw new DB2Exception(db2_stmt_errormsg());
+            throw ConnectionError::new($this->conn);
         }
 
         return db2_num_rows($stmt);
@@ -137,7 +160,10 @@ class DB2Connection implements Connection, ServerInfoAwareConnection
      */
     public function beginTransaction()
     {
-        db2_autocommit($this->conn, DB2_AUTOCOMMIT_OFF);
+        $result = db2_autocommit($this->conn, DB2_AUTOCOMMIT_OFF);
+        assert(is_bool($result));
+
+        return $result;
     }
 
     /**
@@ -146,9 +172,13 @@ class DB2Connection implements Connection, ServerInfoAwareConnection
     public function commit()
     {
         if (! db2_commit($this->conn)) {
-            throw new DB2Exception(db2_conn_errormsg($this->conn));
+            throw ConnectionError::new($this->conn);
         }
-        db2_autocommit($this->conn, DB2_AUTOCOMMIT_ON);
+
+        $result = db2_autocommit($this->conn, DB2_AUTOCOMMIT_ON);
+        assert(is_bool($result));
+
+        return $result;
     }
 
     /**
@@ -157,13 +187,19 @@ class DB2Connection implements Connection, ServerInfoAwareConnection
     public function rollBack()
     {
         if (! db2_rollback($this->conn)) {
-            throw new DB2Exception(db2_conn_errormsg($this->conn));
+            throw ConnectionError::new($this->conn);
         }
-        db2_autocommit($this->conn, DB2_AUTOCOMMIT_ON);
+
+        $result = db2_autocommit($this->conn, DB2_AUTOCOMMIT_ON);
+        assert(is_bool($result));
+
+        return $result;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated The error information is available via exceptions.
      */
     public function errorCode()
     {
@@ -172,6 +208,8 @@ class DB2Connection implements Connection, ServerInfoAwareConnection
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated The error information is available via exceptions.
      */
     public function errorInfo()
     {

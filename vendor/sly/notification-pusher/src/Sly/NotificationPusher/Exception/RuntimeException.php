@@ -12,8 +12,6 @@
 namespace Sly\NotificationPusher\Exception;
 
 /**
- * RuntimeException.
- *
  * @uses   \RuntimeException
  * @uses   \Sly\NotificationPusher\Exception\ExceptionInterface
  *

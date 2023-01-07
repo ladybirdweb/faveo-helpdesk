@@ -12,8 +12,6 @@
 namespace Sly\NotificationPusher\Model;
 
 /**
- * BaseParameteredModel.
- *
  * @author Cédric Dugat <cedric@dugat.me>
  */
 abstract class BaseParameteredModel
@@ -24,8 +22,6 @@ abstract class BaseParameteredModel
     protected $parameters = [];
 
     /**
-     * Get parameters.
-     *
      * @return array
      */
     public function getParameters()
@@ -34,8 +30,6 @@ abstract class BaseParameteredModel
     }
 
     /**
-     * Has parameter.
-     *
      * @param string $key Key
      *
      * @return boolean
@@ -46,8 +40,6 @@ abstract class BaseParameteredModel
     }
 
     /**
-     * Get parameter.
-     *
      * @param string $key Key
      * @param mixed $default Default
      *
@@ -59,11 +51,9 @@ abstract class BaseParameteredModel
     }
 
     /**
-     * Set parameters.
-     *
      * @param array $parameters Parameters
      *
-     * @return \Sly\NotificationPusher\Model\BaseParameteredModel
+     * @return BaseParameteredModel
      */
     public function setParameters($parameters)
     {
@@ -73,8 +63,6 @@ abstract class BaseParameteredModel
     }
 
     /**
-     * Set parameter.
-     *
      * @param string $key Key
      * @param mixed $value Value
      *

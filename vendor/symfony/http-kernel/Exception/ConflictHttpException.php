@@ -17,12 +17,11 @@ namespace Symfony\Component\HttpKernel\Exception;
 class ConflictHttpException extends HttpException
 {
     /**
-     * @param string     $message  The internal exception message
-     * @param \Exception $previous The previous exception
-     * @param int        $code     The internal exception code
-     * @param array      $headers
+     * @param string|null     $message  The internal exception message
+     * @param \Throwable|null $previous The previous exception
+     * @param int             $code     The internal exception code
      */
-    public function __construct(string $message = null, \Exception $previous = null, int $code = 0, array $headers = array())
+    public function __construct(?string $message = '', \Throwable $previous = null, int $code = 0, array $headers = [])
     {
         parent::__construct(409, $message, $previous, $headers, $code);
     }

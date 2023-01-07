@@ -18,8 +18,8 @@ namespace Symfony\Component\Finder\Iterator;
  */
 abstract class MultiplePcreFilterIterator extends \FilterIterator
 {
-    protected $matchRegexps = array();
-    protected $noMatchRegexps = array();
+    protected $matchRegexps = [];
+    protected $noMatchRegexps = [];
 
     /**
      * @param \Iterator $iterator        The Iterator to filter
@@ -83,7 +83,13 @@ abstract class MultiplePcreFilterIterator extends \FilterIterator
      */
     protected function isRegex($str)
     {
-        if (preg_match('/^(.{3,}?)[imsxuADU]*$/', $str, $m)) {
+        $availableModifiers = 'imsxuADU';
+
+        if (\PHP_VERSION_ID >= 80200) {
+            $availableModifiers .= 'n';
+        }
+
+        if (preg_match('/^(.{3,}?)['.$availableModifiers.']*$/', $str, $m)) {
             $start = substr($m[1], 0, 1);
             $end = substr($m[1], -1);
 
@@ -91,7 +97,7 @@ abstract class MultiplePcreFilterIterator extends \FilterIterator
                 return !preg_match('/[*?[:alnum:] \\\\]/', $start);
             }
 
-            foreach (array(array('{', '}'), array('(', ')'), array('[', ']'), array('<', '>')) as $delimiters) {
+            foreach ([['{', '}'], ['(', ')'], ['[', ']'], ['<', '>']] as $delimiters) {
                 if ($start === $delimiters[0] && $end === $delimiters[1]) {
                     return true;
                 }

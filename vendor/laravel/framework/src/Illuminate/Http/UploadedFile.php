@@ -104,6 +104,16 @@ class UploadedFile extends SymfonyUploadedFile
     }
 
     /**
+     * Get the file's extension supplied by the client.
+     *
+     * @return string
+     */
+    public function clientExtension()
+    {
+        return $this->guessClientExtension();
+    }
+
+    /**
      * Create a new file instance from a base instance.
      *
      * @param  \Symfony\Component\HttpFoundation\File\UploadedFile  $file
@@ -116,7 +126,6 @@ class UploadedFile extends SymfonyUploadedFile
             $file->getPathname(),
             $file->getClientOriginalName(),
             $file->getClientMimeType(),
-            $file->getClientSize(),
             $file->getError(),
             $test
         );

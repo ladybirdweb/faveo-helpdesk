@@ -7,10 +7,13 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Comparator;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Visitor\DropSchemaSqlCollector;
+
 use function count;
 
 /**
  * Schema Synchronizer for Default DBAL Connection.
+ *
+ * @deprecated
  */
 class SingleDatabaseSynchronizer extends AbstractSchemaSynchronizer
 {
@@ -30,7 +33,6 @@ class SingleDatabaseSynchronizer extends AbstractSchemaSynchronizer
     {
         return $createSchema->toSql($this->platform);
     }
-
 
     /**
      * {@inheritdoc}
@@ -87,11 +89,14 @@ class SingleDatabaseSynchronizer extends AbstractSchemaSynchronizer
         }
 
         foreach ($dropSchema->getTables() as $table) {
-            if (! $table->hasPrimaryKey()) {
+            $primaryKey = $table->getPrimaryKey();
+
+            if ($primaryKey === null) {
                 continue;
             }
 
-            $columns = $table->getPrimaryKey()->getColumns();
+            $columns = $primaryKey->getColumns();
+
             if (count($columns) > 1) {
                 continue;
             }

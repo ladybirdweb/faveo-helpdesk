@@ -45,7 +45,7 @@ class RemoteAddress
      * at session read, so this is the only way to switch setting.
      *
      * @param  bool  $useProxy Whether to check also proxied IP addresses.
-     * @return RemoteAddress
+     * @return $this
      */
     public function setUseProxy($useProxy = true)
     {
@@ -67,7 +67,7 @@ class RemoteAddress
      * Set list of trusted proxy addresses
      *
      * @param  array $trustedProxies
-     * @return RemoteAddress
+     * @return $this
      */
     public function setTrustedProxies(array $trustedProxies)
     {
@@ -79,7 +79,7 @@ class RemoteAddress
      * Set the header to introspect for proxy IPs
      *
      * @param  string $header
-     * @return RemoteAddress
+     * @return $this
      */
     public function setProxyHeader($header = 'X-Forwarded-For')
     {

@@ -2,7 +2,9 @@
 
 namespace Intervention\Image\Imagick\Commands;
 
-class PixelateCommand extends \Intervention\Image\Commands\AbstractCommand
+use Intervention\Image\Commands\AbstractCommand;
+
+class PixelateCommand extends AbstractCommand
 {
     /**
      * Applies a pixelation effect to a given image
@@ -17,7 +19,7 @@ class PixelateCommand extends \Intervention\Image\Commands\AbstractCommand
         $width = $image->getWidth();
         $height = $image->getHeight();
 
-        $image->getCore()->scaleImage(max(1, ($width / $size)), max(1, ($height / $size)));
+        $image->getCore()->scaleImage(max(1, intval($width / $size)), max(1, intval($height / $size)));
         $image->getCore()->scaleImage($width, $height);
 
         return true;

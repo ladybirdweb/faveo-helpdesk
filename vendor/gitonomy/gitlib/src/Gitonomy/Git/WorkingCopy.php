@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git;
 
 use Gitonomy\Git\Diff\Diff;
@@ -34,23 +35,22 @@ class WorkingCopy
         }
     }
 
-    public function getStatus()
-    {
-        return WorkingStatus::parseOutput();
-    }
-
     public function getUntrackedFiles()
     {
-        $lines = explode("\0", $this->run('status', array('--porcelain', '--untracked-files=all', '-z')));
-        $lines = array_filter($lines, function ($l) { return substr($l, 0, 3) === '?? '; });
-        $lines = array_map(function ($l) { return substr($l, 3); }, $lines);
+        $lines = explode("\0", $this->run('status', ['--porcelain', '--untracked-files=all', '-z']));
+        $lines = array_filter($lines, function ($l) {
+            return substr($l, 0, 3) === '?? ';
+        });
+        $lines = array_map(function ($l) {
+            return substr($l, 3);
+        }, $lines);
 
         return $lines;
     }
 
     public function getDiffPending()
     {
-        $diff = Diff::parse($this->run('diff', array('-r', '-p', '-m', '-M', '--full-index')));
+        $diff = Diff::parse($this->run('diff', ['-r', '-p', '-m', '-M', '--full-index']));
         $diff->setRepository($this->repository);
 
         return $diff;
@@ -58,7 +58,7 @@ class WorkingCopy
 
     public function getDiffStaged()
     {
-        $diff = Diff::parse($this->run('diff', array('-r', '-p', '-m', '-M', '--full-index', '--staged')));
+        $diff = Diff::parse($this->run('diff', ['-r', '-p', '-m', '-M', '--full-index', '--staged']));
         $diff->setRepository($this->repository);
 
         return $diff;
@@ -69,7 +69,7 @@ class WorkingCopy
      */
     public function checkout($revision, $branch = null)
     {
-        $args = array();
+        $args = [];
         if ($revision instanceof Commit) {
             $args[] = $revision->getHash();
         } elseif ($revision instanceof Reference) {
@@ -81,7 +81,7 @@ class WorkingCopy
         }
 
         if (null !== $branch) {
-            $args = array_merge($args, array('-b', $branch));
+            $args = array_merge($args, ['-b', $branch]);
         }
 
         $this->run('checkout', $args);
@@ -89,7 +89,7 @@ class WorkingCopy
         return $this;
     }
 
-    protected function run($command, array $args = array())
+    protected function run($command, array $args = [])
     {
         return $this->repository->run($command, $args);
     }

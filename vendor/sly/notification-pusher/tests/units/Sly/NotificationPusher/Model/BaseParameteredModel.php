@@ -6,8 +6,6 @@ use mageekguy\atoum as Units;
 use Sly\NotificationPusher\Model\Device;
 
 /**
- * BaseParameteredModel.
- *
  * @uses atoum\test
  * @author Cédric Dugat <cedric@dugat.me>
  */
@@ -17,34 +15,29 @@ class BaseParameteredModel extends Units\Test
     {
         $this->if($object = new Device('Test', ['param' => 'test']))
             ->boolean($object->hasParameter('param'))
-                ->isTrue()
+            ->isTrue()
             ->string($object->getParameter('param'))
-                ->isEqualTo('test')
-
+            ->isEqualTo('test')
             ->boolean($object->hasParameter('notExist'))
-                ->isFalse()
+            ->isFalse()
             ->variable($object->getParameter('notExist'))
-                ->isNull()
+            ->isNull()
             ->string($object->getParameter('renotExist', '12345'))
-                ->isEqualTo('12345')
-
+            ->isEqualTo('12345')
             ->when($object->setParameters(['chuck' => 'norris']))
             ->boolean($object->hasParameter('chuck'))
-                ->isTrue()
+            ->isTrue()
             ->string($object->getParameter('chuck'))
-                ->isEqualTo('norris')
-
+            ->isEqualTo('norris')
             ->when($object->setParameter('poney', 'powerful'))
             ->boolean($object->hasParameter('poney'))
-                ->isTrue()
+            ->isTrue()
             ->string($object->getParameter('poney'))
-                ->isEqualTo('powerful')
-
+            ->isEqualTo('powerful')
             ->when($object->setParameter('null', null))
             ->boolean($object->hasParameter('null'))
-                ->isTrue()
+            ->isTrue()
             ->variable($object->getParameter('null'))
-                ->isNull()
-        ;
+            ->isNull();
     }
 }

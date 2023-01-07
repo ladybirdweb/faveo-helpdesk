@@ -2,8 +2,9 @@
 
 namespace Doctrine\DBAL\Driver\Mysqli;
 
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\AbstractMySQLDriver;
+use Doctrine\DBAL\Exception;
+use Doctrine\Deprecations\Deprecation;
 
 class Driver extends AbstractMySQLDriver
 {
@@ -13,9 +14,9 @@ class Driver extends AbstractMySQLDriver
     public function connect(array $params, $username = null, $password = null, array $driverOptions = [])
     {
         try {
-            return new MysqliConnection($params, $username, $password, $driverOptions);
+            return new Connection($params, (string) $username, (string) $password, $driverOptions);
         } catch (MysqliException $e) {
-            throw DBALException::driverException($this, $e);
+            throw Exception::driverException($this, $e);
         }
     }
 
@@ -24,6 +25,12 @@ class Driver extends AbstractMySQLDriver
      */
     public function getName()
     {
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/issues/3580',
+            'Driver::getName() is deprecated'
+        );
+
         return 'mysqli';
     }
 }

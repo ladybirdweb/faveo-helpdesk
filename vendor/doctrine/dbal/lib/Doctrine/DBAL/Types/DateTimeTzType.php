@@ -29,15 +29,15 @@ class DateTimeTzType extends Type implements PhpDateTimeMappingType
      */
     public function getName()
     {
-        return Type::DATETIMETZ;
+        return Types::DATETIMETZ_MUTABLE;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
-        return $platform->getDateTimeTzTypeDeclarationSQL($fieldDeclaration);
+        return $platform->getDateTimeTzTypeDeclarationSQL($column);
     }
 
     /**
@@ -67,7 +67,11 @@ class DateTimeTzType extends Type implements PhpDateTimeMappingType
 
         $val = DateTime::createFromFormat($platform->getDateTimeTzFormatString(), $value);
         if (! $val) {
-            throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getDateTimeTzFormatString());
+            throw ConversionException::conversionFailedFormat(
+                $value,
+                $this->getName(),
+                $platform->getDateTimeTzFormatString()
+            );
         }
 
         return $val;

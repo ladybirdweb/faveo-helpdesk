@@ -1,6 +1,7 @@
 <?php
 namespace Aws\S3;
 
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\PromisorInterface;
 use GuzzleHttp\Psr7;
 use Psr\Http\Message\StreamInterface;
@@ -30,7 +31,8 @@ class ObjectUploader implements PromisorInterface
     /**
      * @param S3ClientInterface $client         The S3 Client used to execute
      *                                          the upload command(s).
-     * @param string            $bucket         Bucket to upload the object.
+     * @param string            $bucket         Bucket to upload the object, or
+     *                                          an S3 access point ARN.
      * @param string            $key            Key of the object.
      * @param mixed             $body           Object data to upload. Can be a
      *                                          StreamInterface, PHP stream
@@ -54,11 +56,14 @@ class ObjectUploader implements PromisorInterface
         $this->client = $client;
         $this->bucket = $bucket;
         $this->key = $key;
-        $this->body = Psr7\stream_for($body);
+        $this->body = Psr7\Utils::streamFor($body);
         $this->acl = $acl;
         $this->options = $options + self::$defaults;
     }
 
+    /**
+     * @return PromiseInterface
+     */
     public function promise()
     {
         /** @var int $mup_threshold */
@@ -112,8 +117,8 @@ class ObjectUploader implements PromisorInterface
          * Read up to 5MB into a buffer to determine how to upload the body.
          * @var StreamInterface $buffer
          */
-        $buffer = Psr7\stream_for();
-        Psr7\copy_to_stream($body, $buffer, MultipartUploader::PART_MIN_SIZE);
+        $buffer = Psr7\Utils::streamFor();
+        Psr7\Utils::copyToStream($body, $buffer, MultipartUploader::PART_MIN_SIZE);
 
         // If body < 5MB, use PutObject with the buffer.
         if ($buffer->getSize() < MultipartUploader::PART_MIN_SIZE) {
@@ -123,7 +128,7 @@ class ObjectUploader implements PromisorInterface
         }
 
         // If body >= 5 MB, then use multipart. [YES]
-        if ($body->isSeekable()) {
+        if ($body->isSeekable() && $body->getMetadata('uri') !== 'php://input') {
             // If the body is seekable, just rewind the body.
             $body->seek(0);
         } else {

@@ -102,7 +102,7 @@ final class MockMethod
         }
 
         if ($method->hasReturnType()) {
-            $returnType = (string) $method->getReturnType();
+            $returnType = $method->getReturnType()->getName();
         } else {
             $returnType = '';
         }
@@ -301,8 +301,8 @@ final class MockMethod
                     $nullable = '?';
                 }
 
-                if ($parameter->hasType() && (string) $parameter->getType() !== 'self') {
-                    $typeDeclaration = $parameter->getType() . ' ';
+                if ($parameter->hasType() && $parameter->getType()->getName() !== 'self') {
+                    $typeDeclaration = $parameter->getType()->getName() . ' ';
                 } else {
                     try {
                         $class = $parameter->getClass();
@@ -326,13 +326,14 @@ final class MockMethod
 
                 if (!$parameter->isVariadic()) {
                     if ($parameter->isDefaultValueAvailable()) {
-                        $value = $parameter->getDefaultValueConstantName();
-
-                        if ($value === null) {
+                        try {
                             $value = \var_export($parameter->getDefaultValue(), true);
-                        } elseif (!\defined($value)) {
-                            $rootValue = \preg_replace('/^.*\\\\/', '', $value);
-                            $value     = \defined($rootValue) ? $rootValue : $value;
+                        } catch (\ReflectionException $e) {
+                            throw new RuntimeException(
+                                $e->getMessage(),
+                                (int) $e->getCode(),
+                                $e
+                            );
                         }
 
                         $default = ' = ' . $value;

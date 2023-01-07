@@ -29,9 +29,9 @@ class Connection
      * @param string                     $host             The server host
      * @param ContextProviderInterface[] $contextProviders Context providers indexed by context name
      */
-    public function __construct(string $host, array $contextProviders = array())
+    public function __construct(string $host, array $contextProviders = [])
     {
-        if (false === strpos($host, '://')) {
+        if (!str_contains($host, '://')) {
             $host = 'tcp://'.$host;
         }
 
@@ -51,20 +51,20 @@ class Connection
             return false;
         }
 
-        $context = array('timestamp' => microtime(true));
+        $context = ['timestamp' => microtime(true)];
         foreach ($this->contextProviders as $name => $provider) {
             $context[$name] = $provider->getContext();
         }
         $context = array_filter($context);
-        $encodedPayload = base64_encode(serialize(array($data, $context)))."\n";
+        $encodedPayload = base64_encode(serialize([$data, $context]))."\n";
 
-        set_error_handler(array(self::class, 'nullErrorHandler'));
+        set_error_handler([self::class, 'nullErrorHandler']);
         try {
             if (-1 !== stream_socket_sendto($this->socket, $encodedPayload)) {
                 return true;
             }
             if (!$socketIsFresh) {
-                stream_socket_shutdown($this->socket, STREAM_SHUT_RDWR);
+                stream_socket_shutdown($this->socket, \STREAM_SHUT_RDWR);
                 fclose($this->socket);
                 $this->socket = $this->createSocket();
             }
@@ -78,20 +78,18 @@ class Connection
         return false;
     }
 
-    private static function nullErrorHandler($t, $m)
+    private static function nullErrorHandler(int $t, string $m)
     {
         // no-op
     }
 
     private function createSocket()
     {
-        set_error_handler(array(self::class, 'nullErrorHandler'));
+        set_error_handler([self::class, 'nullErrorHandler']);
         try {
-            return stream_socket_client($this->host, $errno, $errstr, 3, STREAM_CLIENT_CONNECT | STREAM_CLIENT_ASYNC_CONNECT);
+            return stream_socket_client($this->host, $errno, $errstr, 3, \STREAM_CLIENT_CONNECT | \STREAM_CLIENT_ASYNC_CONNECT);
         } finally {
             restore_error_handler();
         }
-
-        return $socket;
     }
 }

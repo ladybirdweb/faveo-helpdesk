@@ -1,5 +1,67 @@
+### 1.27.1 (2022-06-09)
+
+  * Fixed MandrillHandler support for SwiftMailer 6 (#1676)
+  * Fixed StreamHandler chunk size (backport from #1552)
+
+### 1.27.0 (2022-03-13)
+
+  * Added $maxDepth / setMaxDepth to NormalizerFormatter / JsonFormatter to configure the maximum depth if the default of 9 does not work for you (#1633)
+
+### 1.26.1 (2021-05-28)
+
+  * Fixed PHP 8.1 deprecation warning
+
+### 1.26.0 (2020-12-14)
+
+  * Added $dateFormat and $removeUsedContextFields arguments to PsrLogMessageProcessor (backport from 2.x)
+
+### 1.25.5 (2020-07-23)
+
+  * Fixed array access on null in RavenHandler
+  * Fixed unique_id in WebProcessor not being disableable
+
+### 1.25.4 (2020-05-22)
+
+  * Fixed GitProcessor type error when there is no git repo present
+  * Fixed normalization of SoapFault objects containing deeply nested objects as "detail"
+  * Fixed support for relative paths in RotatingFileHandler
+
+### 1.25.3 (2019-12-20)
+
+  * Fixed formatting of resources in JsonFormatter
+  * Fixed RedisHandler failing to use MULTI properly when passed a proxied Redis instance (e.g. in Symfony with lazy services)
+  * Fixed FilterHandler triggering a notice when handleBatch was filtering all records passed to it
+  * Fixed Turkish locale messing up the conversion of level names to their constant values
+
+### 1.25.2 (2019-11-13)
+
+  * Fixed normalization of Traversables to avoid traversing them as not all of them are rewindable
+  * Fixed setFormatter/getFormatter to forward to the nested handler in FilterHandler, FingersCrossedHandler, BufferHandler and SamplingHandler
+  * Fixed BrowserConsoleHandler formatting when using multiple styles
+  * Fixed normalization of exception codes to be always integers even for PDOException which have them as numeric strings
+  * Fixed normalization of SoapFault objects containing non-strings as "detail"
+  * Fixed json encoding across all handlers to always attempt recovery of non-UTF-8 strings instead of failing the whole encoding
+
+### 1.25.1 (2019-09-06)
+
+  * Fixed forward-compatible interfaces to be compatible with Monolog 1.x too.
+
+### 1.25.0 (2019-09-06)
+
+  * Deprecated SlackbotHandler, use SlackWebhookHandler or SlackHandler instead
+  * Deprecated RavenHandler, use sentry/sentry 2.x and their Sentry\Monolog\Handler instead
+  * Deprecated HipChatHandler, migrate to Slack and use SlackWebhookHandler or SlackHandler instead
+  * Added forward-compatible interfaces and traits FormattableHandlerInterface, FormattableHandlerTrait, ProcessableHandlerInterface, ProcessableHandlerTrait. If you use modern PHP and want to make code compatible with Monolog 1 and 2 this can help. You will have to require at least Monolog 1.25 though.
+  * Added support for RFC3164 (outdated BSD syslog protocol) to SyslogUdpHandler
+  * Fixed issue in GroupHandler and WhatFailureGroupHandler where setting multiple processors would duplicate records
+  * Fixed issue in SignalHandler restarting syscalls functionality
+  * Fixed normalizers handling of exception backtraces to avoid serializing arguments in some cases
+  * Fixed ZendMonitorHandler to work with the latest Zend Server versions
+  * Fixed ChromePHPHandler to avoid sending more data than latest Chrome versions allow in headers (4KB down from 256KB).
+
 ### 1.24.0 (2018-11-05)
 
+  * BC Notice: If you are extending any of the Monolog's Formatters' `normalize` method, make sure you add the new `$depth = 0` argument to your function signature to avoid strict PHP warnings.
   * Added a `ResettableInterface` in order to reset/reset/clear/flush handlers and processors
   * Added a `ProcessorInterface` as an optional way to label a class as being a processor (mostly useful for autowiring dependency containers)
   * Added a way to log signals being received using Monolog\SignalHandler

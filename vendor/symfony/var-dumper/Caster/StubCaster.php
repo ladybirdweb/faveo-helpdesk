@@ -17,6 +17,8 @@ use Symfony\Component\VarDumper\Cloner\Stub;
  * Casts a caster's Stub.
  *
  * @author Nicolas Grekas <p@tchwork.com>
+ *
+ * @final since Symfony 4.4
  */
 class StubCaster
 {
@@ -35,7 +37,7 @@ class StubCaster
                 $stub->class = Stub::STRING_BINARY;
             }
 
-            $a = array();
+            $a = [];
         }
 
         return $a;
@@ -51,7 +53,7 @@ class StubCaster
         if ($isNested) {
             $stub->cut += \count($a);
 
-            return array();
+            return [];
         }
 
         return $a;
@@ -66,7 +68,7 @@ class StubCaster
             $stub->cut = $c->cut;
             $stub->attr = $c->attr;
 
-            $a = array();
+            $a = [];
 
             if ($c->value) {
                 foreach (array_keys($c->value) as $k) {

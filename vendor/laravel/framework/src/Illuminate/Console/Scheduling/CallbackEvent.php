@@ -71,7 +71,9 @@ class CallbackEvent extends Event
         parent::callBeforeCallbacks($container);
 
         try {
-            $response = $container->call($this->callback, $this->parameters);
+            $response = is_object($this->callback)
+                        ? $container->call([$this->callback, '__invoke'], $this->parameters)
+                        : $container->call($this->callback, $this->parameters);
         } finally {
             $this->removeMutex();
 
@@ -88,7 +90,7 @@ class CallbackEvent extends Event
      */
     protected function removeMutex()
     {
-        if ($this->description) {
+        if ($this->description && $this->withoutOverlapping) {
             $this->mutex->forget($this);
         }
     }

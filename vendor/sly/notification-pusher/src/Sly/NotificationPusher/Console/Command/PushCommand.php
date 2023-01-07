@@ -12,6 +12,8 @@
 namespace Sly\NotificationPusher\Console\Command;
 
 use Doctrine\Common\Inflector\Inflector;
+use Exception;
+use Sly\NotificationPusher\Adapter\AdapterInterface;
 use Sly\NotificationPusher\Exception\AdapterException;
 use Sly\NotificationPusher\Model\Device;
 use Sly\NotificationPusher\Model\Message;
@@ -24,8 +26,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * PushCommand.
- *
  * @uses \Symfony\Component\Console\Command\Command
  * @author Cédric Dugat <cedric@dugat.me>
  */
@@ -85,18 +85,16 @@ class PushCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $adapter     = $this->getReadyAdapter($input, $output);
+        $adapter = $this->getReadyAdapter($input, $output);
         $pushManager = new PushManager($input->getOption('env'));
-        $message     = new Message($input->getArgument('message'));
-        $push        = new Push($adapter, new Device($input->getArgument('token')), $message);
+        $message = new Message($input->getArgument('message'));
+        $push = new Push($adapter, new Device($input->getArgument('token')), $message);
         $pushManager->add($push);
 
         $pushManager->push();
     }
 
     /**
-     * Get adapter class from argument.
-     *
      * @param string $argument Given argument
      *
      * @return string
@@ -121,7 +119,7 @@ class PushCommand extends Command
     /**
      * {@inheritdoc}
      *
-     * @return \Sly\NotificationPusher\Adapter\AdapterInterface
+     * @return AdapterInterface
      */
     private function getReadyAdapter(InputInterface $input, OutputInterface $output)
     {
@@ -129,13 +127,13 @@ class PushCommand extends Command
 
         try {
             $adapter = new $adapterClass();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $adapterData = [];
             preg_match_all('/"(.*)"/i', $e->getMessage(), $matches);
 
             foreach ($matches[1] as $match) {
                 $optionKey = str_replace('_', '-', Inflector::tableize($match));
-                $option    = $input->getOption($optionKey);
+                $option = $input->getOption($optionKey);
 
                 if (!$option) {
                     throw new AdapterException(

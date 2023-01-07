@@ -126,11 +126,7 @@ class SqlServerGrammar extends Grammar
      */
     protected function compileJsonContains($column, $value)
     {
-        $parts = explode('->', $column, 2);
-
-        $field = $this->wrap($parts[0]);
-
-        $path = count($parts) > 1 ? ', '.$this->wrapJsonPath($parts[1]) : '';
+        [$field, $path] = $this->wrapJsonFieldAndPath($column);
 
         return $value.' in (select [value] from openjson('.$field.$path.'))';
     }
@@ -144,6 +140,21 @@ class SqlServerGrammar extends Grammar
     public function prepareBindingForJsonContains($binding)
     {
         return is_bool($binding) ? json_encode($binding) : $binding;
+    }
+
+    /**
+     * Compile a "JSON length" statement into SQL.
+     *
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  string  $value
+     * @return string
+     */
+    protected function compileJsonLength($column, $operator, $value)
+    {
+        [$field, $path] = $this->wrapJsonFieldAndPath($column);
+
+        return '(select count(*) from openjson('.$field.$path.')) '.$operator.' '.$value;
     }
 
     /**
@@ -338,7 +349,7 @@ class SqlServerGrammar extends Grammar
      */
     public function compileUpdate(Builder $query, $values)
     {
-        list($table, $alias) = $this->parseUpdateTable($query->from);
+        [$table, $alias] = $this->parseUpdateTable($query->from);
 
         // Each one of the columns in the update statements needs to be wrapped in the
         // keyword identifiers, also a place-holder needs to be created for each of
@@ -394,24 +405,11 @@ class SqlServerGrammar extends Grammar
      */
     public function prepareBindingsForUpdate(array $bindings, array $values)
     {
-        // Update statements with joins in SQL Servers utilize an unique syntax. We need to
-        // take all of the bindings and put them on the end of this array since they are
-        // added to the end of the "where" clause statements as typical where clauses.
-        $bindingsWithoutJoin = Arr::except($bindings, 'join');
+        $cleanBindings = Arr::except($bindings, 'select');
 
         return array_values(
-            array_merge($values, $bindings['join'], Arr::flatten($bindingsWithoutJoin))
+            array_merge($values, Arr::flatten($cleanBindings))
         );
-    }
-
-    /**
-     * Determine if the grammar supports savepoints.
-     *
-     * @return bool
-     */
-    public function supportsSavepoints()
-    {
-        return true;
     }
 
     /**
@@ -465,11 +463,20 @@ class SqlServerGrammar extends Grammar
      */
     protected function wrapJsonSelector($value)
     {
-        $parts = explode('->', $value, 2);
+        [$field, $path] = $this->wrapJsonFieldAndPath($value);
 
-        $field = $this->wrapSegments(explode('.', array_shift($parts)));
+        return 'json_value('.$field.$path.')';
+    }
 
-        return 'json_value('.$field.', '.$this->wrapJsonPath($parts[0]).')';
+    /**
+     * Wrap the given JSON boolean value.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    protected function wrapJsonBooleanValue($value)
+    {
+        return "'".$value."'";
     }
 
     /**
@@ -480,7 +487,11 @@ class SqlServerGrammar extends Grammar
      */
     public function wrapTable($table)
     {
-        return $this->wrapTableValuedFunction(parent::wrapTable($table));
+        if (! $this->isExpression($table)) {
+            return $this->wrapTableValuedFunction(parent::wrapTable($table));
+        }
+
+        return $this->getValue($table);
     }
 
     /**

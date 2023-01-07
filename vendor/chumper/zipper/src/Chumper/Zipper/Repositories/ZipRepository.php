@@ -116,6 +116,7 @@ class ZipRepository implements RepositoryInterface
             }
             call_user_func_array($callback, [
                 'file' => $this->archive->getNameIndex($i),
+                'stats' => $this->archive->statIndex($i)
             ]);
         }
     }

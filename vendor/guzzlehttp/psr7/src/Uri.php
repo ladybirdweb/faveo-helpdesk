@@ -1,4 +1,5 @@
 <?php
+
 namespace GuzzleHttp\Psr7;
 
 use Psr\Http\Message\UriInterface;
@@ -66,12 +67,55 @@ class Uri implements UriInterface
     {
         // weak type check to also accept null until we can add scalar type hints
         if ($uri != '') {
-            $parts = parse_url($uri);
+            $parts = self::parse($uri);
             if ($parts === false) {
                 throw new \InvalidArgumentException("Unable to parse URI: $uri");
             }
             $this->applyParts($parts);
         }
+    }
+
+    /**
+     * UTF-8 aware \parse_url() replacement.
+     *
+     * The internal function produces broken output for non ASCII domain names
+     * (IDN) when used with locales other than "C".
+     *
+     * On the other hand, cURL understands IDN correctly only when UTF-8 locale
+     * is configured ("C.UTF-8", "en_US.UTF-8", etc.).
+     *
+     * @see https://bugs.php.net/bug.php?id=52923
+     * @see https://www.php.net/manual/en/function.parse-url.php#114817
+     * @see https://curl.haxx.se/libcurl/c/CURLOPT_URL.html#ENCODING
+     *
+     * @param string $url
+     *
+     * @return array|false
+     */
+    private static function parse($url)
+    {
+        // If IPv6
+        $prefix = '';
+        if (preg_match('%^(.*://\[[0-9:a-f]+\])(.*?)$%', $url, $matches)) {
+            $prefix = $matches[1];
+            $url = $matches[2];
+        }
+
+        $encodedUrl = preg_replace_callback(
+            '%[^:/@?&=#]+%usD',
+            static function ($matches) {
+                return urlencode($matches[0]);
+            },
+            $url
+        );
+
+        $result = parse_url($prefix . $encodedUrl);
+
+        if ($result === false) {
+            return false;
+        }
+
+        return array_map('urldecode', $result);
     }
 
     public function __toString()
@@ -166,6 +210,7 @@ class Uri implements UriInterface
      * @param UriInterface $uri
      *
      * @return bool
+     *
      * @see Uri::isNetworkPathReference
      * @see Uri::isAbsolutePathReference
      * @see Uri::isRelativePathReference
@@ -184,6 +229,7 @@ class Uri implements UriInterface
      * @param UriInterface $uri
      *
      * @return bool
+     *
      * @link https://tools.ietf.org/html/rfc3986#section-4.2
      */
     public static function isNetworkPathReference(UriInterface $uri)
@@ -199,6 +245,7 @@ class Uri implements UriInterface
      * @param UriInterface $uri
      *
      * @return bool
+     *
      * @link https://tools.ietf.org/html/rfc3986#section-4.2
      */
     public static function isAbsolutePathReference(UriInterface $uri)
@@ -217,6 +264,7 @@ class Uri implements UriInterface
      * @param UriInterface $uri
      *
      * @return bool
+     *
      * @link https://tools.ietf.org/html/rfc3986#section-4.2
      */
     public static function isRelativePathReference(UriInterface $uri)
@@ -237,6 +285,7 @@ class Uri implements UriInterface
      * @param UriInterface|null $base An optional base URI to compare against
      *
      * @return bool
+     *
      * @link https://tools.ietf.org/html/rfc3986#section-4.4
      */
     public static function isSameDocumentReference(UriInterface $uri, UriInterface $base = null)
@@ -357,6 +406,7 @@ class Uri implements UriInterface
      * @param array $parts
      *
      * @return UriInterface
+     *
      * @link http://php.net/manual/en/function.parse-url.php
      *
      * @throws \InvalidArgumentException If the components do not form a valid URI.
@@ -437,9 +487,9 @@ class Uri implements UriInterface
 
     public function withUserInfo($user, $password = null)
     {
-        $info = $user;
-        if ($password != '') {
-            $info .= ':' . $password;
+        $info = $this->filterUserInfoComponent($user);
+        if ($password !== null) {
+            $info .= ':' . $this->filterUserInfoComponent($password);
         }
 
         if ($this->userInfo === $info) {
@@ -537,7 +587,9 @@ class Uri implements UriInterface
         $this->scheme = isset($parts['scheme'])
             ? $this->filterScheme($parts['scheme'])
             : '';
-        $this->userInfo = isset($parts['user']) ? $parts['user'] : '';
+        $this->userInfo = isset($parts['user'])
+            ? $this->filterUserInfoComponent($parts['user'])
+            : '';
         $this->host = isset($parts['host'])
             ? $this->filterHost($parts['host'])
             : '';
@@ -554,7 +606,7 @@ class Uri implements UriInterface
             ? $this->filterQueryAndFragment($parts['fragment'])
             : '';
         if (isset($parts['pass'])) {
-            $this->userInfo .= ':' . $parts['pass'];
+            $this->userInfo .= ':' . $this->filterUserInfoComponent($parts['pass']);
         }
 
         $this->removeDefaultPort();
@@ -573,7 +625,27 @@ class Uri implements UriInterface
             throw new \InvalidArgumentException('Scheme must be a string');
         }
 
-        return strtolower($scheme);
+        return \strtr($scheme, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz');
+    }
+
+    /**
+     * @param string $component
+     *
+     * @return string
+     *
+     * @throws \InvalidArgumentException If the user info is invalid.
+     */
+    private function filterUserInfoComponent($component)
+    {
+        if (!is_string($component)) {
+            throw new \InvalidArgumentException('User info must be a string');
+        }
+
+        return preg_replace_callback(
+            '/(?:[^%' . self::$charUnreserved . self::$charSubDelims . ']+|%(?![A-Fa-f0-9]{2}))/',
+            [$this, 'rawurlencodeMatchZero'],
+            $component
+        );
     }
 
     /**
@@ -589,7 +661,7 @@ class Uri implements UriInterface
             throw new \InvalidArgumentException('Host must be a string');
         }
 
-        return strtolower($host);
+        return \strtr($host, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz');
     }
 
     /**
@@ -606,9 +678,9 @@ class Uri implements UriInterface
         }
 
         $port = (int) $port;
-        if (1 > $port || 0xffff < $port) {
+        if (0 > $port || 0xffff < $port) {
             throw new \InvalidArgumentException(
-                sprintf('Invalid port: %d. Must be between 1 and 65535', $port)
+                sprintf('Invalid port: %d. Must be between 0 and 65535', $port)
             );
         }
 
@@ -618,7 +690,7 @@ class Uri implements UriInterface
     /**
      * @param UriInterface $uri
      * @param array        $keys
-     * 
+     *
      * @return array
      */
     private static function getFilteredQueryString(UriInterface $uri, array $keys)
@@ -639,7 +711,7 @@ class Uri implements UriInterface
     /**
      * @param string      $key
      * @param string|null $value
-     * 
+     *
      * @return string
      */
     private static function generateQueryString($key, $value)
@@ -731,7 +803,7 @@ class Uri implements UriInterface
                 'by adding a leading slash to the path is deprecated since version 1.4 and will throw an exception instead.',
                 E_USER_DEPRECATED
             );
-            $this->path = '/'. $this->path;
+            $this->path = '/' . $this->path;
             //throw new \InvalidArgumentException('The path of a URI with an authority must start with a slash "/" or be empty');
         }
     }

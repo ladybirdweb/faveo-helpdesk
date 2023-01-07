@@ -23,8 +23,8 @@ class HtmlDumper extends CliDumper
 {
     public static $defaultOutput = 'php://output';
 
-    protected static $themes = array(
-        'dark' => array(
+    protected static $themes = [
+        'dark' => [
             'default' => 'background-color:#18171B; color:#FF8400; line-height:1.2em; font:12px Menlo, Monaco, Consolas, monospace; word-wrap: break-word; white-space: pre-wrap; position:relative; z-index:99999; word-break: break-all',
             'num' => 'font-weight:bold; color:#1299DA',
             'const' => 'font-weight:bold',
@@ -39,8 +39,8 @@ class HtmlDumper extends CliDumper
             'index' => 'color:#1299DA',
             'ellipsis' => 'color:#FF8400',
             'ns' => 'user-select:none;',
-        ),
-        'light' => array(
+        ],
+        'light' => [
             'default' => 'background:none; color:#CC7832; line-height:1.2em; font:12px Menlo, Monaco, Consolas, monospace; word-wrap: break-word; white-space: pre-wrap; position:relative; z-index:99999; word-break: break-all',
             'num' => 'font-weight:bold; color:#1299DA',
             'const' => 'font-weight:bold',
@@ -55,8 +55,8 @@ class HtmlDumper extends CliDumper
             'index' => 'color:#1299DA',
             'ellipsis' => 'color:#CC7832',
             'ns' => 'user-select:none;',
-        ),
-    );
+        ],
+    ];
 
     protected $dumpHeader;
     protected $dumpPrefix = '<pre class=sf-dump id=%s data-indent-pad="%s">';
@@ -67,12 +67,12 @@ class HtmlDumper extends CliDumper
     protected $lastDepth = -1;
     protected $styles;
 
-    private $displayOptions = array(
+    private $displayOptions = [
         'maxDepth' => 1,
         'maxStringLength' => 160,
         'fileLinkFormat' => null,
-    );
-    private $extraDisplayOptions = array();
+    ];
+    private $extraDisplayOptions = [];
 
     /**
      * {@inheritdoc}
@@ -81,7 +81,7 @@ class HtmlDumper extends CliDumper
     {
         AbstractDumper::__construct($output, $charset, $flags);
         $this->dumpId = 'sf-dump-'.mt_rand();
-        $this->displayOptions['fileLinkFormat'] = ini_get('xdebug.file_link_format') ?: get_cfg_var('xdebug.file_link_format');
+        $this->displayOptions['fileLinkFormat'] = \ini_get('xdebug.file_link_format') ?: get_cfg_var('xdebug.file_link_format');
         $this->styles = static::$themes['dark'] ?? self::$themes['dark'];
     }
 
@@ -139,7 +139,7 @@ class HtmlDumper extends CliDumper
     /**
      * {@inheritdoc}
      */
-    public function dump(Data $data, $output = null, array $extraDisplayOptions = array())
+    public function dump(Data $data, $output = null, array $extraDisplayOptions = [])
     {
         $this->extraDisplayOptions = $extraDisplayOptions;
         $result = parent::dump($data, $output);
@@ -153,13 +153,13 @@ class HtmlDumper extends CliDumper
      */
     protected function getDumpHeader()
     {
-        $this->headerIsDumped = null !== $this->outputStream ? $this->outputStream : $this->lineDumper;
+        $this->headerIsDumped = $this->outputStream ?? $this->lineDumper;
 
         if (null !== $this->dumpHeader) {
             return $this->dumpHeader;
         }
 
-        $line = str_replace('{$options}', json_encode($this->displayOptions, JSON_FORCE_OBJECT), <<<'EOHTML'
+        $line = str_replace('{$options}', json_encode($this->displayOptions, \JSON_FORCE_OBJECT), <<<'EOHTML'
 <script>
 Sfdump = window.Sfdump || (function (doc) {
 
@@ -314,13 +314,21 @@ return function (root, x) {
     }
 
     function a(e, f) {
-        addEventListener(root, e, function (e) {
+        addEventListener(root, e, function (e, n) {
             if ('A' == e.target.tagName) {
                 f(e.target, e);
             } else if ('A' == e.target.parentNode.tagName) {
                 f(e.target.parentNode, e);
-            } else if (e.target.nextElementSibling && 'A' == e.target.nextElementSibling.tagName) {
-                f(e.target.nextElementSibling, e, true);
+            } else {
+                n = /\bsf-dump-ellipsis\b/.test(e.target.className) ? e.target.parentNode : e.target;
+
+                if ((n = n.nextElementSibling) && 'A' == n.tagName) {
+                    if (!/\bsf-dump-toggle\b/.test(n.className)) {
+                        n = n.nextElementSibling || n;
+                    }
+
+                    f(n, e, true);
+                }
             }
         });
     };
@@ -363,7 +371,7 @@ return function (root, x) {
         if (/\bsf-dump-toggle\b/.test(a.className)) {
             e.preventDefault();
             if (!toggle(a, isCtrlKey(e))) {
-                var r = doc.getElementById(a.getAttribute('href').substr(1)),
+                var r = doc.getElementById(a.getAttribute('href').slice(1)),
                     s = r.previousSibling,
                     f = r.parentNode,
                     t = a.parentNode;
@@ -430,7 +438,7 @@ return function (root, x) {
                 toggle(a);
             }
         } else if (/\bsf-dump-ref\b/.test(elt.className) && (a = elt.getAttribute('href'))) {
-            a = a.substr(1);
+            a = a.slice(1);
             elt.className += ' '+a;
 
             if (/[\[{]$/.test(elt.previousSibling.nodeValue)) {
@@ -469,7 +477,7 @@ return function (root, x) {
                     return this.current();
                 }
                 this.idx = this.idx < (this.nodes.length - 1) ? this.idx + 1 : 0;
-        
+
                 return this.current();
             },
             previous: function () {
@@ -477,7 +485,7 @@ return function (root, x) {
                     return this.current();
                 }
                 this.idx = this.idx > 0 ? this.idx - 1 : (this.nodes.length - 1);
-        
+
                 return this.current();
             },
             isEmpty: function () {
@@ -500,12 +508,17 @@ return function (root, x) {
 
         function showCurrent(state)
         {
-            var currentNode = state.current();
+            var currentNode = state.current(), currentRect, searchRect;
             if (currentNode) {
                 reveal(currentNode);
                 highlight(root, currentNode, state.nodes);
                 if ('scrollIntoView' in currentNode) {
-                    currentNode.scrollIntoView();
+                    currentNode.scrollIntoView(true);
+                    currentRect = currentNode.getBoundingClientRect();
+                    searchRect = search.getBoundingClientRect();
+                    if (currentRect.top < (searchRect.top + searchRect.height)) {
+                        window.scrollBy(0, -(searchRect.top + searchRect.height + 5));
+                    }
                 }
             }
             counter.textContent = (state.isEmpty() ? 0 : state.idx + 1) + ' of ' + state.count();
@@ -517,14 +530,10 @@ return function (root, x) {
             <input type="text" class="sf-dump-search-input">
             <span class="sf-dump-search-count">0 of 0<\/span>
             <button type="button" class="sf-dump-search-input-previous" tabindex="-1">
-                <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1683 1331l-166 165q-19 19-45 19t-45-19l-531-531-531 531q-19 19-45 19t-45-19l-166-165q-19-19-19-45.5t19-45.5l742-741q19-19 45-19t45 19l742 741q19 19 19 45.5t-19 45.5z"\/>
-                <\/svg>
+                <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1683 1331l-166 165q-19 19-45 19t-45-19L896 965l-531 531q-19 19-45 19t-45-19l-166-165q-19-19-19-45.5t19-45.5l742-741q19-19 45-19t45 19l742 741q19 19 19 45.5t-19 45.5z"\/><\/svg>
             <\/button>
             <button type="button" class="sf-dump-search-input-next" tabindex="-1">
-                <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1683 808l-742 741q-19 19-45 19t-45-19l-742-741q-19-19-19-45.5t19-45.5l166-165q19-19 45-19t45 19l531 531 531-531q19-19 45-19t45 19l166 165q19 19 19 45.5t-19 45.5z"\/>
-                <\/svg>
+                <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1683 808l-742 741q-19 19-45 19t-45-19L109 808q-19-19-19-45.5t19-45.5l166-165q19-19 45-19t45 19l531 531 531-531q19-19 45-19t45 19l166 165q19 19 19 45.5t-19 45.5z"\/><\/svg>
             <\/button>
         ';
         root.insertBefore(search, root.firstChild);
@@ -560,11 +569,11 @@ return function (root, x) {
                     "sf-dump-protected",
                     "sf-dump-private",
                 ].map(xpathHasClass).join(' or ');
-                
+
                 var xpathResult = doc.evaluate('.//span[' + classMatches + '][contains(translate(child::text(), ' + xpathString(searchQuery.toUpperCase()) + ', ' + xpathString(searchQuery.toLowerCase()) + '), ' + xpathString(searchQuery.toLowerCase()) + ')]', root, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
 
                 while (node = xpathResult.iterateNext()) state.nodes.push(node);
-                
+
                 showCurrent(state);
             }, 400);
         });
@@ -583,6 +592,15 @@ return function (root, x) {
             var isSearchActive = !/\bsf-dump-search-hidden\b/.test(search.className);
             if ((114 === e.keyCode && !isSearchActive) || (isCtrlKey(e) && 70 === e.keyCode)) {
                 /* F3 or CMD/CTRL + F */
+                if (70 === e.keyCode && document.activeElement === searchInput) {
+                   /*
+                    * If CMD/CTRL + F is hit while having focus on search input,
+                    * the user probably meant to trigger browser search instead.
+                    * Let the browser execute its behavior:
+                    */
+                    return;
+                }
+
                 e.preventDefault();
                 search.className = search.className.replace(/\bsf-dump-search-hidden\b/, '');
                 searchInput.focus();
@@ -641,6 +659,7 @@ pre.sf-dump {
     display: block;
     white-space: pre;
     padding: 5px;
+    overflow: initial !important;
 }
 pre.sf-dump:after {
    content: "";
@@ -655,17 +674,19 @@ pre.sf-dump span {
 pre.sf-dump .sf-dump-compact {
     display: none;
 }
-pre.sf-dump abbr {
-    text-decoration: none;
-    border: none;
-    cursor: help;
-}
 pre.sf-dump a {
     text-decoration: none;
     cursor: pointer;
     border: 0;
     outline: none;
     color: inherit;
+}
+pre.sf-dump img {
+    max-width: 50em;
+    max-height: 50em;
+    margin: .5em 0 0 0;
+    padding: 0;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAHUlEQVQY02O8zAABilCaiQEN0EeA8QuUcX9g3QEAAjcC5piyhyEAAAAASUVORK5CYII=) #D3D3D3;
 }
 pre.sf-dump .sf-dump-ellipsis {
     display: inline-block;
@@ -709,14 +730,16 @@ pre.sf-dump code {
     border-radius: 3px;
 }
 pre.sf-dump .sf-dump-search-hidden {
-    display: none;
+    display: none !important;
 }
 pre.sf-dump .sf-dump-search-wrapper {
-    float: right;
     font-size: 0;
     white-space: nowrap;
-    max-width: 100%;
-    text-align: right;
+    margin-bottom: 5px;
+    display: flex;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 5px;
 }
 pre.sf-dump .sf-dump-search-wrapper > * {
     vertical-align: top;
@@ -733,10 +756,11 @@ pre.sf-dump .sf-dump-search-wrapper > input.sf-dump-search-input {
     height: 21px;
     font-size: 12px;
     border-right: none;
-    width: 140px;
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
     color: #000;
+    min-width: 15px;
+    width: 100%;
 }
 pre.sf-dump .sf-dump-search-wrapper > .sf-dump-search-input-next,
 pre.sf-dump .sf-dump-search-wrapper > .sf-dump-search-input-previous {
@@ -770,6 +794,7 @@ EOHTML
         foreach ($this->styles as $class => $style) {
             $line .= 'pre.sf-dump'.('default' === $class ? ', pre.sf-dump' : '').' .sf-dump-'.$class.'{'.$style.'}';
         }
+        $line .= 'pre.sf-dump .sf-dump-ellipsis-note{'.$this->styles['note'].'}';
 
         return $this->dumpHeader = preg_replace('/\s+/', ' ', $line).'</style>'.$this->dumpHeader;
     }
@@ -777,8 +802,28 @@ EOHTML
     /**
      * {@inheritdoc}
      */
+    public function dumpString(Cursor $cursor, $str, $bin, $cut)
+    {
+        if ('' === $str && isset($cursor->attr['img-data'], $cursor->attr['content-type'])) {
+            $this->dumpKey($cursor);
+            $this->line .= $this->style('default', $cursor->attr['img-size'] ?? '', []).' <samp>';
+            $this->endValue($cursor);
+            $this->line .= $this->indentPad;
+            $this->line .= sprintf('<img src="data:%s;base64,%s" /></samp>', $cursor->attr['content-type'], base64_encode($cursor->attr['img-data']));
+            $this->endValue($cursor);
+        } else {
+            parent::dumpString($cursor, $str, $bin, $cut);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function enterHash(Cursor $cursor, $type, $class, $hasChild)
     {
+        if (Cursor::HASH_OBJECT === $type) {
+            $cursor->attr['depth'] = $cursor->depth;
+        }
         parent::enterHash($cursor, $type, $class, false);
 
         if ($cursor->skipChildren) {
@@ -819,7 +864,7 @@ EOHTML
     /**
      * {@inheritdoc}
      */
-    protected function style($style, $value, $attr = array())
+    protected function style($style, $value, $attr = [])
     {
         if ('' === $value) {
             return '';
@@ -837,13 +882,18 @@ EOHTML
         }
 
         if ('const' === $style && isset($attr['value'])) {
-            $style .= sprintf(' title="%s"', esc(is_scalar($attr['value']) ? $attr['value'] : json_encode($attr['value'])));
+            $style .= sprintf(' title="%s"', esc(\is_scalar($attr['value']) ? $attr['value'] : json_encode($attr['value'])));
         } elseif ('public' === $style) {
             $style .= sprintf(' title="%s"', empty($attr['dynamic']) ? 'Public property' : 'Runtime added dynamic property');
         } elseif ('str' === $style && 1 < $attr['length']) {
             $style .= sprintf(' title="%d%s characters"', $attr['length'], $attr['binary'] ? ' binary or non-UTF-8' : '');
-        } elseif ('note' === $style && false !== $c = strrpos($v, '\\')) {
-            return sprintf('<abbr title="%s" class=sf-dump-%s>%s</abbr>', $v, $style, substr($v, $c + 1));
+        } elseif ('note' === $style && 0 < ($attr['depth'] ?? 0) && false !== $c = strrpos($value, '\\')) {
+            $style .= ' title=""';
+            $attr += [
+                'ellipsis' => \strlen($value) - $c,
+                'ellipsis-type' => 'note',
+                'ellipsis-tail' => 1,
+            ];
         } elseif ('protected' === $style) {
             $style .= ' title="Protected property"';
         } elseif ('meta' === $style && isset($attr['title'])) {
@@ -864,7 +914,7 @@ EOHTML
 
             if (!empty($attr['ellipsis-tail'])) {
                 $tail = \strlen(esc(substr($value, -$attr['ellipsis'], $attr['ellipsis-tail'])));
-                $v .= sprintf('<span class=sf-dump-ellipsis>%s</span>%s', substr($label, 0, $tail), substr($label, $tail));
+                $v .= sprintf('<span class=%s>%s</span>%s', $class, substr($label, 0, $tail), substr($label, $tail));
             } else {
                 $v .= $label;
             }
@@ -886,13 +936,13 @@ EOHTML
                     $s .= '">';
                 }
 
-                $s .= isset($map[$c[$i]]) ? $map[$c[$i]] : sprintf('\x%02X', \ord($c[$i]));
+                $s .= $map[$c[$i]] ?? sprintf('\x%02X', \ord($c[$i]));
             } while (isset($c[++$i]));
 
             return $s.'</span>';
         }, $v).'</span>';
 
-        if (isset($attr['file']) && $href = $this->getSourceLink($attr['file'], isset($attr['line']) ? $attr['line'] : 0)) {
+        if (isset($attr['file']) && $href = $this->getSourceLink($attr['file'], $attr['line'] ?? 0)) {
             $attr['href'] = $href;
         }
         if (isset($attr['href'])) {
@@ -914,21 +964,21 @@ EOHTML
         if (-1 === $this->lastDepth) {
             $this->line = sprintf($this->dumpPrefix, $this->dumpId, $this->indentPad).$this->line;
         }
-        if ($this->headerIsDumped !== (null !== $this->outputStream ? $this->outputStream : $this->lineDumper)) {
+        if ($this->headerIsDumped !== ($this->outputStream ?? $this->lineDumper)) {
             $this->line = $this->getDumpHeader().$this->line;
         }
 
         if (-1 === $depth) {
-            $args = array('"'.$this->dumpId.'"');
+            $args = ['"'.$this->dumpId.'"'];
             if ($this->extraDisplayOptions) {
-                $args[] = json_encode($this->extraDisplayOptions, JSON_FORCE_OBJECT);
+                $args[] = json_encode($this->extraDisplayOptions, \JSON_FORCE_OBJECT);
             }
             // Replace is for BC
             $this->line .= sprintf(str_replace('"%s"', '%s', $this->dumpSuffix), implode(', ', $args));
         }
         $this->lastDepth = $depth;
 
-        $this->line = mb_convert_encoding($this->line, 'HTML-ENTITIES', 'UTF-8');
+        $this->line = mb_encode_numericentity($this->line, [0x80, 0x10FFFF, 0, 0x1FFFFF], 'UTF-8');
 
         if (-1 === $depth) {
             AbstractDumper::dumpLine(0);
@@ -936,19 +986,19 @@ EOHTML
         AbstractDumper::dumpLine($depth);
     }
 
-    private function getSourceLink($file, $line)
+    private function getSourceLink(string $file, int $line)
     {
         $options = $this->extraDisplayOptions + $this->displayOptions;
 
         if ($fmt = $options['fileLinkFormat']) {
-            return \is_string($fmt) ? strtr($fmt, array('%f' => $file, '%l' => $line)) : $fmt->format($file, $line);
+            return \is_string($fmt) ? strtr($fmt, ['%f' => $file, '%l' => $line]) : $fmt->format($file, $line);
         }
 
         return false;
     }
 }
 
-function esc($str)
+function esc(string $str)
 {
-    return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+    return htmlspecialchars($str, \ENT_QUOTES, 'UTF-8');
 }

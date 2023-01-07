@@ -4,6 +4,7 @@ namespace Cron\Tests;
 
 use Cron\DayOfWeekField;
 use DateTime;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -33,6 +34,7 @@ class DayOfWeekFieldTest extends TestCase
     {
         $f = new DayOfWeekField();
         $this->assertTrue($f->isSatisfiedBy(new DateTime(), '?'));
+        $this->assertTrue($f->isSatisfiedBy(new DateTimeImmutable(), '?'));
     }
 
     /**
@@ -51,23 +53,36 @@ class DayOfWeekFieldTest extends TestCase
     }
 
     /**
+     * @covers \Cron\DayOfWeekField::increment
+     */
+    public function testIncrementsDateTimeImmutable()
+    {
+        $d = new DateTimeImmutable('2011-03-15 11:15:00');
+        $f = new DayOfWeekField();
+        $f->increment($d);
+        $this->assertSame('2011-03-16 00:00:00', $d->format('Y-m-d H:i:s'));
+    }
+
+    /**
      * @covers \Cron\DayOfWeekField::isSatisfiedBy
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Weekday must be a value between 0 and 7. 12 given
      */
     public function testValidatesHashValueWeekday()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Weekday must be a value between 0 and 7. 12 given');
+
         $f = new DayOfWeekField();
         $this->assertTrue($f->isSatisfiedBy(new DateTime(), '12#1'));
     }
 
     /**
      * @covers \Cron\DayOfWeekField::isSatisfiedBy
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage There are never more than 5 or less than 1 of a given weekday in a month
      */
     public function testValidatesHashValueNth()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('There are never more than 5 or less than 1 of a given weekday in a month');
+
         $f = new DayOfWeekField();
         $this->assertTrue($f->isSatisfiedBy(new DateTime(), '3#6'));
     }
@@ -101,6 +116,18 @@ class DayOfWeekFieldTest extends TestCase
         $this->assertTrue($f->isSatisfiedBy(new DateTime('2014-04-20 00:00:00'), 'SUN#3'));
         $this->assertTrue($f->isSatisfiedBy(new DateTime('2014-04-20 00:00:00'), '0#3'));
         $this->assertTrue($f->isSatisfiedBy(new DateTime('2014-04-20 00:00:00'), '7#3'));
+    }
+
+    /**
+     * @covers \Cron\DayOfWeekField::isSatisfiedBy
+     */
+    public function testHandlesLastWeekdayOfTheMonth()
+    {
+        $f = new DayOfWeekField();
+        $this->assertTrue($f->isSatisfiedBy(new DateTime('2018-12-28 00:00:00'), 'FRIL'));
+        $this->assertTrue($f->isSatisfiedBy(new DateTime('2018-12-28 00:00:00'), '5L'));
+        $this->assertFalse($f->isSatisfiedBy(new DateTime('2018-12-21 00:00:00'), 'FRIL'));
+        $this->assertFalse($f->isSatisfiedBy(new DateTime('2018-12-21 00:00:00'), '5L'));
     }
 
     /**

@@ -320,6 +320,10 @@ trait FormatsMessages
             return $line;
         }
 
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+
         return $value;
     }
 
@@ -377,7 +381,7 @@ trait FormatsMessages
      */
     protected function callClassBasedReplacer($callback, $message, $attribute, $rule, $parameters, $validator)
     {
-        list($class, $method) = Str::parseCallback($callback, 'replace');
+        [$class, $method] = Str::parseCallback($callback, 'replace');
 
         return call_user_func_array([$this->container->make($class), $method], array_slice(func_get_args(), 1));
     }

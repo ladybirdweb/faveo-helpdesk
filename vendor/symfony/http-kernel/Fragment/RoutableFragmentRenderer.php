@@ -39,10 +39,8 @@ abstract class RoutableFragmentRenderer implements FragmentRendererInterface
     /**
      * Generates a fragment URI for a given controller.
      *
-     * @param ControllerReference $reference A ControllerReference instance
-     * @param Request             $request   A Request instance
-     * @param bool                $absolute  Whether to generate an absolute URL or not
-     * @param bool                $strict    Whether to allow non-scalar attributes or not
+     * @param bool $absolute Whether to generate an absolute URL or not
+     * @param bool $strict   Whether to allow non-scalar attributes or not
      *
      * @return string A fragment URI
      */
@@ -77,12 +75,12 @@ abstract class RoutableFragmentRenderer implements FragmentRendererInterface
         return $request->getBaseUrl().$path;
     }
 
-    private function checkNonScalar($values)
+    private function checkNonScalar(array $values)
     {
         foreach ($values as $key => $value) {
             if (\is_array($value)) {
                 $this->checkNonScalar($value);
-            } elseif (!is_scalar($value) && null !== $value) {
+            } elseif (!\is_scalar($value) && null !== $value) {
                 throw new \LogicException(sprintf('Controller attributes cannot contain non-scalar/non-null values (value for key "%s" is not a scalar or null).', $key));
             }
         }

@@ -48,7 +48,7 @@ class ProcessUtils
             if (\is_string($input)) {
                 return $input;
             }
-            if (is_scalar($input)) {
+            if (\is_scalar($input)) {
                 return (string) $input;
             }
             if ($input instanceof Process) {
@@ -61,7 +61,7 @@ class ProcessUtils
                 return new \IteratorIterator($input);
             }
 
-            throw new InvalidArgumentException(sprintf('%s only accepts strings, Traversable objects or stream resources.', $caller));
+            throw new InvalidArgumentException(sprintf('"%s" only accepts strings, Traversable objects or stream resources.', $caller));
         }
 
         return $input;

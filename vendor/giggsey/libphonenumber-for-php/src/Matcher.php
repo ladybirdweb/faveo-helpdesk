@@ -21,7 +21,7 @@ class Matcher
     /**
      * @var string
      */
-    protected $subject;
+    protected $subject = '';
 
     /**
      * @var array
@@ -36,8 +36,8 @@ class Matcher
      */
     public function __construct($pattern, $subject)
     {
-        $this->pattern = str_replace('/', '\/', $pattern);
-        $this->subject = $subject;
+        $this->pattern = str_replace('/', '\/', (string)$pattern);
+        $this->subject = (string)$subject;
     }
 
     protected function doMatch($type = 'find', $offset = 0)
@@ -69,7 +69,7 @@ class Matcher
             foreach ($groups as $group) {
                 $positions[] = array(
                     $group[0],
-                    $offset + mb_strlen(mb_strcut($search, 0, $group[1]))
+                    $offset + mb_strlen(substr($search, 0, $group[1]))
                 );
             }
 

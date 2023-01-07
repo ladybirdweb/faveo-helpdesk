@@ -43,7 +43,7 @@ class AcceptCharset extends AbstractAccept
      *
      * @param  string $type
      * @param  int|float $priority
-     * @return Accept
+     * @return $this
      */
     public function addCharset($type, $priority = 1)
     {

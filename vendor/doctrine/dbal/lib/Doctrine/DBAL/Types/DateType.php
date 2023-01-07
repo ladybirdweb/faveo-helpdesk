@@ -16,15 +16,15 @@ class DateType extends Type
      */
     public function getName()
     {
-        return Type::DATE;
+        return Types::DATE_MUTABLE;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
-        return $platform->getDateTypeDeclarationSQL($fieldDeclaration);
+        return $platform->getDateTypeDeclarationSQL($column);
     }
 
     /**
@@ -54,7 +54,11 @@ class DateType extends Type
 
         $val = DateTime::createFromFormat('!' . $platform->getDateFormatString(), $value);
         if (! $val) {
-            throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getDateFormatString());
+            throw ConversionException::conversionFailedFormat(
+                $value,
+                $this->getName(),
+                $platform->getDateFormatString()
+            );
         }
 
         return $val;

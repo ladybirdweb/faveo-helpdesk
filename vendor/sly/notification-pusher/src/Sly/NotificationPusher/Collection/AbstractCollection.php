@@ -11,31 +11,33 @@
 
 namespace Sly\NotificationPusher\Collection;
 
+use ArrayIterator;
+use Countable;
+use IteratorAggregate;
+use SeekableIterator;
+use Sly\NotificationPusher\Model\MessageInterface;
+
 /**
- * AbstractCollection.
- *
  * @uses \IteratorAggregate
  * @author Cédric Dugat <cedric@dugat.me>
  */
-abstract class AbstractCollection implements \IteratorAggregate, \Countable
+abstract class AbstractCollection implements IteratorAggregate, Countable
 {
     /**
-     * @var \ArrayIterator
+     * @var ArrayIterator
      */
     protected $coll;
 
     /**
      * @inheritdoc
-     * @return \ArrayIterator|\SeekableIterator
+     * @return ArrayIterator|SeekableIterator
      */
     abstract public function getIterator();
 
     /**
-     * Get.
-     *
      * @param string $key Key
      *
-     * @return \Sly\NotificationPusher\Model\MessageInterface|false
+     * @return MessageInterface|false
      */
     public function get($key)
     {
@@ -43,8 +45,6 @@ abstract class AbstractCollection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * Count.
-     *
      * @return integer
      */
     public function count()
@@ -53,8 +53,6 @@ abstract class AbstractCollection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * isEmpty.
-     *
      * @return boolean
      */
     public function isEmpty()
@@ -67,7 +65,7 @@ abstract class AbstractCollection implements \IteratorAggregate, \Countable
      */
     public function clear()
     {
-        $this->coll = new \ArrayIterator();
+        $this->coll = new ArrayIterator();
     }
 
     /**

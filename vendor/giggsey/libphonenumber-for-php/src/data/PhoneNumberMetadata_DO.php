@@ -50,7 +50,7 @@ return array (
   ),
   'tollFree' => 
   array (
-    'NationalNumberPattern' => '8(?:00|33|44|55|66|77|88)[2-9]\\d{6}',
+    'NationalNumberPattern' => '8(?:00(?:14|[2-9]\\d)|(?:33|44|55|66|77|88)[2-9]\\d)\\d{5}',
     'ExampleNumber' => '8002123456',
     'PossibleLength' => 
     array (
@@ -82,7 +82,7 @@ return array (
   ),
   'personalNumber' => 
   array (
-    'NationalNumberPattern' => '5(?:00|2[12]|33|44|66|77|88)[2-9]\\d{6}',
+    'NationalNumberPattern' => '52(?:3(?:[2-46-9][02-9]\\d|5(?:[02-46-9]\\d|5[0-46-9]))|4(?:[2-478][02-9]\\d|5(?:[034]\\d|2[024-9]|5[0-46-9])|6(?:0[1-9]|[2-9]\\d)|9(?:[05-9]\\d|2[0-5]|49)))\\d{4}|52[34][2-9]1[02-9]\\d{4}|5(?:00|2[125-7]|33|44|66|77|88)[2-9]\\d{6}',
     'ExampleNumber' => '5002345678',
     'PossibleLength' => 
     array (
@@ -154,7 +154,6 @@ return array (
   array (
   ),
   'mainCountryForCode' => false,
-  'leadingDigits' => '8[024]9',
-  'leadingZeroPossible' => false,
+  'leadingDigits' => '8001|8[024]9',
   'mobileNumberPortableRegion' => true,
 );

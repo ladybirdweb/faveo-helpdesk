@@ -52,26 +52,39 @@ class ApplicationTester
      *
      * @return int The command exit code
      */
-    public function run(array $input, $options = array())
+    public function run(array $input, $options = [])
     {
-        $this->input = new ArrayInput($input);
-        if (isset($options['interactive'])) {
-            $this->input->setInteractive($options['interactive']);
+        $prevShellVerbosity = getenv('SHELL_VERBOSITY');
+
+        try {
+            $this->input = new ArrayInput($input);
+            if (isset($options['interactive'])) {
+                $this->input->setInteractive($options['interactive']);
+            }
+
+            if ($this->inputs) {
+                $this->input->setStream(self::createStream($this->inputs));
+            }
+
+            $this->initOutput($options);
+
+            return $this->statusCode = $this->application->run($this->input, $this->output);
+        } finally {
+            // SHELL_VERBOSITY is set by Application::configureIO so we need to unset/reset it
+            // to its previous value to avoid one test's verbosity to spread to the following tests
+            if (false === $prevShellVerbosity) {
+                if (\function_exists('putenv')) {
+                    @putenv('SHELL_VERBOSITY');
+                }
+                unset($_ENV['SHELL_VERBOSITY']);
+                unset($_SERVER['SHELL_VERBOSITY']);
+            } else {
+                if (\function_exists('putenv')) {
+                    @putenv('SHELL_VERBOSITY='.$prevShellVerbosity);
+                }
+                $_ENV['SHELL_VERBOSITY'] = $prevShellVerbosity;
+                $_SERVER['SHELL_VERBOSITY'] = $prevShellVerbosity;
+            }
         }
-
-        $shellInteractive = getenv('SHELL_INTERACTIVE');
-
-        if ($this->inputs) {
-            $this->input->setStream(self::createStream($this->inputs));
-            putenv('SHELL_INTERACTIVE=1');
-        }
-
-        $this->initOutput($options);
-
-        $this->statusCode = $this->application->run($this->input, $this->output);
-
-        putenv($shellInteractive ? "SHELL_INTERACTIVE=$shellInteractive" : 'SHELL_INTERACTIVE');
-
-        return $this->statusCode;
     }
 }

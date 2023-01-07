@@ -19,6 +19,7 @@ use Symfony\Component\Templating\EngineInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Loader\ExistsLoaderInterface;
+use Twig\Loader\SourceContextLoaderInterface;
 
 /**
  * Implements the Hinclude rendering strategy.
@@ -34,9 +35,7 @@ class HIncludeFragmentRenderer extends RoutableFragmentRenderer
 
     /**
      * @param EngineInterface|Environment $templating            An EngineInterface or a Twig instance
-     * @param UriSigner                   $signer                A UriSigner instance
      * @param string                      $globalDefaultTemplate The global default content (it can be a template name or the content)
-     * @param string                      $charset
      */
     public function __construct($templating = null, UriSigner $signer = null, string $globalDefaultTemplate = null, string $charset = 'utf-8')
     {
@@ -52,11 +51,17 @@ class HIncludeFragmentRenderer extends RoutableFragmentRenderer
      * @param EngineInterface|Environment|null $templating An EngineInterface or an Environment instance
      *
      * @throws \InvalidArgumentException
+     *
+     * @internal
      */
     public function setTemplating($templating)
     {
         if (null !== $templating && !$templating instanceof EngineInterface && !$templating instanceof Environment) {
-            throw new \InvalidArgumentException('The hinclude rendering strategy needs an instance of Twig\Environment or Symfony\Component\Templating\EngineInterface');
+            throw new \InvalidArgumentException('The hinclude rendering strategy needs an instance of Twig\Environment or Symfony\Component\Templating\EngineInterface.');
+        }
+
+        if ($templating instanceof EngineInterface) {
+            @trigger_error(sprintf('Using a "%s" instance for "%s" is deprecated since version 4.3; use a \Twig\Environment instance instead.', EngineInterface::class, __CLASS__), \E_USER_DEPRECATED);
         }
 
         $this->templating = $templating;
@@ -81,7 +86,7 @@ class HIncludeFragmentRenderer extends RoutableFragmentRenderer
      *  * id:         An optional hx:include tag id attribute
      *  * attributes: An optional array of hx:include tag attributes
      */
-    public function render($uri, Request $request, array $options = array())
+    public function render($uri, Request $request, array $options = [])
     {
         if ($uri instanceof ControllerReference) {
             if (null === $this->signer) {
@@ -95,20 +100,20 @@ class HIncludeFragmentRenderer extends RoutableFragmentRenderer
         // We need to replace ampersands in the URI with the encoded form in order to return valid html/xml content.
         $uri = str_replace('&', '&amp;', $uri);
 
-        $template = isset($options['default']) ? $options['default'] : $this->globalDefaultTemplate;
+        $template = $options['default'] ?? $this->globalDefaultTemplate;
         if (null !== $this->templating && $template && $this->templateExists($template)) {
             $content = $this->templating->render($template);
         } else {
             $content = $template;
         }
 
-        $attributes = isset($options['attributes']) && \is_array($options['attributes']) ? $options['attributes'] : array();
+        $attributes = isset($options['attributes']) && \is_array($options['attributes']) ? $options['attributes'] : [];
         if (isset($options['id']) && $options['id']) {
             $attributes['id'] = $options['id'];
         }
         $renderedAttributes = '';
         if (\count($attributes) > 0) {
-            $flags = ENT_QUOTES | ENT_SUBSTITUTE;
+            $flags = \ENT_QUOTES | \ENT_SUBSTITUTE;
             foreach ($attributes as $attribute => $value) {
                 $renderedAttributes .= sprintf(
                     ' %s="%s"',
@@ -132,22 +137,23 @@ class HIncludeFragmentRenderer extends RoutableFragmentRenderer
         }
 
         $loader = $this->templating->getLoader();
-        if ($loader instanceof ExistsLoaderInterface || method_exists($loader, 'exists')) {
-            return $loader->exists($template);
-        }
 
-        try {
-            if (method_exists($loader, 'getSourceContext')) {
-                $loader->getSourceContext($template);
-            } else {
-                $loader->getSource($template);
+        if (1 === Environment::MAJOR_VERSION && !$loader instanceof ExistsLoaderInterface) {
+            try {
+                if ($loader instanceof SourceContextLoaderInterface) {
+                    $loader->getSourceContext($template);
+                } else {
+                    $loader->getSource($template);
+                }
+
+                return true;
+            } catch (LoaderError $e) {
             }
 
-            return true;
-        } catch (LoaderError $e) {
+            return false;
         }
 
-        return false;
+        return $loader->exists($template);
     }
 
     /**

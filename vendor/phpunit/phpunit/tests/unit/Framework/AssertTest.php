@@ -966,6 +966,30 @@ XML;
         $this->assertObjectHasAttribute('foo', $o);
     }
 
+    public function testAssertObjectHasAttributeNumericAttribute(): void
+    {
+        $object           = new \stdClass;
+        $object->{'2020'} = 'Tokyo';
+
+        $this->assertObjectHasAttribute('2020', $object);
+
+        $this->expectException(AssertionFailedError::class);
+
+        $this->assertObjectHasAttribute('2018', $object);
+    }
+
+    public function testAssertObjectHasAttributeMultiByteAttribute(): void
+    {
+        $object         = new \stdClass;
+        $object->{'東京'} = 2020;
+
+        $this->assertObjectHasAttribute('東京', $object);
+
+        $this->expectException(AssertionFailedError::class);
+
+        $this->assertObjectHasAttribute('長野', $object);
+    }
+
     public function testAssertObjectNotHasAttribute(): void
     {
         $o = new \Author('Terry Pratchett');
@@ -975,6 +999,30 @@ XML;
         $this->expectException(AssertionFailedError::class);
 
         $this->assertObjectNotHasAttribute('name', $o);
+    }
+
+    public function testAssertObjectNotHasAttributeNumericAttribute(): void
+    {
+        $object           = new \stdClass;
+        $object->{'2020'} = 'Tokyo';
+
+        $this->assertObjectNotHasAttribute('2018', $object);
+
+        $this->expectException(AssertionFailedError::class);
+
+        $this->assertObjectNotHasAttribute('2020', $object);
+    }
+
+    public function testAssertObjectNotHasAttributeMultiByteAttribute(): void
+    {
+        $object         = new \stdClass;
+        $object->{'東京'} = 2020;
+
+        $this->assertObjectNotHasAttribute('長野', $object);
+
+        $this->expectException(AssertionFailedError::class);
+
+        $this->assertObjectNotHasAttribute('東京', $object);
     }
 
     public function testAssertFinite(): void
@@ -2566,6 +2614,329 @@ XML;
         $this->assertStringNotMatchesFormatFile(TEST_FILES_PATH . 'expectedFileFormat.txt', "FOO\n");
     }
 
+    public function testStringsCanBeComparedForEqualityIgnoringCase(): void
+    {
+        $this->assertEqualsIgnoringCase('a', 'A');
+
+        $this->assertNotEqualsIgnoringCase('a', 'B');
+    }
+
+    public function testArraysOfStringsCanBeComparedForEqualityIgnoringCase(): void
+    {
+        $this->assertEqualsIgnoringCase(['a'], ['A']);
+
+        $this->assertNotEqualsIgnoringCase(['a'], ['B']);
+    }
+
+    public function testStringsCanBeComparedForEqualityWithDelta(): void
+    {
+        $this->assertEqualsWithDelta(2.3, 2.5, 0.5);
+
+        $this->assertNotEqualsWithDelta(2.3, 3.5, 0.5);
+    }
+
+    public function testArraysOfStringsCanBeComparedForEqualityWithDelta(): void
+    {
+        $this->assertEqualsWithDelta([2.3], [2.5], 0.5);
+
+        $this->assertNotEqualsWithDelta([2.3], [3.5], 0.5);
+    }
+
+    public function testArraysCanBeComparedForEqualityWithCanonicalization(): void
+    {
+        $this->assertEqualsCanonicalizing([3, 2, 1], [2, 3, 1]);
+
+        $this->assertNotEqualsCanonicalizing([3, 2, 1], [2, 3, 4]);
+    }
+
+    public function testArrayTypeCanBeAsserted(): void
+    {
+        $this->assertIsArray([]);
+
+        try {
+            $this->assertIsArray(null);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testBoolTypeCanBeAsserted(): void
+    {
+        $this->assertIsBool(true);
+
+        try {
+            $this->assertIsBool(null);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testFloatTypeCanBeAsserted(): void
+    {
+        $this->assertIsFloat(0.0);
+
+        try {
+            $this->assertIsFloat(null);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testIntTypeCanBeAsserted(): void
+    {
+        $this->assertIsInt(1);
+
+        try {
+            $this->assertIsInt(null);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testNumericTypeCanBeAsserted(): void
+    {
+        $this->assertIsNumeric('1.0');
+
+        try {
+            $this->assertIsNumeric('abc');
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testObjectTypeCanBeAsserted(): void
+    {
+        $this->assertIsObject(new \stdClass);
+
+        try {
+            $this->assertIsObject(null);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testResourceTypeCanBeAsserted(): void
+    {
+        $this->assertIsResource(\fopen(__FILE__, 'r'));
+
+        try {
+            $this->assertIsResource(null);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testStringTypeCanBeAsserted(): void
+    {
+        $this->assertIsString('');
+
+        try {
+            $this->assertIsString(null);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testScalarTypeCanBeAsserted(): void
+    {
+        $this->assertIsScalar(true);
+
+        try {
+            $this->assertIsScalar(new \stdClass);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testCallableTypeCanBeAsserted(): void
+    {
+        $this->assertIsCallable(function () {
+        });
+
+        try {
+            $this->assertIsCallable(null);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testIterableTypeCanBeAsserted(): void
+    {
+        $this->assertIsIterable([]);
+
+        try {
+            $this->assertIsIterable(null);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testNotArrayTypeCanBeAsserted(): void
+    {
+        $this->assertIsNotArray(null);
+
+        try {
+            $this->assertIsNotArray([]);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testNotBoolTypeCanBeAsserted(): void
+    {
+        $this->assertIsNotBool(null);
+
+        try {
+            $this->assertIsNotBool(true);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testNotFloatTypeCanBeAsserted(): void
+    {
+        $this->assertIsNotFloat(null);
+
+        try {
+            $this->assertIsNotFloat(0.0);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testNotIntTypeCanBeAsserted(): void
+    {
+        $this->assertIsNotInt(null);
+
+        try {
+            $this->assertIsNotInt(1);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testNotNumericTypeCanBeAsserted(): void
+    {
+        $this->assertIsNotNumeric('abc');
+
+        try {
+            $this->assertIsNotNumeric('1.0');
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testNotObjectTypeCanBeAsserted(): void
+    {
+        $this->assertIsNotObject(null);
+
+        try {
+            $this->assertIsNotObject(new \stdClass);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testNotResourceTypeCanBeAsserted(): void
+    {
+        $this->assertIsNotResource(null);
+
+        try {
+            $this->assertIsNotResource(\fopen(__FILE__, 'r'));
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testNotScalarTypeCanBeAsserted(): void
+    {
+        $this->assertIsNotScalar(new \stdClass);
+
+        try {
+            $this->assertIsNotScalar(true);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testNotStringTypeCanBeAsserted(): void
+    {
+        $this->assertIsNotString(null);
+
+        try {
+            $this->assertIsNotString('');
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testNotCallableTypeCanBeAsserted(): void
+    {
+        $this->assertIsNotCallable(null);
+
+        try {
+            $this->assertIsNotCallable(function () {
+            });
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testNotIterableTypeCanBeAsserted(): void
+    {
+        $this->assertIsNotIterable(null);
+
+        try {
+            $this->assertIsNotIterable([]);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
     public function testLogicalAnd(): void
     {
         $this->assertThat(
@@ -2627,6 +2998,90 @@ XML;
                 $this->isTrue()
             )
         );
+    }
+
+    public function testStringContainsStringCanBeAsserted(): void
+    {
+        $this->assertStringContainsString('bar', 'foobarbaz');
+
+        try {
+            $this->assertStringContainsString('barbara', 'foobarbaz');
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testStringNotContainsStringCanBeAsserted(): void
+    {
+        $this->assertStringNotContainsString('barbara', 'foobarbaz');
+
+        try {
+            $this->assertStringNotContainsString('bar', 'foobarbaz');
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testStringContainsStringCanBeAssertedIgnoringCase(): void
+    {
+        $this->assertStringContainsStringIgnoringCase('BAR', 'foobarbaz');
+
+        try {
+            $this->assertStringContainsStringIgnoringCase('BARBARA', 'foobarbaz');
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testStringNotContainsStringCanBeAssertedIgnoringCase(): void
+    {
+        $this->assertStringNotContainsStringIgnoringCase('BARBARA', 'foobarbaz');
+
+        try {
+            $this->assertStringNotContainsStringIgnoringCase('BAR', 'foobarbaz');
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testIterableContainsSameObjectCanBeAsserted(): void
+    {
+        $object   = new \stdClass;
+        $iterable = [$object];
+
+        $this->assertContains($object, $iterable);
+
+        try {
+            $this->assertContains(new \stdClass, $iterable);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    public function testIterableNotContainsSameObjectCanBeAsserted(): void
+    {
+        $object   = new \stdClass;
+        $iterable = [$object];
+
+        $this->assertNotContains(new \stdClass, $iterable);
+
+        try {
+            $this->assertNotContains($object, $iterable);
+        } catch (AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
     }
 
     protected function sameValues(): array

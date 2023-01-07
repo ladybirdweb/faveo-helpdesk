@@ -3,18 +3,21 @@
 namespace Doctrine\DBAL;
 
 use function str_replace;
-use function strtolower;
+use function strtoupper;
 use function version_compare;
 
 /**
  * Class to store and retrieve the version of Doctrine.
+ *
+ * @internal
+ * @deprecated Refrain from checking the DBAL version at runtime.
  */
 class Version
 {
     /**
      * Current Doctrine Version.
      */
-    public const VERSION = '2.9.0';
+    public const VERSION = '2.13.9';
 
     /**
      * Compares a Doctrine version with the current one.
@@ -25,9 +28,8 @@ class Version
      */
     public static function compare($version)
     {
-        $currentVersion = str_replace(' ', '', strtolower(self::VERSION));
-        $version        = str_replace(' ', '', $version);
+        $version = str_replace(' ', '', strtoupper($version));
 
-        return version_compare($version, $currentVersion);
+        return version_compare($version, self::VERSION);
     }
 }

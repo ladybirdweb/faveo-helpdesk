@@ -99,7 +99,8 @@ class Kernel implements KernelContract
     protected function defineConsoleSchedule()
     {
         $this->app->singleton(Schedule::class, function ($app) {
-            return new Schedule;
+            return (new Schedule($this->scheduleTimezone()))
+                    ->useCache($this->scheduleCache());
         });
 
         $schedule = $this->app->make(Schedule::class);
@@ -108,10 +109,20 @@ class Kernel implements KernelContract
     }
 
     /**
+     * Get the name of the cache store that should manage scheduling mutexes.
+     *
+     * @return string
+     */
+    protected function scheduleCache()
+    {
+        return $_ENV['SCHEDULE_CACHE_DRIVER'] ?? null;
+    }
+
+    /**
      * Run the console application.
      *
      * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
+     * @param  \Symfony\Component\Console\Output\OutputInterface|null  $output
      * @return int
      */
     public function handle($input, $output = null)
@@ -158,6 +169,18 @@ class Kernel implements KernelContract
     protected function schedule(Schedule $schedule)
     {
         //
+    }
+
+    /**
+     * Get the timezone that should be used by default for scheduled events.
+     *
+     * @return \DateTimeZone|string|null
+     */
+    protected function scheduleTimezone()
+    {
+        $config = $this->app['config'];
+
+        return $config->get('app.schedule_timezone', $config->get('app.timezone'));
     }
 
     /**
@@ -212,7 +235,7 @@ class Kernel implements KernelContract
             $command = $namespace.str_replace(
                 ['/', '.php'],
                 ['\\', ''],
-                Str::after($command->getPathname(), app_path().DIRECTORY_SEPARATOR)
+                Str::after($command->getPathname(), realpath(app_path()).DIRECTORY_SEPARATOR)
             );
 
             if (is_subclass_of($command, Command::class) &&
@@ -240,8 +263,10 @@ class Kernel implements KernelContract
      *
      * @param  string  $command
      * @param  array  $parameters
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $outputBuffer
+     * @param  \Symfony\Component\Console\Output\OutputInterface|null  $outputBuffer
      * @return int
+     *
+     * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
      */
     public function call($command, array $parameters = [], $outputBuffer = null)
     {
@@ -354,7 +379,7 @@ class Kernel implements KernelContract
     }
 
     /**
-     * Report the exception to the exception handler.
+     * Render the given exception.
      *
      * @param  \Symfony\Component\Console\Output\OutputInterface  $output
      * @param  \Exception  $e

@@ -39,9 +39,10 @@ class MigrationCreator
      *
      * @param  string  $name
      * @param  string  $path
-     * @param  string  $table
+     * @param  string|null  $table
      * @param  bool    $create
      * @return string
+     *
      * @throws \Exception
      */
     public function create($name, $path, $table = null, $create = false)
@@ -84,7 +85,7 @@ class MigrationCreator
     /**
      * Get the migration stub file.
      *
-     * @param  string  $table
+     * @param  string|null  $table
      * @param  bool    $create
      * @return string
      */
@@ -107,7 +108,7 @@ class MigrationCreator
      *
      * @param  string  $name
      * @param  string  $stub
-     * @param  string  $table
+     * @param  string|null  $table
      * @return string
      */
     protected function populateStub($name, $stub, $table)
@@ -150,7 +151,7 @@ class MigrationCreator
     /**
      * Fire the registered post create hooks.
      *
-     * @param  string  $table
+     * @param  string|null  $table
      * @return void
      */
     protected function firePostCreateHooks($table)

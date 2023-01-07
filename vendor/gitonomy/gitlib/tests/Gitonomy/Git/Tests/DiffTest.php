@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git\Tests;
 
 use Gitonomy\Git\Diff\Diff;
@@ -19,6 +20,7 @@ class DiffTest extends AbstractTest
     const CREATE_COMMIT = 'e6fa3c792facc06faa049a6938c84c411954deb5';
     const RENAME_COMMIT = '6640e0ef31518054847a1876328e26ee64083e0a';
     const CHANGEMODE_COMMIT = '93da965f58170f13017477b9a608657e87e23230';
+    const FILE_WITH_UMLAUTS_COMMIT = '8defb9217692dc1f4c18e05e343ca91cf5047702';
 
     /**
      * @dataProvider provideFoobar
@@ -44,17 +46,17 @@ class DiffTest extends AbstractTest
     {
         $files = $diff->getFiles();
 
-        $this->assertEquals(2, count($files), '1 file in diff');
+        $this->assertCount(2, $files, '1 file in diff');
 
         $this->assertTrue($files[0]->isCreation(), 'script_A.php created');
 
-        $this->assertEquals(null,           $files[0]->getOldName(), 'First file name is a new file');
+        $this->assertEquals(null, $files[0]->getOldName(), 'First file name is a new file');
         $this->assertEquals('script_A.php', $files[0]->getNewName(), 'First file name is script_A.php');
-        $this->assertEquals(null,           $files[0]->getOldMode(), 'First file mode is a new file');
-        $this->assertEquals('100644',       $files[0]->getNewMode(), 'First file mode is correct');
+        $this->assertEquals(null, $files[0]->getOldMode(), 'First file mode is a new file');
+        $this->assertEquals('100644', $files[0]->getNewMode(), 'First file mode is correct');
 
         $this->assertEquals(1, $files[0]->getAdditions(), '1 line added');
-        $this->assertEquals(0,  $files[0]->getDeletions(), '0 lines deleted');
+        $this->assertEquals(0, $files[0]->getDeletions(), '0 lines deleted');
     }
 
     /**
@@ -64,14 +66,14 @@ class DiffTest extends AbstractTest
     {
         $files = $repository->getCommit(self::BEFORE_LONGFILE_COMMIT)->getDiff()->getFiles();
 
-        $this->assertEquals(1, count($files), '1 files in diff');
+        $this->assertCount(1, $files, '1 files in diff');
 
         $this->assertTrue($files[0]->isModification(), 'image.jpg modified');
 
         $this->assertEquals('image.jpg', $files[0]->getOldName(), 'Second file name is image.jpg');
         $this->assertEquals('image.jpg', $files[0]->getNewName(), 'Second file name is image.jpg');
-        $this->assertEquals('100644',    $files[0]->getOldMode(), 'Second file mode is a new file');
-        $this->assertEquals('100644',    $files[0]->getNewMode(), 'Second file mode is correct');
+        $this->assertEquals('100644', $files[0]->getOldMode(), 'Second file mode is a new file');
+        $this->assertEquals('100644', $files[0]->getNewMode(), 'Second file mode is correct');
 
         $this->assertTrue($files[0]->isBinary(), 'binary file');
         $this->assertEquals(0, $files[0]->getAdditions(), '0 lines added');
@@ -85,7 +87,7 @@ class DiffTest extends AbstractTest
     {
         $files = $repository->getCommit(self::DELETE_COMMIT)->getDiff()->getFiles();
 
-        $this->assertEquals(1, count($files), '1 files modified');
+        $this->assertCount(1, $files, '1 files modified');
 
         $this->assertTrue($files[0]->isDeletion(), 'File deletion');
         $this->assertEquals('script_B.php', $files[0]->getOldName(), 'verify old filename');
@@ -99,7 +101,7 @@ class DiffTest extends AbstractTest
     {
         $files = $repository->getCommit(self::RENAME_COMMIT)->getDiff()->getFiles();
 
-        $this->assertEquals(1, count($files), '1 files modified');
+        $this->assertCount(1, $files, '1 files modified');
 
         $this->assertTrue($files[0]->isModification());
         $this->assertTrue($files[0]->isRename());
@@ -115,7 +117,7 @@ class DiffTest extends AbstractTest
     {
         $files = $repository->getCommit(self::CHANGEMODE_COMMIT)->getDiff()->getFiles();
 
-        $this->assertEquals(1, count($files), '1 files modified');
+        $this->assertCount(1, $files, '1 files modified');
 
         $this->assertTrue($files[0]->isModification());
         $this->assertTrue($files[0]->isChangeMode());
@@ -133,10 +135,19 @@ class DiffTest extends AbstractTest
 
         $changes = $files[0]->getChanges();
 
-        $this->assertEquals(0, $changes[0]->getRangeOldStart());
-        $this->assertEquals(0, $changes[0]->getRangeOldCount());
+        $this->assertSame(0, $changes[0]->getRangeOldStart());
+        $this->assertSame(0, $changes[0]->getRangeOldCount());
 
-        $this->assertEquals(1, $changes[0]->getRangeNewStart());
-        $this->assertEquals(0, $changes[0]->getRangeNewCount());
+        $this->assertSame(1, $changes[0]->getRangeNewStart());
+        $this->assertSame(0, $changes[0]->getRangeNewCount());
+    }
+
+    /**
+     * @dataProvider provideFoobar
+     */
+    public function testWorksWithUmlauts($repository)
+    {
+        $files = $repository->getCommit(self::FILE_WITH_UMLAUTS_COMMIT)->getDiff()->getFiles();
+        $this->assertSame('file_with_umlauts_\303\244\303\266\303\274', $files[0]->getNewName());
     }
 }

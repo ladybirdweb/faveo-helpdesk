@@ -133,7 +133,7 @@ class GeoIP
     {
         // If IP not set, user remote IP
         $ip = $ip ?: $this->remote_ip;
-        
+
         // Check cache for location
         if ($this->config('cache', 'none') !== 'none' && $location = $this->getCache()->get($ip)) {
             $location->cached = true;
@@ -161,7 +161,7 @@ class GeoIP
                 if ($this->config('log_failures', true) === true) {
                     $log = new Logger('geoip');
                     $log->pushHandler(new StreamHandler(storage_path('logs/geoip.log'), Logger::ERROR));
-                    $log->addError($e);
+                    $log->error($e);
                 }
             }
         }
@@ -232,6 +232,7 @@ class GeoIP
         $remotes_keys = [
             'HTTP_X_FORWARDED_FOR',
             'HTTP_CLIENT_IP',
+            'HTTP_X_REAL_IP',
             'HTTP_X_FORWARDED',
             'HTTP_FORWARDED_FOR',
             'HTTP_FORWARDED',
@@ -284,7 +285,7 @@ class GeoIP
             return false;
         }
 
-        switch($this->config('cache', 'none')) {
+        switch ($this->config('cache', 'none')) {
             case 'all':
                 return true;
             case 'some' && $ip === null:

@@ -71,7 +71,7 @@ class Request extends AbstractMessage implements RequestInterface
      * @param  string $string
      * @param  bool $allowCustomMethods
      * @throws Exception\InvalidArgumentException
-     * @return Request
+     * @return static
      */
     public static function fromString($string, $allowCustomMethods = true)
     {
@@ -166,7 +166,7 @@ class Request extends AbstractMessage implements RequestInterface
      * Set the method for this request
      *
      * @param  string $method
-     * @return Request
+     * @return $this
      * @throws Exception\InvalidArgumentException
      */
     public function setMethod($method)
@@ -194,7 +194,7 @@ class Request extends AbstractMessage implements RequestInterface
      *
      * @throws Exception\InvalidArgumentException
      * @param string|HttpUri $uri
-     * @return Request
+     * @return $this
      */
     public function setUri($uri)
     {
@@ -248,8 +248,8 @@ class Request extends AbstractMessage implements RequestInterface
      * Provide an alternate Parameter Container implementation for query parameters in this object,
      * (this is NOT the primary API for value setting, for that see getQuery())
      *
-     * @param \Zend\Stdlib\ParametersInterface $query
-     * @return Request
+     * @param ParametersInterface $query
+     * @return $this
      */
     public function setQuery(ParametersInterface $query)
     {
@@ -260,9 +260,9 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * Return the parameter container responsible for query parameters or a single query parameter
      *
-     * @param string|null           $name            Parameter name to retrieve, or null to get the whole container.
-     * @param mixed|null            $default         Default value to use when the parameter is missing.
-     * @return \Zend\Stdlib\ParametersInterface|mixed
+     * @param  string|null $name    Parameter name to retrieve, or null to get the whole container.
+     * @param  mixed|null  $default Default value to use when the parameter is missing.
+     * @return ParametersInterface|mixed
      */
     public function getQuery($name = null, $default = null)
     {
@@ -281,8 +281,8 @@ class Request extends AbstractMessage implements RequestInterface
      * Provide an alternate Parameter Container implementation for post parameters in this object,
      * (this is NOT the primary API for value setting, for that see getPost())
      *
-     * @param \Zend\Stdlib\ParametersInterface $post
-     * @return Request
+     * @param ParametersInterface $post
+     * @return $this
      */
     public function setPost(ParametersInterface $post)
     {
@@ -293,9 +293,9 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * Return the parameter container responsible for post parameters or a single post parameter.
      *
-     * @param string|null           $name            Parameter name to retrieve, or null to get the whole container.
-     * @param mixed|null            $default         Default value to use when the parameter is missing.
-     * @return \Zend\Stdlib\ParametersInterface|mixed
+     * @param  string|null $name    Parameter name to retrieve, or null to get the whole container.
+     * @param  mixed|null  $default Default value to use when the parameter is missing.
+     * @return ParametersInterface|mixed
      */
     public function getPost($name = null, $default = null)
     {
@@ -326,7 +326,7 @@ class Request extends AbstractMessage implements RequestInterface
      * (this is NOT the primary API for value setting, for that see getFiles())
      *
      * @param  ParametersInterface $files
-     * @return Request
+     * @return $this
      */
     public function setFiles(ParametersInterface $files)
     {
@@ -337,8 +337,8 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * Return the parameter container responsible for file parameters or a single file.
      *
-     * @param string|null           $name            Parameter name to retrieve, or null to get the whole container.
-     * @param mixed|null            $default         Default value to use when the parameter is missing.
+     * @param  string|null $name    Parameter name to retrieve, or null to get the whole container.
+     * @param  mixed|null  $default Default value to use when the parameter is missing.
      * @return ParametersInterface|mixed
      */
     public function getFiles($name = null, $default = null)
@@ -358,8 +358,8 @@ class Request extends AbstractMessage implements RequestInterface
      * Return the header container responsible for headers or all headers of a certain name/type
      *
      * @see \Zend\Http\Headers::get()
-     * @param string|null           $name            Header name to retrieve, or null to get the whole container.
-     * @param mixed|null            $default         Default value to use when the requested header is missing.
+     * @param  string|null $name    Header name to retrieve, or null to get the whole container.
+     * @param  mixed|null  $default Default value to use when the requested header is missing.
      * @return \Zend\Http\Headers|bool|\Zend\Http\Header\HeaderInterface|\ArrayIterator
      */
     public function getHeaders($name = null, $default = false)

@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git;
 
 /**
@@ -57,14 +58,14 @@ class Blob
     }
 
     /**
-     * Returns content of the blob.
-     *
      * @throws ProcessException Error occurred while getting content of blob
+     *
+     * @return string Content of the blob.
      */
     public function getContent()
     {
         if (null === $this->content) {
-            $this->content = $this->repository->run('cat-file', array('-p', $this->hash));
+            $this->content = $this->repository->run('cat-file', ['-p', $this->hash]);
         }
 
         return $this->content;

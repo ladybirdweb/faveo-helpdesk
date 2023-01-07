@@ -3,6 +3,7 @@
 namespace Flow\Mongo;
 
 use Flow\ConfigInterface;
+use MongoDB\GridFS\Bucket;
 
 /**
  * @codeCoverageIgnore
@@ -11,7 +12,7 @@ interface MongoConfigInterface extends ConfigInterface
 {
 
     /**
-     * @return \MongoGridFS
+     * @return Bucket
      */
     public function getGridFs();
 

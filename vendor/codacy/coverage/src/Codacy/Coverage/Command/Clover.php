@@ -70,6 +70,8 @@ class Clover extends ConsoleCommand
         if ($output->isVerbose()) {
             $output->writeln($result);
         }
+
+        return 0;
     }
 
     /**
@@ -100,7 +102,7 @@ class Clover extends ConsoleCommand
         if ($projectToken == false) {
             throw new \InvalidArgumentException(
                 "Cannot continue with execution as long as your project token is not set as an environmental variable."
-                . PHP_EOL . "Please type: export CODACY_PROJECT_TOKEN=<YOUR TOKEN>"
+                    . PHP_EOL . "Please type: export CODACY_PROJECT_TOKEN=<YOUR TOKEN>"
             );
         }
 

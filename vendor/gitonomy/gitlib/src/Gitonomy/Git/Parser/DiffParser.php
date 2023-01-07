@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git\Parser;
 
 use Gitonomy\Git\Diff\File;
@@ -20,11 +21,11 @@ class DiffParser extends ParserBase
 
     protected function doParse()
     {
-        $this->files = array();
+        $this->files = [];
 
         while (!$this->isFinished()) {
             // 1. title
-            $vars = $this->consumeRegexp('/diff --git (a\/.*) (b\/.*)\n/');
+            $vars = $this->consumeRegexp("/diff --git \"?(a\/.*?)\"? \"?(b\/.*?)\"?\n/");
             $oldName = $vars[1];
             $newName = $vars[2];
             $oldIndex = null;
@@ -73,14 +74,15 @@ class DiffParser extends ParserBase
                 }
                 $this->consumeNewLine();
 
+                //verifying if the file was deleted or created
                 if ($this->expects('--- ')) {
-                    $oldName = $this->consumeTo("\n");
+                    $oldName = $this->consumeTo("\n") === '/dev/null' ? '/dev/null' : $oldName;
                     $this->consumeNewLine();
                     $this->consume('+++ ');
-                    $newName = $this->consumeTo("\n");
+                    $newName = $this->consumeTo("\n") === '/dev/null' ? '/dev/null' : $newName;
                     $this->consumeNewLine();
                 } elseif ($this->expects('Binary files ')) {
-                    $vars = $this->consumeRegexp('/(.*) and (.*) differ\n/');
+                    $vars = $this->consumeRegexp('/"?(.*?)"? and "?(.*?)"? differ\n/');
                     $isBinary = true;
                     $oldName = $vars[1];
                     $newName = $vars[2];
@@ -89,6 +91,9 @@ class DiffParser extends ParserBase
 
             $oldName = $oldName === '/dev/null' ? null : substr($oldName, 2);
             $newName = $newName === '/dev/null' ? null : substr($newName, 2);
+
+            $oldIndex = $oldIndex !== null ?: '';
+            $newIndex = $newIndex !== null ?: '';
             $oldIndex = preg_match('/^0+$/', $oldIndex) ? null : $oldIndex;
             $newIndex = preg_match('/^0+$/', $newIndex) ? null : $newIndex;
             $file = new File($oldName, $newName, $oldMode, $newMode, $oldIndex, $newIndex, $isBinary);
@@ -96,23 +101,23 @@ class DiffParser extends ParserBase
             // 5. Diff
             while ($this->expects('@@ ')) {
                 $vars = $this->consumeRegexp('/-(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))?/');
-                $rangeOldStart = $vars[1];
-                $rangeOldCount = $vars[2];
-                $rangeNewStart = $vars[3];
-                $rangeNewCount = isset($vars[4]) ? $vars[4] : $vars[2]; // @todo Ici, t'as pris un gros raccourci mon loulou
+                $rangeOldStart = (int) $vars[1];
+                $rangeOldCount = (int) $vars[2];
+                $rangeNewStart = (int) $vars[3];
+                $rangeNewCount = isset($vars[4]) ? (int) $vars[4] : (int) $vars[2]; // @todo Ici, t'as pris un gros raccourci mon loulou
                 $this->consume(' @@');
                 $this->consumeTo("\n");
                 $this->consumeNewLine();
 
                 // 6. Lines
-                $lines = array();
+                $lines = [];
                 while (true) {
                     if ($this->expects(' ')) {
-                        $lines[] = array(FileChange::LINE_CONTEXT, $this->consumeTo("\n"));
+                        $lines[] = [FileChange::LINE_CONTEXT, $this->consumeTo("\n")];
                     } elseif ($this->expects('+')) {
-                        $lines[] = array(FileChange::LINE_ADD, $this->consumeTo("\n"));
+                        $lines[] = [FileChange::LINE_ADD, $this->consumeTo("\n")];
                     } elseif ($this->expects('-')) {
-                        $lines[] = array(FileChange::LINE_REMOVE, $this->consumeTo("\n"));
+                        $lines[] = [FileChange::LINE_REMOVE, $this->consumeTo("\n")];
                     } elseif ($this->expects("\ No newline at end of file")) {
                         // Ignore this case...
                     } else {

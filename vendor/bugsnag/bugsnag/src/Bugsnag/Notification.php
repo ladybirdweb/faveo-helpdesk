@@ -233,11 +233,7 @@ class Bugsnag_Notification
         curl_setopt($http, CURLOPT_CONNECTTIMEOUT, $this->config->timeout);
         curl_setopt($http, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($http, CURLOPT_VERBOSE, false);
-        if (defined('HHVM_VERSION')) {
-            curl_setopt($http, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-        } else {
-            curl_setopt($http, CURL_IPRESOLVE_V4, true);
-        }
+        curl_setopt($http, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
 
         if (!empty($this->config->curlOptions)) {
             foreach ($this->config->curlOptions as $option => $value) {

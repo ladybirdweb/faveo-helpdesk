@@ -5,11 +5,10 @@ namespace Doctrine\DBAL\Schema\Visitor;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
+
 use function current;
 use function file_put_contents;
 use function in_array;
-use function mt_rand;
-use function sha1;
 use function strtolower;
 
 /**
@@ -41,7 +40,7 @@ class Graphviz extends AbstractVisitor
      */
     public function acceptSchema(Schema $schema)
     {
-        $this->output  = 'digraph "' . sha1(mt_rand()) . '" {' . "\n";
+        $this->output  = 'digraph "' . $schema->getName() . '" {' . "\n";
         $this->output .= 'splines = true;' . "\n";
         $this->output .= 'overlap = false;' . "\n";
         $this->output .= 'outputorder=edgesfirst;' . "\n";
@@ -72,20 +71,28 @@ class Graphviz extends AbstractVisitor
         $label = '<<TABLE CELLSPACING="0" BORDER="1" ALIGN="LEFT">';
 
         // The title
-        $label .= '<TR><TD BORDER="1" COLSPAN="3" ALIGN="CENTER" BGCOLOR="#fcaf3e"><FONT COLOR="#2e3436" FACE="Helvetica" POINT-SIZE="12">' . $table->getName() . '</FONT></TD></TR>';
+        $label .= '<TR><TD BORDER="1" COLSPAN="3" ALIGN="CENTER" BGCOLOR="#fcaf3e">'
+            . '<FONT COLOR="#2e3436" FACE="Helvetica" POINT-SIZE="12">' . $table->getName() . '</FONT></TD></TR>';
 
         // The attributes block
         foreach ($table->getColumns() as $column) {
             $columnLabel = $column->getName();
 
-            $label .= '<TR>';
-            $label .= '<TD BORDER="0" ALIGN="LEFT" BGCOLOR="#eeeeec">';
-            $label .= '<FONT COLOR="#2e3436" FACE="Helvetica" POINT-SIZE="12">' . $columnLabel . '</FONT>';
-            $label .= '</TD><TD BORDER="0" ALIGN="LEFT" BGCOLOR="#eeeeec"><FONT COLOR="#2e3436" FACE="Helvetica" POINT-SIZE="10">' . strtolower($column->getType()) . '</FONT></TD>';
-            $label .= '<TD BORDER="0" ALIGN="RIGHT" BGCOLOR="#eeeeec" PORT="col' . $column->getName() . '">';
-            if ($table->hasPrimaryKey() && in_array($column->getName(), $table->getPrimaryKey()->getColumns())) {
+            $label .= '<TR>'
+                . '<TD BORDER="0" ALIGN="LEFT" BGCOLOR="#eeeeec">'
+                . '<FONT COLOR="#2e3436" FACE="Helvetica" POINT-SIZE="12">' . $columnLabel . '</FONT>'
+                . '</TD>'
+                . '<TD BORDER="0" ALIGN="LEFT" BGCOLOR="#eeeeec">'
+                . '<FONT COLOR="#2e3436" FACE="Helvetica" POINT-SIZE="10">' . strtolower($column->getType()) . '</FONT>'
+                . '</TD>'
+                . '<TD BORDER="0" ALIGN="RIGHT" BGCOLOR="#eeeeec" PORT="col' . $column->getName() . '">';
+
+            $primaryKey = $table->getPrimaryKey();
+
+            if ($primaryKey !== null && in_array($column->getName(), $primaryKey->getColumns())) {
                 $label .= "\xe2\x9c\xb7";
             }
+
             $label .= '</TD></TR>';
         }
 
@@ -107,6 +114,7 @@ class Graphviz extends AbstractVisitor
         foreach ($options as $key => $value) {
             $node .= $key . '=' . $value . ' ';
         }
+
         $node .= "]\n";
 
         return $node;
@@ -125,6 +133,7 @@ class Graphviz extends AbstractVisitor
         foreach ($options as $key => $value) {
             $relation .= $key . '=' . $value . ' ';
         }
+
         $relation .= "]\n";
 
         return $relation;

@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+4.4.0
+-----
+
+ * deprecated `Process::inheritEnvironmentVariables()`: env variables are always inherited.
+ * added `Process::getLastOutputTime()` method
+
 4.2.0
 -----
 
@@ -21,9 +27,9 @@ CHANGELOG
 -----
 
  * environment variables will always be inherited
- * added a second `array $env = array()` argument to the `start()`, `run()`,
+ * added a second `array $env = []` argument to the `start()`, `run()`,
    `mustRun()`, and `restart()` methods of the `Process` class
- * added a second `array $env = array()` argument to the `start()` method of the
+ * added a second `array $env = []` argument to the `start()` method of the
    `PhpProcess` class
  * the `ProcessUtils::escapeArgument()` method has been removed
  * the `areEnvironmentVariablesInherited()`, `getOptions()`, and `setOptions()`

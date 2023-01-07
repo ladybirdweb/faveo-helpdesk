@@ -15,6 +15,7 @@ use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\RouteCompiler;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Parser as YamlParser;
 use Symfony\Component\Yaml\Yaml;
@@ -27,9 +28,9 @@ use Symfony\Component\Yaml\Yaml;
  */
 class YamlFileLoader extends FileLoader
 {
-    private static $availableKeys = array(
-        'resource', 'type', 'prefix', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options', 'condition', 'controller', 'name_prefix', 'trailing_slash_on_root',
-    );
+    private const AVAILABLE_KEYS = [
+        'resource', 'type', 'prefix', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options', 'condition', 'controller', 'name_prefix', 'trailing_slash_on_root', 'locale', 'format', 'utf8', 'exclude',
+    ];
     private $yamlParser;
 
     /**
@@ -61,7 +62,7 @@ class YamlFileLoader extends FileLoader
         try {
             $parsedConfig = $this->yamlParser->parseFile($path, Yaml::PARSE_CONSTANT);
         } catch (ParseException $e) {
-            throw new \InvalidArgumentException(sprintf('The file "%s" does not contain valid YAML.', $path), 0, $e);
+            throw new \InvalidArgumentException(sprintf('The file "%s" does not contain valid YAML: ', $path).$e->getMessage(), 0, $e);
         }
 
         $collection = new RouteCollection();
@@ -95,35 +96,43 @@ class YamlFileLoader extends FileLoader
      */
     public function supports($resource, $type = null)
     {
-        return \is_string($resource) && \in_array(pathinfo($resource, PATHINFO_EXTENSION), array('yml', 'yaml'), true) && (!$type || 'yaml' === $type);
+        return \is_string($resource) && \in_array(pathinfo($resource, \PATHINFO_EXTENSION), ['yml', 'yaml'], true) && (!$type || 'yaml' === $type);
     }
 
     /**
      * Parses a route and adds it to the RouteCollection.
      *
-     * @param RouteCollection $collection A RouteCollection instance
-     * @param string          $name       Route name
-     * @param array           $config     Route definition
-     * @param string          $path       Full path of the YAML file being processed
+     * @param string $name   Route name
+     * @param array  $config Route definition
+     * @param string $path   Full path of the YAML file being processed
      */
     protected function parseRoute(RouteCollection $collection, $name, array $config, $path)
     {
-        $defaults = isset($config['defaults']) ? $config['defaults'] : array();
-        $requirements = isset($config['requirements']) ? $config['requirements'] : array();
-        $options = isset($config['options']) ? $config['options'] : array();
-        $host = isset($config['host']) ? $config['host'] : '';
-        $schemes = isset($config['schemes']) ? $config['schemes'] : array();
-        $methods = isset($config['methods']) ? $config['methods'] : array();
-        $condition = isset($config['condition']) ? $config['condition'] : null;
+        $defaults = $config['defaults'] ?? [];
+        $requirements = $config['requirements'] ?? [];
+        $options = $config['options'] ?? [];
+        $host = $config['host'] ?? '';
+        $schemes = $config['schemes'] ?? [];
+        $methods = $config['methods'] ?? [];
+        $condition = $config['condition'] ?? null;
 
         foreach ($requirements as $placeholder => $requirement) {
             if (\is_int($placeholder)) {
-                @trigger_error(sprintf('A placeholder name must be a string (%d given). Did you forget to specify the placeholder key for the requirement "%s" of route "%s" in "%s"?', $placeholder, $requirement, $name, $path), E_USER_DEPRECATED);
+                @trigger_error(sprintf('A placeholder name must be a string (%d given). Did you forget to specify the placeholder key for the requirement "%s" of route "%s" in "%s"?', $placeholder, $requirement, $name, $path), \E_USER_DEPRECATED);
             }
         }
 
         if (isset($config['controller'])) {
             $defaults['_controller'] = $config['controller'];
+        }
+        if (isset($config['locale'])) {
+            $defaults['_locale'] = $config['locale'];
+        }
+        if (isset($config['format'])) {
+            $defaults['_format'] = $config['format'];
+        }
+        if (isset($config['utf8'])) {
+            $options['utf8'] = $config['utf8'];
         }
 
         if (\is_array($config['path'])) {
@@ -132,6 +141,7 @@ class YamlFileLoader extends FileLoader
             foreach ($config['path'] as $locale => $path) {
                 $localizedRoute = clone $route;
                 $localizedRoute->setDefault('_locale', $locale);
+                $localizedRoute->setRequirement('_locale', preg_quote($locale, RouteCompiler::REGEX_DELIMITER));
                 $localizedRoute->setDefault('_canonical_route', $name);
                 $localizedRoute->setPath($path);
                 $collection->add($name.'.'.$locale, $localizedRoute);
@@ -145,34 +155,43 @@ class YamlFileLoader extends FileLoader
     /**
      * Parses an import and adds the routes in the resource to the RouteCollection.
      *
-     * @param RouteCollection $collection A RouteCollection instance
-     * @param array           $config     Route definition
-     * @param string          $path       Full path of the YAML file being processed
-     * @param string          $file       Loaded file name
+     * @param array  $config Route definition
+     * @param string $path   Full path of the YAML file being processed
+     * @param string $file   Loaded file name
      */
     protected function parseImport(RouteCollection $collection, array $config, $path, $file)
     {
-        $type = isset($config['type']) ? $config['type'] : null;
-        $prefix = isset($config['prefix']) ? $config['prefix'] : '';
-        $defaults = isset($config['defaults']) ? $config['defaults'] : array();
-        $requirements = isset($config['requirements']) ? $config['requirements'] : array();
-        $options = isset($config['options']) ? $config['options'] : array();
-        $host = isset($config['host']) ? $config['host'] : null;
-        $condition = isset($config['condition']) ? $config['condition'] : null;
-        $schemes = isset($config['schemes']) ? $config['schemes'] : null;
-        $methods = isset($config['methods']) ? $config['methods'] : null;
+        $type = $config['type'] ?? null;
+        $prefix = $config['prefix'] ?? '';
+        $defaults = $config['defaults'] ?? [];
+        $requirements = $config['requirements'] ?? [];
+        $options = $config['options'] ?? [];
+        $host = $config['host'] ?? null;
+        $condition = $config['condition'] ?? null;
+        $schemes = $config['schemes'] ?? null;
+        $methods = $config['methods'] ?? null;
         $trailingSlashOnRoot = $config['trailing_slash_on_root'] ?? true;
+        $exclude = $config['exclude'] ?? null;
 
         if (isset($config['controller'])) {
             $defaults['_controller'] = $config['controller'];
         }
+        if (isset($config['locale'])) {
+            $defaults['_locale'] = $config['locale'];
+        }
+        if (isset($config['format'])) {
+            $defaults['_format'] = $config['format'];
+        }
+        if (isset($config['utf8'])) {
+            $options['utf8'] = $config['utf8'];
+        }
 
         $this->setCurrentDir(\dirname($path));
 
-        $imported = $this->import($config['resource'], $type, false, $file);
+        $imported = $this->import($config['resource'], $type, false, $file, $exclude) ?: [];
 
         if (!\is_array($imported)) {
-            $imported = array($imported);
+            $imported = [$imported];
         }
 
         foreach ($imported as $subCollection) {
@@ -197,6 +216,7 @@ class YamlFileLoader extends FileLoader
                         foreach ($prefix as $locale => $localePrefix) {
                             $localizedRoute = clone $route;
                             $localizedRoute->setDefault('_locale', $locale);
+                            $localizedRoute->setRequirement('_locale', preg_quote($locale, RouteCompiler::REGEX_DELIMITER));
                             $localizedRoute->setDefault('_canonical_route', $name);
                             $localizedRoute->setPath($localePrefix.(!$trailingSlashOnRoot && '/' === $route->getPath() ? '' : $route->getPath()));
                             $subCollection->add($name.'.'.$locale, $localizedRoute);
@@ -249,8 +269,8 @@ class YamlFileLoader extends FileLoader
         if (!\is_array($config)) {
             throw new \InvalidArgumentException(sprintf('The definition of "%s" in "%s" must be a YAML array.', $name, $path));
         }
-        if ($extraKeys = array_diff(array_keys($config), self::$availableKeys)) {
-            throw new \InvalidArgumentException(sprintf('The routing file "%s" contains unsupported keys for "%s": "%s". Expected one of: "%s".', $path, $name, implode('", "', $extraKeys), implode('", "', self::$availableKeys)));
+        if ($extraKeys = array_diff(array_keys($config), self::AVAILABLE_KEYS)) {
+            throw new \InvalidArgumentException(sprintf('The routing file "%s" contains unsupported keys for "%s": "%s". Expected one of: "%s".', $path, $name, implode('", "', $extraKeys), implode('", "', self::AVAILABLE_KEYS)));
         }
         if (isset($config['resource']) && isset($config['path'])) {
             throw new \InvalidArgumentException(sprintf('The routing file "%s" must not specify both the "resource" key and the "path" key for "%s". Choose between an import and a route definition.', $path, $name));

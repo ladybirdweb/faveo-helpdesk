@@ -8,7 +8,9 @@
 
 namespace Sly\NotificationPusher\Adapter;
 
-
+/**
+ * @author Oleg Abrazhaev <seyferseed@gmail.com>
+ */
 interface FeedbackAdapterInterface
 {
     public function getFeedback();

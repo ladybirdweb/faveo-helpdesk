@@ -101,7 +101,7 @@ class Curl implements HttpAdapter, StreamInterface
      * Set the configuration array for the adapter
      *
      * @param  array|Traversable $options
-     * @return Curl
+     * @return $this
      * @throws AdapterException\InvalidArgumentException
      */
     public function setOptions($options = [])
@@ -143,7 +143,7 @@ class Curl implements HttpAdapter, StreamInterface
                     break;
                 default:
                     if (is_array($v) && isset($this->config[$option]) && is_array($this->config[$option])) {
-                        $v = ArrayUtils::merge($this->config[$option], $v);
+                        $v = ArrayUtils::merge($this->config[$option], $v, true);
                     }
                     $this->config[$option] = $v;
                     break;
@@ -168,7 +168,7 @@ class Curl implements HttpAdapter, StreamInterface
      *
      * @param  string|int $option
      * @param  mixed $value
-     * @return Curl
+     * @return $this
      */
     public function setCurlOption($option, $value)
     {
@@ -208,6 +208,18 @@ class Curl implements HttpAdapter, StreamInterface
         } else {
             $connectTimeout = null;
         }
+
+        if ($connectTimeout !== null && ! is_numeric($connectTimeout)) {
+            throw new AdapterException\InvalidArgumentException(sprintf(
+                'integer or numeric string expected, got %s',
+                gettype($connectTimeout)
+            ));
+        }
+
+        if ($connectTimeout !== null) {
+            $connectTimeout = (int) $connectTimeout;
+        }
+
         if ($connectTimeout !== null) {
             if (defined('CURLOPT_CONNECTTIMEOUT_MS')) {
                 curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT_MS, $connectTimeout * 1000);
@@ -413,9 +425,7 @@ class Curl implements HttpAdapter, StreamInterface
          * Make sure POSTFIELDS is set after $curlMethod is set:
          * @link http://de2.php.net/manual/en/function.curl-setopt.php#81161
          */
-        if (in_array($method, ['POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], true)) {
-            curl_setopt($this->curl, CURLOPT_POSTFIELDS, $body);
-        } elseif ($curlMethod == CURLOPT_UPLOAD) {
+        if ($curlMethod == CURLOPT_UPLOAD) {
             // this covers a PUT by file-handle:
             // Make the setting of this options explicit (rather than setting it through the loop following a bit lower)
             // to group common functionality together.
@@ -423,6 +433,8 @@ class Curl implements HttpAdapter, StreamInterface
             curl_setopt($this->curl, CURLOPT_INFILESIZE, $this->config['curloptions'][CURLOPT_INFILESIZE]);
             unset($this->config['curloptions'][CURLOPT_INFILE]);
             unset($this->config['curloptions'][CURLOPT_INFILESIZE]);
+        } elseif (in_array($method, ['POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], true)) {
+            curl_setopt($this->curl, CURLOPT_POSTFIELDS, $body);
         }
 
         // set additional curl options
@@ -482,7 +494,7 @@ class Curl implements HttpAdapter, StreamInterface
 
         // cURL automatically handles Proxy rewrites, remove the "HTTP/1.0 200 Connection established" string:
         $responseHeaders = preg_replace(
-            "/HTTP\/1.0\s*200\s*Connection\s*established\\r\\n\\r\\n/",
+            "/HTTP\/1.[01]\s*200\s*Connection\s*established\\r\\n\\r\\n/",
             '',
             $responseHeaders
         );
@@ -541,7 +553,7 @@ class Curl implements HttpAdapter, StreamInterface
      * Set output stream for the response
      *
      * @param resource $stream
-     * @return Curl
+     * @return $this
      */
     public function setOutputStream($stream)
     {

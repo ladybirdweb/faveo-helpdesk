@@ -110,7 +110,7 @@ return array (
   ),
   'uan' => 
   array (
-    'NationalNumberPattern' => '[01589]\\d{5}',
+    'NationalNumberPattern' => '(?:0[1-9]|[1589]\\d)\\d{4}',
     'ExampleNumber' => '542011',
     'PossibleLength' => 
     array (
@@ -151,6 +151,5 @@ return array (
   array (
   ),
   'mainCountryForCode' => false,
-  'leadingZeroPossible' => false,
   'mobileNumberPortableRegion' => false,
 );

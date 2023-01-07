@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git;
 
 use Gitonomy\Git\Blame\Line;
@@ -83,33 +84,31 @@ class Blame implements \Countable
      */
     public function getGroupedLines()
     {
-        $result = array();
+        $result = [];
         $commit = null;
-        $current = array();
+        $current = [];
 
         foreach ($this->getLines() as $lineNumber => $line) {
             if ($commit !== $line->getCommit()) {
                 if (count($current)) {
-                    $result[] = array($commit, $current);
+                    $result[] = [$commit, $current];
                 }
                 $commit = $line->getCommit();
-                $current = array();
+                $current = [];
             }
 
             $current[$lineNumber] = $line;
         }
 
         if (count($current)) {
-            $result[] = array($commit, $current);
+            $result[] = [$commit, $current];
         }
 
         return $result;
     }
 
     /**
-     * Returns all lines of the blame.
-     *
-     * @return array
+     * @return Line[] All lines of the blame.
      */
     public function getLines()
     {
@@ -117,7 +116,7 @@ class Blame implements \Countable
             return $this->lines;
         }
 
-        $args = array('-p');
+        $args = ['-p'];
 
         if (null !== $this->lineRange) {
             $args[] = '-L';
@@ -138,6 +137,7 @@ class Blame implements \Countable
     /**
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->getLines());

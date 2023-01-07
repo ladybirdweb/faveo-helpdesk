@@ -20,7 +20,7 @@ class StreamWrapper
 
     private static $specTransformers = array();
 
-    public static function register()
+    public static function register(): void
     {
         if (\in_array('phpspec', stream_get_wrappers())) {
             stream_wrapper_unregister('phpspec');
@@ -28,17 +28,17 @@ class StreamWrapper
         stream_wrapper_register('phpspec', 'PhpSpec\Loader\StreamWrapper');
     }
 
-    public static function reset()
+    public static function reset(): void
     {
         static::$specTransformers = array();
     }
 
-    public static function addTransformer(SpecTransformer $specTransformer)
+    public static function addTransformer(SpecTransformer $specTransformer): void
     {
         static::$specTransformers[] = $specTransformer;
     }
 
-    public static function wrapPath($path)
+    public static function wrapPath($path): string
     {
         if (!\defined('HHVM_VERSION'))
         {
@@ -48,7 +48,7 @@ class StreamWrapper
         return $path;
     }
 
-    public function stream_open($path, $mode, $options, &$opened_path)
+    public function stream_open($path, $mode, $options, &$opened_path): bool
     {
         if ($mode != 'rb') {
             throw new \RuntimeException('Cannot open phpspec url in mode "$mode"');
@@ -74,7 +74,7 @@ class StreamWrapper
         return true;
     }
 
-    public function stream_stat()
+    public function stream_stat(): array
     {
         return stat($this->realPath);
     }
@@ -84,7 +84,7 @@ class StreamWrapper
         return fread($this->fileResource, $count);
     }
 
-    public function stream_eof()
+    public function stream_eof(): bool
     {
         return feof($this->fileResource);
     }

@@ -1,0 +1,12 @@
+# Hey there!
+#
+# I plan to develop a new version of NotificationPusher this year,
+# including many new features, and a Dockerized standalone microservice (K8s ready). 🙌🕺
+# The current version of this lib has been writen in 2013.
+#
+# Of course, this new version will respect all current PHP standards (DDD powered).
+#
+# Feel free to participate by giving a small contribution.
+# If donations allow, we'll push the project further (hosted mode, SaaS service and more).
+
+custom: ["https://paypal.me/ph3nol"]

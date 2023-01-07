@@ -40,7 +40,7 @@ abstract class Output implements OutputInterface
     public function __construct(?int $verbosity = self::VERBOSITY_NORMAL, bool $decorated = false, OutputFormatterInterface $formatter = null)
     {
         $this->verbosity = null === $verbosity ? self::VERBOSITY_NORMAL : $verbosity;
-        $this->formatter = $formatter ?: new OutputFormatter();
+        $this->formatter = $formatter ?? new OutputFormatter();
         $this->formatter->setDecorated($decorated);
     }
 
@@ -138,7 +138,7 @@ abstract class Output implements OutputInterface
     public function write($messages, $newline = false, $options = self::OUTPUT_NORMAL)
     {
         if (!is_iterable($messages)) {
-            $messages = array($messages);
+            $messages = [$messages];
         }
 
         $types = self::OUTPUT_NORMAL | self::OUTPUT_RAW | self::OUTPUT_PLAIN;
@@ -163,7 +163,7 @@ abstract class Output implements OutputInterface
                     break;
             }
 
-            $this->doWrite($message, $newline);
+            $this->doWrite($message ?? '', $newline);
         }
     }
 

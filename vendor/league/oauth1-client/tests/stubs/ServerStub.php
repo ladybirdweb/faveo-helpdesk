@@ -9,7 +9,7 @@ use League\OAuth1\Client\Server\User;
 class ServerStub extends Server
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function urlTemporaryCredentials()
     {
@@ -17,7 +17,7 @@ class ServerStub extends Server
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function urlAuthorization()
     {
@@ -25,7 +25,7 @@ class ServerStub extends Server
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function urlTokenCredentials()
     {
@@ -33,7 +33,7 @@ class ServerStub extends Server
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function urlUserDetails()
     {
@@ -41,17 +41,18 @@ class ServerStub extends Server
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function userDetails($data, TokenCredentials $tokenCredentials)
     {
         $user = new User;
         $user->firstName = $data['foo'];
+
         return $user;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function userUid($data, TokenCredentials $tokenCredentials)
     {
@@ -59,7 +60,7 @@ class ServerStub extends Server
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function userEmail($data, TokenCredentials $tokenCredentials)
     {
@@ -67,7 +68,7 @@ class ServerStub extends Server
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function userScreenName($data, TokenCredentials $tokenCredentials)
     {

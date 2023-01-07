@@ -1,5 +1,23 @@
 # Change Log
 
+## [2.3.1] - 2020-10-12
+### Added
+- Added support for PHP 8 (#92)
+### Changed
+- N/A
+### Fixed
+- N/A
+
+## [2.3.0] - 2019-03-30
+### Added
+- Added support for DateTimeImmutable via DateTimeInterface
+- Added support for PHP 7.3
+- Started listing projects that use the library
+### Changed
+- Errors should now report a human readable position in the cron expression, instead of starting at 0
+### Fixed
+- N/A
+
 ## [2.2.0] - 2018-06-05
 ### Added
 - Added support for steps larger than field ranges (#6)

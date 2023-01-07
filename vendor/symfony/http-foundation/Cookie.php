@@ -18,6 +18,10 @@ namespace Symfony\Component\HttpFoundation;
  */
 class Cookie
 {
+    public const SAMESITE_NONE = 'none';
+    public const SAMESITE_LAX = 'lax';
+    public const SAMESITE_STRICT = 'strict';
+
     protected $name;
     protected $value;
     protected $domain;
@@ -25,12 +29,14 @@ class Cookie
     protected $path;
     protected $secure;
     protected $httpOnly;
+
     private $raw;
     private $sameSite;
     private $secureDefault = false;
 
-    const SAMESITE_LAX = 'lax';
-    const SAMESITE_STRICT = 'strict';
+    private static $reservedCharsList = "=,; \t\r\n\v\f";
+    private const RESERVED_CHARS_FROM = ['=', ',', ';', ' ', "\t", "\r", "\n", "\v", "\f"];
+    private const RESERVED_CHARS_TO = ['%3D', '%2C', '%3B', '%20', '%09', '%0D', '%0A', '%0B', '%0C'];
 
     /**
      * Creates cookie from raw header string.
@@ -42,7 +48,7 @@ class Cookie
      */
     public static function fromString($cookie, $decode = false)
     {
-        $data = array(
+        $data = [
             'expires' => 0,
             'path' => '/',
             'domain' => null,
@@ -50,7 +56,7 @@ class Cookie
             'httponly' => false,
             'raw' => !$decode,
             'samesite' => null,
-        );
+        ];
 
         $parts = HeaderUtils::split($cookie, ';=');
         $part = array_shift($parts);
@@ -88,11 +94,11 @@ class Cookie
     public function __construct(string $name, string $value = null, $expire = 0, ?string $path = '/', string $domain = null, ?bool $secure = false, bool $httpOnly = true, bool $raw = false, string $sameSite = null)
     {
         if (9 > \func_num_args()) {
-            @trigger_error(sprintf('The default value of the "$secure" and "$samesite" arguments of "%s"\'s constructor will respectively change from "false" to "null" and from "null" to "lax" in Symfony 5.0, you should define their values explicitly or use "Cookie::create()" instead.', __METHOD__), E_USER_DEPRECATED);
+            @trigger_error(sprintf('The default value of the "$secure" and "$samesite" arguments of "%s"\'s constructor will respectively change from "false" to "null" and from "null" to "lax" in Symfony 5.0, you should define their values explicitly or use "Cookie::create()" instead.', __METHOD__), \E_USER_DEPRECATED);
         }
 
         // from PHP source code
-        if (preg_match("/[=,; \t\r\n\013\014]/", $name)) {
+        if ($raw && false !== strpbrk($name, self::$reservedCharsList)) {
             throw new \InvalidArgumentException(sprintf('The cookie name "%s" contains invalid characters.', $name));
         }
 
@@ -126,7 +132,7 @@ class Cookie
             $sameSite = strtolower($sameSite);
         }
 
-        if (!\in_array($sameSite, array(self::SAMESITE_LAX, self::SAMESITE_STRICT, null), true)) {
+        if (!\in_array($sameSite, [self::SAMESITE_LAX, self::SAMESITE_STRICT, self::SAMESITE_NONE, null], true)) {
             throw new \InvalidArgumentException('The "sameSite" parameter value is not valid.');
         }
 
@@ -140,7 +146,13 @@ class Cookie
      */
     public function __toString()
     {
-        $str = ($this->isRaw() ? $this->getName() : urlencode($this->getName())).'=';
+        if ($this->isRaw()) {
+            $str = $this->getName();
+        } else {
+            $str = str_replace(self::RESERVED_CHARS_FROM, self::RESERVED_CHARS_TO, $this->getName());
+        }
+
+        $str .= '=';
 
         if ('' === (string) $this->getValue()) {
             $str .= 'deleted; expires='.gmdate('D, d-M-Y H:i:s T', time() - 31536001).'; Max-Age=0';

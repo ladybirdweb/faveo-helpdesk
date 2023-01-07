@@ -15,6 +15,7 @@
     ],
     "require": {
         "php": ">=5.6.0",
+        "ext-zip": "*",
         "illuminate/support": "^5.0",
         "illuminate/filesystem": "^5.0"
     },

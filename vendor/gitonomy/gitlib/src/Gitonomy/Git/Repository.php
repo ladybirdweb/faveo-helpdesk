@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git;
 
 use Gitonomy\Git\Diff\Diff;
@@ -17,7 +18,6 @@ use Gitonomy\Git\Exception\ProcessException;
 use Gitonomy\Git\Exception\RuntimeException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessUtils;
 
 /**
  * Git repository object.
@@ -87,6 +87,11 @@ class Repository
     protected $environmentVariables;
 
     /**
+     * @var bool
+     */
+    protected $inheritEnvironmentVariables;
+
+    /**
      * Timeout that should be set for every running process.
      *
      * @var int
@@ -111,17 +116,17 @@ class Repository
      *
      * @throws InvalidArgumentException The folder does not exists
      */
-    public function __construct($dir, $options = array())
+    public function __construct($dir, $options = [])
     {
-        $is_windows = defined('PHP_WINDOWS_VERSION_BUILD');
-        $options = array_merge(array(
-            'working_dir' => null,
-            'debug' => true,
-            'logger' => null,
-            'environment_variables' => $is_windows ? array('PATH' => getenv('path')) : array(),
-            'command' => 'git',
-            'process_timeout' => 3600,
-        ), $options);
+        $options = array_merge([
+            'working_dir'                   => null,
+            'debug'                         => true,
+            'logger'                        => null,
+            'command'                       => 'git',
+            'environment_variables'         => [],
+            'inherit_environment_variables' => false,
+            'process_timeout'               => 3600,
+        ], $options);
 
         if (null !== $options['logger'] && !$options['logger'] instanceof LoggerInterface) {
             throw new InvalidArgumentException(sprintf('Argument "logger" passed to Repository should be a Psr\Log\LoggerInterface. A %s was provided', is_object($options['logger']) ? get_class($options['logger']) : gettype($options['logger'])));
@@ -130,11 +135,17 @@ class Repository
         $this->logger = $options['logger'];
         $this->initDir($dir, $options['working_dir']);
 
-        $this->objects = array();
-        $this->debug = (bool) $options['debug'];
-        $this->environmentVariables = $options['environment_variables'];
-        $this->processTimeout = $options['process_timeout'];
+        $this->objects = [];
         $this->command = $options['command'];
+        $this->debug = (bool) $options['debug'];
+        $this->processTimeout = $options['process_timeout'];
+
+        if (defined('PHP_WINDOWS_VERSION_BUILD') && isset($_SERVER['PATH']) && !isset($options['environment_variables']['PATH'])) {
+            $options['environment_variables']['PATH'] = $_SERVER['PATH'];
+        }
+
+        $this->environmentVariables = $options['environment_variables'];
+        $this->inheritEnvironmentVariables = $options['inherit_environment_variables'];
 
         if (true === $this->debug && null !== $this->logger) {
             $this->logger->debug(sprintf('Repository created (git dir: "%s", working dir: "%s")', $this->gitDir, $this->workingDir ?: 'none'));
@@ -153,7 +164,7 @@ class Repository
 
         if (false === $realGitDir) {
             throw new InvalidArgumentException(sprintf('Directory "%s" does not exist or is not a directory', $gitDir));
-        } else if (!is_dir($realGitDir)) {
+        } elseif (!is_dir($realGitDir)) {
             throw new InvalidArgumentException(sprintf('Directory "%s" does not exist or is not a directory', $realGitDir));
         } elseif (null === $workingDir && is_dir($realGitDir.'/.git')) {
             $workingDir = $realGitDir;
@@ -304,11 +315,13 @@ class Repository
     /**
      * Returns the reference list associated to the repository.
      *
+     * @param bool $reload Reload references from the filesystem
+     *
      * @return ReferenceBag
      */
-    public function getReferences()
+    public function getReferences($reload = false)
     {
-        if (null === $this->referenceBag) {
+        if (null === $this->referenceBag || $reload) {
             $this->referenceBag = new ReferenceBag($this);
         }
 
@@ -363,6 +376,9 @@ class Repository
         return $this->objects[$hash];
     }
 
+    /**
+     * @return Blame
+     */
     public function getBlame($revision, $file, $lineRange = null)
     {
         if (is_string($revision)) {
@@ -400,7 +416,7 @@ class Repository
             $revisions = new RevisionList($this, $revisions);
         }
 
-        $args = array_merge(array('-r', '-p', '-m', '-M', '--no-commit-id', '--full-index'), $revisions->getAsTextArray());
+        $args = array_merge(['-r', '-p', '-m', '-M', '--no-commit-id', '--full-index'], $revisions->getAsTextArray());
 
         $diff = Diff::parse($this->run('diff', $args));
         $diff->setRepository($this);
@@ -412,31 +428,18 @@ class Repository
      * Returns the size of repository, in kilobytes.
      *
      * @return int A sum, in kilobytes
-     *
-     * @throws RuntimeException An error occurred while computing size
      */
     public function getSize()
     {
-        $commandlineArguments = array('du', '-skc', $this->gitDir);
-        $commandline = $this->normalizeCommandlineArguments($commandlineArguments);
-        $process = new Process($commandline);
-        $process->run();
-
-        if (!preg_match('/(\d+)\s+total$/', trim($process->getOutput()), $vars)) {
-            $message = sprintf("Unable to parse process output\ncommand: %s\noutput: %s", $process->getCommandLine(), $process->getOutput());
-
-            if (null !== $this->logger) {
-                $this->logger->error($message);
+        $totalBytes = 0;
+        $path = realpath($this->gitDir);
+        if ($path && file_exists($path)) {
+            foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS)) as $object) {
+                $totalBytes += $object->getSize();
             }
-
-            if (true === $this->debug) {
-                throw new RuntimeException('unable to parse repository size output');
-            }
-
-            return;
         }
 
-        return $vars[1];
+        return (int) ($totalBytes / 1000 + 0.5);
     }
 
     /**
@@ -444,7 +447,7 @@ class Repository
      *
      * @param string $command The command to execute
      */
-    public function shell($command, array $env = array())
+    public function shell($command, array $env = [])
     {
         $argument = sprintf('%s \'%s\'', $command, $this->gitDir);
 
@@ -453,7 +456,7 @@ class Repository
             $prefix .= sprintf('export %s=%s;', escapeshellarg($name), escapeshellarg($value));
         }
 
-        proc_open($prefix.'git shell -c '.escapeshellarg($argument), array(STDIN, STDOUT, STDERR), $pipes);
+        proc_open($prefix.'git shell -c '.escapeshellarg($argument), [STDIN, STDOUT, STDERR], $pipes);
     }
 
     /**
@@ -525,11 +528,11 @@ class Repository
      * @param string $command Git command to run (checkout, branch, tag)
      * @param array  $args    Arguments of git command
      *
-     * @return string Output of a successful process or null if execution failed and debug-mode is disabled.
-     *
      * @throws RuntimeException Error while executing git command (debug-mode only)
+     *
+     * @return string Output of a successful process or null if execution failed and debug-mode is disabled.
      */
-    public function run($command, $args = array())
+    public function run($command, $args = [])
     {
         $process = $this->getProcess($command, $args);
 
@@ -598,7 +601,7 @@ class Repository
      *
      * @return Repository the newly created repository
      */
-    public function cloneTo($path, $bare = true, array $options = array())
+    public function cloneTo($path, $bare = true, array $options = [])
     {
         return Admin::cloneTo($path, $this->gitDir, $bare, $options);
     }
@@ -611,57 +614,27 @@ class Repository
      *
      * @see self::run
      */
-    private function getProcess($command, $args = array())
+    private function getProcess($command, $args = [])
     {
-        $base = array($this->command, '--git-dir', $this->gitDir);
+        $base = [$this->command, '--git-dir', $this->gitDir];
 
         if ($this->workingDir) {
-            $base = array_merge($base, array('--work-tree', $this->workingDir));
+            $base = array_merge($base, ['--work-tree', $this->workingDir]);
         }
 
         $base[] = $command;
 
-        $commandlineArguments = array_merge($base, $args);
-        $commandline = $this->normalizeCommandlineArguments($commandlineArguments);
+        $process = new Process(array_merge($base, $args));
 
-        $process = new Process($commandline);
-        $process->setEnv($this->environmentVariables);
+        if ($this->inheritEnvironmentVariables) {
+            $process->setEnv(array_replace($_SERVER, $this->environmentVariables));
+        } else {
+            $process->setEnv($this->environmentVariables);
+        }
+
         $process->setTimeout($this->processTimeout);
         $process->setIdleTimeout($this->processTimeout);
 
         return $process;
-    }
-
-    /**
-     * This internal helper method is used to convert an array of commandline
-     * arguments to an escaped commandline string for older versions of the
-     * Symfony Process component.
-     *
-     * It acts as a backward compatible layer for Symfony Process < 3.3.
-     *
-     * @param array $arguments a list of command line arguments
-     *
-     * @return string|array a single escaped string (< 4.0) or a raw array of
-     *                      the arguments passed in (4.0+)
-     *
-     * @see Process::escapeArgument()
-     * @see ProcessUtils::escapeArgument()
-     */
-    private function normalizeCommandlineArguments(array $arguments)
-    {
-        // From version 4.0 and onwards, the Process accepts an array of
-        // arguments, and escaping is taken care of automatically.
-        if (!class_exists('Symfony\Component\Process\ProcessBuilder')) {
-            return $arguments;
-        }
-
-        // For version < 3.3, the Process only accepts a simple string
-        // as commandline, and escaping has to happen manually.
-        $commandline = implode(' ', array_map(
-            'Symfony\Component\Process\ProcessUtils::escapeArgument',
-            $arguments
-        ));
-
-        return $commandline;
     }
 }

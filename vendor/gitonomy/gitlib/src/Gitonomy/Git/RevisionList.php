@@ -9,6 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git;
 
 /**
@@ -26,9 +27,9 @@ class RevisionList implements \IteratorAggregate, \Countable
     public function __construct(Repository $repository, $revisions)
     {
         if (is_string($revisions)) {
-            $revisions = array($repository->getRevision($revisions));
+            $revisions = [$repository->getRevision($revisions)];
         } elseif ($revisions instanceof Revision) {
-            $revisions = array($revisions);
+            $revisions = [$revisions];
         } elseif (!is_array($revisions)) {
             throw new \InvalidArgumentException(sprintf('Expected a string, a Revision or an array, got a "%s".', is_object($revisions) ? get_class($revisions) : gettype($revisions)));
         }
@@ -48,16 +49,21 @@ class RevisionList implements \IteratorAggregate, \Countable
         $this->revisions = $revisions;
     }
 
+    /**
+     * @return Revision[]
+     */
     public function getAll()
     {
         return $this->revisions;
     }
 
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->revisions);
     }
 
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->revisions);

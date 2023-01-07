@@ -1,5 +1,3 @@
-sudo: false
-
 language: php
 
 matrix:
@@ -10,6 +8,7 @@ matrix:
       env:
         - CS_CHECK=true
     - php: 7.2
+    - php: 7.3
 
 before_install:
   - composer install --no-interaction

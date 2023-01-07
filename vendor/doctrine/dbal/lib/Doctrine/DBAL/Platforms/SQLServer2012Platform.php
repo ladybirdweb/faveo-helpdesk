@@ -3,10 +3,12 @@
 namespace Doctrine\DBAL\Platforms;
 
 use Doctrine\DBAL\Schema\Sequence;
-use const PREG_OFFSET_CAPTURE;
+
 use function preg_match;
 use function preg_match_all;
 use function substr_count;
+
+use const PREG_OFFSET_CAPTURE;
 
 /**
  * Platform to ensure compatibility of Doctrine with Microsoft SQL Server 2012 version.
@@ -66,9 +68,9 @@ class SQLServer2012Platform extends SQLServer2008Platform
     /**
      * {@inheritdoc}
      */
-    public function getSequenceNextValSQL($sequenceName)
+    public function getSequenceNextValSQL($sequence)
     {
-        return 'SELECT NEXT VALUE FOR ' . $sequenceName;
+        return 'SELECT NEXT VALUE FOR ' . $sequence;
     }
 
     /**
@@ -99,18 +101,7 @@ class SQLServer2012Platform extends SQLServer2008Platform
         }
 
         // Queries using OFFSET... FETCH MUST have an ORDER BY clause
-        // Find the position of the last instance of ORDER BY and ensure it is not within a parenthetical statement
-        // but can be in a newline
-        $matches      = [];
-        $matchesCount = preg_match_all('/[\\s]+order\\s+by\\s/im', $query, $matches, PREG_OFFSET_CAPTURE);
-        $orderByPos   = false;
-        if ($matchesCount > 0) {
-            $orderByPos = $matches[0][($matchesCount - 1)][1];
-        }
-
-        if ($orderByPos === false
-            || substr_count($query, '(', $orderByPos) - substr_count($query, ')', $orderByPos)
-        ) {
+        if ($this->shouldAddOrderBy($query)) {
             if (preg_match('/^SELECT\s+DISTINCT/im', $query)) {
                 // SQL Server won't let us order by a non-selected column in a DISTINCT query,
                 // so we have to do this madness. This says, order by the first column in the
@@ -139,5 +130,36 @@ class SQLServer2012Platform extends SQLServer2008Platform
         }
 
         return $query;
+    }
+
+    /**
+     * @param string $query
+     */
+    private function shouldAddOrderBy($query): bool
+    {
+        // Find the position of the last instance of ORDER BY and ensure it is not within a parenthetical statement
+        // but can be in a newline
+        $matches      = [];
+        $matchesCount = preg_match_all('/[\\s]+order\\s+by\\s/im', $query, $matches, PREG_OFFSET_CAPTURE);
+        if ($matchesCount === 0) {
+            return true;
+        }
+
+        // ORDER BY instance may be in a subquery after ORDER BY
+        // e.g. SELECT col1 FROM test ORDER BY (SELECT col2 from test ORDER BY col2)
+        // if in the searched query ORDER BY clause was found where
+        // number of open parentheses after the occurrence of the clause is equal to
+        // number of closed brackets after the occurrence of the clause,
+        // it means that ORDER BY is included in the query being checked
+        while ($matchesCount > 0) {
+            $orderByPos          = $matches[0][--$matchesCount][1];
+            $openBracketsCount   = substr_count($query, '(', $orderByPos);
+            $closedBracketsCount = substr_count($query, ')', $orderByPos);
+            if ($openBracketsCount === $closedBracketsCount) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

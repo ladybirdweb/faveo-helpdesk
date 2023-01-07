@@ -5,6 +5,9 @@
 [GCM](http://developer.android.com/google/gcm/gs.html) adapter is used to push notification to Google/Android devices.
 [FCM](https://firebase.google.com/docs/cloud-messaging/) is supported. Please see [this comment](https://github.com/Ph3nol/NotificationPusher/pull/141#issuecomment-318896948) for explanation.
 
+##### Important
+Parameter `notificatinData` is mandatory for sending messagev via FCM.
+
 ### Custom notification push example
 
 ``` php

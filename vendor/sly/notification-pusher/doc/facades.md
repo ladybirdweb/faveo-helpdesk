@@ -10,7 +10,7 @@ Also, facades provide useful methods to filter successful and invalid tokens fro
 
 ### The Response
 
-```
+``` php
 $response->getParsedResponses();
 $response->getOriginalResponses();
 $response->getPushCollection();
@@ -18,7 +18,7 @@ $response->getPushCollection();
 
 ### Android facade
 
-```
+``` php
 $android_api_key = 'key';
 
 //get tokens list from your service
@@ -56,7 +56,7 @@ die(dump($response, $invalidTokens, $successfulTokens));
 
 ### APNS facade
 
-```
+``` php
 $certificatePath = 'cert.pem';
 $passPhrase      = '';
 

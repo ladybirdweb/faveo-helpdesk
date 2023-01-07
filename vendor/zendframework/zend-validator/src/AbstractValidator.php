@@ -133,9 +133,9 @@ abstract class AbstractValidator implements
         foreach ($options as $name => $option) {
             $fname = 'set' . ucfirst($name);
             $fname2 = 'is' . ucfirst($name);
-            if (($name != 'setOptions') && method_exists($this, $name)) {
+            if (($name !== 'setOptions') && method_exists($this, $name)) {
                 $this->{$name}($option);
-            } elseif (($fname != 'setOptions') && method_exists($this, $fname)) {
+            } elseif (($fname !== 'setOptions') && method_exists($this, $fname)) {
                 $this->{$fname}($option);
             } elseif (method_exists($this, $fname2)) {
                 $this->{$fname2}($option);

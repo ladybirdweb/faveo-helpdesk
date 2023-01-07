@@ -11,6 +11,9 @@ namespace Sly\NotificationPusher\Model;
 
 use Sly\NotificationPusher\Collection\PushCollection;
 
+/**
+ * @author Oleg Abrazhaev <seyferseed@gmail.com>
+ */
 class Response implements ResponseInterface
 {
     /**
@@ -28,9 +31,6 @@ class Response implements ResponseInterface
      */
     private $pushCollection;
 
-    /**
-     * Response constructor.
-     */
     public function __construct()
     {
         $this->pushCollection = new PushCollection();
@@ -59,7 +59,7 @@ class Response implements ResponseInterface
     }
 
     /**
-     * @param \Sly\NotificationPusher\Model\PushInterface $push Push
+     * @param PushInterface $push Push
      */
     public function addPush(PushInterface $push)
     {

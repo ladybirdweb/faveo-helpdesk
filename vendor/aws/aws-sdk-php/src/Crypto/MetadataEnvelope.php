@@ -22,7 +22,6 @@ class MetadataEnvelope implements ArrayAccess, IteratorAggregate, JsonSerializab
     const KEY_WRAP_ALGORITHM_HEADER = 'x-amz-wrap-alg';
     const CONTENT_CRYPTO_SCHEME_HEADER = 'x-amz-cek-alg';
     const CRYPTO_TAG_LENGTH_HEADER = 'x-amz-tag-len';
-    const UNENCRYPTED_CONTENT_MD5_HEADER = 'x-amz-unencrypted-content-md5';
     const UNENCRYPTED_CONTENT_LENGTH_HEADER = 'x-amz-unencrypted-content-length';
 
     private static $constants = [];
@@ -39,6 +38,10 @@ class MetadataEnvelope implements ArrayAccess, IteratorAggregate, JsonSerializab
         return array_keys(self::$constants);
     }
 
+    /**
+     * @return void
+     */
+    #[\ReturnTypeWillChange]
     public function offsetSet($name, $value)
     {
         $constants = self::getConstantValues();
@@ -50,6 +53,7 @@ class MetadataEnvelope implements ArrayAccess, IteratorAggregate, JsonSerializab
         $this->data[$name] = $value;
     }
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->data;

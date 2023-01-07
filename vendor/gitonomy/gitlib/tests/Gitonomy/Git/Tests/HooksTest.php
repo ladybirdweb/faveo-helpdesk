@@ -9,13 +9,20 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git\Tests;
+
+use Gitonomy\Git\Exception\InvalidArgumentException;
+use Gitonomy\Git\Exception\LogicException;
 
 class HooksTest extends AbstractTest
 {
     private static $symlinkOnWindows = null;
 
-    public static function setUpBeforeClass()
+    /**
+     * @beforeClass
+     */
+    public static function setUpWindows()
     {
         if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
             self::$symlinkOnWindows = true;
@@ -48,7 +55,8 @@ class HooksTest extends AbstractTest
         $file = $this->hookPath($repository, $hook);
 
         $this->assertTrue($repository->getHooks()->has($hook), "hook $hook in repository");
-        $this->assertTrue(file_exists($file), "Hook $hook is present");
+
+        $this->assertFileExists($file, "Hook $hook is present");
     }
 
     public function assertNoHook($repository, $hook)
@@ -56,7 +64,12 @@ class HooksTest extends AbstractTest
         $file = $this->hookPath($repository, $hook);
 
         $this->assertFalse($repository->getHooks()->has($hook), "No hook $hook in repository");
-        $this->assertFalse(file_exists($file), "Hook $hook is not present");
+
+        if (method_exists($this, 'assertFileDoesNotExist')) {
+            $this->assertFileDoesNotExist($file, "Hook $hook is not present");
+        } else {
+            $this->assertFileNotExists($file, "Hook $hook is not present");
+        }
     }
 
     /**
@@ -71,10 +84,11 @@ class HooksTest extends AbstractTest
 
     /**
      * @dataProvider provideFoobar
-     * @expectedException InvalidArgumentException
      */
     public function testGet_InvalidName_ThrowsException($repository)
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $repository->getHooks()->get('foo');
     }
 
@@ -99,15 +113,21 @@ class HooksTest extends AbstractTest
         $repository->getHooks()->setSymlink('foo', $file);
 
         $this->assertTrue(is_link($this->hookPath($repository, 'foo')), 'foo hook is a symlink');
-        $this->assertEquals($file, readlink($this->hookPath($repository, 'foo')), 'target of symlink is correct');
+
+        $this->assertEquals(
+            str_replace('\\', '/', $file),
+            str_replace('\\', '/', readlink($this->hookPath($repository, 'foo'))),
+            'target of symlink is correct'
+        );
     }
 
     /**
      * @dataProvider provideFoobar
-     * @expectedException LogicException
      */
     public function testSymlink_WithExisting_ThrowsLogicException($repository)
     {
+        $this->expectException(LogicException::class);
+
         $this->markAsSkippedIfSymlinkIsMissing();
 
         $file = $this->hookPath($repository, 'target-symlink');
@@ -140,7 +160,8 @@ class HooksTest extends AbstractTest
     {
         $repository->getHooks()->set('foo', 'bar');
 
-        $this->setExpectedException('LogicException');
+        $this->expectException(LogicException::class);
+
         $repository->getHooks()->set('foo', 'bar');
     }
 
@@ -153,15 +174,21 @@ class HooksTest extends AbstractTest
         touch($file);
 
         $repository->getHooks()->remove('foo');
-        $this->assertFalse(file_exists($file));
+
+        if (method_exists($this, 'assertFileDoesNotExist')) {
+            $this->assertFileDoesNotExist($file);
+        } else {
+            $this->assertFileNotExists($file);
+        }
     }
 
     /**
      * @dataProvider provideFoobar
-     * @expectedException LogicException
      */
     public function testRemove_NotExisting_ThrowsLogicException($repository)
     {
+        $this->expectException(LogicException::class);
+
         $repository->getHooks()->remove('foo');
     }
 

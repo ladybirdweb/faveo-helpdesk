@@ -12,7 +12,7 @@ class DebugStack implements SQLLogger
     /**
      * Executed SQL queries.
      *
-     * @var mixed[][]
+     * @var array<int, array<string, mixed>>
      */
     public $queries = [];
 
@@ -38,8 +38,14 @@ class DebugStack implements SQLLogger
             return;
         }
 
-        $this->start                          = microtime(true);
-        $this->queries[++$this->currentQuery] = ['sql' => $sql, 'params' => $params, 'types' => $types, 'executionMS' => 0];
+        $this->start = microtime(true);
+
+        $this->queries[++$this->currentQuery] = [
+            'sql' => $sql,
+            'params' => $params,
+            'types' => $types,
+            'executionMS' => 0,
+        ];
     }
 
     /**

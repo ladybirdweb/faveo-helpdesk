@@ -37,7 +37,7 @@ abstract class FileLoader extends ArrayLoader
 
         // empty resource
         if (null === $messages) {
-            $messages = array();
+            $messages = [];
         }
 
         // not an array
@@ -47,7 +47,7 @@ abstract class FileLoader extends ArrayLoader
 
         $catalogue = parent::load($messages, $locale, $domain);
 
-        if (class_exists('Symfony\Component\Config\Resource\FileResource')) {
+        if (class_exists(FileResource::class)) {
             $catalogue->addResource(new FileResource($resource));
         }
 

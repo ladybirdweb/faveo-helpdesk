@@ -42,7 +42,7 @@ class Origin implements HeaderInterface
      */
     public function __construct($value = null)
     {
-        if ($value) {
+        if ($value !== null) {
             HeaderValue::assertValid($value);
             $this->value = $value;
         }
@@ -55,7 +55,7 @@ class Origin implements HeaderInterface
 
     public function getFieldValue()
     {
-        return $this->value;
+        return (string) $this->value;
     }
 
     public function toString()

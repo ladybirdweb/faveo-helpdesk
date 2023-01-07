@@ -1,6 +1,32 @@
 CHANGELOG
 =========
 
+4.4.0
+-----
+
+ * passing arguments to `Request::isMethodSafe()` is deprecated.
+ * `ApacheRequest` is deprecated, use the `Request` class instead.
+ * passing a third argument to `HeaderBag::get()` is deprecated, use method `all()` instead
+ * [BC BREAK] `PdoSessionHandler` with MySQL changed the type of the lifetime column,
+   make sure to run `ALTER TABLE sessions MODIFY sess_lifetime INTEGER UNSIGNED NOT NULL` to
+   update your database.
+ * `PdoSessionHandler` now precalculates the expiry timestamp in the lifetime column,
+    make sure to run `CREATE INDEX EXPIRY ON sessions (sess_lifetime)` to update your database
+    to speed up garbage collection of expired sessions.
+ * added `SessionHandlerFactory` to create session handlers with a DSN
+ * added `IpUtils::anonymize()` to help with GDPR compliance.
+
+4.3.0
+-----
+
+ * added PHPUnit constraints: `RequestAttributeValueSame`, `ResponseCookieValueSame`, `ResponseHasCookie`,
+   `ResponseHasHeader`, `ResponseHeaderSame`, `ResponseIsRedirected`, `ResponseIsSuccessful`, and `ResponseStatusCodeSame`
+ * deprecated `MimeTypeGuesserInterface` and `ExtensionGuesserInterface` in favor of `Symfony\Component\Mime\MimeTypesInterface`.
+ * deprecated `MimeType` and `MimeTypeExtensionGuesser` in favor of `Symfony\Component\Mime\MimeTypes`.
+ * deprecated `FileBinaryMimeTypeGuesser` in favor of `Symfony\Component\Mime\FileBinaryMimeTypeGuesser`.
+ * deprecated `FileinfoMimeTypeGuesser` in favor of `Symfony\Component\Mime\FileinfoMimeTypeGuesser`.
+ * added `UrlHelper` that allows to get an absolute URL and a relative path for a given path
+
 4.2.0
 -----
 
@@ -67,7 +93,7 @@ CHANGELOG
 -----
 
  * the `Request::setTrustedProxies()` method takes a new `$trustedHeaderSet` argument,
-   see http://symfony.com/doc/current/components/http_foundation/trusting_proxies.html for more info,
+   see https://symfony.com/doc/current/deployment/proxies.html for more info,
  * deprecated the `Request::setTrustedHeaderName()` and `Request::getTrustedHeaderName()` methods,
  * added `File\Stream`, to be passed to `BinaryFileResponse` when the size of the served file is unknown,
    disabling `Range` and `Content-Length` handling, switching to chunked encoding instead
@@ -190,10 +216,10 @@ CHANGELOG
  * Added `FlashBag`. Flashes expire when retrieved by `get()` or `all()`. This
    implementation is ESI compatible.
  * Added `AutoExpireFlashBag` (default) to replicate Symfony 2.0.x auto expire
-   behaviour of messages auto expiring after one page page load.  Messages must
+   behavior of messages auto expiring after one page page load.  Messages must
    be retrieved by `get()` or `all()`.
  * Added `Symfony\Component\HttpFoundation\Attribute\AttributeBag` to replicate
-   attributes storage behaviour from 2.0.x (default).
+   attributes storage behavior from 2.0.x (default).
  * Added `Symfony\Component\HttpFoundation\Attribute\NamespacedAttributeBag` for
    namespace session attributes.
  * Flash API can stores messages in an array so there may be multiple messages

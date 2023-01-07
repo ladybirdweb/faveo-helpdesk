@@ -50,47 +50,47 @@ class Uri implements UriInterface
     /**
      * URI scheme
      *
-     * @var string
+     * @var string|null
      */
     protected $scheme;
 
     /**
      * URI userInfo part (usually user:password in HTTP URLs)
      *
-     * @var string
+     * @var string|null
      */
     protected $userInfo;
 
     /**
      * URI hostname
      *
-     * @var string
+     * @var string|null
      */
     protected $host;
 
     /**
      * URI port
      *
-     * @var int
+     * @var int|null
      */
     protected $port;
 
     /**
      * URI path
      *
-     * @var string
+     * @var string|null
      */
     protected $path;
 
     /**
      * URI query string
      *
-     * @var string
+     * @var string|null
      */
     protected $query;
 
     /**
-     * URI fragment
+     * URI fragment|null
      *
      * @var string
      */
@@ -192,7 +192,7 @@ class Uri implements UriInterface
     public function isValid()
     {
         if ($this->host) {
-            if (strlen($this->path) > 0 && substr($this->path, 0, 1) != '/') {
+            if (strlen($this->path) > 0 && 0 !== strpos($this->path, '/')) {
                 return false;
             }
             return true;
@@ -204,7 +204,7 @@ class Uri implements UriInterface
 
         if ($this->path) {
             // Check path-only (no host) URI
-            if (substr($this->path, 0, 2) == '//') {
+            if (0 === strpos($this->path, '//')) {
                 return false;
             }
             return true;
@@ -231,7 +231,7 @@ class Uri implements UriInterface
 
         if ($this->path) {
             // Check path-only (no host) URI
-            if (substr($this->path, 0, 2) == '//') {
+            if (0 === strpos($this->path, '//')) {
                 return false;
             }
             return true;
@@ -301,12 +301,17 @@ class Uri implements UriInterface
                 $this->setUserInfo($userInfo);
             }
 
-            $nMatches = preg_match('/:[\d]{1,5}$/', $authority, $matches);
+            $nMatches = preg_match('/:[\d]{0,5}$/', $authority, $matches);
             if ($nMatches === 1) {
                 $portLength = strlen($matches[0]);
                 $port = substr($matches[0], 1);
 
-                $this->setPort((int) $port);
+                // If authority ends with colon, port will be empty string.
+                // Remove the colon from authority, but keeps port null
+                if ($port) {
+                    $this->setPort((int) $port);
+                }
+
                 $authority = substr($authority, 0, -$portLength);
             }
 
@@ -337,7 +342,7 @@ class Uri implements UriInterface
         }
 
         // All that's left is the fragment
-        if ($uri && substr($uri, 0, 1) == '#') {
+        if ($uri && 0 === strpos($uri, '#')) {
             $this->setFragment(substr($uri, 1));
         }
 
@@ -483,7 +488,7 @@ class Uri implements UriInterface
                     $this->setQuery($baseUri->getQuery());
                 }
             } else {
-                if (substr($relPath, 0, 1) == '/') {
+                if (0 === strpos($relPath, '/')) {
                     $this->setPath(static::removePathDotSegments($relPath));
                 } else {
                     if ($baseUri->getHost() && ! $basePath) {
@@ -682,7 +687,7 @@ class Uri implements UriInterface
      * You can check if a scheme is valid before setting it using the
      * validateScheme() method.
      *
-     * @param  string $scheme
+     * @param  string|null $scheme
      * @throws Exception\InvalidUriPartException
      * @return Uri
      */
@@ -703,7 +708,7 @@ class Uri implements UriInterface
     /**
      * Set the URI User-info part (usually user:password)
      *
-     * @param  string $userInfo
+     * @param  string|null $userInfo
      * @return Uri
      * @throws Exception\InvalidUriPartException If the schema definition
      * does not have this part
@@ -728,7 +733,7 @@ class Uri implements UriInterface
      * example the HTTP RFC clearly states that only IPv4 and valid DNS names
      * are allowed in HTTP URIs.
      *
-     * @param  string $host
+     * @param  string|null $host
      * @throws Exception\InvalidUriPartException
      * @return Uri
      */
@@ -745,6 +750,10 @@ class Uri implements UriInterface
             ), Exception\InvalidUriPartException::INVALID_HOSTNAME);
         }
 
+        if ($host !== null) {
+            $host = strtolower($host);
+        }
+
         $this->host = $host;
         return $this;
     }
@@ -752,7 +761,7 @@ class Uri implements UriInterface
     /**
      * Set the port part of the URI
      *
-     * @param  int $port
+     * @param  int|null $port
      * @return Uri
      */
     public function setPort($port)
@@ -764,7 +773,7 @@ class Uri implements UriInterface
     /**
      * Set the path
      *
-     * @param  string $path
+     * @param  string|null $path
      * @return Uri
      */
     public function setPath($path)
@@ -780,7 +789,7 @@ class Uri implements UriInterface
      * query string. Array values will be represented in the query string using
      * PHP's common square bracket notation.
      *
-     * @param  string|array $query
+     * @param  string|array|null $query
      * @return Uri
      */
     public function setQuery($query)
@@ -798,7 +807,7 @@ class Uri implements UriInterface
     /**
      * Set the URI fragment part
      *
-     * @param  string $fragment
+     * @param  string|null $fragment
      * @return Uri
      * @throws Exception\InvalidUriPartException If the schema definition
      * does not have this part
@@ -1105,7 +1114,7 @@ class Uri implements UriInterface
                     }
                     $output = substr($output, 0, $lastSlashPos);
                     break;
-                case (substr($path, 0, 4) == '/../'):
+                case (0 === strpos($path, '/../')):
                     $path   = '/' . substr($path, 4);
                     $lastSlashPos = strrpos($output, '/', -1);
                     if (false === $lastSlashPos) {
@@ -1113,13 +1122,13 @@ class Uri implements UriInterface
                     }
                     $output = substr($output, 0, $lastSlashPos);
                     break;
-                case (substr($path, 0, 3) == '/./'):
+                case (0 === strpos($path, '/./')):
                     $path = substr($path, 2);
                     break;
-                case (substr($path, 0, 2) == './'):
+                case (0 === strpos($path, './')):
                     $path = substr($path, 2);
                     break;
-                case (substr($path, 0, 3) == '../'):
+                case (0 === strpos($path, '../')):
                     $path = substr($path, 3);
                     break;
                 default:

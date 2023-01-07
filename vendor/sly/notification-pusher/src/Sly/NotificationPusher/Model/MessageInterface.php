@@ -12,25 +12,19 @@
 namespace Sly\NotificationPusher\Model;
 
 /**
- * MessageInterface
- *
  * @author Cédric Dugat <cedric@dugat.me>
  */
 interface MessageInterface
 {
     /**
-     * Get Text.
-     *
      * @return string
      */
     public function getText();
 
     /**
-     * Set Text.
-     *
      * @param string $text Text
      *
-     * @return \Sly\NotificationPusher\Model\MessageInterface
+     * @return MessageInterface
      */
     public function setText($text);
 }

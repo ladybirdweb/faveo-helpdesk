@@ -6,27 +6,24 @@
  * Time: 17:03
  */
 
-namespace Sly\Sly\NotificationPusher\Adapter;
+namespace Sly\NotificationPusher\Adapter;
 
 
-use Sly\NotificationPusher\Adapter\BaseAdapter;
+use Sly\NotificationPusher\Collection\DeviceCollection;
 use Sly\NotificationPusher\Model\PushInterface;
 
 /**
- * Class ApnsAPI
  * @package Sly\Sly\NotificationPusher\Adapter
- *
+ * @author Oleg Abrazhaev <seyferseed@gmail.com>
  * todo: implement with edamov/pushok
  */
 class ApnsAPI extends BaseAdapter
 {
 
     /**
-     * Push.
+     * @param PushInterface $push Push
      *
-     * @param \Sly\NotificationPusher\Model\PushInterface $push Push
-     *
-     * @return \Sly\NotificationPusher\Collection\DeviceCollection
+     * @return DeviceCollection
      */
     public function push(PushInterface $push)
     {
@@ -34,8 +31,6 @@ class ApnsAPI extends BaseAdapter
     }
 
     /**
-     * Supports.
-     *
      * @param string $token Token
      *
      * @return boolean
@@ -46,8 +41,6 @@ class ApnsAPI extends BaseAdapter
     }
 
     /**
-     * Get defined parameters.
-     *
      * @return array
      */
     public function getDefinedParameters()
@@ -56,8 +49,6 @@ class ApnsAPI extends BaseAdapter
     }
 
     /**
-     * Get default parameters.
-     *
      * @return array
      */
     public function getDefaultParameters()
@@ -66,8 +57,6 @@ class ApnsAPI extends BaseAdapter
     }
 
     /**
-     * Get required parameters.
-     *
      * @return array
      */
     public function getRequiredParameters()

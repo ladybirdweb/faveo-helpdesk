@@ -30,7 +30,7 @@ class CacheControl implements HeaderInterface
      *
      * @param string $headerLine
      * @throws Exception\InvalidArgumentException
-     * @return CacheControl
+     * @return static
      */
     public static function fromString($headerLine)
     {
@@ -83,7 +83,7 @@ class CacheControl implements HeaderInterface
      *
      * @param string $key
      * @param string|bool $value
-     * @return CacheControl - provides the fluent interface
+     * @return $this
      */
     public function addDirective($key, $value = true)
     {
@@ -121,7 +121,7 @@ class CacheControl implements HeaderInterface
      * Remove a directive
      *
      * @param string $key
-     * @return CacheControl - provides the fluent interface
+     * @return $this
      */
     public function removeDirective($key)
     {

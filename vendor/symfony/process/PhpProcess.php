@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Process;
 
+use Symfony\Component\Process\Exception\LogicException;
 use Symfony\Component\Process\Exception\RuntimeException;
 
 /**
@@ -33,11 +34,10 @@ class PhpProcess extends Process
      */
     public function __construct(string $script, string $cwd = null, array $env = null, int $timeout = 60, array $php = null)
     {
-        $executableFinder = new PhpExecutableFinder();
-        if (false === $php = $php ?? $executableFinder->find(false)) {
-            $php = null;
-        } else {
-            $php = array_merge(array($php), $executableFinder->findArguments());
+        if (null === $php) {
+            $executableFinder = new PhpExecutableFinder();
+            $php = $executableFinder->find(false);
+            $php = false === $php ? null : array_merge([$php], $executableFinder->findArguments());
         }
         if ('phpdbg' === \PHP_SAPI) {
             $file = tempnam(sys_get_temp_dir(), 'dbg');
@@ -51,13 +51,21 @@ class PhpProcess extends Process
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public static function fromShellCommandline(string $command, string $cwd = null, array $env = null, $input = null, ?float $timeout = 60)
+    {
+        throw new LogicException(sprintf('The "%s()" method cannot be called when using "%s".', __METHOD__, self::class));
+    }
+
+    /**
      * Sets the path to the PHP binary to use.
      *
      * @deprecated since Symfony 4.2, use the $php argument of the constructor instead.
      */
     public function setPhpBinary($php)
     {
-        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.2, use the $php argument of the constructor instead.', __METHOD__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.2, use the $php argument of the constructor instead.', __METHOD__), \E_USER_DEPRECATED);
 
         $this->setCommandLine($php);
     }
@@ -65,7 +73,7 @@ class PhpProcess extends Process
     /**
      * {@inheritdoc}
      */
-    public function start(callable $callback = null, array $env = array())
+    public function start(callable $callback = null, array $env = [])
     {
         if (null === $this->getCommandLine()) {
             throw new RuntimeException('Unable to find the PHP executable.');

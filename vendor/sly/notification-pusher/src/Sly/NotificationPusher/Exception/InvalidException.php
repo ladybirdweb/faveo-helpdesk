@@ -12,8 +12,6 @@
 namespace Sly\NotificationPusher\Exception;
 
 /**
- * InvalidException.
- *
  * @uses   \RuntimeException
  * @uses   \Sly\NotificationPusher\Exception\ExceptionInterface
  *

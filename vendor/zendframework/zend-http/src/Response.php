@@ -89,6 +89,16 @@ class Response extends AbstractMessage implements ResponseInterface
     /**#@-*/
 
     /**
+     * @internal
+     */
+    const MIN_STATUS_CODE_VALUE = 100;
+
+    /**
+     * @internal
+     */
+    const MAX_STATUS_CODE_VALUE = 599;
+
+    /**
      * @var array Recommended Reason Phrases
      */
     protected $recommendedReasonPhrases = [
@@ -177,7 +187,7 @@ class Response extends AbstractMessage implements ResponseInterface
      * Populate object from string
      *
      * @param  string $string
-     * @return self
+     * @return static
      * @throws Exception\InvalidArgumentException
      */
     public static function fromString($string)
@@ -249,7 +259,7 @@ class Response extends AbstractMessage implements ResponseInterface
      */
     protected function parseStatusLine($line)
     {
-        $regex   = '/^HTTP\/(?P<version>1\.[01]) (?P<status>\d{3})(?:[ ]+(?P<reason>.*))?$/';
+        $regex   = '/^HTTP\/(?P<version>1\.[01]|2) (?P<status>\d{3})(?:[ ]+(?P<reason>.*))?$/';
         $matches = [];
         if (! preg_match($regex, $line, $matches)) {
             throw new Exception\InvalidArgumentException(
@@ -275,16 +285,20 @@ class Response extends AbstractMessage implements ResponseInterface
      *
      * @param  int $code
      * @throws Exception\InvalidArgumentException
-     * @return self
+     * @return $this
      */
     public function setStatusCode($code)
     {
-        $const = get_class($this) . '::STATUS_CODE_' . $code;
-        if (! is_numeric($code) || ! defined($const)) {
-            $code = is_scalar($code) ? $code : gettype($code);
+        if (! is_numeric($code)
+            || is_float($code)
+            || $code < static::MIN_STATUS_CODE_VALUE
+            || $code > static::MAX_STATUS_CODE_VALUE
+        ) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid status code provided: "%s"',
-                $code
+                'Invalid status code "%s"; must be an integer between %d and %d, inclusive',
+                is_scalar($code) ? $code : gettype($code),
+                static::MIN_STATUS_CODE_VALUE,
+                static::MAX_STATUS_CODE_VALUE
             ));
         }
 
@@ -306,7 +320,7 @@ class Response extends AbstractMessage implements ResponseInterface
      *
      * @param  int $code
      * @throws Exception\InvalidArgumentException
-     * @return self
+     * @return $this
      */
     public function setCustomStatusCode($code)
     {
@@ -325,7 +339,7 @@ class Response extends AbstractMessage implements ResponseInterface
      * Assign status code
      *
      * @param int $code
-     * @return self
+     * @return $this
      */
     protected function saveStatusCode($code)
     {
@@ -336,7 +350,7 @@ class Response extends AbstractMessage implements ResponseInterface
 
     /**
      * @param string $reasonPhrase
-     * @return self
+     * @return $this
      */
     public function setReasonPhrase($reasonPhrase)
     {
@@ -564,6 +578,13 @@ class Response extends AbstractMessage implements ResponseInterface
             );
         }
 
+        if ($body === ''
+            || ($this->getHeaders()->has('content-length')
+                && (int) $this->getHeaders()->get('content-length')->getFieldValue() === 0)
+        ) {
+            return '';
+        }
+
         ErrorHandler::start();
         $return = gzinflate(substr($body, 10));
         $test = ErrorHandler::stop();
@@ -592,6 +613,11 @@ class Response extends AbstractMessage implements ResponseInterface
             throw new Exception\RuntimeException(
                 'zlib extension is required in order to decode "deflate" encoding'
             );
+        }
+
+        if ($this->getHeaders()->has('content-length')
+            && 0 === (int) $this->getHeaders()->get('content-length')->getFieldValue()) {
+            return '';
         }
 
         /**

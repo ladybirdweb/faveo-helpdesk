@@ -3,16 +3,16 @@
 namespace tests\units\Sly\NotificationPusher;
 
 use mageekguy\atoum as Units;
+use Sly\NotificationPusher\Adapter\Apns;
+use Sly\NotificationPusher\Collection\DeviceCollection;
+use Sly\NotificationPusher\Collection\PushCollection;
+use Sly\NotificationPusher\Model\Device;
+use Sly\NotificationPusher\Model\Message;
+use Sly\NotificationPusher\Model\Push;
 use Sly\NotificationPusher\Model\Response;
 use Sly\NotificationPusher\PushManager as TestedModel;
 
-use Sly\NotificationPusher\Model\Message as BaseMessage;
-use Sly\NotificationPusher\Model\Device as BaseDevice;
-use Sly\NotificationPusher\Collection\DeviceCollection as BaseDeviceCollection;
-
 /**
- * PushManager.
- *
  * @uses atoum\test
  * @author Cédric Dugat <cedric@dugat.me>
  */
@@ -24,69 +24,59 @@ class PushManager extends Units\Test
     {
         $this->if($object = new TestedModel())
             ->string($object->getEnvironment())
-                ->isEqualTo(TestedModel::ENVIRONMENT_DEV)
-
+            ->isEqualTo(TestedModel::ENVIRONMENT_DEV)
             ->when($object = new TestedModel(TestedModel::ENVIRONMENT_PROD))
             ->string($object->getEnvironment())
-                ->isEqualTo(TestedModel::ENVIRONMENT_PROD)
-        ;
+            ->isEqualTo(TestedModel::ENVIRONMENT_PROD);
     }
 
     public function testCollection()
     {
         $this->if($this->mockGenerator()->orphanize('__construct'))
-            ->and($this->mockClass('\Sly\NotificationPusher\Model\Push', '\Mock'))
+            ->and($this->mockClass(Push::class, '\Mock'))
             ->and($push = new \Mock\Push())
-            ->and($push->getMockController()->getMessage = new BaseMessage('Test'))
-            ->and($push->getMockController()->getDevices = new BaseDeviceCollection([new BaseDevice(self::APNS_TOKEN_EXAMPLE)]))
+            ->and($push->getMockController()->getMessage = new Message('Test'))
+            ->and($push->getMockController()->getDevices = new DeviceCollection([new Device(self::APNS_TOKEN_EXAMPLE)]))
             ->and($push2 = new \Mock\Push())
-            ->and($push2->getMockController()->getMessage = new BaseMessage('Test 2'))
-            ->and($push2->getMockController()->getDevices = new BaseDeviceCollection([new BaseDevice(self::APNS_TOKEN_EXAMPLE)]))
-
+            ->and($push2->getMockController()->getMessage = new Message('Test 2'))
+            ->and($push2->getMockController()->getDevices = new DeviceCollection([new Device(self::APNS_TOKEN_EXAMPLE)]))
             ->and($object = (new TestedModel())->getPushCollection())
-
             ->when($object->add($push))
             ->object($object)
-                ->isInstanceOf('\Sly\NotificationPusher\Collection\PushCollection')
+            ->isInstanceOf(PushCollection::class)
             ->object($object->getIterator())
-                ->hasSize(1)
+            ->hasSize(1)
             ->when($object->add($push2))
             ->object($object)
-                ->isInstanceOf('\Sly\NotificationPusher\Collection\PushCollection')
+            ->isInstanceOf(PushCollection::class)
             ->object($object->getIterator())
-                ->hasSize(2)
-
+            ->hasSize(2)
             ->object($object->first())
-                ->isEqualTo($push)
+            ->isEqualTo($push)
             ->object($object->last())
-                ->isEqualTo($push2)
-        ;
+            ->isEqualTo($push2);
     }
 
     public function testPush()
     {
         date_default_timezone_set('UTC');
         $this->if($this->mockGenerator()->orphanize('__construct'))
-            ->and($this->mockClass('\Sly\NotificationPusher\Adapter\Apns', '\Mock'))
+            ->and($this->mockClass(Apns::class, '\Mock'))
             ->and($apnsAdapter = new \Mock\Apns())
             ->and($apnsAdapter->getMockController()->push = true)
             ->and($apnsAdapter->getMockController()->getResponse = new Response())
-
             ->and($this->mockGenerator()->orphanize('__construct'))
-            ->and($this->mockClass('\Sly\NotificationPusher\Model\Push', '\Mock'))
+            ->and($this->mockClass(Push::class, '\Mock'))
             ->and($push = new \Mock\Push())
-            ->and($push->getMockController()->getMessage = new BaseMessage('Test'))
-            ->and($push->getMockController()->getDevices = new BaseDeviceCollection([new BaseDevice(self::APNS_TOKEN_EXAMPLE)]))
+            ->and($push->getMockController()->getMessage = new Message('Test'))
+            ->and($push->getMockController()->getDevices = new DeviceCollection([new Device(self::APNS_TOKEN_EXAMPLE)]))
             ->and($push->getMockController()->getAdapter = $apnsAdapter)
-
             ->and($object = new TestedModel())
             ->and($object->add($push))
-
             ->object($object->push())
-                ->isInstanceOf('\Sly\NotificationPusher\Collection\PushCollection')
-                ->hasSize(1)
+            ->isInstanceOf(PushCollection::class)
+            ->hasSize(1)
             ->object($object->getResponse())
-                ->isInstanceOf('\Sly\NotificationPusher\Model\Response')
-        ;
+            ->isInstanceOf(Response::class);
     }
 }

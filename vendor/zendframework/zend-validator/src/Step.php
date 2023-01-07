@@ -122,7 +122,9 @@ class Step extends AbstractValidator
 
         $this->setValue($value);
 
-        $fmod = $this->fmod($value - $this->baseValue, $this->step);
+        $substract = $this->sub($value, $this->baseValue);
+
+        $fmod = $this->fmod($substract, $this->step);
 
         if ($fmod !== 0.0 && $fmod !== $this->step) {
             $this->error(self::NOT_STEP);
@@ -146,10 +148,31 @@ class Step extends AbstractValidator
         }
 
         //find the maximum precision from both input params to give accurate results
-        $xFloatSegment = substr($x, strpos($x, '.') + 1) ?: '';
-        $yFloatSegment = substr($y, strpos($y, '.') + 1) ?: '';
-        $precision = strlen($xFloatSegment) + strlen($yFloatSegment);
+        $precision = $this->getPrecision($x) + $this->getPrecision($y);
 
         return round($x - $y * floor($x / $y), $precision);
+    }
+
+    /**
+     * replaces the internal substraction operation which give wrong results on some cases
+     *
+     * @param float $x
+     * @param float $y
+     * @return float
+     */
+    private function sub($x, $y)
+    {
+        $precision = $this->getPrecision($x) + $this->getPrecision($y);
+        return round($x - $y, $precision);
+    }
+
+    /**
+     * @param  float $float
+     * @return int
+     */
+    private function getPrecision($float)
+    {
+        $segment = substr($float, strpos($float, '.') + 1);
+        return $segment ? strlen($segment) : 0;
     }
 }

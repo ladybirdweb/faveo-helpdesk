@@ -16,15 +16,15 @@ class TimeType extends Type
      */
     public function getName()
     {
-        return Type::TIME;
+        return Types::TIME_MUTABLE;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
-        return $platform->getTimeTypeDeclarationSQL($fieldDeclaration);
+        return $platform->getTimeTypeDeclarationSQL($column);
     }
 
     /**
@@ -54,7 +54,11 @@ class TimeType extends Type
 
         $val = DateTime::createFromFormat('!' . $platform->getTimeFormatString(), $value);
         if (! $val) {
-            throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getTimeFormatString());
+            throw ConversionException::conversionFailedFormat(
+                $value,
+                $this->getName(),
+                $platform->getTimeFormatString()
+            );
         }
 
         return $val;

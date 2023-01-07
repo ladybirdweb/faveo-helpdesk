@@ -11,13 +11,17 @@
 
 namespace Symfony\Component\Routing\Generator\Dumper;
 
-use Symfony\Component\Routing\Matcher\Dumper\PhpMatcherDumper;
+@trigger_error(sprintf('The "%s" class is deprecated since Symfony 4.3, use "CompiledUrlGeneratorDumper" instead.', PhpGeneratorDumper::class), \E_USER_DEPRECATED);
+
+use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper;
 
 /**
  * PhpGeneratorDumper creates a PHP class able to generate URLs for a given set of routes.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Tobias Schultze <http://tobion.de>
+ *
+ * @deprecated since Symfony 4.3, use CompiledUrlGeneratorDumper instead.
  */
 class PhpGeneratorDumper extends GeneratorDumper
 {
@@ -33,12 +37,12 @@ class PhpGeneratorDumper extends GeneratorDumper
      *
      * @return string A PHP class representing the generator class
      */
-    public function dump(array $options = array())
+    public function dump(array $options = [])
     {
-        $options = array_merge(array(
+        $options = array_merge([
             'class' => 'ProjectUrlGenerator',
             'base_class' => 'Symfony\\Component\\Routing\\Generator\\UrlGenerator',
-        ), $options);
+        ], $options);
 
         return <<<EOF
 <?php
@@ -75,16 +79,14 @@ EOF;
     /**
      * Generates PHP code representing an array of defined routes
      * together with the routes properties (e.g. requirements).
-     *
-     * @return string PHP code
      */
-    private function generateDeclaredRoutes()
+    private function generateDeclaredRoutes(): string
     {
-        $routes = "array(\n";
+        $routes = "[\n";
         foreach ($this->getRoutes()->all() as $name => $route) {
             $compiledRoute = $route->compile();
 
-            $properties = array();
+            $properties = [];
             $properties[] = $compiledRoute->getVariables();
             $properties[] = $route->getDefaults();
             $properties[] = $route->getRequirements();
@@ -92,22 +94,20 @@ EOF;
             $properties[] = $compiledRoute->getHostTokens();
             $properties[] = $route->getSchemes();
 
-            $routes .= sprintf("        '%s' => %s,\n", $name, PhpMatcherDumper::export($properties));
+            $routes .= sprintf("        '%s' => %s,\n", $name, CompiledUrlMatcherDumper::export($properties));
         }
-        $routes .= '    )';
+        $routes .= '    ]';
 
         return $routes;
     }
 
     /**
      * Generates PHP code representing the `generate` method that implements the UrlGeneratorInterface.
-     *
-     * @return string PHP code
      */
-    private function generateGenerateMethod()
+    private function generateGenerateMethod(): string
     {
         return <<<'EOF'
-    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
+    public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)
     {
         $locale = $parameters['_locale']
             ?? $this->context->getParameter('_locale')
@@ -116,7 +116,6 @@ EOF;
         if (null !== $locale && null !== $name) {
             do {
                 if ((self::$declaredRoutes[$name.'.'.$locale][1]['_canonical_route'] ?? null) === $name) {
-                    unset($parameters['_locale']);
                     $name .= '.'.$locale;
                     break;
                 }
@@ -128,6 +127,14 @@ EOF;
         }
 
         list($variables, $defaults, $requirements, $tokens, $hostTokens, $requiredSchemes) = self::$declaredRoutes[$name];
+
+        if (isset($defaults['_canonical_route']) && isset($defaults['_locale'])) {
+            if (!\in_array('_locale', $variables, true)) {
+                unset($parameters['_locale']);
+            } elseif (!isset($parameters['_locale'])) {
+                $parameters['_locale'] = $defaults['_locale'];
+            }
+        }
 
         return $this->doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $referenceType, $hostTokens, $requiredSchemes);
     }

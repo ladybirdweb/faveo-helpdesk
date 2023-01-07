@@ -11,5 +11,20 @@ This library **does not** support [PSR-7](http://www.php-fig.org/psr/psr-7), as
 it predates that specification. For PSR-7 support, please see our
 [Diactoros component](https://docs.zendframework.com/zend-diactoros/).
 
-- File issues at https://github.com/zendframework/zend-http/issues
-- Documentation is at https://docs.zendframework.com/zend-http/
+## Installation
+
+Run the following to install this library:
+
+```bash
+$ composer require zendframework/zend-http
+```
+
+## Documentation
+
+Browse the documentation online at https://docs.zendframework.com/zend-http/
+
+## Support
+
+* [Issues](https://github.com/zendframework/zend-http/issues/)
+* [Chat](https://zendframework-slack.herokuapp.com/)
+* [Forum](https://discourse.zendframework.com/)

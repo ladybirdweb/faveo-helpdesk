@@ -36,6 +36,19 @@ class CollectionConfigurator
         $this->parentPrefixes = $parentPrefixes;
     }
 
+    /**
+     * @return array
+     */
+    public function __sleep()
+    {
+        throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
+    }
+
+    public function __wakeup()
+    {
+        throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
+    }
+
     public function __destruct()
     {
         if (null === $this->prefixes) {
@@ -47,10 +60,8 @@ class CollectionConfigurator
 
     /**
      * Creates a sub-collection.
-     *
-     * @return self
      */
-    final public function collection($name = '')
+    final public function collection(string $name = ''): self
     {
         return new self($this->collection, $this->name.$name, $this, $this->prefixes);
     }
@@ -62,7 +73,7 @@ class CollectionConfigurator
      *
      * @return $this
      */
-    final public function prefix($prefix)
+    final public function prefix($prefix): self
     {
         if (\is_array($prefix)) {
             if (null === $this->parentPrefixes) {
@@ -88,7 +99,7 @@ class CollectionConfigurator
         return $this;
     }
 
-    private function createRoute($path): Route
+    private function createRoute(string $path): Route
     {
         return (clone $this->route)->setPath($path);
     }

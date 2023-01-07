@@ -12,9 +12,9 @@ class StringType extends Type
     /**
      * {@inheritdoc}
      */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
-        return $platform->getVarcharTypeDeclarationSQL($fieldDeclaration);
+        return $platform->getVarcharTypeDeclarationSQL($column);
     }
 
     /**
@@ -30,6 +30,6 @@ class StringType extends Type
      */
     public function getName()
     {
-        return Type::STRING;
+        return Types::STRING;
     }
 }

@@ -5,6 +5,7 @@ namespace Cron\Tests;
 use Cron\CronExpression;
 use Cron\MonthField;
 use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -47,11 +48,12 @@ class CronExpressionTest extends TestCase
      * @covers \Cron\CronExpression::__construct
      * @covers \Cron\CronExpression::getExpression
      * @covers \Cron\CronExpression::__toString
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid CRON field value A at position 0
      */
     public function testParsesCronScheduleThrowsAnException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid CRON field value A at position 0');
+
         CronExpression::factory('A 1 2 3 4');
     }
 
@@ -89,20 +91,22 @@ class CronExpressionTest extends TestCase
      * @covers \Cron\CronExpression::__construct
      * @covers \Cron\CronExpression::setExpression
      * @covers \Cron\CronExpression::setPart
-     * @expectedException InvalidArgumentException
      */
     public function testInvalidCronsWillFail()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         // Only four values
         $cron = CronExpression::factory('* * * 1');
     }
 
     /**
      * @covers \Cron\CronExpression::setPart
-     * @expectedException InvalidArgumentException
      */
     public function testInvalidPartsWillFail()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         // Only four values
         $cron = CronExpression::factory('* * * * *');
         $cron->setPart(1, 'abc');
@@ -228,6 +232,7 @@ class CronExpressionTest extends TestCase
         $this->assertTrue($cron->isDue('now'));
         $this->assertTrue($cron->isDue(new DateTime('now')));
         $this->assertTrue($cron->isDue(date('Y-m-d H:i')));
+        $this->assertTrue($cron->isDue(new DateTimeImmutable('now')));
     }
 
     /**
@@ -410,6 +415,18 @@ class CronExpressionTest extends TestCase
     /**
      * @covers \Cron\CronExpression::getRunDate
      */
+    public function testGetRunDateHandlesDifferentDates()
+    {
+        $cron = CronExpression::factory('@weekly');
+        $date = new DateTime("2019-03-10 00:00:00");
+        $this->assertEquals($date, $cron->getNextRunDate("2019-03-03 08:00:00"));
+        $this->assertEquals($date, $cron->getNextRunDate(new DateTime("2019-03-03 08:00:00")));
+        $this->assertEquals($date, $cron->getNextRunDate(new DateTimeImmutable("2019-03-03 08:00:00")));
+    }
+
+    /**
+     * @covers \Cron\CronExpression::getRunDate
+     */
     public function testSkipsCurrentDateByDefault()
     {
         $cron = CronExpression::factory('* * * * *');
@@ -556,5 +573,17 @@ class CronExpressionTest extends TestCase
 
         $nextRunDate = $e->getNextRunDate(new DateTime('2014-05-07 00:00:00'));
         $this->assertSame('2015-04-01 00:00:00', $nextRunDate->format('Y-m-d H:i:s'));
+    }
+
+    /**
+     * When there is an issue with a field, we should report the human readable position
+     *
+     * @see https://github.com/dragonmantank/cron-expression/issues/29
+     */
+    public function testFieldPositionIsHumanAdjusted()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("6 is not a valid position");
+        $e = CronExpression::factory('0 * * * * ? *');
     }
 }

@@ -76,7 +76,7 @@ class Response extends HttpResponse
     /**
      * Send HTTP headers
      *
-     * @return Response
+     * @return $this
      */
     public function sendHeaders()
     {
@@ -103,7 +103,7 @@ class Response extends HttpResponse
     /**
      * Send content
      *
-     * @return Response
+     * @return $this
      */
     public function sendContent()
     {
@@ -119,7 +119,7 @@ class Response extends HttpResponse
     /**
      * Send HTTP response
      *
-     * @return Response
+     * @return $this
      */
     public function send()
     {

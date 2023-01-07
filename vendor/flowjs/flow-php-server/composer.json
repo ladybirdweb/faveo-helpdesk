@@ -19,13 +19,18 @@
     "chunks"
   ],
   "require": {
-      "php": ">=5.3"
+      "php": ">=5.4"
   },
   "require-dev": {
-    "mikey179/vfsStream": "v1.2.0",
+    "mikey179/vfsstream": "v1.2.0",
     "league/phpunit-coverage-listener": "~1.1",
-    "fabpot/php-cs-fixer": "dev-master",
-    "phpunit/phpunit": "4.*"
+    "fabpot/php-cs-fixer": "~2.2",
+    "phpunit/phpunit": "4.*",
+    "mongodb/mongodb": "^1.4.0",
+    "ext-mongodb": "*"
+  },
+  "suggest": {
+    "mongodb/mongodb":"Required to use this package with Mongo DB"
   },
   "autoload": {
     "psr-0": {

@@ -18,7 +18,7 @@ namespace Symfony\Component\HttpFoundation;
  */
 class IpUtils
 {
-    private static $checkedIps = array();
+    private static $checkedIps = [];
 
     /**
      * This class should not be instantiated.
@@ -37,8 +37,12 @@ class IpUtils
      */
     public static function checkIp($requestIp, $ips)
     {
+        if (null === $requestIp) {
+            return false;
+        }
+
         if (!\is_array($ips)) {
-            $ips = array($ips);
+            $ips = [$ips];
         }
 
         $method = substr_count($requestIp, ':') > 1 ? 'checkIp6' : 'checkIp4';
@@ -68,15 +72,15 @@ class IpUtils
             return self::$checkedIps[$cacheKey];
         }
 
-        if (!filter_var($requestIp, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+        if (!filter_var($requestIp, \FILTER_VALIDATE_IP, \FILTER_FLAG_IPV4)) {
             return self::$checkedIps[$cacheKey] = false;
         }
 
-        if (false !== strpos($ip, '/')) {
-            list($address, $netmask) = explode('/', $ip, 2);
+        if (str_contains($ip, '/')) {
+            [$address, $netmask] = explode('/', $ip, 2);
 
             if ('0' === $netmask) {
-                return self::$checkedIps[$cacheKey] = filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+                return self::$checkedIps[$cacheKey] = filter_var($address, \FILTER_VALIDATE_IP, \FILTER_FLAG_IPV4);
             }
 
             if ($netmask < 0 || $netmask > 32) {
@@ -120,8 +124,17 @@ class IpUtils
             throw new \RuntimeException('Unable to check Ipv6. Check that PHP was not compiled with option "disable-ipv6".');
         }
 
-        if (false !== strpos($ip, '/')) {
-            list($address, $netmask) = explode('/', $ip, 2);
+        // Check to see if we were given a IP4 $requestIp or $ip by mistake
+        if (str_contains($requestIp, '.') || str_contains($ip, '.')) {
+            return self::$checkedIps[$cacheKey] = false;
+        }
+
+        if (!filter_var($requestIp, \FILTER_VALIDATE_IP, \FILTER_FLAG_IPV6)) {
+            return self::$checkedIps[$cacheKey] = false;
+        }
+
+        if (str_contains($ip, '/')) {
+            [$address, $netmask] = explode('/', $ip, 2);
 
             if ('0' === $netmask) {
                 return (bool) unpack('n*', @inet_pton($address));
@@ -145,12 +158,44 @@ class IpUtils
         for ($i = 1, $ceil = ceil($netmask / 16); $i <= $ceil; ++$i) {
             $left = $netmask - 16 * ($i - 1);
             $left = ($left <= 16) ? $left : 16;
-            $mask = ~(0xffff >> $left) & 0xffff;
+            $mask = ~(0xFFFF >> $left) & 0xFFFF;
             if (($bytesAddr[$i] & $mask) != ($bytesTest[$i] & $mask)) {
                 return self::$checkedIps[$cacheKey] = false;
             }
         }
 
         return self::$checkedIps[$cacheKey] = true;
+    }
+
+    /**
+     * Anonymizes an IP/IPv6.
+     *
+     * Removes the last byte for v4 and the last 8 bytes for v6 IPs
+     */
+    public static function anonymize(string $ip): string
+    {
+        $wrappedIPv6 = false;
+        if ('[' === substr($ip, 0, 1) && ']' === substr($ip, -1, 1)) {
+            $wrappedIPv6 = true;
+            $ip = substr($ip, 1, -1);
+        }
+
+        $packedAddress = inet_pton($ip);
+        if (4 === \strlen($packedAddress)) {
+            $mask = '255.255.255.0';
+        } elseif ($ip === inet_ntop($packedAddress & inet_pton('::ffff:ffff:ffff'))) {
+            $mask = '::ffff:ffff:ff00';
+        } elseif ($ip === inet_ntop($packedAddress & inet_pton('::ffff:ffff'))) {
+            $mask = '::ffff:ff00';
+        } else {
+            $mask = 'ffff:ffff:ffff:ffff:0000:0000:0000:0000';
+        }
+        $ip = inet_ntop($packedAddress & inet_pton($mask));
+
+        if ($wrappedIPv6) {
+            $ip = '['.$ip.']';
+        }
+
+        return $ip;
     }
 }

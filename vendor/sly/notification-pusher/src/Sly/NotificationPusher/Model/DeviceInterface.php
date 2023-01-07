@@ -12,25 +12,19 @@
 namespace Sly\NotificationPusher\Model;
 
 /**
- * DeviceInterface
- *
  * @author Cédric Dugat <cedric@dugat.me>
  */
 interface DeviceInterface
 {
     /**
-     * Get token.
-     *
      * @return string
      */
     public function getToken();
 
     /**
-     * Set token.
-     *
      * @param string $token Token
      *
-     * @return \Sly\NotificationPusher\Model\DeviceInterface
+     * @return DeviceInterface
      */
     public function setToken($token);
 }

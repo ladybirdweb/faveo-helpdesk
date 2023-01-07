@@ -38,7 +38,7 @@ abstract class AbstractFieldValuePart
      * Set a Field Value Part this Field Value Part matched against.
      *
      * @param AbstractFieldValuePart $matchedAgainst
-     * @return AbstractFieldValuePart provides fluent interface
+     * @return $this
      */
     public function setMatchedAgainst(AbstractFieldValuePart $matchedAgainst)
     {

@@ -16,17 +16,17 @@ use Sly\NotificationPusher\Exception\AdapterException;
 use Sly\NotificationPusher\Exception\PushException;
 use Sly\NotificationPusher\Model\BaseOptionedModel;
 use Sly\NotificationPusher\Model\DeviceInterface;
+use Sly\NotificationPusher\Model\MessageInterface;
 use Sly\NotificationPusher\Model\PushInterface;
 use ZendService\Apple\Apns\Client\AbstractClient as ServiceAbstractClient;
 use ZendService\Apple\Apns\Client\Feedback as ServiceFeedbackClient;
 use ZendService\Apple\Apns\Client\Message as ServiceClient;
 use ZendService\Apple\Apns\Message as ServiceMessage;
 use ZendService\Apple\Apns\Message\Alert as ServiceAlert;
+use ZendService\Apple\Apns\Response\Feedback;
 use ZendService\Apple\Apns\Response\Message as ServiceResponse;
 
 /**
- * APNS adapter.
- *
  * @uses \Sly\NotificationPusher\Adapter\BaseAdapter
  *
  * @author Cédric Dugat <cedric@dugat.me>
@@ -47,7 +47,7 @@ class Apns extends BaseAdapter implements FeedbackAdapterInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Sly\NotificationPusher\Exception\AdapterException
+     * @throws AdapterException
      */
     public function __construct(array $parameters = [])
     {
@@ -63,7 +63,7 @@ class Apns extends BaseAdapter implements FeedbackAdapterInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Sly\NotificationPusher\Exception\PushException
+     * @throws PushException
      */
     public function push(PushInterface $push)
     {
@@ -72,15 +72,14 @@ class Apns extends BaseAdapter implements FeedbackAdapterInterface
         $pushedDevices = new DeviceCollection();
 
         foreach ($push->getDevices() as $device) {
-            /** @var \ZendService\Apple\Apns\Message $message */
             $message = $this->getServiceMessageFromOrigin($device, $push->getMessage());
 
             try {
-                /** @var \ZendService\Apple\Apns\Response\Message $response */
+                /** @var ServiceResponse $response */
                 $response = $client->send($message);
 
                 $responseArr = [
-                    'id'    => $response->getId(),
+                    'id' => $response->getId(),
                     'token' => $response->getCode(),
                 ];
                 $push->addResponse($device, $responseArr);
@@ -105,17 +104,15 @@ class Apns extends BaseAdapter implements FeedbackAdapterInterface
     }
 
     /**
-     * Feedback.
-     *
      * @return array
      */
     public function getFeedback()
     {
-        $client           = $this->getOpenedFeedbackClient();
-        $responses        = [];
+        $client = $this->getOpenedFeedbackClient();
+        $responses = [];
         $serviceResponses = $client->feedback();
 
-        /** @var \ZendService\Apple\Apns\Response\Feedback $response */
+        /** @var Feedback $response */
         foreach ($serviceResponses as $response) {
             $responses[$response->getToken()] = new \DateTime(date('c', $response->getTime()));
         }
@@ -124,11 +121,9 @@ class Apns extends BaseAdapter implements FeedbackAdapterInterface
     }
 
     /**
-     * Get opened client.
+     * @param ServiceAbstractClient|null $client Client
      *
-     * @param \ZendService\Apple\Apns\Client\AbstractClient|null $client Client
-     *
-     * @return \ZendService\Apple\Apns\Client\AbstractClient
+     * @return ServiceAbstractClient
      */
     public function getOpenedClient(ServiceAbstractClient $client = null)
     {
@@ -146,8 +141,6 @@ class Apns extends BaseAdapter implements FeedbackAdapterInterface
     }
 
     /**
-     * Get opened ServiceClient
-     *
      * @return ServiceClient
      */
     protected function getOpenedServiceClient()
@@ -160,8 +153,6 @@ class Apns extends BaseAdapter implements FeedbackAdapterInterface
     }
 
     /**
-     * Get opened ServiceFeedbackClient
-     *
      * @return ServiceFeedbackClient
      */
     private function getOpenedFeedbackClient()
@@ -174,25 +165,23 @@ class Apns extends BaseAdapter implements FeedbackAdapterInterface
     }
 
     /**
-     * Get service message from origin.
+     * @param DeviceInterface $device Device
+     * @param BaseOptionedModel|MessageInterface $message Message
      *
-     * @param \Sly\NotificationPusher\Model\DeviceInterface $device Device
-     * @param BaseOptionedModel|\Sly\NotificationPusher\Model\MessageInterface $message Message
-     *
-     * @return \ZendService\Apple\Apns\Message
+     * @return ServiceMessage
      */
     public function getServiceMessageFromOrigin(DeviceInterface $device, BaseOptionedModel $message)
     {
         $badge = ($message->hasOption('badge'))
-            ? (int)($message->getOption('badge') + $device->getParameter('badge', 0))
+            ? (int) ($message->getOption('badge') + $device->getParameter('badge', 0))
             : false;
 
-        $sound            = $message->getOption('sound');
+        $sound = $message->getOption('sound');
         $contentAvailable = $message->getOption('content-available');
-        $mutableContent   = $message->getOption('mutable-content');
-        $category         = $message->getOption('category');
-        $urlArgs          = $message->getOption('urlArgs');
-        $expire           = $message->getOption('expire');
+        $mutableContent = $message->getOption('mutable-content');
+        $category = $message->getOption('category');
+        $urlArgs = $message->getOption('urlArgs');
+        $expire = $message->getOption('expire');
 
         $alert = new ServiceAlert(
             $message->getText(),
@@ -267,7 +256,7 @@ class Apns extends BaseAdapter implements FeedbackAdapterInterface
      */
     public function supports($token)
     {
-        return (ctype_xdigit($token) && 64 == strlen($token));
+        return ctype_xdigit($token);
     }
 
     /**

@@ -17,10 +17,8 @@ use Sly\NotificationPusher\Model\ResponseInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Facade for simple use cases
- *
- * Class ApnsPushService
  * @package Sly\NotificationPusher
+ * @author Oleg Abrazhaev <seyferseed@gmail.com>
  */
 class ApnsPushService extends AbstractPushService
 {
@@ -50,7 +48,7 @@ class ApnsPushService extends AbstractPushService
         parent::__construct($environment);
 
         $this->certificatePath = $certificatePath;
-        $this->passPhrase      = $passPhrase;
+        $this->passPhrase = $passPhrase;
     }
 
     /**
@@ -75,7 +73,7 @@ class ApnsPushService extends AbstractPushService
         }
 
         $adapterParams = [];
-        $deviceParams  = [];
+        $deviceParams = [];
         $messageParams = [];
         if (isset($params) && !empty($params)) {
             if (isset($params['adapter'])) {
@@ -92,10 +90,9 @@ class ApnsPushService extends AbstractPushService
         }
 
         $adapterParams['certificate'] = $this->certificatePath;
-        $adapterParams['passPhrase']  = $this->passPhrase;
+        $adapterParams['passPhrase'] = $this->passPhrase;
 
         // Development one by default (without argument).
-        /** @var PushManager $pushManager */
         $pushManager = new PushManager($this->environment);
 
         // Then declare an adapter.
@@ -135,9 +132,9 @@ class ApnsPushService extends AbstractPushService
      */
     public function feedback()
     {
-        $adapterParams                = [];
+        $adapterParams = [];
         $adapterParams['certificate'] = $this->certificatePath;
-        $adapterParams['passPhrase']  = $this->passPhrase;
+        $adapterParams['passPhrase'] = $this->passPhrase;
 
         // Development one by default (without argument).
         /** @var PushManager $pushManager */
@@ -201,7 +198,7 @@ class ApnsPushService extends AbstractPushService
         }
 
         $feedbackTokens = array_keys($this->feedback);
-        $sentTokens     = array_keys($this->response->getParsedResponses());
+        $sentTokens = array_keys($this->response->getParsedResponses());
 
         //all bad
         if (!$feedbackTokens) {

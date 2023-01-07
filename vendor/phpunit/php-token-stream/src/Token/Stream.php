@@ -204,10 +204,7 @@ class PHP_Token_Stream implements ArrayAccess, Countable, SeekableIterator
                                       $this->linesOfCode['cloc'];
     }
 
-    /**
-     * @return int
-     */
-    public function count()
+    public function count(): int
     {
         return count($this->tokens);
     }
@@ -303,7 +300,7 @@ class PHP_Token_Stream implements ArrayAccess, Countable, SeekableIterator
             ];
 
             foreach ($this->tokens as $token) {
-                switch (get_class($token)) {
+                switch (PHP_Token_Util::getClass($token)) {
                     case 'PHP_Token_REQUIRE_ONCE':
                     case 'PHP_Token_REQUIRE':
                     case 'PHP_Token_INCLUDE_ONCE':
@@ -358,7 +355,7 @@ class PHP_Token_Stream implements ArrayAccess, Countable, SeekableIterator
         $interfaceEndLine = false;
 
         foreach ($this->tokens as $token) {
-            switch (get_class($token)) {
+            switch (PHP_Token_Util::getClass($token)) {
                 case 'PHP_Token_HALT_COMPILER':
                     return;
 
@@ -392,15 +389,17 @@ class PHP_Token_Stream implements ArrayAccess, Countable, SeekableIterator
                       'file'      => $this->filename
                     ];
 
-                    if ($token instanceof PHP_Token_CLASS) {
-                        $class[]        = $token->getName();
-                        $classEndLine[] = $token->getEndLine();
+                    if ($token->getName() !== null) {
+                        if ($token instanceof PHP_Token_CLASS) {
+                            $class[]        = $token->getName();
+                            $classEndLine[] = $token->getEndLine();
 
-                        $this->classes[$class[count($class) - 1]] = $tmp;
-                    } else {
-                        $trait                = $token->getName();
-                        $traitEndLine         = $token->getEndLine();
-                        $this->traits[$trait] = $tmp;
+                            $this->classes[$class[count($class) - 1]] = $tmp;
+                        } else {
+                            $trait                = $token->getName();
+                            $traitEndLine         = $token->getEndLine();
+                            $this->traits[$trait] = $tmp;
+                        }
                     }
                     break;
 
@@ -475,61 +474,42 @@ class PHP_Token_Stream implements ArrayAccess, Countable, SeekableIterator
         return $this->linesOfCode;
     }
 
-    /**
-     */
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = 0;
     }
 
-    /**
-     * @return bool
-     */
-    public function valid()
+    public function valid(): bool
     {
         return isset($this->tokens[$this->position]);
     }
 
-    /**
-     * @return int
-     */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->position;
     }
 
-    /**
-     * @return PHP_Token
-     */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->tokens[$this->position];
     }
 
-    /**
-     */
-    public function next()
+    public function next(): void
     {
         $this->position++;
     }
 
     /**
      * @param int $offset
-     *
-     * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->tokens[$offset]);
     }
 
-    /**
-     * @param int $offset
-     *
-     * @return mixed
-     *
-     * @throws OutOfBoundsException
-     */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (!$this->offsetExists($offset)) {
@@ -548,7 +528,7 @@ class PHP_Token_Stream implements ArrayAccess, Countable, SeekableIterator
      * @param int   $offset
      * @param mixed $value
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->tokens[$offset] = $value;
     }
@@ -558,7 +538,7 @@ class PHP_Token_Stream implements ArrayAccess, Countable, SeekableIterator
      *
      * @throws OutOfBoundsException
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         if (!$this->offsetExists($offset)) {
             throw new OutOfBoundsException(
@@ -579,7 +559,7 @@ class PHP_Token_Stream implements ArrayAccess, Countable, SeekableIterator
      *
      * @throws OutOfBoundsException
      */
-    public function seek($position)
+    public function seek($position): void
     {
         $this->position = $position;
 

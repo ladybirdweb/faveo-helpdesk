@@ -11,6 +11,7 @@
  */
 
 return array (
+  223200 => 'Orange',
   2232079 => 'Sotelma',
   223217 => 'Sotelma',
   2235 => 'Atel',
@@ -18,6 +19,7 @@ return array (
   2237 => 'Orange',
   22382 => 'Orange',
   22383 => 'Orange',
+  22384 => 'Orange',
   22389 => 'Sotelma',
   22390 => 'Orange',
   22391 => 'Orange',

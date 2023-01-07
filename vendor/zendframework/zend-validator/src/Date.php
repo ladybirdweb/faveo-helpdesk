@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -57,6 +57,11 @@ class Date extends AbstractValidator
     protected $format = self::FORMAT_DEFAULT;
 
     /**
+     * @var bool
+     */
+    protected $strict = false;
+
+    /**
      * Sets validator options
      *
      * @param  string|array|Traversable $options OPTIONAL
@@ -100,6 +105,17 @@ class Date extends AbstractValidator
         return $this;
     }
 
+    public function setStrict(bool $strict) : self
+    {
+        $this->strict = $strict;
+        return $this;
+    }
+
+    public function isStrict() : bool
+    {
+        return $this->strict;
+    }
+
     /**
      * Returns true if $value is a DateTime instance or can be converted into one.
      *
@@ -110,8 +126,14 @@ class Date extends AbstractValidator
     {
         $this->setValue($value);
 
-        if (! $this->convertToDateTime($value)) {
+        $date = $this->convertToDateTime($value);
+        if (! $date) {
             $this->error(self::INVALID_DATE);
+            return false;
+        }
+
+        if ($this->isStrict() && $date->format($this->getFormat()) !== $value) {
+            $this->error(self::FALSEFORMAT);
             return false;
         }
 

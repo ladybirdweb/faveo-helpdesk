@@ -11,29 +11,23 @@
 
 namespace Sly\NotificationPusher\Adapter;
 
+use Sly\NotificationPusher\Collection\DeviceCollection;
 use Sly\NotificationPusher\Model\PushInterface;
-use Sly\NotificationPusher\Model\Response;
 use Sly\NotificationPusher\Model\ResponseInterface;
 
 /**
- * AdapterInterface.
- *
  * @author Cédric Dugat <cedric@dugat.me>
  */
 interface AdapterInterface
 {
     /**
-     * Push.
+     * @param PushInterface $push Push
      *
-     * @param \Sly\NotificationPusher\Model\PushInterface $push Push
-     *
-     * @return \Sly\NotificationPusher\Collection\DeviceCollection
+     * @return DeviceCollection
      */
     public function push(PushInterface $push);
 
     /**
-     * Supports.
-     *
      * @param string $token Token
      *
      * @return boolean
@@ -51,39 +45,29 @@ interface AdapterInterface
     public function setResponse(ResponseInterface $response);
 
     /**
-     * Get defined parameters.
-     *
      * @return array
      */
     public function getDefinedParameters();
 
     /**
-     * Get default parameters.
-     *
      * @return array
      */
     public function getDefaultParameters();
 
     /**
-     * Get required parameters.
-     *
      * @return array
      */
     public function getRequiredParameters();
 
     /**
-     * Get Environment.
-     *
      * @return string
      */
     public function getEnvironment();
 
     /**
-     * Set Environment.
-     *
      * @param string $environment Environment value to set
      *
-     * @return \Sly\NotificationPusher\Adapter\AdapterInterface
+     * @return AdapterInterface
      */
     public function setEnvironment($environment);
 }

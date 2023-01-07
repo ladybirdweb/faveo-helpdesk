@@ -1,9 +1,11 @@
 {
   "name": "maatwebsite/excel",
-  "description": "Supercharged Excel exports in Laravel",
+  "description": "Supercharged Excel exports and imports in Laravel",
   "license": "MIT",
   "keywords": [
     "laravel",
+    "php",
+    "phpspreadsheet",
     "phpexcel",
     "excel",
     "csv",
@@ -13,54 +15,40 @@
   ],
   "authors": [
     {
-      "name": "Maatwebsite.nl",
+      "name": "Patrick Brouwers",
       "email": "patrick@maatwebsite.nl"
     }
   ],
   "require": {
-    "php": ">=5.5",
-    "phpoffice/phpexcel": "^1.8.1",
-    "illuminate/cache": "^5.0",
-    "illuminate/config": "^5.0",
-    "illuminate/filesystem": "^5.0",
-    "illuminate/support": "^5.0",
-    "jeremeamia/superclosure": "^2.3",
-    "nesbot/carbon": "~1.0",
-    "tijsverkoyen/css-to-inline-styles": "~2.0"
+    "ext-json": "*",
+    "php": "^7.0|^8.0",
+    "phpoffice/phpspreadsheet": "1.16.*",
+    "illuminate/support": "5.8.*|^6.0|^7.0|^8.0"
   },
   "require-dev": {
-    "phpseclib/phpseclib": "~1.0",
-    "phpunit/phpunit": "~4.0",
-    "mockery/mockery": "~1.0",
-    "orchestra/testbench": "3.1.*|3.2.*|3.3.*|3.4.*|3.5.*|3.6.*"
-  },
-  "suggest": {
-    "illuminate/http": "^5.0",
-    "illuminate/routing": "^5.0",
-    "illuminate/view": "^5.0",
-    "illuminate/queue": "^5.0"
+    "orchestra/testbench": "^6.0",
+    "predis/predis": "^1.1"
   },
   "autoload": {
-    "classmap": [
-      "src/Maatwebsite/Excel"
-    ],
-    "psr-0": {
+    "psr-4": {
       "Maatwebsite\\Excel\\": "src/"
     }
   },
   "autoload-dev": {
-    "classmap": [
-      "tests/TestCase.php"
-    ]
+    "psr-4": {
+      "Maatwebsite\\Excel\\Tests\\": "tests/"
+    }
   },
   "extra": {
-        "laravel": {
-            "providers": [
-                "Maatwebsite\\Excel\\ExcelServiceProvider"
-            ],
-            "aliases": {
-                "Excel": "Maatwebsite\\Excel\\Facades\\Excel"
-            }
-        }
+    "laravel": {
+      "providers": [
+        "Maatwebsite\\Excel\\ExcelServiceProvider"
+      ],
+      "aliases": {
+        "Excel": "Maatwebsite\\Excel\\Facades\\Excel"
+      }
     }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

@@ -14,7 +14,7 @@
 return array (
   'generalDesc' => 
   array (
-    'NationalNumberPattern' => '[2-59]\\d{6}',
+    'NationalNumberPattern' => '(?:[2-59]\\d\\d|800)\\d{4}',
     'PossibleLength' => 
     array (
       0 => 7,
@@ -36,7 +36,7 @@ return array (
   ),
   'mobile' => 
   array (
-    'NationalNumberPattern' => '(?:[34][36]|5[1-389]|9\\d)\\d{5}',
+    'NationalNumberPattern' => '(?:36|5[1-389]|9\\d)\\d{5}',
     'ExampleNumber' => '9911234',
     'PossibleLength' => 
     array (
@@ -47,9 +47,10 @@ return array (
   ),
   'tollFree' => 
   array (
+    'NationalNumberPattern' => '800\\d{4}',
+    'ExampleNumber' => '8001234',
     'PossibleLength' => 
     array (
-      0 => -1,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -87,9 +88,10 @@ return array (
   ),
   'voip' => 
   array (
+    'NationalNumberPattern' => '(?:3[3-5]|4[356])\\d{5}',
+    'ExampleNumber' => '3401234',
     'PossibleLength' => 
     array (
-      0 => -1,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -147,7 +149,7 @@ return array (
       'format' => '$1 $2 $3',
       'leadingDigitsPatterns' => 
       array (
-        0 => '[2-59]',
+        0 => '[2-589]',
       ),
       'nationalPrefixFormattingRule' => '',
       'domesticCarrierCodeFormattingRule' => '',
@@ -158,6 +160,5 @@ return array (
   array (
   ),
   'mainCountryForCode' => false,
-  'leadingZeroPossible' => false,
   'mobileNumberPortableRegion' => false,
 );

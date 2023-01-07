@@ -2,23 +2,45 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.5] - 2021-12-02
+
+### Changed
+
+* [#73](https://github.com/sebastianbergmann/php-file-iterator/pull/73): Micro performance improvements on parsing paths
+
+### Fixed
+
+* [#74](https://github.com/sebastianbergmann/php-file-iterator/pull/74): Document return type of `SebastianBergmann\FileIterator\Iterator::accept()` so that Symfony's `DebugClassLoader` does not trigger a deprecation warning
+
+## [2.0.4] - 2021-07-19
+
+### Changed
+
+* Added `ReturnTypeWillChange` attribute to `SebastianBergmann\FileIterator\Iterator::accept()` because the return type of `\FilterIterator::accept()` will change in PHP 8.1
+
+## [2.0.3] - 2020-11-30
+
+### Changed
+
+* Changed PHP version constraint in `composer.json` from `^7.1` to `>=7.1`
+
 ## [2.0.2] - 2018-09-13
 
 ### Fixed
 
-* Fixed [#48](https://github.com/sebastianbergmann/php-file-iterator/issues/48): Excluding an array that contains false ends up excluding the current working directory
+* [#48](https://github.com/sebastianbergmann/php-file-iterator/issues/48): Excluding an array that contains false ends up excluding the current working directory
 
 ## [2.0.1] - 2018-06-11
 
 ### Fixed
 
-* Fixed [#46](https://github.com/sebastianbergmann/php-file-iterator/issues/46): Regression with hidden parent directory
+* [#46](https://github.com/sebastianbergmann/php-file-iterator/issues/46): Regression with hidden parent directory
 
 ## [2.0.0] - 2018-05-28
 
 ### Fixed
 
-* Fixed [#30](https://github.com/sebastianbergmann/php-file-iterator/issues/30): Exclude is not considered if it is a parent of the base path
+* [#30](https://github.com/sebastianbergmann/php-file-iterator/issues/30): Exclude is not considered if it is a parent of the base path
 
 ### Changed
 
@@ -32,19 +54,19 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Fixed
 
-* Fixed [#37](https://github.com/sebastianbergmann/php-file-iterator/issues/37): Regression caused by fix for [#30](https://github.com/sebastianbergmann/php-file-iterator/issues/30)
+* [#37](https://github.com/sebastianbergmann/php-file-iterator/issues/37): Regression caused by fix for [#30](https://github.com/sebastianbergmann/php-file-iterator/issues/30)
 
 ## [1.4.4] - 2017-11-27
 
 ### Fixed
 
-* Fixed [#30](https://github.com/sebastianbergmann/php-file-iterator/issues/30): Exclude is not considered if it is a parent of the base path
+* [#30](https://github.com/sebastianbergmann/php-file-iterator/issues/30): Exclude is not considered if it is a parent of the base path
 
 ## [1.4.3] - 2017-11-25
 
 ### Fixed
 
-* Fixed [#34](https://github.com/sebastianbergmann/php-file-iterator/issues/34): Factory should use canonical directory names
+* [#34](https://github.com/sebastianbergmann/php-file-iterator/issues/34): Factory should use canonical directory names
 
 ## [1.4.2] - 2016-11-26
 
@@ -60,9 +82,12 @@ No changes
 
 * [Added support for wildcards (glob) in exclude](https://github.com/sebastianbergmann/php-file-iterator/pull/23)
 
+[2.0.5]: https://github.com/sebastianbergmann/php-file-iterator/compare/2.0.4...2.0.5
+[2.0.4]: https://github.com/sebastianbergmann/php-file-iterator/compare/2.0.3...2.0.4
+[2.0.3]: https://github.com/sebastianbergmann/php-file-iterator/compare/2.0.2...2.0.3
 [2.0.2]: https://github.com/sebastianbergmann/php-file-iterator/compare/2.0.1...2.0.2
 [2.0.1]: https://github.com/sebastianbergmann/php-file-iterator/compare/2.0.0...2.0.1
-[2.0.0]: https://github.com/sebastianbergmann/php-file-iterator/compare/1.4...master
+[2.0.0]: https://github.com/sebastianbergmann/php-file-iterator/compare/1.4...2.0.0
 [1.4.5]: https://github.com/sebastianbergmann/php-file-iterator/compare/1.4.4...1.4.5
 [1.4.4]: https://github.com/sebastianbergmann/php-file-iterator/compare/1.4.3...1.4.4
 [1.4.3]: https://github.com/sebastianbergmann/php-file-iterator/compare/1.4.2...1.4.3

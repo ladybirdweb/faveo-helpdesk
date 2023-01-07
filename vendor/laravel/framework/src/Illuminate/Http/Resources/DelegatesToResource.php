@@ -3,9 +3,12 @@
 namespace Illuminate\Http\Resources;
 
 use Exception;
+use Illuminate\Support\Traits\ForwardsCalls;
 
 trait DelegatesToResource
 {
+    use ForwardsCalls;
+
     /**
      * Get the value of the resource's route key.
      *
@@ -31,6 +34,7 @@ trait DelegatesToResource
      *
      * @param  mixed  $value
      * @return void
+     *
      * @throws \Exception
      */
     public function resolveRouteBinding($value)
@@ -46,7 +50,7 @@ trait DelegatesToResource
      */
     public function offsetExists($offset)
     {
-        return array_key_exists($offset, $this->resource);
+        return isset($this->resource[$offset]);
     }
 
     /**
@@ -125,6 +129,6 @@ trait DelegatesToResource
      */
     public function __call($method, $parameters)
     {
-        return $this->resource->{$method}(...$parameters);
+        return $this->forwardCallTo($this->resource, $method, $parameters);
     }
 }

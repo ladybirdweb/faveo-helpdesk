@@ -17,10 +17,14 @@ use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Debug\Exception\ClassNotFoundException;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 
+@trigger_error(sprintf('The "%s" class is deprecated since Symfony 4.4, use "%s" instead.', ClassNotFoundFatalErrorHandler::class, \Symfony\Component\ErrorHandler\FatalErrorHandler\ClassNotFoundFatalErrorHandler::class), \E_USER_DEPRECATED);
+
 /**
  * ErrorHandler for classes that do not exist.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ *
+ * @deprecated since Symfony 4.4, use Symfony\Component\ErrorHandler\FatalErrorHandler\ClassNotFoundFatalErrorHandler instead.
  */
 class ClassNotFoundFatalErrorHandler implements FatalErrorHandlerInterface
 {
@@ -29,48 +33,34 @@ class ClassNotFoundFatalErrorHandler implements FatalErrorHandlerInterface
      */
     public function handleError(array $error, FatalErrorException $exception)
     {
-        $messageLen = \strlen($error['message']);
-        $notFoundSuffix = '\' not found';
-        $notFoundSuffixLen = \strlen($notFoundSuffix);
-        if ($notFoundSuffixLen > $messageLen) {
-            return;
+        if (!preg_match('/^(Class|Interface|Trait) [\'"]([^\'"]+)[\'"] not found$/', $error['message'], $matches)) {
+            return null;
+        }
+        $typeName = strtolower($matches[1]);
+        $fullyQualifiedClassName = $matches[2];
+
+        if (false !== $namespaceSeparatorIndex = strrpos($fullyQualifiedClassName, '\\')) {
+            $className = substr($fullyQualifiedClassName, $namespaceSeparatorIndex + 1);
+            $namespacePrefix = substr($fullyQualifiedClassName, 0, $namespaceSeparatorIndex);
+            $message = sprintf('Attempted to load %s "%s" from namespace "%s".', $typeName, $className, $namespacePrefix);
+            $tail = ' for another namespace?';
+        } else {
+            $className = $fullyQualifiedClassName;
+            $message = sprintf('Attempted to load %s "%s" from the global namespace.', $typeName, $className);
+            $tail = '?';
         }
 
-        if (0 !== substr_compare($error['message'], $notFoundSuffix, -$notFoundSuffixLen)) {
-            return;
-        }
-
-        foreach (array('class', 'interface', 'trait') as $typeName) {
-            $prefix = ucfirst($typeName).' \'';
-            $prefixLen = \strlen($prefix);
-            if (0 !== strpos($error['message'], $prefix)) {
-                continue;
-            }
-
-            $fullyQualifiedClassName = substr($error['message'], $prefixLen, -$notFoundSuffixLen);
-            if (false !== $namespaceSeparatorIndex = strrpos($fullyQualifiedClassName, '\\')) {
-                $className = substr($fullyQualifiedClassName, $namespaceSeparatorIndex + 1);
-                $namespacePrefix = substr($fullyQualifiedClassName, 0, $namespaceSeparatorIndex);
-                $message = sprintf('Attempted to load %s "%s" from namespace "%s".', $typeName, $className, $namespacePrefix);
-                $tail = ' for another namespace?';
+        if ($candidates = $this->getClassCandidates($className)) {
+            $tail = array_pop($candidates).'"?';
+            if ($candidates) {
+                $tail = ' for e.g. "'.implode('", "', $candidates).'" or "'.$tail;
             } else {
-                $className = $fullyQualifiedClassName;
-                $message = sprintf('Attempted to load %s "%s" from the global namespace.', $typeName, $className);
-                $tail = '?';
+                $tail = ' for "'.$tail;
             }
-
-            if ($candidates = $this->getClassCandidates($className)) {
-                $tail = array_pop($candidates).'"?';
-                if ($candidates) {
-                    $tail = ' for e.g. "'.implode('", "', $candidates).'" or "'.$tail;
-                } else {
-                    $tail = ' for "'.$tail;
-                }
-            }
-            $message .= "\nDid you forget a \"use\" statement".$tail;
-
-            return new ClassNotFoundException($message, $exception);
         }
+        $message .= "\nDid you forget a \"use\" statement".$tail;
+
+        return new ClassNotFoundException($message, $exception);
     }
 
     /**
@@ -86,11 +76,11 @@ class ClassNotFoundFatalErrorHandler implements FatalErrorHandlerInterface
     private function getClassCandidates(string $class): array
     {
         if (!\is_array($functions = spl_autoload_functions())) {
-            return array();
+            return [];
         }
 
         // find Symfony and Composer autoloaders
-        $classes = array();
+        $classes = [];
 
         foreach ($functions as $function) {
             if (!\is_array($function)) {
@@ -127,10 +117,10 @@ class ClassNotFoundFatalErrorHandler implements FatalErrorHandlerInterface
     private function findClassInPath(string $path, string $class, string $prefix): array
     {
         if (!$path = realpath($path.'/'.strtr($prefix, '\\_', '//')) ?: realpath($path.'/'.\dirname(strtr($prefix, '\\_', '//'))) ?: realpath($path)) {
-            return array();
+            return [];
         }
 
-        $classes = array();
+        $classes = [];
         $filename = $class.'.php';
         foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::LEAVES_ONLY) as $file) {
             if ($filename == $file->getFileName() && $class = $this->convertFileToClass($path, $file->getPathName(), $prefix)) {
@@ -143,9 +133,9 @@ class ClassNotFoundFatalErrorHandler implements FatalErrorHandlerInterface
 
     private function convertFileToClass(string $path, string $file, string $prefix): ?string
     {
-        $candidates = array(
+        $candidates = [
             // namespaced class
-            $namespacedClass = str_replace(array($path.\DIRECTORY_SEPARATOR, '.php', '/'), array('', '', '\\'), $file),
+            $namespacedClass = str_replace([$path.\DIRECTORY_SEPARATOR, '.php', '/'], ['', '', '\\'], $file),
             // namespaced class (with target dir)
             $prefix.$namespacedClass,
             // namespaced class (with target dir and separator)
@@ -156,7 +146,7 @@ class ClassNotFoundFatalErrorHandler implements FatalErrorHandlerInterface
             str_replace('\\', '_', $prefix.$namespacedClass),
             // PEAR class (with target dir and separator)
             str_replace('\\', '_', $prefix.'\\'.$namespacedClass),
-        );
+        ];
 
         if ($prefix) {
             $candidates = array_filter($candidates, function ($candidate) use ($prefix) { return 0 === strpos($candidate, $prefix); });
@@ -171,7 +161,11 @@ class ClassNotFoundFatalErrorHandler implements FatalErrorHandlerInterface
             }
         }
 
-        require_once $file;
+        try {
+            require_once $file;
+        } catch (\Throwable $e) {
+            return null;
+        }
 
         foreach ($candidates as $candidate) {
             if ($this->classExists($candidate)) {

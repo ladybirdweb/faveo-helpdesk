@@ -61,7 +61,7 @@ return array (
   ),
   'shortCode' => 
   array (
-    'NationalNumberPattern' => '(?:1\\d{1,3}|8\\d\\d|99)\\d',
+    'NationalNumberPattern' => '1\\d{2,4}|(?:8\\d\\d|99)\\d',
     'ExampleNumber' => '100',
     'PossibleLength' => 
     array (
@@ -111,6 +111,5 @@ return array (
   array (
   ),
   'mainCountryForCode' => false,
-  'leadingZeroPossible' => false,
   'mobileNumberPortableRegion' => false,
 );

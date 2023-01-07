@@ -14,17 +14,13 @@ namespace Sly\NotificationPusher\Collection;
 use Sly\NotificationPusher\Model\DeviceInterface;
 
 /**
- * DeviceCollection.
- *
  * @uses \Sly\NotificationPusher\Collection\AbstractCollection
  * @uses \IteratorAggregate
  * @author Cédric Dugat <cedric@dugat.me>
  */
-class DeviceCollection extends AbstractCollection implements \IteratorAggregate
+class DeviceCollection extends AbstractCollection
 {
     /**
-     * Constructor.
-     *
      * @param array $devices Devices
      */
     public function __construct(array $devices = [])
@@ -45,7 +41,7 @@ class DeviceCollection extends AbstractCollection implements \IteratorAggregate
     }
 
     /**
-     * @param \Sly\NotificationPusher\Model\DeviceInterface $device Device
+     * @param DeviceInterface $device Device
      */
     public function add(DeviceInterface $device)
     {
@@ -53,8 +49,6 @@ class DeviceCollection extends AbstractCollection implements \IteratorAggregate
     }
 
     /**
-     * Get tokens.
-     *
      * @return array
      */
     public function getTokens()

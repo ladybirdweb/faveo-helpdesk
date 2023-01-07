@@ -12,6 +12,7 @@ namespace Zend\Validator\File;
 use Traversable;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Validator\AbstractValidator;
+use Zend\Validator\File\FileInformationTrait;
 use Zend\Validator\Exception;
 
 /**
@@ -19,6 +20,8 @@ use Zend\Validator\Exception;
  */
 class Extension extends AbstractValidator
 {
+    use FileInformationTrait;
+
     /**
      * @const string Error constants
      */
@@ -41,6 +44,7 @@ class Extension extends AbstractValidator
     protected $options = [
         'case'      => false,   // Validate case sensitive
         'extension' => '',      // List of extensions
+        'allowNonExistentFile' => false, // Allow validation even if file does not exist
     ];
 
     /**
@@ -168,6 +172,28 @@ class Extension extends AbstractValidator
     }
 
     /**
+     * Returns whether or not to allow validation of non-existent files.
+     *
+     * @return bool
+     */
+    public function getAllowNonExistentFile()
+    {
+        return $this->options['allowNonExistentFile'];
+    }
+
+    /**
+     * Sets the flag indicating whether or not to allow validation of non-existent files.
+     *
+     * @param  bool $flag Whether or not to allow validation of non-existent files.
+     * @return self Provides a fluent interface
+     */
+    public function setAllowNonExistentFile($flag)
+    {
+        $this->options['allowNonExistentFile'] = (bool) $flag;
+        return $this;
+    }
+
+    /**
      * Returns true if and only if the file extension of $value is included in the
      * set extension list
      *
@@ -177,31 +203,19 @@ class Extension extends AbstractValidator
      */
     public function isValid($value, $file = null)
     {
-        if (is_string($value) && is_array($file)) {
-            // Legacy Zend\Transfer API support
-            $filename = $file['name'];
-            $file     = $file['tmp_name'];
-        } elseif (is_array($value)) {
-            if (! isset($value['tmp_name']) || ! isset($value['name'])) {
-                throw new Exception\InvalidArgumentException(
-                    'Value array must be in $_FILES format'
-                );
-            }
-            $file     = $value['tmp_name'];
-            $filename = $value['name'];
-        } else {
-            $file     = $value;
-            $filename = basename($file);
-        }
-        $this->setValue($filename);
+        $fileInfo = $this->getFileInfo($value, $file);
 
         // Is file readable ?
-        if (empty($file) || false === is_readable($file)) {
+        if (! $this->getAllowNonExistentFile()
+            && (empty($fileInfo['file']) || false === is_readable($fileInfo['file']))
+        ) {
             $this->error(self::NOT_FOUND);
             return false;
         }
 
-        $extension  = substr($filename, strrpos($filename, '.') + 1);
+        $this->setValue($fileInfo['filename']);
+
+        $extension  = substr($fileInfo['filename'], strrpos($fileInfo['filename'], '.') + 1);
         $extensions = $this->getExtension();
 
         if ($this->getCase() && (in_array($extension, $extensions))) {

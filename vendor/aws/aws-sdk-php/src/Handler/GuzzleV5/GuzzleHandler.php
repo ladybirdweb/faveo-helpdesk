@@ -26,14 +26,16 @@ use Psr\Http\Message\StreamInterface as Psr7StreamInterface;
 class GuzzleHandler
 {
     private static $validOptions = [
-        'proxy'           => true,
-        'verify'          => true,
-        'timeout'         => true,
-        'debug'           => true,
-        'connect_timeout' => true,
-        'stream'          => true,
-        'delay'           => true,
-        'sink'            => true,
+        'proxy'             => true,
+        'expect'            => true,
+        'cert'              => true,
+        'verify'            => true,
+        'timeout'           => true,
+        'debug'             => true,
+        'connect_timeout'   => true,
+        'stream'            => true,
+        'delay'             => true,
+        'sink'              => true,
     ];
 
     /** @var ClientInterface */
@@ -49,9 +51,9 @@ class GuzzleHandler
 
     /**
      * @param Psr7Request $request
-     * @param array       $options
-     *
-     * @return Promise\Promise
+     * @param array $options
+     * @return Promise\Promise|Promise\PromiseInterface
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function __invoke(Psr7Request $request, array $options = [])
     {

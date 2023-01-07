@@ -16,7 +16,7 @@ interface HeaderInterface
      * Factory to generate a header object from a string
      *
      * @param string $headerLine
-     * @return self
+     * @return static
      * @throws Exception\InvalidArgumentException If the header does not match RFC 2616 definition.
      * @see http://tools.ietf.org/html/rfc2616#section-4.2
      */

@@ -11,6 +11,7 @@ use Doctrine\DBAL\TransactionIsolationLevel;
 use Doctrine\DBAL\Types\BlobType;
 use Doctrine\DBAL\Types\TextType;
 use InvalidArgumentException;
+
 use function array_diff_key;
 use function array_merge;
 use function array_unique;
@@ -148,17 +149,16 @@ class MySqlPlatform extends AbstractPlatform
      * Two approaches to listing the table indexes. The information_schema is
      * preferred, because it doesn't cause problems with SQL keywords such as "order" or "table".
      */
-    public function getListTableIndexesSQL($table, $currentDatabase = null)
+    public function getListTableIndexesSQL($table, $database = null)
     {
-        if ($currentDatabase) {
-            $currentDatabase = $this->quoteStringLiteral($currentDatabase);
-            $table           = $this->quoteStringLiteral($table);
+        if ($database) {
+            $database = $this->quoteStringLiteral($database);
+            $table    = $this->quoteStringLiteral($table);
 
-            return 'SELECT TABLE_NAME AS `Table`, NON_UNIQUE AS Non_Unique, INDEX_NAME AS Key_name, ' .
-                   'SEQ_IN_INDEX AS Seq_in_index, COLUMN_NAME AS Column_Name, COLLATION AS Collation, ' .
-                   'CARDINALITY AS Cardinality, SUB_PART AS Sub_Part, PACKED AS Packed, ' .
-                   'NULLABLE AS `Null`, INDEX_TYPE AS Index_Type, COMMENT AS Comment ' .
-                   'FROM information_schema.STATISTICS WHERE TABLE_NAME = ' . $table . ' AND TABLE_SCHEMA = ' . $currentDatabase .
+            return 'SELECT NON_UNIQUE AS Non_Unique, INDEX_NAME AS Key_name, COLUMN_NAME AS Column_Name,' .
+                   ' SUB_PART AS Sub_Part, INDEX_TYPE AS Index_Type' .
+                   ' FROM information_schema.STATISTICS WHERE TABLE_NAME = ' . $table .
+                   ' AND TABLE_SCHEMA = ' . $database .
                    ' ORDER BY SEQ_IN_INDEX ASC';
         }
 
@@ -176,7 +176,10 @@ class MySqlPlatform extends AbstractPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * @param string      $table
+     * @param string|null $database
+     *
+     * @return string
      */
     public function getListTableForeignKeysSQL($table, $database = null)
     {
@@ -195,10 +198,9 @@ class MySqlPlatform extends AbstractPlatform
 
         $databaseNameSql = $database ?? 'DATABASE()';
 
-        $sql .= ' AND k.table_schema = ' . $databaseNameSql . ' /*!50116 AND c.constraint_schema = ' . $databaseNameSql . ' */';
-        $sql .= ' AND k.`REFERENCED_COLUMN_NAME` is not NULL';
-
-        return $sql;
+        return $sql . ' AND k.table_schema = ' . $databaseNameSql
+            . ' /*!50116 AND c.constraint_schema = ' . $databaseNameSql . ' */'
+            . ' AND k.`REFERENCED_COLUMN_NAME` is not NULL';
     }
 
     /**
@@ -243,10 +245,10 @@ class MySqlPlatform extends AbstractPlatform
      *
      * {@inheritDoc}
      */
-    public function getClobTypeDeclarationSQL(array $field)
+    public function getClobTypeDeclarationSQL(array $column)
     {
-        if (! empty($field['length']) && is_numeric($field['length'])) {
-            $length = $field['length'];
+        if (! empty($column['length']) && is_numeric($column['length'])) {
+            $length = $column['length'];
 
             if ($length <= static::LENGTH_LIMIT_TINYTEXT) {
                 return 'TINYTEXT';
@@ -267,9 +269,9 @@ class MySqlPlatform extends AbstractPlatform
     /**
      * {@inheritDoc}
      */
-    public function getDateTimeTypeDeclarationSQL(array $fieldDeclaration)
+    public function getDateTimeTypeDeclarationSQL(array $column)
     {
-        if (isset($fieldDeclaration['version']) && $fieldDeclaration['version'] === true) {
+        if (isset($column['version']) && $column['version'] === true) {
             return 'TIMESTAMP';
         }
 
@@ -279,7 +281,7 @@ class MySqlPlatform extends AbstractPlatform
     /**
      * {@inheritDoc}
      */
-    public function getDateTypeDeclarationSQL(array $fieldDeclaration)
+    public function getDateTypeDeclarationSQL(array $column)
     {
         return 'DATE';
     }
@@ -287,7 +289,7 @@ class MySqlPlatform extends AbstractPlatform
     /**
      * {@inheritDoc}
      */
-    public function getTimeTypeDeclarationSQL(array $fieldDeclaration)
+    public function getTimeTypeDeclarationSQL(array $column)
     {
         return 'TIME';
     }
@@ -295,21 +297,21 @@ class MySqlPlatform extends AbstractPlatform
     /**
      * {@inheritDoc}
      */
-    public function getBooleanTypeDeclarationSQL(array $field)
+    public function getBooleanTypeDeclarationSQL(array $column)
     {
         return 'TINYINT(1)';
     }
 
     /**
      * Obtain DBMS specific SQL code portion needed to set the COLLATION
-     * of a field declaration to be used in statements like CREATE TABLE.
+     * of a column declaration to be used in statements like CREATE TABLE.
      *
      * @deprecated Deprecated since version 2.5, Use {@link self::getColumnCollationDeclarationSQL()} instead.
      *
      * @param string $collation name of the collation
      *
      * @return string  DBMS specific SQL code portion needed to set the COLLATION
-     *                 of a field declaration.
+     *                 of a column declaration.
      */
     public function getCollationFieldDeclaration($collation)
     {
@@ -381,7 +383,7 @@ class MySqlPlatform extends AbstractPlatform
                ' ORDER BY ORDINAL_POSITION ASC';
     }
 
-    public function getListTableMetadataSQL(string $table, ?string $database = null) : string
+    public function getListTableMetadataSQL(string $table, ?string $database = null): string
     {
         return sprintf(
             <<<'SQL'
@@ -414,7 +416,7 @@ SQL
     /**
      * {@inheritDoc}
      */
-    protected function _getCreateTableSQL($tableName, array $columns, array $options = [])
+    protected function _getCreateTableSQL($name, array $columns, array $options = [])
     {
         $queryFields = $this->getColumnDeclarationListSQL($columns);
 
@@ -443,7 +445,7 @@ SQL
             $query .= 'TEMPORARY ';
         }
 
-        $query .= 'TABLE ' . $tableName . ' (' . $queryFields . ') ';
+        $query .= 'TABLE ' . $name . ' (' . $queryFields . ') ';
         $query .= $this->buildTableOptions($options);
         $query .= $this->buildPartitionOptions($options);
 
@@ -457,7 +459,7 @@ SQL
         // Propagate foreign key constraints only for InnoDB.
         if (isset($options['foreignKeys']) && $engine === 'INNODB') {
             foreach ((array) $options['foreignKeys'] as $definition) {
-                $sql[] = $this->getCreateForeignKeySQL($definition, $tableName);
+                $sql[] = $this->getCreateForeignKeySQL($definition, $name);
             }
         }
 
@@ -467,14 +469,14 @@ SQL
     /**
      * {@inheritdoc}
      */
-    public function getDefaultValueDeclarationSQL($field)
+    public function getDefaultValueDeclarationSQL($column)
     {
-        // Unset the default value if the given field definition does not allow default values.
-        if ($field['type'] instanceof TextType || $field['type'] instanceof BlobType) {
-            $field['default'] = null;
+        // Unset the default value if the given column definition does not allow default values.
+        if ($column['type'] instanceof TextType || $column['type'] instanceof BlobType) {
+            $column['default'] = null;
         }
 
-        return parent::getDefaultValueDeclarationSQL($field);
+        return parent::getDefaultValueDeclarationSQL($column);
     }
 
     /**
@@ -504,7 +506,7 @@ SQL
             $options['collate'] = $options['charset'] . '_unicode_ci';
         }
 
-        $tableOptions[] = sprintf('COLLATE %s', $options['collate']);
+        $tableOptions[] = $this->getColumnCollationDeclarationSQL($options['collate']);
 
         // Engine
         if (! isset($options['engine'])) {
@@ -520,9 +522,7 @@ SQL
 
         // Comment
         if (isset($options['comment'])) {
-            $comment = trim($options['comment'], " '");
-
-            $tableOptions[] = sprintf('COMMENT = %s ', $this->quoteStringLiteral($comment));
+            $tableOptions[] = sprintf('COMMENT = %s ', $this->quoteStringLiteral($options['comment']));
         }
 
         // Row format
@@ -554,8 +554,10 @@ SQL
     {
         $columnSql  = [];
         $queryParts = [];
-        if ($diff->newName !== false) {
-            $queryParts[] = 'RENAME TO ' . $diff->getNewName()->getQuotedName($this);
+        $newName    = $diff->getNewName();
+
+        if ($newName !== false) {
+            $queryParts[] = 'RENAME TO ' . $newName->getQuotedName($this);
         }
 
         foreach ($diff->addedColumns as $column) {
@@ -563,9 +565,11 @@ SQL
                 continue;
             }
 
-            $columnArray            = $column->toArray();
-            $columnArray['comment'] = $this->getColumnComment($column);
-            $queryParts[]           = 'ADD ' . $this->getColumnDeclarationSQL($column->getQuotedName($this), $columnArray);
+            $columnArray = array_merge($column->toArray(), [
+                'comment' => $this->getColumnComment($column),
+            ]);
+
+            $queryParts[] = 'ADD ' . $this->getColumnDeclarationSQL($column->getQuotedName($this), $columnArray);
         }
 
         foreach ($diff->removedColumns as $column) {
@@ -585,7 +589,8 @@ SQL
             $columnArray = $column->toArray();
 
             // Don't propagate default value changes for unsupported column types.
-            if ($columnDiff->hasChanged('default') &&
+            if (
+                $columnDiff->hasChanged('default') &&
                 count($columnDiff->changedProperties) === 1 &&
                 ($columnArray['type'] instanceof TextType || $columnArray['type'] instanceof BlobType)
             ) {
@@ -613,6 +618,17 @@ SQL
             $keyColumns   = array_unique(array_values($diff->addedIndexes['primary']->getColumns()));
             $queryParts[] = 'ADD PRIMARY KEY (' . implode(', ', $keyColumns) . ')';
             unset($diff->addedIndexes['primary']);
+        } elseif (isset($diff->changedIndexes['primary'])) {
+            // Necessary in case the new primary key includes a new auto_increment column
+            foreach ($diff->changedIndexes['primary']->getColumns() as $columnName) {
+                if (isset($diff->addedColumns[$columnName]) && $diff->addedColumns[$columnName]->getAutoincrement()) {
+                    $keyColumns   = array_unique(array_values($diff->changedIndexes['primary']->getColumns()));
+                    $queryParts[] = 'DROP PRIMARY KEY';
+                    $queryParts[] = 'ADD PRIMARY KEY (' . implode(', ', $keyColumns) . ')';
+                    unset($diff->changedIndexes['primary']);
+                    break;
+                }
+            }
         }
 
         $sql      = [];
@@ -620,8 +636,10 @@ SQL
 
         if (! $this->onSchemaAlterTable($diff, $tableSql)) {
             if (count($queryParts) > 0) {
-                $sql[] = 'ALTER TABLE ' . $diff->getName($this)->getQuotedName($this) . ' ' . implode(', ', $queryParts);
+                $sql[] = 'ALTER TABLE ' . $diff->getName($this)->getQuotedName($this) . ' '
+                    . implode(', ', $queryParts);
             }
+
             $sql = array_merge(
                 $this->getPreAlterTableIndexForeignKeySQL($diff),
                 $sql,
@@ -648,25 +666,27 @@ SQL
             $sql = array_merge($sql, $this->getPreAlterTableAlterPrimaryKeySQL($diff, $remIndex));
 
             foreach ($diff->addedIndexes as $addKey => $addIndex) {
-                if ($remIndex->getColumns() === $addIndex->getColumns()) {
-                    $indexClause = 'INDEX ' . $addIndex->getName();
-
-                    if ($addIndex->isPrimary()) {
-                        $indexClause = 'PRIMARY KEY';
-                    } elseif ($addIndex->isUnique()) {
-                        $indexClause = 'UNIQUE INDEX ' . $addIndex->getName();
-                    }
-
-                    $query  = 'ALTER TABLE ' . $table . ' DROP INDEX ' . $remIndex->getName() . ', ';
-                    $query .= 'ADD ' . $indexClause;
-                    $query .= ' (' . $this->getIndexFieldDeclarationListSQL($addIndex) . ')';
-
-                    $sql[] = $query;
-
-                    unset($diff->removedIndexes[$remKey], $diff->addedIndexes[$addKey]);
-
-                    break;
+                if ($remIndex->getColumns() !== $addIndex->getColumns()) {
+                    continue;
                 }
+
+                $indexClause = 'INDEX ' . $addIndex->getName();
+
+                if ($addIndex->isPrimary()) {
+                    $indexClause = 'PRIMARY KEY';
+                } elseif ($addIndex->isUnique()) {
+                    $indexClause = 'UNIQUE INDEX ' . $addIndex->getName();
+                }
+
+                $query  = 'ALTER TABLE ' . $table . ' DROP INDEX ' . $remIndex->getName() . ', ';
+                $query .= 'ADD ' . $indexClause;
+                $query .= ' (' . $this->getIndexFieldDeclarationListSQL($addIndex) . ')';
+
+                $sql[] = $query;
+
+                unset($diff->removedIndexes[$remKey], $diff->addedIndexes[$addKey]);
+
+                break;
             }
         }
 
@@ -845,10 +865,14 @@ SQL
      */
     protected function getPostAlterTableRenameIndexForeignKeySQL(TableDiff $diff)
     {
-        $sql       = [];
-        $tableName = $diff->newName !== false
-            ? $diff->getNewName()->getQuotedName($this)
-            : $diff->getName($this)->getQuotedName($this);
+        $sql     = [];
+        $newName = $diff->getNewName();
+
+        if ($newName !== false) {
+            $tableName = $newName->getQuotedName($this);
+        } else {
+            $tableName = $diff->getName($this)->getQuotedName($this);
+        }
 
         foreach ($this->getRemainingForeignKeyConstraintsRequiringRenamedIndexes($diff) as $foreignKey) {
             if (in_array($foreignKey, $diff->changedForeignKeys, true)) {
@@ -881,41 +905,41 @@ SQL
     /**
      * {@inheritDoc}
      */
-    public function getIntegerTypeDeclarationSQL(array $field)
+    public function getIntegerTypeDeclarationSQL(array $column)
     {
-        return 'INT' . $this->_getCommonIntegerTypeDeclarationSQL($field);
+        return 'INT' . $this->_getCommonIntegerTypeDeclarationSQL($column);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getBigIntTypeDeclarationSQL(array $field)
+    public function getBigIntTypeDeclarationSQL(array $column)
     {
-        return 'BIGINT' . $this->_getCommonIntegerTypeDeclarationSQL($field);
+        return 'BIGINT' . $this->_getCommonIntegerTypeDeclarationSQL($column);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getSmallIntTypeDeclarationSQL(array $field)
+    public function getSmallIntTypeDeclarationSQL(array $column)
     {
-        return 'SMALLINT' . $this->_getCommonIntegerTypeDeclarationSQL($field);
+        return 'SMALLINT' . $this->_getCommonIntegerTypeDeclarationSQL($column);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getFloatDeclarationSQL(array $field)
+    public function getFloatDeclarationSQL(array $column)
     {
-        return 'DOUBLE PRECISION' . $this->getUnsignedDeclaration($field);
+        return 'DOUBLE PRECISION' . $this->getUnsignedDeclaration($column);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDecimalTypeDeclarationSQL(array $columnDef)
+    public function getDecimalTypeDeclarationSQL(array $column)
     {
-        return parent::getDecimalTypeDeclarationSQL($columnDef) . $this->getUnsignedDeclaration($columnDef);
+        return parent::getDecimalTypeDeclarationSQL($column) . $this->getUnsignedDeclaration($column);
     }
 
     /**
@@ -933,14 +957,30 @@ SQL
     /**
      * {@inheritDoc}
      */
-    protected function _getCommonIntegerTypeDeclarationSQL(array $columnDef)
+    protected function _getCommonIntegerTypeDeclarationSQL(array $column)
     {
         $autoinc = '';
-        if (! empty($columnDef['autoincrement'])) {
+        if (! empty($column['autoincrement'])) {
             $autoinc = ' AUTO_INCREMENT';
         }
 
-        return $this->getUnsignedDeclaration($columnDef) . $autoinc;
+        return $this->getUnsignedDeclaration($column) . $autoinc;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getColumnCharsetDeclarationSQL($charset)
+    {
+        return 'CHARACTER SET ' . $charset;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getColumnCollationDeclarationSQL($collation)
+    {
+        return 'COLLATE ' . $this->quoteSingleIdentifier($collation);
     }
 
     /**
@@ -952,6 +992,7 @@ SQL
         if ($foreignKey->hasOption('match')) {
             $query .= ' MATCH ' . $foreignKey->getOption('match');
         }
+
         $query .= parent::getAdvancedForeignKeyOptionsSQL($foreignKey);
 
         return $query;
@@ -967,13 +1008,17 @@ SQL
         } elseif (is_string($index)) {
             $indexName = $index;
         } else {
-            throw new InvalidArgumentException('MysqlPlatform::getDropIndexSQL() expects $index parameter to be string or \Doctrine\DBAL\Schema\Index.');
+            throw new InvalidArgumentException(
+                __METHOD__ . '() expects $index parameter to be string or ' . Index::class . '.'
+            );
         }
 
         if ($table instanceof Table) {
             $table = $table->getQuotedName($this);
         } elseif (! is_string($table)) {
-            throw new InvalidArgumentException('MysqlPlatform::getDropIndexSQL() expects $table parameter to be string or \Doctrine\DBAL\Schema\Table.');
+            throw new InvalidArgumentException(
+                __METHOD__ . '() expects $table parameter to be string or ' . Table::class . '.'
+            );
         }
 
         if ($index instanceof Index && $index->isPrimary()) {
@@ -1093,7 +1138,9 @@ SQL
         if ($table instanceof Table) {
             $table = $table->getQuotedName($this);
         } elseif (! is_string($table)) {
-            throw new InvalidArgumentException('getDropTemporaryTableSQL() expects $table parameter to be string or \Doctrine\DBAL\Schema\Table.');
+            throw new InvalidArgumentException(
+                __METHOD__ . '() expects $table parameter to be string or ' . Table::class . '.'
+            );
         }
 
         return 'DROP TEMPORARY TABLE ' . $table;
@@ -1108,10 +1155,10 @@ SQL
      *
      * {@inheritDoc}
      */
-    public function getBlobTypeDeclarationSQL(array $field)
+    public function getBlobTypeDeclarationSQL(array $column)
     {
-        if (! empty($field['length']) && is_numeric($field['length'])) {
-            $length = $field['length'];
+        if (! empty($column['length']) && is_numeric($column['length'])) {
+            $length = $column['length'];
 
             if ($length <= static::LENGTH_LIMIT_TINYBLOB) {
                 return 'TINYBLOB';
@@ -1147,10 +1194,7 @@ SQL
         return TransactionIsolationLevel::REPEATABLE_READ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsColumnLengthIndexes() : bool
+    public function supportsColumnLengthIndexes(): bool
     {
         return true;
     }

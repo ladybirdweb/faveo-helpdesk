@@ -18,8 +18,6 @@ use Sly\NotificationPusher\PushManager;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * BaseAdapter.
- *
  * @author Cédric Dugat <cedric@dugat.me>
  */
 abstract class BaseAdapter extends BaseParameteredModel implements AdapterInterface
@@ -40,8 +38,6 @@ abstract class BaseAdapter extends BaseParameteredModel implements AdapterInterf
     protected $response;
 
     /**
-     * Constructor.
-     *
      * @param array $parameters Adapter specific parameters
      */
     public function __construct(array $parameters = [])
@@ -51,10 +47,10 @@ abstract class BaseAdapter extends BaseParameteredModel implements AdapterInterf
         $resolver->setDefaults($this->getDefaultParameters());
         $resolver->setRequired($this->getRequiredParameters());
 
-        $reflectedClass   = new \ReflectionClass($this);
+        $reflectedClass = new \ReflectionClass($this);
         $this->adapterKey = lcfirst($reflectedClass->getShortName());
         $this->parameters = $resolver->resolve($parameters);
-        $this->response   = new Response();
+        $this->response = new Response();
     }
 
     /**
@@ -74,8 +70,6 @@ abstract class BaseAdapter extends BaseParameteredModel implements AdapterInterf
     }
 
     /**
-     * __toString.
-     *
      * @return string
      */
     public function __toString()
@@ -84,8 +78,6 @@ abstract class BaseAdapter extends BaseParameteredModel implements AdapterInterf
     }
 
     /**
-     * Get AdapterKey.
-     *
      * @return string
      */
     public function getAdapterKey()
@@ -94,8 +86,6 @@ abstract class BaseAdapter extends BaseParameteredModel implements AdapterInterf
     }
 
     /**
-     * Get Environment.
-     *
      * @return string
      */
     public function getEnvironment()
@@ -104,11 +94,9 @@ abstract class BaseAdapter extends BaseParameteredModel implements AdapterInterf
     }
 
     /**
-     * Set Environment.
-     *
      * @param string $environment Environment value to set
      *
-     * @return \Sly\NotificationPusher\Adapter\AdapterInterface
+     * @return AdapterInterface
      */
     public function setEnvironment($environment)
     {
@@ -118,8 +106,6 @@ abstract class BaseAdapter extends BaseParameteredModel implements AdapterInterf
     }
 
     /**
-     * isDevelopmentEnvironment.
-     *
      * @return boolean
      */
     public function isDevelopmentEnvironment()
@@ -128,8 +114,6 @@ abstract class BaseAdapter extends BaseParameteredModel implements AdapterInterf
     }
 
     /**
-     * isProductionEnvironment.
-     *
      * @return boolean
      */
     public function isProductionEnvironment()

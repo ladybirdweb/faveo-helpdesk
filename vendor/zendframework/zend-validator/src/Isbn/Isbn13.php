@@ -33,11 +33,11 @@ class Isbn13
 
         for ($i = 0; $i < 12; $i++) {
             if ($i % 2 == 0) {
-                $sum += $value{$i};
+                $sum += $value[$i];
                 continue;
             }
 
-            $sum += 3 * $value{$i};
+            $sum += 3 * $value[$i];
         }
 
         return $sum;

@@ -31,14 +31,12 @@ class WWWAuthenticate implements MultipleHeaderInterface
         }
 
         // @todo implementation details
-        $header = new static($value);
-
-        return $header;
+        return new static($value);
     }
 
     public function __construct($value = null)
     {
-        if ($value) {
+        if ($value !== null) {
             HeaderValue::assertValid($value);
             $this->value = $value;
         }
@@ -51,7 +49,7 @@ class WWWAuthenticate implements MultipleHeaderInterface
 
     public function getFieldValue()
     {
-        return $this->value;
+        return (string) $this->value;
     }
 
     public function toString()

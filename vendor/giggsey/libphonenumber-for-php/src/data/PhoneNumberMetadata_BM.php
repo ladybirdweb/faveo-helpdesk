@@ -26,8 +26,8 @@ return array (
   ),
   'fixedLine' => 
   array (
-    'NationalNumberPattern' => '441(?:2(?:02|23|[3479]\\d|61)|[46]\\d\\d|5(?:4\\d|60|89)|824)\\d{4}',
-    'ExampleNumber' => '4412345678',
+    'NationalNumberPattern' => '441(?:[46]\\d\\d|5(?:4\\d|60|89))\\d{4}',
+    'ExampleNumber' => '4414123456',
     'PossibleLength' => 
     array (
     ),
@@ -38,7 +38,7 @@ return array (
   ),
   'mobile' => 
   array (
-    'NationalNumberPattern' => '441(?:[37]\\d|5[0-39])\\d{5}',
+    'NationalNumberPattern' => '441(?:[2378]\\d|5[0-39]|92)\\d{5}',
     'ExampleNumber' => '4413701234',
     'PossibleLength' => 
     array (
@@ -82,7 +82,7 @@ return array (
   ),
   'personalNumber' => 
   array (
-    'NationalNumberPattern' => '5(?:00|2[12]|33|44|66|77|88)[2-9]\\d{6}',
+    'NationalNumberPattern' => '52(?:3(?:[2-46-9][02-9]\\d|5(?:[02-46-9]\\d|5[0-46-9]))|4(?:[2-478][02-9]\\d|5(?:[034]\\d|2[024-9]|5[0-46-9])|6(?:0[1-9]|[2-9]\\d)|9(?:[05-9]\\d|2[0-5]|49)))\\d{4}|52[34][2-9]1[02-9]\\d{4}|5(?:00|2[125-7]|33|44|66|77|88)[2-9]\\d{6}',
     'ExampleNumber' => '5002345678',
     'PossibleLength' => 
     array (
@@ -145,7 +145,8 @@ return array (
   'countryCode' => 1,
   'internationalPrefix' => '011',
   'nationalPrefix' => '1',
-  'nationalPrefixForParsing' => '1',
+  'nationalPrefixForParsing' => '1|([2-9]\\d{6})$',
+  'nationalPrefixTransformRule' => '441$1',
   'sameMobileAndFixedLinePattern' => false,
   'numberFormat' => 
   array (
@@ -155,6 +156,5 @@ return array (
   ),
   'mainCountryForCode' => false,
   'leadingDigits' => '441',
-  'leadingZeroPossible' => false,
-  'mobileNumberPortableRegion' => false,
+  'mobileNumberPortableRegion' => true,
 );

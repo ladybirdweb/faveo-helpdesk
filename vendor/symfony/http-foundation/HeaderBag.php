@@ -18,13 +18,13 @@ namespace Symfony\Component\HttpFoundation;
  */
 class HeaderBag implements \IteratorAggregate, \Countable
 {
-    protected $headers = array();
-    protected $cacheControl = array();
+    protected const UPPER = '_ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    protected const LOWER = '-abcdefghijklmnopqrstuvwxyz';
 
-    /**
-     * @param array $headers An array of HTTP headers
-     */
-    public function __construct(array $headers = array())
+    protected $headers = [];
+    protected $cacheControl = [];
+
+    public function __construct(array $headers = [])
     {
         foreach ($headers as $key => $values) {
             $this->set($key, $values);
@@ -58,10 +58,16 @@ class HeaderBag implements \IteratorAggregate, \Countable
     /**
      * Returns the headers.
      *
+     * @param string|null $key The name of the headers to return or null to get them all
+     *
      * @return array An array of headers
      */
-    public function all()
+    public function all(/* string $key = null */)
     {
+        if (1 <= \func_num_args() && null !== $key = func_get_arg(0)) {
+            return $this->headers[strtr($key, self::UPPER, self::LOWER)] ?? [];
+        }
+
         return $this->headers;
     }
 
@@ -77,19 +83,15 @@ class HeaderBag implements \IteratorAggregate, \Countable
 
     /**
      * Replaces the current HTTP headers by a new set.
-     *
-     * @param array $headers An array of HTTP headers
      */
-    public function replace(array $headers = array())
+    public function replace(array $headers = [])
     {
-        $this->headers = array();
+        $this->headers = [];
         $this->add($headers);
     }
 
     /**
      * Adds new headers the current HTTP headers set.
-     *
-     * @param array $headers An array of HTTP headers
      */
     public function add(array $headers)
     {
@@ -101,42 +103,43 @@ class HeaderBag implements \IteratorAggregate, \Countable
     /**
      * Returns a header value by name.
      *
-     * @param string               $key     The header name
-     * @param string|string[]|null $default The default value
-     * @param bool                 $first   Whether to return the first value or all header values
+     * @param string      $key     The header name
+     * @param string|null $default The default value
      *
-     * @return string|string[]|null The first header value or default value if $first is true, an array of values otherwise
+     * @return string|null The first header value or default value
      */
-    public function get($key, $default = null, $first = true)
+    public function get($key, $default = null)
     {
-        $key = str_replace('_', '-', strtolower($key));
-        $headers = $this->all();
+        $headers = $this->all((string) $key);
+        if (2 < \func_num_args()) {
+            @trigger_error(sprintf('Passing a third argument to "%s()" is deprecated since Symfony 4.4, use method "all()" instead', __METHOD__), \E_USER_DEPRECATED);
 
-        if (!array_key_exists($key, $headers)) {
-            if (null === $default) {
-                return $first ? null : array();
+            if (!func_get_arg(2)) {
+                return $headers;
             }
-
-            return $first ? $default : array($default);
         }
 
-        if ($first) {
-            return \count($headers[$key]) ? $headers[$key][0] : $default;
+        if (!$headers) {
+            return $default;
         }
 
-        return $headers[$key];
+        if (null === $headers[0]) {
+            return null;
+        }
+
+        return (string) $headers[0];
     }
 
     /**
      * Sets a header by name.
      *
-     * @param string          $key     The key
-     * @param string|string[] $values  The value or an array of values
-     * @param bool            $replace Whether to replace the actual value or not (true by default)
+     * @param string               $key     The key
+     * @param string|string[]|null $values  The value or an array of values
+     * @param bool                 $replace Whether to replace the actual value or not (true by default)
      */
     public function set($key, $values, $replace = true)
     {
-        $key = str_replace('_', '-', strtolower($key));
+        $key = strtr($key, self::UPPER, self::LOWER);
 
         if (\is_array($values)) {
             $values = array_values($values);
@@ -148,7 +151,7 @@ class HeaderBag implements \IteratorAggregate, \Countable
             }
         } else {
             if (true === $replace || !isset($this->headers[$key])) {
-                $this->headers[$key] = array($values);
+                $this->headers[$key] = [$values];
             } else {
                 $this->headers[$key][] = $values;
             }
@@ -168,7 +171,7 @@ class HeaderBag implements \IteratorAggregate, \Countable
      */
     public function has($key)
     {
-        return array_key_exists(str_replace('_', '-', strtolower($key)), $this->all());
+        return \array_key_exists(strtr($key, self::UPPER, self::LOWER), $this->all());
     }
 
     /**
@@ -181,7 +184,7 @@ class HeaderBag implements \IteratorAggregate, \Countable
      */
     public function contains($key, $value)
     {
-        return \in_array($value, $this->get($key, null, false));
+        return \in_array($value, $this->all((string) $key));
     }
 
     /**
@@ -191,22 +194,21 @@ class HeaderBag implements \IteratorAggregate, \Countable
      */
     public function remove($key)
     {
-        $key = str_replace('_', '-', strtolower($key));
+        $key = strtr($key, self::UPPER, self::LOWER);
 
         unset($this->headers[$key]);
 
         if ('cache-control' === $key) {
-            $this->cacheControl = array();
+            $this->cacheControl = [];
         }
     }
 
     /**
      * Returns the HTTP header value converted to a date.
      *
-     * @param string    $key     The parameter key
-     * @param \DateTime $default The default value
+     * @param string $key The parameter key
      *
-     * @return \DateTime|null The parsed DateTime or the default value if the header does not exist
+     * @return \DateTimeInterface|null The parsed DateTime or the default value if the header does not exist
      *
      * @throws \RuntimeException When the HTTP header is not parseable
      */
@@ -216,8 +218,8 @@ class HeaderBag implements \IteratorAggregate, \Countable
             return $default;
         }
 
-        if (false === $date = \DateTime::createFromFormat(DATE_RFC2822, $value)) {
-            throw new \RuntimeException(sprintf('The %s HTTP header is not parseable (%s).', $key, $value));
+        if (false === $date = \DateTime::createFromFormat(\DATE_RFC2822, $value)) {
+            throw new \RuntimeException(sprintf('The "%s" HTTP header is not parseable (%s).', $key, $value));
         }
 
         return $date;
@@ -226,8 +228,8 @@ class HeaderBag implements \IteratorAggregate, \Countable
     /**
      * Adds a custom Cache-Control directive.
      *
-     * @param string $key   The Cache-Control directive name
-     * @param mixed  $value The Cache-Control directive value
+     * @param string      $key   The Cache-Control directive name
+     * @param bool|string $value The Cache-Control directive value
      */
     public function addCacheControlDirective($key, $value = true)
     {
@@ -245,7 +247,7 @@ class HeaderBag implements \IteratorAggregate, \Countable
      */
     public function hasCacheControlDirective($key)
     {
-        return array_key_exists($key, $this->cacheControl);
+        return \array_key_exists($key, $this->cacheControl);
     }
 
     /**
@@ -253,11 +255,11 @@ class HeaderBag implements \IteratorAggregate, \Countable
      *
      * @param string $key The directive name
      *
-     * @return mixed|null The directive value if defined, null otherwise
+     * @return bool|string|null The directive value if defined, null otherwise
      */
     public function getCacheControlDirective($key)
     {
-        return array_key_exists($key, $this->cacheControl) ? $this->cacheControl[$key] : null;
+        return $this->cacheControl[$key] ?? null;
     }
 
     /**
@@ -277,6 +279,7 @@ class HeaderBag implements \IteratorAggregate, \Countable
      *
      * @return \ArrayIterator An \ArrayIterator instance
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->headers);
@@ -287,6 +290,7 @@ class HeaderBag implements \IteratorAggregate, \Countable
      *
      * @return int The number of headers
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return \count($this->headers);

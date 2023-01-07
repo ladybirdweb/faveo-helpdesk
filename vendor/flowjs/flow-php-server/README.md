@@ -28,8 +28,11 @@ require_once './vendor/autoload.php';
 $config = new \Flow\Config();
 $config->setTempDir('./chunks_temp_folder');
 $request = new \Flow\Request();
-if (\Flow\Basic::save('./' . $request->getIdentifier(), $config, $request)) {
-  // file saved successfully and can be accessed at './final_file_destination'
+$uploadFolder = './final_file_destination/'; // Folder where the file will be stored
+$uploadFileName = uniqid()."_".$request->getFileName(); // The name the file will have on the server
+$uploadPath = $uploadFolder.$uploadFileName;
+if (\Flow\Basic::save($uploadPath, $config, $request)) {
+  // file saved successfully and can be accessed at $uploadPath
 } else {
   // This is not a final chunk or request is invalid, continue to upload.
 }

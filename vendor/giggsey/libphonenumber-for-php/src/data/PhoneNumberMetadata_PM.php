@@ -14,7 +14,20 @@
 return array (
   'generalDesc' => 
   array (
-    'NationalNumberPattern' => '[45]\\d{5}',
+    'NationalNumberPattern' => '(?:[45]|80\\d\\d)\\d{5}',
+    'PossibleLength' => 
+    array (
+      0 => 6,
+      1 => 9,
+    ),
+    'PossibleLengthLocalOnly' => 
+    array (
+    ),
+  ),
+  'fixedLine' => 
+  array (
+    'NationalNumberPattern' => '(?:4[1-356]|50)\\d{4}',
+    'ExampleNumber' => '430123',
     'PossibleLength' => 
     array (
       0 => 6,
@@ -23,23 +36,13 @@ return array (
     array (
     ),
   ),
-  'fixedLine' => 
-  array (
-    'NationalNumberPattern' => '(?:4[1-3]|50)\\d{4}',
-    'ExampleNumber' => '430123',
-    'PossibleLength' => 
-    array (
-    ),
-    'PossibleLengthLocalOnly' => 
-    array (
-    ),
-  ),
   'mobile' => 
   array (
-    'NationalNumberPattern' => '(?:4[02-4]|5[05])\\d{4}',
+    'NationalNumberPattern' => '(?:4[02-4]|5[056])\\d{4}',
     'ExampleNumber' => '551234',
     'PossibleLength' => 
     array (
+      0 => 6,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -47,9 +50,11 @@ return array (
   ),
   'tollFree' => 
   array (
+    'NationalNumberPattern' => '80[0-5]\\d{6}',
+    'ExampleNumber' => '800012345',
     'PossibleLength' => 
     array (
-      0 => -1,
+      0 => 9,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -155,11 +160,22 @@ return array (
       'domesticCarrierCodeFormattingRule' => '',
       'nationalPrefixOptionalWhenFormatting' => false,
     ),
+    1 => 
+    array (
+      'pattern' => '(\\d{3})(\\d{2})(\\d{2})(\\d{2})',
+      'format' => '$1 $2 $3 $4',
+      'leadingDigitsPatterns' => 
+      array (
+        0 => '8',
+      ),
+      'nationalPrefixFormattingRule' => '0$1',
+      'domesticCarrierCodeFormattingRule' => '',
+      'nationalPrefixOptionalWhenFormatting' => false,
+    ),
   ),
   'intlNumberFormat' => 
   array (
   ),
   'mainCountryForCode' => false,
-  'leadingZeroPossible' => false,
   'mobileNumberPortableRegion' => false,
 );

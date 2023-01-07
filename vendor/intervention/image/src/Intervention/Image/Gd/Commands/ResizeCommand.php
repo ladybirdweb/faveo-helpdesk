@@ -2,7 +2,9 @@
 
 namespace Intervention\Image\Gd\Commands;
 
-class ResizeCommand extends \Intervention\Image\Commands\AbstractCommand
+use Intervention\Image\Commands\AbstractCommand;
+
+class ResizeCommand extends AbstractCommand
 {
     /**
      * Resizes image dimensions
@@ -42,7 +44,7 @@ class ResizeCommand extends \Intervention\Image\Commands\AbstractCommand
     protected function modify($image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h)
     {
         // create new image
-        $modified = imagecreatetruecolor($dst_w, $dst_h);
+        $modified = imagecreatetruecolor(intval($dst_w), intval($dst_h));
 
         // get current image
         $resource = $image->getCore();
@@ -68,8 +70,8 @@ class ResizeCommand extends \Intervention\Image\Commands\AbstractCommand
             $dst_y,
             $src_x,
             $src_y,
-            $dst_w,
-            $dst_h,
+            intval($dst_w),
+            intval($dst_h),
             $src_w,
             $src_h
         );

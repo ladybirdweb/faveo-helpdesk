@@ -1,6 +1,9 @@
 <?php
 namespace Aws\S3;
 
+use Aws\Arn\Exception\InvalidArnException;
+use Aws\Arn\S3\AccessPointArn;
+use Aws\Arn\ArnParser;
 use GuzzleHttp\Psr7;
 use Psr\Http\Message\UriInterface;
 
@@ -31,11 +34,25 @@ class S3UriParser
      * @param string|UriInterface $uri
      *
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException|InvalidArnException
      */
     public function parse($uri)
     {
-        $url = Psr7\uri_for($uri);
+        // Attempt to parse host component of uri as an ARN
+        $components = $this->parseS3UrlComponents($uri);
+        if (!empty($components)) {
+            if (ArnParser::isArn($components['host'])) {
+                $arn = new AccessPointArn($components['host']);
+                return [
+                    'bucket' => $components['host'],
+                    'key' => $components['path'],
+                    'path_style' => false,
+                    'region' => $arn->getRegion()
+                ];
+            }
+        }
+
+        $url = Psr7\Utils::uriFor($uri);
 
         if ($url->getScheme() == $this->streamWrapperScheme) {
             return $this->parseStreamWrapper($url);
@@ -59,6 +76,19 @@ class S3UriParser
         $result['region'] = $matches[2] == 'amazonaws' ? null : $matches[2];
 
         return $result;
+    }
+
+    private function parseS3UrlComponents($uri)
+    {
+        preg_match("/^([a-zA-Z0-9]*):\/\/([a-zA-Z0-9:-]*)\/(.*)/", $uri, $components);
+        if (empty($components)) {
+            return [];
+        }
+        return [
+            'scheme' => $components[1],
+            'host' => $components[2],
+            'path' => $components[3],
+        ];
     }
 
     private function parseStreamWrapper(UriInterface $url)

@@ -11,6 +11,9 @@ namespace Sly\NotificationPusher;
 
 use Sly\NotificationPusher\Model\ResponseInterface;
 
+/**
+ * @author Oleg Abrazhaev <seyferseed@gmail.com>
+ */
 abstract class AbstractPushService
 {
     /**
@@ -24,7 +27,6 @@ abstract class AbstractPushService
     protected $response;
 
     /**
-     * AbstractPushService constructor.
      * @param string $environment
      */
     public function __construct($environment = PushManager::ENVIRONMENT_DEV)

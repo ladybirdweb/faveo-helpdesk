@@ -78,7 +78,7 @@ class Cookies extends Headers
     {
         throw new Exception\RuntimeException(
             __CLASS__ . '::' . __FUNCTION__ . ' should not be used as a factory, use '
-            . __NAMESPACE__ . '\Headers::fromtString() instead.'
+            . __NAMESPACE__ . '\Headers::fromString() instead.'
         );
     }
 
@@ -338,7 +338,7 @@ class Cookies extends Headers
      *
      * @param Response $response HTTP Response object
      * @param Uri\Uri|string $refUri The requested URI
-     * @return Cookies
+     * @return static
      * @todo Add the $uri functionality.
      */
     public static function fromResponse(Response $response, $refUri)
@@ -361,7 +361,7 @@ class Cookies extends Headers
     /**
      * Empties the cookieJar of any cookie
      *
-     * @return Cookies
+     * @return $this
      */
     public function reset()
     {

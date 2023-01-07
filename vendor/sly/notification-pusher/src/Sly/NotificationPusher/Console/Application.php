@@ -16,16 +16,11 @@ use Sly\NotificationPusher\NotificationPusher;
 use Symfony\Component\Console\Application as BaseApplication;
 
 /**
- * Application.
- *
  * @uses \Symfony\Component\Console\Application
  * @author Cédric Dugat <cedric@dugat.me>
  */
 class Application extends BaseApplication
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         error_reporting(-1);

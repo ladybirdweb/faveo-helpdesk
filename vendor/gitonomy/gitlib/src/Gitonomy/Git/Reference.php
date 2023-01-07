@@ -9,7 +9,11 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Gitonomy\Git;
+
+use Gitonomy\Git\Exception\ProcessException;
+use Gitonomy\Git\Exception\ReferenceNotFoundException;
 
 /**
  * Reference in a Git repository.
@@ -28,16 +32,25 @@ abstract class Reference extends Revision
         $this->commitHash = $commitHash;
     }
 
+    /**
+     * @return string
+     */
     public function getFullname()
     {
         return $this->revision;
     }
 
+    /**
+     * @return void
+     */
     public function delete()
     {
         $this->repository->getReferences()->delete($this->getFullname());
     }
 
+    /**
+     * @return string
+     */
     public function getCommitHash()
     {
         if (null !== $this->commitHash) {
@@ -45,7 +58,7 @@ abstract class Reference extends Revision
         }
 
         try {
-            $result = $this->repository->run('rev-parse', array('--verify', $this->revision));
+            $result = $this->repository->run('rev-parse', ['--verify', $this->revision]);
         } catch (ProcessException $e) {
             throw new ReferenceNotFoundException(sprintf('Can not find revision "%s"', $this->revision));
         }
@@ -54,15 +67,16 @@ abstract class Reference extends Revision
     }
 
     /**
-     * Returns the commit associated to the reference.
-     *
-     * @return Commit
+     * @return Commit Commit associated to the reference.
      */
     public function getCommit()
     {
         return $this->repository->getCommit($this->getCommitHash());
     }
 
+    /**
+     * @return Commit
+     */
     public function getLastModification($path = null)
     {
         return $this->getCommit()->getLastModification($path);

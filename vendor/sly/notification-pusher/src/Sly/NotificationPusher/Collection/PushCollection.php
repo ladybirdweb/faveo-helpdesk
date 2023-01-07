@@ -14,17 +14,12 @@ namespace Sly\NotificationPusher\Collection;
 use Sly\NotificationPusher\Model\PushInterface;
 
 /**
- * PushCollection.
- *
  * @uses \Sly\NotificationPusher\Collection\AbstractCollection
  * @uses \IteratorAggregate
  * @author Cédric Dugat <cedric@dugat.me>
  */
 class PushCollection extends AbstractCollection
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->coll = new \ArrayIterator();
@@ -39,7 +34,7 @@ class PushCollection extends AbstractCollection
     }
 
     /**
-     * @param \Sly\NotificationPusher\Model\PushInterface $push Push
+     * @param PushInterface $push Push
      */
     public function add(PushInterface $push)
     {

@@ -14,7 +14,7 @@
 return array (
   'generalDesc' => 
   array (
-    'NationalNumberPattern' => '(?:[237]\\d|[89]0)\\d{7}|[23]\\d{5}',
+    'NationalNumberPattern' => '(?:[2378]\\d|90)\\d{7}|[23]\\d{5}',
     'PossibleLength' => 
     array (
       0 => 6,
@@ -37,7 +37,7 @@ return array (
   ),
   'mobile' => 
   array (
-    'NationalNumberPattern' => '7(?:(?:[02-7]\\d|8[03-8]|99)\\d|1(?:[01]\\d|20))\\d{5}',
+    'NationalNumberPattern' => '7020\\d{5}|7(?:0[013-9]|1[0-3]|[2-7]\\d|8[03-8]|9[019])\\d{6}',
     'ExampleNumber' => '712034567',
     'PossibleLength' => 
     array (
@@ -61,7 +61,7 @@ return array (
   ),
   'premiumRate' => 
   array (
-    'NationalNumberPattern' => '90[036]\\d{6}',
+    'NationalNumberPattern' => '90[0136]\\d{6}',
     'ExampleNumber' => '900123456',
     'PossibleLength' => 
     array (
@@ -115,7 +115,7 @@ return array (
   ),
   'uan' => 
   array (
-    'NationalNumberPattern' => '37\\d{7}',
+    'NationalNumberPattern' => '(?:37\\d|80[578])\\d{6}',
     'ExampleNumber' => '372123456',
     'PossibleLength' => 
     array (
@@ -156,11 +156,12 @@ return array (
   array (
     0 => 
     array (
-      'pattern' => '(\\d{2})(\\d{4})',
+      'pattern' => '(\\d{3})(\\d{3})',
       'format' => '$1 $2',
       'leadingDigitsPatterns' => 
       array (
-        0 => '219|31',
+        0 => '2[3-6]',
+        1 => '2[3-6]\\d9',
       ),
       'nationalPrefixFormattingRule' => '0$1',
       'domesticCarrierCodeFormattingRule' => '',
@@ -168,12 +169,11 @@ return array (
     ),
     1 => 
     array (
-      'pattern' => '(\\d{3})(\\d{3})',
+      'pattern' => '(\\d{2})(\\d{4})',
       'format' => '$1 $2',
       'leadingDigitsPatterns' => 
       array (
-        0 => '2[3-6]',
-        1 => '2[3-6]\\d9',
+        0 => '219|31',
       ),
       'nationalPrefixFormattingRule' => '0$1',
       'domesticCarrierCodeFormattingRule' => '',
@@ -208,6 +208,5 @@ return array (
   array (
   ),
   'mainCountryForCode' => false,
-  'leadingZeroPossible' => false,
   'mobileNumberPortableRegion' => true,
 );

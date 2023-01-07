@@ -22,9 +22,6 @@ namespace Sly\NotificationPusher\Collection;
  */
 class ResponseCollection extends AbstractCollection
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->coll = new \ArrayIterator();

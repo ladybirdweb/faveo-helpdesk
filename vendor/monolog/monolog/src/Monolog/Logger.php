@@ -321,7 +321,7 @@ class Logger implements LoggerInterface, ResettableInterface
         if ($this->microsecondTimestamps && PHP_VERSION_ID < 70100) {
             $ts = \DateTime::createFromFormat('U.u', sprintf('%.6F', microtime(true)), static::$timezone);
         } else {
-            $ts = new \DateTime(null, static::$timezone);
+            $ts = new \DateTime('now', static::$timezone);
         }
         $ts->setTimezone(static::$timezone);
 
@@ -522,13 +522,18 @@ class Logger implements LoggerInterface, ResettableInterface
     /**
      * Converts PSR-3 levels to Monolog ones if necessary
      *
-     * @param string|int Level number (monolog) or name (PSR-3)
+     * @param string|int $level Level number (monolog) or name (PSR-3)
      * @return int
      */
     public static function toMonologLevel($level)
     {
-        if (is_string($level) && defined(__CLASS__.'::'.strtoupper($level))) {
-            return constant(__CLASS__.'::'.strtoupper($level));
+        if (is_string($level)) {
+            // Contains chars of all log levels and avoids using strtoupper() which may have
+            // strange results depending on locale (for example, "i" will become "İ")
+            $upper = strtr($level, 'abcdefgilmnortuwy', 'ABCDEFGILMNORTUWY');
+            if (defined(__CLASS__.'::'.$upper)) {
+                return constant(__CLASS__ . '::' . $upper);
+            }
         }
 
         return $level;

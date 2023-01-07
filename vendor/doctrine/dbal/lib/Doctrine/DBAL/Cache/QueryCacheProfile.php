@@ -3,6 +3,8 @@
 namespace Doctrine\DBAL\Cache;
 
 use Doctrine\Common\Cache\Cache;
+use Doctrine\DBAL\Types\Type;
+
 use function hash;
 use function serialize;
 use function sha1;
@@ -67,16 +69,16 @@ class QueryCacheProfile
     /**
      * Generates the real cache key from query, params, types and connection parameters.
      *
-     * @param string         $query
-     * @param mixed[]        $params
-     * @param int[]|string[] $types
-     * @param mixed[]        $connectionParams
+     * @param string                                                               $sql
+     * @param array<int, mixed>|array<string, mixed>                               $params
+     * @param array<int, Type|int|string|null>|array<string, Type|int|string|null> $types
+     * @param array<string, mixed>                                                 $connectionParams
      *
      * @return string[]
      */
-    public function generateCacheKeys($query, $params, $types, array $connectionParams = [])
+    public function generateCacheKeys($sql, $params, $types, array $connectionParams = [])
     {
-        $realCacheKey = 'query=' . $query .
+        $realCacheKey = 'query=' . $sql .
             '&params=' . serialize($params) .
             '&types=' . serialize($types) .
             '&connectionParams=' . hash('sha256', serialize($connectionParams));
@@ -92,7 +94,7 @@ class QueryCacheProfile
     }
 
     /**
-     * @return \Doctrine\DBAL\Cache\QueryCacheProfile
+     * @return QueryCacheProfile
      */
     public function setResultCacheDriver(Cache $cache)
     {
@@ -102,7 +104,7 @@ class QueryCacheProfile
     /**
      * @param string|null $cacheKey
      *
-     * @return \Doctrine\DBAL\Cache\QueryCacheProfile
+     * @return QueryCacheProfile
      */
     public function setCacheKey($cacheKey)
     {
@@ -112,7 +114,7 @@ class QueryCacheProfile
     /**
      * @param int $lifetime
      *
-     * @return \Doctrine\DBAL\Cache\QueryCacheProfile
+     * @return QueryCacheProfile
      */
     public function setLifetime($lifetime)
     {

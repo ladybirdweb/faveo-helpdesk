@@ -33,16 +33,16 @@ class ClassStub extends ConstStub
                 if ($callable instanceof \Closure) {
                     $r = new \ReflectionFunction($callable);
                 } elseif (\is_object($callable)) {
-                    $r = array($callable, '__invoke');
+                    $r = [$callable, '__invoke'];
                 } elseif (\is_array($callable)) {
                     $r = $callable;
                 } elseif (false !== $i = strpos($callable, '::')) {
-                    $r = array(substr($callable, 0, $i), substr($callable, 2 + $i));
+                    $r = [substr($callable, 0, $i), substr($callable, 2 + $i)];
                 } else {
                     $r = new \ReflectionFunction($callable);
                 }
             } elseif (0 < $i = strpos($identifier, '::') ?: strpos($identifier, '->')) {
-                $r = array(substr($identifier, 0, $i), substr($identifier, 2 + $i));
+                $r = [substr($identifier, 0, $i), substr($identifier, 2 + $i)];
             } else {
                 $r = new \ReflectionClass($identifier);
             }
@@ -55,17 +55,17 @@ class ClassStub extends ConstStub
                 }
             }
 
-            if (false !== strpos($identifier, "class@anonymous\0")) {
-                $this->value = $identifier = preg_replace_callback('/class@anonymous\x00.*?\.php0x?[0-9a-fA-F]++/', function ($m) {
-                    return \class_exists($m[0], false) ? get_parent_class($m[0]).'@anonymous' : $m[0];
+            if (str_contains($identifier, "@anonymous\0")) {
+                $this->value = $identifier = preg_replace_callback('/[a-zA-Z_\x7f-\xff][\\\\a-zA-Z0-9_\x7f-\xff]*+@anonymous\x00.*?\.php(?:0x?|:[0-9]++\$)[0-9a-fA-F]++/', function ($m) {
+                    return class_exists($m[0], false) ? (get_parent_class($m[0]) ?: key(class_implements($m[0])) ?: 'class').'@anonymous' : $m[0];
                 }, $identifier);
             }
 
             if (null !== $callable && $r instanceof \ReflectionFunctionAbstract) {
-                $s = ReflectionCaster::castFunctionAbstract($r, array(), new Stub(), true);
+                $s = ReflectionCaster::castFunctionAbstract($r, [], new Stub(), true, Caster::EXCLUDE_VERBOSE);
                 $s = ReflectionCaster::getSignature($s);
 
-                if ('()' === substr($identifier, -2)) {
+                if (str_ends_with($identifier, '()')) {
                     $this->value = substr_replace($identifier, $s, -2);
                 } else {
                     $this->value .= $s;

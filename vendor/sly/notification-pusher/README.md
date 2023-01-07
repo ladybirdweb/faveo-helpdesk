@@ -52,10 +52,10 @@ or `include vendor/autoload.php` in your index.php.
 
 ## Todo
 
+* Rewrite tests in PHPUnit 8+. (contributions are welcome!)
 * Add new features (custom APNS payloads, GCM and FCM custom options, etc.)
 * Add new adapters (like Blackberry and Windows phones)
 * Write more documentation and examples!
-* Write more tests. (contributions are welcome!)
 
 ## 1.x users
 

@@ -2,6 +2,9 @@
 
 namespace Intervention\Image;
 
+use Intervention\Image\Exception\InvalidArgumentException;
+use Intervention\Image\Exception\NotSupportedException;
+
 abstract class AbstractEncoder
 {
     /**
@@ -82,6 +85,20 @@ abstract class AbstractEncoder
     abstract protected function processWebp();
 
     /**
+     * Processes and returns image as Avif encoded string
+     *
+     * @return string
+     */
+    abstract protected function processAvif();
+
+    /**
+     * Processes and returns image as Heic encoded string
+     *
+     * @return string
+     */
+    abstract protected function processHeic();
+
+    /**
      * Process a given image
      *
      * @param  Image   $image
@@ -114,9 +131,12 @@ abstract class AbstractEncoder
 
             case 'jpg':
             case 'jpeg':
+            case 'jfif':
+            case 'image/jp2':
             case 'image/jpg':
             case 'image/jpeg':
             case 'image/pjpeg':
+            case 'image/jfif':
                 $this->result = $this->processJpeg();
                 break;
 
@@ -129,7 +149,6 @@ abstract class AbstractEncoder
                 $this->result = $this->processTiff();
                 break;
 
-            case 'bmp':
             case 'bmp':
             case 'ms-bmp':
             case 'x-bitmap':
@@ -165,10 +184,21 @@ abstract class AbstractEncoder
             case 'image/x-webp':
                 $this->result = $this->processWebp();
                 break;
+
+            case 'avif':
+            case 'image/avif':
+                $this->result = $this->processAvif();
+                break;
+
+            case 'heic':
+            case 'image/heic':
+            case 'image/heif':
+                $this->result = $this->processHeic();
+                break;
                 
             default:
-                throw new \Intervention\Image\Exception\NotSupportedException(
-                    "Encoding format ({$format}) is not supported."
+                throw new NotSupportedException(
+                    "Encoding format ({$this->format}) is not supported."
                 );
         }
 
@@ -229,7 +259,7 @@ abstract class AbstractEncoder
         $quality = $quality === 0 ? 1 : $quality;
 
         if ($quality < 0 || $quality > 100) {
-            throw new \Intervention\Image\Exception\InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Quality must range from 0 to 100.'
             );
         }

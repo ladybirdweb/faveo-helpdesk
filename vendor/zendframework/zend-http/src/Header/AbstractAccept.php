@@ -77,7 +77,7 @@ abstract class AbstractAccept implements HeaderInterface
      * Factory method: parse Accept header string
      *
      * @param  string $headerLine
-     * @return Accept
+     * @return static
      */
     public static function fromString($headerLine)
     {
@@ -242,7 +242,7 @@ abstract class AbstractAccept implements HeaderInterface
      * @param  int|float $priority
      * @param  array (optional) $params
      * @throws Exception\InvalidArgumentException
-     * @return Accept
+     * @return $this
      */
     protected function addType($type, $priority = 1, array $params = [])
     {

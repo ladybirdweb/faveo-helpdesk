@@ -25,15 +25,14 @@ class GenericHeader implements HeaderInterface
     /**
      * Factory to generate a header object from a string
      *
-     * @static
      * @param string $headerLine
-     * @return GenericHeader
+     * @return static
      */
     public static function fromString($headerLine)
     {
         list($fieldName, $fieldValue) = GenericHeader::splitHeaderLine($headerLine);
-        $header = new static($fieldName, $fieldValue);
-        return $header;
+
+        return new static($fieldName, $fieldValue);
     }
 
     /**
@@ -80,7 +79,7 @@ class GenericHeader implements HeaderInterface
      * Set header field name
      *
      * @param  string $fieldName
-     * @return GenericHeader
+     * @return $this
      * @throws Exception\InvalidArgumentException If the name does not match with RFC 2616 format.
      */
     public function setFieldName($fieldName)
@@ -122,7 +121,7 @@ class GenericHeader implements HeaderInterface
      * Set header field value
      *
      * @param  string $fieldValue
-     * @return GenericHeader
+     * @return $this
      */
     public function setFieldValue($fieldValue)
     {

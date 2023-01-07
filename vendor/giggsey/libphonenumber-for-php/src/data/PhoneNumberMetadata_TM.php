@@ -36,7 +36,7 @@ return array (
   ),
   'mobile' => 
   array (
-    'NationalNumberPattern' => '6[1-9]\\d{6}',
+    'NationalNumberPattern' => '6\\d{7}',
     'ExampleNumber' => '66123456',
     'PossibleLength' => 
     array (
@@ -158,18 +158,6 @@ return array (
     ),
     1 => 
     array (
-      'pattern' => '(\\d{2})(\\d{6})',
-      'format' => '$1 $2',
-      'leadingDigitsPatterns' => 
-      array (
-        0 => '6',
-      ),
-      'nationalPrefixFormattingRule' => '8 $1',
-      'domesticCarrierCodeFormattingRule' => '',
-      'nationalPrefixOptionalWhenFormatting' => false,
-    ),
-    2 => 
-    array (
       'pattern' => '(\\d{3})(\\d)(\\d{2})(\\d{2})',
       'format' => '$1 $2-$3-$4',
       'leadingDigitsPatterns' => 
@@ -180,11 +168,22 @@ return array (
       'domesticCarrierCodeFormattingRule' => '',
       'nationalPrefixOptionalWhenFormatting' => false,
     ),
+    2 => 
+    array (
+      'pattern' => '(\\d{2})(\\d{6})',
+      'format' => '$1 $2',
+      'leadingDigitsPatterns' => 
+      array (
+        0 => '6',
+      ),
+      'nationalPrefixFormattingRule' => '8 $1',
+      'domesticCarrierCodeFormattingRule' => '',
+      'nationalPrefixOptionalWhenFormatting' => false,
+    ),
   ),
   'intlNumberFormat' => 
   array (
   ),
   'mainCountryForCode' => false,
-  'leadingZeroPossible' => false,
   'mobileNumberPortableRegion' => false,
 );
