@@ -3,15 +3,14 @@
 namespace App\Exceptions;
 
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Lang;
 use Exception;
-use Illuminate\Support\Facades\App;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Session\TokenMismatchException;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -35,8 +34,10 @@ class Handler extends ExceptionHandler
 
     /**
      * @param \Throwable $e
-     * @return void
+     *
      * @throws \Throwable
+     *
+     * @return void
      */
     public function report(\Throwable $e)
     {
@@ -74,8 +75,10 @@ class Handler extends ExceptionHandler
     /**
      * @param $request
      * @param \Throwable $e
-     * @return type|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
+     *
      * @throws \Throwable
+     *
+     * @return type|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
      */
     public function render($request, \Throwable $e)
     {
