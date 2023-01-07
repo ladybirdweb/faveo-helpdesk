@@ -6,8 +6,14 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 interface IWriter
 {
+    public const SAVE_WITH_CHARTS = 1;
+
+    public const DISABLE_PRECALCULATE_FORMULAE = 2;
+
     /**
      * IWriter constructor.
+     *
+     * @param Spreadsheet $spreadsheet The spreadsheet that we want to save using this Writer
      */
     public function __construct(Spreadsheet $spreadsheet);
 
@@ -25,11 +31,11 @@ interface IWriter
      *        Set to true, to advise the Writer to include any charts that exist in the PhpSpreadsheet object.
      *        Set to false (the default) to ignore charts.
      *
-     * @param bool $pValue
+     * @param bool $includeCharts
      *
      * @return IWriter
      */
-    public function setIncludeCharts($pValue);
+    public function setIncludeCharts($includeCharts);
 
     /**
      * Get Pre-Calculate Formulas flag
@@ -48,18 +54,23 @@ interface IWriter
      *        Set to true (the default) to advise the Writer to calculate all formulae on save
      *        Set to false to prevent precalculation of formulae on save.
      *
-     * @param bool $pValue Pre-Calculate Formulas?
+     * @param bool $precalculateFormulas Pre-Calculate Formulas?
      *
      * @return IWriter
      */
-    public function setPreCalculateFormulas($pValue);
+    public function setPreCalculateFormulas($precalculateFormulas);
 
     /**
      * Save PhpSpreadsheet to file.
      *
-     * @param resource|string $pFilename Name of the file to save
+     * @param resource|string $filename Name of the file to save
+     * @param int $flags Flags that can change the behaviour of the Writer:
+     *            self::SAVE_WITH_CHARTS                Save any charts that are defined (if the Writer supports Charts)
+     *            self::DISABLE_PRECALCULATE_FORMULAE   Don't Precalculate formulae before saving the file
+     *
+     * @throws Exception
      */
-    public function save($pFilename);
+    public function save($filename, int $flags = 0): void;
 
     /**
      * Get use disk caching where possible?
@@ -71,12 +82,12 @@ interface IWriter
     /**
      * Set use disk caching where possible?
      *
-     * @param bool $pValue
-     * @param string $pDirectory Disk caching directory
+     * @param bool $useDiskCache
+     * @param string $cacheDirectory Disk caching directory
      *
      * @return IWriter
      */
-    public function setUseDiskCaching($pValue, $pDirectory = null);
+    public function setUseDiskCaching($useDiskCache, $cacheDirectory = null);
 
     /**
      * Get disk caching directory.

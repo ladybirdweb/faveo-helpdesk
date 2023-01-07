@@ -28,10 +28,10 @@ class Failure implements Arrayable, JsonSerializable
     private $values;
 
     /**
-     * @param int    $row
-     * @param string $attribute
-     * @param array  $errors
-     * @param array  $values
+     * @param  int  $row
+     * @param  string  $attribute
+     * @param  array  $errors
+     * @param  array  $values
      */
     public function __construct(int $row, string $attribute, array $errors, array $values = [])
     {
@@ -86,6 +86,7 @@ class Failure implements Arrayable, JsonSerializable
     /**
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return [

@@ -4,7 +4,9 @@ namespace Illuminate\Queue\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+#[AsCommand(name: 'queue:failed')]
 class ListFailedCommand extends Command
 {
     /**
@@ -13,6 +15,17 @@ class ListFailedCommand extends Command
      * @var string
      */
     protected $name = 'queue:failed';
+
+    /**
+     * The name of the console command.
+     *
+     * This name is used to identify the command during lazy loading.
+     *
+     * @var string|null
+     *
+     * @deprecated
+     */
+    protected static $defaultName = 'queue:failed';
 
     /**
      * The console command description.
@@ -36,10 +49,12 @@ class ListFailedCommand extends Command
     public function handle()
     {
         if (count($jobs = $this->getFailedJobs()) === 0) {
-            return $this->info('No failed jobs!');
+            return $this->components->info('No failed jobs found.');
         }
 
+        $this->newLine();
         $this->displayFailedJobs($jobs);
+        $this->newLine();
     }
 
     /**
@@ -109,6 +124,11 @@ class ListFailedCommand extends Command
      */
     protected function displayFailedJobs(array $jobs)
     {
-        $this->table($this->headers, $jobs);
+        collect($jobs)->each(
+            fn ($job) => $this->components->twoColumnDetail(
+                sprintf('<fg=gray>%s</> %s</>', $job[4], $job[0]),
+                sprintf('<fg=gray>%s@%s</> %s', $job[1], $job[2], $job[3])
+            ),
+        );
     }
 }

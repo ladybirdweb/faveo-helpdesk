@@ -8,6 +8,7 @@ use PhpOffice\PhpSpreadsheet\Collection\Memory;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\SimpleCache\CacheInterface;
+use ReflectionClass;
 
 class Settings
 {
@@ -15,32 +16,21 @@ class Settings
      * Class name of the chart renderer used for rendering charts
      * eg: PhpOffice\PhpSpreadsheet\Chart\Renderer\JpGraph.
      *
-     * @var string
+     * @var ?string
      */
     private static $chartRenderer;
 
     /**
      * Default options for libxml loader.
      *
-     * @var int
+     * @var ?int
      */
-    private static $libXmlLoaderOptions = null;
-
-    /**
-     * Allow/disallow libxml_disable_entity_loader() call when not thread safe.
-     * Default behaviour is to do the check, but if you're running PHP versions
-     *      7.2 < 7.2.1
-     * then you may need to disable this check to prevent unwanted behaviour in other threads
-     * SECURITY WARNING: Changing this flag is not recommended.
-     *
-     * @var bool
-     */
-    private static $libXmlDisableEntityLoader = true;
+    private static $libXmlLoaderOptions;
 
     /**
      * The cache implementation to be used for cell collection.
      *
-     * @var CacheInterface
+     * @var ?CacheInterface
      */
     private static $cache;
 
@@ -63,24 +53,29 @@ class Settings
      *
      * @return bool Success or failure
      */
-    public static function setLocale($locale)
+    public static function setLocale(string $locale)
     {
         return Calculation::getInstance()->setLocale($locale);
+    }
+
+    public static function getLocale(): string
+    {
+        return Calculation::getInstance()->getLocale();
     }
 
     /**
      * Identify to PhpSpreadsheet the external library to use for rendering charts.
      *
-     * @param string $rendererClass Class name of the chart renderer
+     * @param string $rendererClassName Class name of the chart renderer
      *    eg: PhpOffice\PhpSpreadsheet\Chart\Renderer\JpGraph
      */
-    public static function setChartRenderer($rendererClass): void
+    public static function setChartRenderer(string $rendererClassName): void
     {
-        if (!is_a($rendererClass, IRenderer::class, true)) {
+        if (!is_a($rendererClassName, IRenderer::class, true)) {
             throw new Exception('Chart renderer must implement ' . IRenderer::class);
         }
 
-        self::$chartRenderer = $rendererClass;
+        self::$chartRenderer = $rendererClassName;
     }
 
     /**
@@ -89,22 +84,29 @@ class Settings
      * @return null|string Class name of the chart renderer
      *    eg: PhpOffice\PhpSpreadsheet\Chart\Renderer\JpGraph
      */
-    public static function getChartRenderer()
+    public static function getChartRenderer(): ?string
     {
         return self::$chartRenderer;
+    }
+
+    public static function htmlEntityFlags(): int
+    {
+        return \ENT_COMPAT;
     }
 
     /**
      * Set default options for libxml loader.
      *
-     * @param int $options Default options for libxml loader
+     * @param ?int $options Default options for libxml loader
      */
-    public static function setLibXmlLoaderOptions($options): void
+    public static function setLibXmlLoaderOptions($options): int
     {
-        if ($options === null && defined('LIBXML_DTDLOAD')) {
-            $options = LIBXML_DTDLOAD | LIBXML_DTDATTR;
+        if ($options === null) {
+            $options = defined('LIBXML_DTDLOAD') ? (LIBXML_DTDLOAD | LIBXML_DTDATTR) : 0;
         }
         self::$libXmlLoaderOptions = $options;
+
+        return $options;
     }
 
     /**
@@ -113,40 +115,41 @@ class Settings
      *
      * @return int Default options for libxml loader
      */
-    public static function getLibXmlLoaderOptions()
+    public static function getLibXmlLoaderOptions(): int
     {
-        if (self::$libXmlLoaderOptions === null && defined('LIBXML_DTDLOAD')) {
-            self::setLibXmlLoaderOptions(LIBXML_DTDLOAD | LIBXML_DTDATTR);
-        } elseif (self::$libXmlLoaderOptions === null) {
-            self::$libXmlLoaderOptions = true;
+        if (self::$libXmlLoaderOptions === null) {
+            return self::setLibXmlLoaderOptions(null);
         }
 
         return self::$libXmlLoaderOptions;
     }
 
     /**
-     * Enable/Disable the entity loader for libxml loader.
-     * Allow/disallow libxml_disable_entity_loader() call when not thread safe.
-     * Default behaviour is to do the check, but if you're running PHP versions
-     *      7.2 < 7.2.1
-     * then you may need to disable this check to prevent unwanted behaviour in other threads
-     * SECURITY WARNING: Changing this flag to false is not recommended.
+     * Deprecated, has no effect.
      *
      * @param bool $state
+     *
+     * @deprecated will be removed without replacement as it is no longer necessary on PHP 7.3.0+
+     *
+     * @codeCoverageIgnore
      */
-    public static function setLibXmlDisableEntityLoader($state): void
+    public static function setLibXmlDisableEntityLoader(/** @scrutinizer ignore-unused */ $state): void
     {
-        self::$libXmlDisableEntityLoader = (bool) $state;
+        // noop
     }
 
     /**
-     * Return the state of the entity loader (disabled/enabled) for libxml loader.
+     * Deprecated, has no effect.
      *
      * @return bool $state
+     *
+     * @deprecated will be removed without replacement as it is no longer necessary on PHP 7.3.0+
+     *
+     * @codeCoverageIgnore
      */
-    public static function getLibXmlDisableEntityLoader()
+    public static function getLibXmlDisableEntityLoader(): bool
     {
-        return self::$libXmlDisableEntityLoader;
+        return true;
     }
 
     /**
@@ -158,17 +161,22 @@ class Settings
     }
 
     /**
-     * Gets the implementation of cache that should be used for cell collection.
-     *
-     * @return CacheInterface
+     * Gets the implementation of cache that is being used for cell collection.
      */
-    public static function getCache()
+    public static function getCache(): CacheInterface
     {
         if (!self::$cache) {
-            self::$cache = new Memory();
+            self::$cache = self::useSimpleCacheVersion3() ? new Memory\SimpleCache3() : new Memory\SimpleCache1();
         }
 
         return self::$cache;
+    }
+
+    public static function useSimpleCacheVersion3(): bool
+    {
+        return
+            PHP_MAJOR_VERSION === 8 &&
+            (new ReflectionClass(CacheInterface::class))->getMethod('get')->getReturnType() !== null;
     }
 
     /**
@@ -194,7 +202,9 @@ class Settings
      */
     public static function getHttpClient(): ClientInterface
     {
-        self::assertHttpClient();
+        if (!self::$httpClient || !self::$requestFactory) {
+            throw new Exception('HTTP client must be configured via Settings::setHttpClient() to be able to use WEBSERVICE function.');
+        }
 
         return self::$httpClient;
     }
@@ -204,15 +214,10 @@ class Settings
      */
     public static function getRequestFactory(): RequestFactoryInterface
     {
-        self::assertHttpClient();
-
-        return self::$requestFactory;
-    }
-
-    private static function assertHttpClient(): void
-    {
         if (!self::$httpClient || !self::$requestFactory) {
             throw new Exception('HTTP client must be configured via Settings::setHttpClient() to be able to use WEBSERVICE function.');
         }
+
+        return self::$requestFactory;
     }
 }

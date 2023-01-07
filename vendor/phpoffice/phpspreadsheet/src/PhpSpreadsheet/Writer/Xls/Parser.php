@@ -78,7 +78,7 @@ class Parser
     /**
      * The parse tree to be generated.
      *
-     * @var string
+     * @var array|string
      */
     public $parseTree;
 
@@ -469,6 +469,7 @@ class Parser
         'BAHTTEXT' => [368, 1, 0, 0],
     ];
 
+    /** @var Spreadsheet */
     private $spreadsheet;
 
     /**
@@ -527,10 +528,10 @@ class Parser
         } elseif (preg_match('/^' . Calculation::CALCULATION_REGEXP_DEFINEDNAME . '$/mui', $token) && $this->spreadsheet->getDefinedName($token) !== null) {
             return $this->convertDefinedName($token);
         // commented so argument number can be processed correctly. See toReversePolish().
-        /*elseif (preg_match("/[A-Z0-9\xc0-\xdc\.]+/", $token))
-        {
-            return($this->convertFunction($token, $this->_func_args));
-        }*/
+            /*elseif (preg_match("/[A-Z0-9\xc0-\xdc\.]+/", $token))
+            {
+                return($this->convertFunction($token, $this->_func_args));
+            }*/
         // if it's an argument, ignore the token (the argument remains)
         } elseif ($token == 'arg') {
             return '';
@@ -597,10 +598,9 @@ class Parser
         if ($args >= 0) {
             return pack('Cv', $this->ptg['ptgFuncV'], $this->functions[$token][0]);
         }
+
         // Variable number of args eg. SUM($i, $j, $k, ..).
-        if ($args == -1) {
-            return pack('CCv', $this->ptg['ptgFuncVarV'], $num_args, $this->functions[$token][0]);
-        }
+        return pack('CCv', $this->ptg['ptgFuncVarV'], $num_args, $this->functions[$token][0]);
     }
 
     /**
@@ -747,12 +747,14 @@ class Parser
         return pack('C', 0xFF);
     }
 
-    private function convertDefinedName(string $name): void
+    private function convertDefinedName(string $name): string
     {
         if (strlen($name) > 255) {
             throw new WriterException('Defined Name is too long');
         }
 
+        throw new WriterException('Cannot yet write formulae with defined names to Xls');
+        /*
         $nameReference = 1;
         foreach ($this->spreadsheet->getDefinedNames() as $definedName) {
             if ($name === $definedName->getName()) {
@@ -763,8 +765,9 @@ class Parser
 
         $ptgRef = pack('Cvxx', $this->ptg['ptgName'], $nameReference);
 
-        throw new WriterException('Cannot yet write formulae with defined names to Xls');
-//        return $ptgRef;
+
+        return $ptgRef;
+        */
     }
 
     /**
@@ -778,8 +781,7 @@ class Parser
      */
     private function getRefIndex($ext_ref)
     {
-        $ext_ref = preg_replace("/^'/", '', $ext_ref); // Remove leading  ' if any.
-        $ext_ref = preg_replace("/'$/", '', $ext_ref); // Remove trailing ' if any.
+        $ext_ref = (string) preg_replace(["/^'/", "/'$/"], ['', ''], $ext_ref); // Remove leading and trailing ' if any.
         $ext_ref = str_replace('\'\'', '\'', $ext_ref); // Replace escaped '' with '
 
         // Check if there is a sheet range eg., Sheet1:Sheet2.
@@ -851,10 +853,10 @@ class Parser
      * called by the addWorksheet() method of the
      * \PhpOffice\PhpSpreadsheet\Writer\Xls\Workbook class.
      *
-     * @see \PhpOffice\PhpSpreadsheet\Writer\Xls\Workbook::addWorksheet()
-     *
      * @param string $name The name of the worksheet being added
      * @param int $index The index of the worksheet being added
+     *
+     * @see \PhpOffice\PhpSpreadsheet\Writer\Xls\Workbook::addWorksheet()
      */
     public function setExtSheet($name, $index): void
     {
@@ -966,8 +968,9 @@ class Parser
     /**
      * Advance to the next valid token.
      */
-    private function advance()
+    private function advance(): void
     {
+        $token = '';
         $i = $this->currentCharacter;
         $formula_length = strlen($this->formula);
         // eat up white spaces
@@ -995,7 +998,7 @@ class Parser
                 $this->currentCharacter = $i + 1;
                 $this->currentToken = $token;
 
-                return 1;
+                return;
             }
 
             if ($i < ($formula_length - 2)) {
@@ -1035,7 +1038,6 @@ class Parser
             case '%':
                 return $token;
 
-                break;
             case '>':
                 if ($this->lookAhead === '=') { // it's a GE token
                     break;
@@ -1043,7 +1045,6 @@ class Parser
 
                 return $token;
 
-                break;
             case '<':
                 // it's a LE or a NE token
                 if (($this->lookAhead === '=') || ($this->lookAhead === '>')) {
@@ -1052,7 +1053,6 @@ class Parser
 
                 return $token;
 
-                break;
             default:
                 // if it's a reference A1 or $A$1 or $A1 or A$1
                 if (preg_match('/^\$?[A-Ia-i]?[A-Za-z]\$?\d+$/', $token) && !preg_match('/\d/', $this->lookAhead) && ($this->lookAhead !== ':') && ($this->lookAhead !== '.') && ($this->lookAhead !== '!')) {
@@ -1148,10 +1148,6 @@ class Parser
             $this->advance();
             $result2 = $this->expression();
             $result = $this->createTree('ptgNE', $result, $result2);
-        } elseif ($this->currentToken == '&') {
-            $this->advance();
-            $result2 = $this->expression();
-            $result = $this->createTree('ptgConcat', $result, $result2);
         }
 
         return $result;
@@ -1202,6 +1198,11 @@ class Parser
             return $this->createTree('ptgUplus', $result2, '');
         }
         $result = $this->term();
+        while ($this->currentToken === '&') {
+            $this->advance();
+            $result2 = $this->expression();
+            $result = $this->createTree('ptgConcat', $result, $result2);
+        }
         while (
             ($this->currentToken == '+') ||
             ($this->currentToken == '-') ||
@@ -1229,9 +1230,9 @@ class Parser
      * This function just introduces a ptgParen element in the tree, so that Excel
      * doesn't get confused when working with a parenthesized formula afterwards.
      *
-     * @see fact()
-     *
      * @return array The parsed ptg'd tree
+     *
+     * @see fact()
      */
     private function parenthesizedExpression()
     {
@@ -1277,7 +1278,8 @@ class Parser
      */
     private function fact()
     {
-        if ($this->currentToken === '(') {
+        $currentToken = $this->currentToken;
+        if ($currentToken === '(') {
             $this->advance(); // eat the "("
             $result = $this->parenthesizedExpression();
             if ($this->currentToken !== ')') {
@@ -1444,6 +1446,9 @@ class Parser
         if (empty($tree)) { // If it's the first call use parseTree
             $tree = $this->parseTree;
         }
+        if (!is_array($tree) || !isset($tree['left'], $tree['right'], $tree['value'])) {
+            throw new WriterException('Unexpected non-array');
+        }
 
         if (is_array($tree['left'])) {
             $converted_tree = $this->toReversePolish($tree['left']);
@@ -1473,7 +1478,8 @@ class Parser
             } else {
                 $left_tree = '';
             }
-            // add it's left subtree and return.
+
+            // add its left subtree and return.
             return $left_tree . $this->convertFunction($tree['value'], $tree['right']);
         }
         $converted_tree = $this->convert($tree['value']);

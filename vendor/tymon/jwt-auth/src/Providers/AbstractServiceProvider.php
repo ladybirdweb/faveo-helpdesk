@@ -12,8 +12,6 @@
 namespace Tymon\JWTAuth\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Lcobucci\JWT\Builder as JWTBuilder;
-use Lcobucci\JWT\Parser as JWTParser;
 use Namshi\JOSE\JWS;
 use Tymon\JWTAuth\Blacklist;
 use Tymon\JWTAuth\Claims\Factory as ClaimFactory;
@@ -27,11 +25,9 @@ use Tymon\JWTAuth\Http\Middleware\AuthenticateAndRenew;
 use Tymon\JWTAuth\Http\Middleware\Check;
 use Tymon\JWTAuth\Http\Middleware\RefreshToken;
 use Tymon\JWTAuth\Http\Parser\AuthHeaders;
-use Tymon\JWTAuth\Http\Parser\Cookies;
 use Tymon\JWTAuth\Http\Parser\InputSource;
 use Tymon\JWTAuth\Http\Parser\Parser;
 use Tymon\JWTAuth\Http\Parser\QueryString;
-use Tymon\JWTAuth\Http\Parser\RouteParams;
 use Tymon\JWTAuth\JWT;
 use Tymon\JWTAuth\JWTAuth;
 use Tymon\JWTAuth\JWTGuard;
@@ -169,8 +165,6 @@ abstract class AbstractServiceProvider extends ServiceProvider
     {
         $this->app->singleton('tymon.jwt.provider.jwt.lcobucci', function ($app) {
             return new Lcobucci(
-                new JWTBuilder(),
-                new JWTParser(),
                 $this->config('secret'),
                 $this->config('algo'),
                 $this->config('keys')
@@ -235,8 +229,6 @@ abstract class AbstractServiceProvider extends ServiceProvider
                     new AuthHeaders,
                     new QueryString,
                     new InputSource,
-                    new RouteParams,
-                    new Cookies($this->config('decrypt_cookies')),
                 ]
             );
 
@@ -354,7 +346,6 @@ abstract class AbstractServiceProvider extends ServiceProvider
      *
      * @param  string  $key
      * @param  string  $default
-     *
      * @return mixed
      */
     protected function config($key, $default = null)
@@ -366,7 +357,6 @@ abstract class AbstractServiceProvider extends ServiceProvider
      * Get an instantiable configuration instance.
      *
      * @param  string  $key
-     *
      * @return mixed
      */
     protected function getConfigInstance($key)

@@ -7,6 +7,7 @@ use Closure;
 use Illuminate\Support\Collection;
 use PhpOffice\PhpSpreadsheet\Worksheet\Row as SpreadsheetRow;
 
+/** @mixin SpreadsheetRow */
 class Row implements ArrayAccess
 {
     use DelegatedMacroable;
@@ -32,13 +33,20 @@ class Row implements ArrayAccess
     protected $rowCache;
 
     /**
-     * @param SpreadsheetRow $row
-     * @param array          $headingRow
+     * @var bool|null
      */
-    public function __construct(SpreadsheetRow $row, array $headingRow = [])
+    protected $rowCacheFormatData;
+
+    /**
+     * @param  SpreadsheetRow  $row
+     * @param  array  $headingRow
+     * @param  array  $headerIsGrouped
+     */
+    public function __construct(SpreadsheetRow $row, array $headingRow = [], array $headerIsGrouped = [])
     {
-        $this->row        = $row;
-        $this->headingRow = $headingRow;
+        $this->row             = $row;
+        $this->headingRow      = $headingRow;
+        $this->headerIsGrouped = $headerIsGrouped;
     }
 
     /**
@@ -50,12 +58,10 @@ class Row implements ArrayAccess
     }
 
     /**
-     * @param null        $nullValue
-     * @param bool        $calculateFormulas
-     * @param bool        $formatData
-     *
-     * @param string|null $endColumn
-     *
+     * @param  null  $nullValue
+     * @param  bool  $calculateFormulas
+     * @param  bool  $formatData
+     * @param  string|null  $endColumn
      * @return Collection
      */
     public function toCollection($nullValue = null, $calculateFormulas = false, $formatData = true, ?string $endColumn = null): Collection
@@ -64,16 +70,15 @@ class Row implements ArrayAccess
     }
 
     /**
-     * @param null        $nullValue
-     * @param bool        $calculateFormulas
-     * @param bool        $formatData
-     * @param string|null $endColumn
-     *
+     * @param  null  $nullValue
+     * @param  bool  $calculateFormulas
+     * @param  bool  $formatData
+     * @param  string|null  $endColumn
      * @return array
      */
     public function toArray($nullValue = null, $calculateFormulas = false, $formatData = true, ?string $endColumn = null)
     {
-        if (is_array($this->rowCache)) {
+        if (is_array($this->rowCache) && ($this->rowCacheFormatData === $formatData)) {
             return $this->rowCache;
         }
 
@@ -84,7 +89,11 @@ class Row implements ArrayAccess
             $value = (new Cell($cell))->getValue($nullValue, $calculateFormulas, $formatData);
 
             if (isset($this->headingRow[$i])) {
-                $cells[$this->headingRow[$i]] = $value;
+                if (!$this->headerIsGrouped[$i]) {
+                    $cells[$this->headingRow[$i]] = $value;
+                } else {
+                    $cells[$this->headingRow[$i]][] = $value;
+                }
             } else {
                 $cells[] = $value;
             }
@@ -96,17 +105,20 @@ class Row implements ArrayAccess
             $cells = ($this->preparationCallback)($cells, $this->row->getRowIndex());
         }
 
-        $this->rowCache = $cells;
+        $this->rowCache           = $cells;
+        $this->rowCacheFormatData = $formatData;
 
         return $cells;
     }
 
     /**
+     * @param  bool  $calculateFormulas
+     * @param  string|null  $endColumn
      * @return bool
      */
-    public function isEmpty(): bool
+    public function isEmpty($calculateFormulas = false, ?string $endColumn = null): bool
     {
-        return count(array_filter($this->toArray(null, false, false))) === 0;
+        return count(array_filter($this->toArray(null, $calculateFormulas, false, $endColumn))) === 0;
     }
 
     /**
@@ -117,28 +129,33 @@ class Row implements ArrayAccess
         return $this->row->getRowIndex();
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset(($this->toArray())[$offset]);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return ($this->toArray())[$offset];
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         //
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         //
     }
 
     /**
-     * @param \Closure $preparationCallback
+     * @param  \Closure  $preparationCallback
+     *
      * @internal
      */
     public function setPreparationCallback(Closure $preparationCallback = null)

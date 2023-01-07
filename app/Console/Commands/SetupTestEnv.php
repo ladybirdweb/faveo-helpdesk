@@ -3,9 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Model\helpdesk\Settings\System;
-use Artisan;
-use Config;
-use DB;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
 
 class SetupTestEnv extends Command
@@ -42,7 +42,7 @@ class SetupTestEnv extends Command
     public function handle()
     {
         $dbUsername = $this->option('username') ? $this->option('username') : env('DB_USERNAME');
-        $dbPassword = $this->option('password') ? $this->option('password') : (env('DB_PASSWORD')) ? env('DB_PASSWORD') : '';
+        $dbPassword = $this->option('password') ? $this->option('password') : (env('DB_PASSWORD'));
         $this->setupConfig($dbUsername, $dbPassword);
 
         echo "\nCreating database...\n";

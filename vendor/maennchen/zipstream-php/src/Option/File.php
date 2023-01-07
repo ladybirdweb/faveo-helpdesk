@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace ZipStream\Option;
 
 use DateTime;
+use DateTimeInterface;
 
 final class File
 {
@@ -11,18 +13,22 @@ final class File
      * @var string
      */
     private $comment = '';
+
     /**
      * @var Method
      */
     private $method;
+
     /**
      * @var int
      */
     private $deflateLevel;
+
     /**
-     * @var DateTime
+     * @var DateTimeInterface
      */
     private $time;
+
     /**
      * @var int
      */
@@ -83,17 +89,17 @@ final class File
     }
 
     /**
-     * @return DateTime
+     * @return DateTimeInterface
      */
-    public function getTime(): DateTime
+    public function getTime(): DateTimeInterface
     {
         return $this->time;
     }
 
     /**
-     * @param DateTime $time
+     * @param DateTimeInterface $time
      */
-    public function setTime(DateTime $time): void
+    public function setTime(DateTimeInterface $time): void
     {
         $this->time = $time;
     }

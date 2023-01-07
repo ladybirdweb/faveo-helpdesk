@@ -2,6 +2,11 @@
 
 ## [Unreleased](https://github.com/FakerPHP/Faker/compare/v1.20.0...main)
 
+## [2022-12-13, v1.21.0](https://github.com/FakerPHP/Faker/compare/v1.20.0..v1.21.0)
+
+- Dropped support for PHP 7.1, 7.2, and 7.3 (#543)
+- Added support for PHP 8.2 (#528)
+
 ## [2022-07-20, v1.20.0](https://github.com/FakerPHP/Faker/compare/v1.19.0..v1.20.0)
 
 - Fixed typo in French phone number (#452)

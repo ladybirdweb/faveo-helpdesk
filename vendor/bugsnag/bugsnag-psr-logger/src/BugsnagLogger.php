@@ -4,7 +4,7 @@ namespace Bugsnag\PsrLogger;
 
 use Bugsnag\Client;
 use Bugsnag\Report;
-use Exception;
+use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
 use Throwable;
 
@@ -15,7 +15,7 @@ class BugsnagLogger extends AbstractLogger
      *
      * @var \Bugsnag\Client
      */
-    protected $client;
+    protected Client $client;
 
     /**
      * The minimum level required to notify bugsnag.
@@ -24,7 +24,7 @@ class BugsnagLogger extends AbstractLogger
      *
      * @var string
      */
-    protected $notifyLevel = LogLevel::NOTICE;
+    protected string $notifyLevel = LogLevel::NOTICE;
 
     /**
      * Create a new bugsnag logger instance.
@@ -45,7 +45,7 @@ class BugsnagLogger extends AbstractLogger
      *
      * @return void
      */
-    public function setNotifyLevel($notifyLevel)
+    public function setNotifyLevel(string $notifyLevel): void
     {
         if (!in_array($notifyLevel, $this->getLogLevelOrder())) {
             syslog(LOG_WARNING, 'Bugsnag Warning: Invalid notify level supplied to Bugsnag Logger');
@@ -57,13 +57,13 @@ class BugsnagLogger extends AbstractLogger
     /**
      * Log a message to the logs.
      *
-     * @param string $level
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed              $level
+     * @param string|\Stringable $message
+     * @param mixed[]            $context
      *
      * @return void
      */
-    public function log($level, $message, array $context = [])
+    public function log(mixed $level, string|\Stringable $message, array $context = []): void
     {
         $title = 'Log '.$level;
         if (isset($context['title'])) {
@@ -72,10 +72,10 @@ class BugsnagLogger extends AbstractLogger
         }
 
         $exception = null;
-        if (isset($context['exception']) && ($context['exception'] instanceof Exception || $context['exception'] instanceof Throwable)) {
+        if (isset($context['exception']) && $context['exception'] instanceof Throwable) {
             $exception = $context['exception'];
             unset($context['exception']);
-        } elseif ($message instanceof Exception || $message instanceof Throwable) {
+        } elseif ($message instanceof Throwable) {
             $exception = $message;
         }
 
@@ -118,12 +118,12 @@ class BugsnagLogger extends AbstractLogger
     /**
      * Checks whether the selected level is above another level.
      *
-     * @param string $level
+     * @param mixed  $level
      * @param string $base
      *
      * @return bool
      */
-    protected function aboveLevel($level, $base)
+    protected function aboveLevel(mixed $level, string $base): bool
     {
         $levelOrder = $this->getLogLevelOrder();
         $baseIndex = array_search($base, $levelOrder);
@@ -137,7 +137,7 @@ class BugsnagLogger extends AbstractLogger
      *
      * @return string[]
      */
-    protected function getLogLevelOrder()
+    protected function getLogLevelOrder(): array
     {
         return [
             LogLevel::DEBUG,
@@ -154,11 +154,11 @@ class BugsnagLogger extends AbstractLogger
     /**
      * Get the severity for the logger.
      *
-     * @param string $level
+     * @param mixed $level
      *
      * @return string
      */
-    protected function getSeverity($level)
+    protected function getSeverity(mixed $level): string
     {
         if ($this->aboveLevel($level, 'error')) {
             return 'error';
@@ -172,32 +172,16 @@ class BugsnagLogger extends AbstractLogger
     /**
      * Format the parameters for the logger.
      *
-     * @param mixed $message
+     * @param string|\Stringable $message
      *
      * @return string
      */
-    protected function formatMessage($message)
+    protected function formatMessage(string|\Stringable $message): string
     {
-        if (is_array($message)) {
-            return var_export($message, true);
+        if (is_string($message)) {
+            return $message;
         }
 
-        return $message;
-    }
-
-    /**
-     * Ensure the given string is less than 100 characters.
-     *
-     * @param string $str
-     *
-     * @return string
-     */
-    protected function limit($str)
-    {
-        if (strlen($str) <= 100) {
-            return $str;
-        }
-
-        return rtrim(substr($str, 0, 97)).'...';
+        return (string) $message;
     }
 }

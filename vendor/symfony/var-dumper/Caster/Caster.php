@@ -47,7 +47,7 @@ class Caster
         if ($hasDebugInfo) {
             try {
                 $debugInfo = $obj->__debugInfo();
-            } catch (\Throwable $e) {
+            } catch (\Throwable) {
                 // ignore failing __debugInfo()
                 $hasDebugInfo = false;
             }
@@ -61,7 +61,7 @@ class Caster
 
         if ($a) {
             static $publicProperties = [];
-            $debugClass = $debugClass ?? get_debug_type($obj);
+            $debugClass ??= get_debug_type($obj);
 
             $i = 0;
             $prefixedKeys = [];

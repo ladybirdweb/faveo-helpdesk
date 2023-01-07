@@ -16,7 +16,7 @@ class DownloadCollection
      */
     public function downloadExcel()
     {
-        return function (string $fileName, string $writerType = null, $withHeadings = false) {
+        return function (string $fileName, string $writerType = null, $withHeadings = false, array $responseHeaders = []) {
             $export = new class($this, $withHeadings) implements FromCollection, WithHeadings
             {
                 use Exportable;
@@ -32,8 +32,8 @@ class DownloadCollection
                 private $collection;
 
                 /**
-                 * @param Collection $collection
-                 * @param bool       $withHeading
+                 * @param  Collection  $collection
+                 * @param  bool  $withHeading
                  */
                 public function __construct(Collection $collection, bool $withHeading = false)
                 {
@@ -68,7 +68,7 @@ class DownloadCollection
                 }
             };
 
-            return $export->download($fileName, $writerType);
+            return $export->download($fileName, $writerType, $responseHeaders);
         };
     }
 }
