@@ -15,7 +15,7 @@ $segment = "";
 foreach ($segments as $seg) {
     $segment.="/".$seg;
 }
-$inputs = json_encode(\Input::all());
+$inputs = json_encode(Request::all());
 $path = public_path();
 ?>
 <script type="text/javascript">

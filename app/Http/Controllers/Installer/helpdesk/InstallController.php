@@ -19,7 +19,7 @@ use Exception;
 use File;
 use Hash;
 use Illuminate\Http\Request;
-use Input;
+use Illuminate\Support\Facades\Request as Input;
 use Redirect;
 use Session;
 use UnAuth;

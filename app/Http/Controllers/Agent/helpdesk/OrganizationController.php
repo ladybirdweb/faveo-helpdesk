@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Agent\helpdesk;
 
 // controllers
+use Illuminate\Support\Facades\Request as Input;
 use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\OrganizationRequest;
@@ -264,7 +265,7 @@ class OrganizationController extends Controller
     public function Head_Org($id)
     {
         // get the user to make organization head
-        $head_user = \Input::get('user');
+        $head_user = Input::get('user');
         // get an instance of the selected organization
         $org_head = Organization::where('id', '=', $id)->first();
         $org_head->head = $head_user;

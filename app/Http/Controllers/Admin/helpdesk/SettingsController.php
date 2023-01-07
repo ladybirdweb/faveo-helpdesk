@@ -39,7 +39,7 @@ use Exception;
 use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Input;
+use Illuminate\Support\Facades\Request as Input;
 use Lang;
 
 /**
@@ -866,13 +866,13 @@ class SettingsController extends Controller
 
     public function saveConditions()
     {
-        if (\Input::get('fetching-commands') && \Input::get('notification-commands')) {
-            $fetching_commands = \Input::get('fetching-commands');
-            $fetching_dailyAt = \Input::get('fetching-dailyAt');
-            $notification_commands = \Input::get('notification-commands');
-            $notification_dailyAt = \Input::get('notification-dailyAt');
-            $work_commands = \Input::get('work-commands');
-            $workflow_dailyAt = \Input::get('workflow-dailyAt');
+        if (Input::get('fetching-commands') && Input::get('notification-commands')) {
+            $fetching_commands = Input::get('fetching-commands');
+            $fetching_dailyAt = Input::get('fetching-dailyAt');
+            $notification_commands = Input::get('notification-commands');
+            $notification_dailyAt = Input::get('notification-dailyAt');
+            $work_commands = Input::get('work-commands');
+            $workflow_dailyAt = Input::get('workflow-dailyAt');
             $fetching_command = $this->getCommand($fetching_commands, $fetching_dailyAt);
             $notification_command = $this->getCommand($notification_commands, $notification_dailyAt);
             $work_command = $this->getCommand($work_commands, $workflow_dailyAt);

@@ -2,6 +2,7 @@
 
 namespace App\Api\v1;
 
+use Illuminate\Support\Facades\Request as Input;
 use App\Http\Controllers\Agent\helpdesk\TicketController as CoreTicketController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\helpdesk\TicketRequest;
@@ -1418,7 +1419,7 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make(
-                \Input::get(),
+                Input::all(),
                 [
                     'email' => 'required|email|unique:users',
                     'ticket_id' => 'required',
@@ -1451,7 +1452,7 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make(
-                \Input::get(),
+                Input::all(),
                 [
                     'ticket_id' => 'required',
                 ]
@@ -1483,7 +1484,7 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make(
-                \Input::get(),
+                Input::all(),
                 [
                     'ticketid' => 'required',
                     'email' => 'required',

@@ -18,7 +18,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Input;
+use Illuminate\Support\Facades\Request as Input;
 use Lang;
 
 /**

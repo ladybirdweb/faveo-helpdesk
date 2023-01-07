@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\helpdesk;
 
 // controller
+use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Controller;
 // request
 
@@ -56,13 +57,13 @@ class ErrorAndDebuggingController extends Controller
             $debug = ($debug) ? 'true' : 'false';
             $bugsnag_debug = \Config::get('app.bugsnag_reporting');
             $bugsnag_debug = ($bugsnag_debug) ? 'true' : 'false';
-            if ($debug != \Input::get('debug') || $bugsnag_debug != \Input::get('bugsnag')) {
+            if ($debug != Request::get('debug') || $bugsnag_debug != Request::get('bugsnag')) {
                 // dd($request->input());
                 $debug_new = base_path().DIRECTORY_SEPARATOR.'.env';
                 $datacontent = File::get($debug_new);
                 $datacontent = str_replace(
                     'APP_DEBUG='.$debug,
-                    'APP_DEBUG='.\Input::get('debug'),
+                    'APP_DEBUG='.Request::get('debug'),
                     $datacontent
                 );
                 File::put($debug_new, $datacontent);
@@ -72,7 +73,7 @@ class ErrorAndDebuggingController extends Controller
                 $datacontent2 = File::get($bugsnag_debug_new);
                 $datacontent2 = str_replace(
                     'APP_BUGSNAG='.$bugsnag_debug,
-                    'APP_BUGSNAG='.\Input::get('bugsnag'),
+                    'APP_BUGSNAG='.Request::get('bugsnag'),
                     $datacontent2
                 );
                 File::put($bugsnag_debug_new, $datacontent2);

@@ -14,7 +14,7 @@ use File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Input;
+use Illuminate\Support\Facades\Request;
 use Lang;
 use UnAuth;
 use Validator;
@@ -134,9 +134,9 @@ class LanguageController extends Controller
         try {
             // getting all of the post data
             $file = [
-                'File' => Input::file('File'),
-                'language-name' => Input::input('language-name'),
-                'iso-code' => Input::input('iso-code'),
+                'File' => Request::file('File'),
+                'language-name' => Request::input('language-name'),
+                'iso-code' => Request::input('iso-code'),
             ];
 
             // setting up rules
@@ -155,14 +155,14 @@ class LanguageController extends Controller
 
                 //Checking if package already exists or not in lang folder
                 $path = base_path('resources/lang');
-                if (in_array(strtolower(Input::get('iso-code')), scandir($path))) {
+                if (in_array(strtolower(Request::get('iso-code')), scandir($path))) {
 
                     //sending back with error message
                     Session::flash('fails', Lang::get('lang.package_exist'));
-                    Session::flash('link', 'change-language/'.strtolower(Input::get('iso-code')));
+                    Session::flash('link', 'change-language/'.strtolower(Request::get('iso-code')));
 
                     return Redirect::back()->withInput();
-                } elseif (! array_key_exists(strtolower(Input::get('iso-code')), Config::get('languages'))) {//Checking Valid ISO code form Languages.php
+                } elseif (! array_key_exists(strtolower(Request::get('iso-code')), Config::get('languages'))) {//Checking Valid ISO code form Languages.php
                     //sending back with error message
                     Session::flash('fails', Lang::get('lang.iso-code-error'));
 
@@ -170,13 +170,13 @@ class LanguageController extends Controller
                 } else {
 
                     // checking file is valid.
-                    if (Input::file('File')->isValid()) {
-                        $name = Input::file('File')->getClientOriginalName(); //uploaded file's original name
+                    if (Request::file('File')->isValid()) {
+                        $name = Request::file('File')->getClientOriginalName(); //uploaded file's original name
                         $destinationPath = base_path('public/uploads/'); // defining uploading path
-                        $extractpath = base_path('resources/lang').'/'.strtolower(Input::get('iso-code')); //defining extracting path
+                        $extractpath = base_path('resources/lang').'/'.strtolower(Request::get('iso-code')); //defining extracting path
                         mkdir($extractpath); //creating directroy for extracting uploadd file
                         //mkdir($destinationPath);
-                        Input::file('File')->move($destinationPath, $name); // uploading file to given path
+                        Request::file('File')->move($destinationPath, $name); // uploading file to given path
                         \Zipper::make($destinationPath.'/'.$name)->extractTo($extractpath); //extracting file to give path
                         //check if Zip extract foldercontains any subfolder
                         $directories = File::directories($extractpath);
@@ -194,7 +194,7 @@ class LanguageController extends Controller
                         } else {
                             // sending back with success message
                             Session::flash('success', Lang::get('lang.upload-success'));
-                            Session::flash('link', 'change-language/'.strtolower(Input::get('iso-code')));
+                            Session::flash('link', 'change-language/'.strtolower(Request::get('iso-code')));
 
                             return Redirect::route('LanguageController');
                         }

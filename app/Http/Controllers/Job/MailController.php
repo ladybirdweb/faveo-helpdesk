@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Job;
 
+use Illuminate\Support\Facades\Request as Input;
 use App\Http\Controllers\Controller;
 use Exception;
 use Form;
@@ -31,7 +32,7 @@ class MailController extends Controller
 
     public function form($label, $name, $class)
     {
-        $mailid = \Input::get('emailid');
+        $mailid = Input::get('emailid');
         if ($mailid) {
             $emails = new \App\Model\helpdesk\Email\Emails();
             $email = $emails->find($mailid);

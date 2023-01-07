@@ -45,7 +45,7 @@ use Hash;
 use Illuminate\Http\Request;
 use Illuminate\support\Collection;
 use Illuminate\Support\Str;
-use Input;
+use Illuminate\Support\Facades\Request as Input;
 use Lang;
 use Mail;
 use PDF;
@@ -1588,7 +1588,7 @@ class TicketController extends Controller
      */
     public function autosearch($id)
     {
-        $term = \Input::get('term');
+        $term = Input::get('term');
         $user = \App\User::where('email', 'LIKE', '%'.$term.'%')->pluck('email');
         echo json_encode($user);
     }

@@ -17,7 +17,7 @@ use Config;
 use Exception;
 use Illuminate\Http\Request;
 use Image;
-use Input;
+use Illuminate\Support\Facades\Request as Input;
 use Lang;
 
 /**

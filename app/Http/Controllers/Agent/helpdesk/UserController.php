@@ -39,7 +39,7 @@ use Exception;
 use GeoIP;
 use Hash;
 use Illuminate\Http\Request;
-use Input;
+use Illuminate\Support\Facades\Request as Input;
 use Lang;
 use Redirect;
 
@@ -897,7 +897,7 @@ class UserController extends Controller
         // checking if the name is unique
         $check2 = Organization::where('name', '=', Input::get('name'))->first();
         // if any of the fields is not available then return false
-        if (\Input::get('name') == null) {
+        if (Input::get('name') == null) {
             return 'Name is required';
         } elseif ($check2 != null) {
             return 'Name should be Unique';

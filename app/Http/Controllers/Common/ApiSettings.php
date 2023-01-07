@@ -8,7 +8,7 @@ use App\Model\helpdesk\Ticket\Tickets;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
-use Input;
+use Illuminate\Support\Facades\Request as Input;
 use Lang;
 use Log;
 

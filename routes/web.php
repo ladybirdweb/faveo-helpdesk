@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Request;
+
 /*
   |--------------------------------------------------------------------------
   | Application Routes
@@ -487,13 +489,13 @@ Route::group(['middleware' => ['web']], function () {
      */
     // seasrch
 //    Route::POST('tickets/search/', function () {
-//        $keyword = Illuminate\Support\Str::lower(Input::get('auto'));
+//        $keyword = Illuminate\Support\Str::lower(Request::get('auto'));
 //        $models = App\Model\Ticket\Tickets::where('ticket_number', '=', $keyword)->orderby('ticket_number')->take(10)->skip(0)->get();
 //        $count = count($models);
 //        return Illuminate\Support\Facades\Redirect::back()->with('contents', $models)->with('counts', $count);
 //    });
     Route::any('getdata', function () {
-        $term = Illuminate\Support\Str::lower(Input::get('term'));
+        $term = Illuminate\Support\Str::lower(Request::get('term'));
         $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term.'%')->groupBy('ticket_number')->take(10)->get();
         foreach ($data as $v) {
             return [
