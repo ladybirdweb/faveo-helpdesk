@@ -29,7 +29,7 @@ class TeamRequest extends Request
     public function rules()
     {
         return [
-            'name'   => 'required|unique:teams|max:30',
+            'name' => 'required|unique:teams|max:30',
             'status' => 'required',
         ];
     }

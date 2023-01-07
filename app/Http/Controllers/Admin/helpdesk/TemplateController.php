@@ -41,7 +41,6 @@ class TemplateController extends Controller
      * Display a listing of the resource.
      *
      * @param type Template $template
-     *
      * @return type Response
      */
     public function index(Template $template)
@@ -60,7 +59,6 @@ class TemplateController extends Controller
      *
      * @param type Languages $language
      * @param type Template  $template
-     *
      * @return type Response
      */
     public function create(Languages $language, Template $template)
@@ -80,7 +78,6 @@ class TemplateController extends Controller
      *
      * @param type Template        $template
      * @param type TemplateRequest $request
-     *
      * @return type Response
      */
     public function store(Template $template, TemplateRequest $request)
@@ -103,8 +100,7 @@ class TemplateController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -115,10 +111,9 @@ class TemplateController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param type $id
+     * @param  type  $id
      * @param type Template  $template
      * @param type Languages $language
-     *
      * @return type Response
      */
     public function listdirectories()
@@ -164,7 +159,7 @@ class TemplateController extends Controller
         //   }
         // Move all images files
 
-        if (!file_exists($filename)) {
+        if (! file_exists($filename)) {
             mkdir($filename, 0777);
         }
         $files = array_filter(scandir($directory.'default'));
@@ -173,7 +168,7 @@ class TemplateController extends Controller
             if ($file === '.' or $file === '..') {
                 continue;
             }
-            if (!is_dir($file)) {
+            if (! is_dir($file)) {
                 //   $file_to_go = str_replace("code/resources/views/emails/",'code/resources/views/emails/'.$fname,$file);
                 $destination = $directory.$fname.'/';
 
@@ -242,7 +237,6 @@ class TemplateController extends Controller
      * @param type int           $id
      * @param type Template      $template
      * @param type TemplateUdate $request
-     *
      * @return type Response
      */
     public function update($id, Template $template, TemplateUdate $request)
@@ -269,7 +263,6 @@ class TemplateController extends Controller
      *
      * @param type int      $id
      * @param type Template $template
-     *
      * @return type Response
      */
     public function destroy($id, Template $template)
@@ -294,7 +287,6 @@ class TemplateController extends Controller
      * Form for Email connection checking.
      *
      * @param type Emails $email
-     *
      * @return type Response
      */
     public function formDiagno(Emails $email)
@@ -312,7 +304,6 @@ class TemplateController extends Controller
      * function to send  emails.
      *
      * @param type Request $request
-     *
      * @return type
      */
     public function postDiagno(DiagnosRequest $request)
@@ -323,18 +314,18 @@ class TemplateController extends Controller
             $msg = $request->input('message');
             $from = $request->input('from');
             $from_address = Emails::where('id', '=', $from)->first();
-            if (!$from_address) {
+            if (! $from_address) {
                 throw new Exception('Sorry! We can not find your request');
             }
             $to_address = [
 
-                'name'  => '',
+                'name' => '',
                 'email' => $to,
             ];
             $message = [
-                'subject'  => $subject,
+                'subject' => $subject,
                 'scenario' => null,
-                'body'     => $msg,
+                'body' => $msg,
             ];
 
             $this->PhpMailController->sendmail($from, $to_address, $message, [], []);

@@ -31,7 +31,7 @@ class TemplateRequest extends Request
         return [
             //            'name'                  => 'required|unique:template',
             //            'subject'               => 'required',
-            'type'    => 'required',
+            'type' => 'required',
             'message' => 'required',
         ];
     }

@@ -28,9 +28,9 @@ class SocialMediaController extends Controller
     public function postSettings($provider, Request $request)
     {
         $this->validate($request, [
-            'client_id'     => 'required',
+            'client_id' => 'required',
             'client_secret' => 'required',
-            'redirect'      => 'required|url',
+            'redirect' => 'required|url',
         ]);
 
         try {
@@ -65,8 +65,8 @@ class SocialMediaController extends Controller
         foreach ($requests as $key => $value) {
             $social->create([
                 'provider' => $provider,
-                'key'      => $key,
-                'value'    => $value,
+                'key' => $key,
+                'value' => $value,
             ]);
         }
     }

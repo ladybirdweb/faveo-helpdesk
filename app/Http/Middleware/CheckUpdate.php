@@ -12,9 +12,8 @@ class CheckUpdate
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -47,7 +46,7 @@ class CheckUpdate
     public function checkNewUpdate()
     {
         $notify = new BarNotification();
-        if (!\Schema::hasTable('bar_notifications')) {
+        if (! \Schema::hasTable('bar_notifications')) {
             $url = url('database-upgrade');
             //$string = "Your Database is outdated please upgrade <a href=$url>Now !</a>";
             echo view('themes.default1.update.database', compact('url'));
@@ -65,7 +64,7 @@ class CheckUpdate
                 }
             }
             if (count($notifications) > 0) {
-                if (!array_key_exists('new-version', $notifications)) {
+                if (! array_key_exists('new-version', $notifications)) {
                     $check_version = $this->checkNewVersion();
                     if ($check_version == true) {
                         $notify->create(['key' => 'new-version', 'value' => 'new version found please click <a href='.url('file-update').'><b>here to download</b></a>']);

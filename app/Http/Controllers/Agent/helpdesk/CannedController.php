@@ -73,7 +73,6 @@ class CannedController extends Controller
      *
      * @param type CannedRequest $request
      * @param type Canned        $canned
-     *
      * @return type Redirect
      */
     public function store(CannedRequest $request, Canned $canned)
@@ -95,9 +94,8 @@ class CannedController extends Controller
     /**
      * Show the form for editing the Canned Response.
      *
-     * @param type $id
+     * @param  type  $id
      * @param type Canned $canned
-     *
      * @return type View
      */
     public function edit($id, Canned $canned)
@@ -115,10 +113,9 @@ class CannedController extends Controller
     /**
      * Update the Canned Response in database.
      *
-     * @param type $id
+     * @param  type  $id
      * @param type CannedUpdateRequest $request
      * @param type Canned              $canned
-     *
      * @return type Redirect
      */
     public function update($id, CannedUpdateRequest $request, Canned $canned)
@@ -142,9 +139,8 @@ class CannedController extends Controller
     /**
      * Delete the Canned Response from storage.
      *
-     * @param type $id
+     * @param  type  $id
      * @param type Canned $canned
-     *
      * @return type Redirect
      */
     public function destroy($id, Canned $canned)
@@ -166,8 +162,7 @@ class CannedController extends Controller
     /**
      * Fetch Canned Response in the ticket detail page.
      *
-     * @param type $id
-     *
+     * @param  type  $id
      * @return type json
      */
     public function get_canned($id)
