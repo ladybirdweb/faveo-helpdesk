@@ -80,7 +80,7 @@ class LanguageController extends Controller
      */
     public function getLanguages()
     {
-        $path = base_path('resources/lang');
+        $path = base_path('lang');
         $values = scandir($path);  //Extracts names of directories present in lang directory
         $values = array_slice($values, 2); // skips array element $value[0] = '.' & $value[1] = '..'
         $sysLanguage = \Cache::get('language');
@@ -154,7 +154,7 @@ class LanguageController extends Controller
             } else {
 
                 //Checking if package already exists or not in lang folder
-                $path = base_path('resources/lang');
+                $path = base_path('lang');
                 if (in_array(strtolower(Request::get('iso-code')), scandir($path))) {
 
                     //sending back with error message
@@ -173,7 +173,7 @@ class LanguageController extends Controller
                     if (Request::file('File')->isValid()) {
                         $name = Request::file('File')->getClientOriginalName(); //uploaded file's original name
                         $destinationPath = base_path('public/uploads/'); // defining uploading path
-                        $extractpath = base_path('resources/lang').'/'.strtolower(Request::get('iso-code')); //defining extracting path
+                        $extractpath = base_path('lang').'/'.strtolower(Request::get('iso-code')); //defining extracting path
                         mkdir($extractpath); //creating directroy for extracting uploadd file
                         //mkdir($destinationPath);
                         Request::file('File')->move($destinationPath, $name); // uploading file to given path
@@ -235,7 +235,7 @@ class LanguageController extends Controller
     {
         if ($lang !== App::getLocale()) {
             if ($lang !== Config::get('app.fallback_locale')) {
-                $deletePath = base_path('resources/lang').'/'.$lang;     //define file path to delete
+                $deletePath = base_path('lang').'/'.$lang;     //define file path to delete
                 $success = File::deleteDirectory($deletePath); //remove extracted folder and it's subfolder from lang
                 if ($success) {
                     //sending back with success message
