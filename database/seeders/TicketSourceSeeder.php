@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Model\helpdesk\Ticket\Ticket_source;
 use Illuminate\Database\Seeder;
 

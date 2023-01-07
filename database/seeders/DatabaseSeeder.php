@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Model\Common\Template;
 use App\Model\Common\TemplateSet;
 use App\Model\Common\TemplateType;

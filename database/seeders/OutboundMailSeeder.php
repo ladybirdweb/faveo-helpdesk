@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Model\MailJob\MailService;
 use App\Model\MailJob\QueueService;
 use Illuminate\Database\Seeder;
