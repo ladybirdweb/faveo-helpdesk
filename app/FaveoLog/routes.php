@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\App;
+use Illuminate\Support\Facades\Route;
+
 Breadcrumbs::register('logs', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
     $breadcrumbs->push('System Logs', route('logs'));
 });
 Route::middleware('web', 'auth', 'roles')->group(function () {
-    Route::get('logs', 'App\FaveoLog\controllers\LogViewerController@index')->name('logs');
+    Route::get('logs', [App\FaveoLog\controllers\LogViewerController::class, 'index'])->name('logs');
 });
