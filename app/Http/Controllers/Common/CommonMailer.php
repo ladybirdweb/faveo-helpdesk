@@ -22,7 +22,7 @@ class CommonMailer
             $set = new \Swift_Mailer($transport);
 
             // Set the mailer
-            \Mail::setSwiftMailer($set);
+            \Mail::setSymfonyTransport($set);
 
             return true;
         } catch (Exception $e) {
