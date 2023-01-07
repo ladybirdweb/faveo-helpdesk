@@ -57,8 +57,6 @@ class Kernel extends HttpKernel
         'role.agent' => \App\Http\Middleware\CheckRoleAgent::class,
         'role.user' => \App\Http\Middleware\CheckRoleUser::class,
         'api' => \App\Http\Middleware\ApiKey::class,
-        'jwt.auth' => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
-        'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
         'jwt.authOveride' => \App\Http\Middleware\JwtAuthenticate::class,
         'update' => \App\Http\Middleware\CheckUpdate::class,
         'board' => \App\Http\Middleware\CheckBoard::class,
@@ -67,6 +65,10 @@ class Kernel extends HttpKernel
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'installer' => \App\Http\Middleware\IsInstalled::class,
         'force.option' => \App\Http\Middleware\TicketViewURL::class,
+        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
+        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
     ];
 
     /**
@@ -80,6 +82,7 @@ class Kernel extends HttpKernel
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         \App\Http\Middleware\Authenticate::class,
+        \Illuminate\Routing\Middleware\ThrottleRequests::class,
         \Illuminate\Session\Middleware\AuthenticateSession::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
         \Illuminate\Auth\Middleware\Authorize::class,

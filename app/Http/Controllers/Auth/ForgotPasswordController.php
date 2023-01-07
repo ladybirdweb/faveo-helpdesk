@@ -8,7 +8,8 @@ use App\User;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Lang;
+use Illuminate\Support\Facades\Lang;
+Use Illuminate\Support\Facades\DB;
 
 class ForgotPasswordController extends Controller
 {
@@ -53,13 +54,13 @@ class ForgotPasswordController extends Controller
                 $user1 = $user->email;
                 //gen new code and pass
                 $code = Str::random(60);
-                $password_reset_table = \DB::table('password_resets')->where('email', '=', $user->email)->first();
+                $password_reset_table = DB::table('password_resets')->where('email', '=', $user->email)->first();
                 if (isset($password_reset_table)) {
-                    $password_reset_table = \DB::table('password_resets')->where('email', '=', $user->email)->update(['token' => $code, 'created_at' => $date]);
+                    $password_reset_table = DB::table('password_resets')->where('email', '=', $user->email)->update(['token' => $code, 'created_at' => $date]);
                 // $password_reset_table->token = $code;
                 // $password_reset_table->update(['token' => $code]);
                 } else {
-                    $create_password_reset = \DB::table('password_resets')->insert(['email' => $user->email, 'token' => $code, 'created_at' => $date]);
+                    $create_password_reset = DB::table('password_resets')->insert(['email' => $user->email, 'token' => $code, 'created_at' => $date]);
                 }
                 $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user->user_name, 'email' => $user->email], $message = ['subject' => 'Your Password Reset Link', 'scenario' => 'reset-password'], $template_variables = ['user' => $user->first_name, 'email_address' => $user->email, 'password_reset_link' => url('password/reset/'.$code.'?email='.$user->email)], true);
                 if ($user->mobile != '' && $user->mobile != null) {
