@@ -30,9 +30,9 @@ class MailRequest extends Request
         }
 
         $rules = [
-            'email_address' => $email_address_rule,
-            'email_name' => 'required',
-            'password' => 'required',
+            'email_address'    => $email_address_rule,
+            'email_name'       => 'required',
+            'password'         => 'required',
             'sending_protocol' => 'required_if:sending_status,on',
         ];
         $driver = $this->input('sending_protocol');

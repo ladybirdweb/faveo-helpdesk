@@ -49,6 +49,7 @@ class OrganizationController extends Controller
      * Display a listing of the resource.
      *
      * @param type Organization $org
+     *
      * @return type Response
      */
     public function index()
@@ -143,6 +144,7 @@ class OrganizationController extends Controller
      *
      * @param type Organization        $org
      * @param type OrganizationRequest $request
+     *
      * @return type Redirect
      */
     public function store(Organization $org, OrganizationRequest $request)
@@ -166,8 +168,9 @@ class OrganizationController extends Controller
     /**
      * Display the specified organization.
      *
-     * @param  type  $id
+     * @param type $id
      * @param type Organization $org
+     *
      * @return type view
      */
     public function show($id, Organization $org)
@@ -185,8 +188,9 @@ class OrganizationController extends Controller
     /**
      * Show the form for editing the specified organization.
      *
-     * @param  type  $id
+     * @param type $id
      * @param type Organization $org
+     *
      * @return type view
      */
     public function edit($id, Organization $org)
@@ -204,9 +208,10 @@ class OrganizationController extends Controller
     /**
      * Update the specified organization in storage.
      *
-     * @param  type  $id
+     * @param type $id
      * @param type Organization       $org
      * @param type OrganizationUpdate $request
+     *
      * @return type Redirect
      */
     public function update($id, Organization $org, OrganizationUpdate $request)
@@ -234,6 +239,7 @@ class OrganizationController extends Controller
      * Delete a specified organization from storage.
      *
      * @param type int $id
+     *
      * @return type Redirect
      */
     public function destroy($id, Organization $org, User_org $user_org)
@@ -259,7 +265,8 @@ class OrganizationController extends Controller
     /**
      * Soring an organization head.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return type boolean
      */
     public function Head_Org($id)
@@ -278,9 +285,10 @@ class OrganizationController extends Controller
     /**
      * get the report of organizations.
      *
-     * @param  type  $id
-     * @param  type  $date111
-     * @param  type  $date122
+     * @param type $id
+     * @param type $date111
+     * @param type $date122
+     *
      * @return type array
      */
     public function orgChartData($id, $date111 = '', $date122 = '')
