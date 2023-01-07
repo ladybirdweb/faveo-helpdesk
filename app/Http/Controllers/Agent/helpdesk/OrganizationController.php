@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Agent\helpdesk;
 
 // controllers
-use Illuminate\Support\Facades\Request as Input;
 use App\Http\Controllers\Controller;
-// requests
 use App\Http\Requests\helpdesk\OrganizationRequest;
-/* include organization model */
+// requests
 use App\Http\Requests\helpdesk\OrganizationUpdate;
+/* include organization model */
+use App\Model\helpdesk\Agent_panel\Organization;
 // models
 /* Define OrganizationRequest to validate the create form */
-use App\Model\helpdesk\Agent_panel\Organization;
 use App\Model\helpdesk\Agent_panel\User_org;
-/* Define OrganizationUpdate to validate the create form */
 use App\User;
-// classes
+/* Define OrganizationUpdate to validate the create form */
 use Exception;
+// classes
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request as Input;
 use Lang;
 
 /**

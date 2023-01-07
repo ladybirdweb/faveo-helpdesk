@@ -2,12 +2,11 @@
 
 namespace App\Api\v1;
 
-use Illuminate\Support\Facades\Request as Input;
 use App\Http\Controllers\Agent\helpdesk\TicketController as CoreTicketController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\helpdesk\TicketRequest;
-//use Illuminate\Support\Facades\Request as Value;
 use App\Model\helpdesk\Agent\Department;
+//use Illuminate\Support\Facades\Request as Value;
 use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Manage\Sla_plan;
@@ -22,6 +21,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Request as Input;
 use Illuminate\Support\Str;
 
 /**

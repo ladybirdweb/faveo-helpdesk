@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Job;
 
-use Illuminate\Support\Facades\Request as Input;
 use App\Http\Controllers\Controller;
 use Exception;
 use Form;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request as Input;
 
 class MailController extends Controller
 {

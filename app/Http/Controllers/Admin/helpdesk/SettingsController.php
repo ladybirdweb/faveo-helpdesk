@@ -38,8 +38,8 @@ use DB;
 use Exception;
 use File;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Request as Input;
+use Illuminate\Support\Str;
 use Lang;
 
 /**
