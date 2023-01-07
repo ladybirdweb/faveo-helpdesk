@@ -16,7 +16,7 @@ if (isset($_FILES['image'])) {
     $res = ['upload' => [
         'links' => ['original' => $link],
         'image' => ['width' => $data[0],
-            'height' => $data[1],
+            'height'        => $data[1],
         ],
     ]];
     //echo out the response :)

@@ -97,7 +97,7 @@ $bootstrapPermission = substr(sprintf('%o', fileperms($basePath.DIRECTORY_SEPARA
          <?php
          foreach ($extensions as $extension) {
              echo '<tr>';
-             if (! extension_loaded($extension)) {
+             if (!extension_loaded($extension)) {
                  echo '<td>'.$extension."</td>  <td style='color:red'>Not Enabled"
                  ."<p>To enable this, please open '".php_ini_loaded_file()."' and add 'extension = ".$extension."'</p>"
                  .'</td>';
@@ -124,7 +124,7 @@ $bootstrapPermission = substr(sprintf('%o', fileperms($basePath.DIRECTORY_SEPARA
                 echo '</tr>';
                 echo '<tr>';
                 $env = '../.env';
-                if (! is_file($env)) {
+                if (!is_file($env)) {
                     echo "<td>.env file</td>  <td style='color:green'>Not found</td>";
                 } else {
                     echo "<td>.env file</td>  <td style='color:red'>Yes Found<p>Please delete  '$env' </p></td>";
