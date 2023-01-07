@@ -129,7 +129,6 @@ class ArticleController extends Controller
      * Creating a Article.
      *
      * @param type Category $category
-     *
      * @return type view
      */
     public function create(Category $category)
@@ -149,7 +148,6 @@ class ArticleController extends Controller
      *
      * @param type Article        $article
      * @param type ArticleRequest $request
-     *
      * @return type redirect
      */
     public function store(Article $article, ArticleRequest $request)
@@ -186,7 +184,6 @@ class ArticleController extends Controller
      * @param type Article      $article
      * @param type Relationship $relation
      * @param type Category     $category
-     *
      * @return view
      */
     public function edit($slug)
@@ -218,7 +215,6 @@ class ArticleController extends Controller
      * @param type Article        $article
      * @param type Relationship   $relation
      * @param type ArticleRequest $request
-     *
      * @return Response
      */
     public function update($slug, ArticleUpdate $request)
@@ -260,9 +256,8 @@ class ArticleController extends Controller
     /**
      * Delete an Agent by id.
      *
-     * @param type $id
+     * @param  type  $id
      * @param type Article $article
-     *
      * @return Response
      */
     public function destroy($slug, Article $article, Relationship $relation, Comment $comment)
@@ -296,8 +291,7 @@ class ArticleController extends Controller
      * user time zone
      * fetching timezone.
      *
-     * @param type $utc
-     *
+     * @param  type  $utc
      * @return type
      */
     public static function usertimezone($utc)

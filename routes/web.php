@@ -128,11 +128,11 @@ Route::group(['middleware' => ['web']], function () {
         Route::resource('forms', 'Admin\helpdesk\FormController');
         Route::get('forms/add-child/{formid}', ['as' => 'forms.add.child', 'uses' => 'Admin\helpdesk\FormController@addChildForm']);
         Route::post('forms/field/{fieldid}/child', [
-            'as'   => 'forms.field.child',
+            'as' => 'forms.field.child',
             'uses' => 'Admin\helpdesk\FormController@addChild',
         ]);
         Route::get('forms/render/child', [
-            'as'   => 'forms.field.child',
+            'as' => 'forms.field.child',
             'uses' => 'Admin\helpdesk\FormController@renderChild',
         ]);
 
@@ -255,10 +255,10 @@ Route::group(['middleware' => ['web']], function () {
 
         //route for submit error and debugging setting form page
         Route::post('post-settings', ['as' => 'post.error.debug.settings',
-            'uses'                         => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings', ]);
+            'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings', ]);
         //route to error logs table page
         Route::get('show-error-logs', [
-            'as'   => 'error.logs',
+            'as' => 'error.logs',
             'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showErrorLogs',
         ]);
 

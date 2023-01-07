@@ -53,9 +53,9 @@ class ReportController extends Controller
     /**
      * function to get help_topic graph.
      *
-     * @param type $date111
-     * @param type $date122
-     * @param type $helptopic
+     * @param  type  $date111
+     * @param  type  $date122
+     * @param  type  $helptopic
      */
     public function chartdataHelptopic(Request $request, $date111 = '', $date122 = '', $helptopic = '')
     {

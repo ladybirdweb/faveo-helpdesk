@@ -29,7 +29,7 @@ class SlaRequest extends Request
     public function rules()
     {
         return [
-            'name'         => 'required|unique:sla_plan|max:50',
+            'name' => 'required|unique:sla_plan|max:50',
             'grace_period' => 'required',
         ];
     }

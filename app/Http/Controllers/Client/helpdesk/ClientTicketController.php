@@ -40,7 +40,6 @@ class ClientTicketController extends Controller
      *
      * @param type Tickets $ticket
      * @param type User    $user
-     *
      * @return type response
      */
     public function getCheckTicket(Tickets $ticket, User $user)
@@ -51,8 +50,7 @@ class ClientTicketController extends Controller
     /**
      * reply.
      *
-     * @param type $value
-     *
+     * @param  type  $value
      * @return type view
      */
     public function reply($id, Request $request)
