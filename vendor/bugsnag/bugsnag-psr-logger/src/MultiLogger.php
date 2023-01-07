@@ -2,6 +2,8 @@
 
 namespace Bugsnag\PsrLogger;
 
+use Psr\Log\AbstractLogger;
+
 class MultiLogger extends AbstractLogger
 {
     /**
@@ -9,7 +11,7 @@ class MultiLogger extends AbstractLogger
      *
      * @var \Psr\Log\LoggerInterface[]
      */
-    protected $loggers;
+    protected array $loggers;
 
     /**
      * Create a new multi logger instance.
@@ -26,13 +28,13 @@ class MultiLogger extends AbstractLogger
     /**
      * Log a message to the logs.
      *
-     * @param string $level
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed              $level
+     * @param string|\Stringable $message
+     * @param mixed[]            $context
      *
      * @return void
      */
-    public function log($level, $message, array $context = [])
+    public function log(mixed $level, string|\Stringable $message, array $context = []): void
     {
         foreach ($this->loggers as $logger) {
             $logger->log($level, $message, $context);

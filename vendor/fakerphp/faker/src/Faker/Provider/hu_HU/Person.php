@@ -21,7 +21,7 @@ class Person extends \Faker\Provider\Person
         '{{title}} {{lastName}} {{firstNameFemale}}',
         '{{lastName}} {{firstNameFemale}} {{suffix}}',
         '{{title}} {{lastName}} {{firstNameFemale}} {{suffix}}',
-        '{{lastNameFemaleMarried}} {{$lastName}} {{firstNameFemale}}',
+        '{{lastNameFemaleMarried}} {{lastName}} {{firstNameFemale}}',
         '{{title}} {{lastNameFemaleMarried}} {{firstNameFemale}}',
         '{{lastName}} {{firstNameMaleNe}}',
         '{{title}} {{lastName}} {{firstNameMaleNe}}',
@@ -92,5 +92,10 @@ class Person extends \Faker\Provider\Person
     public static function suffix()
     {
         return static::randomElement(static::$suffix);
+    }
+
+    public static function lastNameFemaleMarried()
+    {
+        return static::randomElement(static::$lastNameFemaleMarried);
     }
 }

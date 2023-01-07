@@ -201,6 +201,13 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
                     $app['log']->withoutContext();
                 }
 
+                if (method_exists($app['db'], 'getConnections')) {
+                    foreach ($app['db']->getConnections() as $connection) {
+                        $connection->resetTotalQueryDuration();
+                        $connection->allowQueryDurationHandlersToRunAgain();
+                    }
+                }
+
                 $app->forgetScopedInstances();
 
                 return Facade::clearResolvedInstances();

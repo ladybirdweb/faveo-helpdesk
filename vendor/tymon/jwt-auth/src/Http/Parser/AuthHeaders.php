@@ -34,7 +34,6 @@ class AuthHeaders implements ParserContract
      * Attempt to parse the token from some other possible headers.
      *
      * @param  \Illuminate\Http\Request  $request
-     *
      * @return null|string
      */
     protected function fromAltHeaders(Request $request)
@@ -46,23 +45,31 @@ class AuthHeaders implements ParserContract
      * Try to parse the token from the request header.
      *
      * @param  \Illuminate\Http\Request  $request
-     *
      * @return null|string
      */
     public function parse(Request $request)
     {
         $header = $request->headers->get($this->header) ?: $this->fromAltHeaders($request);
 
-        if ($header && preg_match('/'.$this->prefix.'\s*(\S+)\b/i', $header, $matches)) {
-            return $matches[1];
+        if ($header !== null) {
+            $position = strripos($header, $this->prefix);
+
+            if ($position !== false) {
+                $header = substr($header, $position + strlen($this->prefix));
+
+                return trim(
+                    strpos($header, ',') !== false ? strstr($header, ',', true) : $header
+                );
+            }
         }
+
+        return null;
     }
 
     /**
      * Set the header name.
      *
      * @param  string  $headerName
-     *
      * @return $this
      */
     public function setHeaderName($headerName)
@@ -76,7 +83,6 @@ class AuthHeaders implements ParserContract
      * Set the header prefix.
      *
      * @param  string  $headerPrefix
-     *
      * @return $this
      */
     public function setHeaderPrefix($headerPrefix)

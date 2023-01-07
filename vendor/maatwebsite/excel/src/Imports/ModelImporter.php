@@ -22,7 +22,7 @@ class ModelImporter
     private $manager;
 
     /**
-     * @param ModelManager $manager
+     * @param  ModelManager  $manager
      */
     public function __construct(ModelManager $manager)
     {
@@ -30,10 +30,10 @@ class ModelImporter
     }
 
     /**
-     * @param Worksheet   $worksheet
-     * @param ToModel     $import
-     * @param int|null    $startRow
-     * @param string|null $endColumn
+     * @param  Worksheet  $worksheet
+     * @param  ToModel  $import
+     * @param  int|null  $startRow
+     * @param  string|null  $endColumn
      *
      * @throws \Maatwebsite\Excel\Validators\ValidationException
      */
@@ -44,6 +44,7 @@ class ModelImporter
         }
 
         $headingRow       = HeadingRowExtractor::extract($worksheet, $import);
+        $headerIsGrouped  = HeadingRowExtractor::extractGrouping($headingRow, $import);
         $batchSize        = $import instanceof WithBatchInserts ? $import->batchSize() : 1;
         $endRow           = EndRowFinder::find($import, $startRow, $worksheet->getHighestRow());
         $progessBar       = $import instanceof WithProgressBar;
@@ -59,8 +60,8 @@ class ModelImporter
         foreach ($worksheet->getRowIterator($startRow, $endRow) as $spreadSheetRow) {
             $i++;
 
-            $row = new Row($spreadSheetRow, $headingRow);
-            if (!$import instanceof SkipsEmptyRows || ($import instanceof SkipsEmptyRows && !$row->isEmpty())) {
+            $row = new Row($spreadSheetRow, $headingRow, $headerIsGrouped);
+            if (!$import instanceof SkipsEmptyRows || ($import instanceof SkipsEmptyRows && !$row->isEmpty($withCalcFormulas))) {
                 $rowArray = $row->toArray(null, $withCalcFormulas, $formatData, $endColumn);
 
                 if ($withValidation) {

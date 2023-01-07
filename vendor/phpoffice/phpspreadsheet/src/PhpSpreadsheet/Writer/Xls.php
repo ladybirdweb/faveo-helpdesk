@@ -4,10 +4,10 @@ namespace PhpOffice\PhpSpreadsheet\Writer;
 
 use PhpOffice\PhpSpreadsheet\Calculation\Calculation;
 use PhpOffice\PhpSpreadsheet\Calculation\Functions;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\RichText\Run;
-use PhpOffice\PhpSpreadsheet\Shared\Drawing as SharedDrawing;
 use PhpOffice\PhpSpreadsheet\Shared\Escher;
 use PhpOffice\PhpSpreadsheet\Shared\Escher\DgContainer;
 use PhpOffice\PhpSpreadsheet\Shared\Escher\DgContainer\SpgrContainer;
@@ -23,6 +23,9 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\BaseDrawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing;
+use PhpOffice\PhpSpreadsheet\Writer\Xls\Parser;
+use PhpOffice\PhpSpreadsheet\Writer\Xls\Workbook;
+use PhpOffice\PhpSpreadsheet\Writer\Xls\Worksheet;
 
 class Xls extends BaseWriter
 {
@@ -64,7 +67,7 @@ class Xls extends BaseWriter
     /**
      * Formula parser.
      *
-     * @var \PhpOffice\PhpSpreadsheet\Writer\Xls\Parser
+     * @var Parser
      */
     private $parser;
 
@@ -78,24 +81,24 @@ class Xls extends BaseWriter
     /**
      * Basic OLE object summary information.
      *
-     * @var array
+     * @var string
      */
     private $summaryInformation;
 
     /**
      * Extended OLE object document summary information.
      *
-     * @var array
+     * @var string
      */
     private $documentSummaryInformation;
 
     /**
-     * @var \PhpOffice\PhpSpreadsheet\Writer\Xls\Workbook
+     * @var Workbook
      */
     private $writerWorkbook;
 
     /**
-     * @var \PhpOffice\PhpSpreadsheet\Writer\Xls\Worksheet[]
+     * @var Worksheet[]
      */
     private $writerWorksheets;
 
@@ -114,10 +117,12 @@ class Xls extends BaseWriter
     /**
      * Save Spreadsheet to file.
      *
-     * @param resource|string $pFilename
+     * @param resource|string $filename
      */
-    public function save($pFilename): void
+    public function save($filename, int $flags = 0): void
     {
+        $this->processFlags($flags);
+
         // garbage collect
         $this->spreadsheet->garbageCollect();
 
@@ -156,8 +161,9 @@ class Xls extends BaseWriter
 
         // add fonts from rich text eleemnts
         for ($i = 0; $i < $countSheets; ++$i) {
-            foreach ($this->writerWorksheets[$i]->phpSheet->getCoordinates() as $coordinate) {
-                $cell = $this->writerWorksheets[$i]->phpSheet->getCell($coordinate);
+            foreach ($this->writerWorksheets[$i]->phpSheet->getCellCollection()->getCoordinates() as $coordinate) {
+                /** @var Cell $cell */
+                $cell = $this->writerWorksheets[$i]->phpSheet->getCellCollection()->get($coordinate);
                 $cVal = $cell->getValue();
                 if ($cVal instanceof RichText) {
                     $elements = $cVal->getRichTextElements();
@@ -216,9 +222,10 @@ class Xls extends BaseWriter
             $arrRootData[] = $OLE_DocumentSummaryInformation;
         }
 
-        $root = new Root(time(), time(), $arrRootData);
+        $time = $this->spreadsheet->getProperties()->getModified();
+        $root = new Root($time, $time, $arrRootData);
         // save the OLE file
-        $this->openFileHandle($pFilename);
+        $this->openFileHandle($filename);
         $root->save($this->fileHandle);
         $this->maybeCloseFileHandle();
 
@@ -239,8 +246,6 @@ class Xls extends BaseWriter
         foreach ($this->spreadsheet->getAllsheets() as $sheet) {
             // sheet index
             $sheetIndex = $sheet->getParent()->getIndex($sheet);
-
-            $escher = null;
 
             // check if there are any shapes for this sheet
             $filterRange = $sheet->getAutoFilter()->getRange();
@@ -388,7 +393,7 @@ class Xls extends BaseWriter
         }
     }
 
-    private function processMemoryDrawing(BstoreContainer &$bstoreContainer, BaseDrawing $drawing, string $renderingFunctionx): void
+    private function processMemoryDrawing(BstoreContainer &$bstoreContainer, MemoryDrawing $drawing, string $renderingFunctionx): void
     {
         switch ($renderingFunctionx) {
             case MemoryDrawing::RENDERING_JPEG:
@@ -418,8 +423,9 @@ class Xls extends BaseWriter
         $bstoreContainer->addBSE($BSE);
     }
 
-    private function processDrawing(BstoreContainer &$bstoreContainer, BaseDrawing $drawing): void
+    private function processDrawing(BstoreContainer &$bstoreContainer, Drawing $drawing): void
     {
+        $blipType = null;
         $blipData = '';
         $filename = $drawing->getPath();
 
@@ -428,8 +434,12 @@ class Xls extends BaseWriter
         switch ($imageFormat) {
             case 1: // GIF, not supported by BIFF8, we convert to PNG
                 $blipType = BSE::BLIPTYPE_PNG;
+                $newImage = @imagecreatefromgif($filename);
+                if ($newImage === false) {
+                    throw new Exception("Unable to create image from $filename");
+                }
                 ob_start();
-                imagepng(imagecreatefromgif($filename));
+                imagepng($newImage);
                 $blipData = ob_get_contents();
                 ob_end_clean();
 
@@ -446,8 +456,12 @@ class Xls extends BaseWriter
                 break;
             case 6: // Windows DIB (BMP), we convert to PNG
                 $blipType = BSE::BLIPTYPE_PNG;
+                $newImage = @imagecreatefrombmp($filename);
+                if ($newImage === false) {
+                    throw new Exception("Unable to create image from $filename");
+                }
                 ob_start();
-                imagepng(SharedDrawing::imagecreatefrombmp($filename));
+                imagepng($newImage);
                 $blipData = ob_get_contents();
                 ob_end_clean();
 
@@ -759,7 +773,10 @@ class Xls extends BaseWriter
         return $data;
     }
 
-    private function writeSummaryPropOle(int $dataProp, int &$dataSection_NumProps, array &$dataSection, int $sumdata, int $typdata): void
+    /**
+     * @param float|int $dataProp
+     */
+    private function writeSummaryPropOle($dataProp, int &$dataSection_NumProps, array &$dataSection, int $sumdata, int $typdata): void
     {
         if ($dataProp) {
             $dataSection[] = [

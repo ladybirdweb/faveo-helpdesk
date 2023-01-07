@@ -109,10 +109,20 @@ class FormRequest extends Request implements ValidatesWhenResolved
      */
     protected function createDefaultValidator(ValidationFactory $factory)
     {
-        return $factory->make(
-            $this->validationData(), $this->container->call([$this, 'rules']),
+        $rules = $this->container->call([$this, 'rules']);
+
+        $validator = $factory->make(
+            $this->validationData(), $rules,
             $this->messages(), $this->attributes()
         )->stopOnFirstFailure($this->stopOnFirstFailure);
+
+        if ($this->isPrecognitive()) {
+            $validator->setRules(
+                $this->filterPrecognitiveRules($validator->getRulesWithoutPlaceholders())
+            );
+        }
+
+        return $validator;
     }
 
     /**
@@ -206,11 +216,13 @@ class FormRequest extends Request implements ValidatesWhenResolved
     /**
      * Get the validated data from the request.
      *
-     * @return array
+     * @param  string|null  $key
+     * @param  mixed  $default
+     * @return mixed
      */
-    public function validated()
+    public function validated($key = null, $default = null)
     {
-        return $this->validator->validated();
+        return data_get($this->validator->validated(), $key, $default);
     }
 
     /**

@@ -170,7 +170,6 @@ return [
         App\Providers\ConfigServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
         'Vsmoraes\Pdf\PdfServiceProvider',
-        'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         \Torann\GeoIP\GeoIPServiceProvider::class,
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,

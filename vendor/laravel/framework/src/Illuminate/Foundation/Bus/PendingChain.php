@@ -5,7 +5,7 @@ namespace Illuminate\Foundation\Bus;
 use Closure;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Queue\CallQueuedClosure;
-use Illuminate\Queue\SerializableClosureFactory;
+use Laravel\SerializableClosure\SerializableClosure;
 
 class PendingChain
 {
@@ -91,7 +91,7 @@ class PendingChain
     }
 
     /**
-     * Set the desired delay for the chain.
+     * Set the desired delay in seconds for the chain.
      *
      * @param  \DateTimeInterface|\DateInterval|int|null  $delay
      * @return $this
@@ -112,7 +112,7 @@ class PendingChain
     public function catch($callback)
     {
         $this->catchCallbacks[] = $callback instanceof Closure
-                        ? SerializableClosureFactory::make($callback)
+                        ? new SerializableClosure($callback)
                         : $callback;
 
         return $this;

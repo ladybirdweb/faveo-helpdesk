@@ -8,6 +8,7 @@ use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
+/** @mixin SpreadsheetCell */
 class Cell
 {
     use DelegatedMacroable;
@@ -18,7 +19,7 @@ class Cell
     private $cell;
 
     /**
-     * @param SpreadsheetCell $cell
+     * @param  SpreadsheetCell  $cell
      */
     public function __construct(SpreadsheetCell $cell)
     {
@@ -26,11 +27,11 @@ class Cell
     }
 
     /**
-     * @param Worksheet $worksheet
-     * @param string    $coordinate
+     * @param  Worksheet  $worksheet
+     * @param  string  $coordinate
+     * @return Cell
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @return Cell
      */
     public static function make(Worksheet $worksheet, string $coordinate)
     {
@@ -46,10 +47,9 @@ class Cell
     }
 
     /**
-     * @param null $nullValue
-     * @param bool $calculateFormulas
-     * @param bool $formatData
-     *
+     * @param  null  $nullValue
+     * @param  bool  $calculateFormulas
+     * @param  bool  $formatData
      * @return mixed
      */
     public function getValue($nullValue = null, $calculateFormulas = false, $formatData = true)

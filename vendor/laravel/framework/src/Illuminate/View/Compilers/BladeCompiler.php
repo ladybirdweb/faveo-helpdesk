@@ -21,6 +21,7 @@ class BladeCompiler extends Compiler implements CompilerInterface
         Concerns\CompilesConditionals,
         Concerns\CompilesEchos,
         Concerns\CompilesErrors,
+        Concerns\CompilesFragments,
         Concerns\CompilesHelpers,
         Concerns\CompilesIncludes,
         Concerns\CompilesInjections,
@@ -121,6 +122,20 @@ class BladeCompiler extends Compiler implements CompilerInterface
      * @var array
      */
     protected $rawBlocks = [];
+
+    /**
+     * The array of anonymous component paths to search for components in.
+     *
+     * @var array
+     */
+    protected $anonymousComponentPaths = [];
+
+    /**
+     * The array of anonymous component namespaces to autoload from.
+     *
+     * @var array
+     */
+    protected $anonymousComponentNamespaces = [];
 
     /**
      * The array of class component aliases and their class names.
@@ -241,7 +256,7 @@ class BladeCompiler extends Compiler implements CompilerInterface
         );
 
         foreach ($this->precompilers as $precompiler) {
-            $value = call_user_func($precompiler, $value);
+            $value = $precompiler($value);
         }
 
         // Here we will loop through all of the tokens returned by the Zend lexer and
@@ -340,11 +355,11 @@ class BladeCompiler extends Compiler implements CompilerInterface
      */
     protected function storeUncompiledBlocks($value)
     {
-        if (strpos($value, '@verbatim') !== false) {
+        if (str_contains($value, '@verbatim')) {
             $value = $this->storeVerbatimBlocks($value);
         }
 
-        if (strpos($value, '@php') !== false) {
+        if (str_contains($value, '@php')) {
             $value = $this->storePhpBlocks($value);
         }
 
@@ -504,12 +519,14 @@ class BladeCompiler extends Compiler implements CompilerInterface
      */
     protected function compileStatement($match)
     {
-        if (Str::contains($match[1], '@')) {
+        if (str_contains($match[1], '@')) {
             $match[0] = isset($match[3]) ? $match[1].$match[3] : $match[1];
         } elseif (isset($this->customDirectives[$match[1]])) {
             $match[0] = $this->callCustomDirective($match[1], Arr::get($match, 3));
         } elseif (method_exists($this, $method = 'compile'.ucfirst($match[1]))) {
             $match[0] = $this->$method(Arr::get($match, 3));
+        } else {
+            return $match[0];
         }
 
         return isset($match[3]) ? $match[0] : $match[0].$match[2];
@@ -524,9 +541,9 @@ class BladeCompiler extends Compiler implements CompilerInterface
      */
     protected function callCustomDirective($name, $value)
     {
-        $value = $value ?? '';
+        $value ??= '';
 
-        if (Str::startsWith($value, '(') && Str::endsWith($value, ')')) {
+        if (str_starts_with($value, '(') && str_ends_with($value, ')')) {
             $value = Str::substr($value, 1, -1);
         }
 
@@ -625,12 +642,12 @@ class BladeCompiler extends Compiler implements CompilerInterface
      */
     public function component($class, $alias = null, $prefix = '')
     {
-        if (! is_null($alias) && Str::contains($alias, '\\')) {
+        if (! is_null($alias) && str_contains($alias, '\\')) {
             [$class, $alias] = [$alias, $class];
         }
 
         if (is_null($alias)) {
-            $alias = Str::contains($class, '\\View\\Components\\')
+            $alias = str_contains($class, '\\View\\Components\\')
                             ? collect(explode('\\', Str::after($class, '\\View\\Components\\')))->map(function ($segment) {
                                 return Str::kebab($segment);
                             })->implode(':')
@@ -673,6 +690,45 @@ class BladeCompiler extends Compiler implements CompilerInterface
     }
 
     /**
+     * Register a new anonymous component path.
+     *
+     * @param  string  $path
+     * @param  string|null  $prefix
+     * @return void
+     */
+    public function anonymousComponentPath(string $path, string $prefix = null)
+    {
+        $prefixHash = md5($prefix ?: $path);
+
+        $this->anonymousComponentPaths[] = [
+            'path' => $path,
+            'prefix' => $prefix,
+            'prefixHash' => $prefixHash,
+        ];
+
+        Container::getInstance()
+                ->make(ViewFactory::class)
+                ->addNamespace($prefixHash, $path);
+    }
+
+    /**
+     * Register an anonymous component namespace.
+     *
+     * @param  string  $directory
+     * @param  string|null  $prefix
+     * @return void
+     */
+    public function anonymousComponentNamespace(string $directory, string $prefix = null)
+    {
+        $prefix ??= $directory;
+
+        $this->anonymousComponentNamespaces[$prefix] = Str::of($directory)
+                ->replace('/', '.')
+                ->trim('. ')
+                ->toString();
+    }
+
+    /**
      * Register a class-based component namespace.
      *
      * @param  string  $namespace
@@ -682,6 +738,26 @@ class BladeCompiler extends Compiler implements CompilerInterface
     public function componentNamespace($namespace, $prefix)
     {
         $this->classComponentNamespaces[$prefix] = $namespace;
+    }
+
+    /**
+     * Get the registered anonymous component paths.
+     *
+     * @return array
+     */
+    public function getAnonymousComponentPaths()
+    {
+        return $this->anonymousComponentPaths;
+    }
+
+    /**
+     * Get the registered anonymous component namespaces.
+     *
+     * @return array
+     */
+    public function getAnonymousComponentNamespaces()
+    {
+        return $this->anonymousComponentNamespaces;
     }
 
     /**

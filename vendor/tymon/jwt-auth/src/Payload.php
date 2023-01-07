@@ -17,6 +17,7 @@ use Countable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use JsonSerializable;
 use Tymon\JWTAuth\Claims\Claim;
 use Tymon\JWTAuth\Claims\Collection;
@@ -38,7 +39,6 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
      * @param  \Tymon\JWTAuth\Claims\Collection  $claims
      * @param  \Tymon\JWTAuth\Validators\PayloadValidator  $validator
      * @param  bool  $refreshFlow
-     *
      * @return void
      */
     public function __construct(Collection $claims, PayloadValidator $validator, $refreshFlow = false)
@@ -61,7 +61,6 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
      *
      * @param  array  $values
      * @param  bool  $strict
-     *
      * @return bool
      */
     public function matches(array $values, $strict = false)
@@ -85,7 +84,6 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
      * Checks if a payload strictly matches some expected values.
      *
      * @param  array  $values
-     *
      * @return bool
      */
     public function matchesStrict(array $values)
@@ -97,7 +95,6 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
      * Get the payload.
      *
      * @param  mixed  $claim
-     *
      * @return mixed
      */
     public function get($claim = null)
@@ -119,7 +116,6 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
      * Get the underlying Claim instance.
      *
      * @param  string  $claim
-     *
      * @return \Tymon\JWTAuth\Claims\Claim
      */
     public function getInternal($claim)
@@ -131,7 +127,6 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
      * Determine whether the payload has the claim (by instance).
      *
      * @param  \Tymon\JWTAuth\Claims\Claim  $claim
-     *
      * @return bool
      */
     public function has(Claim $claim)
@@ -143,7 +138,6 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
      * Determine whether the payload has the claim (by key).
      *
      * @param  string  $claim
-     *
      * @return bool
      */
     public function hasKey($claim)
@@ -166,6 +160,7 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->toArray();
@@ -175,7 +170,6 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
      * Get the payload as JSON.
      *
      * @param  int  $options
-     *
      * @return string
      */
     public function toJson($options = JSON_UNESCAPED_SLASHES)
@@ -197,9 +191,9 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
      * Determine if an item exists at an offset.
      *
      * @param  mixed  $key
-     *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($key)
     {
         return Arr::has($this->toArray(), $key);
@@ -209,9 +203,9 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
      * Get an item at a given offset.
      *
      * @param  mixed  $key
-     *
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($key)
     {
         return Arr::get($this->toArray(), $key);
@@ -225,6 +219,7 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
      *
      * @throws \Tymon\JWTAuth\Exceptions\PayloadException
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($key, $value)
     {
         throw new PayloadException('The payload is immutable');
@@ -234,11 +229,11 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
      * Don't allow changing the payload as it should be immutable.
      *
      * @param  string  $key
+     * @return void
      *
      * @throws \Tymon\JWTAuth\Exceptions\PayloadException
-     *
-     * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($key)
     {
         throw new PayloadException('The payload is immutable');
@@ -249,6 +244,7 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->toArray());
@@ -258,7 +254,6 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
      * Invoke the Payload as a callable function.
      *
      * @param  mixed  $claim
-     *
      * @return mixed
      */
     public function __invoke($claim = null)
@@ -271,10 +266,9 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
      *
      * @param  string  $method
      * @param  array  $parameters
+     * @return mixed
      *
      * @throws \BadMethodCallException
-     *
-     * @return mixed
      */
     public function __call($method, $parameters)
     {
@@ -286,6 +280,6 @@ class Payload implements ArrayAccess, Arrayable, Countable, Jsonable, JsonSerial
             }
         }
 
-        throw new BadMethodCallException(sprintf('The claim [%s] does not exist on the payload.', $method));
+        throw new BadMethodCallException(sprintf('The claim [%s] does not exist on the payload.', Str::after($method, 'get')));
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace ZipStream;
@@ -80,19 +81,24 @@ class ZipStream
      * to prevent file permissions issues upon extract (see #84)
      * 0x603 is 00000110 00000011 in binary, so 6 and 3
      */
-    const ZIP_VERSION_MADE_BY = 0x603;
+    public const ZIP_VERSION_MADE_BY = 0x603;
 
     /**
-     * The following signatures end with 0x4b50, which in ASCII is PK,
+     * The following signatures end with 0x4b50, which in ASCII is PK,
      * the initials of the inventor Phil Katz.
      * See https://en.wikipedia.org/wiki/Zip_(file_format)#File_headers
      */
-    const FILE_HEADER_SIGNATURE = 0x04034b50;
-    const CDR_FILE_SIGNATURE = 0x02014b50;
-    const CDR_EOF_SIGNATURE = 0x06054b50;
-    const DATA_DESCRIPTOR_SIGNATURE = 0x08074b50;
-    const ZIP64_CDR_EOF_SIGNATURE = 0x06064b50;
-    const ZIP64_CDR_LOCATOR_SIGNATURE = 0x07064b50;
+    public const FILE_HEADER_SIGNATURE = 0x04034b50;
+
+    public const CDR_FILE_SIGNATURE = 0x02014b50;
+
+    public const CDR_EOF_SIGNATURE = 0x06054b50;
+
+    public const DATA_DESCRIPTOR_SIGNATURE = 0x08074b50;
+
+    public const ZIP64_CDR_EOF_SIGNATURE = 0x06064b50;
+
+    public const ZIP64_CDR_LOCATOR_SIGNATURE = 0x07064b50;
 
     /**
      * Global Options
@@ -293,7 +299,7 @@ class ZipStream
         $options->defaultTo($this->opt);
 
         $file = new File($this, $name, $options);
-        $file->processStream(new DeflateStream($stream));
+        $file->processStream(new Stream($stream));
     }
 
     /**
@@ -312,12 +318,9 @@ class ZipStream
      *
      * Examples:
      *
-     *   // create a temporary file stream and write text to it
-     *   $fp = tmpfile();
-     *   fwrite($fp, 'The quick brown fox jumped over the lazy dog.');
-     *
+     *   $stream = $response->getBody();
      *   // add a file named 'streamfile.txt' from the content of the stream
-     *   $x->addFileFromPsr7Stream('streamfile.txt', $fp);
+     *   $x->addFileFromPsr7Stream('streamfile.txt', $stream);
      *
      * @return void
      */
@@ -379,34 +382,6 @@ class ZipStream
     }
 
     /**
-     * Send ZIP64 CDR EOF (Central Directory Record End-of-File) record.
-     *
-     * @return void
-     */
-    protected function addCdr64Eof(): void
-    {
-        $num_files = count($this->files);
-        $cdr_length = $this->cdr_ofs;
-        $cdr_offset = $this->ofs;
-
-        $fields = [
-            ['V', static::ZIP64_CDR_EOF_SIGNATURE],     // ZIP64 end of central file header signature
-            ['P', 44],                                  // Length of data below this header (length of block - 12) = 44
-            ['v', static::ZIP_VERSION_MADE_BY],         // Made by version
-            ['v', Version::ZIP64],                      // Extract by version
-            ['V', 0x00],                                // disk number
-            ['V', 0x00],                                // no of disks
-            ['P', $num_files],                          // no of entries on disk
-            ['P', $num_files],                          // no of entries in cdr
-            ['P', $cdr_length],                         // CDR size
-            ['P', $cdr_offset],                         // CDR offset
-        ];
-
-        $ret = static::packFields($fields);
-        $this->send($ret);
-    }
-
-    /**
      * Create a format string and argument list for pack(), then call
      * pack() and return the result.
      *
@@ -459,7 +434,13 @@ class ZipStream
         }
         $this->need_headers = false;
 
-        fwrite($this->opt->getOutputStream(), $str);
+        $outputStream = $this->opt->getOutputStream();
+
+        if ($outputStream instanceof StreamInterface) {
+            $outputStream->write($str);
+        } else {
+            fwrite($outputStream, $str);
+        }
 
         if ($this->opt->isFlushOutput()) {
             // flush output buffer if it is on and flushable
@@ -471,6 +452,62 @@ class ZipStream
             // Flush system buffers after flushing userspace output buffer
             flush();
         }
+    }
+
+    /**
+     * Is this file larger than large_file_size?
+     *
+     * @param string $path
+     * @return bool
+     */
+    public function isLargeFile(string $path): bool
+    {
+        if (!$this->opt->isStatFiles()) {
+            return false;
+        }
+        $stat = stat($path);
+        return $stat['size'] > $this->opt->getLargeFileSize();
+    }
+
+    /**
+     * Save file attributes for trailing CDR record.
+     *
+     * @param File $file
+     * @return void
+     */
+    public function addToCdr(File $file): void
+    {
+        $file->ofs = $this->ofs;
+        $this->ofs = $this->ofs->add($file->getTotalLength());
+        $this->files[] = $file->getCdrFile();
+    }
+
+    /**
+     * Send ZIP64 CDR EOF (Central Directory Record End-of-File) record.
+     *
+     * @return void
+     */
+    protected function addCdr64Eof(): void
+    {
+        $num_files = count($this->files);
+        $cdr_length = $this->cdr_ofs;
+        $cdr_offset = $this->ofs;
+
+        $fields = [
+            ['V', static::ZIP64_CDR_EOF_SIGNATURE],     // ZIP64 end of central file header signature
+            ['P', 44],                                  // Length of data below this header (length of block - 12) = 44
+            ['v', static::ZIP_VERSION_MADE_BY],         // Made by version
+            ['v', Version::ZIP64],                      // Extract by version
+            ['V', 0x00],                                // disk number
+            ['V', 0x00],                                // no of disks
+            ['P', $num_files],                          // no of entries on disk
+            ['P', $num_files],                          // no of entries in cdr
+            ['P', $cdr_length],                         // CDR size
+            ['P', $cdr_offset],                         // CDR offset
+        ];
+
+        $ret = static::packFields($fields);
+        $this->send($ret);
     }
 
     /**
@@ -492,13 +529,13 @@ class ZipStream
             $disposition .= "; filename*=UTF-8''{$urlencoded}";
         }
 
-        $headers = array(
+        $headers = [
             'Content-Type' => $this->opt->getContentType(),
             'Content-Disposition' => $disposition,
             'Pragma' => 'public',
             'Cache-Control' => 'public, must-revalidate',
-            'Content-Transfer-Encoding' => 'binary'
-        );
+            'Content-Transfer-Encoding' => 'binary',
+        ];
 
         $call = $this->opt->getHttpHeaderCallback();
         foreach ($headers as $key => $val) {
@@ -567,33 +604,5 @@ class ZipStream
         $this->ofs = new Bigint();
         $this->cdr_ofs = new Bigint();
         $this->opt = new ArchiveOptions();
-    }
-
-    /**
-     * Is this file larger than large_file_size?
-     *
-     * @param string $path
-     * @return bool
-     */
-    public function isLargeFile(string $path): bool
-    {
-        if (!$this->opt->isStatFiles()) {
-            return false;
-        }
-        $stat = stat($path);
-        return $stat['size'] > $this->opt->getLargeFileSize();
-    }
-
-    /**
-     * Save file attributes for trailing CDR record.
-     *
-     * @param File $file
-     * @return void
-     */
-    public function addToCdr(File $file): void
-    {
-        $file->ofs = $this->ofs;
-        $this->ofs = $this->ofs->add($file->getTotalLength());
-        $this->files[] = $file->getCdrFile();
     }
 }

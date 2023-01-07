@@ -268,6 +268,19 @@ abstract class HasOneOrMany extends Relation
     }
 
     /**
+     * Attach a model instance without raising any events to the parent model.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return \Illuminate\Database\Eloquent\Model|false
+     */
+    public function saveQuietly(Model $model)
+    {
+        return Model::withoutEvents(function () use ($model) {
+            return $this->save($model);
+        });
+    }
+
+    /**
      * Attach a collection of models to the parent instance.
      *
      * @param  iterable  $models
@@ -280,6 +293,19 @@ abstract class HasOneOrMany extends Relation
         }
 
         return $models;
+    }
+
+    /**
+     * Attach a collection of models to the parent instance without raising any events to the parent model.
+     *
+     * @param  iterable  $models
+     * @return iterable
+     */
+    public function saveManyQuietly($models)
+    {
+        return Model::withoutEvents(function () use ($models) {
+            return $this->saveMany($models);
+        });
     }
 
     /**
