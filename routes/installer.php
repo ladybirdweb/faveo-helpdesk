@@ -1,96 +1,30 @@
 <?php
 
-Route::get('serial', [
-    'as' => 'serialkey',
-    'uses' => 'Installer\helpdesk\InstallController@serialkey',
-]);
-Route::post('/post-serial', [
-    'as' => 'post.serialkey',
-    'uses' => 'Installer\helpdesk\InstallController@postSerialKeyToFaveo',
-]);
-Route::post('/post-bill', [
-    'as' => 'return.bill',
-    'uses' => 'Installer\helpdesk\InstallController@returnFormBilling',
-]);
+Route::get('serial', 'Installer\helpdesk\InstallController@serialkey')->name('serialkey');
+Route::post('/post-serial', 'Installer\helpdesk\InstallController@postSerialKeyToFaveo')->name('post.serialkey');
+Route::post('/post-bill', 'Installer\helpdesk\InstallController@returnFormBilling')->name('return.bill');
 
-Route::get('/JavaScript-disabled', [
-    'as' => 'js-disabled',
-    'uses' => 'Installer\helpdesk\InstallController@jsDisabled',
-]);
-Route::get('/step2', [
-    'as' => 'licence',
-    'uses' => 'Installer\helpdesk\InstallController@licence',
-]);
-Route::post('/step1post', [
-    'as' => 'postlicence',
-    'uses' => 'Installer\helpdesk\InstallController@licencecheck',
-]);
-Route::get('/step1', [
-    'as' => 'prerequisites',
-    'uses' => 'Installer\helpdesk\InstallController@prerequisites',
-]);
-Route::post('/step2post', [
-    'as' => 'postprerequisites',
-    'uses' => 'Installer\helpdesk\InstallController@prerequisitescheck',
-]);
-Route::get('/step3', [
-    'as' => 'configuration',
-    'uses' => 'Installer\helpdesk\InstallController@configuration',
-]);
-Route::post('/step4post', [
-    'as' => 'postconfiguration',
-    'uses' => 'Installer\helpdesk\InstallController@configurationcheck',
-]);
-Route::get('/step4', [
-    'as' => 'database',
-    'uses' => 'Installer\helpdesk\InstallController@database',
-]);
-Route::get('/step5', [
-    'as' => 'account',
-    'uses' => 'Installer\helpdesk\InstallController@account',
-]);
-Route::post('/step6post', [
-    'as' => 'postaccount',
-    'uses' => 'Installer\helpdesk\InstallController@accountcheck',
-]);
-Route::get('/final', [
-    'as' => 'final',
-    'uses' => 'Installer\helpdesk\InstallController@finalize',
-]);
-Route::post('/finalpost', [
-    'as' => 'postfinal',
-    'uses' => 'Installer\helpdesk\InstallController@finalcheck',
-]);
-Route::post('/postconnection', [
-    'as' => 'postconnection',
-    'uses' => 'Installer\helpdesk\InstallController@postconnection',
-]);
-Route::get('/change-file-permission', [
-    'as' => 'change-permission',
-    'uses' => 'Installer\helpdesk\InstallController@changeFilePermission',
-]);
+Route::get('/JavaScript-disabled', 'Installer\helpdesk\InstallController@jsDisabled')->name('js-disabled');
+Route::get('/step2', 'Installer\helpdesk\InstallController@licence')->name('licence');
+Route::post('/step1post', 'Installer\helpdesk\InstallController@licencecheck')->name('postlicence');
+Route::get('/step1', 'Installer\helpdesk\InstallController@prerequisites')->name('prerequisites');
+Route::post('/step2post', 'Installer\helpdesk\InstallController@prerequisitescheck')->name('postprerequisites');
+Route::get('/step3', 'Installer\helpdesk\InstallController@configuration')->name('configuration');
+Route::post('/step4post', 'Installer\helpdesk\InstallController@configurationcheck')->name('postconfiguration');
+Route::get('/step4', 'Installer\helpdesk\InstallController@database')->name('database');
+Route::get('/step5', 'Installer\helpdesk\InstallController@account')->name('account');
+Route::post('/step6post', 'Installer\helpdesk\InstallController@accountcheck')->name('postaccount');
+Route::get('/final', 'Installer\helpdesk\InstallController@finalize')->name('final');
+Route::post('/finalpost', 'Installer\helpdesk\InstallController@finalcheck')->name('postfinal');
+Route::post('/postconnection', 'Installer\helpdesk\InstallController@postconnection')->name('postconnection');
+Route::get('/change-file-permission', 'Installer\helpdesk\InstallController@changeFilePermission')->name('change-permission');
 
-Route::get('create/env', [
-    'as' => 'create.env',
-    'uses' => 'Installer\helpdesk\InstallController@createEnv',
-]);
+Route::get('create/env', 'Installer\helpdesk\InstallController@createEnv')->name('create.env');
 
-Route::get('preinstall/check', [
-    'as' => 'preinstall.check',
-    'uses' => 'Installer\helpdesk\InstallController@checkPreInstall',
-]);
+Route::get('preinstall/check', 'Installer\helpdesk\InstallController@checkPreInstall')->name('preinstall.check');
 
-Route::get('migrate', [
-    'as' => 'migrate',
-    'uses' => 'Installer\helpdesk\InstallController@migrate',
-]);
+Route::get('migrate', 'Installer\helpdesk\InstallController@migrate')->name('migrate');
 
-Route::get('seed', [
-    'as' => 'seed',
-    'uses' => 'Installer\helpdesk\InstallController@seed',
-]);
+Route::get('seed', 'Installer\helpdesk\InstallController@seed')->name('seed');
 
-Route::get('update/install', [
-    'as' => 'update.install',
-    'uses' => 'Installer\helpdesk\InstallController@updateInstalEnv',
-]);
+Route::get('update/install', 'Installer\helpdesk\InstallController@updateInstalEnv')->name('update.install');

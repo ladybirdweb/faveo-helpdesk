@@ -8,15 +8,15 @@
      * @author Vijay Sebastian<vijay.sebastian@ladybirdweb.com>
      * @name Faveo
      */
-    Route::group(['prefix' => 'api/v1'], function () {
+    Route::prefix('api/v1')->group(function () {
         Route::post('authenticate', '\App\Api\v1\TokenAuthController@authenticate');
         Route::get('authenticate/user', '\App\Api\v1\TokenAuthController@getAuthenticatedUser');
-        Route::get('/database-config', ['as' => 'database-config', 'uses' => '\App\Api\v1\InstallerApiController@config_database']);
-        Route::get('/system-config', ['as' => 'database-config', 'uses' => '\App\Api\v1\InstallerApiController@config_system']);
+        Route::get('/database-config', '\App\Api\v1\InstallerApiController@config_database')->name('database-config');
+        Route::get('/system-config', '\App\Api\v1\InstallerApiController@config_system')->name('database-config');
         /*
          * Helpdesk
          */
-        Route::group(['prefix' => 'helpdesk'], function () {
+        Route::prefix('helpdesk')->group(function () {
             Route::post('create', '\App\Api\v1\ApiController@createTicket');
             Route::post('reply', '\App\Api\v1\ApiController@ticketReply');
             Route::post('edit', '\App\Api\v1\ApiController@editTicket');
@@ -60,7 +60,7 @@
         /*
          * FCM token response
          */
-        Route::post('fcmtoken', ['as' => 'fcmtoken', 'uses' => 'Common\PushNotificationController@fcmToken']);
+        Route::post('fcmtoken', 'Common\PushNotificationController@fcmToken')->name('fcmtoken');
     });
     /*
      * ================================================================================================
@@ -70,11 +70,11 @@
      * @author Manish Verma<manish.verma@ladybirdweb.com>
      * @name Faveo
      */
-    Route::group(['prefix' => 'api/v2'], function () {
+    Route::prefix('api/v2')->group(function () {
         /*
          * Helpdesk
          */
-        Route::group(['prefix' => 'helpdesk'], function () {
+        Route::prefix('helpdesk')->group(function () {
             Route::get('tickets', '\App\Api\v2\TicketController@getTickets');
         });
     });

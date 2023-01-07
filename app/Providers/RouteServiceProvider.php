@@ -55,10 +55,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        Route::group([
-            'middleware' => 'web',
-            'namespace' => $this->namespace,
-        ], function ($router) {
+        Route::middleware('web')->namespace($this->namespace)->group(function ($router) {
             require base_path('routes/web.php');
         });
     }
@@ -72,11 +69,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        Route::group([
-            'middleware' => 'api',
-            'namespace' => $this->namespace,
-            'prefix' => 'api',
-        ], function ($router) {
+        Route::middleware('api')->namespace($this->namespace)->prefix('api')->group(function ($router) {
             require base_path('routes/api.php');
         });
     }
@@ -90,10 +83,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapInstallerRoutes()
     {
-        Route::group([
-            'middleware' => ['web', 'installer'],
-            'namespace' => $this->namespace,
-        ], function ($router) {
+        Route::middleware('web', 'installer')->namespace($this->namespace)->group(function ($router) {
             require base_path('routes/installer.php');
         });
     }
@@ -107,11 +97,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapUpdateRoutes()
     {
-        Route::group([
-            'middleware' => ['web', 'redirect', 'install'],
-            'namespace' => $this->namespace,
-            'prefix' => 'app/update',
-        ], function ($router) {
+        Route::middleware('web', 'redirect', 'install')->namespace($this->namespace)->prefix('app/update')->group(function ($router) {
             require base_path('routes/update.php');
         });
     }
