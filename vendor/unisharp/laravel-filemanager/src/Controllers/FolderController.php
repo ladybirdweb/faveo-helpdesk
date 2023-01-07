@@ -2,11 +2,9 @@
 
 namespace UniSharp\LaravelFilemanager\Controllers;
 
-use Illuminate\Support\Facades\File;
+use UniSharp\LaravelFilemanager\Events\FolderIsCreating;
+use UniSharp\LaravelFilemanager\Events\FolderWasCreated;
 
-/**
- * Class FolderController.
- */
 class FolderController extends LfmController
 {
     /**
@@ -16,35 +14,23 @@ class FolderController extends LfmController
      */
     public function getFolders()
     {
-        $folder_types = [];
-        $root_folders = [];
-
-        if (parent::allowMultiUser()) {
-            $folder_types['user'] = 'root';
-        }
-
-        if (parent::allowShareFolder()) {
-            $folder_types['share'] = 'shares';
-        }
-
-        foreach ($folder_types as $folder_type => $lang_key) {
-            $root_folder_path = parent::getRootFolderPath($folder_type);
-
-            $children = parent::getDirectories($root_folder_path);
-            usort($children, function ($a, $b) {
-                return strcmp($a->name, $b->name);
-            });
-
-            array_push($root_folders, (object) [
-                'name' => trans('laravel-filemanager::lfm.title-' . $lang_key),
-                'path' => parent::getInternalPath($root_folder_path),
-                'children' => $children,
-                'has_next' => ! ($lang_key == end($folder_types)),
-            ]);
-        }
+        $folder_types = array_filter(['user', 'share'], function ($type) {
+            return $this->helper->allowFolderType($type);
+        });
 
         return view('laravel-filemanager::tree')
-            ->with(compact('root_folders'));
+            ->with([
+                'root_folders' => array_map(function ($type) use ($folder_types) {
+                    $path = $this->lfm->dir($this->helper->getRootFolder($type));
+
+                    return (object) [
+                        'name' => trans('laravel-filemanager::lfm.title-' . $type),
+                        'url' => $path->path('working_dir'),
+                        'children' => $path->folders(),
+                        'has_next' => ! ($type == end($folder_types)),
+                    ];
+                }, $folder_types),
+            ]);
     }
 
     /**
@@ -54,22 +40,28 @@ class FolderController extends LfmController
      */
     public function getAddfolder()
     {
-        $folder_name = parent::translateFromUtf8(trim(request('name')));
-        $path = parent::getCurrentPath($folder_name);
+        $folder_name = $this->helper->input('name');
 
-        if (empty($folder_name)) {
-            return parent::error('folder-name');
+        $new_path = $this->lfm->setName($folder_name)->path('absolute');
+
+        event(new FolderIsCreating($new_path));
+
+        try {
+            if ($folder_name === null || $folder_name == '') {
+                return $this->helper->error('folder-name');
+            } elseif ($this->lfm->setName($folder_name)->exists()) {
+                return $this->helper->error('folder-exist');
+            } elseif (config('lfm.alphanumeric_directory') && preg_match('/[^\w-]/i', $folder_name)) {
+                return $this->helper->error('folder-alnum');
+            } else {
+                $this->lfm->setName($folder_name)->createFolder();
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
 
-        if (File::exists($path)) {
-            return parent::error('folder-exist');
-        }
+        event(new FolderWasCreated($new_path));
 
-        if (config('lfm.alphanumeric_directory') && preg_match('/[^\w-]/i', $folder_name)) {
-            return parent::error('folder-alnum');
-        }
-
-        parent::createFolderByPath($path);
         return parent::$success_response;
     }
 }

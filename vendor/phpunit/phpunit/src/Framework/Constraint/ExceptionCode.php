@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,7 +9,10 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
-class ExceptionCode extends Constraint
+use function sprintf;
+use Throwable;
+
+final class ExceptionCode extends Constraint
 {
     /**
      * @var int|string
@@ -21,8 +24,6 @@ class ExceptionCode extends Constraint
      */
     public function __construct($expected)
     {
-        parent::__construct();
-
         $this->expectedCode = $expected;
     }
 
@@ -35,7 +36,7 @@ class ExceptionCode extends Constraint
      * Evaluates the constraint for parameter $other. Returns true if the
      * constraint is met, false otherwise.
      *
-     * @param \Throwable $other
+     * @param Throwable $other
      */
     protected function matches($other): bool
     {
@@ -43,7 +44,7 @@ class ExceptionCode extends Constraint
     }
 
     /**
-     * Returns the description of the failure
+     * Returns the description of the failure.
      *
      * The beginning of failure messages is "Failed asserting that" in most
      * cases. This method should return the second part of that sentence.
@@ -54,10 +55,10 @@ class ExceptionCode extends Constraint
      */
     protected function failureDescription($other): string
     {
-        return \sprintf(
+        return sprintf(
             '%s is equal to expected exception code %s',
-            $this->exporter->export($other->getCode()),
-            $this->exporter->export($this->expectedCode)
+            $this->exporter()->export($other->getCode()),
+            $this->exporter()->export($this->expectedCode)
         );
     }
 }

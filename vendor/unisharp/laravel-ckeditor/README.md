@@ -1,7 +1,11 @@
 CKEditor Package
 =====================
 
-p.s. Instead of using this package, I recommend just follow [the official CKEditor installation instructions with package managers](http://docs.ckeditor.com/#!/guide/dev_package_managers)
+## Note
+
+**This is NOT the official CKEDITOR package.**
+
+[CKEDITOR officially has its own composer package since 2014](https://ckeditor.com/blog/CKEditor-Supports-Bower-and-Composer/). Instead of using this package, we recommend you follow [the official CKEditor installation instructions with package managers](https://docs.ckeditor.com/ckeditor4/latest/guide/dev_package_managers.html#composer)
 
 ## Installation
 ### Set up package
@@ -12,7 +16,9 @@ composer require unisharp/laravel-ckeditor
 
 ### Add ServiceProvider
 
-Edit config/app.php, add the following file to `Application Service Providers` section.
+For Laravel 5.5+ you can skip this step. 
+
+For Laravel 5.4 and earlier edit config/app.php, add the following file to `Application Service Providers` section.
 ```
 Unisharp\Ckeditor\ServiceProvider::class,
 ```

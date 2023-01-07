@@ -3,11 +3,19 @@
 namespace UniSharp\LaravelFilemanager\Middlewares;
 
 use Closure;
-use UniSharp\LaravelFilemanager\Traits\LfmHelpers;
+use UniSharp\LaravelFilemanager\Lfm;
+use UniSharp\LaravelFilemanager\LfmPath;
 
 class CreateDefaultFolder
 {
-    use LfmHelpers;
+    private $lfm;
+    private $helper;
+
+    public function __construct()
+    {
+        $this->lfm = app(LfmPath::class);
+        $this->helper = app(Lfm::class);
+    }
 
     public function handle($request, Closure $next)
     {
@@ -19,16 +27,10 @@ class CreateDefaultFolder
 
     private function checkDefaultFolderExists($type = 'share')
     {
-        if ($type === 'user' && ! $this->allowMultiUser()) {
+        if (! $this->helper->allowFolderType($type)) {
             return;
         }
 
-        if ($type === 'share' && ! $this->allowShareFolder()) {
-            return;
-        }
-
-        $path = $this->getRootFolderPath($type);
-
-        $this->createFolderByPath($path);
+        $this->lfm->dir($this->helper->getRootFolder($type))->createFolder();
     }
 }

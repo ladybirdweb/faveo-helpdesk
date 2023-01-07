@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,6 +9,8 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
+use function array_key_exists;
+use function is_array;
 use ArrayAccess;
 
 /**
@@ -19,7 +21,7 @@ use ArrayAccess;
  *
  * The array key is passed in the constructor.
  */
-class ArrayHasKey extends Constraint
+final class ArrayHasKey extends Constraint
 {
     /**
      * @var int|string
@@ -31,7 +33,6 @@ class ArrayHasKey extends Constraint
      */
     public function __construct($key)
     {
-        parent::__construct();
         $this->key = $key;
     }
 
@@ -42,7 +43,7 @@ class ArrayHasKey extends Constraint
      */
     public function toString(): string
     {
-        return 'has the key ' . $this->exporter->export($this->key);
+        return 'has the key ' . $this->exporter()->export($this->key);
     }
 
     /**
@@ -53,8 +54,8 @@ class ArrayHasKey extends Constraint
      */
     protected function matches($other): bool
     {
-        if (\is_array($other)) {
-            return \array_key_exists($this->key, $other);
+        if (is_array($other)) {
+            return array_key_exists($this->key, $other);
         }
 
         if ($other instanceof ArrayAccess) {
@@ -65,7 +66,7 @@ class ArrayHasKey extends Constraint
     }
 
     /**
-     * Returns the description of the failure
+     * Returns the description of the failure.
      *
      * The beginning of failure messages is "Failed asserting that" in most
      * cases. This method should return the second part of that sentence.

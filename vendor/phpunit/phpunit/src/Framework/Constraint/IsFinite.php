@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,10 +9,12 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
+use function is_finite;
+
 /**
  * Constraint that accepts finite.
  */
-class IsFinite extends Constraint
+final class IsFinite extends Constraint
 {
     /**
      * Returns a string representation of the constraint.
@@ -30,6 +32,6 @@ class IsFinite extends Constraint
      */
     protected function matches($other): bool
     {
-        return \is_finite($other);
+        return is_finite($other);
     }
 }

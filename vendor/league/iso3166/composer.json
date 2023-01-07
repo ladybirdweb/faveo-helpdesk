@@ -1,0 +1,35 @@
+{
+    "name": "league/iso3166",
+    "description": "ISO 3166-1 PHP Library",
+    "autoload": {
+        "psr-4": { "League\\ISO3166\\": "src" }
+    },
+    "autoload-dev": {
+        "psr-4": { "League\\ISO3166\\": "tests" }
+    },
+    "require": {
+        "php": "^7.3|^8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    },
+    "scripts": {
+        "cs-review": "php-cs-fixer fix --verbose --diff --dry-run",
+        "cs-fix": "php-cs-fixer fix --verbose",
+        "test": "phpunit"
+    },
+    "extra": {
+        "branch-alias": { "dev-master": "3.x-dev" }
+    },
+    "keywords": ["ISO 3166", "ISO", "3166", "3166-1", "countries", "library"],
+    "homepage": "https://github.com/thephpleague/iso3166",
+    "license": "MIT",
+    "authors": [{
+        "name": "Rob Bast",
+        "email": "rob.bast@gmail.com"
+    }],
+    "support": {
+        "issues": "https://github.com/thephpleague/iso3166/issues",
+        "source": "https://github.com/thephpleague/iso3166"
+    }
+}

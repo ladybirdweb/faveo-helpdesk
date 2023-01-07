@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,13 +9,15 @@
  */
 namespace PHPUnit\Framework\MockObject\Stub;
 
+use function array_pop;
+use function count;
+use function is_array;
 use PHPUnit\Framework\MockObject\Invocation;
-use PHPUnit\Framework\MockObject\Stub;
 
 /**
- * Stubs a method by returning a value from a map.
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-class ReturnValueMap implements Stub
+final class ReturnValueMap implements Stub
 {
     /**
      * @var array
@@ -29,14 +31,14 @@ class ReturnValueMap implements Stub
 
     public function invoke(Invocation $invocation)
     {
-        $parameterCount = \count($invocation->getParameters());
+        $parameterCount = count($invocation->getParameters());
 
         foreach ($this->valueMap as $map) {
-            if (!\is_array($map) || $parameterCount !== (\count($map) - 1)) {
+            if (!is_array($map) || $parameterCount !== (count($map) - 1)) {
                 continue;
             }
 
-            $return = \array_pop($map);
+            $return = array_pop($map);
 
             if ($invocation->getParameters() === $map) {
                 return $return;

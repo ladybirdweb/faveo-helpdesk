@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /*
  * This file is part of PharIo\Version.
  *
@@ -7,16 +7,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace PharIo\Version;
 
 class ExactVersionConstraint extends AbstractVersionConstraint {
-    /**
-     * @param Version $version
-     *
-     * @return bool
-     */
-    public function complies(Version $version) {
-        return $this->asString() == $version->getVersionString();
+    public function complies(Version $version): bool {
+        $other = $version->getVersionString();
+
+        if ($version->hasBuildMetaData()) {
+            $other .= '+' . $version->getBuildMetaData()->asString();
+        }
+
+        return $this->asString() === $other;
     }
 }

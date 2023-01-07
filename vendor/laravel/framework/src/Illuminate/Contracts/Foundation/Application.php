@@ -17,14 +17,15 @@ interface Application extends Container
     /**
      * Get the base path of the Laravel installation.
      *
+     * @param  string  $path
      * @return string
      */
-    public function basePath();
+    public function basePath($path = '');
 
     /**
      * Get the path to the bootstrap directory.
      *
-     * @param  string  $path Optionally, a path to append to the bootstrap path
+     * @param  string  $path
      * @return string
      */
     public function bootstrapPath($path = '');
@@ -32,7 +33,7 @@ interface Application extends Container
     /**
      * Get the path to the application configuration files.
      *
-     * @param  string  $path Optionally, a path to append to the config path
+     * @param  string  $path
      * @return string
      */
     public function configPath($path = '');
@@ -40,7 +41,7 @@ interface Application extends Container
     /**
      * Get the path to the database directory.
      *
-     * @param  string  $path Optionally, a path to append to the database path
+     * @param  string  $path
      * @return string
      */
     public function databasePath($path = '');
@@ -107,7 +108,7 @@ interface Application extends Container
      * Register a service provider with the application.
      *
      * @param  \Illuminate\Support\ServiceProvider|string  $provider
-     * @param  bool   $force
+     * @param  bool  $force
      * @return \Illuminate\Support\ServiceProvider
      */
     public function register($provider, $force = false);

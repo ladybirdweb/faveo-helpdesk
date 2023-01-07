@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -11,9 +11,6 @@ namespace PHPUnit\Framework\Error;
 
 use PHPUnit\Framework\Exception;
 
-/**
- * Wrapper for PHP errors.
- */
 class Error extends Exception
 {
     public function __construct(string $message, int $code, string $file, int $line, \Exception $previous = null)

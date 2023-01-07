@@ -2,86 +2,79 @@
 
 namespace UniSharp\LaravelFilemanager\Controllers;
 
-use Illuminate\Support\Facades\File;
-use UniSharp\LaravelFilemanager\Events\ImageIsRenaming;
-use UniSharp\LaravelFilemanager\Events\ImageWasRenamed;
+use Illuminate\Support\Facades\Storage;
 use UniSharp\LaravelFilemanager\Events\FolderIsRenaming;
 use UniSharp\LaravelFilemanager\Events\FolderWasRenamed;
+use UniSharp\LaravelFilemanager\Events\FileIsRenaming;
+use UniSharp\LaravelFilemanager\Events\FileWasRenamed;
+use UniSharp\LaravelFilemanager\Events\ImageIsRenaming;
+use UniSharp\LaravelFilemanager\Events\ImageWasRenamed;
 
-/**
- * Class RenameController.
- */
 class RenameController extends LfmController
 {
-    /**
-     * @return string
-     */
     public function getRename()
     {
-        $old_name = parent::translateFromUtf8(request('file'));
-        $new_name = parent::translateFromUtf8(trim(request('new_name')));
+        $old_name = $this->helper->input('file');
+        $new_name = $this->helper->input('new_name');
 
-        $old_file = parent::getCurrentPath($old_name);
-        if (File::isDirectory($old_file)) {
-            return $this->renameDirectory($old_name, $new_name);
-        } else {
-            return $this->renameFile($old_name, $new_name);
+        $file = $this->lfm->setName($old_name);
+
+        if (!Storage::disk($this->helper->config('disk'))->exists($file->path('storage'))) {
+            abort(404);
         }
-    }
 
-    protected function renameDirectory($old_name, $new_name)
-    {
+        $old_file = $this->lfm->pretty($old_name);
+
+        $is_directory = $file->isDirectory();
+
         if (empty($new_name)) {
-            return parent::error('folder-name');
+            if ($is_directory) {
+                return parent::error('folder-name');
+            } else {
+                return parent::error('file-name');
+            }
         }
 
-        $old_file = parent::getCurrentPath($old_name);
-        $new_file = parent::getCurrentPath($new_name);
-
-        event(new FolderIsRenaming($old_file, $new_file));
-
-        if (config('lfm.alphanumeric_directory') && preg_match('/[^\w-]/i', $new_name)) {
+        if ($is_directory && config('lfm.alphanumeric_directory') && preg_match('/[^\w-]/i', $new_name)) {
             return parent::error('folder-alnum');
-        }
-
-        if (File::exists($new_file)) {
-            return parent::error('rename');
-        }
-
-        File::move($old_file, $new_file);
-        event(new FolderWasRenamed($old_file, $new_file));
-
-        return parent::$success_response;
-    }
-
-    protected function renameFile($old_name, $new_name)
-    {
-        if (empty($new_name)) {
-            return parent::error('file-name');
-        }
-
-        $old_file = parent::getCurrentPath($old_name);
-        $extension = File::extension($old_file);
-        $new_file = parent::getCurrentPath(basename($new_name, ".$extension") . ".$extension");
-
-        if (config('lfm.alphanumeric_filename') && preg_match('/[^\w-.]/i', $new_name)) {
+        } elseif (config('lfm.alphanumeric_filename') && preg_match('/[^.\w-]/i', $new_name)) {
             return parent::error('file-alnum');
-        }
-
-        // TODO Should be "FileIsRenaming"
-        event(new ImageIsRenaming($old_file, $new_file));
-
-        if (File::exists($new_file)) {
+        } elseif ($this->lfm->setName($new_name)->exists()) {
             return parent::error('rename');
         }
 
-        if (parent::fileIsImage($old_file) && File::exists(parent::getThumbPath($old_name))) {
-            File::move(parent::getThumbPath($old_name), parent::getThumbPath($new_name));
+        if (! $is_directory) {
+            $extension = $old_file->extension();
+            if ($extension) {
+                $new_name = str_replace('.' . $extension, '', $new_name) . '.' . $extension;
+            }
         }
 
-        File::move($old_file, $new_file);
-        // TODO Should be "FileWasRenamed"
-        event(new ImageWasRenamed($old_file, $new_file));
+        $new_path = $this->lfm->setName($new_name)->path('absolute');
+
+        if ($is_directory) {
+            event(new FolderIsRenaming($old_file->path(), $new_path));
+        } else {
+            event(new FileIsRenaming($old_file->path(), $new_path));
+            event(new ImageIsRenaming($old_file->path(), $new_path));
+        }
+
+        $old_path = $old_file->path();
+
+        if ($old_file->hasThumb()) {
+            $this->lfm->setName($old_name)->thumb()
+                ->move($this->lfm->setName($new_name)->thumb());
+        }
+
+        $this->lfm->setName($old_name)
+            ->move($this->lfm->setName($new_name));
+
+        if ($is_directory) {
+            event(new FolderWasRenamed($old_path, $new_path));
+        } else {
+            event(new FileWasRenamed($old_path, $new_path));
+            event(new ImageWasRenamed($old_path, $new_path));
+        }
 
         return parent::$success_response;
     }

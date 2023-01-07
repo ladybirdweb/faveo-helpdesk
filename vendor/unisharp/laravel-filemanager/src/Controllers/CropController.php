@@ -6,9 +6,6 @@ use Intervention\Image\Facades\Image;
 use UniSharp\LaravelFilemanager\Events\ImageIsCropping;
 use UniSharp\LaravelFilemanager\Events\ImageWasCropped;
 
-/**
- * Class CropController.
- */
 class CropController extends LfmController
 {
     /**
@@ -18,11 +15,11 @@ class CropController extends LfmController
      */
     public function getCrop()
     {
-        $working_dir = request('working_dir');
-        $img = parent::objectPresenter(parent::getCurrentPath(request('img')));
-
         return view('laravel-filemanager::crop')
-            ->with(compact('working_dir', 'img'));
+            ->with([
+                'working_dir' => request('working_dir'),
+                'img' => $this->lfm->pretty(request('img'))
+            ]);
     }
 
     /**
@@ -30,34 +27,27 @@ class CropController extends LfmController
      */
     public function getCropimage($overWrite = true)
     {
-        $dataX = request('dataX');
-        $dataY = request('dataY');
-        $dataHeight = request('dataHeight');
-        $dataWidth = request('dataWidth');
-        $image_path = parent::getCurrentPath(request('img'));
+        $image_name = request('img');
+        $image_path = $this->lfm->setName($image_name)->path('absolute');
         $crop_path = $image_path;
 
         if (! $overWrite) {
-            $fileParts = explode('.', request('img'));
+            $fileParts = explode('.', $image_name);
             $fileParts[count($fileParts) - 2] = $fileParts[count($fileParts) - 2] . '_cropped_' . time();
-            $crop_path = parent::getCurrentPath(implode('.', $fileParts));
+            $crop_path = $this->lfm->setName(implode('.', $fileParts))->path('absolute');
         }
 
         event(new ImageIsCropping($image_path));
+
+        $crop_info = request()->only('dataWidth', 'dataHeight', 'dataX', 'dataY');
+
         // crop image
         Image::make($image_path)
-            ->crop($dataWidth, $dataHeight, $dataX, $dataY)
+            ->crop(...array_values($crop_info))
             ->save($crop_path);
 
-        if (config('lfm.should_create_thumbnails', true)) {
-            // create thumb folder
-            parent::createFolderByPath(parent::getThumbPath());
-
-            // make new thumbnail
-            Image::make($crop_path)
-                ->fit(config('lfm.thumb_img_width', 200), config('lfm.thumb_img_height', 200))
-                ->save(parent::getThumbPath(parent::getName($crop_path)));
-        }
+        // make new thumbnail
+        $this->lfm->generateThumbnail($image_name);
 
         event(new ImageWasCropped($image_path));
     }

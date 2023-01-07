@@ -2,12 +2,12 @@
 
 namespace Illuminate\Database\Schema\Grammars;
 
-use Illuminate\Support\Fluent;
+use Doctrine\DBAL\Schema\AbstractSchemaManager as SchemaManager;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\TableDiff;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Blueprint;
-use Doctrine\DBAL\Schema\AbstractSchemaManager as SchemaManager;
+use Illuminate\Support\Fluent;
 
 class RenameColumn
 {
@@ -61,9 +61,22 @@ class RenameColumn
     protected static function setRenamedColumns(TableDiff $tableDiff, Fluent $command, Column $column)
     {
         $tableDiff->renamedColumns = [
-            $command->from => new Column($command->to, $column->getType(), $column->toArray()),
+            $command->from => new Column($command->to, $column->getType(), self::getWritableColumnOptions($column)),
         ];
 
         return $tableDiff;
+    }
+
+    /**
+     * Get the writable column options.
+     *
+     * @param  \Doctrine\DBAL\Schema\Column  $column
+     * @return array
+     */
+    private static function getWritableColumnOptions(Column $column)
+    {
+        return array_filter($column->toArray(), function (string $name) use ($column) {
+            return method_exists($column, 'set'.$name);
+        }, ARRAY_FILTER_USE_KEY);
     }
 }

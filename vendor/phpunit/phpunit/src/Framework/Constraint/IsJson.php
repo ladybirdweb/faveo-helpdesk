@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,10 +9,14 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
+use function json_decode;
+use function json_last_error;
+use function sprintf;
+
 /**
  * Constraint that asserts that a string is valid JSON.
  */
-class IsJson extends Constraint
+final class IsJson extends Constraint
 {
     /**
      * Returns a string representation of the constraint.
@@ -34,9 +38,9 @@ class IsJson extends Constraint
             return false;
         }
 
-        \json_decode($other);
+        json_decode($other);
 
-        if (\json_last_error()) {
+        if (json_last_error()) {
             return false;
         }
 
@@ -44,7 +48,7 @@ class IsJson extends Constraint
     }
 
     /**
-     * Returns the description of the failure
+     * Returns the description of the failure.
      *
      * The beginning of failure messages is "Failed asserting that" in most
      * cases. This method should return the second part of that sentence.
@@ -59,14 +63,14 @@ class IsJson extends Constraint
             return 'an empty string is valid JSON';
         }
 
-        \json_decode($other);
+        json_decode($other);
         $error = JsonMatchesErrorMessageProvider::determineJsonError(
-            \json_last_error()
+            (string) json_last_error()
         );
 
-        return \sprintf(
+        return sprintf(
             '%s is valid JSON (%s)',
-            $this->exporter->shortenedExport($other),
+            $this->exporter()->shortenedExport($other),
             $error
         );
     }

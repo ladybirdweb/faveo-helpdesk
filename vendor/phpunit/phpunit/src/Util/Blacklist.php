@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,6 +9,12 @@
  */
 namespace PHPUnit\Util;
 
+use const DIRECTORY_SEPARATOR;
+use function class_exists;
+use function defined;
+use function dirname;
+use function strpos;
+use function sys_get_temp_dir;
 use Composer\Autoload\ClassLoader;
 use DeepCopy\DeepCopy;
 use Doctrine\Instantiator\Instantiator;
@@ -21,6 +27,7 @@ use phpDocumentor\Reflection\Type;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophet;
 use ReflectionClass;
+use ReflectionException;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeUnitReverseLookup\Wizard;
 use SebastianBergmann\Comparator\Comparator;
@@ -34,18 +41,19 @@ use SebastianBergmann\ObjectEnumerator\Enumerator;
 use SebastianBergmann\RecursionContext\Context;
 use SebastianBergmann\ResourceOperations\ResourceOperations;
 use SebastianBergmann\Timer\Timer;
+use SebastianBergmann\Type\TypeName;
 use SebastianBergmann\Version;
 use Text_Template;
 use TheSeer\Tokenizer\Tokenizer;
 use Webmozart\Assert\Assert;
 
 /**
- * Utility class for blacklisting PHPUnit's own source code files.
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class Blacklist
 {
     /**
-     * @var array
+     * @var array<string,int>
      */
     public static $blacklistedClassNames = [
         // composer
@@ -123,6 +131,9 @@ final class Blacklist
         // sebastian/resource-operations
         ResourceOperations::class => 1,
 
+        // sebastian/type
+        TypeName::class => 1,
+
         // sebastian/version
         Version::class => 1,
 
@@ -139,6 +150,8 @@ final class Blacklist
     private static $directories;
 
     /**
+     * @throws Exception
+     *
      * @return string[]
      */
     public function getBlacklistedDirectories(): array
@@ -148,16 +161,19 @@ final class Blacklist
         return self::$directories;
     }
 
+    /**
+     * @throws Exception
+     */
     public function isBlacklisted(string $file): bool
     {
-        if (\defined('PHPUNIT_TESTSUITE')) {
+        if (defined('PHPUNIT_TESTSUITE')) {
             return false;
         }
 
         $this->initialize();
 
         foreach (self::$directories as $directory) {
-            if (\strpos($file, $directory) === 0) {
+            if (strpos($file, $directory) === 0) {
                 return true;
             }
         }
@@ -165,31 +181,43 @@ final class Blacklist
         return false;
     }
 
+    /**
+     * @throws Exception
+     */
     private function initialize(): void
     {
         if (self::$directories === null) {
             self::$directories = [];
 
             foreach (self::$blacklistedClassNames as $className => $parent) {
-                if (!\class_exists($className)) {
+                if (!class_exists($className)) {
                     continue;
                 }
 
-                $reflector = new ReflectionClass($className);
-                $directory = $reflector->getFileName();
+                try {
+                    $directory = (new ReflectionClass($className))->getFileName();
+                    // @codeCoverageIgnoreStart
+                } catch (ReflectionException $e) {
+                    throw new Exception(
+                        $e->getMessage(),
+                        (int) $e->getCode(),
+                        $e
+                    );
+                }
+                // @codeCoverageIgnoreEnd
 
                 for ($i = 0; $i < $parent; $i++) {
-                    $directory = \dirname($directory);
+                    $directory = dirname($directory);
                 }
 
                 self::$directories[] = $directory;
             }
 
             // Hide process isolation workaround on Windows.
-            if (\DIRECTORY_SEPARATOR === '\\') {
+            if (DIRECTORY_SEPARATOR === '\\') {
                 // tempnam() prefix is limited to first 3 chars.
                 // @see https://php.net/manual/en/function.tempnam.php
-                self::$directories[] = \sys_get_temp_dir() . '\\PHP';
+                self::$directories[] = sys_get_temp_dir() . '\\PHP';
             }
         }
     }

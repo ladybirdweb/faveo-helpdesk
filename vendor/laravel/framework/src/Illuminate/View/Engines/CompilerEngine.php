@@ -3,8 +3,8 @@
 namespace Illuminate\View\Engines;
 
 use Exception;
-use ErrorException;
 use Illuminate\View\Compilers\CompilerInterface;
+use Illuminate\View\ViewException;
 
 class CompilerEngine extends PhpEngine
 {
@@ -37,7 +37,7 @@ class CompilerEngine extends PhpEngine
      * Get the evaluated contents of the view.
      *
      * @param  string  $path
-     * @param  array   $data
+     * @param  array  $data
      * @return string
      */
     public function get($path, array $data = [])
@@ -74,7 +74,7 @@ class CompilerEngine extends PhpEngine
      */
     protected function handleViewException(Exception $e, $obLevel)
     {
-        $e = new ErrorException($this->getMessage($e), 0, 1, $e->getFile(), $e->getLine(), $e);
+        $e = new ViewException($this->getMessage($e), 0, 1, $e->getFile(), $e->getLine(), $e);
 
         parent::handleViewException($e, $obLevel);
     }

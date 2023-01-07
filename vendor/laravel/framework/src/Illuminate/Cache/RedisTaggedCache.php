@@ -21,7 +21,7 @@ class RedisTaggedCache extends TaggedCache
      * Store an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed   $value
+     * @param  mixed  $value
      * @param  \DateTimeInterface|\DateInterval|int|null  $ttl
      * @return bool
      */
@@ -179,7 +179,7 @@ class RedisTaggedCache extends TaggedCache
 
         if (count($values) > 0) {
             foreach (array_chunk($values, 1000) as $valuesChunk) {
-                call_user_func_array([$this->store->connection(), 'del'], $valuesChunk);
+                $this->store->connection()->del(...$valuesChunk);
             }
         }
     }

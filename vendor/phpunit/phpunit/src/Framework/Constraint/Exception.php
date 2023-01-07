@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,10 +9,12 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
+use function get_class;
+use function sprintf;
 use PHPUnit\Util\Filter;
 use Throwable;
 
-class Exception extends Constraint
+final class Exception extends Constraint
 {
     /**
      * @var string
@@ -21,8 +23,6 @@ class Exception extends Constraint
 
     public function __construct(string $className)
     {
-        parent::__construct();
-
         $this->className = $className;
     }
 
@@ -31,7 +31,7 @@ class Exception extends Constraint
      */
     public function toString(): string
     {
-        return \sprintf(
+        return sprintf(
             'exception of type "%s"',
             $this->className
         );
@@ -49,7 +49,7 @@ class Exception extends Constraint
     }
 
     /**
-     * Returns the description of the failure
+     * Returns the description of the failure.
      *
      * The beginning of failure messages is "Failed asserting that" in most
      * cases. This method should return the second part of that sentence.
@@ -66,15 +66,15 @@ class Exception extends Constraint
                     . "\n" . Filter::getFilteredStacktrace($other);
             }
 
-            return \sprintf(
+            return sprintf(
                 'exception of type "%s" matches expected exception "%s"%s',
-                \get_class($other),
+                get_class($other),
                 $this->className,
                 $message
             );
         }
 
-        return \sprintf(
+        return sprintf(
             'exception of type "%s" is thrown',
             $this->className
         );

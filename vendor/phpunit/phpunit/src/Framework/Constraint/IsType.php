@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,40 +9,91 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
+use function get_resource_type;
+use function is_array;
+use function is_bool;
+use function is_callable;
+use function is_float;
+use function is_int;
+use function is_iterable;
+use function is_numeric;
+use function is_object;
+use function is_resource;
+use function is_scalar;
+use function is_string;
+use function sprintf;
+use TypeError;
+
 /**
  * Constraint that asserts that the value it is evaluated for is of a
  * specified type.
  *
  * The expected value is passed in the constructor.
  */
-class IsType extends Constraint
+final class IsType extends Constraint
 {
-    public const TYPE_ARRAY    = 'array';
+    /**
+     * @var string
+     */
+    public const TYPE_ARRAY = 'array';
 
-    public const TYPE_BOOL     = 'bool';
+    /**
+     * @var string
+     */
+    public const TYPE_BOOL = 'bool';
 
-    public const TYPE_FLOAT    = 'float';
+    /**
+     * @var string
+     */
+    public const TYPE_FLOAT = 'float';
 
-    public const TYPE_INT      = 'int';
+    /**
+     * @var string
+     */
+    public const TYPE_INT = 'int';
 
-    public const TYPE_NULL     = 'null';
+    /**
+     * @var string
+     */
+    public const TYPE_NULL = 'null';
 
-    public const TYPE_NUMERIC  = 'numeric';
+    /**
+     * @var string
+     */
+    public const TYPE_NUMERIC = 'numeric';
 
-    public const TYPE_OBJECT   = 'object';
+    /**
+     * @var string
+     */
+    public const TYPE_OBJECT = 'object';
 
+    /**
+     * @var string
+     */
     public const TYPE_RESOURCE = 'resource';
 
-    public const TYPE_STRING   = 'string';
+    /**
+     * @var string
+     */
+    public const TYPE_STRING = 'string';
 
-    public const TYPE_SCALAR   = 'scalar';
+    /**
+     * @var string
+     */
+    public const TYPE_SCALAR = 'scalar';
 
+    /**
+     * @var string
+     */
     public const TYPE_CALLABLE = 'callable';
 
+    /**
+     * @var string
+     */
     public const TYPE_ITERABLE = 'iterable';
 
     /**
-     * @var array
+     * @var array<string,bool>
      */
     private const KNOWN_TYPES = [
         'array'    => true,
@@ -73,11 +124,9 @@ class IsType extends Constraint
      */
     public function __construct(string $type)
     {
-        parent::__construct();
-
         if (!isset(self::KNOWN_TYPES[$type])) {
             throw new \PHPUnit\Framework\Exception(
-                \sprintf(
+                sprintf(
                     'Type specified for PHPUnit\Framework\Constraint\IsType <%s> ' .
                     'is not a valid type.',
                     $type
@@ -93,7 +142,7 @@ class IsType extends Constraint
      */
     public function toString(): string
     {
-        return \sprintf(
+        return sprintf(
             'is of type "%s"',
             $this->type
         );
@@ -109,44 +158,57 @@ class IsType extends Constraint
     {
         switch ($this->type) {
             case 'numeric':
-                return \is_numeric($other);
+                return is_numeric($other);
 
             case 'integer':
             case 'int':
-                return \is_int($other);
+                return is_int($other);
 
             case 'double':
             case 'float':
             case 'real':
-                return \is_float($other);
+                return is_float($other);
 
             case 'string':
-                return \is_string($other);
+                return is_string($other);
 
             case 'boolean':
             case 'bool':
-                return \is_bool($other);
+                return is_bool($other);
 
             case 'null':
                 return null === $other;
 
             case 'array':
-                return \is_array($other);
+                return is_array($other);
 
             case 'object':
-                return \is_object($other);
+                return is_object($other);
 
             case 'resource':
-                return \is_resource($other) || \is_string(@\get_resource_type($other));
+                if (is_resource($other)) {
+                    return true;
+                }
+
+                try {
+                    $resource = @get_resource_type($other);
+
+                    if (is_string($resource)) {
+                        return true;
+                    }
+                } catch (TypeError $e) {
+                }
+
+                return false;
 
             case 'scalar':
-                return \is_scalar($other);
+                return is_scalar($other);
 
             case 'callable':
-                return \is_callable($other);
+                return is_callable($other);
 
             case 'iterable':
-                return \is_iterable($other);
+                return is_iterable($other);
         }
     }
 }

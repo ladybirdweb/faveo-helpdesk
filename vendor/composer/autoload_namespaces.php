@@ -8,9 +8,10 @@ $baseDir = dirname($vendorDir);
 return array(
     'thomaswelton\\GravatarLib\\' => array($vendorDir . '/thomaswelton/gravatarlib'),
     'PhpSpec' => array($vendorDir . '/phpspec/phpspec/src'),
-    'Parsedown' => array($vendorDir . '/erusev/parsedown'),
     'Mremi\\UrlShortener' => array($vendorDir . '/mremi/url-shortener/src'),
     'Mockery' => array($vendorDir . '/mockery/mockery/library'),
+    'Highlight\\' => array($vendorDir . '/scrivo/highlight.php'),
+    'HighlightUtilities\\' => array($vendorDir . '/scrivo/highlight.php'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
     'Guzzle\\Tests' => array($vendorDir . '/guzzle/guzzle/tests'),
     'Guzzle' => array($vendorDir . '/guzzle/guzzle/src'),
@@ -18,8 +19,4 @@ return array(
     'Flow' => array($vendorDir . '/flowjs/flow-php-server/src'),
     'Fetch' => array($vendorDir . '/tedivm/fetch/src'),
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
-    'Davibennun\\LaravelPushNotification' => array($vendorDir . '/davibennun/laravel-push-notification/src'),
-    'Chumper\\Datatable' => array($vendorDir . '/chumper/datatable/src'),
-    'Bugsnag_' => array($vendorDir . '/bugsnag/bugsnag/src'),
-    'Bugsnag\\BugsnagLaravel\\' => array($vendorDir . '/bugsnag/bugsnag-laravel/src'),
 );

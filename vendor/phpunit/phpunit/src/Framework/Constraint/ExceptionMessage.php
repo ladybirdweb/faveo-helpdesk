@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,7 +9,11 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
-class ExceptionMessage extends Constraint
+use function sprintf;
+use function strpos;
+use Throwable;
+
+final class ExceptionMessage extends Constraint
 {
     /**
      * @var string
@@ -18,8 +22,6 @@ class ExceptionMessage extends Constraint
 
     public function __construct(string $expected)
     {
-        parent::__construct();
-
         $this->expectedMessage = $expected;
     }
 
@@ -36,7 +38,7 @@ class ExceptionMessage extends Constraint
      * Evaluates the constraint for parameter $other. Returns true if the
      * constraint is met, false otherwise.
      *
-     * @param \Throwable $other
+     * @param Throwable $other
      */
     protected function matches($other): bool
     {
@@ -44,11 +46,11 @@ class ExceptionMessage extends Constraint
             return $other->getMessage() === '';
         }
 
-        return \strpos($other->getMessage(), $this->expectedMessage) !== false;
+        return strpos((string) $other->getMessage(), $this->expectedMessage) !== false;
     }
 
     /**
-     * Returns the description of the failure
+     * Returns the description of the failure.
      *
      * The beginning of failure messages is "Failed asserting that" in most
      * cases. This method should return the second part of that sentence.
@@ -58,13 +60,13 @@ class ExceptionMessage extends Constraint
     protected function failureDescription($other): string
     {
         if ($this->expectedMessage === '') {
-            return \sprintf(
+            return sprintf(
                 "exception message is empty but is '%s'",
                 $other->getMessage()
             );
         }
 
-        return \sprintf(
+        return sprintf(
             "exception message '%s' contains '%s'",
             $other->getMessage(),
             $this->expectedMessage

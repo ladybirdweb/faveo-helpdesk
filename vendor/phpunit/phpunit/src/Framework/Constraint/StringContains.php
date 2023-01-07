@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,6 +9,11 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
+use function mb_stripos;
+use function mb_strpos;
+use function mb_strtolower;
+use function sprintf;
+
 /**
  * Constraint that asserts that the string it is evaluated for contains
  * a given string.
@@ -18,7 +23,7 @@ namespace PHPUnit\Framework\Constraint;
  *
  * The sub-string is passed in the constructor.
  */
-class StringContains extends Constraint
+final class StringContains extends Constraint
 {
     /**
      * @var string
@@ -32,8 +37,6 @@ class StringContains extends Constraint
 
     public function __construct(string $string, bool $ignoreCase = false)
     {
-        parent::__construct();
-
         $this->string     = $string;
         $this->ignoreCase = $ignoreCase;
     }
@@ -44,12 +47,12 @@ class StringContains extends Constraint
     public function toString(): string
     {
         if ($this->ignoreCase) {
-            $string = \mb_strtolower($this->string);
+            $string = mb_strtolower($this->string);
         } else {
             $string = $this->string;
         }
 
-        return \sprintf(
+        return sprintf(
             'contains "%s"',
             $string
         );
@@ -68,9 +71,9 @@ class StringContains extends Constraint
         }
 
         if ($this->ignoreCase) {
-            return \mb_stripos($other, $this->string) !== false;
+            return mb_stripos($other, $this->string) !== false;
         }
 
-        return \mb_strpos($other, $this->string) !== false;
+        return mb_strpos($other, $this->string) !== false;
     }
 }

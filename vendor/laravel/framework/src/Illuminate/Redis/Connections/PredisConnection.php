@@ -3,15 +3,22 @@
 namespace Illuminate\Redis\Connections;
 
 use Closure;
+use Illuminate\Contracts\Redis\Connection as ConnectionContract;
 use Predis\Command\ServerFlushDatabase;
 use Predis\Connection\Aggregate\ClusterInterface;
-use Illuminate\Contracts\Redis\Connection as ConnectionContract;
 
 /**
  * @mixin \Predis\Client
  */
 class PredisConnection extends Connection implements ConnectionContract
 {
+    /**
+     * The Predis client.
+     *
+     * @var \Predis\Client
+     */
+    protected $client;
+
     /**
      * Create a new Predis connection.
      *
@@ -35,7 +42,7 @@ class PredisConnection extends Connection implements ConnectionContract
     {
         $loop = $this->pubSubLoop();
 
-        call_user_func_array([$loop, $method], (array) $channels);
+        $loop->{$method}(...array_values((array) $channels));
 
         foreach ($loop as $message) {
             if ($message->kind === 'message' || $message->kind === 'pmessage') {

@@ -133,7 +133,6 @@ return [
      */
     'providers' => [
         'Illuminate\Broadcasting\BroadcastServiceProvider',
-        'DaveJamesMiller\Breadcrumbs\ServiceProvider',
         /*
          * Laravel Framework Service Providers...
          */
@@ -168,12 +167,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ConfigServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
-        'Propaganistas\LaravelPhone\LaravelPhoneServiceProvider',
-        'Bugsnag\BugsnagLaravel\BugsnagLaravelServiceProvider',
         'Vsmoraes\Pdf\PdfServiceProvider',
         'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
-        'Chumper\Datatable\DatatableServiceProvider',
-        'Chumper\Zipper\ZipperServiceProvider',
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         \Torann\GeoIP\GeoIPServiceProvider::class,
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,

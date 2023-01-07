@@ -9,7 +9,14 @@
  */
 namespace PHPUnit\Runner;
 
-interface AfterTestHook extends Hook
+/**
+ * This interface, as well as the associated mechanism for extending PHPUnit,
+ * will be removed in PHPUnit 10. There is no alternative available in this
+ * version of PHPUnit.
+ *
+ * @see https://github.com/sebastianbergmann/phpunit/issues/4676
+ */
+interface AfterTestHook extends TestHook
 {
     /**
      * This hook will fire after any test, regardless of the result.

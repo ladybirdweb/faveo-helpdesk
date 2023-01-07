@@ -1,6 +1,0 @@
-version: "2.0"
-services:
-    php-cli:
-        build: ./docker/php-cli
-        volumes:
-            - ./:/var/www

@@ -10,7 +10,7 @@ class SortedMiddleware extends Collection
      * Create a new Sorted Middleware container.
      *
      * @param  array  $priorityMap
-     * @param  array|\Illuminate\Support\Collection  $middlewares
+     * @param  \Illuminate\Support\Collection|array  $middlewares
      * @return void
      */
     public function __construct(array $priorityMap, $middlewares)
@@ -62,7 +62,7 @@ class SortedMiddleware extends Collection
             }
         }
 
-        return array_values(array_unique($middlewares, SORT_REGULAR));
+        return Router::uniqueMiddleware($middlewares);
     }
 
     /**

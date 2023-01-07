@@ -33,32 +33,25 @@ class Tokenizer
      */
     private $handlers;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $patterns = new TokenizerPatterns();
         $escaping = new TokenizerEscaping($patterns);
 
-        $this->handlers = array(
+        $this->handlers = [
             new Handler\WhitespaceHandler(),
             new Handler\IdentifierHandler($patterns, $escaping),
             new Handler\HashHandler($patterns, $escaping),
             new Handler\StringHandler($patterns, $escaping),
             new Handler\NumberHandler($patterns),
             new Handler\CommentHandler(),
-        );
+        ];
     }
 
     /**
      * Tokenize selector source code.
-     *
-     * @param Reader $reader
-     *
-     * @return TokenStream
      */
-    public function tokenize(Reader $reader)
+    public function tokenize(Reader $reader): TokenStream
     {
         $stream = new TokenStream();
 

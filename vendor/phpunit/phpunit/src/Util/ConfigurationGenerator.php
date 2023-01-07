@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,24 +9,32 @@
  */
 namespace PHPUnit\Util;
 
+use function str_replace;
+
+/**
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
+ */
 final class ConfigurationGenerator
 {
     /**
      * @var string
      */
-    private const TEMPLATE = <<<EOT
+    private const TEMPLATE = <<<'EOT'
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/{phpunit_version}/phpunit.xsd"
          bootstrap="{bootstrap_script}"
+         cacheResultFile="{cache_directory}/test-results"
+         executionOrder="depends,defects"
          forceCoversAnnotation="true"
          beStrictAboutCoversAnnotation="true"
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
+         convertDeprecationsToExceptions="true"
          verbose="true">
     <testsuites>
         <testsuite name="default">
-            <directory suffix="Test.php">{tests_directory}</directory>
+            <directory>{tests_directory}</directory>
         </testsuite>
     </testsuites>
 
@@ -39,20 +47,22 @@ final class ConfigurationGenerator
 
 EOT;
 
-    public function generateDefaultConfiguration(string $phpunitVersion, string $bootstrapScript, string $testsDirectory, string $srcDirectory): string
+    public function generateDefaultConfiguration(string $phpunitVersion, string $bootstrapScript, string $testsDirectory, string $srcDirectory, string $cacheDirectory): string
     {
-        return \str_replace(
+        return str_replace(
             [
                 '{phpunit_version}',
                 '{bootstrap_script}',
                 '{tests_directory}',
                 '{src_directory}',
+                '{cache_directory}',
             ],
             [
                 $phpunitVersion,
                 $bootstrapScript,
                 $testsDirectory,
                 $srcDirectory,
+                $cacheDirectory,
             ],
             self::TEMPLATE
         );

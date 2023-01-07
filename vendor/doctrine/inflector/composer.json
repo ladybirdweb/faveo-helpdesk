@@ -13,30 +13,29 @@
         {"name": "Johannes Schmitt", "email": "schmittjoh@gmail.com"}
     ],
     "require": {
-        "php": "^7.1 || ^8.0"
+        "php": "^7.2 || ^8.0"
     },
     "require-dev": {
-        "doctrine/coding-standard": "^8.0",
-        "phpstan/phpstan": "^0.12",
-        "phpstan/phpstan-phpunit": "^0.12",
-        "phpstan/phpstan-strict-rules": "^0.12",
-        "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
+        "doctrine/coding-standard": "^10",
+        "phpstan/phpstan": "^1.8",
+        "phpstan/phpstan-phpunit": "^1.1",
+        "phpstan/phpstan-strict-rules": "^1.3",
+        "phpunit/phpunit": "^8.5 || ^9.5",
+        "vimeo/psalm": "^4.25"
     },
     "autoload": {
         "psr-4": {
-            "Doctrine\\Common\\Inflector\\": "lib/Doctrine/Common/Inflector",
             "Doctrine\\Inflector\\": "lib/Doctrine/Inflector"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Doctrine\\Tests\\Common\\Inflector\\": "tests/Doctrine/Tests/Common/Inflector",
             "Doctrine\\Tests\\Inflector\\": "tests/Doctrine/Tests/Inflector"
         }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     }
 }
