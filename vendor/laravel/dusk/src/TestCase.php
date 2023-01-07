@@ -54,7 +54,7 @@ abstract class TestCase extends FoundationTestCase
      */
     protected function baseUrl()
     {
-        return config('app.url');
+        return rtrim(config('app.url'), '/');
     }
 
     /**
@@ -67,5 +67,15 @@ abstract class TestCase extends FoundationTestCase
     protected function user()
     {
         throw new Exception('User resolver has not been set.');
+    }
+
+    /**
+     * Determine if the tests are running within Laravel Sail.
+     *
+     * @return bool
+     */
+    protected static function runningInSail()
+    {
+        return isset($_ENV['LARAVEL_SAIL']) && $_ENV['LARAVEL_SAIL'] == '1';
     }
 }

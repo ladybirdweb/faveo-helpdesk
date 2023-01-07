@@ -180,7 +180,7 @@ return [
         App\FaveoStorage\StorageServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
         \App\Api\ApiServiceProvider::class,
-
+        Barryvdh\Debugbar\ServiceProvider::class,
     ],
     /*
       |--------------------------------------------------------------------------
@@ -204,6 +204,7 @@ return [
         'Crypt'        => 'Illuminate\Support\Facades\Crypt',
         'Date'         => Illuminate\Support\Facades\Date::class,
         'DB'           => 'Illuminate\Support\Facades\DB',
+        'Debugbar'     => Barryvdh\Debugbar\Facades\Debugbar::class,
         'Eloquent'     => 'Illuminate\Database\Eloquent\Model',
         'Event'        => 'Illuminate\Support\Facades\Event',
         'File'         => 'Illuminate\Support\Facades\File',

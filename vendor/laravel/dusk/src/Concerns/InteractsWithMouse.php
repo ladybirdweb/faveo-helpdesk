@@ -2,6 +2,8 @@
 
 namespace Laravel\Dusk\Concerns;
 
+use Facebook\WebDriver\Exception\ElementClickInterceptedException;
+use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\Interactions\WebDriverActions;
 use Facebook\WebDriver\WebDriverBy;
 
@@ -48,9 +50,33 @@ trait InteractsWithMouse
     {
         if (is_null($selector)) {
             (new WebDriverActions($this->driver))->click()->perform();
-        } else {
-            $this->resolver->findOrFail($selector)->click();
+
+            return $this;
         }
+
+        foreach ($this->resolver->all($selector) as $element) {
+            try {
+                $element->click();
+
+                return $this;
+            } catch (ElementClickInterceptedException $e) {
+                //
+            }
+        }
+
+        throw $e ?? new NoSuchElementException("Unable to locate element with selector [{$selector}].");
+    }
+
+    /**
+     * Click the topmost element at the given pair of coordinates.
+     *
+     * @param  int  $x
+     * @param  int  $y
+     * @return $this
+     */
+    public function clickAtPoint($x, $y)
+    {
+        $this->driver->executeScript("document.elementFromPoint({$x}, {$y}).click()");
 
         return $this;
     }
@@ -58,7 +84,7 @@ trait InteractsWithMouse
     /**
      * Click the element at the given XPath expression.
      *
-     * @param  string  $selector
+     * @param  string  $expression
      * @return $this
      */
     public function clickAtXPath($expression)

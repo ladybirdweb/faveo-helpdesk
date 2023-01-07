@@ -45,7 +45,8 @@
         "nunomaduro/collision": "^5.10",
         "mockery/mockery": "^1.4.4",
         "fakerphp/faker": "^1.9.1",
-        "facade/ignition": "^2.5"
+        "facade/ignition": "^2.5",
+        "barryvdh/laravel-debugbar": "^3.7"
     },
     "autoload": {
         "classmap": [

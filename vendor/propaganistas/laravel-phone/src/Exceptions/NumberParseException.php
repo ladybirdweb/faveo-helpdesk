@@ -1,4 +1,6 @@
-<?php namespace Propaganistas\LaravelPhone\Exceptions;
+<?php
+
+namespace Propaganistas\LaravelPhone\Exceptions;
 
 use Illuminate\Support\Str;
 use libphonenumber\NumberParseException as libNumberParseException;
@@ -37,7 +39,7 @@ class NumberParseException extends libNumberParseException
      * Country mismatch static constructor.
      *
      * @param string $number
-     * @param string|array $country
+     * @param string|array $countries
      * @return static
      */
     public static function countryMismatch($number, $countries)

@@ -1,4 +1,6 @@
-<?php namespace Propaganistas\LaravelPhone\Validation;
+<?php
+
+namespace Propaganistas\LaravelPhone\Validation;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -74,11 +76,12 @@ class Phone
                 $phoneNumberInstance = $phoneNumber->getPhoneNumberInstance();
 
                 // Country detection.
-                if ($detect && $this->lib->isValidNumber($phoneNumberInstance)) {
-                    return true;
+                // Will throw a NumberParseException if country could not be detected.
+                if ($detect && $country === null) {
+                    $country = $phoneNumber->getCountry();
                 }
 
-                // Default number+country validation.
+                // Number+country validation.
                 if ($this->lib->isValidNumberForRegion($phoneNumberInstance, $country)) {
                     return true;
                 }
@@ -104,7 +107,7 @@ class Phone
         // Discover if an input field was provided. If not, guess the field's name.
         $inputField = Collection::make($parameters)
                                 ->intersect(array_keys(Arr::dot($data)))
-                                ->first() ?: "${attribute}_country";
+                                ->first() ?: "{$attribute}_country";
 
         // Attempt to retrieve the field's value.
         if ($inputCountry = Arr::get($data, $inputField)) {

@@ -11,7 +11,7 @@
         "php": "^7.3|^8.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.0"
+        "phpunit/phpunit": "^9.5"
     },
     "scripts": {
         "cs-review": "php-cs-fixer fix --verbose --diff --dry-run",

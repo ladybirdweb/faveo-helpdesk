@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * (c) Rob Bast <rob.bast@gmail.com>
  *
@@ -16,57 +18,45 @@ interface ISO3166DataProvider
      *
      * @api
      *
-     * @param string $name
-     *
-     * @throws \League\ISO3166\Exception\InvalidArgumentException if input is not a string
      * @throws \League\ISO3166\Exception\OutOfBoundsException if input does not exist in dataset
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function name($name);
+    public function name(string $name): array;
 
     /**
      * Lookup ISO3166-1 data by alpha2 identifier.
      *
      * @api
      *
-     * @param string $alpha2
-     *
-     * @throws \League\ISO3166\Exception\InvalidArgumentException if input is not a string
      * @throws \League\ISO3166\Exception\DomainException if input does not look like an alpha2 key
      * @throws \League\ISO3166\Exception\OutOfBoundsException if input does not exist in dataset
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function alpha2($alpha2);
+    public function alpha2(string $alpha2): array;
 
     /**
      * Lookup ISO3166-1 data by alpha3 identifier.
      *
      * @api
      *
-     * @param string $alpha3
-     *
-     * @throws \League\ISO3166\Exception\InvalidArgumentException if input is not a string
      * @throws \League\ISO3166\Exception\DomainException if input does not look like an alpha3 key
      * @throws \League\ISO3166\Exception\OutOfBoundsException if input does not exist in dataset
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function alpha3($alpha3);
+    public function alpha3(string $alpha3): array;
 
     /**
      * Lookup ISO3166-1 data by numeric identifier (numerical string, that is).
      *
      * @api
      *
-     * @param string $numeric
-     *
-     * @throws \League\ISO3166\Exception\InvalidArgumentException if input is not a string
      * @throws \League\ISO3166\Exception\DomainException if input does not look like a numeric key
      * @throws \League\ISO3166\Exception\OutOfBoundsException if input does not exist in dataset
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function numeric($numeric);
+    public function numeric(string $numeric): array;
 }

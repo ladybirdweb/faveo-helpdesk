@@ -1,4 +1,6 @@
-<?php namespace Propaganistas\LaravelPhone\Traits;
+<?php
+
+namespace Propaganistas\LaravelPhone\Traits;
 
 use Illuminate\Support\Collection;
 use League\ISO3166\ISO3166;
@@ -33,6 +35,10 @@ trait ParsesCountries
     protected function parseCountries($countries)
     {
         return Collection::make(is_array($countries) ? $countries : func_get_args())
+                         ->reject(function ($value) {
+                             /** @phpstan-ignore-next-line */
+                             return is_null($value);
+                         })
                          ->map(function ($country) {
                              return strtoupper($country);
                          })

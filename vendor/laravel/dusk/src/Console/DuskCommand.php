@@ -17,7 +17,10 @@ class DuskCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'dusk {--without-tty : Disable output to TTY}';
+    protected $signature = 'dusk
+                {--browse : Open a browser instead of using headless mode}
+                {--without-tty : Disable output to TTY}
+                {--pest : Run the tests using Pest}';
 
     /**
      * The console command description.
@@ -56,12 +59,18 @@ class DuskCommand extends Command
 
         $this->purgeConsoleLogs();
 
-        $options = array_slice($_SERVER['argv'], $this->option('without-tty') ? 3 : 2);
+        $this->purgeSourceLogs();
+
+        $options = collect($_SERVER['argv'])
+            ->slice(2)
+            ->diff(['--browse', '--without-tty'])
+            ->values()
+            ->all();
 
         return $this->withDuskEnvironment(function () use ($options) {
             $process = (new Process(array_merge(
                 $this->binary(), $this->phpunitArguments($options)
-            )))->setTimeout(null);
+            ), null, $this->env()))->setTimeout(null);
 
             try {
                 $process->setTty(! $this->option('without-tty'));
@@ -88,11 +97,17 @@ class DuskCommand extends Command
      */
     protected function binary()
     {
-        if ('phpdbg' === PHP_SAPI) {
-            return [PHP_BINARY, '-qrr', 'vendor/phpunit/phpunit/phpunit'];
+        $binaryPath = 'vendor/phpunit/phpunit/phpunit';
+
+        if ($this->option('pest')) {
+            $binaryPath = 'vendor/pestphp/pest/bin/pest';
         }
 
-        return [PHP_BINARY, 'vendor/phpunit/phpunit/phpunit'];
+        if ('phpdbg' === PHP_SAPI) {
+            return [PHP_BINARY, '-qrr', $binaryPath];
+        }
+
+        return [PHP_BINARY, $binaryPath];
     }
 
     /**
@@ -104,7 +119,7 @@ class DuskCommand extends Command
     protected function phpunitArguments($options)
     {
         $options = array_values(array_filter($options, function ($option) {
-            return ! Str::startsWith($option, '--env=');
+            return ! Str::startsWith($option, ['--env=', '--pest']);
         }));
 
         if (! file_exists($file = base_path('phpunit.dusk.xml'))) {
@@ -115,25 +130,27 @@ class DuskCommand extends Command
     }
 
     /**
+     * Get the PHP binary environment variables.
+     *
+     * @return array|null
+     */
+    protected function env()
+    {
+        if ($this->option('browse') && ! isset($_ENV['CI']) && ! isset($_SERVER['CI'])) {
+            return ['DUSK_HEADLESS_DISABLED' => true];
+        }
+    }
+
+    /**
      * Purge the failure screenshots.
      *
      * @return void
      */
     protected function purgeScreenshots()
     {
-        $path = base_path('tests/Browser/screenshots');
-
-        if (! is_dir($path)) {
-            return;
-        }
-
-        $files = Finder::create()->files()
-                        ->in($path)
-                        ->name('failure-*');
-
-        foreach ($files as $file) {
-            @unlink($file->getRealPath());
-        }
+        $this->purgeDebuggingFiles(
+            base_path('tests/Browser/screenshots'), 'failure-*'
+        );
     }
 
     /**
@@ -143,15 +160,39 @@ class DuskCommand extends Command
      */
     protected function purgeConsoleLogs()
     {
-        $path = base_path('tests/Browser/console');
+        $this->purgeDebuggingFiles(
+            base_path('tests/Browser/console'), '*.log'
+        );
+    }
 
+    /**
+     * Purge the source logs.
+     *
+     * @return void
+     */
+    protected function purgeSourceLogs()
+    {
+        $this->purgeDebuggingFiles(
+            base_path('tests/Browser/source'), '*.txt'
+        );
+    }
+
+    /**
+     * Purge debugging files based on path and patterns.
+     *
+     * @param  string  $path
+     * @param  string  $patterns
+     * @return void
+     */
+    protected function purgeDebuggingFiles($path, $patterns)
+    {
         if (! is_dir($path)) {
             return;
         }
 
         $files = Finder::create()->files()
-            ->in($path)
-            ->name('*.log');
+                       ->in($path)
+                       ->name($patterns);
 
         foreach ($files as $file) {
             @unlink($file->getRealPath());

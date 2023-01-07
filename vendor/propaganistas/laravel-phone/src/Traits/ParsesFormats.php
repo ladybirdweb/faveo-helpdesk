@@ -1,4 +1,6 @@
-<?php namespace Propaganistas\LaravelPhone\Traits;
+<?php
+
+namespace Propaganistas\LaravelPhone\Traits;
 
 use Illuminate\Support\Arr;
 use libphonenumber\PhoneNumberFormat;
@@ -27,12 +29,12 @@ trait ParsesFormats
     /**
      * Parse a phone format.
      *
-     * @param string $format
-     * @return string
+     * @param int|string $format
+     * @return int|null
      */
     protected static function parseFormat($format)
     {
-        static::loadFormats();
+        self::loadFormats();
 
         // If the format equals a constant's value, just return it.
         if (in_array($format, static::$formats, true)) {

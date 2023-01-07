@@ -40,6 +40,38 @@ class Browser
     public static $storeScreenshotsAt;
 
     /**
+     * The common screen sizes to use for responsive screenshots.
+     *
+     * @var array
+     */
+    public static $responsiveScreenSizes = [
+        'xs' => [
+            'width' => 360,
+            'height' => 640,
+        ],
+        'sm' => [
+            'width' => 640,
+            'height' => 360,
+        ],
+        'md' => [
+            'width' => 768,
+            'height' => 1024,
+        ],
+        'lg' => [
+            'width' => 1024,
+            'height' => 768,
+        ],
+        'xl' => [
+            'width' => 1280,
+            'height' => 1024,
+        ],
+        '2xl' => [
+            'width' => 1536,
+            'height' => 864,
+        ],
+    ];
+
+    /**
      * The directory that will contain any console logs.
      *
      * @var string
@@ -116,7 +148,7 @@ class Browser
      * Create a browser instance.
      *
      * @param  \Facebook\WebDriver\Remote\RemoteWebDriver  $driver
-     * @param  \Laravel\Dusk\ElementResolver  $resolver
+     * @param  \Laravel\Dusk\ElementResolver|null  $resolver
      * @return void
      */
     public function __construct($driver, $resolver = null)
@@ -172,6 +204,18 @@ class Browser
     public function visitRoute($route, $parameters = [])
     {
         return $this->visit(route($route, $parameters));
+    }
+
+    /**
+     * Browse to the "about:blank" page.
+     *
+     * @return $this
+     */
+    public function blank()
+    {
+        $this->driver->navigate()->to('about:blank');
+
+        return $this;
     }
 
     /**
@@ -234,6 +278,18 @@ class Browser
     }
 
     /**
+     * Navigate to the next page.
+     *
+     * @return $this
+     */
+    public function forward()
+    {
+        $this->driver->navigate()->forward();
+
+        return $this;
+    }
+
+    /**
      * Maximize the browser window.
      *
      * @return $this
@@ -272,7 +328,7 @@ class Browser
 
         $html = $this->driver->findElement(WebDriverBy::tagName('html'));
 
-        if (! empty($html) && ($html->getSize()->getWidth() <= 0 || $html->getSize()->getHeight() <= 0)) {
+        if (! empty($html) && $html->getSize()->getWidth() > 0 && $html->getSize()->getHeight() > 0) {
             $this->resize($html->getSize()->getWidth(), $html->getSize()->getHeight());
         }
 
@@ -320,6 +376,21 @@ class Browser
     }
 
     /**
+     * Scroll element into view at the given selector.
+     *
+     * @param  string  $selector
+     * @return $this
+     */
+    public function scrollIntoView($selector)
+    {
+        $selector = addslashes($this->resolver->format($selector));
+
+        $this->driver->executeScript("document.querySelector(\"$selector\").scrollIntoView();");
+
+        return $this;
+    }
+
+    /**
      * Scroll screen to element at the given selector.
      *
      * @param  string  $selector
@@ -353,6 +424,26 @@ class Browser
         }
 
         $this->driver->takeScreenshot($filePath);
+
+        return $this;
+    }
+
+    /**
+     * Take a series of screenshots at different browser sizes to emulate different devices.
+     *
+     * @param  string  $name
+     * @return $this
+     */
+    public function responsiveScreenshots($name)
+    {
+        if (substr($name, -1) !== '/') {
+            $name .= '-';
+        }
+
+        foreach (static::$responsiveScreenSizes as $device => $size) {
+            $this->resize($size['width'], $size['height'])
+                ->screenshot("$name$device");
+        }
 
         return $this;
     }
@@ -418,7 +509,7 @@ class Browser
     /**
      * Execute a Closure with a scoped browser instance.
      *
-     * @param  string  $selector
+     * @param  string|\Laravel\Dusk\Component  $selector
      * @param  \Closure  $callback
      * @return $this
      */
@@ -430,7 +521,7 @@ class Browser
     /**
      * Execute a Closure with a scoped browser instance.
      *
-     * @param  string  $selector
+     * @param  string|\Laravel\Dusk\Component  $selector
      * @param  \Closure  $callback
      * @return $this
      */
@@ -451,6 +542,47 @@ class Browser
         call_user_func($callback, $browser);
 
         return $this;
+    }
+
+    /**
+     * Execute a Closure outside of the current browser scope.
+     *
+     * @param  string|\Laravel\Dusk\Component  $selector
+     * @param  \Closure  $callback
+     * @return $this
+     */
+    public function elsewhere($selector, Closure $callback)
+    {
+        $browser = new static(
+            $this->driver, new ElementResolver($this->driver, 'body '.$selector)
+        );
+
+        if ($this->page) {
+            $browser->onWithoutAssert($this->page);
+        }
+
+        if ($selector instanceof Component) {
+            $browser->onComponent($selector, $this->resolver);
+        }
+
+        call_user_func($callback, $browser);
+
+        return $this;
+    }
+
+    /**
+     * Execute a Closure outside of the current browser scope when the selector is available.
+     *
+     * @param  string  $selector
+     * @param  \Closure  $callback
+     * @param  int|null  $seconds
+     * @return $this
+     */
+    public function elsewhereWhenAvailable($selector, Closure $callback, $seconds = null)
+    {
+        return $this->elsewhere('', function ($browser) use ($selector, $callback, $seconds) {
+            $browser->whenAvailable($selector, $callback, $seconds);
+        });
     }
 
     /**

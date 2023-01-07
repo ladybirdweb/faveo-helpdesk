@@ -6,6 +6,8 @@ use Facebook\WebDriver\Interactions\WebDriverActions;
 use Facebook\WebDriver\Remote\LocalFileDetector;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverKeys;
+use Facebook\WebDriver\WebDriverSelect;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 trait InteractsWithElements
@@ -43,9 +45,11 @@ trait InteractsWithElements
     {
         $this->ensurejQueryIsAvailable();
 
-        $selector = addslashes(trim($this->resolver->format("{$element}:contains({$link}):visible")));
+        $selector = addslashes(trim($this->resolver->format("{$element}")));
 
-        $this->driver->executeScript("jQuery.find(\"{$selector}\")[0].click();");
+        $link = str_replace("'", "\\\\'", $link);
+
+        $this->driver->executeScript("jQuery.find(`{$selector}:contains('{$link}'):visible`)[0].click();");
 
         return $this;
     }
@@ -99,7 +103,7 @@ trait InteractsWithElements
      * Send the given keys to the element matching the given selector.
      *
      * @param  string  $selector
-     * @param  dynamic  $keys
+     * @param  mixed  $keys
      * @return $this
      */
     public function keys($selector, ...$keys)
@@ -183,7 +187,7 @@ trait InteractsWithElements
      */
     public function appendSlowly($field, $value, $pause = 100)
     {
-        foreach (str_split($value) as $char) {
+        foreach (preg_split('//u', $value, -1, PREG_SPLIT_NO_EMPTY) as $char) {
             $this->append($field, $char)->pause($pause);
         }
 
@@ -207,7 +211,7 @@ trait InteractsWithElements
      * Select the given value or random value of a drop-down field.
      *
      * @param  string  $field
-     * @param  string  $value
+     * @param  string|array|null  $value
      * @return $this
      */
     public function select($field, $value = null)
@@ -216,18 +220,34 @@ trait InteractsWithElements
 
         $options = $element->findElements(WebDriverBy::cssSelector('option:not([disabled])'));
 
-        if (is_null($value)) {
+        $select = $element->getTagName() === 'select' ? new WebDriverSelect($element) : null;
+
+        $isMultiple = false;
+
+        if (! is_null($select)) {
+            if ($isMultiple = $select->isMultiple()) {
+                $select->deselectAll();
+            }
+        }
+
+        if (func_num_args() === 1) {
             $options[array_rand($options)]->click();
         } else {
-            if (is_bool($value)) {
-                $value = $value ? '1' : '0';
-            }
+            $value = collect(Arr::wrap($value))->transform(function ($value) {
+                if (is_bool($value)) {
+                    return $value ? '1' : '0';
+                }
+
+                return (string) $value;
+            })->all();
 
             foreach ($options as $option) {
-                if ((string) $option->getAttribute('value') === (string) $value) {
+                if (in_array((string) $option->getAttribute('value'), $value)) {
                     $option->click();
 
-                    break;
+                    if (! $isMultiple) {
+                        break;
+                    }
                 }
             }
         }
@@ -253,7 +273,7 @@ trait InteractsWithElements
      * Check the given checkbox.
      *
      * @param  string  $field
-     * @param  string  $value
+     * @param  string|null  $value
      * @return $this
      */
     public function check($field, $value = null)
@@ -271,7 +291,7 @@ trait InteractsWithElements
      * Uncheck the given checkbox.
      *
      * @param  string  $field
-     * @param  string  $value
+     * @param  string|null  $value
      * @return $this
      */
     public function uncheck($field, $value = null)

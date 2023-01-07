@@ -1,4 +1,6 @@
-<?php namespace Propaganistas\LaravelPhone;
+<?php
+
+namespace Propaganistas\LaravelPhone;
 
 use Exception;
 use Illuminate\Contracts\Support\Jsonable;
@@ -11,6 +13,7 @@ use libphonenumber\NumberParseException as libNumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberType;
 use libphonenumber\PhoneNumberUtil;
+use Propaganistas\LaravelPhone\Exceptions\InvalidParameterException;
 use Propaganistas\LaravelPhone\Exceptions\NumberFormatException;
 use Propaganistas\LaravelPhone\Exceptions\CountryCodeException;
 use Propaganistas\LaravelPhone\Exceptions\NumberParseException;
@@ -145,7 +148,7 @@ class PhoneNumber implements Jsonable, JsonSerializable, Serializable
     /**
      * Format the phone number in a given format.
      *
-     * @param string $format
+     * @param string|int $format
      * @return string
      * @throws \Propaganistas\LaravelPhone\Exceptions\NumberFormatException
      */
@@ -265,7 +268,7 @@ class PhoneNumber implements Jsonable, JsonSerializable, Serializable
         foreach ($countries as $country) {
             $instance = $this->lib->parse($this->number, $country);
 
-            if ($this->lib->isValidNumber($instance)) {
+            if (($this->lenient && $this->lib->isPossibleNumber($instance)) || $this->lib->isValidNumber($instance)) {
                 return $this->lib->getRegionCodeForNumber($instance);
             }
         }
@@ -315,6 +318,38 @@ class PhoneNumber implements Jsonable, JsonSerializable, Serializable
     }
 
     /**
+     * Determine if two phone numbers are the same.
+     *
+     * @param string|static $number
+     * @param string|array|null $country
+     * @return bool
+     */
+    public function equals($number, $country = null)
+    {
+        try {
+            if (! $number instanceof static) {
+                $number = static::make($number, $country);
+            }
+
+            return $this->formatE164() === $number->formatE164();
+        } catch (NumberParseException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Determine if two phone numbers are not the same.
+     *
+     * @param string|static $number
+     * @param string|array|null $country
+     * @return bool
+     */
+    public function notEquals($number, $country = null)
+    {
+        return ! $this->equals($number, $country);
+    }
+
+    /**
      * Get the raw provided number.
      *
      * @return string
@@ -339,7 +374,7 @@ class PhoneNumber implements Jsonable, JsonSerializable, Serializable
      *
      * @return bool
      */
-    protected function numberLooksInternational()
+    public function numberLooksInternational()
     {
         return Str::startsWith($this->number, '+');
     }
@@ -372,6 +407,7 @@ class PhoneNumber implements Jsonable, JsonSerializable, Serializable
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->formatE164();
@@ -381,21 +417,45 @@ class PhoneNumber implements Jsonable, JsonSerializable, Serializable
      * Convert the phone instance into a string representation.
      *
      * @return string
+     *
+     * @deprecated PHP 8.1
      */
     public function serialize()
     {
-        return $this->formatE164();
+        return $this->__serialize()['number'];
     }
 
     /**
      * Reconstructs the phone instance from a string representation.
      *
-     * @param string $serialized
+     * @param string|array $serialized
+     *
+     * @deprecated PHP 8.1
      */
     public function unserialize($serialized)
     {
+       $this->__unserialize(is_array($serialized) ? $serialized : ['number' => $serialized]);
+    }
+    
+    /**
+     * Convert the phone instance into a string representation.
+     *
+     * @return array
+     */
+    public function __serialize()
+    {
+        return ['number' => $this->formatE164()];
+    }
+
+    /**
+     * Reconstructs the phone instance from a string representation.
+     *
+     * @param array $serialized
+     */
+    public function __unserialize(array $serialized)
+    {
         $this->lib = PhoneNumberUtil::getInstance();
-        $this->number = $serialized;
+        $this->number = $serialized['number'];
         $this->country = $this->lib->getRegionCodeForNumber($this->getPhoneNumberInstance());
     }
 

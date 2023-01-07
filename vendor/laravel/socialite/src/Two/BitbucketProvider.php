@@ -3,6 +3,7 @@
 namespace Laravel\Socialite\Two;
 
 use Exception;
+use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Arr;
 
 class BitbucketProvider extends AbstractProvider implements ProviderInterface
@@ -42,13 +43,13 @@ class BitbucketProvider extends AbstractProvider implements ProviderInterface
      */
     protected function getUserByToken($token)
     {
-        $userUrl = 'https://api.bitbucket.org/2.0/user?access_token='.$token;
-
-        $response = $this->getHttpClient()->get($userUrl);
+        $response = $this->getHttpClient()->get('https://api.bitbucket.org/2.0/user', [
+            RequestOptions::QUERY => ['access_token' => $token],
+        ]);
 
         $user = json_decode($response->getBody(), true);
 
-        if (in_array('email', $this->scopes)) {
+        if (in_array('email', $this->scopes, true)) {
             $user['email'] = $this->getEmailByToken($token);
         }
 
@@ -74,7 +75,7 @@ class BitbucketProvider extends AbstractProvider implements ProviderInterface
         $emails = json_decode($response->getBody(), true);
 
         foreach ($emails['values'] as $email) {
-            if ($email['type'] == 'email' && $email['is_primary'] && $email['is_confirmed']) {
+            if ($email['type'] === 'email' && $email['is_primary'] && $email['is_confirmed']) {
                 return $email['email'];
             }
         }
@@ -103,22 +104,11 @@ class BitbucketProvider extends AbstractProvider implements ProviderInterface
     public function getAccessToken($code)
     {
         $response = $this->getHttpClient()->post($this->getTokenUrl(), [
-            'auth' => [$this->clientId, $this->clientSecret],
-            'headers' => ['Accept' => 'application/json'],
-            'form_params' => $this->getTokenFields($code),
+            RequestOptions::AUTH => [$this->clientId, $this->clientSecret],
+            RequestOptions::HEADERS => ['Accept' => 'application/json'],
+            RequestOptions::FORM_PARAMS => $this->getTokenFields($code),
         ]);
 
         return json_decode($response->getBody(), true)['access_token'];
-    }
-
-    /**
-     * Get the POST fields for the token request.
-     *
-     * @param  string  $code
-     * @return array
-     */
-    protected function getTokenFields($code)
-    {
-        return parent::getTokenFields($code) + ['grant_type' => 'authorization_code'];
     }
 }

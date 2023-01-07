@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Closure;
 use Exception;
 use Facebook\WebDriver\Exception\NoSuchElementException;
+use Facebook\WebDriver\Exception\ScriptTimeoutException;
 use Facebook\WebDriver\Exception\TimeOutException;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Illuminate\Support\Arr;
@@ -18,7 +19,7 @@ trait WaitsForElements
      *
      * @param  string  $selector
      * @param  \Closure  $callback
-     * @param  int  $seconds
+     * @param  int|null  $seconds
      * @return $this
      *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
@@ -29,10 +30,10 @@ trait WaitsForElements
     }
 
     /**
-     * Wait for the given selector to be visible.
+     * Wait for the given selector to become visible.
      *
      * @param  string  $selector
-     * @param  int  $seconds
+     * @param  int|null  $seconds
      * @return $this
      *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
@@ -50,7 +51,7 @@ trait WaitsForElements
      * Wait for the given selector to be removed.
      *
      * @param  string  $selector
-     * @param  int  $seconds
+     * @param  int|null  $seconds
      * @return $this
      *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
@@ -74,7 +75,7 @@ trait WaitsForElements
      * Wait for the given text to be removed.
      *
      * @param  string  $text
-     * @param  int  $seconds
+     * @param  int|null  $seconds
      * @return $this
      *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
@@ -91,10 +92,10 @@ trait WaitsForElements
     }
 
     /**
-     * Wait for the given text to be visible.
+     * Wait for the given text to become visible.
      *
      * @param  array|string  $text
-     * @param  int  $seconds
+     * @param  int|null  $seconds
      * @return $this
      *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
@@ -111,10 +112,29 @@ trait WaitsForElements
     }
 
     /**
-     * Wait for the given link to be visible.
+     * Wait for the given text to become visible inside the given selector.
+     *
+     * @param  string  $selector
+     * @param  array|string  $text
+     * @param  int|null  $seconds
+     * @return $this
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
+     */
+    public function waitForTextIn($selector, $text, $seconds = null)
+    {
+        $message = 'Waited %s seconds for text "'.$text.'" in selector '.$selector;
+
+        return $this->waitUsing($seconds, 100, function () use ($selector, $text) {
+            return $this->assertSeeIn($selector, $text);
+        }, $message);
+    }
+
+    /**
+     * Wait for the given link to become visible.
      *
      * @param  string  $link
-     * @param  int  $seconds
+     * @param  int|null  $seconds
      * @return $this
      *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
@@ -129,10 +149,22 @@ trait WaitsForElements
     }
 
     /**
+     * Wait for an input field to become visible.
+     *
+     * @param  string  $field
+     * @param  int|null  $seconds
+     * @return $this
+     */
+    public function waitForInput($field, $seconds = null)
+    {
+        return $this->waitFor("input[name='{$field}'], textarea[name='{$field}'], select[name='{$field}']", $seconds);
+    }
+
+    /**
      * Wait for the given location.
      *
      * @param  string  $path
-     * @param  int  $seconds
+     * @param  int|null  $seconds
      * @return $this
      *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
@@ -141,7 +173,9 @@ trait WaitsForElements
     {
         $message = $this->formatTimeOutMessage('Waited %s seconds for location', $path);
 
-        return $this->waitUntil("window.location.pathname == '{$path}'", $seconds, $message);
+        return Str::startsWith($path, ['http://', 'https://'])
+            ? $this->waitUntil('`${location.protocol}//${location.host}${location.pathname}` == \''.$path.'\'', $seconds, $message)
+            : $this->waitUntil("window.location.pathname == '{$path}'", $seconds, $message);
     }
 
     /**
@@ -149,7 +183,7 @@ trait WaitsForElements
      *
      * @param  string  $route
      * @param  array  $parameters
-     * @param  int  $seconds
+     * @param  int|null  $seconds
      * @return $this
      *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
@@ -160,11 +194,47 @@ trait WaitsForElements
     }
 
     /**
+     * Wait until an element is enabled.
+     *
+     * @param  string  $selector
+     * @param  int|null  $seconds
+     * @return $this
+     */
+    public function waitUntilEnabled($selector, $seconds = null)
+    {
+        $message = $this->formatTimeOutMessage('Waited %s seconds for element to be enabled', $selector);
+
+        $this->waitUsing($seconds, 100, function () use ($selector) {
+            return $this->resolver->findOrFail($selector)->isEnabled();
+        }, $message);
+
+        return $this;
+    }
+
+    /**
+     * Wait until an element is disabled.
+     *
+     * @param  string  $selector
+     * @param  int|null  $seconds
+     * @return $this
+     */
+    public function waitUntilDisabled($selector, $seconds = null)
+    {
+        $message = $this->formatTimeOutMessage('Waited %s seconds for element to be disabled', $selector);
+
+        $this->waitUsing($seconds, 100, function () use ($selector) {
+            return ! $this->resolver->findOrFail($selector)->isEnabled();
+        }, $message);
+
+        return $this;
+    }
+
+    /**
      * Wait until the given script returns true.
      *
      * @param  string  $script
-     * @param  int  $seconds
-     * @param  string  $message
+     * @param  int|null  $seconds
+     * @param  string|null  $message
      * @return $this
      *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
@@ -190,6 +260,7 @@ trait WaitsForElements
      * @param  string  $key
      * @param  string  $value
      * @param  string|null  $componentSelector
+     * @param  int|null  $seconds
      * @return $this
      */
     public function waitUntilVue($key, $value, $componentSelector = null, $seconds = null)
@@ -207,6 +278,7 @@ trait WaitsForElements
      * @param  string  $key
      * @param  string  $value
      * @param  string|null  $componentSelector
+     * @param  int|null  $seconds
      * @return $this
      */
     public function waitUntilVueIsNot($key, $value, $componentSelector = null, $seconds = null)
@@ -221,7 +293,7 @@ trait WaitsForElements
     /**
      * Wait for a JavaScript dialog to open.
      *
-     * @param  int  $seconds
+     * @param  int|null  $seconds
      * @return $this
      */
     public function waitForDialog($seconds = null)
@@ -238,8 +310,8 @@ trait WaitsForElements
     /**
      * Wait for the current page to reload.
      *
-     * @param  \Closure  $callback
-     * @param  int  $seconds
+     * @param  \Closure|null  $callback
+     * @param  int|null  $seconds
      * @return $this
      *
      * @throws \Facebook\WebDriver\Exception\TimeOutException
@@ -260,9 +332,54 @@ trait WaitsForElements
     }
 
     /**
+     * Click an element and wait for the page to reload.
+     *
+     * @param  string|null  $selector
+     * @return $this
+     */
+    public function clickAndWaitForReload($selector = null)
+    {
+        return $this->waitForReload(function ($browser) use ($selector) {
+            $browser->click($selector);
+        });
+    }
+
+    /**
+     * Wait for the given event type to occur on a target.
+     *
+     * @param  string  $type
+     * @param  string|null  $target
+     * @param  int|null  $seconds
+     * @return $this
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
+     */
+    public function waitForEvent($type, $target = null, $seconds = null)
+    {
+        $seconds = is_null($seconds) ? static::$waitSeconds : $seconds;
+
+        if ($target !== 'document' && $target !== 'window') {
+            $target = $this->resolver->findOrFail($target ?? '');
+        }
+
+        $this->driver->manage()->timeouts()->setScriptTimeout($seconds);
+
+        try {
+            $this->driver->executeAsyncScript(
+                'eval(arguments[0]).addEventListener(arguments[1], () => arguments[2](), { once: true });',
+                [$target, $type]
+            );
+        } catch (ScriptTimeoutException $e) {
+            throw new TimeoutException("Waited {$seconds} seconds for event [{$type}].");
+        }
+
+        return $this;
+    }
+
+    /**
      * Wait for the given callback to be true.
      *
-     * @param  int  $seconds
+     * @param  int|null  $seconds
      * @param  int  $interval
      * @param  \Closure  $callback
      * @param  string|null  $message

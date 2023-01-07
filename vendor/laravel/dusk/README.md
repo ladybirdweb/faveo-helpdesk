@@ -1,10 +1,10 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-dusk.svg"></p>
+<p align="center"><img src="/art/logo.svg" alt="Logo Laravel Dusk"></p>
 
 <p align="center">
 <a href="https://github.com/laravel/dusk/actions"><img src="https://github.com/laravel/dusk/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/dusk"><img src="https://poser.pugx.org/laravel/dusk/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/dusk"><img src="https://poser.pugx.org/laravel/dusk/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/dusk"><img src="https://poser.pugx.org/laravel/dusk/license.svg" alt="License"></a>
+<a href="https://packagist.org/packages/laravel/dusk"><img src="https://img.shields.io/packagist/dt/laravel/dusk" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/dusk"><img src="https://img.shields.io/packagist/v/laravel/dusk" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/dusk"><img src="https://img.shields.io/packagist/l/laravel/dusk" alt="License"></a>
 </p>
 
 ## Introduction

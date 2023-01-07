@@ -12,14 +12,14 @@
 namespace Mremi\UrlShortener\Provider\Bitly;
 
 /**
- * Authentication interface
+ * Authentication interface.
  *
  * @author Rémi Marseille <marseille.remi@gmail.com>
  */
 interface AuthenticationInterface
 {
     /**
-     * Calls Bit.ly API to get an access token
+     * Calls Bit.ly API to get an access token.
      *
      * @return string
      */

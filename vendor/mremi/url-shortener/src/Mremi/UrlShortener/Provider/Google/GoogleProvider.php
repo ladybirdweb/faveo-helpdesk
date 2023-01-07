@@ -11,14 +11,13 @@
 
 namespace Mremi\UrlShortener\Provider\Google;
 
-use Guzzle\Http\Client;
-
+use GuzzleHttp\Client;
 use Mremi\UrlShortener\Exception\InvalidApiResponseException;
 use Mremi\UrlShortener\Model\LinkInterface;
 use Mremi\UrlShortener\Provider\UrlShortenerProviderInterface;
 
 /**
- * Google provider class
+ * Google provider class.
  *
  * @author Rémi Marseille <marseille.remi@gmail.com>
  */
@@ -35,12 +34,12 @@ class GoogleProvider implements UrlShortenerProviderInterface
     private $options;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $apiKey  A Google API key, optional
      * @param array  $options An array of options used to do the shorten/expand request
      */
-    public function __construct($apiKey = null, array $options = array())
+    public function __construct($apiKey = null, array $options = [])
     {
         $this->apiKey  = $apiKey;
         $this->options = $options;
@@ -61,13 +60,16 @@ class GoogleProvider implements UrlShortenerProviderInterface
     {
         $client = $this->createClient();
 
-        $request = $client->post($this->getUri(), array(
-            'Content-Type' => 'application/json'
-        ), json_encode(array(
-            'longUrl' => $link->getLongUrl(),
-        )), $this->options);
+        $response = $client->post($this->getUri(), array_merge(
+            [
+                'json' => [
+                    'longUrl' => $link->getLongUrl(),
+                ],
+            ],
+            $this->options
+        ));
 
-        $response = $this->validate($request->send()->getBody(true));
+        $response = $this->validate($response->getBody()->getContents());
 
         $link->setShortUrl($response->id);
     }
@@ -79,11 +81,11 @@ class GoogleProvider implements UrlShortenerProviderInterface
     {
         $client = $this->createClient();
 
-        $request = $client->get($this->getUri(array(
+        $response = $client->get($this->getUri([
             'shortUrl' => $link->getShortUrl(),
-        )), array(), $this->options);
+        ]), $this->options);
 
-        $response = $this->validate($request->send()->getBody(true), true);
+        $response = $this->validate($response->getBody()->getContents(), true);
 
         $link->setLongUrl($response->longUrl);
     }
@@ -98,34 +100,36 @@ class GoogleProvider implements UrlShortenerProviderInterface
      */
     protected function createClient()
     {
-        return new Client('https://www.googleapis.com/urlshortener/v1/url');
+        return new Client([
+            'base_uri' => 'https://www.googleapis.com/urlshortener/v1/url',
+        ]);
     }
 
     /**
-     * Gets the URI
+     * Gets the URI.
      *
      * @param array $parameters An array of parameters, optional
      *
-     * @return null|string
+     * @return string|null
      */
-    private function getUri(array $parameters = array())
+    private function getUri(array $parameters = [])
     {
         if ($this->apiKey) {
-            $parameters = array_merge($parameters, array('key' => $this->apiKey));
+            $parameters = array_merge($parameters, ['key' => $this->apiKey]);
         }
 
         if (0 === count($parameters)) {
-            return null;
+            return;
         }
 
         return sprintf('?%s', http_build_query($parameters));
     }
 
     /**
-     * Validates the Google's response and returns it whether the status code is 200
+     * Validates the Google's response and returns it whether the status code is 200.
      *
-     * @param string  $apiRawResponse An API response, as it returned
-     * @param boolean $checkStatus    TRUE whether the status code has to be checked, default FALSE
+     * @param string $apiRawResponse An API response, as it returned
+     * @param bool   $checkStatus    TRUE whether the status code has to be checked, default FALSE
      *
      * @return object
      *

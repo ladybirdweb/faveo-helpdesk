@@ -4,7 +4,6 @@ namespace Laravel\Socialite\One;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use InvalidArgumentException;
 use Laravel\Socialite\Contracts\Provider as ProviderContract;
 use League\OAuth1\Client\Credentials\TokenCredentials;
 use League\OAuth1\Client\Server\Server;
@@ -64,12 +63,12 @@ abstract class AbstractProvider implements ProviderContract
      *
      * @return \Laravel\Socialite\One\User
      *
-     * @throws \InvalidArgumentException
+     * @throws \Laravel\Socialite\One\MissingVerifierException
      */
     public function user()
     {
         if (! $this->hasNecessaryVerifier()) {
-            throw new InvalidArgumentException('Invalid request. Missing OAuth verifier.');
+            throw new MissingVerifierException('Invalid request. Missing OAuth verifier.');
         }
 
         $token = $this->getToken();
@@ -129,6 +128,10 @@ abstract class AbstractProvider implements ProviderContract
     {
         $temp = $this->request->session()->get('oauth.temp');
 
+        if (! $temp) {
+            throw new MissingTemporaryCredentialsException('Missing temporary OAuth credentials.');
+        }
+
         return $this->server->getTokenCredentials(
             $temp, $this->request->get('oauth_token'), $this->request->get('oauth_verifier')
         );
@@ -141,7 +144,7 @@ abstract class AbstractProvider implements ProviderContract
      */
     protected function hasNecessaryVerifier()
     {
-        return $this->request->has('oauth_token') && $this->request->has('oauth_verifier');
+        return $this->request->has(['oauth_token', 'oauth_verifier']);
     }
 
     /**

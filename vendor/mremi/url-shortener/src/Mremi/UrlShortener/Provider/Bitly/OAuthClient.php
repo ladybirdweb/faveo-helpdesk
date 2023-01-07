@@ -11,10 +11,10 @@
 
 namespace Mremi\UrlShortener\Provider\Bitly;
 
-use Guzzle\Http\Client;
+use GuzzleHttp\Client;
 
 /**
- * OAuth client class
+ * OAuth client class.
  *
  * @author Rémi Marseille <marseille.remi@gmail.com>
  */
@@ -31,7 +31,7 @@ class OAuthClient implements AuthenticationInterface
     private $password;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $username A valid Bit.ly username
      * @param string $password A valid Bit.ly password
@@ -47,15 +47,17 @@ class OAuthClient implements AuthenticationInterface
      */
     public function getAccessToken()
     {
-        $client = new Client('https://api-ssl.bitly.com/oauth/access_token');
+        $client = new Client([
+            'base_uri' => 'https://api-ssl.bitly.com/oauth/access_token',
+        ]);
 
-        $request = $client->post(null, null, null, array(
-            'auth' => array(
+        $response = $client->post(null, [
+            'auth' => [
                 $this->username,
                 $this->password,
-            ),
-        ));
+            ],
+        ]);
 
-        return $request->send()->getBody(true);
+        return $response->getBody()->getContents();
     }
 }

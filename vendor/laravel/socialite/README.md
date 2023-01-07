@@ -1,10 +1,10 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-socialite.svg"></p>
+<p align="center"><img src="/art/logo.svg" alt="Logo Laravel Socialite"></p>
 
 <p align="center">
 <a href="https://github.com/laravel/socialite/actions"><img src="https://github.com/laravel/socialite/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/socialite"><img src="https://poser.pugx.org/laravel/socialite/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/socialite"><img src="https://poser.pugx.org/laravel/socialite/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/socialite"><img src="https://poser.pugx.org/laravel/socialite/license.svg" alt="License"></a>
+<a href="https://packagist.org/packages/laravel/socialite"><img src="https://img.shields.io/packagist/dt/laravel/socialite" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/socialite"><img src="https://img.shields.io/packagist/v/laravel/socialite" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/socialite"><img src="https://img.shields.io/packagist/l/laravel/socialite" alt="License"></a>
 </p>
 
 ## Introduction

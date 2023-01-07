@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9da6744efcb5435630815fb416a6752c
+class ComposerStaticInite3a664ccc4def6142d1c80482606ee61
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -13,11 +13,11 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
-        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
+        '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
+        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
@@ -92,7 +92,10 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '8a9dc1de0ca7e01f3e08231539562f61' => __DIR__ . '/..' . '/aws/aws-sdk-php/src/functions.php',
+        '4a1f389d6ce373bda9e57857d3b61c84' => __DIR__ . '/..' . '/barryvdh/laravel-debugbar/src/helpers.php',
         'ed962a97bd972bc82007176b647d4e36' => __DIR__ . '/..' . '/facade/ignition/src/helpers.php',
+        '265b4faa2b3a9766332744949e83bf97' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Collections/helpers.php',
+        'c7a3c339e7e14b60e06a2d7fcce9476b' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Events/functions.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
         'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
@@ -210,6 +213,7 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         'M' => 
         array (
             'MyCLabs\\Enum\\' => 13,
+            'Mremi\\UrlShortener\\' => 19,
             'Monolog\\' => 8,
             'Matrix\\' => 7,
             'Maatwebsite\\Excel\\' => 18,
@@ -225,6 +229,7 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
             'Laravel\\Ui\\' => 11,
             'Laravel\\Tinker\\' => 15,
             'Laravel\\Socialite\\' => 18,
+            'Laravel\\SerializableClosure\\' => 28,
             'Laravel\\Dusk\\' => 13,
         ),
         'J' => 
@@ -234,6 +239,7 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         'I' => 
         array (
             'Intervention\\Image\\' => 19,
+            'Illuminate\\Support\\' => 19,
             'Illuminate\\Foundation\\Auth\\' => 27,
             'Illuminate\\' => 11,
         ),
@@ -242,13 +248,13 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
+            'GrahamCampbell\\ResultType\\' => 26,
             'Gitonomy\\Git\\' => 13,
             'Giggsey\\Locale\\' => 15,
         ),
         'F' => 
         array (
             'Fruitcake\\Cors\\' => 15,
-            'Fideloper\\Proxy\\' => 16,
             'Faker\\' => 6,
             'Facebook\\WebDriver\\' => 19,
             'Facade\\Ignition\\' => 16,
@@ -270,7 +276,10 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
             'Doctrine\\Common\\Cache\\' => 22,
             'Doctrine\\Common\\' => 16,
             'DeepCopy\\' => 9,
+            'DebugBar\\' => 9,
             'DaveJamesMiller\\Breadcrumbs\\' => 28,
+            'Database\\Seeders\\' => 17,
+            'Database\\Factories\\' => 19,
         ),
         'C' => 
         array (
@@ -286,6 +295,7 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
             'Bugsnag\\BugsnagLaravel\\' => 23,
             'Bugsnag\\' => 8,
             'Brick\\Math\\' => 11,
+            'Barryvdh\\Debugbar\\' => 18,
         ),
         'A' => 
         array (
@@ -303,8 +313,8 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
         ),
         'libphonenumber\\' => 
         array (
@@ -492,8 +502,8 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            1 => __DIR__ . '/..' . '/psr/http-factory/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -551,6 +561,10 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         array (
             0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
         ),
+        'Mremi\\UrlShortener\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mremi/url-shortener/src/Mremi/UrlShortener',
+        ),
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
@@ -599,6 +613,10 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         array (
             0 => __DIR__ . '/..' . '/laravel/socialite/src',
         ),
+        'Laravel\\SerializableClosure\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel/serializable-closure/src',
+        ),
         'Laravel\\Dusk\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/dusk/src',
@@ -610,6 +628,11 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         'Intervention\\Image\\' => 
         array (
             0 => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image',
+        ),
+        'Illuminate\\Support\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Macroable',
+            1 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Collections',
         ),
         'Illuminate\\Foundation\\Auth\\' => 
         array (
@@ -631,6 +654,10 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
+        'GrahamCampbell\\ResultType\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/graham-campbell/result-type/src',
+        ),
         'Gitonomy\\Git\\' => 
         array (
             0 => __DIR__ . '/..' . '/gitonomy/gitlib/src/Gitonomy/Git',
@@ -642,10 +669,6 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         'Fruitcake\\Cors\\' => 
         array (
             0 => __DIR__ . '/..' . '/fruitcake/laravel-cors/src',
-        ),
-        'Fideloper\\Proxy\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/fideloper/proxy/src',
         ),
         'Faker\\' => 
         array (
@@ -707,9 +730,21 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
+        'DebugBar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/maximebf/debugbar/src/DebugBar',
+        ),
         'DaveJamesMiller\\Breadcrumbs\\' => 
         array (
             0 => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src',
+        ),
+        'Database\\Seeders\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/database/seeders',
+        ),
+        'Database\\Factories\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/database/factories',
         ),
         'Cron\\' => 
         array (
@@ -747,6 +782,10 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
         ),
+        'Barryvdh\\Debugbar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/barryvdh/laravel-debugbar/src',
+        ),
         'Aws\\' => 
         array (
             0 => __DIR__ . '/..' . '/aws/aws-sdk-php/src',
@@ -778,10 +817,6 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         ),
         'M' => 
         array (
-            'Mremi\\UrlShortener' => 
-            array (
-                0 => __DIR__ . '/..' . '/mremi/url-shortener/src',
-            ),
             'Mockery' => 
             array (
                 0 => __DIR__ . '/..' . '/mockery/mockery/library',
@@ -792,17 +827,6 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
             'HTMLPurifier' => 
             array (
                 0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',
-            ),
-        ),
-        'G' => 
-        array (
-            'Guzzle\\Tests' => 
-            array (
-                0 => __DIR__ . '/..' . '/guzzle/guzzle/tests',
-            ),
-            'Guzzle' => 
-            array (
-                0 => __DIR__ . '/..' . '/guzzle/guzzle/src',
             ),
         ),
         'F' => 
@@ -873,6 +897,7 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         'AddForeignKeysToTicketsTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140454_add_foreign_keys_to_tickets_table.php',
         'AddForeignKeysToUserAssignOrganizationTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140454_add_foreign_keys_to_user_assign_organization_table.php',
         'AddForeignKeysToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140454_add_foreign_keys_to_users_table.php',
+        'AddUuidToFailedJobsTable' => __DIR__ . '/../..' . '/database/migrations/2023_01_07_000000_add_uuid_to_failed_jobs_table.php',
         'Adobe_Font_Metrics' => __DIR__ . '/..' . '/phenx/php-font-lib/classes/Adobe_Font_Metrics.php',
         'AlterEmailsTableMakeUsernameColumnNullable' => __DIR__ . '/../..' . '/database/migrations/2018_08_13_075015_alter_emails_table_make_username_column_nullable.php',
         'AlterTicketSourceTable' => __DIR__ . '/../..' . '/database/migrations/2016_08_16_104539_alter_ticket_source_table.php',
@@ -982,7 +1007,10 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         'DOMPDF' => __DIR__ . '/..' . '/dompdf/dompdf/include/dompdf.cls.php',
         'DOMPDF_Exception' => __DIR__ . '/..' . '/dompdf/dompdf/include/dompdf_exception.cls.php',
         'DOMPDF_Image_Exception' => __DIR__ . '/..' . '/dompdf/dompdf/include/dompdf_image_exception.cls.php',
-        'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
+        'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
+        'Database\\Seeders\\OutboundMailSeeder' => __DIR__ . '/../..' . '/database/seeders/OutboundMailSeeder.php',
+        'Database\\Seeders\\TicketSourceSeeder' => __DIR__ . '/../..' . '/database/seeders/TicketSourceSeeder.php',
+        'Database\\Seeders\\UserSeeder' => __DIR__ . '/../..' . '/database/seeders/UserSeeder.php',
         'Encoding_Map' => __DIR__ . '/..' . '/phenx/php-font-lib/classes/Encoding_Map.php',
         'Fixed_Positioner' => __DIR__ . '/..' . '/dompdf/dompdf/include/fixed_positioner.cls.php',
         'Font' => __DIR__ . '/..' . '/phenx/php-font-lib/classes/Font.php',
@@ -1116,7 +1144,6 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         'Null_Frame_Decorator' => __DIR__ . '/..' . '/dompdf/dompdf/include/null_frame_decorator.cls.php',
         'Null_Frame_Reflower' => __DIR__ . '/..' . '/dompdf/dompdf/include/null_frame_reflower.cls.php',
         'Null_Positioner' => __DIR__ . '/..' . '/dompdf/dompdf/include/null_positioner.cls.php',
-        'OutboundMailSeeder' => __DIR__ . '/../..' . '/database/seeds/OutboundMailSeeder.php',
         'PDFLib_Adapter' => __DIR__ . '/..' . '/dompdf/dompdf/include/pdflib_adapter.cls.php',
         'PHPUnit\\Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Exception.php',
         'PHPUnit\\Framework\\ActualValueIsNotAnObjectException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Exception/ActualValueIsNotAnObjectException.php',
@@ -1773,9 +1800,7 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
         'TheSeer\\Tokenizer\\TokenCollectionException' => __DIR__ . '/..' . '/theseer/tokenizer/src/TokenCollectionException.php',
         'TheSeer\\Tokenizer\\Tokenizer' => __DIR__ . '/..' . '/theseer/tokenizer/src/Tokenizer.php',
         'TheSeer\\Tokenizer\\XMLSerializer' => __DIR__ . '/..' . '/theseer/tokenizer/src/XMLSerializer.php',
-        'TicketSourceSeeder' => __DIR__ . '/../..' . '/database/seeds/TicketSourceSeeder.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
-        'UserSeeder' => __DIR__ . '/../..' . '/database/seeds/UserSeeder.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
         'Version1079table' => __DIR__ . '/../..' . '/database/migrations/2016_06_28_141613_version1079table.php',
     );
@@ -1783,10 +1808,10 @@ class ComposerStaticInit9da6744efcb5435630815fb416a6752c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9da6744efcb5435630815fb416a6752c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9da6744efcb5435630815fb416a6752c::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit9da6744efcb5435630815fb416a6752c::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit9da6744efcb5435630815fb416a6752c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite3a664ccc4def6142d1c80482606ee61::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite3a664ccc4def6142d1c80482606ee61::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInite3a664ccc4def6142d1c80482606ee61::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInite3a664ccc4def6142d1c80482606ee61::$classMap;
 
         }, null, ClassLoader::class);
     }

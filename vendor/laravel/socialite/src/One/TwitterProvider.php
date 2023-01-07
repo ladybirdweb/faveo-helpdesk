@@ -2,8 +2,6 @@
 
 namespace Laravel\Socialite\One;
 
-use InvalidArgumentException;
-
 class TwitterProvider extends AbstractProvider
 {
     /**
@@ -12,7 +10,7 @@ class TwitterProvider extends AbstractProvider
     public function user()
     {
         if (! $this->hasNecessaryVerifier()) {
-            throw new InvalidArgumentException('Invalid request. Missing OAuth verifier.');
+            throw new MissingVerifierException('Invalid request. Missing OAuth verifier.');
         }
 
         $user = $this->server->getUserDetails($token = $this->getToken(), $this->shouldBypassCache($token->getIdentifier(), $token->getSecret()));
@@ -33,5 +31,16 @@ class TwitterProvider extends AbstractProvider
             'avatar' => $user->imageUrl,
             'avatar_original' => str_replace('_normal', '', $user->imageUrl),
         ]);
+    }
+
+    /**
+     * Set the access level the application should request to the user account.
+     *
+     * @param  string  $scope
+     * @return void
+     */
+    public function scope(string $scope)
+    {
+        $this->server->setApplicationScope($scope);
     }
 }

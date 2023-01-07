@@ -3,6 +3,7 @@
 namespace Laravel\Socialite\Two;
 
 use Exception;
+use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Arr;
 
 class GithubProvider extends AbstractProvider implements ProviderInterface
@@ -43,7 +44,7 @@ class GithubProvider extends AbstractProvider implements ProviderInterface
 
         $user = json_decode($response->getBody(), true);
 
-        if (in_array('user:email', $this->scopes)) {
+        if (in_array('user:email', $this->scopes, true)) {
             $user['email'] = $this->getEmailByToken($token);
         }
 
@@ -92,13 +93,13 @@ class GithubProvider extends AbstractProvider implements ProviderInterface
     /**
      * Get the default options for an HTTP request.
      *
-     * @param string $token
+     * @param  string  $token
      * @return array
      */
     protected function getRequestOptions($token)
     {
         return [
-            'headers' => [
+            RequestOptions::HEADERS => [
                 'Accept' => 'application/vnd.github.v3+json',
                 'Authorization' => 'token '.$token,
             ],

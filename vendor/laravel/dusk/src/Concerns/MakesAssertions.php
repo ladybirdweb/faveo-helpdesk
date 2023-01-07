@@ -10,7 +10,14 @@ use PHPUnit\Framework\Assert as PHPUnit;
 trait MakesAssertions
 {
     /**
-     * Assert that the page title is the given value.
+     * Indicates the browser has made an assertion about the source code of the page.
+     *
+     * @var bool
+     */
+    public $madeSourceAssertion = false;
+
+    /**
+     * Assert that the page title matches the given text.
      *
      * @param  string  $title
      * @return $this
@@ -26,7 +33,7 @@ trait MakesAssertions
     }
 
     /**
-     * Assert that the page title contains the given value.
+     * Assert that the page title contains the given text.
      *
      * @param  string  $title
      * @return $this
@@ -35,16 +42,16 @@ trait MakesAssertions
     {
         PHPUnit::assertTrue(
             Str::contains($this->driver->getTitle(), $title),
-            "Did not see expected value [{$title}] within title [{$this->driver->getTitle()}]."
+            "Did not see expected text [{$title}] within title [{$this->driver->getTitle()}]."
         );
 
         return $this;
     }
 
     /**
-     * Assert that the given cookie is present.
+     * Assert that the given encrypted cookie is present.
      *
-     * @param  string $name
+     * @param  string  $name
      * @param  bool  $decrypt
      * @return $this
      */
@@ -61,7 +68,7 @@ trait MakesAssertions
     }
 
     /**
-     * Assert that the given plain cookie is present.
+     * Assert that the given unencrypted cookie is present.
      *
      * @param  string  $name
      * @return $this
@@ -72,9 +79,9 @@ trait MakesAssertions
     }
 
     /**
-     * Assert that the given cookie is not present.
+     * Assert that the given encrypted cookie is not present.
      *
-     * @param  string $name
+     * @param  string  $name
      * @param  bool  $decrypt
      * @return $this
      */
@@ -91,7 +98,7 @@ trait MakesAssertions
     }
 
     /**
-     * Assert that the given plain cookie is not present.
+     * Assert that the given unencrypted cookie is not present.
      *
      * @param  string  $name
      * @return $this
@@ -114,7 +121,8 @@ trait MakesAssertions
         $actual = $decrypt ? $this->cookie($name) : $this->plainCookie($name);
 
         PHPUnit::assertEquals(
-            $value, $actual,
+            $value,
+            $actual,
             "Cookie [{$name}] had value [{$actual}], but expected [{$value}]."
         );
 
@@ -122,7 +130,7 @@ trait MakesAssertions
     }
 
     /**
-     * Assert that a cookie has a given value.
+     * Assert that an unencrypted cookie has a given value.
      *
      * @param  string  $name
      * @param  string  $value
@@ -134,7 +142,7 @@ trait MakesAssertions
     }
 
     /**
-     * Assert that the given text appears on the page.
+     * Assert that the given text is present on the page.
      *
      * @param  string  $text
      * @return $this
@@ -145,7 +153,7 @@ trait MakesAssertions
     }
 
     /**
-     * Assert that the given text does not appear on the page.
+     * Assert that the given text is not present on the page.
      *
      * @param  string  $text
      * @return $this
@@ -156,7 +164,7 @@ trait MakesAssertions
     }
 
     /**
-     * Assert that the given text appears within the given selector.
+     * Assert that the given text is present within the selector.
      *
      * @param  string  $selector
      * @param  string  $text
@@ -177,7 +185,7 @@ trait MakesAssertions
     }
 
     /**
-     * Assert that the given text does not appear within the given selector.
+     * Assert that the given text is not present within the selector.
      *
      * @param  string  $selector
      * @param  string  $text
@@ -198,6 +206,66 @@ trait MakesAssertions
     }
 
     /**
+     * Assert that any text is present within the selector.
+     *
+     * @param  string  $selector
+     * @return $this
+     */
+    public function assertSeeAnythingIn($selector)
+    {
+        $fullSelector = $this->resolver->format($selector);
+
+        $element = $this->resolver->findOrFail($selector);
+
+        PHPUnit::assertTrue(
+            $element->getText() !== '',
+            "Saw unexpected text [''] within element [{$fullSelector}]."
+        );
+
+        return $this;
+    }
+
+    /**
+     * Assert that no text is present within the selector.
+     *
+     * @param  string  $selector
+     * @return $this
+     */
+    public function assertSeeNothingIn($selector)
+    {
+        $fullSelector = $this->resolver->format($selector);
+
+        $element = $this->resolver->findOrFail($selector);
+
+        PHPUnit::assertTrue(
+            $element->getText() === '',
+            "Did not see expected text [''] within element [{$fullSelector}]."
+        );
+
+        return $this;
+    }
+
+    /**
+     * Assert that the given JavaScript expression evaluates to the given value.
+     *
+     * @param  string  $expression
+     * @param  mixed  $expected
+     * @return $this
+     */
+    public function assertScript($expression, $expected = true)
+    {
+        $expression = Str::start($expression, 'return ');
+
+        PHPUnit::assertEquals(
+            $expected,
+            $this->driver->executeScript($expression),
+            "JavaScript expression [{$expression}] mismatched."
+        );
+
+        return $this;
+    }
+
+    /**
      * Assert that the given source code is present on the page.
      *
      * @param  string  $code
@@ -205,9 +273,11 @@ trait MakesAssertions
      */
     public function assertSourceHas($code)
     {
+        $this->madeSourceAssertion = true;
+
         PHPUnit::assertTrue(
             Str::contains($this->driver->getPageSource(), $code),
-            "Did not find expected source code [{$code}]"
+            "Did not find expected source code [{$code}]."
         );
 
         return $this;
@@ -221,16 +291,18 @@ trait MakesAssertions
      */
     public function assertSourceMissing($code)
     {
+        $this->madeSourceAssertion = true;
+
         PHPUnit::assertFalse(
             Str::contains($this->driver->getPageSource(), $code),
-            "Found unexpected source code [{$code}]"
+            "Found unexpected source code [{$code}]."
         );
 
         return $this;
     }
 
     /**
-     * Assert that the given link is visible.
+     * Assert that the given link is present on the page.
      *
      * @param  string  $link
      * @return $this
@@ -252,7 +324,7 @@ trait MakesAssertions
     }
 
     /**
-     * Assert that the given link is not visible.
+     * Assert that the given link is not present on the page.
      *
      * @param  string  $link
      * @return $this
@@ -283,10 +355,12 @@ trait MakesAssertions
     {
         $this->ensurejQueryIsAvailable();
 
-        $selector = addslashes(trim($this->resolver->format("a:contains('{$link}')")));
+        $selector = addslashes(trim($this->resolver->format('a')));
+
+        $link = str_replace("'", "\\\\'", $link);
 
         $script = <<<JS
-            var link = jQuery.find("{$selector}");
+            var link = jQuery.find(`{$selector}:contains('{$link}')`);
             return link.length > 0 && jQuery(link).is(':visible');
 JS;
 
@@ -294,7 +368,7 @@ JS;
     }
 
     /**
-     * Assert that the given input or text area contains the given value.
+     * Assert that the given input field has the given value.
      *
      * @param  string  $field
      * @param  string  $value
@@ -303,7 +377,8 @@ JS;
     public function assertInputValue($field, $value)
     {
         PHPUnit::assertEquals(
-            $value, $this->inputValue($field),
+            $value,
+            $this->inputValue($field),
             "Expected value [{$value}] for the [{$field}] input does not equal the actual value [{$this->inputValue($field)}]."
         );
 
@@ -311,7 +386,7 @@ JS;
     }
 
     /**
-     * Assert that the given input or text area does not contain the given value.
+     * Assert that the given input field does not have the given value.
      *
      * @param  string  $field
      * @param  string  $value
@@ -320,7 +395,8 @@ JS;
     public function assertInputValueIsNot($field, $value)
     {
         PHPUnit::assertNotEquals(
-            $value, $this->inputValue($field),
+            $value,
+            $this->inputValue($field),
             "Value [{$value}] for the [{$field}] input should not equal the actual value."
         );
 
@@ -343,10 +419,40 @@ JS;
     }
 
     /**
-     * Assert that the given checkbox field is checked.
+     * Assert that the given input field is present.
      *
      * @param  string  $field
-     * @param  string  $value
+     * @return $this
+     */
+    public function assertInputPresent($field)
+    {
+        $this->assertPresent(
+            "input[name='{$field}'], textarea[name='{$field}'], select[name='{$field}']"
+        );
+
+        return $this;
+    }
+
+    /**
+     * Assert that the given input field is not visible.
+     *
+     * @param  string  $field
+     * @return $this
+     */
+    public function assertInputMissing($field)
+    {
+        $this->assertMissing(
+            "input[name='{$field}'], textarea[name='{$field}'], select[name='{$field}']"
+        );
+
+        return $this;
+    }
+
+    /**
+     * Assert that the given checkbox is checked.
+     *
+     * @param  string  $field
+     * @param  string|null  $value
      * @return $this
      */
     public function assertChecked($field, $value = null)
@@ -362,10 +468,10 @@ JS;
     }
 
     /**
-     * Assert that the given checkbox field is not checked.
+     * Assert that the given checkbox is not checked.
      *
      * @param  string  $field
-     * @param  string  $value
+     * @param  string|null  $value
      * @return $this
      */
     public function assertNotChecked($field, $value = null)
@@ -375,6 +481,26 @@ JS;
         PHPUnit::assertFalse(
             $element->isSelected(),
             "Checkbox [{$field}] was unexpectedly checked."
+        );
+
+        return $this;
+    }
+
+    /**
+     * Assert that the given checkbox is in an indeterminate state.
+     *
+     * @param  string  $field
+     * @param  string|null  $value
+     * @return $this
+     */
+    public function assertIndeterminate($field, $value = null)
+    {
+        $this->assertNotChecked($field, $value);
+
+        PHPUnit::assertSame(
+            'true',
+            $this->resolver->findOrFail($field)->getAttribute('indeterminate'),
+            "Checkbox [{$field}] was not in indeterminate state."
         );
 
         return $this;
@@ -403,7 +529,7 @@ JS;
      * Assert that the given radio field is not selected.
      *
      * @param  string  $field
-     * @param  string  $value
+     * @param  string|null  $value
      * @return $this
      */
     public function assertRadioNotSelected($field, $value = null)
@@ -419,7 +545,7 @@ JS;
     }
 
     /**
-     * Assert that the given select field has the given value selected.
+     * Assert that the given dropdown has the given value selected.
      *
      * @param  string  $field
      * @param  string  $value
@@ -436,7 +562,7 @@ JS;
     }
 
     /**
-     * Assert that the given select field does not have the given value selected.
+     * Assert that the given dropdown does not have the given value selected.
      *
      * @param  string  $field
      * @param  string  $value
@@ -468,7 +594,8 @@ JS;
         })->all();
 
         PHPUnit::assertCount(
-            count($values), $options,
+            count($values),
+            $options,
             'Expected options ['.implode(',', $values)."] for selection field [{$field}] to be available."
         );
 
@@ -485,7 +612,8 @@ JS;
     public function assertSelectMissingOptions($field, array $values)
     {
         PHPUnit::assertCount(
-            0, $this->resolver->resolveSelectOptions($field, $values),
+            0,
+            $this->resolver->resolveSelectOptions($field, $values),
             'Unexpected options ['.implode(',', $values)."] for selection field [{$field}]."
         );
 
@@ -505,7 +633,7 @@ JS;
     }
 
     /**
-     * Assert that the given value is not available to be selected on the given field.
+     * Assert that the given value is not available to be selected.
      *
      * @param  string  $field
      * @param  string  $value
@@ -533,7 +661,7 @@ JS;
     }
 
     /**
-     * Assert that the element at the given selector has the given value.
+     * Assert that the element matching the given selector has the given value.
      *
      * @param  string  $selector
      * @param  string  $value
@@ -541,15 +669,75 @@ JS;
      */
     public function assertValue($selector, $value)
     {
-        $actual = $this->resolver->findOrFail($selector)->getAttribute('value');
+        $fullSelector = $this->resolver->format($selector);
 
-        PHPUnit::assertEquals($value, $actual);
+        $this->ensureElementSupportsValueAttribute(
+            $element = $this->resolver->findOrFail($selector),
+            $fullSelector
+        );
+
+        $actual = $element->getAttribute('value');
+
+        PHPUnit::assertEquals(
+            $value,
+            $actual,
+            "Did not see expected value [{$value}] within element [{$fullSelector}]."
+        );
 
         return $this;
     }
 
     /**
-     * Assert that the element at the given selector has the given attribute value.
+     * Assert that the element matching the given selector does not have the given value.
+     *
+     * @param  string  $selector
+     * @param  string  $value
+     * @return $this
+     */
+    public function assertValueIsNot($selector, $value)
+    {
+        $fullSelector = $this->resolver->format($selector);
+
+        $this->ensureElementSupportsValueAttribute(
+            $element = $this->resolver->findOrFail($selector),
+            $fullSelector
+        );
+
+        $actual = $element->getAttribute('value');
+
+        PHPUnit::assertNotEquals(
+            $value,
+            $actual,
+            "Saw unexpected value [{$value}] within element [{$fullSelector}]."
+        );
+
+        return $this;
+    }
+
+    /**
+     * Ensure the given element supports the 'value' attribute.
+     *
+     * @param  mixed  $element
+     * @param  string  $fullSelector
+     * @return void
+     */
+    public function ensureElementSupportsValueAttribute($element, $fullSelector)
+    {
+        PHPUnit::assertTrue(in_array($element->getTagName(), [
+            'textarea',
+            'select',
+            'button',
+            'input',
+            'li',
+            'meter',
+            'option',
+            'param',
+            'progress',
+        ]), "This assertion cannot be used with the element [{$fullSelector}].");
+    }
+
+    /**
+     * Assert that the element matching the given selector has the given value in the provided attribute.
      *
      * @param  string  $selector
      * @param  string  $attribute
@@ -568,7 +756,8 @@ JS;
         );
 
         PHPUnit::assertEquals(
-            $value, $actual,
+            $value,
+            $actual,
             "Expected '$attribute' attribute [{$value}] does not equal actual value [$actual]."
         );
 
@@ -576,20 +765,35 @@ JS;
     }
 
     /**
-     * Assert that the element at the given selector has the given data attribute value.
+     * Assert that the element matching the given selector contains the given value in the provided attribute.
      *
      * @param  string  $selector
      * @param  string  $attribute
      * @param  string  $value
      * @return $this
      */
-    public function assertDataAttribute($selector, $attribute, $value)
+    public function assertAttributeContains($selector, $attribute, $value)
     {
-        return $this->assertAttribute($selector, 'data-'.$attribute, $value);
+        $fullSelector = $this->resolver->format($selector);
+
+        $actual = $this->resolver->findOrFail($selector)->getAttribute($attribute);
+
+        PHPUnit::assertNotNull(
+            $actual,
+            "Did not see expected attribute [{$attribute}] within element [{$fullSelector}]."
+        );
+
+        PHPUnit::assertStringContainsString(
+            $value,
+            $actual,
+            "Attribute '$attribute' does not contain [{$value}]. Full attribute value was [$actual]."
+        );
+
+        return $this;
     }
 
     /**
-     * Assert that the element at the given selector has the given aria attribute value.
+     * Assert that the element matching the given selector has the given value in the provided aria attribute.
      *
      * @param  string  $selector
      * @param  string  $attribute
@@ -602,7 +806,20 @@ JS;
     }
 
     /**
-     * Assert that the element with the given selector is visible.
+     * Assert that the element matching the given selector has the given value in the provided data attribute.
+     *
+     * @param  string  $selector
+     * @param  string  $attribute
+     * @param  string  $value
+     * @return $this
+     */
+    public function assertDataAttribute($selector, $attribute, $value)
+    {
+        return $this->assertAttribute($selector, 'data-'.$attribute, $value);
+    }
+
+    /**
+     * Assert that the element matching the given selector is visible.
      *
      * @param  string  $selector
      * @return $this
@@ -620,7 +837,7 @@ JS;
     }
 
     /**
-     * Assert that the element with the given selector is present in the DOM.
+     * Assert that the element matching the given selector is present.
      *
      * @param  string  $selector
      * @return $this
@@ -638,7 +855,25 @@ JS;
     }
 
     /**
-     * Assert that the element with the given selector is not on the page.
+     * Assert that the element matching the given selector is not present in the source.
+     *
+     * @param  string  $selector
+     * @return $this
+     */
+    public function assertNotPresent($selector)
+    {
+        $fullSelector = $this->resolver->format($selector);
+
+        PHPUnit::assertTrue(
+            is_null($this->resolver->find($selector)),
+            "Element [{$fullSelector}] is present."
+        );
+
+        return $this;
+    }
+
+    /**
+     * Assert that the element matching the given selector is not visible.
      *
      * @param  string  $selector
      * @return $this
@@ -653,13 +888,16 @@ JS;
             $missing = true;
         }
 
-        PHPUnit::assertTrue($missing, "Saw unexpected element [{$fullSelector}].");
+        PHPUnit::assertTrue(
+            $missing,
+            "Saw unexpected element [{$fullSelector}]."
+        );
 
         return $this;
     }
 
     /**
-     * Assert that a JavaScript dialog with given message has been opened.
+     * Assert that a JavaScript dialog with the given message has been opened.
      *
      * @param  string  $message
      * @return $this
@@ -669,7 +907,8 @@ JS;
         $actualMessage = $this->driver->switchTo()->alert()->getText();
 
         PHPUnit::assertEquals(
-            $message, $actualMessage,
+            $message,
+            $actualMessage,
             "Expected dialog message [{$message}] does not equal actual message [{$actualMessage}]."
         );
 
@@ -788,36 +1027,46 @@ JS;
      * Assert that the Vue component's attribute at the given key has the given value.
      *
      * @param  string  $key
-     * @param  string  $value
+     * @param  mixed  $value
      * @param  string|null  $componentSelector
      * @return $this
      */
     public function assertVue($key, $value, $componentSelector = null)
     {
-        PHPUnit::assertEquals($value, $this->vueAttribute($componentSelector, $key));
+        $formattedValue = json_encode($value);
+
+        PHPUnit::assertEquals(
+            $value,
+            $this->vueAttribute($componentSelector, $key),
+            "Did not see expected value [{$formattedValue}] at the key [{$key}]."
+        );
 
         return $this;
     }
 
     /**
-     * Assert that the Vue component's attribute at the given key
-     * does not have the given value.
+     * Assert that a given Vue component data property does not match the given value.
      *
      * @param  string  $key
-     * @param  string  $value
+     * @param  mixed  $value
      * @param  string|null  $componentSelector
      * @return $this
      */
     public function assertVueIsNot($key, $value, $componentSelector = null)
     {
-        PHPUnit::assertNotEquals($value, $this->vueAttribute($componentSelector, $key));
+        $formattedValue = json_encode($value);
+
+        PHPUnit::assertNotEquals(
+            $value,
+            $this->vueAttribute($componentSelector, $key),
+            "Saw unexpected value [{$formattedValue}] at the key [{$key}]."
+        );
 
         return $this;
     }
 
     /**
-     * Assert that the Vue component's attribute at the given key
-     * is an array that contains the given value.
+     * Assert that a given Vue component data propertys is an array and contains the given value.
      *
      * @param  string  $key
      * @param  string  $value
@@ -828,15 +1077,18 @@ JS;
     {
         $attribute = $this->vueAttribute($componentSelector, $key);
 
-        PHPUnit::assertIsArray($attribute, "The attribute for key [$key] is not an array.");
+        PHPUnit::assertIsArray(
+            $attribute,
+            "The attribute for key [{$key}] is not an array."
+        );
+
         PHPUnit::assertContains($value, $attribute);
 
         return $this;
     }
 
     /**
-     * Assert that the Vue component's attribute at the given key
-     * is an array that does not contain the given value.
+     * Assert that a given Vue component data property is an array and does not contain the given value.
      *
      * @param  string  $key
      * @param  string  $value
@@ -847,7 +1099,11 @@ JS;
     {
         $attribute = $this->vueAttribute($componentSelector, $key);
 
-        PHPUnit::assertIsArray($attribute, "The attribute for key [$key] is not an array.");
+        PHPUnit::assertIsArray(
+            $attribute,
+            "The attribute for key [{$key}] is not an array."
+        );
+
         PHPUnit::assertNotContains($value, $attribute);
 
         return $this;
@@ -865,7 +1121,15 @@ JS;
         $fullSelector = $this->resolver->format($componentSelector);
 
         return $this->driver->executeScript(
-            "return document.querySelector('".$fullSelector."').__vue__.".$key
+            "var el = document.querySelector('".$fullSelector."');".
+            "if (typeof el.__vue__ !== 'undefined')".
+            '    return el.__vue__.'.$key.';'.
+            'try {'.
+            '    var attr = el.__vueParentComponent.ctx.'.$key.';'.
+            "    if (typeof attr !== 'undefined')".
+            '        return attr;'.
+            '} catch (e) {}'.
+            'return el.__vueParentComponent.setupState.'.$key.';'
         );
     }
 }

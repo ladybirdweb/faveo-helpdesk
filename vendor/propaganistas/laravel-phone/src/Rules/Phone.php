@@ -1,4 +1,6 @@
-<?php namespace Propaganistas\LaravelPhone\Rules;
+<?php
+
+namespace Propaganistas\LaravelPhone\Rules;
 
 use libphonenumber\PhoneNumberType;
 use Propaganistas\LaravelPhone\Traits\ParsesCountries;
@@ -74,7 +76,7 @@ class Phone
     /**
      * Set the phone types.
      *
-     * @param string|array $type
+     * @param int|string|array $type
      * @return $this
      */
     public function type($type)

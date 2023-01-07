@@ -29,6 +29,7 @@ trait ProvidesBrowser
      * Tear down the Dusk test case class.
      *
      * @afterClass
+     *
      * @return void
      */
     public static function tearDownDuskClass()
@@ -68,10 +69,12 @@ trait ProvidesBrowser
             $callback(...$browsers->all());
         } catch (Exception $e) {
             $this->captureFailuresFor($browsers);
+            $this->storeSourceLogsFor($browsers);
 
             throw $e;
         } catch (Throwable $e) {
             $this->captureFailuresFor($browsers);
+            $this->storeSourceLogsFor($browsers);
 
             throw $e;
         } finally {
@@ -159,6 +162,22 @@ trait ProvidesBrowser
             $name = $this->getCallerName();
 
             $browser->storeConsoleLog($name.'-'.$key);
+        });
+    }
+
+    /**
+     * Store the source code for the given browsers (if necessary).
+     *
+     * @param  \Illuminate\Support\Collection  $browsers
+     * @return void
+     */
+    protected function storeSourceLogsFor($browsers)
+    {
+        $browsers->each(function ($browser, $key) {
+            if (property_exists($browser, 'madeSourceAssertion') &&
+                $browser->madeSourceAssertion) {
+                $browser->storeSource($this->getCallerName().'-'.$key);
+            }
         });
     }
 

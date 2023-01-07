@@ -1,6 +1,9 @@
-<?php namespace Propaganistas\LaravelPhone;
+<?php
+
+namespace Propaganistas\LaravelPhone;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Factory;
 use Illuminate\Validation\Rule;
 use libphonenumber\PhoneNumberUtil;
 use Propaganistas\LaravelPhone\Rules;
@@ -20,16 +23,10 @@ class PhoneServiceProvider extends ServiceProvider
         });
 
         $this->app->alias('libphonenumber', PhoneNumberUtil::class);
-    }
-    
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        $this->app['validator']->extendDependent('phone', Validation\Phone::class . '@validate');
+
+        $this->app->afterResolving('validator', static function (Factory $validator) {
+            $validator->extendDependent('phone', Validation\Phone::class . '@validate');
+        });
 
         Rule::macro('phone', function () {
             return new Rules\Phone;

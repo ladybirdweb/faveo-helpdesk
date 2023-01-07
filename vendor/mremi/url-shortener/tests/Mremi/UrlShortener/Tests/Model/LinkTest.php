@@ -11,22 +11,24 @@
 
 namespace Mremi\UrlShortener\Tests\Model;
 
+use DateTime;
 use Mremi\UrlShortener\Model\Link;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Tests Link class
+ * Tests Link class.
  *
  * @author Rémi Marseille <marseille.remi@gmail.com>
  */
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends TestCase
 {
     /**
-     * Tests the createdAt property
+     * Tests the createdAt property.
      */
     public function testCreatedAt()
     {
-        $link = new Link;
+        $link = new Link();
 
-        $this->assertInstanceOf('\DateTime', $link->getCreatedAt());
+        $this->assertInstanceOf(DateTime::class, $link->getCreatedAt());
     }
 }

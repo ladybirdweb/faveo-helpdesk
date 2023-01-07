@@ -1,4 +1,6 @@
-<?php namespace Propaganistas\LaravelPhone\Traits;
+<?php
+
+namespace Propaganistas\LaravelPhone\Traits;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -17,7 +19,7 @@ trait ParsesTypes
     /**
      * Determine whether the given type is valid.
      *
-     * @param string $type
+     * @param int|string $type
      * @return bool
      */
     public static function isValidType($type)
@@ -28,14 +30,18 @@ trait ParsesTypes
     /**
      * Parse a phone type into constant's value.
      *
-     * @param string|array $types
+     * @param int|string|array $types
      * @return array
      */
     protected static function parseTypes($types)
     {
-        static::loadTypes();
+        self::loadTypes();
 
         return Collection::make(is_array($types) ? $types : func_get_args())
+                         ->reject(function ($value) {
+                             /** @phpstan-ignore-next-line */
+                             return is_null($value);
+                         })
                          ->map(function ($type) {
                              // If the type equals a constant's value, just return it.
                              if (is_numeric($type) && in_array($type, static::$resolvedTypes)) {
@@ -45,20 +51,20 @@ trait ParsesTypes
                              // Otherwise we'll assume the type is the constant's name.
                              return Arr::get(static::$resolvedTypes, strtoupper($type));
                          })
-                         ->reject(function ($value) {
-                             return is_null($value) || $value === false;
+                         ->filter(function ($value) {
+                             return is_numeric($value);
                          })->toArray();
     }
 
     /**
      * Parse a phone type into its string representation.
      *
-     * @param string|array $types
+     * @param int|string|array $types
      * @return array
      */
     protected static function parseTypesAsStrings($types)
     {
-        static::loadTypes();
+        self::loadTypes();
 
         return array_keys(
             array_intersect(

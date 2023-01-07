@@ -87,7 +87,7 @@ class ElementResolver
         }
 
         return $this->firstOrFail([
-            $field, "input[name='{$field}']", "textarea[name='{$field}']",
+            "input[name='{$field}']", "textarea[name='{$field}']", $field,
         ]);
     }
 
@@ -106,7 +106,7 @@ class ElementResolver
         }
 
         return $this->firstOrFail([
-            $field, "select[name='{$field}']",
+            "select[name='{$field}']", $field,
         ]);
     }
 
@@ -137,7 +137,7 @@ class ElementResolver
      * Resolve the element for a given radio "field" / value.
      *
      * @param  string  $field
-     * @param  string  $value
+     * @param  string|null  $value
      * @return \Facebook\WebDriver\Remote\RemoteWebElement
      *
      * @throws \Exception
@@ -156,7 +156,7 @@ class ElementResolver
         }
 
         return $this->firstOrFail([
-            $field, "input[type=radio][name='{$field}'][value='{$value}']",
+            "input[type=radio][name='{$field}'][value='{$value}']", $field,
         ]);
     }
 
@@ -164,7 +164,7 @@ class ElementResolver
      * Resolve the element for a given checkbox "field".
      *
      * @param  string|null  $field
-     * @param  string  $value
+     * @param  string|null  $value
      * @return \Facebook\WebDriver\Remote\RemoteWebElement
      *
      * @throws \Exception
@@ -186,7 +186,7 @@ class ElementResolver
         }
 
         return $this->firstOrFail([
-            $field, $selector,
+            $selector, $field,
         ]);
     }
 
@@ -205,7 +205,7 @@ class ElementResolver
         }
 
         return $this->firstOrFail([
-            $field, "input[type=file][name='{$field}']",
+            "input[type=file][name='{$field}']", $field,
         ]);
     }
 
@@ -224,8 +224,8 @@ class ElementResolver
         }
 
         return $this->firstOrFail([
-            $field, "input[name='{$field}']", "textarea[name='{$field}']",
-            "select[name='{$field}']", "button[name='{$field}']",
+            "input[name='{$field}']", "textarea[name='{$field}']",
+            "select[name='{$field}']", "button[name='{$field}']", $field,
         ]);
     }
 

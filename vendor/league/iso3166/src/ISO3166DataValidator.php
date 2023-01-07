@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * (c) Rob Bast <rob.bast@gmail.com>
  *
@@ -14,9 +16,11 @@ use League\ISO3166\Exception\DomainException;
 final class ISO3166DataValidator
 {
     /**
-     * @return array
+     * @param array<array<string, mixed>> $data
+     *
+     * @return array<array<string, mixed>>
      */
-    public function validate(array $data)
+    public function validate(array $data): array
     {
         foreach ($data as $entry) {
             $this->assertEntryHasRequiredKeys($entry);
@@ -26,9 +30,11 @@ final class ISO3166DataValidator
     }
 
     /**
+     * @param array<string, mixed> $entry
+     *
      * @throws \League\ISO3166\Exception\DomainException if given data entry does not have all the required keys
      */
-    private function assertEntryHasRequiredKeys(array $entry)
+    private function assertEntryHasRequiredKeys(array $entry): void
     {
         if (!isset($entry[ISO3166::KEY_ALPHA2])) {
             throw new DomainException('Each data entry must have a valid alpha2 key.');
