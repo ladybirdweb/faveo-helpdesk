@@ -3,10 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Model\helpdesk\Settings\System;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Console\Command;
 
 class SetupTestEnv extends Command
 {
