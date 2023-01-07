@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddForeignKeysToHelpTopicTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -38,4 +38,4 @@ class AddForeignKeysToHelpTopicTable extends Migration
             $table->dropForeign('help_topic_ibfk_6');
         });
     }
-}
+};
