@@ -1,8 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\helpdesk;
-use App\Http\Controllers\Agent\helpdesk;
-use App\Http\Controllers\Agent\kb;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Agent;
 use App\Http\Controllers\Auth;
@@ -11,8 +8,8 @@ use App\Http\Controllers\Common;
 use App\Http\Controllers\Installer;
 use App\Http\Controllers\Job;
 use App\Http\Controllers\Update;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
   |--------------------------------------------------------------------------
@@ -618,24 +615,24 @@ Route::middleware('web')->group(function () {
       |=============================================================
      */
     Route::get('500', function () {
-    return view('errors.500');
-})->name('error500');
+        return view('errors.500');
+    })->name('error500');
 
     Route::get('404', function () {
-    return view('errors.404');
-})->name('error404');
+        return view('errors.404');
+    })->name('error404');
 
     Route::get('error-in-database-connection', function () {
-    return view('errors.db');
-})->name('errordb');
+        return view('errors.db');
+    })->name('errordb');
 
     Route::get('unauthorized', function () {
-    return view('errors.unauth');
-})->name('unauth');
+        return view('errors.unauth');
+    })->name('unauth');
 
     Route::get('board-offline', function () {
-    return view('errors.offline');
-})->name('board.offline');
+        return view('errors.offline');
+    })->name('board.offline');
 
     /*
       |=============================================================

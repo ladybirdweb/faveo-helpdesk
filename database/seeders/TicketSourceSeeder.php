@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Model\helpdesk\Ticket\Ticket_source;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class TicketSourceSeeder extends Seeder
 {
@@ -14,9 +15,9 @@ class TicketSourceSeeder extends Seeder
      */
     public function run()
     {
-        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Ticket_source::truncate();
-        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         Ticket_source::create(['name' => 'Web', 'value' => 'Web', 'css_class' => 'fa fa-globe']);
         Ticket_source::create(['name' => 'Email', 'value' => 'E-mail', 'css_class' => 'fa fa-envelope']);
         Ticket_source::create(['name' => 'Agent', 'value' => 'Agent Panel', 'css_class' => 'fa fa-user']);
