@@ -12,9 +12,8 @@ class TicketViewURL
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -28,11 +27,11 @@ class TicketViewURL
         if (count(Input::all()) == 0) {
             return \Redirect::to('tickets?show%5B%5D=inbox&departments%5B%5D=All');
         } else {
-            if (!array_key_exists('show', Input::all()) && !array_key_exists('departments', Input::all())) {
+            if (! array_key_exists('show', Input::all()) && ! array_key_exists('departments', Input::all())) {
                 return \Redirect::to($request_str.'&show%5B%5D=inbox&departments%5B%5D=All');
-            } elseif (!array_key_exists('show', Input::all()) && array_key_exists('departments', Input::all())) {
+            } elseif (! array_key_exists('show', Input::all()) && array_key_exists('departments', Input::all())) {
                 return \Redirect::to($request_str.'&show%5B%5D=inbox');
-            } elseif (array_key_exists('show', Input::all()) && !array_key_exists('departments', Input::all())) {
+            } elseif (array_key_exists('show', Input::all()) && ! array_key_exists('departments', Input::all())) {
                 return \Redirect::to($request_str.'&departments%5B%5D=All');
             } else {
                 // do nothing

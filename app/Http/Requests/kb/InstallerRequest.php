@@ -29,11 +29,11 @@ class InstallerRequest extends Request
     public function rules()
     {
         return [
-            'firstname'       => 'required|max:20',
-            'Lastname'        => 'required|max:20',
-            'email'           => 'required|max:50|email',
-            'username'        => 'required|max:50|min:3',
-            'password'        => 'required|min:6',
+            'firstname' => 'required|max:20',
+            'Lastname' => 'required|max:20',
+            'email' => 'required|max:50|email',
+            'username' => 'required|max:50|min:3',
+            'password' => 'required|min:6',
             'confirmpassword' => 'required|same:password',
         ];
     }

@@ -36,9 +36,9 @@ class Sys_userRequest extends Request
 
         return [
             'first_name' => 'required',
-            'user_name'  => 'required|min:3|unique:users,user_name',
-            'email'      => 'required|unique:users,email',
-            'mobile'     => 'unique:users',
+            'user_name' => 'required|min:3|unique:users,user_name',
+            'email' => 'required|unique:users,email',
+            'mobile' => 'unique:users',
         ];
     }
 
@@ -57,11 +57,11 @@ class Sys_userRequest extends Request
         $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
         if (($settings->status == '1' || $settings->status == 1) && ($email_mandatory->status == '1' || $email_mandatory->status == 1)) {
             return [
-                'first_name'   => 'required',
-                'user_name'    => 'required|min:3|unique:users,user_name',
-                'email'        => 'required|unique:users,email',
+                'first_name' => 'required',
+                'user_name' => 'required|min:3|unique:users,user_name',
+                'email' => 'required|unique:users,email',
                 'country_code' => 'required',
-                'mobile'       => 'required|unique:users',
+                'mobile' => 'required|unique:users',
             ];
         } elseif (($settings->status == '0' || $settings->status == 0) && ($email_mandatory->status == '1' || $email_mandatory->status == 1)) {
             return 0;
@@ -82,17 +82,16 @@ class Sys_userRequest extends Request
      *@category function to make only moble required rule
      *
      *@param null
-     *
      *@return array
      */
     public function onlyMobleRequired()
     {
         return [
-            'first_name'   => 'required',
-            'user_name'    => 'required|min:3|unique:users,user_name',
-            'email'        => 'unique:users,email',
+            'first_name' => 'required',
+            'user_name' => 'required|min:3|unique:users,user_name',
+            'email' => 'unique:users,email',
             'country_code' => 'required',
-            'mobile'       => 'required|unique:users',
+            'mobile' => 'required|unique:users',
         ];
     }
 }

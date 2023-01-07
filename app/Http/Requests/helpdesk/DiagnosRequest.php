@@ -29,8 +29,8 @@ class DiagnosRequest extends Request
     public function rules()
     {
         return [
-            'from'    => 'required',
-            'to'      => 'required|email',
+            'from' => 'required',
+            'to' => 'required|email',
             'subject' => 'required',
             'message' => 'required',
         ];

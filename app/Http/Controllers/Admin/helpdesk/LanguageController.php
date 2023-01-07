@@ -41,13 +41,12 @@ class LanguageController extends Controller
      * Switch language at runtime.
      *
      * @param type "" $lang
-     *
      * @return type response
      */
     public function switchLanguage($lang)
     {
         $changed = UnAuth::changeLanguage($lang);
-        if (!$changed) {
+        if (! $changed) {
             return \Redirect::back()->with('fails', Lang::get('lang.language-error'));
         } else {
             return \Redirect::back();
@@ -135,16 +134,16 @@ class LanguageController extends Controller
         try {
             // getting all of the post data
             $file = [
-                'File'          => Input::file('File'),
+                'File' => Input::file('File'),
                 'language-name' => Input::input('language-name'),
-                'iso-code'      => Input::input('iso-code'),
+                'iso-code' => Input::input('iso-code'),
             ];
 
             // setting up rules
             $rules = [
-                'File'          => 'required|mimes:zip|max:30000',
+                'File' => 'required|mimes:zip|max:30000',
                 'language-name' => 'required',
-                'iso-code'      => 'required|max:2',
+                'iso-code' => 'required|max:2',
             ]; // and for max size
             // doing the validation, passing post data, rules and the messages
             $validator = Validator::make($file, $rules);
@@ -163,7 +162,7 @@ class LanguageController extends Controller
                     Session::flash('link', 'change-language/'.strtolower(Input::get('iso-code')));
 
                     return Redirect::back()->withInput();
-                } elseif (!array_key_exists(strtolower(Input::get('iso-code')), Config::get('languages'))) {//Checking Valid ISO code form Languages.php
+                } elseif (! array_key_exists(strtolower(Input::get('iso-code')), Config::get('languages'))) {//Checking Valid ISO code form Languages.php
                     //sending back with error message
                     Session::flash('fails', Lang::get('lang.iso-code-error'));
 
@@ -182,7 +181,7 @@ class LanguageController extends Controller
                         //check if Zip extract foldercontains any subfolder
                         $directories = File::directories($extractpath);
                         //$directories = glob($extractpath. '/*' , GLOB_ONLYDIR);
-                        if (!empty($directories)) { //if extract folder contains subfolder
+                        if (! empty($directories)) { //if extract folder contains subfolder
                             $success = File::deleteDirectory($extractpath); //remove extracted folder and it's subfolder from lang
                             //$success2 = File::delete($destinationPath.'/'.$name);
                             if ($success) {
@@ -229,8 +228,7 @@ class LanguageController extends Controller
     /**
      * This function is used to delete languages.
      *
-     * @param type $lang
-     *
+     * @param  type  $lang
      * @return type response
      */
     public function deleteLanguage($lang)

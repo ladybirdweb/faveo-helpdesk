@@ -30,12 +30,12 @@ class EmailsEditRequest extends Request
     {
         return [
             'email_address' => 'email',
-            'email_name'    => 'required',
+            'email_name' => 'required',
             // 'department' => 'required',
             // 'priority' => 'required',
             // 'help_topic' => 'required',
             // 'imap_config' => 'required',
-            'password'  => 'required|min:6',
+            'password' => 'required|min:6',
             'user_name' => 'required',
             // 'sending_host' => 'required',
             // 'sending_port' => 'required',

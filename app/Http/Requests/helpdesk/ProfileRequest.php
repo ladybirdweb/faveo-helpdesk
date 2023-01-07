@@ -29,9 +29,9 @@ class ProfileRequest extends Request
     public function rules()
     {
         return [
-            'first_name'  => 'required',
+            'first_name' => 'required',
             'profile_pic' => 'mimes:png,jpeg',
-            'mobile'      => $this->checkMobile(),
+            'mobile' => $this->checkMobile(),
         ];
     }
 

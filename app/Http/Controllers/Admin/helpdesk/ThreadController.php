@@ -22,7 +22,6 @@ class ThreadController extends Controller
      *
      * @param type Ticket_thread $thread
      * @param type Priority      $priority
-     *
      * @return type Response
      */
     public function getTickets(Ticket_Thread $thread, Priority $priority)

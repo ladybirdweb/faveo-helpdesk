@@ -76,7 +76,6 @@ class ProfileController extends Controller
      *
      * @param type int            $id
      * @param type ProfileRequest $request
-     *
      * @return type Response
      */
     public function postProfile($id, ProfileRequest $request)
@@ -119,7 +118,6 @@ class ProfileController extends Controller
      * @param type int             $id
      * @param type User            $user
      * @param type ProfilePassword $request
-     *
      * @return type Response
      */
     public function postProfilePassword($id, User $user, ProfilePassword $request)

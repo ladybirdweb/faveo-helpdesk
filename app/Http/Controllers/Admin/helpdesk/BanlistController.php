@@ -71,9 +71,8 @@ class BanlistController extends Controller
     /**
      * Store a new banned user credentials.
      *
-     * @param BanRequest $request
-     * @param User       $user
-     *
+     * @param  BanRequest  $request
+     * @param  User  $user
      * @return type Response
      */
     public function store(BanRequest $request, User $user)
@@ -106,9 +105,8 @@ class BanlistController extends Controller
     /**
      * Editing the details of the banned users.
      *
-     * @param type $id
-     * @param User $ban
-     *
+     * @param  type  $id
+     * @param  User  $ban
      * @return type Response
      */
     public function edit($id, User $ban)
@@ -125,10 +123,9 @@ class BanlistController extends Controller
     /**
      * Update the banned users.
      *
-     * @param type           $id
-     * @param User           $ban
-     * @param BanlistRequest $request
-     *
+     * @param  type  $id
+     * @param  User  $ban
+     * @param  BanlistRequest  $request
      * @return type Response
      */
     public function update($id, User $ban, BanlistRequest $request)
@@ -150,9 +147,8 @@ class BanlistController extends Controller
     /**
      * delete the banned users.
      *
-     * @param type      $id
-     * @param \App\User $ban
-     *
+     * @param  type  $id
+     * @param  \App\User  $ban
      * @return type view
      */
     public function delete($id, User $ban)

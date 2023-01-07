@@ -28,7 +28,7 @@ class Ticket_attachments extends Model
         $name = $this->name;
         $root = $this->path;
 
-        if (($drive == 'database' || !$drive) && $value && base64_decode($value, true) === false) {
+        if (($drive == 'database' || ! $drive) && $value && base64_decode($value, true) === false) {
             $value = base64_encode($value);
         }
         if ($drive && $drive !== 'database') {

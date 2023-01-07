@@ -52,8 +52,7 @@ class TemplateController extends Controller
      * Show template
      * This template to show a particular template.
      *
-     * @param type $id
-     *
+     * @param  type  $id
      * @return type view
      */
     public function showTemplate($id)
@@ -70,8 +69,7 @@ class TemplateController extends Controller
     /**
      * This function is used to display chumper datatables of the template list.
      *
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return type datatable
      */
     public function GetTemplates(Request $request)
@@ -109,8 +107,7 @@ class TemplateController extends Controller
     /**
      * To store a set of templates.
      *
-     * @param \App\Http\Requests\helpdesk\TemplateRequest $request
-     *
+     * @param  \App\Http\Requests\helpdesk\TemplateRequest  $request
      * @return type redirect
      */
     public function store(TemplateRequest $request)
@@ -127,8 +124,7 @@ class TemplateController extends Controller
     /**
      * function to get the edit page of template.
      *
-     * @param type $id
-     *
+     * @param  type  $id
      * @return type
      */
     public function edit($id)
@@ -147,9 +143,8 @@ class TemplateController extends Controller
     /**
      * function to update a template.
      *
-     * @param type                                      $id
-     * @param \App\Http\Requests\helpdesk\TemplateUdate $request
-     *
+     * @param  type  $id
+     * @param  \App\Http\Requests\helpdesk\TemplateUdate  $request
      * @return type
      */
     public function update($id, TemplateUdate $request)
@@ -168,15 +163,14 @@ class TemplateController extends Controller
     /**
      * function to delete a template.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function destroy(Request $request)
     {
         try {
             $ids = $request->input('select');
-            if (!empty($ids)) {
+            if (! empty($ids)) {
                 foreach ($ids as $id) {
                     $template = $this->template->where('id', $id)->first();
                     if ($template) {
@@ -217,8 +211,7 @@ class TemplateController extends Controller
     /**
      * function to show the templates.
      *
-     * @param type $id
-     *
+     * @param  type  $id
      * @return type Mixed
      */
     public function show($id)

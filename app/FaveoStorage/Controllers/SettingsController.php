@@ -88,9 +88,9 @@ class SettingsController extends Controller
     public function save($key, $value)
     {
         CommonSettings::create([
-            'option_name'    => 'storage',
+            'option_name' => 'storage',
             'optional_field' => $key,
-            'option_value'   => $value,
+            'option_value' => $value,
         ]);
     }
 
@@ -124,10 +124,10 @@ class SettingsController extends Controller
 
     public function activate()
     {
-        if (!\Schema::hasColumn('ticket_attachment', 'driver')) {
+        if (! \Schema::hasColumn('ticket_attachment', 'driver')) {
             $path = 'app'.DIRECTORY_SEPARATOR.'FaveoStorage'.DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR.'migrations';
             Artisan::call('migrate', [
-                '--path'  => $path,
+                '--path' => $path,
                 '--force' => true,
             ]);
         }

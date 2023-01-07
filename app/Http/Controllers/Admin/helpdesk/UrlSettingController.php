@@ -101,7 +101,7 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]\n";
     {
         //dd(public_path('.htaccess'),base_path('.htaccess'));
         $file = public_path('.htaccess');
-        if (!\File::exists($file)) {
+        if (! \File::exists($file)) {
             $file = base_path('/../.htaccess');
         }
         $this->deleteCustom();
@@ -113,7 +113,7 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]\n";
     public function deleteCustom()
     {
         $file = public_path('.htaccess');
-        if (!\File::exists($file)) {
+        if (! \File::exists($file)) {
             $file = base_path('/../.htaccess');
         }
         $content = file_get_contents($file);
