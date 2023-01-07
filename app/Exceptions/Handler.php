@@ -2,49 +2,227 @@
 
 namespace App\Exceptions;
 
+use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Lang;
+use Exception;
+use Illuminate\Support\Facades\App;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Session\TokenMismatchException;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
     /**
-     * A list of exception types with their corresponding custom log levels.
+     * A list of the exception types that should not be reported.
      *
-     * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
-     */
-    protected $levels = [
-        //
-    ];
-
-    /**
-     * A list of the exception types that are not reported.
-     *
-     * @var array<int, class-string<\Throwable>>
+     * @var array
      */
     protected $dontReport = [
-        //
+        HttpResponseException::class,
+        AuthorizationException::class,
+        HttpResponseException::class,
+        ModelNotFoundException::class,
+        \Symfony\Component\HttpKernel\Exception\HttpException::class,
+        ValidationException::class,
+        \DaveJamesMiller\Breadcrumbs\BreadcrumbsException::class,
     ];
 
     /**
-     * A list of the inputs that are never flashed to the session on validation exceptions.
-     *
-     * @var array<int, string>
-     */
-    protected $dontFlash = [
-        'current_password',
-        'password',
-        'password_confirmation',
-    ];
-
-    /**
-     * Register the exception handling callbacks for the application.
-     *
+     * @param \Throwable $e
      * @return void
+     * @throws \Throwable
      */
-    public function register()
+    public function report(\Throwable $e)
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        Bugsnag::setBeforeNotifyFunction(function ($error) { //set bugsnag
+            return false;
         });
+        // check if system is running in production environment
+        if (\App::environment() == 'production') {
+            $debug = Config::get('app.bugsnag_reporting'); //get bugsang reporting preference
+            if ($debug) { //if preference is true for reporting
+                $version = Config::get('app.version'); //set app version in report
+                Bugsnag::setAppVersion($version);
+                Bugsnag::setBeforeNotifyFunction(function ($error) { //set bugsnag
+                    return true;
+                }); //set bugsnag reporting as true
+            }
+        }
+
+        return parent::report($e);
+    }
+
+    /**
+     * Convert a validation exception into a JSON response.
+     *
+     * @param \Illuminate\Http\Request                   $request
+     * @param \Illuminate\Validation\ValidationException $exception
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function invalidJson($request, ValidationException $exception)
+    {
+        return response()->json(['success' => false, 'errors' => $exception->errors()], $exception->status);
+    }
+
+    /**
+     * @param $request
+     * @param \Throwable $e
+     * @return type|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
+     * @throws \Throwable
+     */
+    public function render($request, \Throwable $e)
+    {
+        switch ($e) {
+            case $e instanceof HttpResponseException:
+                return parent::render($request, $e);
+            case $e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException:
+                return response()->json(['message' => $e->getMessage(), 'code' => $e->getStatusCode()]);
+            case $e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException:
+                return response()->json(['message' => $e->getMessage(), 'code' => $e->getStatusCode()]);
+            case $e instanceof TokenMismatchException:
+                if ($request->ajax() || $request->wantsJson()) {
+                    $result = ['fails' => \Lang::get('lang.session-expired')];
+
+                    return response()->json(compact('result'), 402);
+                }
+
+                return redirect()->back()->with('fails', \Lang::get('lang.session-expired'));
+            default:
+                return $this->common($request, $e);
+        }
+    }
+
+    /**
+     * Function to render 500 error page.
+     *
+     * @param type $request
+     * @param type $e
+     *
+     * @return type mixed
+     */
+    public function render500($request, $e)
+    {
+        $seg = $request->segments();
+        if (in_array('api', $seg)) {
+            if ($e instanceof ValidationException) {
+                return $this->invalidJson($request, $e);
+            }
+
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+        if (config('app.debug') == true) {
+            return parent::render($request, $e);
+        } elseif ($e instanceof ValidationException) {
+            return parent::render($request, $e);
+        } elseif ($e instanceof \Illuminate\Validation\ValidationException) {
+            return parent::render($request, $e);
+        }
+
+        return response()->view('errors.500');
+        //return redirect()->route('error500', []);
+    }
+
+    /**
+     * Function to render 404 error page.
+     *
+     * @param type $request
+     * @param type $e
+     *
+     * @return type mixed
+     */
+    public function render404($request, $e)
+    {
+        $seg = $request->segments();
+        if (in_array('api', $seg)) {
+            return response()->json(['success' => false, 'message' => 'not-found'], 404);
+        }
+        if (config('app.debug') == true) {
+            if ($e->getStatusCode() == '404') {
+                return redirect()->route('error404', []);
+            }
+
+            return parent::render($request, $e);
+        }
+
+        return redirect()->route('error404', []);
+    }
+
+    /**
+     * Function to render database connection failed.
+     *
+     * @param type $request
+     * @param type $e
+     *
+     * @return type mixed
+     */
+    public function renderDB($request, $e)
+    {
+        $seg = $request->segments();
+        if (in_array('api', $seg)) {
+            return response()->json(['status' => '404']);
+        }
+        if (config('app.debug') == true) {
+            return parent::render($request, $e);
+        }
+
+        return redirect()->route('error404', []);
+    }
+
+    /**
+     * Common finction to render both types of codes.
+     *
+     * @param type $request
+     * @param type $e
+     *
+     * @return type mixed
+     */
+    public function common($request, $e)
+    {
+        switch ($e) {
+            case $e instanceof HttpException:
+                return $this->render404($request, $e);
+            case $e instanceof NotFoundHttpException:
+                return $this->render404($request, $e);
+            case $e instanceof PDOException:
+                if (strpos('1045', $e->getMessage()) == true) {
+                    return $this->renderDB($request, $e);
+                } else {
+                    return $this->render500($request, $e);
+                }
+//            case $e instanceof ErrorException:
+//                if($e->getMessage() == 'Breadcrumb not found with name "" ') {
+//                    return $this->render404($request, $e);
+//                } else {
+//                    return parent::render($request, $e);
+//                }
+            case $e instanceof TokenMismatchException:
+                if ($request->ajax() || $request->wantsJson()) {
+                    $result = ['fails' => \Lang::get('lang.session-expired')];
+
+                    return response()->json(compact('result'), 402);
+                }
+
+                return redirect()->back()->with('fails', \Lang::get('lang.session-expired'));
+            case $e instanceof AuthorizationException:
+                return redirect('/')->with('fails', \Lang::get('lang.access-denied'));
+            case $e instanceof MethodNotAllowedHttpException:
+                if (stripos($request->url(), 'api')) {
+                    $result = ['message' => \Lang::get('lang.methon_not_allowed'), 'success' => false];
+
+                    return response()->json($result, 405);
+                }
+                $this->render500($request, $e);
+            default:
+                return $this->render500($request, $e);
+        }
+
+        return parent::render($request, $e);
     }
 }

@@ -55,7 +55,7 @@ class TestResult {
      <?php
 
 function validate_php(&$results) {
-    if (version_compare(PHP_VERSION, '7.1') == -1 || version_compare('7.1.50', PHP_VERSION) == -1) {
+    if (version_compare(PHP_VERSION, '8.1') != 1) {
         $results[] = new TestResult('PHP version required in order to run Faveo HELPDESK is PHP 7.1.* PHP version greater or lesser than 7.1 are not supported yet. Your PHP version: ' . PHP_VERSION, STATUS_ERROR);
         return false;
     } else {
@@ -75,7 +75,7 @@ function validate_php(&$results) {
  */
 function php_config_value_to_bytes($val) {
     $val = trim($val);
-    $last = strtolower($val{strlen($val) - 1});
+    $last = strtolower($val[strlen($val) - 1]);
     $val = (integer)$val;
     switch ($last) {
         // The 'G' modifier is available since PHP 5.1.0
