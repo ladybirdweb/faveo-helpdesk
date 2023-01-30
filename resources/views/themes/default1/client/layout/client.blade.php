@@ -251,7 +251,7 @@
                             <div id="login-form" class="{{$loginFormClass}}">
                                  <div class="row">
                                     <div class="col-md-12">
-                                        {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}
+                                        {!!  Form::open(['route' => 'post.login']) !!}
                                         @if(Session::has('errors'))
                                         @if(Session::has('check'))
                                         <?php goto b; ?>
@@ -270,7 +270,7 @@
                                         </div>
                                         <div class="form-group has-feedback @if(isset($errors)) {!! $errors->has('password') ? 'has-error' : '' !!} @endif">
                                             {!! Form::password('password',['placeholder'=>Lang::get('lang.password'),'class' => 'form-control']) !!}
-                                            <?php \Event::fire('auth.login.form'); ?>
+                                            <?php \Illuminate\Support\Facades\Event::dispatch('auth.login.form'); ?>
                                             <a href="{{url('password/email')}}" style="font-size: .8em" class="pull-left">{!! Lang::get('lang.forgot_password') !!}</a>
                                         </div>
                                         <div class="form-group pull-left">
@@ -297,7 +297,7 @@
                     </nav>
                 
                     <div id="header-search" class="site-search clearfix"><!-- #header-search -->
-                        {!!Form::open(['method'=>'get','action'=>'Client\kb\UserController@search','class'=>'search-form clearfix'])!!}
+                        {!!Form::open(['route' => 'client.search','class'=>'search-form clearfix'])!!}
                         <div class="form-border" style="z-index: 0;width: 80%;">
                             <div class="form-inline ">
                                 <div class="form-group input-group">

@@ -48,6 +48,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
+        (new AlterColumnTypeSeeder())->run();
         /* Date time format */
         $date_time_formats = [
             'd/m/Y H:i:s',
@@ -267,7 +268,7 @@ class DatabaseSeeder extends Seeder
         /* Daily notification log */
         Log_notification::create(['log' => 'NOT-1']);
         /* System complete settings */
-        Alert::create(['id' => '1', 'ticket_status' => '1', 'ticket_admin_email' => '1', 'assignment_status' => '1', 'assignment_status' => '1', 'assignment_assigned_agent' => '1']);
+        Alert::create(['id' => '1', 'ticket_status' => '1', 'ticket_admin_email' => '1', 'assignment_status' => '1', 'assignment_assigned_agent' => '1']);
         Company::create(['id' => '1']);
         Email::create(['id' => '1', 'template' => 'default', 'email_fetching' => '1', 'notification_cron' => '1', 'all_emails' => '1', 'email_collaborator' => '1', 'attachment' => '1']);
         Responder::create(['id' => '1', 'new_ticket' => '1', 'agent_new_ticket' => '1']);
@@ -298,7 +299,7 @@ class DatabaseSeeder extends Seeder
         Widgets::create(['id' => '19', 'name' => 'dribbble']);
         Widgets::create(['id' => '20', 'name' => 'instagram']);
         /* Knowledge base setting */
-        Settings::create(['id' => 'id', 'pagination' => '10']);
+        Settings::create(['pagination' => '10']);
         /* Counrty phone code and iso code */
 
         CountryCode::create(['id' => '1',

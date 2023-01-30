@@ -202,7 +202,7 @@
                     </nav>
                     
                     <div id="header-search" class="site-search clearfix"><!-- #header-search -->
-                        {!!Form::open(['method'=>'get','action'=>'Client\kb\UserController@search','class'=>'search-form clearfix'])!!}
+                        {!!Form::open(['route'=>'client.search','class'=>'search-form clearfix'])!!}
                         <div class="form-border" style="z-index: 0;">
                             <div class="form-inline ">
                                 <div class="form-group input-group" style="width: 88%;">

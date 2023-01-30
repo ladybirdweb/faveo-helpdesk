@@ -20,8 +20,8 @@ return new class() extends Migration {
             $table->string('page_size');
             $table->string('log_level');
             $table->string('purge_log');
-            $table->integer('api_enable');
-            $table->integer('api_key_mandatory');
+            $table->integer('api_enable')->nullable();
+            $table->integer('api_key_mandatory')->nullable();
             $table->string('api_key');
             $table->string('name_format');
             $table->integer('time_farmat')->unsigned()->nullable()->index('time_farmat');

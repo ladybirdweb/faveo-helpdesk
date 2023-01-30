@@ -1,0 +1,49 @@
+{
+   "name":"thomaswelton/laravel-gravatar",
+   "description":"Laravel 5 Gravatar helper",
+   "keywords":[
+      "laravel",
+      "laravel5",
+      "gravatar"
+   ],
+   "homepage":"https://github.com/thomaswelton/laravel-gravatar",
+   "license":"MIT",
+   "authors":[
+      {
+         "name":"ThomasWelton",
+         "email":"thomaswelton@me.com",
+         "role":"Developer"
+      },
+      {
+         "name":"Antoine Augusti",
+         "email":"antoine.augusti@gmail.com",
+         "role":"Developer"
+      }
+   ],
+   "require":{
+      "php":">=5.4.0",
+      "illuminate/support":"~5.0|^6.0|^7.0|^8.0|^9.0",
+      "thomaswelton/gravatarlib":"0.1.x"
+   },
+   "require-dev":{
+      "phpunit/phpunit":"4.8.*",
+      "mockery/mockery":"0.9.*"
+   },
+   "autoload":{
+      "psr-4":{
+         "Thomaswelton\\LaravelGravatar\\":"src/",
+         "Thomaswelton\\Tests\\LaravelGravatar\\":"tests/"
+      }
+   },
+   "extra": {
+        "laravel": {
+            "providers": [
+                "Thomaswelton\\LaravelGravatar\\LaravelGravatarServiceProvider"
+            ],
+            "aliases": {
+                "Gravatar": "Thomaswelton\\LaravelGravatar\\Facades\\Gravatar"
+            }
+        }
+    },
+   "minimum-stability":"stable"
+}

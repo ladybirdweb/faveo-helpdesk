@@ -16,7 +16,7 @@ return new class() extends Migration {
             $table->string('User');
             $table->string('IP');
             $table->string('Attempts');
-            $table->datetime('LastLogin');
+            $table->timestamp('LastLogin')->nullable();
             $table->timestamps();
         });
     }

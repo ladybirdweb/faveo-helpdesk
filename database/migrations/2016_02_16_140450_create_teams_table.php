@@ -14,10 +14,10 @@ return new class() extends Migration {
         Schema::create('teams', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->boolean('status');
+            $table->boolean('status')->default(0);
             $table->integer('team_lead')->unsigned()->nullable()->index('team_lead');
-            $table->boolean('assign_alert');
-            $table->string('admin_notes');
+            $table->boolean('assign_alert')->default(0);
+            $table->string('admin_notes')->nullable();
             $table->timestamps();
         });
     }

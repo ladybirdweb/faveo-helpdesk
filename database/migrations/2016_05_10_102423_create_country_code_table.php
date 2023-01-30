@@ -13,11 +13,11 @@ return new class() extends Migration {
     {
         Schema::create('country_code', function (Blueprint $table) {
             $table->increments('id');
-            $table->char('iso', 2);
+            $table->char('iso', 2)->nullable();
             $table->string('name', 100);
             $table->string('nicename', 100);
-            $table->char('iso3', 3);
-            $table->smallInteger('numcode');
+            $table->char('iso3', 3)->nullable();
+            $table->string('numcode');
             $table->integer('phonecode');
             $table->timestamps();
         });

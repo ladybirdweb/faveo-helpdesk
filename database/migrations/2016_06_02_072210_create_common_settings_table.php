@@ -14,9 +14,9 @@ return new class() extends Migration {
         Schema::create('common_settings', function (Blueprint $table) {
             $table->increments('id');
             $table->string('option_name');
-            $table->string('option_value');
+            $table->string('option_value')->nullable();
             $table->string('status');
-            $table->string('optional_field');
+            $table->string('optional_field')->nullable();
             $table->timestamps();
         });
     }

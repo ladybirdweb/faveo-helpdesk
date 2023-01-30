@@ -59,6 +59,9 @@ Route::middleware('web')->group(function () {
 
     // Auth login
     Route::get('auth/login/{one?}/{two?}/{three?}/{four?}/{five?}', [Auth\AuthController::class, 'getLogin'])->name('auth.login');
+    Route::post('auth/login', [Auth\AuthController::class, 'postLogin'])->name('auth.post.login');
+    Route::get('user/search', [Client\kb\UserController::class, 'search'])->name('client.search');
+
     Breadcrumbs::register('auth.login', function ($breadcrumbs) {
         $breadcrumbs->parent('/');
         $breadcrumbs->push('Create Account', url('auth/register'));

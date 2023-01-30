@@ -389,7 +389,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
 
                                 @if(!$conversation->is_internal)
                                 @if($conversation->user_id != null)
-                                <?php Event::fire(new App\Events\Timeline($conversation, $role, $user)); ?>
+                                <?php \Illuminate\Support\Facades\Event::dispatch(new App\Events\Timeline($conversation, $role, $user)); ?>
                                 @endif
                                 @endif
                                 <?php

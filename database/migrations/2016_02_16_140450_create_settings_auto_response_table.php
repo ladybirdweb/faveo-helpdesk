@@ -13,11 +13,11 @@ return new class() extends Migration {
     {
         Schema::create('settings_auto_response', function (Blueprint $table) {
             $table->increments('id');
-            $table->boolean('new_ticket');
-            $table->boolean('agent_new_ticket');
-            $table->boolean('submitter');
-            $table->boolean('participants');
-            $table->boolean('overlimit');
+            $table->boolean('new_ticket')->default(0);
+            $table->boolean('agent_new_ticket')->default(0);
+            $table->boolean('submitter')->default(0);
+            $table->boolean('participants')->default(0);
+            $table->boolean('overlimit')->default(0);
             $table->timestamps();
         });
     }
