@@ -183,7 +183,7 @@ return [
         \App\Api\ApiServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         \Chumper\Datatable\DatatableServiceProvider::class,
-        \Yajra\DataTables\DataTablesServiceProvider::class
+        \Yajra\DataTables\DataTablesServiceProvider::class,
     ],
     /*
       |--------------------------------------------------------------------------

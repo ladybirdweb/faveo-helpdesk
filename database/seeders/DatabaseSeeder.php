@@ -47,7 +47,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-
         (new AlterColumnTypeSeeder())->run();
         /* Date time format */
         $date_time_formats = [
