@@ -499,7 +499,7 @@ $data = $ConvDate[0];
                                     </div>
                                     <div class="timeline-footer" style="margin-bottom:-5px">
                                     @if(!$conversation->is_internal)
-                                    <?php Event::fire(new App\Events\Timeline($conversation,$role,$user)); ?>
+                                    <?php \Illuminate\Support\Facades\Event::dispatch(new App\Events\Timeline($conversation,$role,$user)); ?>
                                     @endif
                                         <?php 
                                         $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id','=',$conversation->id)->get();

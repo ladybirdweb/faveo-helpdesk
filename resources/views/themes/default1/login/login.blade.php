@@ -7,7 +7,7 @@
       <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>
         <!-- form open -->
-        {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}  
+        {!!  Form::open(['route' => 'post.login']) !!}
           <!-- Email -->
           <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
 			

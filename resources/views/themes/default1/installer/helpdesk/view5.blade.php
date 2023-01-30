@@ -217,7 +217,7 @@ active
                         <td>
                             <div class="side-by-side clearfix moveleft">
                             <?php 
-                            $path = base_path('resources/lang'); 
+                            $path = base_path('lang');
                             $values = scandir($path);
                             $values = array_slice($values, 2);
                             $show = [];

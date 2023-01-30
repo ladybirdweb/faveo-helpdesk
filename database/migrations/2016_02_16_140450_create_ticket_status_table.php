@@ -19,8 +19,8 @@ return new class() extends Migration {
             $table->string('message');
             $table->integer('flags');
             $table->integer('sort');
-            $table->integer('email_user');
-            $table->string('icon_class');
+            $table->integer('email_user')->nullable();
+            $table->string('icon_class')->nullable();
             $table->string('properties');
             $table->timestamps();
         });

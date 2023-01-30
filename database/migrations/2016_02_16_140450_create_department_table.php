@@ -17,15 +17,15 @@ return new class() extends Migration {
             $table->string('type');
             $table->integer('sla')->unsigned()->nullable()->index('sla');
             $table->integer('manager')->unsigned()->nullable()->index('manager_2');
-            $table->string('ticket_assignment');
-            $table->string('outgoing_email');
-            $table->string('template_set');
-            $table->string('auto_ticket_response');
-            $table->string('auto_message_response');
-            $table->string('auto_response_email');
-            $table->string('recipient');
-            $table->string('group_access');
-            $table->string('department_sign');
+            $table->string('ticket_assignment')->nullable();
+            $table->string('outgoing_email')->nullable();
+            $table->string('template_set')->nullable();
+            $table->string('auto_ticket_response')->nullable();
+            $table->string('auto_message_response')->nullable();
+            $table->string('auto_response_email')->nullable();
+            $table->string('recipient')->nullable();
+            $table->string('group_access')->nullable();
+            $table->string('department_sign')->nullable();
             $table->timestamps();
         });
     }

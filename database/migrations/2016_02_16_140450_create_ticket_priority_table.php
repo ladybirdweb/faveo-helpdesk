@@ -19,7 +19,7 @@ return new class() extends Migration {
             $table->string('priority_color');
             $table->boolean('priority_urgency');
             $table->boolean('ispublic');
-            $table->string('is_default');
+            $table->string('is_default')->nullable();
             $table->timestamps();
         });
     }

@@ -36,6 +36,7 @@ use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\User;
 use Auth;
+use Chumper\Datatable\Facades\DatatableFacade;
 use Crypt;
 use DB;
 use Exception;
@@ -50,6 +51,7 @@ use Lang;
 use Mail;
 use PDF;
 use UTC;
+use Yajra\DataTables\Facades\DataTables;
 
 /**
  * TicketController.
@@ -678,7 +680,7 @@ class TicketController extends Controller
             $token = Str::random(60);
             $user->remember_token = $token;
             // mail user his/her password
-            //\Event::fire(new \App\Events\ClientTicketFormPost($from_data, $emailadd, $source));
+            //\Illuminate\Support\Facades\Event::dispatch(new \App\Events\ClientTicketFormPost($from_data, $emailadd, $source));
             if ($user->save()) {
                 $user_id = $user->id;
                 $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
@@ -2684,7 +2686,7 @@ class TicketController extends Controller
      */
     public function getTableFormat()
     {
-        return \Datatable::table()
+        return DatatableFacade::table()
             ->addColumn(
                 '<a class="checkbox-toggle"><i class="far fa-square fa-2x"></i></a>',
                 Lang::get('lang.subject'),
@@ -2716,7 +2718,7 @@ class TicketController extends Controller
      */
     public static function genreateTableJson($tickets)
     {
-        return \Datatables::of($tickets)
+        return DataTables::of($tickets)
                         ->editColumn('id', function ($tickets) {
                             $rep = ($tickets->last_replier == 'client') ? '#F39C12'
                                         : '#000';
@@ -3159,7 +3161,7 @@ class TicketController extends Controller
 
     public static function getTable($tickets)
     {
-        return \Datatables::of($tickets)
+        return DataTables::of($tickets)
             ->addColumn('id', function ($tickets) {
                 return "<input type='checkbox' name='select_all[]' id='".$tickets->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='".$tickets->id."'></input>";
             })

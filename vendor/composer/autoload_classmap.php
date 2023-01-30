@@ -48,6 +48,7 @@ return array(
     'DOMPDF' => $vendorDir . '/dompdf/dompdf/include/dompdf.cls.php',
     'DOMPDF_Exception' => $vendorDir . '/dompdf/dompdf/include/dompdf_exception.cls.php',
     'DOMPDF_Image_Exception' => $vendorDir . '/dompdf/dompdf/include/dompdf_image_exception.cls.php',
+    'Database\\Seeders\\AlterColumnTypeSeeder' => $baseDir . '/database/seeders/AlterColumnTypeSeeder.php',
     'Database\\Seeders\\DatabaseSeeder' => $baseDir . '/database/seeders/DatabaseSeeder.php',
     'Database\\Seeders\\OutboundMailSeeder' => $baseDir . '/database/seeders/OutboundMailSeeder.php',
     'Database\\Seeders\\TicketSourceSeeder' => $baseDir . '/database/seeders/TicketSourceSeeder.php',

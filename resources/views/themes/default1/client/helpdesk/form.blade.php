@@ -212,7 +212,7 @@ class = "nav-item active"
                             {!! Lang::get('lang.max') !!}. {!! $max_size_in_actual !!}
                         </div>
                         {{-- Event fire --}}
-                        <?php Event::fire(new App\Events\ClientTicketForm()); ?>
+                        <?php \Illuminate\Support\Facades\Event::dispatch(new App\Events\ClientTicketForm()); ?>
                         <div class="col-md-12" id="response"> </div>
                         <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>
                         <div class="col-md-12 form-group">

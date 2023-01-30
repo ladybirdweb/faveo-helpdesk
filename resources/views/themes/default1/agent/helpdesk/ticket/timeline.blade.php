@@ -133,7 +133,7 @@ if ($thread->title != "") {
         <div class="mb-3">
             <!-- <button type="button" class="btn btn-default"><i class="fa fa-edit" style="color:green;"> </i> Edit</button> -->
             <?php
-            Event::fire(new \App\Events\TicketBoxHeader($user->id));
+            \Illuminate\Support\Facades\Event::dispatch(new \App\Events\TicketBoxHeader($user->id));
 
             if ($group->can_edit_ticket == 1) {
                 ?>
@@ -149,7 +149,7 @@ if ($thread->title != "") {
             @endif
 
 
-            <?php Event::fire('show-add-event-btn', []); ?>
+            <?php \Illuminate\Support\Facades\Event::dispatch('show-add-event-btn', []); ?>
 
             <a href="{{url('ticket/print/'.$tickets->id)}}" target="_blank" class="btn btn-default btn-tool btn-sm"><i class="fas fa-print" > </i> {!! Lang::get('lang.generate_pdf') !!}</a>
             <div class="btn-group">
@@ -197,7 +197,7 @@ if ($thread->title != "") {
                         <?php if ($group->can_ban_email == 1) { ?>
                         <a href="#" class="dropdown-item" data-toggle="modal" data-target="#banemail"><i class="fas fa-ban" style="color:red;"></i> {!! Lang::get('lang.ban_email') !!}</a>
                         <?php 
-                        \Event::fire('ticket.details.more.list',[$tickets]);
+                        \Illuminate\Support\Facades\Event::dispatch('ticket.details.more.list',[$tickets]);
                         }
                         ?>          </div>
                 </div>
@@ -305,13 +305,13 @@ if ($thread->title != "") {
                         <tr><td><b>{!! Lang::get('lang.help_topic') !!}:</b></td>     <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first(); ?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
                         <tr><td><b>{!! Lang::get('lang.last_message') !!}:</b></td>   <td>{{Str::limit($username,30)}}</td></tr>
                         <tr><td><b>{!! Lang::get('lang.organization') !!}:</b></td>   <td>{!!$LastResponse->getOrgWithLink()!!}</td></tr>
-                        <?php Event::fire(new App\Events\TicketDetailTable($TicketData)); ?>
+                        <?php \Illuminate\Support\Facades\Event::dispatch(new App\Events\TicketDetailTable($TicketData)); ?>
                     </div>
                 </table>
             </div>
         </div>
 
-        <?php Event::fire('ticket.timeline.marble',[$TicketData]);?>
+        <?php \Illuminate\Support\Facades\Event::dispatch('ticket.timeline.marble',[$TicketData]);?>
         <div id="gifshow" style="display:none" class="text-center">
             <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}">
         </div>  <!-- added 05/05/2016-->
@@ -329,7 +329,7 @@ if ($thread->title != "") {
             <ul class="nav nav-tabs">
                 <li class="nav-item"><a class="nav-link active" href="#General" data-toggle="tab" style="color:#27C116;" id="aa"><i class="fa fa-reply-all"> </i> {!! Lang::get('lang.reply') !!}</a></li>
                 <li class="nav-item"><a class="nav-link" href="#Internal" data-toggle="tab" style="color:#0495FF;" id="bb"><i class="fa fa-file-text"> </i> {!! Lang::get('lang.internal_notes') !!}</a></li>
-                <?php Event::fire('timeline.tab.list',[$TicketData]); ?>
+                <?php \Illuminate\Support\Facades\Event::dispatch('timeline.tab.list',[$TicketData]); ?>
                 <!-- <li><a href="#Reply" data-toggle="tab" style="color:orange;"><i class="fa fa-mail-forward" > </i> Forward</a></li> -->
             </ul>
 
@@ -392,7 +392,7 @@ if ($thread->title != "") {
                                     </div>
                                 </div>
                             </div>
-                        <?php Event::fire(new App\Events\TimeLineFormEvent($tickets)); ?>
+                        <?php \Illuminate\Support\Facades\Event::dispatch(new App\Events\TimeLineFormEvent($tickets)); ?>
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-2">
@@ -495,7 +495,7 @@ if ($thread->title != "") {
                         {!!Form::close()!!}
                     </div>
                 </div>
-                <?php Event::fire('timeline.tab.content',[$tickets]); ?>
+                <?php \Illuminate\Support\Facades\Event::dispatch('timeline.tab.content',[$tickets]); ?>
             </div>
         </div>
 
@@ -759,7 +759,7 @@ if ($thread->title != "") {
                                         <div class="timeline-footer" style="margin-bottom:-5px">
                                             @if(!$conversation->is_internal)
                                                 @if($conversation->user_id != null)
-                                                    <?php Event::fire(new App\Events\Timeline($conversation, $role)); ?>
+                                                    <?php \Illuminate\Support\Facades\Event::dispatch(new App\Events\Timeline($conversation, $role)); ?>
                                                 @endif
                                             @endif
                                            
@@ -916,7 +916,7 @@ if ($thread->title != "") {
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
     <?php }
-    \Event::fire('ticket.detail.modelpopup',[$tickets]);
+    \Illuminate\Support\Facades\Event::dispatch('ticket.detail.modelpopup',[$tickets]);
     ?>
     <!-- Change Owner Modal -->
     <div class="modal fade" id="ChangeOwner">
@@ -1072,7 +1072,7 @@ if ($thread->title != "") {
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    <?php \Event::fire('show-add-calendar-model', ['id' => $tickets->id])?>
+    <?php \Illuminate\Support\Facades\Event::dispatch('show-add-calendar-model', ['id' => $tickets->id])?>
     <!-- add or search user Modal -->
     <div class="modal fade" id="addccc">
         <div class="modal-dialog">

@@ -66,7 +66,7 @@
 
                 }
                 $replacetop = 0;
-                $replacetop = \Event::fire('service.desk.agent.topbar.replace', []);
+                $replacetop = \Illuminate\Support\Facades\Event::dispatch('service.desk.agent.topbar.replace', []);
 
                 if (count($replacetop) == 0) {
                     $replacetop = 0;
@@ -74,7 +74,7 @@
                     $replacetop = $replacetop[0];
                 }
                 $replaceside = 0;
-                $replaceside = \Event::fire('service.desk.agent.sidebar.replace', []);
+                $replaceside = \Illuminate\Support\Facades\Event::dispatch('service.desk.agent.sidebar.replace', []);
 
                 if (count($replaceside) == 0) {
                     $replaceside = 0;
@@ -105,10 +105,10 @@
                             @if(Auth::user()->role == 'admin')
                                 <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">{!! Lang::get('lang.report') !!}</a></li>
                             @endif
-                            <?php \Event::fire('calendar.topbar', []); ?>
+                            <?php \Illuminate\Support\Facades\Event::dispatch('calendar.topbar', []); ?>
                         </ul>
                         @else
-                            <?php \Event::fire('service.desk.agent.topbar', []); ?>
+                            <?php \Illuminate\Support\Facades\Event::dispatch('service.desk.agent.topbar', []); ?>
                             @endif
                         <?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id', '=', Auth::user()->id)->where('is_read', '0')->get(); ?>
                         <ul class="nav navbar-nav navbar-right">
@@ -388,7 +388,7 @@
                         }
                         ?>
                         @else
-<?php \Event::fire('service.desk.agent.sidebar', []); ?>
+<?php \Illuminate\Support\Facades\Event::dispatch('service.desk.agent.sidebar', []); ?>
                         @endif
                     </ul>
                 </section>
@@ -444,13 +444,13 @@
                                 </div>
                             @endif
                             @endif
-<?php \Event::fire('service.desk.agent.topsubbar', []); ?>
+<?php \Illuminate\Support\Facades\Event::dispatch('service.desk.agent.topsubbar', []); ?>
                         </div>
                     </div>
                 </div>
                 <section class="content-header">
                     @yield('PageHeader')
-                    {!! Breadcrumbs::renderIfExists() !!}
+                    {!! Breadcrumbs::render() !!}
                 </section>
                 <!-- Main content -->
                 <section class="content">
@@ -613,8 +613,8 @@
 
     });
 </script>-->
-<?php Event::fire('show.calendar.script', []); ?>
-<?php Event::fire('load-calendar-scripts', []); ?>
+<?php \Illuminate\Support\Facades\Event::dispatch('show.calendar.script', []); ?>
+<?php \Illuminate\Support\Facades\Event::dispatch('load-calendar-scripts', []); ?>
 @yield('FooterInclude')
 </body>
 </html>

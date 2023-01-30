@@ -34,5 +34,5 @@
 </div>
 @endforeach
 @include('themes.default1.agent.helpdesk.filters.tags')
-<?php Event::fire(new App\Events\TicketDetailTable($TicketData)); ?>
+<?php \Illuminate\Support\Facades\Event::dispatch(new App\Events\TicketDetailTable($TicketData)); ?>
         

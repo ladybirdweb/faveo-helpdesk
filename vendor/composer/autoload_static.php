@@ -14,9 +14,9 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
+        'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
-        'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -60,6 +60,14 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
         'Z' => 
         array (
             'ZipStream\\' => 10,
+            'Zend\\Validator\\' => 15,
+            'Zend\\Uri\\' => 9,
+            'Zend\\Stdlib\\' => 12,
+            'Zend\\Loader\\' => 12,
+            'Zend\\Json\\' => 10,
+            'Zend\\Hydrator\\' => 14,
+            'Zend\\Http\\' => 10,
+            'Zend\\Escaper\\' => 13,
         ),
         'Y' => 
         array (
@@ -76,6 +84,7 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
         ),
         'U' => 
         array (
+            'Unisharp\\Ckeditor\\' => 18,
             'UniSharp\\LaravelFilemanager\\' => 28,
         ),
         'T' => 
@@ -83,6 +92,8 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
             'Tymon\\JWTAuth\\' => 14,
             'Torann\\GeoIP\\' => 13,
             'TijsVerkoyen\\CssToInlineStyles\\' => 31,
+            'Thomaswelton\\Tests\\LaravelGravatar\\' => 35,
+            'Thomaswelton\\LaravelGravatar\\' => 29,
             'Tests\\' => 6,
             'Termwind\\' => 9,
         ),
@@ -106,6 +117,7 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
             'Symfony\\Component\\String\\' => 25,
             'Symfony\\Component\\Routing\\' => 26,
             'Symfony\\Component\\Process\\' => 26,
+            'Symfony\\Component\\OptionsResolver\\' => 34,
             'Symfony\\Component\\Mime\\' => 23,
             'Symfony\\Component\\Mailer\\' => 25,
             'Symfony\\Component\\HttpKernel\\' => 29,
@@ -174,6 +186,8 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
             'Laravel\\Socialite\\' => 18,
             'Laravel\\SerializableClosure\\' => 28,
             'Laravel\\Dusk\\' => 13,
+            'LaravelFCM\\Mocks\\' => 17,
+            'LaravelFCM\\' => 11,
         ),
         'J' => 
         array (
@@ -229,6 +243,7 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
             'Composer\\CaBundle\\' => 18,
             'Complex\\' => 8,
             'Collective\\Html\\' => 16,
+            'Chumper\\Zipper\\' => 15,
             'Carbon\\' => 7,
         ),
         'B' => 
@@ -254,8 +269,8 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
         ),
         'libphonenumber\\' => 
         array (
@@ -264,6 +279,38 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
+        ),
+        'Zend\\Validator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-validator/src',
+        ),
+        'Zend\\Uri\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-uri/src',
+        ),
+        'Zend\\Stdlib\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-stdlib/src',
+        ),
+        'Zend\\Loader\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-loader/src',
+        ),
+        'Zend\\Json\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-json/src',
+        ),
+        'Zend\\Hydrator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-hydrator/src',
+        ),
+        'Zend\\Http\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-http/src',
+        ),
+        'Zend\\Escaper\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-escaper/src',
         ),
         'Yajra\\DataTables\\' => 
         array (
@@ -281,6 +328,10 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
         array (
             0 => __DIR__ . '/..' . '/vsmoraes/laravel-pdf/src',
         ),
+        'Unisharp\\Ckeditor\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/unisharp/laravel-ckeditor',
+        ),
         'UniSharp\\LaravelFilemanager\\' => 
         array (
             0 => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src',
@@ -296,6 +347,14 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
         'TijsVerkoyen\\CssToInlineStyles\\' => 
         array (
             0 => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src',
+        ),
+        'Thomaswelton\\Tests\\LaravelGravatar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/thomaswelton/laravel-gravatar/tests',
+        ),
+        'Thomaswelton\\LaravelGravatar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/thomaswelton/laravel-gravatar/src',
         ),
         'Tests\\' => 
         array (
@@ -377,6 +436,10 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
         array (
             0 => __DIR__ . '/..' . '/symfony/process',
         ),
+        'Symfony\\Component\\OptionsResolver\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/options-resolver',
+        ),
         'Symfony\\Component\\Mime\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/mime',
@@ -455,8 +518,8 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -590,6 +653,14 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
         array (
             0 => __DIR__ . '/..' . '/laravel/dusk/src',
         ),
+        'LaravelFCM\\Mocks\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/brozot/laravel-fcm/tests/mocks',
+        ),
+        'LaravelFCM\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/brozot/laravel-fcm/src',
+        ),
         'JmesPath\\' => 
         array (
             0 => __DIR__ . '/..' . '/mtdowling/jmespath.php/src',
@@ -703,10 +774,12 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
         'Database\\Seeders\\' => 
         array (
             0 => __DIR__ . '/../..' . '/database/seeders',
+            1 => __DIR__ . '/..' . '/laravel/pint/database/seeders',
         ),
         'Database\\Factories\\' => 
         array (
             0 => __DIR__ . '/../..' . '/database/factories',
+            1 => __DIR__ . '/..' . '/laravel/pint/database/factories',
         ),
         'Cron\\' => 
         array (
@@ -727,6 +800,10 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
         'Collective\\Html\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravelcollective/html/src',
+        ),
+        'Chumper\\Zipper\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/chumper/zipper/src/Chumper/Zipper',
         ),
         'Carbon\\' => 
         array (
@@ -759,10 +836,44 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
+            1 => __DIR__ . '/..' . '/laravel/pint/app',
         ),
     );
 
     public static $prefixesPsr0 = array (
+        't' => 
+        array (
+            'thomaswelton\\GravatarLib\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/thomaswelton/gravatarlib',
+            ),
+        ),
+        'Z' => 
+        array (
+            'ZendService\\Google\\Gcm\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/zendframework/zendservice-google-gcm/library',
+            ),
+            'ZendService\\Google\\Exception\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/zendframework/zendservice-google-gcm/library',
+            ),
+            'ZendService\\Apple\\Exception\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/zendframework/zendservice-apple-apns/library',
+            ),
+            'ZendService\\Apple\\Apns\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/zendframework/zendservice-apple-apns/library',
+            ),
+        ),
+        'S' => 
+        array (
+            'Sly' => 
+            array (
+                0 => __DIR__ . '/..' . '/sly/notification-pusher/src',
+            ),
+        ),
         'P' => 
         array (
             'PhpSpec' => 
@@ -804,6 +915,17 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
             'Diff' => 
             array (
                 0 => __DIR__ . '/..' . '/phpspec/php-diff/lib',
+            ),
+            'Davibennun\\LaravelPushNotification' => 
+            array (
+                0 => __DIR__ . '/..' . '/davibennun/laravel-push-notification/src',
+            ),
+        ),
+        'C' => 
+        array (
+            'Chumper\\Datatable' => 
+            array (
+                0 => __DIR__ . '/..' . '/chumper/datatable/src',
             ),
         ),
     );
@@ -851,6 +973,7 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
         'DOMPDF' => __DIR__ . '/..' . '/dompdf/dompdf/include/dompdf.cls.php',
         'DOMPDF_Exception' => __DIR__ . '/..' . '/dompdf/dompdf/include/dompdf_exception.cls.php',
         'DOMPDF_Image_Exception' => __DIR__ . '/..' . '/dompdf/dompdf/include/dompdf_image_exception.cls.php',
+        'Database\\Seeders\\AlterColumnTypeSeeder' => __DIR__ . '/../..' . '/database/seeders/AlterColumnTypeSeeder.php',
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
         'Database\\Seeders\\OutboundMailSeeder' => __DIR__ . '/../..' . '/database/seeders/OutboundMailSeeder.php',
         'Database\\Seeders\\TicketSourceSeeder' => __DIR__ . '/../..' . '/database/seeders/TicketSourceSeeder.php',

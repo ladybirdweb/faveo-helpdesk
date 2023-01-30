@@ -96,14 +96,14 @@
 
         <?php
         $replacetop = 0;
-        $replacetop = \Event::fire('service.desk.admin.topbar.replace', []);
+        $replacetop = \Illuminate\Support\Facades\Event::dispatch('service.desk.admin.topbar.replace', []);
         if (count($replacetop) == 0) {
             $replacetop = 0;
         } else {
             $replacetop = $replacetop[0];
         }
         $replaceside = 0;
-        $replaceside = \Event::fire('service.desk.admin.sidebar.replace', []);
+        $replaceside = \Illuminate\Support\Facades\Event::dispatch('service.desk.admin.sidebar.replace', []);
         if (count($replaceside) == 0) {
             $replaceside = 0;
         } else {
@@ -137,7 +137,7 @@
                         </a>
                     </li>
                     @else
-                    <?php \Event::fire('service.desk.admin.topbar', []); ?>
+                    <?php \Illuminate\Support\Facades\Event::dispatch('service.desk.admin.topbar', []); ?>
                     @endif
                 </ul>
 
@@ -691,7 +691,7 @@
                                 </a>
                             </li>
                             @endif
-                            <?php \Event::fire('service.desk.admin.sidebar', []); ?>
+                            <?php \Illuminate\Support\Facades\Event::dispatch('service.desk.admin.sidebar', []); ?>
                         </ul>
                     </nav>
                 </section>
@@ -709,7 +709,7 @@
                       </div><!-- /.col -->
                       <div class="col-sm-6">
 
-                        {!! Breadcrumbs::renderIfExists() !!}
+                        {!! Breadcrumbs::render() !!}
                       </div><!-- /.col -->
                     </div><!-- /.row -->
                   </div><!-- /.container-fluid -->

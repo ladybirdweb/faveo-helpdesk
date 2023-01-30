@@ -23,10 +23,10 @@ return new class() extends Migration {
             $table->integer('active');
             $table->boolean('is_delete')->default(0);
             $table->string('ext');
-            $table->integer('country_code');
+            $table->integer('country_code')->nullable();
             $table->string('phone_number');
             $table->string('mobile')->nullable()->unique();
-            $table->text('agent_sign', 65535);
+            $table->text('agent_sign')->nullable();
             $table->string('account_type');
             $table->string('account_status');
             $table->integer('assign_group')->unsigned()->nullable()->index('assign_group_3');

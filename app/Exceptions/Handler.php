@@ -41,6 +41,7 @@ class Handler extends ExceptionHandler
      */
     public function report(\Throwable $e)
     {
+        dd($e);
         Bugsnag::setBeforeNotifyFunction(function ($error) { //set bugsnag
             return false;
         });
