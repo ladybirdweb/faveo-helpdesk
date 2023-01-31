@@ -3,6 +3,7 @@
 namespace Chumper\Zipper\Repositories;
 
 use Exception;
+use Illuminate\Support\Str;
 use ZipArchive;
 
 class ZipRepository implements RepositoryInterface
@@ -114,10 +115,12 @@ class ZipRepository implements RepositoryInterface
             if ($stats['size'] === 0 && $stats['crc'] === 0) {
                 continue;
             }
-            call_user_func_array($callback, [
-                'file' => $this->archive->getNameIndex($i),
-                'stats' => $this->archive->statIndex($i)
-            ]);
+            $file = $this->archive->getNameIndex($i);
+            $stats = $this->archive->statIndex($i);
+            if (Str::startsWith($file, 'some_prefix')) {
+                $callback($file, $stats);
+            }
+
         }
     }
 

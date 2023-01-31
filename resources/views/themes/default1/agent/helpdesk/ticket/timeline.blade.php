@@ -222,10 +222,12 @@ if ($thread->title != "") {
                 <div class="col-md-3">
                     <b>{!! Lang::get('lang.due_date') !!}: </b>
                     <?php
-                    $time = $tickets->created_at;
-                    $time = date_create($time);
+                    $duedate = $tickets->duedate;
+                    $user_timezone = new DateTimeZone('Asia/Kolkata');
+                    $time = date_create($tickets->duedate, $user_timezone);
                     date_add($time, date_interval_create_from_date_string($SlaPlan->grace_period));
-                    echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
+                    date_add($time, date_interval_create_from_date_string('30 minutes'));
+                    echo $time->format('Y-m-d H:i:s');
                     ?>
                 </div>
                 <div class="col-md-3">
@@ -885,6 +887,12 @@ if ($thread->title != "") {
                     <div id="show" style="display:none;text-align: center;">
                         <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}">
                     </div>
+                    <script>
+                        $('#Edit').on('hidden.bs.modal', function (e) {
+                            $(this).find('form')[0].reset();
+
+                        });
+                    </script>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal" id="dismis">{!! Lang::get('lang.close') !!}</button>
                         <input type="submit" class="btn btn-primary" value="{!! Lang::get('lang.update') !!}">
