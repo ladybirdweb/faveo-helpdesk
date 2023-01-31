@@ -151,7 +151,7 @@ class UserController extends Controller
         }
         // displaying list of users with chumper datatables
         // return \Datatable::collection(User::where('role', "!=", "admin")->get())
-        return \Datatables::of($users)
+        return \Yajra\DataTables\Facades\DataTables::of($users)
                         /* column username */
                         ->removeColumn('id', 'last_name', 'country_code', 'phone_number')
                         ->addColumn('user_name', function ($model) {

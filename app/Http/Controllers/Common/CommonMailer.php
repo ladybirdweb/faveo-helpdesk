@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Common;
 
 use Exception;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 
 class CommonMailer
 {
@@ -12,17 +13,12 @@ class CommonMailer
             if (!$config) {
                 return false;
             }
-            $https = [];
-            $https['ssl']['verify_peer'] = false;
-            $https['ssl']['verify_peer_name'] = false;
-            $transport = new \Swift_SmtpTransport($config['host'], $config['port'], $config['security']);
+            $transport = new EsmtpTransport($config['host'], $config['port']);
             $transport->setUsername($config['username']);
             $transport->setPassword($config['password']);
-            $transport->setStreamOptions($https);
-            $set = new \Swift_Mailer($transport);
 
             // Set the mailer
-            \Mail::setSymfonyTransport($set);
+            \Mail::setSymfonyTransport($transport);
 
             return true;
         } catch (Exception $e) {

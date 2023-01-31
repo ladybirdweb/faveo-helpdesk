@@ -1,11 +1,7 @@
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/support-ukraine.svg?t=1" />](https://supportukrainenow.org)
-
 # Ignition: a beautiful error page for PHP apps
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/ignition.svg?style=flat-square)](https://packagist.org/packages/spatie/ignition)
 [![Run tests](https://github.com/spatie/ignition/actions/workflows/run-tests.yml/badge.svg)](https://github.com/spatie/ignition/actions/workflows/run-tests.yml)
-[![PHPStan](https://github.com/spatie/ignition/actions/workflows/phpstan.yml/badge.svg)](https://github.com/spatie/ignition/actions/workflows/phpstan.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/ignition.svg?style=flat-square)](https://packagist.org/packages/spatie/ignition)
 
 [Ignition](https://flareapp.io/docs/ignition-for-laravel/introduction) is a beautiful and customizable error page for

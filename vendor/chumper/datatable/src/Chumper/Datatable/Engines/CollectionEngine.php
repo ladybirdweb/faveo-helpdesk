@@ -13,6 +13,19 @@ use Illuminate\Support\Collection;
 class CollectionEngine extends BaseEngine {
 
     /**
+     * Constant for OR queries in internal search
+     *
+     * @var string
+     */
+    const OR_CONDITION = 'OR';
+    /**
+     * Constant for AND queries in internal search
+     *
+     * @var string
+     */
+    const AND_CONDITION = 'AND';
+
+    /**
      * @var \Illuminate\Support\Collection
      */
     private $workingCollection;
@@ -23,22 +36,13 @@ class CollectionEngine extends BaseEngine {
     private $collection;
 
     /**
-     * @var string
-     */
-    const OR_CONDITION = 'OR';
-
-    /**
-     * @var string
-     */
-    const AND_CONDITION = 'AND';
-
-    /**
      * @var array Different options
      */
     private $options = array(
-        'stripOrder'        =>  false,
-        'stripSearch'       =>  false,
-        'caseSensitive'     =>  false,
+        'sortFlags'         => SORT_NATURAL,
+        'stripOrder'        => false,
+        'stripSearch'       => false,
+        'caseSensitive'     => false,
     );
 
     /**
@@ -98,9 +102,9 @@ class CollectionEngine extends BaseEngine {
         return $this;
     }
 
-    public function stripOrder()
+    public function stripOrder($callback = true)
     {
-        $this->options['stripOrder'] = true;
+        $this->options['stripOrder'] = $callback;
         return $this;
     }
 
@@ -110,9 +114,20 @@ class CollectionEngine extends BaseEngine {
         return $this;
     }
 
-    public function setOrderStrip()
+    public function setOrderStrip($callback = true)
     {
-        $this->options['stripOrder'] = true;
+        return $this->stripOrder($callback);
+    }
+
+    /**
+     * Set the sort behaviour of the doInternalOrder() function.
+     *
+     * @param int $sort_flags For details see: http://php.net/manual/en/function.sort.php
+     * @return $this
+     */
+    public function setOrderFlags($sort_flags = SORT_NATURAL)
+    {
+        $this->options['sortFlags'] = $sort_flags;
         return $this;
     }
 
@@ -137,6 +152,13 @@ class CollectionEngine extends BaseEngine {
         return $this->workingCollection->slice($this->skip,$this->limit)->values();
     }
 
+    /**
+     * Filter a collection based on the DataTables search parameters (sSearch_0 etc)
+     * See http://legacy.datatables.net/usage/server-side
+     *
+     * @param Collection $columns       All the columns in the DataTable
+     * @param array      $searchColumns Columns to search on - values are case-sensitive (must match definition from $columns)
+     */
     private function doInternalSearch(Collection $columns, array $searchColumns)
     {
         if((is_null($this->search) || empty($this->search)) && empty($this->fieldSearches))
@@ -146,9 +168,7 @@ class CollectionEngine extends BaseEngine {
         $caseSensitive = $this->options['caseSensitive'];
 
         $toSearch = array();
-
         $searchType = self::AND_CONDITION;
-
         // Map the searchColumns to the real columns
         $ii = 0;
         foreach($columns as $i => $col)
@@ -164,7 +184,6 @@ class CollectionEngine extends BaseEngine {
                 {
                     if($value)
                         $searchType = self::OR_CONDITION;
-
                     $toSearch[$ii] = $value;
                 }
             }
@@ -174,7 +193,6 @@ class CollectionEngine extends BaseEngine {
         $self = $this;
         $this->workingCollection = $this->workingCollection->filter(function($row) use ($toSearch, $caseSensitive, $self, $searchType)
         {
-
             for($i=0, $stack=array(), $nb=count($row); $i<$nb; $i++)
             {
                 if(!array_key_exists($i, $toSearch))
@@ -221,11 +239,9 @@ class CollectionEngine extends BaseEngine {
                     }
                 }
             }
-
             if($searchType == $self::AND_CONDITION)
             {
                 $result = array_diff_key(array_filter($toSearch), $stack);
-
                 if(empty($result))
                     return true;
             }
@@ -242,33 +258,31 @@ class CollectionEngine extends BaseEngine {
         if(is_null($this->orderColumn))
             return;
 
-        // Bug added on pull request #309
-        $column = array_values($this->orderColumn)[0];
-        $direction = array_values($this->orderDirection)[0];
+        $column = $this->orderColumn[0];
         $stripOrder = $this->options['stripOrder'];
+        $self = $this;
+        $this->workingCollection = $this->workingCollection->sortBy(function($row) use ($column,$stripOrder,$self) {
 
-        $sortFunction = 'sortBy';
-        if ($direction == BaseEngine::ORDER_DESC)
-            $sortFunction = 'sortByDesc';
-
-        $this->workingCollection->{$sortFunction}(function($row) use ($column,$stripOrder) {
-
-            if($this->getAliasMapping())
+            if($self->getAliasMapping())
             {
-                $column = $this->getNameByIndex($column[0]);
-                return $row[$column];
+                $column = $self->getNameByIndex($column);
             }
             if($stripOrder)
             {
-                return strip_tags($row[$column]);
+                if(is_callable($stripOrder)){
+                    return $stripOrder($row, $column);
+                }else{
+                    return strip_tags($row[$column]);
+                }
             }
             else
             {
-                if (is_array($column))
-                    return $row[$column[0]];
                 return $row[$column];
             }
-        });
+        }, $this->options['sortFlags']);
+
+        if($this->orderDirection == BaseEngine::ORDER_DESC)
+            $this->workingCollection = $this->workingCollection->reverse();
     }
 
     private function compileArray($columns)
@@ -285,6 +299,10 @@ class CollectionEngine extends BaseEngine {
             if(!is_null($self->getRowId()) && is_callable($self->getRowId()))
             {
                 $entry['DT_RowId'] = call_user_func($self->getRowId(),$row);
+            }
+            if(!is_null($self->getRowData()) && is_callable($self->getRowData()))
+            {
+                $entry['DT_RowData'] = call_user_func($self->getRowData(),$row);
             }
             $i=0;
             foreach ($columns as $col)

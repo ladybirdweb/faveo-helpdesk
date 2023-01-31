@@ -3,7 +3,7 @@
 /*
  * This file is part of Psy Shell.
  *
- * (c) 2012-2022 Justin Hileman
+ * (c) 2012-2023 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -122,8 +122,6 @@ class CodeFormatter implements ReflectorFormatter
      * This is typehinted as \Reflector but we've narrowed the input via self::isReflectable already.
      *
      * @param \ReflectionClass|\ReflectionFunctionAbstract $reflector
-     *
-     * @return int
      */
     private static function getStartLine(\Reflector $reflector): int
     {
@@ -309,9 +307,9 @@ class CodeFormatter implements ReflectorFormatter
     /**
      * Check whether a Reflector instance is reflectable by this formatter.
      *
-     * @param \Reflector $reflector
+     * @phpstan-assert-if-true \ReflectionClass|\ReflectionFunctionAbstract $reflector
      *
-     * @return bool
+     * @param \Reflector $reflector
      */
     private static function isReflectable(\Reflector $reflector): bool
     {

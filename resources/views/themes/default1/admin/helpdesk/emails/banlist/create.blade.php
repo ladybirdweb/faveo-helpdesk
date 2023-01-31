@@ -32,7 +32,7 @@ class="nav-link active"
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-{!! Form::open(['action' => 'Admin\helpdesk\BanlistController@store','method' => 'POST']) !!}
+{!! Form::open(['route' => 'banlist.store']) !!}
 
 @if(Session::has('success'))
 <div class="alert alert-success alert-dismissable">

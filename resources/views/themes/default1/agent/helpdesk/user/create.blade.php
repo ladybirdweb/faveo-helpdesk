@@ -68,7 +68,7 @@ class="nav-link active"
 </div>
 @endif    
 <!-- open a form -->
-{!! Form::open(['action'=>'Agent\helpdesk\UserController@store','method'=>'post']) !!}
+{!! Form::open(['route' => 'user.store']) !!}
 <div class="card card-light">
     <div class="card-header">
         <h3 class="card-title">
