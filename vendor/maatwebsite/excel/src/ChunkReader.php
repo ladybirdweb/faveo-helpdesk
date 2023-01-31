@@ -2,8 +2,12 @@
 
 namespace Maatwebsite\Excel;
 
+use Illuminate\Bus\Queueable;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\PendingDispatch;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Jobs\SyncJob;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ShouldQueueWithoutChain;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
@@ -20,6 +24,16 @@ use Throwable;
 
 class ChunkReader
 {
+    /**
+     * @var Container
+     */
+    protected $container;
+
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
+
     /**
      * @param  WithChunkReading  $import
      * @param  Reader  $reader
@@ -87,7 +101,9 @@ class ChunkReader
 
         $jobs->each(function ($job) {
             try {
-                dispatch_now($job);
+                function_exists('dispatch_now')
+                    ? dispatch_now($job)
+                    : $this->dispatchNow($job);
             } catch (Throwable $e) {
                 if (method_exists($job, 'failed')) {
                     $job->failed($e);
@@ -103,5 +119,27 @@ class ChunkReader
         unset($jobs);
 
         return null;
+    }
+
+    /**
+     * Dispatch a command to its appropriate handler in the current process without using the synchronous queue.
+     *
+     * @param  object  $command
+     * @param  mixed  $handler
+     * @return mixed
+     */
+    protected function dispatchNow($command, $handler = null)
+    {
+        $uses = class_uses_recursive($command);
+
+        if (in_array(InteractsWithQueue::class, $uses) &&
+            in_array(Queueable::class, $uses) && !$command->job
+        ) {
+            $command->setJob(new SyncJob($this->container, json_encode([]), 'sync', 'sync'));
+        }
+
+        $method = method_exists($command, 'handle') ? 'handle' : '__invoke';
+
+        return $this->container->call([$command, $method]);
     }
 }

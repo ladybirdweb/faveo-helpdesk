@@ -11,7 +11,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0",
-        "illuminate/pipeline": "^8.0|^9.0",
+        "illuminate/pipeline": "^8.0|^9.0|^10.0",
         "spatie/backtrace": "^1.2",
         "symfony/http-foundation": "^5.0|^6.0",
         "symfony/mime": "^5.2|^6.0",

@@ -37,7 +37,7 @@ class BugsnagServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    const VERSION = '2.25.0';
+    const VERSION = '2.25.1';
 
     /**
      * Boot the service provider.
@@ -180,6 +180,71 @@ class BugsnagServiceProvider extends ServiceProvider
 
             $this->app->make(Tracker::class)->set($job);
         });
+
+        $this->setupQueueForLaravelVapor($queue);
+    }
+
+    /**
+     * Setup queue events for Laravel Vapor.
+     *
+     * This is required because Laravel Vapor's queue system doesn't behave as
+     * a daemonised queue worker (the 'looping' event never fires) but also
+     * doesn't behave as a non-daemonised queue worker (our shutdown function
+     * never fires).
+     *
+     * @param QueueManager $queue
+     *
+     * @return void
+     */
+    private function setupQueueForLaravelVapor(QueueManager $queue)
+    {
+        // ensure we're running on vapor
+        // this is how vapor-core does it, e.g.:
+        // https://github.com/laravel/vapor-core/blob/61437221090850ba6e51dce15d0058d362654f9b/src/ConfiguresAssets.php#L16-L19
+        if (!isset($_ENV['VAPOR_SSM_PATH'])) {
+            return;
+        }
+
+        // used to keep track of if we're the ones disabling batch sending, so we
+        // know if we need to re-enable it - if the user disables batch sending
+        // then they don't want it enabled at all
+        static $batchSendingWasDisabledByUs = false;
+
+        $queue->before(function () use (&$batchSendingWasDisabledByUs) {
+            // clear breadcrumbs to stop them leaking between jobs
+            $this->app->bugsnag->clearBreadcrumbs();
+
+            // only re-enable batch sending if we're the ones disabling it
+            // this allows users to disable batch sending entirely
+            if ($batchSendingWasDisabledByUs) {
+                $this->app->bugsnag->setBatchSending(true);
+            }
+        });
+
+        $flush = function () use (&$batchSendingWasDisabledByUs) {
+            // flush any events created in this job
+            $this->app->bugsnag->flush();
+
+            // disable batch sending so any events after this get sent synchronously
+            // this is important as exceptions are logged after the 'exceptionOccurred'
+            // event fires, so the above flush is too early to send them
+            // these exceptions would get sent after processing the next queued job,
+            // but we'd still drop the last event when this queue worker stops running
+            if ($this->app->bugsnag->isBatchSending()) {
+                $this->app->bugsnag->setBatchSending(false);
+                $batchSendingWasDisabledByUs = true;
+            }
+        };
+
+        // added in 5.2.41
+        if (method_exists($queue, 'after')) {
+            $queue->after($flush);
+        }
+
+        // added in 5.2.41
+        if (method_exists($queue, 'exceptionOccurred')) {
+            $queue->exceptionOccurred($flush);
+        }
     }
 
     /**

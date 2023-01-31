@@ -65,6 +65,7 @@ final class BacktraceProcessor
      */
     const LARAVEL_VENDOR_NAMESPACE = 'Illuminate\\';
     const LUMEN_VENDOR_NAMESPACE = 'Laravel\\';
+    const COLLISION_VENDOR_NAMESPACE = 'NunoMaduro\\Collision\\';
 
     /**
      * The current state; one of the self::STATE_ constants.
@@ -132,7 +133,7 @@ final class BacktraceProcessor
                 // if this class is a framework exception handler and the function
                 // matches self::HANDLER_METHOD, we can move on to searching for
                 // the caller
-                if (($class === self::LARAVEL_HANDLER_CLASS || $class === self::LUMEN_HANDLER_CLASS)
+                if ($this->isFrameworkExceptionHandler($class)
                     && isset($frame['function'])
                     && $frame['function'] === self::HANDLER_METHOD
                 ) {
@@ -144,10 +145,7 @@ final class BacktraceProcessor
             case self::STATE_HANDLER_CALLER:
                 // if this is an app exception handler or a framework class, we
                 // can move on to determine if this was unhandled or not
-                if ($class === self::LARAVEL_APP_EXCEPTION_HANDLER
-                    || $class === self::LUMEN_APP_EXCEPTION_HANDLER
-                    || $this->isVendor($class)
-                ) {
+                if ($this->isAppExceptionHandler($class) || $this->isVendor($class)) {
                     $this->state = self::STATE_IS_UNHANDLED;
                 }
 
@@ -180,7 +178,47 @@ final class BacktraceProcessor
      */
     private function isVendor($class)
     {
-        return substr($class, 0, strlen(self::LARAVEL_VENDOR_NAMESPACE)) === self::LARAVEL_VENDOR_NAMESPACE
-            || substr($class, 0, strlen(self::LUMEN_VENDOR_NAMESPACE)) === self::LUMEN_VENDOR_NAMESPACE;
+        return $this->isInNamespace($class, self::LARAVEL_VENDOR_NAMESPACE)
+            || $this->isInNamespace($class, self::LUMEN_VENDOR_NAMESPACE)
+            || $this->isInNamespace($class, self::COLLISION_VENDOR_NAMESPACE);
+    }
+
+    /**
+     * Check if the given class is in the given namespace.
+     *
+     * @param string $class
+     * @param string $namespace
+     *
+     * @return bool
+     */
+    private function isInNamespace($class, $namespace)
+    {
+        return substr($class, 0, strlen($namespace)) === $namespace;
+    }
+
+    /**
+     * Is the given class Laravel or Lumen's exception handler?
+     *
+     * @param string $class
+     *
+     * @return bool
+     */
+    private function isFrameworkExceptionHandler($class)
+    {
+        return $class === self::LARAVEL_HANDLER_CLASS
+            || $class === self::LUMEN_HANDLER_CLASS;
+    }
+
+    /**
+     * Is the given class an App's exception handler?
+     *
+     * @param string $class
+     *
+     * @return bool
+     */
+    private function isAppExceptionHandler($class)
+    {
+        return $class === self::LARAVEL_APP_EXCEPTION_HANDLER
+            || $class === self::LUMEN_APP_EXCEPTION_HANDLER;
     }
 }

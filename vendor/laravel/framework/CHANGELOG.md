@@ -1,6 +1,48 @@
 # Release Notes for 9.x
 
-## [Unreleased](https://github.com/laravel/framework/compare/v9.45.1...9.x)
+## [Unreleased](https://github.com/laravel/framework/compare/v9.47.0...9.x)
+
+
+## [v9.47.0](https://github.com/laravel/framework/compare/v9.46.0...v9.47.0) - 2023-01-10
+
+### Added
+- Added Support Lazy Collections in `BatchFake::add()` ([#45507](https://github.com/laravel/framework/pull/45507))
+- Added Decimal to list of Numeric rules ([#45533](https://github.com/laravel/framework/pull/45533))
+- Added `Illuminate/Routing/PendingSingletonResourceRegistration::destroyable()` ([#45549](https://github.com/laravel/framework/pull/45549))
+- Added setVisible and setHidden to Eloquent Collection ([#45558](https://github.com/laravel/framework/pull/45558))
+
+### Fixed
+- Fix bound method contextual binding ([#45500](https://github.com/laravel/framework/pull/45500))
+- Fixed Method explodeExplicitRule with regex rule ([#45555](https://github.com/laravel/framework/pull/45555))
+- Fixed `Illuminate/Database/Query/Builder::whereIntegerInRaw()` ([#45584](https://github.com/laravel/framework/pull/45584))
+- Fixes blade tags ([#45490](https://github.com/laravel/framework/pull/45490))
+
+### Changed
+- Return model when casting attribute ([#45539](https://github.com/laravel/framework/pull/45539))
+- always show full path to migration in `Illuminate/Database/Console/Migrations/MigrateMakeCommand.php` ([9f6ff48](https://github.com/laravel/framework/commit/9f6ff487e6964dc407c267d1a40352fa71b2fc44))
+- Remove index name when adding primary key on MySQL ([#45515](https://github.com/laravel/framework/pull/45515))
+
+
+## [v9.46.0](https://github.com/laravel/framework/compare/v9.45.1...v9.46.0) - 2023-01-03
+
+### Added
+- Added Passthrough PATH variable to serve command ([#45402](https://github.com/laravel/framework/pull/45402))
+- Added whenHas to JsonResource ([#45376](https://github.com/laravel/framework/pull/45376))
+- Added ./fleet directory to .gitignore ([#45432](https://github.com/laravel/framework/pull/45432))
+- Added unless to JsonResource ([#45419](https://github.com/laravel/framework/pull/45419))
+
+### Fixed
+- Fixed credentials check ([#45437](https://github.com/laravel/framework/pull/45437))
+- Fixed decimal cast precision issue ([#45456](https://github.com/laravel/framework/pull/45456), [#45492](https://github.com/laravel/framework/pull/45492))
+- Precognitive validation with nested arrays doesn't throw validation error ([#45405](https://github.com/laravel/framework/pull/45405))
+- Fixed issue on which class to check increment and decrement methods for custom cast ([#45444](https://github.com/laravel/framework/pull/45444))
+
+### Changed
+- Update decimal validation rule to allow validation of signed numbers ([24a48b2](https://github.com/laravel/framework/commit/24a48b2fa6154b2ba2e669999e73a060f9e82080))
+- Output only unique asset / preload tags in Vite ([#45404](https://github.com/laravel/framework/pull/45404))
+- Optimize whereKey method in Query Builder ([#45453](https://github.com/laravel/framework/pull/45453))
+- Remove extra code in Model.php to optimize performance ([#45476](https://github.com/laravel/framework/pull/45476))
+- Exception Handler prepareResponse add previous Exception ([#45499](https://github.com/laravel/framework/pull/45499))
 
 
 ## [v9.45.1](https://github.com/laravel/framework/compare/v9.45.0...v9.45.1) - 2022-12-21

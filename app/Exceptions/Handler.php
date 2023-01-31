@@ -41,21 +41,7 @@ class Handler extends ExceptionHandler
      */
     public function report(\Throwable $e)
     {
-        dd($e);
-        Bugsnag::setBeforeNotifyFunction(function ($error) { //set bugsnag
-            return false;
-        });
-        // check if system is running in production environment
-        if (\App::environment() == 'production') {
-            $debug = Config::get('app.bugsnag_reporting'); //get bugsang reporting preference
-            if ($debug) { //if preference is true for reporting
-                $version = Config::get('app.version'); //set app version in report
-                Bugsnag::setAppVersion($version);
-                Bugsnag::setBeforeNotifyFunction(function ($error) { //set bugsnag
-                    return true;
-                }); //set bugsnag reporting as true
-            }
-        }
+        $this->reportToBugsNag($e);
 
         return parent::report($e);
     }
@@ -228,5 +214,23 @@ class Handler extends ExceptionHandler
         }
 
         return parent::render($request, $e);
+    }
+
+    protected function reportToBugsNag(\Throwable $e)
+    {
+        if (Config::get('app.bugsnag_reporting') && env('APP_ENV') == 'production' && $this->shouldReportBugsnag($e)) {
+            Bugsnag::notifyException($e);
+        }
+    }
+
+    public function shouldReportBugsnag($e)
+    {
+        foreach ($this->dontReport as $report) {
+            if ($e instanceof $report) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -33,7 +33,7 @@ class="nav-link active"
 <!-- content -->
 @section('content')
 <!-- open a form -->
-{!! Form::open(array('action' => 'Admin\helpdesk\DepartmentController@store' , 'method' => 'post') )!!}
+{!! Form::open(array('route' => 'departments.store') )!!}
 @if(Session::has('errors'))
 <?php //dd($errors); ?>
 <div class="alert alert-danger alert-dismissable">
