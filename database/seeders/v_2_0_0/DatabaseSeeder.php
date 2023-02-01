@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\v_2_0_0;
 
 use App\Model\Common\Template;
 use App\Model\Common\TemplateSet;
@@ -37,6 +37,7 @@ use App\Model\helpdesk\Workflow\WorkflowClose;
 use App\Model\kb\Settings;
 // Knowledge base
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -47,8 +48,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $tables = Schema::getAllTables();
 
-        (new AlterColumnTypeSeeder())->run();
+        foreach ($tables as $table) {
+            $tableName = (array)$table;
+            $tableName = reset($tableName);
+
+            $columns = Schema::getColumnListing($tableName);
+
+            foreach ($columns as $column) {
+                if (Schema::getColumnType($tableName, $column) == 'string') {
+                    Schema::table($tableName, function ($table) use($column) {
+                        $table->string($column)->nullable()->change();
+                    });
+                } elseif (Schema::getColumnType($tableName, $column) == 'boolean') {
+                    Schema::table($tableName, function ($table) use($column) {
+                        $table->boolean($column)->default(0)->change();
+                    });
+                }
+            }
+        }
         /* Date time format */
         $date_time_formats = [
             'd/m/Y H:i:s',

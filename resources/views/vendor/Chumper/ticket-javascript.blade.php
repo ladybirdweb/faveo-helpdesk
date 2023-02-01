@@ -41,12 +41,24 @@ foreach($segments as $seg){
                 },
                 "aaSorting": sort,
                 "columnDefs": [
-                    { "searchable": false, "targets": [6,7] },
+                    {"defaultContent": "-",
+                        "targets": "_all"},
+                    { "searchable": true, "targets": [6,7] },
                     { "visible": last, "targets": 6 },
                     {"visible": create, "targets":7},
                 ],
+                "columns":[
+                    {data: "check_box"},
+                    {data: "ticket_number"},
+                    {data: "ticket_number"},
+                    {data: "ticket_number"},
+                    {data: "ticket_number"},
+                    {data: "ticket_number"},
+                    {data: "ticket_number"},
+                    {data: "ticket_number"},
+                ],
                 "fnCreatedRow": function (nRow, aData, iDataIndex) {
-                    var str = aData[3];
+                    var str = aData['ticket_number'];
                     if (str.search("#000") == -1) {
                         $("td", nRow).css({"background-color": "#F3F3F3", "font-weight": "600", "border-bottom": "solid 0.5px #ddd", "border-right": "solid 0.5px #F3F3F3"});
                         $("td", nRow).mouseenter(function () {

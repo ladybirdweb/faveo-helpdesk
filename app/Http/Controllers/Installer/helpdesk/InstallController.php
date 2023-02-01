@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Installer\helpdesk;
 // controllers
 use App\Http\Controllers\Controller;
 // requests
+use App\Http\Controllers\Update\SyncFaveoToLatestVersion;
 use App\Http\Requests\helpdesk\InstallerRequest;
 use App\Model\helpdesk\Settings\System;
 // models
@@ -435,6 +436,7 @@ class InstallController extends Controller
         $ENV['DB_DATABASE'] = '"'.$database.'"';
         $ENV['DB_USERNAME'] = '"'.$dbusername.'"';
         $ENV['DB_PASSWORD'] = '"'.$dbpassword.'"';
+        $ENV['DB_ENGINE']   = 'InnoDB';
         $ENV['MAIL_MAILER'] = 'smtp';
         $ENV['MAIL_HOST'] = 'mailtrap.io';
         $ENV['MAIL_PORT'] = '2525';
@@ -490,29 +492,23 @@ class InstallController extends Controller
 
     public function migrate()
     {
-        $db_install_method = '';
-
         try {
-            $tableNames = \Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
+            $tableNames = Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
             if (count($tableNames) === 0) {
-                if (!Cache::get('dummy_data_installation')) {
-                    Artisan::call('migrate', ['--force' => true]);
-                    $db_install_method = 'migrate';
-                } else {
+                (new SyncFaveoToLatestVersion())->sync();
+                if (Cache::get('dummy_data_installation')) {
                     $path = base_path().DIRECTORY_SEPARATOR.'DB'.DIRECTORY_SEPARATOR.'dummy-data.sql';
                     DB::unprepared(file_get_contents($path));
-                    $db_install_method = 'dump';
                 }
             }
         } catch (Exception $ex) {
+            dd($ex);
             $this->rollBackMigration();
             $result = ['error' => $ex->getMessage()];
 
             return response()->json(compact('result'), 500);
         }
-        $url = ($db_install_method == 'migrate') ? url('seed') : '';
-        $message = ($db_install_method == 'migrate') ? 'Tables have been migrated successfully in database.' : 'Database has been setup successfully.';
-        $result = ['success' => $message, 'next' => 'Seeding pre configurations data', 'api' => $url];
+        $result = ['success' => 'Database has been setup successfully.'];
 
         return response()->json(compact('result'));
     }

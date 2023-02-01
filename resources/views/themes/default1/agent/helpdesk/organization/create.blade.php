@@ -32,7 +32,7 @@ class="nav-link active"
 <!-- content -->
 @section('content')
 <!-- open a form -->
-{!! Form::open(['action'=>'Agent\helpdesk\OrganizationController@store','method'=>'post']) !!}
+{!! Form::open(['route' => 'organizations.store','method'=>'post']) !!}
 
 @if(Session::has('errors'))
 <?php //dd($errors); ?>

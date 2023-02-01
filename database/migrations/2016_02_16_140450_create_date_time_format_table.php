@@ -11,7 +11,7 @@ return new class() extends Migration {
      */
     public function up()
     {
-        Schema::create('date_time_format', function (Blueprint $table) {
+        \Illuminate\Support\Facades\Schema::create('date_time_format', function (Blueprint $table) {
             $table->increments('id');
             $table->string('format');
         });
