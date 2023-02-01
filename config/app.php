@@ -35,7 +35,7 @@ return [
       | This tells about aplication current version.
       |
      */
-    'version' => 'Community 1.11.1',
+    'version' => parse_ini_file(storage_path('faveoconfig.ini'), false, INI_SCANNER_RAW)['APP_VERSION'],
     /*
       |--------------------------------------------------------------------------
       | Application Name
@@ -44,7 +44,7 @@ return [
       | This Applocation name is used for installation and update checking
       |
      */
-    'name' => 'Faveo Helpdesk Community',
+    'name' => parse_ini_file(storage_path('faveoconfig.ini'), false, INI_SCANNER_RAW)['APP_NAME'],
     /*
       |--------------------------------------------------------------------------
       | Application URL
