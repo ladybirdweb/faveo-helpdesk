@@ -29,7 +29,6 @@ foreach($segments as $seg){
                         "<'row'<'col-sm-6'i><'col-sm-6'p>>",
                 "sPaginationType": "full_numbers",
                 "bProcessing": true,
-                "bServerSide": true,
                 "lengthMenu": [[10, 25, 50, 100, 500], [10, 25, 50, 100, 500]],
                 "ajax": {
                     url: "{{url('filter')}}",
@@ -43,19 +42,17 @@ foreach($segments as $seg){
                 "columnDefs": [
                     {"defaultContent": "-",
                         "targets": "_all"},
-                    { "searchable": true, "targets": [6,7] },
                     { "visible": last, "targets": 6 },
                     {"visible": create, "targets":7},
                 ],
                 "columns":[
-                    {data: "check_box"},
+                    {data: "id"},
+                    {data: "title"},
                     {data: "ticket_number"},
-                    {data: "ticket_number"},
-                    {data: "ticket_number"},
-                    {data: "ticket_number"},
-                    {data: "ticket_number"},
-                    {data: "ticket_number"},
-                    {data: "ticket_number"},
+                    {data: "priority"},
+                    {data: "user_name"},
+                    {data: "assign_user_name"},
+                    {data: "updated_at"},
                 ],
                 "fnCreatedRow": function (nRow, aData, iDataIndex) {
                     var str = aData['ticket_number'];
