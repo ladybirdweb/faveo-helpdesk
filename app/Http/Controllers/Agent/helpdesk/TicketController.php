@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Agent\helpdesk;
 
 // controllers
+use App\Http\Controllers\Agent\helpdesk\Filter\FilterControllerOld;
 use App\Http\Controllers\Common\FileuploadController;
 use App\Http\Controllers\Common\NotificationController as Notify;
 use App\Http\Controllers\Common\PhpMailController;
@@ -2817,7 +2818,16 @@ class TicketController extends Controller
                                 }
                             }
                         })
+                        ->editColumn('updated_at', function ($tickets) {
+                            $TicketDatarow = $tickets->updated_at;
+                            $updated = '--';
+                            if ($TicketDatarow) {
+                                $updated = $tickets->updated_at;
+                            }
 
+                            return '<span style="display:none">'.$updated.'</span>'.UTC::usertimezone($updated);
+                        })
+                        ->rawColumns(['id', 'title', 'ticket_number', 'c_uname', 'a_uname', 'updated_at'])
                         ->make();
     }
 
@@ -3253,6 +3263,7 @@ class TicketController extends Controller
 
                     return '<span style="display:none">'.$updated.'</span>'.UTC::usertimezone($updated);
                 })
+                ->rawColumns(['id', 'title', 'ticket_number', 'priority', 'user_name', 'assign_user_name', 'updated_at', 'created_at'])
                 ->make();
     }
 }
