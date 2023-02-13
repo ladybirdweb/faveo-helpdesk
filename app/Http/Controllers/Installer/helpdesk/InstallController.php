@@ -12,20 +12,20 @@ use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\User;
-Use Illuminate\Support\Facades\Artisan;
-// classes
-use Illuminate\Support\Facades\Cache;
 use DB;
+// classes
 use Exception;
-use Illuminate\Support\Facades\File;
 use Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request as Input;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use UnAuth;
 use Illuminate\Support\Facades\View;
+use UnAuth;
 
 /**
  * |=======================================================================
@@ -436,7 +436,7 @@ class InstallController extends Controller
         $ENV['DB_DATABASE'] = '"'.$database.'"';
         $ENV['DB_USERNAME'] = '"'.$dbusername.'"';
         $ENV['DB_PASSWORD'] = '"'.$dbpassword.'"';
-        $ENV['DB_ENGINE']   = 'InnoDB';
+        $ENV['DB_ENGINE'] = 'InnoDB';
         $ENV['MAIL_MAILER'] = 'smtp';
         $ENV['MAIL_HOST'] = 'mailtrap.io';
         $ENV['MAIL_PORT'] = '2525';
