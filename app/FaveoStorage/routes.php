@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\App;
 use Illuminate\Support\Facades\Route;
 
 \Event::listen('settings.system', function () {
