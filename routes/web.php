@@ -63,9 +63,9 @@ Route::middleware('web')->group(function () {
     Route::get('user/search', [Client\kb\UserController::class, 'search'])->name('client.search');
 
     Breadcrumbs::register('auth.login', function ($breadcrumbs) {
-        $breadcrumbs->parent('/');
-        $breadcrumbs->push('Create Account', url('auth/register'));
-        $breadcrumbs->push('Login', url('auth/login'));
+//        $breadcrumbs->parent('/');
+//        $breadcrumbs->push('Create Account', url('auth/register'));
+//        $breadcrumbs->push('Login', url('auth/login'));
     });
 
     Route::get('account/activate/{token}', [Auth\AuthController::class, 'accountActivate'])->name('account.activate');

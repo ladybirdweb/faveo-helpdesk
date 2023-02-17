@@ -36,7 +36,7 @@ class="nav-item menu-open"
 
 @section('content')
 
-{!! Form::open(array('action' => 'Agent\kb\PageController@store' , 'method' => 'post') )!!}
+{!! Form::open(array('route' => 'page.store' , 'method' => 'post') )!!}
 
 @if(Session::has('errors'))
 <?php //dd($errors); ?>

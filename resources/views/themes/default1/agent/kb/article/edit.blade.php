@@ -240,7 +240,7 @@ class="nav-item menu-open"
                     
                         <div class="modal-content">
                     
-                            {!! Form::open(['method'=>'post','action'=>'Agent\kb\CategoryController@store']) !!}
+                            {!! Form::open(['method'=>'post','route'=>'category.store']) !!}
                     
                             <div class="modal-header">
                                 <h4 class="modal-title">{{Lang::get('lang.addcategory')}}</h4>

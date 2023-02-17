@@ -1,111 +1,97 @@
-<?php return array (
-  'sans-serif' => 
-  array (
-    'normal' => DOMPDF_DIR . '/lib/fonts/Helvetica',
-    'bold' => DOMPDF_DIR . '/lib/fonts/Helvetica-Bold',
-    'italic' => DOMPDF_DIR . '/lib/fonts/Helvetica-Oblique',
-    'bold_italic' => DOMPDF_DIR . '/lib/fonts/Helvetica-BoldOblique',
-  ),
-  'times' => 
-  array (
-    'normal' => DOMPDF_DIR . '/lib/fonts/Times-Roman',
-    'bold' => DOMPDF_DIR . '/lib/fonts/Times-Bold',
-    'italic' => DOMPDF_DIR . '/lib/fonts/Times-Italic',
-    'bold_italic' => DOMPDF_DIR . '/lib/fonts/Times-BoldItalic',
-  ),
-  'times-roman' => 
-  array (
-    'normal' => DOMPDF_DIR . '/lib/fonts/Times-Roman',
-    'bold' => DOMPDF_DIR . '/lib/fonts/Times-Bold',
-    'italic' => DOMPDF_DIR . '/lib/fonts/Times-Italic',
-    'bold_italic' => DOMPDF_DIR . '/lib/fonts/Times-BoldItalic',
-  ),
-  'courier' => 
-  array (
-    'normal' => DOMPDF_DIR . '/lib/fonts/Courier',
-    'bold' => DOMPDF_DIR . '/lib/fonts/Courier-Bold',
-    'italic' => DOMPDF_DIR . '/lib/fonts/Courier-Oblique',
-    'bold_italic' => DOMPDF_DIR . '/lib/fonts/Courier-BoldOblique',
-  ),
-  'helvetica' => 
-  array (
-    'normal' => DOMPDF_DIR . '/lib/fonts/Helvetica',
-    'bold' => DOMPDF_DIR . '/lib/fonts/Helvetica-Bold',
-    'italic' => DOMPDF_DIR . '/lib/fonts/Helvetica-Oblique',
-    'bold_italic' => DOMPDF_DIR . '/lib/fonts/Helvetica-BoldOblique',
-  ),
-  'zapfdingbats' => 
-  array (
-    'normal' => DOMPDF_DIR . '/lib/fonts/ZapfDingbats',
-    'bold' => DOMPDF_DIR . '/lib/fonts/ZapfDingbats',
-    'italic' => DOMPDF_DIR . '/lib/fonts/ZapfDingbats',
-    'bold_italic' => DOMPDF_DIR . '/lib/fonts/ZapfDingbats',
-  ),
-  'symbol' => 
-  array (
-    'normal' => DOMPDF_DIR . '/lib/fonts/Symbol',
-    'bold' => DOMPDF_DIR . '/lib/fonts/Symbol',
-    'italic' => DOMPDF_DIR . '/lib/fonts/Symbol',
-    'bold_italic' => DOMPDF_DIR . '/lib/fonts/Symbol',
-  ),
-  'serif' => 
-  array (
-    'normal' => DOMPDF_DIR . '/lib/fonts/Times-Roman',
-    'bold' => DOMPDF_DIR . '/lib/fonts/Times-Bold',
-    'italic' => DOMPDF_DIR . '/lib/fonts/Times-Italic',
-    'bold_italic' => DOMPDF_DIR . '/lib/fonts/Times-BoldItalic',
-  ),
-  'monospace' => 
-  array (
-    'normal' => DOMPDF_DIR . '/lib/fonts/Courier',
-    'bold' => DOMPDF_DIR . '/lib/fonts/Courier-Bold',
-    'italic' => DOMPDF_DIR . '/lib/fonts/Courier-Oblique',
-    'bold_italic' => DOMPDF_DIR . '/lib/fonts/Courier-BoldOblique',
-  ),
-  'fixed' => 
-  array (
-    'normal' => DOMPDF_DIR . '/lib/fonts/Courier',
-    'bold' => DOMPDF_DIR . '/lib/fonts/Courier-Bold',
-    'italic' => DOMPDF_DIR . '/lib/fonts/Courier-Oblique',
-    'bold_italic' => DOMPDF_DIR . '/lib/fonts/Courier-BoldOblique',
-  ),
-  'dejavu sans' => 
-  array (
-    'bold' => DOMPDF_DIR . '/lib/fonts/DejaVuSans-Bold',
-    'bold_italic' => DOMPDF_DIR . '/lib/fonts/DejaVuSans-BoldOblique',
-    'italic' => DOMPDF_DIR . '/lib/fonts/DejaVuSans-Oblique',
-    'normal' => DOMPDF_DIR . '/lib/fonts/DejaVuSans',
-  ),
-  'dejavu sans light' => 
-  array (
-    'normal' => DOMPDF_DIR . '/lib/fonts/DejaVuSans-ExtraLight',
-  ),
-  'dejavu sans condensed' => 
-  array (
-    'bold' => DOMPDF_DIR . '/lib/fonts/DejaVuSansCondensed-Bold',
-    'bold_italic' => DOMPDF_DIR . '/lib/fonts/DejaVuSansCondensed-BoldOblique',
-    'italic' => DOMPDF_DIR . '/lib/fonts/DejaVuSansCondensed-Oblique',
-    'normal' => DOMPDF_DIR . '/lib/fonts/DejaVuSansCondensed',
-  ),
-  'dejavu sans mono' => 
-  array (
-    'bold' => DOMPDF_DIR . '/lib/fonts/DejaVuSansMono-Bold',
-    'bold_italic' => DOMPDF_DIR . '/lib/fonts/DejaVuSansMono-BoldOblique',
-    'italic' => DOMPDF_DIR . '/lib/fonts/DejaVuSansMono-Oblique',
-    'normal' => DOMPDF_DIR . '/lib/fonts/DejaVuSansMono',
-  ),
-  'dejavu serif' => 
-  array (
-    'bold' => DOMPDF_DIR . '/lib/fonts/DejaVuSerif-Bold',
-    'bold_italic' => DOMPDF_DIR . '/lib/fonts/DejaVuSerif-BoldItalic',
-    'italic' => DOMPDF_DIR . '/lib/fonts/DejaVuSerif-Italic',
-    'normal' => DOMPDF_DIR . '/lib/fonts/DejaVuSerif',
-  ),
-  'dejavu serif condensed' => 
-  array (
-    'bold' => DOMPDF_DIR . '/lib/fonts/DejaVuSerifCondensed-Bold',
-    'bold_italic' => DOMPDF_DIR . '/lib/fonts/DejaVuSerifCondensed-BoldItalic',
-    'italic' => DOMPDF_DIR . '/lib/fonts/DejaVuSerifCondensed-Italic',
-    'normal' => DOMPDF_DIR . '/lib/fonts/DejaVuSerifCondensed',
-  ),
-) ?>
+<?php
+return function ($rootDir) {
+    $distFontDir = $rootDir . '/lib/fonts';
+    return [
+        'sans-serif' =>
+            [
+                'normal' => $distFontDir . '/Helvetica',
+                'bold' => $distFontDir . '/Helvetica-Bold',
+                'italic' => $distFontDir . '/Helvetica-Oblique',
+                'bold_italic' => $distFontDir . '/Helvetica-BoldOblique'
+            ],
+        'times' =>
+            [
+                'normal' => $distFontDir . '/Times-Roman',
+                'bold' => $distFontDir . '/Times-Bold',
+                'italic' => $distFontDir . '/Times-Italic',
+                'bold_italic' => $distFontDir . '/Times-BoldItalic'
+            ],
+        'times-roman' =>
+            [
+                'normal' => $distFontDir . '/Times-Roman',
+                'bold' => $distFontDir . '/Times-Bold',
+                'italic' => $distFontDir . '/Times-Italic',
+                'bold_italic' => $distFontDir . '/Times-BoldItalic'
+            ],
+        'courier' =>
+            [
+                'normal' => $distFontDir . '/Courier',
+                'bold' => $distFontDir . '/Courier-Bold',
+                'italic' => $distFontDir . '/Courier-Oblique',
+                'bold_italic' => $distFontDir . '/Courier-BoldOblique'
+            ],
+        'helvetica' =>
+            [
+                'normal' => $distFontDir . '/Helvetica',
+                'bold' => $distFontDir . '/Helvetica-Bold',
+                'italic' => $distFontDir . '/Helvetica-Oblique',
+                'bold_italic' => $distFontDir . '/Helvetica-BoldOblique'
+            ],
+        'zapfdingbats' =>
+            [
+                'normal' => $distFontDir . '/ZapfDingbats',
+                'bold' => $distFontDir . '/ZapfDingbats',
+                'italic' => $distFontDir . '/ZapfDingbats',
+                'bold_italic' => $distFontDir . '/ZapfDingbats'
+            ],
+        'symbol' =>
+            [
+                'normal' => $distFontDir . '/Symbol',
+                'bold' => $distFontDir . '/Symbol',
+                'italic' => $distFontDir . '/Symbol',
+                'bold_italic' => $distFontDir . '/Symbol'
+            ],
+        'serif' =>
+            [
+                'normal' => $distFontDir . '/Times-Roman',
+                'bold' => $distFontDir . '/Times-Bold',
+                'italic' => $distFontDir . '/Times-Italic',
+                'bold_italic' => $distFontDir . '/Times-BoldItalic'
+            ],
+        'monospace' =>
+            [
+                'normal' => $distFontDir . '/Courier',
+                'bold' => $distFontDir . '/Courier-Bold',
+                'italic' => $distFontDir . '/Courier-Oblique',
+                'bold_italic' => $distFontDir . '/Courier-BoldOblique'
+            ],
+        'fixed' =>
+            [
+                'normal' => $distFontDir . '/Courier',
+                'bold' => $distFontDir . '/Courier-Bold',
+                'italic' => $distFontDir . '/Courier-Oblique',
+                'bold_italic' => $distFontDir . '/Courier-BoldOblique'
+            ],
+        'dejavu sans' =>
+            [
+                'bold' => $distFontDir . '/DejaVuSans-Bold',
+                'bold_italic' => $distFontDir . '/DejaVuSans-BoldOblique',
+                'italic' => $distFontDir . '/DejaVuSans-Oblique',
+                'normal' => $distFontDir . '/DejaVuSans'
+            ],
+        'dejavu sans mono' =>
+            [
+                'bold' => $distFontDir . '/DejaVuSansMono-Bold',
+                'bold_italic' => $distFontDir . '/DejaVuSansMono-BoldOblique',
+                'italic' => $distFontDir . '/DejaVuSansMono-Oblique',
+                'normal' => $distFontDir . '/DejaVuSansMono'
+            ],
+        'dejavu serif' =>
+            [
+                'bold' => $distFontDir . '/DejaVuSerif-Bold',
+                'bold_italic' => $distFontDir . '/DejaVuSerif-BoldItalic',
+                'italic' => $distFontDir . '/DejaVuSerif-Italic',
+                'normal' => $distFontDir . '/DejaVuSerif'
+            ]
+    ];
+};

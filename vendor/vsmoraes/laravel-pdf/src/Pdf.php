@@ -1,71 +1,92 @@
 <?php
 namespace Vsmoraes\Pdf;
 
+use Dompdf\Options;
+
 interface Pdf
 {
+    const DEFAULT_SIZE = 'A4';
+    const DEFAULT_ORIENTATION = 'portrait';
+
     /**
      * Loads the HTML to the DOMPDF class
      *
      * @param $html
      * @param string $size
      * @param string $orientation
-     * @return mixed
+     *
+     * @return $this
      */
-    public function load($html, $size = 'A4', $orientation = 'portrait');
+    public function load($html, $size = self::DEFAULT_SIZE, $orientation = self::DEFAULT_ORIENTATION);
 
     /**
      * Set the filename (full path) to where the file should be saved
      *
-     * @param null $filename
-     * @return mixed
+     * @param string $filename
+     *
+     * @return $this
      */
-    public function filename($filename = null);
+    public function filename($filename);
 
     /**
      * Set paper size
      *
-     * @param $size
-     * @param $orientation
-     * @return mixed
+     * @param string $size
+     * @param string $orientation
+     *
+     * @return $this
      */
     public function setPaper($size, $orientation);
 
     /**
-     * Render the pdf
+     * Renders the HTML to PDF
      *
-     * @return mixed
+     * @return $this
      */
     public function render();
 
     /**
-     * Clear the pdf
-     *
-     * @return mixed
-     */
-    public function clear();
-
-    /**
      * Render the pdf on the browser
      *
-     * @param array $options
-     * @return mixed
+     * @param bool $acceptRanges
+     * @param bool $compress
+     * @param bool $attachment
+     *
+     * @return void
      */
-    public function show($options = ['compress' => 1, 'Attachment' => 0]);
+    public function show($acceptRanges = false, $compress = true, $attachment = true);
 
     /**
      * Forces the pdf to download
      *
-     * @param array $options
      * @return mixed
      */
-    public function download($options = ['compress' => 1, 'Attachment' => 0]);
+    public function download();
 
     /**
      * Output the pdf the to file speficied on $this->filename()
      *
-     * @param array $options
-     * @return mixed
+     * @param bool $compress
+     *
+     * @return string
      */
-    public function output($options = ['compress' => 1]);
+    public function output($compress = true);
 
+    /**
+     * Define Dompdf Options
+     * @see https://github.com/dompdf/dompdf/blob/master/src/Options.php
+     *
+     * @param Options $options
+     *
+     * @return $this
+     */
+    public function setOptions(Options $options);
+
+    /**
+     * Return the current Dompdf options
+     * @see https://github.com/dompdf/dompdf/blob/master/src/Options.php
+     *
+     * @return Options
+     */
+    public function getOptions();
 }

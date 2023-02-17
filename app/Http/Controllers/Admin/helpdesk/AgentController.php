@@ -111,9 +111,6 @@ class AgentController extends Controller
      */
     public function store(User $user, AgentRequest $request)
     {
-        if ($request->fails()) {
-            return redirect('agents/create');
-        }
         if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
             return redirect()->back()->with(['fails2' => Lang::get('lang.country-code-required-error'), 'country_code' => 1])->withInput();
         } else {
@@ -198,7 +195,7 @@ class AgentController extends Controller
             $teams = $team->pluck('id', 'name')->toArray();
             $assign = $team_assign_agent->where('agent_id', $id)->pluck('team_id')->toArray();
 
-            return view('themes.default1.admin.helpdesk.agent.agents.edit', compact('teams', 'assign', 'table', 'teams1', 'user', 'timezones', 'groups', 'departments', 'team', 'exp', 'counted'))->with('phonecode', $phonecode->phonecode);
+            return view('themes.default1.admin.helpdesk.agent.agents.edit', compact('teams', 'assign', 'table', 'teams1', 'user', 'timezones', 'groups', 'departments', 'team'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
             return redirect('agents')->with('fail', Lang::get('lang.failed_to_edit_agent'));
         }

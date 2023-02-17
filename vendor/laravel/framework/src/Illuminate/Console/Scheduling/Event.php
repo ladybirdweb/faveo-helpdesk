@@ -80,7 +80,7 @@ class Event
     public $onOneServer = false;
 
     /**
-     * The amount of time the mutex should be valid.
+     * The number of minutes the mutex should be valid.
      *
      * @var int
      */
@@ -658,6 +658,8 @@ class Event
 
     /**
      * Do not allow the event to overlap each other.
+     *
+     * The expiration time of the underlying cache lock may be specified in minutes.
      *
      * @param  int  $expiresAt
      * @return $this

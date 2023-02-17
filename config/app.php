@@ -184,7 +184,8 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
         \Chumper\Datatable\DatatableServiceProvider::class,
         \Yajra\DataTables\DataTablesServiceProvider::class,
-        \Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class
+        \Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
     /*
       |--------------------------------------------------------------------------

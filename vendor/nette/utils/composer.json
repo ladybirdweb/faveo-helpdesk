@@ -15,16 +15,17 @@
 		}
 	],
 	"require": {
-		"php": ">=7.2 <8.3"
+		"php": ">=8.0 <8.3"
 	},
 	"require-dev": {
-		"nette/tester": "~2.0",
-		"tracy/tracy": "^2.3",
+		"nette/tester": "^2.4",
+		"tracy/tracy": "^2.9",
 		"phpstan/phpstan": "^1.0",
 		"jetbrains/phpstorm-attributes": "dev-master"
 	},
 	"conflict": {
-		"nette/di": "<3.0.6"
+		"nette/finder": "<3",
+		"nette/schema": "<1.2.2"
 	},
 	"suggest": {
 		"ext-iconv": "to use Strings::webalize(), toAscii(), chr() and reverse()",
@@ -45,7 +46,7 @@
 	},
 	"extra": {
 		"branch-alias": {
-			"dev-master": "3.2-dev"
+			"dev-master": "4.0-dev"
 		}
 	}
 }
