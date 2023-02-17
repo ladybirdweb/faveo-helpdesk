@@ -4,12 +4,8 @@ namespace App\Http\Controllers\Update;
 
 use App\Http\Controllers\Controller;
 use App\Model\helpdesk\Settings\System;
-use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 class SyncFaveoToLatestVersion extends Controller
 {
@@ -20,7 +16,7 @@ class SyncFaveoToLatestVersion extends Controller
         set_time_limit(0);
 
         $latestVersion = $this->getPhpComaptibleVersion(Config::get('app.version'));
-        $olderVersion  = $this->getOlderVersion();
+        $olderVersion = $this->getOlderVersion();
 
         if (version_compare($latestVersion, $olderVersion) == 1) {
             $this->updateToLatestVersion($olderVersion);
@@ -34,14 +30,14 @@ class SyncFaveoToLatestVersion extends Controller
 
         $seederPath = base_path('database'.DIRECTORY_SEPARATOR.'seeders');
 
-        if(file_exists($seederPath)){
+        if (file_exists($seederPath)) {
             $seederVersions = scandir($seederPath);
 
             natsort($seederVersions);
             $formattedOlderVersion = $olderVersion;
             foreach ($seederVersions as $version) {
-                if(version_compare($this->getPhpComaptibleVersion($version), $formattedOlderVersion) == 1){
-                    Artisan::call('db:seed',['--class' => "Database\Seeders\\$version\DatabaseSeeder", '--force' => true]);
+                if (version_compare($this->getPhpComaptibleVersion($version), $formattedOlderVersion) == 1) {
+                    Artisan::call('db:seed', ['--class' => "Database\Seeders\\$version\DatabaseSeeder", '--force' => true]);
                 }
             }
         }
@@ -54,6 +50,7 @@ class SyncFaveoToLatestVersion extends Controller
         }
 
         $version = System::value('version') ?: '0.0.0';
+
         return $this->getPhpComaptibleVersion($version);
     }
 
