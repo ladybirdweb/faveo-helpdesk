@@ -31,13 +31,17 @@
         {
             "type": "vcs",
             "url": "https://github.com/sandesh556/laravel-gravatar.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/sandesh556/pdf-laravel5.git"
         }
     ],
     "require": {
         "php": "^8.0",
         "laravel/framework": "^9.46",
         "laravelcollective/html": "^6.3",
-        "vsmoraes/laravel-pdf": "1.0.1",
+        "vsmoraes/laravel-pdf": "dev-dev-laravel6",
         "propaganistas/laravel-phone": "^4.3",
         "bugsnag/bugsnag-laravel": "^2.23",
         "neitanod/forceutf8": "dev-master",
@@ -47,7 +51,7 @@
         "aws/aws-sdk-php": "^3.131",
         "predis/predis": "~1.0",
         "mremi/url-shortener": "^2.4",
-        "maatwebsite/excel": "3.1.x-dev",
+        "maatwebsite/excel": "^3.1",
         "laravel/socialite": "^5.3",
         "tedivm/fetch": "0.6.*",
         "unisharp/laravel-filemanager": "^2.4",

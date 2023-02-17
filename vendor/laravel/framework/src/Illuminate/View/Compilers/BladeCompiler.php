@@ -31,6 +31,7 @@ class BladeCompiler extends Compiler implements CompilerInterface
         Concerns\CompilesLoops,
         Concerns\CompilesRawPhp,
         Concerns\CompilesStacks,
+        Concerns\CompilesStyles,
         Concerns\CompilesTranslations,
         ReflectsClosures;
 
@@ -506,6 +507,8 @@ class BladeCompiler extends Compiler implements CompilerInterface
     {
         preg_match_all('/\B@(@?\w+(?:::\w+)?)([ \t]*)(\( ( [\S\s]*? ) \))?/x', $template, $matches);
 
+        $offset = 0;
+
         for ($i = 0; isset($matches[0][$i]); $i++) {
             $match = [
                 $matches[0][$i],
@@ -521,17 +524,60 @@ class BladeCompiler extends Compiler implements CompilerInterface
             while (isset($match[4]) &&
                    Str::endsWith($match[0], ')') &&
                    ! $this->hasEvenNumberOfParentheses($match[0])) {
-                $rest = Str::before(Str::after($template, $match[0]), ')');
+                if (($after = Str::after($template, $match[0])) === $template) {
+                    break;
+                }
+
+                $rest = Str::before($after, ')');
+
+                if (isset($matches[0][$i + 1]) && Str::contains($rest.')', $matches[0][$i + 1])) {
+                    unset($matches[0][$i + 1]);
+                    $i++;
+                }
 
                 $match[0] = $match[0].$rest.')';
                 $match[3] = $match[3].$rest.')';
                 $match[4] = $match[4].$rest;
             }
 
-            $template = Str::replaceFirst($match[0], $this->compileStatement($match), $template);
+            [$template, $offset] = $this->replaceFirstStatement(
+                $match[0],
+                $this->compileStatement($match),
+                $template,
+                $offset
+            );
         }
 
         return $template;
+    }
+
+    /**
+     * Replace the first match for a statement compilation operation.
+     *
+     * @param  string  $search
+     * @param  string  $replace
+     * @param  string  $subject
+     * @param  int  $offset
+     * @return array
+     */
+    protected function replaceFirstStatement($search, $replace, $subject, $offset)
+    {
+        $search = (string) $search;
+
+        if ($search === '') {
+            return $subject;
+        }
+
+        $position = strpos($subject, $search, $offset);
+
+        if ($position !== false) {
+            return [
+                substr_replace($subject, $replace, $position, strlen($search)),
+                $position + strlen($replace),
+            ];
+        }
+
+        return [$subject, 0];
     }
 
     /**
@@ -675,7 +721,7 @@ class BladeCompiler extends Compiler implements CompilerInterface
      * Check the result of a condition.
      *
      * @param  string  $name
-     * @param  array  $parameters
+     * @param  mixed  ...$parameters
      * @return bool
      */
     public function check($name, ...$parameters)

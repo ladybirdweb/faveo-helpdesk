@@ -32,7 +32,16 @@ foreach($segments as $seg){
                         d.profiletype = show;
                         d.searchTerm = searchTerm;
                     }
-                }
+                },
+                "columns":[
+                    {data: "user_name"},
+                    {data: "email"},
+                    {data: "mobile"},
+                    {data: "active"},
+                    {data: "updated_at"},
+                    {data: "role"},
+                    {data: "Actions"},
+                ],
                 
             });
         }

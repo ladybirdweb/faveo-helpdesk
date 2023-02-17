@@ -9,7 +9,7 @@
 <script type="text/javascript" src="{{asset('lb-faveo/dist/js/nicEdit.js')}}"></script>
 
 @section('content')
-{!! Form::open(array('action' => 'Admin\kb\CategoryController@store' , 'method' => 'post') )!!}
+{!! Form::open(array('route' => 'category.store' , 'method' => 'post') )!!}
 <div class="box box-primary">
 	<div class="box-header">
 	 	<h4 class="box-title">Add Category</h4> {!! Form::submit('save',['class'=>'form-group btn btn-primary pull-right'])!!}

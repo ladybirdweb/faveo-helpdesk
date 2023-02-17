@@ -32,7 +32,7 @@ class="nav-link active"
 <!-- content -->
 @section('content')
 <!-- open a form -->
-{!! Form::open(['action' => 'Admin\helpdesk\HelptopicController@store', 'method' => 'post']) !!}
+{!! Form::open(['route' => 'helptopic.store', 'method' => 'post']) !!}
 @if(Session::has('errors'))
 <?php //dd($errors); ?>
 <div class="alert alert-danger alert-dismissable">

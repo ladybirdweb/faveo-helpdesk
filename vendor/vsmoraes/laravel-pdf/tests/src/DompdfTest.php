@@ -1,34 +1,54 @@
 <?php
+namespace Vsmoraes\Pdf;
 
-class DompdfTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class DompdfTest extends TestCase
 {
 
     public function testLoadHtml()
     {
-        $stub = $this->getMockBuilder('\DOMPDF')
-            ->setMethods(['load_html'])
+        $html = '<html><head></head><body></body></html>';
+        $size = Pdf::DEFAULT_SIZE;
+        $orientation = Pdf::DEFAULT_ORIENTATION;
+
+        $stub = $this->getMockBuilder(\Dompdf\Dompdf::class)
+            ->setMethods(['loadHtml', 'setPaper'])
             ->getMock();
 
-        $pdf = new \Vsmoraes\Pdf\Dompdf($stub);
+        $stub->expects($this->once())
+            ->method('loadHtml')
+            ->with($html);
 
         $stub->expects($this->once())
-            ->method('load_html');
+            ->method('setPaper')
+            ->with($size, $orientation);
 
-        $pdf->load('<html><head></head><body></body></html>');
+        $pdf = new Dompdf($stub);
+        $result = $pdf->load($html);
+
+        $this->assertEquals($pdf, $result);
     }
 
     public function testShowHtml()
     {
-        $stub = $this->getMockBuilder('\DOMPDF')
-            ->getMock();
+        $html = '<html><head></head><body></body></html>';
+        $size = Pdf::DEFAULT_SIZE;
+        $orientation = Pdf::DEFAULT_ORIENTATION;
 
-        $pdf = new \Vsmoraes\Pdf\Dompdf($stub);
+        $stub = $this->getMockBuilder(\Dompdf\Dompdf::class)
+            ->setMethods(['setPaper', 'stream'])
+            ->getMock();
 
         $stub->expects($this->once())
             ->method('stream');
 
-        $pdf->load('<html><head></head><body></body></html>');
+        $stub->expects($this->once())
+            ->method('setPaper')
+            ->with($size, $orientation);
+
+        $pdf = new Dompdf($stub);
+        $pdf->load($html);
         $pdf->show();
     }
-
 }

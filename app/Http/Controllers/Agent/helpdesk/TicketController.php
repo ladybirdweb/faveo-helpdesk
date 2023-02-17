@@ -50,8 +50,9 @@ use Illuminate\Support\Facades\Request as Input;
 use Illuminate\Support\Str;
 use Lang;
 use Mail;
-use PDF;
 use UTC;
+use Vsmoraes\Pdf\Pdf;
+use Vsmoraes\Pdf\PdfFacade;
 use Yajra\DataTables\Facades\DataTables;
 
 /**
@@ -507,7 +508,7 @@ class TicketController extends Controller
          * @see https://github.com/dompdf/dompdf/issues/1272
          * For time bieng we are silencing the error using "@" operator in front of it
          */
-        return @PDF::load($html1)->show();
+        return PdfFacade::load($html1)->show(false, false, false);
     }
 
     /**
@@ -2444,7 +2445,7 @@ class TicketController extends Controller
              * @see https://github.com/dompdf/dompdf/issues/1272
              * For time bieng we are silencing the error using "@" operator in front of it
              */
-            return @PDF::load($html1)->show();
+            return PdfFacade::load($html1)->show(false, false, false);
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
