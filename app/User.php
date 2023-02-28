@@ -47,8 +47,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
         if (!$pic && $value) {
             $pic = '';
-            $file = asset('uploads/profilepic/'.$value);
-            if ($file) {
+            $file = public_path('uploads/profilepic/'.$value);
+            if ($file && file_exists($file)) {
                 $type = pathinfo($file, PATHINFO_EXTENSION);
                 $data = file_get_contents($file);
                 $pic = 'data:image/'.$type.';base64,'.base64_encode($data);

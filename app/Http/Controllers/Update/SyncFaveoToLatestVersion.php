@@ -25,6 +25,7 @@ class SyncFaveoToLatestVersion extends Controller
         if (version_compare($latestVersion, $olderVersion) == 1) {
             $this->updateToLatestVersion($olderVersion);
         }
+        Artisan::call('storage:link');
         System::first()->update(['version' => Config::get('app.version')]);
     }
 
