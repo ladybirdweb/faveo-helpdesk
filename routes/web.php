@@ -543,7 +543,7 @@ Route::middleware('web')->group(function () {
         Route::post('/ticket/close/{id}', [Agent\helpdesk\TicketController::class, 'close'])->name('ticket.close'); /*  Get Ticket Close */
         Route::post('/ticket/resolve/{id}', [Agent\helpdesk\TicketController::class, 'resolve'])->name('ticket.resolve'); /*  Get ticket Resolve */
         Route::post('/ticket/open/{id}', [Agent\helpdesk\TicketController::class, 'open'])->name('ticket.open'); /*  Get Ticket Open */
-        Route::get('image/{id}', [Agent\helpdesk\MailController::class, 'get_data'])->name('image'); /* get image */
+        Route::get('image/{id?}', [Agent\helpdesk\MailController::class, 'get_data'])->name('image'); /* get image */
         Route::post('rating/{id}', [Agent\helpdesk\TicketController::class, 'rating'])->name('ticket.rating'); /* Get overall Ratings */
         Route::post('rating2/{id}', [Agent\helpdesk\TicketController::class, 'ratingReply'])->name('ticket.rating2'); /* Get reply Ratings */
     });

@@ -186,7 +186,7 @@ class PhpMailController extends Controller
                     'port'        => $mail->sending_port,
                     'security'    => $mail->sending_encryption,
                     'username'    => $mail->email_address,
-                    'password'    => $mail->password,
+                    'password'    => $mail->getRawOriginal()['password'],
                 ];
                 if (!$this->commonMailer->setSmtpDriver($config)) {
                     \Log::info('Invaid configuration :- '.$config);
