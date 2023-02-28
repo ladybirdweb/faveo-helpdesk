@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\SyncFaveoToLatestVersion;
 use App\Model\MailJob\Condition;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -24,6 +25,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\InstallDB::class,
         \App\Console\Commands\SetupTestEnv::class,
         \App\Console\Commands\SecureFaveoAPPKey::class,
+        SyncFaveoToLatestVersion::class
     ];
 
     /**
