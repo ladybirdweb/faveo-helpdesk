@@ -16,6 +16,6 @@ class ExcelController extends Controller
             throw new Exception('No data');
         }
         //dd(Excel::download(new UserExport($data), $filename.'.'.'xls'));
-        return Excel::download(new UserExport(), $filename.'.'.'xls');
+        return Excel::download(new UserExport($data), $filename.'.'.'xlsx');
     }
 }
