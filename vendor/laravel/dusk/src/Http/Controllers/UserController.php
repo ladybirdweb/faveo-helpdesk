@@ -3,6 +3,8 @@
 namespace Laravel\Dusk\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 class UserController
 {
@@ -30,7 +32,8 @@ class UserController
      * Login using the given user ID / email.
      *
      * @param  string  $userId
-     * @param  string  $guard
+     * @param  string|null  $guard
+     * @return void
      */
     public function login($userId, $guard = null)
     {
@@ -38,7 +41,7 @@ class UserController
 
         $provider = Auth::guard($guard)->getProvider();
 
-        $user = str_contains($userId, '@')
+        $user = Str::contains($userId, '@')
                     ? $provider->retrieveByCredentials(['email' => $userId])
                     : $provider->retrieveById($userId);
 
@@ -48,11 +51,16 @@ class UserController
     /**
      * Log the user out of the application.
      *
-     * @param  string  $guard
+     * @param  string|null  $guard
+     * @return void
      */
     public function logout($guard = null)
     {
-        Auth::guard($guard ?: config('auth.defaults.guard'))->logout();
+        $guard = $guard ?: config('auth.defaults.guard');
+
+        Auth::guard($guard)->logout();
+
+        Session::forget('password_hash_'.$guard);
     }
 
     /**

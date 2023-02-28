@@ -3,6 +3,8 @@
 namespace Illuminate\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Carbon;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class SetCacheHeaders
 {
@@ -13,13 +15,14 @@ class SetCacheHeaders
      * @param  \Closure  $next
      * @param  string|array  $options
      * @return \Symfony\Component\HttpFoundation\Response
+     *
      * @throws \InvalidArgumentException
      */
     public function handle($request, Closure $next, $options = [])
     {
         $response = $next($request);
 
-        if (! $request->isMethodCacheable() || ! $response->getContent()) {
+        if (! $request->isMethodCacheable() || (! $response->getContent() && ! $response instanceof BinaryFileResponse)) {
             return $response;
         }
 
@@ -28,7 +31,15 @@ class SetCacheHeaders
         }
 
         if (isset($options['etag']) && $options['etag'] === true) {
-            $options['etag'] = md5($response->getContent());
+            $options['etag'] = $response->getEtag() ?? md5($response->getContent());
+        }
+
+        if (isset($options['last_modified'])) {
+            if (is_numeric($options['last_modified'])) {
+                $options['last_modified'] = Carbon::createFromTimestamp($options['last_modified']);
+            } else {
+                $options['last_modified'] = Carbon::parse($options['last_modified']);
+            }
         }
 
         $response->setCache($options);
@@ -45,7 +56,7 @@ class SetCacheHeaders
      */
     protected function parseOptions($options)
     {
-        return collect(explode(';', $options))->mapWithKeys(function ($option) {
+        return collect(explode(';', rtrim($options, ';')))->mapWithKeys(function ($option) {
             $data = explode('=', $option, 2);
 
             return [$data[0] => $data[1] ?? true];

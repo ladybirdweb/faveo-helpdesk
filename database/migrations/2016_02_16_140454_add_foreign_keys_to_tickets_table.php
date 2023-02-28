@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddForeignKeysToTicketsTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -44,4 +43,4 @@ class AddForeignKeysToTicketsTable extends Migration
             $table->dropForeign('tickets_ibfk_9');
         });
     }
-}
+};

@@ -11,11 +11,11 @@
 
 namespace Tymon\JWTAuth;
 
-use Tymon\JWTAuth\Support\RefreshFlow;
-use Tymon\JWTAuth\Support\CustomClaims;
+use Tymon\JWTAuth\Contracts\Providers\JWT as JWTContract;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
-use Tymon\JWTAuth\Contracts\Providers\JWT as JWTContract;
+use Tymon\JWTAuth\Support\CustomClaims;
+use Tymon\JWTAuth\Support\RefreshFlow;
 
 class Manager
 {
@@ -62,7 +62,6 @@ class Manager
      * @param  \Tymon\JWTAuth\Contracts\Providers\JWT  $provider
      * @param  \Tymon\JWTAuth\Blacklist  $blacklist
      * @param  \Tymon\JWTAuth\Factory  $payloadFactory
-     *
      * @return void
      */
     public function __construct(JWTContract $provider, Blacklist $blacklist, Factory $payloadFactory)
@@ -76,7 +75,6 @@ class Manager
      * Encode a Payload and return the Token.
      *
      * @param  \Tymon\JWTAuth\Payload  $payload
-     *
      * @return \Tymon\JWTAuth\Token
      */
     public function encode(Payload $payload)
@@ -91,10 +89,9 @@ class Manager
      *
      * @param  \Tymon\JWTAuth\Token  $token
      * @param  bool  $checkBlacklist
+     * @return \Tymon\JWTAuth\Payload
      *
      * @throws \Tymon\JWTAuth\Exceptions\TokenBlacklistedException
-     *
-     * @return \Tymon\JWTAuth\Payload
      */
     public function decode(Token $token, $checkBlacklist = true)
     {
@@ -118,7 +115,6 @@ class Manager
      * @param  \Tymon\JWTAuth\Token  $token
      * @param  bool  $forceForever
      * @param  bool  $resetClaims
-     *
      * @return \Tymon\JWTAuth\Token
      */
     public function refresh(Token $token, $forceForever = false, $resetClaims = false)
@@ -143,10 +139,9 @@ class Manager
      *
      * @param  \Tymon\JWTAuth\Token  $token
      * @param  bool  $forceForever
+     * @return bool
      *
      * @throws \Tymon\JWTAuth\Exceptions\JWTException
-     *
-     * @return bool
      */
     public function invalidate(Token $token, $forceForever = false)
     {
@@ -164,18 +159,23 @@ class Manager
      * Build the claims to go into the refreshed token.
      *
      * @param  \Tymon\JWTAuth\Payload  $payload
-     *
      * @return array
      */
     protected function buildRefreshClaims(Payload $payload)
     {
-        // assign the payload values as variables for use later
-        extract($payload->toArray());
+        // Get the claims to be persisted from the payload
+        $persistentClaims = collect($payload->toArray())
+            ->only($this->persistentClaims)
+            ->toArray();
 
         // persist the relevant claims
         return array_merge(
             $this->customClaims,
-            compact($this->persistentClaims, 'sub', 'iat')
+            $persistentClaims,
+            [
+                'sub' => $payload['sub'],
+                'iat' => $payload['iat'],
+            ]
         );
     }
 
@@ -213,7 +213,6 @@ class Manager
      * Set whether the blacklist is enabled.
      *
      * @param  bool  $enabled
-     *
      * @return $this
      */
     public function setBlacklistEnabled($enabled)
@@ -227,7 +226,6 @@ class Manager
      * Set the claims to be persisted when refreshing a token.
      *
      * @param  array  $claims
-     *
      * @return $this
      */
     public function setPersistentClaims(array $claims)

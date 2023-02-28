@@ -2,19 +2,22 @@
 
 namespace Illuminate\Notifications\Channels;
 
+use Illuminate\Contracts\Mail\Factory as MailFactory;
+use Illuminate\Contracts\Mail\Mailable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Markdown;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Illuminate\Mail\Markdown;
-use Illuminate\Contracts\Mail\Mailer;
-use Illuminate\Contracts\Mail\Mailable;
-use Illuminate\Notifications\Notification;
+use Symfony\Component\Mailer\Header\MetadataHeader;
+use Symfony\Component\Mailer\Header\TagHeader;
 
 class MailChannel
 {
     /**
      * The mailer implementation.
      *
-     * @var \Illuminate\Contracts\Mail\Mailer
+     * @var \Illuminate\Contracts\Mail\Factory
      */
     protected $mailer;
 
@@ -28,11 +31,11 @@ class MailChannel
     /**
      * Create a new mail channel instance.
      *
-     * @param  \Illuminate\Contracts\Mail\Mailer  $mailer
+     * @param  \Illuminate\Contracts\Mail\Factory  $mailer
      * @param  \Illuminate\Mail\Markdown  $markdown
      * @return void
      */
-    public function __construct(Mailer $mailer, Markdown $markdown)
+    public function __construct(MailFactory $mailer, Markdown $markdown)
     {
         $this->mailer = $mailer;
         $this->markdown = $markdown;
@@ -58,9 +61,9 @@ class MailChannel
             return $message->send($this->mailer);
         }
 
-        $this->mailer->send(
+        $this->mailer->mailer($message->mailer ?? null)->send(
             $this->buildView($message),
-            $message->data(),
+            array_merge($message->data(), $this->additionalMessageData($notification)),
             $this->messageBuilder($notifiable, $notification, $message)
         );
     }
@@ -92,9 +95,31 @@ class MailChannel
             return $message->view;
         }
 
+        if (property_exists($message, 'theme') && ! is_null($message->theme)) {
+            $this->markdown->theme($message->theme);
+        }
+
         return [
             'html' => $this->markdown->render($message->markdown, $message->data()),
             'text' => $this->markdown->renderText($message->markdown, $message->data()),
+        ];
+    }
+
+    /**
+     * Get additional meta-data to pass along with the view data.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return array
+     */
+    protected function additionalMessageData($notification)
+    {
+        return [
+            '__laravel_notification_id' => $notification->id,
+            '__laravel_notification' => get_class($notification),
+            '__laravel_notification_queued' => in_array(
+                ShouldQueue::class,
+                class_implements($notification)
+            ),
         ];
     }
 
@@ -118,8 +143,22 @@ class MailChannel
         $this->addAttachments($mailMessage, $message);
 
         if (! is_null($message->priority)) {
-            $mailMessage->setPriority($message->priority);
+            $mailMessage->priority($message->priority);
         }
+
+        if ($message->tags) {
+            foreach ($message->tags as $tag) {
+                $mailMessage->getHeaders()->add(new TagHeader($tag));
+            }
+        }
+
+        if ($message->metadata) {
+            foreach ($message->metadata as $key => $value) {
+                $mailMessage->getHeaders()->add(new MetadataHeader($key, $value));
+            }
+        }
+
+        $this->runCallbacks($mailMessage, $message);
     }
 
     /**
@@ -207,5 +246,21 @@ class MailChannel
         foreach ($message->rawAttachments as $attachment) {
             $mailMessage->attachData($attachment['data'], $attachment['name'], $attachment['options']);
         }
+    }
+
+    /**
+     * Run the callbacks for the message.
+     *
+     * @param  \Illuminate\Mail\Message  $mailMessage
+     * @param  \Illuminate\Notifications\Messages\MailMessage  $message
+     * @return $this
+     */
+    protected function runCallbacks($mailMessage, $message)
+    {
+        foreach ($message->callbacks as $callback) {
+            $callback($mailMessage->getSymfonyMessage());
+        }
+
+        return $this;
     }
 }

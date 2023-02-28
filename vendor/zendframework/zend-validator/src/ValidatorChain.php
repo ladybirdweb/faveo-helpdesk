@@ -11,7 +11,6 @@ namespace Zend\Validator;
 
 use Countable;
 use Zend\Stdlib\PriorityQueue;
-use Zend\ServiceManager\ServiceManager;
 
 class ValidatorChain implements
     Countable,
@@ -66,8 +65,8 @@ class ValidatorChain implements
      */
     public function getPluginManager()
     {
-        if (! $this->plugins) {
-            $this->setPluginManager(new ValidatorPluginManager(new ServiceManager));
+        if (!$this->plugins) {
+            $this->setPluginManager(new ValidatorPluginManager());
         }
         return $this->plugins;
     }
@@ -137,11 +136,8 @@ class ValidatorChain implements
      * @param  int                  $priority
      * @return ValidatorChain Provides a fluent interface
      */
-    public function addValidator(
-        ValidatorInterface $validator,
-        $breakChainOnFailure = false,
-        $priority = self::DEFAULT_PRIORITY
-    ) {
+    public function addValidator(ValidatorInterface $validator, $breakChainOnFailure = false, $priority = self::DEFAULT_PRIORITY)
+    {
         return $this->attach($validator, $breakChainOnFailure, $priority);
     }
 
@@ -159,7 +155,7 @@ class ValidatorChain implements
     {
         $priority = self::DEFAULT_PRIORITY;
 
-        if (! $this->validators->isEmpty()) {
+        if (!$this->validators->isEmpty()) {
             $extractedNodes = $this->validators->toArray(PriorityQueue::EXTR_PRIORITY);
             rsort($extractedNodes, SORT_NUMERIC);
             $priority = $extractedNodes[0] + 1;
@@ -284,7 +280,7 @@ class ValidatorChain implements
     /**
      * Get all the validators
      *
-     * @return array
+     * @return PriorityQueue
      */
     public function getValidators()
     {

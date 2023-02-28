@@ -3,7 +3,7 @@ Usage
 
  * Must use 'forceChunkSize=true' on client side.
  * Chunk preprocessor not supported.
- * One should ensure indices on the gridfs collection on the property 'flowIdentifier'.
+ * One should ensure indices on the gridfs files collection on the property 'flowIdentifier'.
 
 Besides the points above, the usage is analogous to the 'normal' flow-php:
 
@@ -41,7 +41,7 @@ if ($file->validateFile()) {
 Delete unfinished files
 -----------------------
 
-For this you should setup cron, which would check each chunk upload time.
+For this you should set up cron, which would check each chunk upload time.
 If chunk is uploaded long time ago, then chunk should be deleted.
 
 Helper method for checking this:

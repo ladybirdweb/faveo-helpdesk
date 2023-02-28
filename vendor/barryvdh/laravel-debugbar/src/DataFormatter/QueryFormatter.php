@@ -6,7 +6,6 @@ use DebugBar\DataFormatter\DataFormatter;
 
 class QueryFormatter extends DataFormatter
 {
-
     /**
      * Removes extra spaces at the beginning and end of the SQL query and its lines.
      *
@@ -15,7 +14,10 @@ class QueryFormatter extends DataFormatter
      */
     public function formatSql($sql)
     {
-        return trim(preg_replace("/\s*\n\s*/", "\n", $sql));
+        $sql = preg_replace("/\?(?=(?:[^'\\\']*'[^'\\']*')*[^'\\\']*$)(?:\?)/", '?', $sql);
+        $sql = trim(preg_replace("/\s*\n\s*/", "\n", $sql));
+
+        return $sql;
     }
 
     /**
@@ -29,6 +31,15 @@ class QueryFormatter extends DataFormatter
         foreach ($bindings as &$binding) {
             if (is_string($binding) && !mb_check_encoding($binding, 'UTF-8')) {
                 $binding = '[BINARY DATA]';
+            }
+
+            if (is_array($binding)) {
+                $binding = $this->checkBindings($binding);
+                $binding = '[' . implode(',', $binding) . ']';
+            }
+
+            if (is_object($binding)) {
+                $binding =  json_encode($binding);
             }
         }
 
@@ -44,7 +55,7 @@ class QueryFormatter extends DataFormatter
     public function escapeBindings($bindings)
     {
         foreach ($bindings as &$binding) {
-            $binding = htmlentities($binding, ENT_QUOTES, 'UTF-8', false);
+            $binding = htmlentities((string) $binding, ENT_QUOTES, 'UTF-8', false);
         }
 
         return $bindings;

@@ -2,17 +2,15 @@
 
 namespace App\Exceptions;
 
-// controller
-use Bugsnag;
-use Bugsnag\BugsnagLaravel\BugsnagExceptionHandler as ExceptionHandler;
-use Config;
+use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Exception;
-// use Symfony\Component\HttpKernel\Exception\HttpException;
-// use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Foundation\Validation\ValidationException as foundation;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Session\TokenMismatchException;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -25,42 +23,25 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //        'Symfony\Component\HttpKernel\Exception\HttpException',
-        \Illuminate\Http\Exception\HttpResponseException::class,
-        foundation::class,
+        HttpResponseException::class,
         AuthorizationException::class,
         HttpResponseException::class,
         ModelNotFoundException::class,
         \Symfony\Component\HttpKernel\Exception\HttpException::class,
         ValidationException::class,
-        \DaveJamesMiller\Breadcrumbs\Exception::class,
+        \DaveJamesMiller\Breadcrumbs\BreadcrumbsException::class,
     ];
 
     /**
-     * Report or log an exception.
+     * @param \Throwable $e
      *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param \Exception $e
+     * @throws \Throwable
      *
      * @return void
      */
-    public function report(Exception $e)
+    public function report(\Throwable $e)
     {
-        Bugsnag::setBeforeNotifyFunction(function ($error) { //set bugsnag
-            return false;
-        });
-        // check if system is running in production environment
-        if (\App::environment() == 'production') {
-            $debug = Config::get('app.bugsnag_reporting'); //get bugsang reporting preference
-            if ($debug) { //if preference is true for reporting
-                $version = Config::get('app.version'); //set app version in report
-                Bugsnag::setAppVersion($version);
-                Bugsnag::setBeforeNotifyFunction(function ($error) { //set bugsnag
-                    return true;
-                }); //set bugsnag reporting as true
-            }
-        }
+        $this->reportToBugsNag($e);
 
         return parent::report($e);
     }
@@ -79,17 +60,17 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * Render an exception into an HTTP response.
+     * @param $request
+     * @param \Throwable $e
      *
-     * @param type      $request
-     * @param Exception $e
+     * @throws \Throwable
      *
-     * @return type mixed
+     * @return type|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
      */
-    public function render($request, Exception $e)
+    public function render($request, \Throwable $e)
     {
         switch ($e) {
-            case $e instanceof \Illuminate\Http\Exception\HttpResponseException:
+            case $e instanceof HttpResponseException:
                 return parent::render($request, $e);
             case $e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException:
                 return response()->json(['message' => $e->getMessage(), 'code' => $e->getStatusCode()]);
@@ -233,5 +214,23 @@ class Handler extends ExceptionHandler
         }
 
         return parent::render($request, $e);
+    }
+
+    protected function reportToBugsNag(\Throwable $e)
+    {
+        if (Config::get('app.bugsnag_reporting') && env('APP_ENV') == 'production' && $this->shouldReportBugsnag($e)) {
+            Bugsnag::notifyException($e);
+        }
+    }
+
+    public function shouldReportBugsnag($e)
+    {
+        foreach ($this->dontReport as $report) {
+            if ($e instanceof $report) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

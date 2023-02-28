@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateGroupsTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -25,10 +24,10 @@ class CreateGroupsTable extends Migration
             $table->boolean('can_delete_ticket');
             $table->boolean('can_ban_email');
             $table->boolean('can_manage_canned');
-            $table->boolean('can_manage_faq');
+            $table->boolean('can_manage_faq')->default(0);
             $table->boolean('can_view_agent_stats');
             $table->boolean('department_access');
-            $table->string('admin_notes');
+            $table->string('admin_notes')->nullable();
             $table->timestamps();
         });
     }
@@ -42,4 +41,4 @@ class CreateGroupsTable extends Migration
     {
         Schema::drop('groups');
     }
-}
+};

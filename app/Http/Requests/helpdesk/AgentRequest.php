@@ -4,6 +4,7 @@ namespace App\Http\Requests\helpdesk;
 
 use App\Http\Requests\Request;
 use App\Model\helpdesk\Settings\CommonSettings;
+use Illuminate\Contracts\Validation\Validator;
 
 /**
  * AgentRequest.
@@ -38,12 +39,12 @@ class AgentRequest extends Request
             'user_name'  => 'required|unique:users|max:30',
             'first_name' => 'required|max:30',
             // 'last_name'  => 'required|max:30',
-            'email'      => 'required|unique:users',
-            'active'     => 'required',
+            'email'  => 'required|unique:users',
+            'active' => 'required',
             // 'account_status' => 'required',
-            'group'               => 'required',
-            'primary_department'  => 'required',
-            'agent_time_zone'     => 'required',
+            'group'              => 'required',
+            'primary_department' => 'required',
+            'agent_time_zone'    => 'required',
             // 'phone_number' => 'phone:IN',
             'mobile' => 'unique:users',
             'team'   => 'required',
@@ -53,7 +54,7 @@ class AgentRequest extends Request
     /**
      *@category Funcion to set rule if send opt is enabled
      *
-     *@param object $settings (instance of Model common settings)
+     *@param  object  $settings (instance of Model common settings)
      *
      *@author manish.verma@ladybirdweb.com
      *
@@ -64,20 +65,20 @@ class AgentRequest extends Request
         $settings = $settings->select('status')->where('option_name', '=', 'send_otp')->first();
         if ($settings->status == '1' || $settings->status == 1) {
             return [
-                'user_name'           => 'required|unique:users|max:30',
-                'first_name'          => 'required|max:30',
+                'user_name'  => 'required|unique:users|max:30',
+                'first_name' => 'required|max:30',
                 // 'last_name'           => 'required|max:30',
-                'email'               => 'required|unique:users',
-                'active'              => 'required',
+                'email'  => 'required|unique:users',
+                'active' => 'required',
                 // 'account_status'       => 'required',
-                'group'               => 'required',
-                'primary_department'  => 'required',
-                'agent_time_zone'     => 'required',
+                'group'              => 'required',
+                'primary_department' => 'required',
+                'agent_time_zone'    => 'required',
                 // 'phone_number' => 'phone:IN',
                 // 'mobile' => 'phone:IN',
-                'team'                => 'required',
-                'mobile'              => 'required|unique:users',
-                'country_code'        => 'required',
+                'team'         => 'required',
+                'mobile'       => 'required|unique:users',
+                'country_code' => 'required',
             ];
         } else {
             return 0;

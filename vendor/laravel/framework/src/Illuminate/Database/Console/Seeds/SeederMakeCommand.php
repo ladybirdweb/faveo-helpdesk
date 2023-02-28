@@ -2,10 +2,11 @@
 
 namespace Illuminate\Database\Console\Seeds;
 
-use Illuminate\Support\Composer;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+#[AsCommand(name: 'make:seeder')]
 class SeederMakeCommand extends GeneratorCommand
 {
     /**
@@ -14,6 +15,17 @@ class SeederMakeCommand extends GeneratorCommand
      * @var string
      */
     protected $name = 'make:seeder';
+
+    /**
+     * The name of the console command.
+     *
+     * This name is used to identify the command during lazy loading.
+     *
+     * @var string|null
+     *
+     * @deprecated
+     */
+    protected static $defaultName = 'make:seeder';
 
     /**
      * The console command description.
@@ -30,27 +42,6 @@ class SeederMakeCommand extends GeneratorCommand
     protected $type = 'Seeder';
 
     /**
-     * The Composer instance.
-     *
-     * @var \Illuminate\Support\Composer
-     */
-    protected $composer;
-
-    /**
-     * Create a new command instance.
-     *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
-     * @param  \Illuminate\Support\Composer  $composer
-     * @return void
-     */
-    public function __construct(Filesystem $files, Composer $composer)
-    {
-        parent::__construct($files);
-
-        $this->composer = $composer;
-    }
-
-    /**
      * Execute the console command.
      *
      * @return void
@@ -58,8 +49,6 @@ class SeederMakeCommand extends GeneratorCommand
     public function handle()
     {
         parent::handle();
-
-        $this->composer->dumpAutoloads();
     }
 
     /**
@@ -69,7 +58,20 @@ class SeederMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/seeder.stub';
+        return $this->resolveStubPath('/stubs/seeder.stub');
+    }
+
+    /**
+     * Resolve the fully-qualified path to the stub.
+     *
+     * @param  string  $stub
+     * @return string
+     */
+    protected function resolveStubPath($stub)
+    {
+        return is_file($customPath = $this->laravel->basePath(trim($stub, '/')))
+            ? $customPath
+            : __DIR__.$stub;
     }
 
     /**
@@ -80,17 +82,22 @@ class SeederMakeCommand extends GeneratorCommand
      */
     protected function getPath($name)
     {
-        return $this->laravel->databasePath().'/seeds/'.$name.'.php';
+        $name = str_replace('\\', '/', Str::replaceFirst($this->rootNamespace(), '', $name));
+
+        if (is_dir($this->laravel->databasePath().'/seeds')) {
+            return $this->laravel->databasePath().'/seeds/'.$name.'.php';
+        }
+
+        return $this->laravel->databasePath().'/seeders/'.$name.'.php';
     }
 
     /**
-     * Parse the class name and format according to the root namespace.
+     * Get the root namespace for the class.
      *
-     * @param  string  $name
      * @return string
      */
-    protected function qualifyClass($name)
+    protected function rootNamespace()
     {
-        return $name;
+        return 'Database\Seeders\\';
     }
 }

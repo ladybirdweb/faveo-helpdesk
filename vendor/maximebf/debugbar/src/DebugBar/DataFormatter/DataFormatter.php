@@ -54,8 +54,10 @@ class DataFormatter implements DataFormatterInterface
     {
         if ($seconds < 0.001) {
             return round($seconds * 1000000) . 'μs';
-        } elseif ($seconds < 1) {
+        } elseif ($seconds < 0.1) {
             return round($seconds * 1000, 2) . 'ms';
+        } elseif ($seconds < 1) {
+            return round($seconds * 1000) . 'ms';
         }
         return round($seconds, 2) . 's';
     }
@@ -76,6 +78,6 @@ class DataFormatter implements DataFormatterInterface
 
         $base = log($size) / log(1024);
         $suffixes = array('B', 'KB', 'MB', 'GB', 'TB');
-        return $sign . round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
+        return $sign . round(pow(1024, $base - floor($base)), $precision) . $suffixes[(int) floor($base)];
     }
 }

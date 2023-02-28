@@ -3,7 +3,10 @@
 namespace Illuminate\Foundation\Console;
 
 use Illuminate\Console\GeneratorCommand;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Input\InputOption;
 
+#[AsCommand(name: 'make:channel')]
 class ChannelMakeCommand extends GeneratorCommand
 {
     /**
@@ -12,6 +15,17 @@ class ChannelMakeCommand extends GeneratorCommand
      * @var string
      */
     protected $name = 'make:channel';
+
+    /**
+     * The name of the console command.
+     *
+     * This name is used to identify the command during lazy loading.
+     *
+     * @var string|null
+     *
+     * @deprecated
+     */
+    protected static $defaultName = 'make:channel';
 
     /**
      * The console command description.
@@ -36,8 +50,8 @@ class ChannelMakeCommand extends GeneratorCommand
     protected function buildClass($name)
     {
         return str_replace(
-            'DummyUser',
-            class_basename(config('auth.providers.users.model')),
+            ['DummyUser', '{{ userModel }}'],
+            class_basename($this->userProviderModel()),
             parent::buildClass($name)
         );
     }
@@ -61,5 +75,17 @@ class ChannelMakeCommand extends GeneratorCommand
     protected function getDefaultNamespace($rootNamespace)
     {
         return $rootNamespace.'\Broadcasting';
+    }
+
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            ['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the channel already exists'],
+        ];
     }
 }

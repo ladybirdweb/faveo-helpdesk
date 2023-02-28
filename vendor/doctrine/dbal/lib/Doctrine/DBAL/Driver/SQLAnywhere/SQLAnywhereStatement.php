@@ -2,6 +2,9 @@
 
 namespace Doctrine\DBAL\Driver\SQLAnywhere;
 
+use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\Driver\FetchUtils;
+use Doctrine\DBAL\Driver\Result;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Driver\StatementIterator;
 use Doctrine\DBAL\FetchMode;
@@ -10,14 +13,16 @@ use IteratorAggregate;
 use PDO;
 use ReflectionClass;
 use ReflectionObject;
+use ReturnTypeWillChange;
 use stdClass;
-use const SASQL_BOTH;
+
 use function array_key_exists;
+use function assert;
 use function func_get_args;
 use function func_num_args;
 use function gettype;
 use function is_array;
-use function is_numeric;
+use function is_int;
 use function is_object;
 use function is_resource;
 use function is_string;
@@ -36,10 +41,14 @@ use function sasql_stmt_reset;
 use function sasql_stmt_result_metadata;
 use function sprintf;
 
+use const SASQL_BOTH;
+
 /**
  * SAP SQL Anywhere implementation of the Statement interface.
+ *
+ * @deprecated Support for SQLAnywhere will be removed in 3.0.
  */
-class SQLAnywhereStatement implements IteratorAggregate, Statement
+class SQLAnywhereStatement implements IteratorAggregate, Statement, Result
 {
     /** @var resource The connection resource. */
     private $conn;
@@ -53,14 +62,19 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
     /** @var int Default fetch mode to use. */
     private $defaultFetchMode = FetchMode::MIXED;
 
-    /** @var resource The result set resource to fetch. */
+    /** @var resource|null The result set resource to fetch. */
     private $result;
 
     /** @var resource The prepared SQL statement to execute. */
     private $stmt;
 
+    /** @var mixed[] The references to bound parameter values. */
+    private $boundValues = [];
+
     /**
      * Prepares given statement for given connection.
+     *
+     * @internal The statement can be only instantiated by its driver connection.
      *
      * @param resource $conn The connection resource to use.
      * @param string   $sql  The SQL statement to prepare.
@@ -86,8 +100,10 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
      *
      * @throws SQLAnywhereException
      */
-    public function bindParam($column, &$variable, $type = ParameterType::STRING, $length = null)
+    public function bindParam($param, &$variable, $type = ParameterType::STRING, $length = null)
     {
+        assert(is_int($param));
+
         switch ($type) {
             case ParameterType::INTEGER:
             case ParameterType::BOOLEAN:
@@ -108,7 +124,9 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
                 throw new SQLAnywhereException('Unknown type: ' . $type);
         }
 
-        if (! sasql_stmt_bind_param_ex($this->stmt, $column - 1, $variable, $type, $variable === null)) {
+        $this->boundValues[$param] =& $variable;
+
+        if (! sasql_stmt_bind_param_ex($this->stmt, $param - 1, $variable, $type, $variable === null)) {
             throw SQLAnywhereException::fromSQLAnywhereError($this->conn, $this->stmt);
         }
 
@@ -120,11 +138,15 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
      */
     public function bindValue($param, $value, $type = ParameterType::STRING)
     {
+        assert(is_int($param));
+
         return $this->bindParam($param, $value, $type);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Use free() instead.
      *
      * @throws SQLAnywhereException
      */
@@ -147,6 +169,8 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated The error information is available via exceptions.
      */
     public function errorCode()
     {
@@ -155,6 +179,8 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated The error information is available via exceptions.
      */
     public function errorInfo()
     {
@@ -172,9 +198,11 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
             $hasZeroIndex = array_key_exists(0, $params);
 
             foreach ($params as $key => $val) {
-                $key = $hasZeroIndex && is_numeric($key) ? $key + 1 : $key;
-
-                $this->bindValue($key, $val);
+                if ($hasZeroIndex && is_int($key)) {
+                    $this->bindValue($key + 1, $val);
+                } else {
+                    $this->bindValue($key, $val);
+                }
             }
         }
 
@@ -189,6 +217,8 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Use fetchNumeric(), fetchAssociative() or fetchOne() instead.
      *
      * @throws SQLAnywhereException
      */
@@ -241,6 +271,8 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Use fetchAllNumeric(), fetchAllAssociative() or fetchFirstColumn() instead.
      */
     public function fetchAll($fetchMode = null, $fetchArgument = null, $ctorArgs = null)
     {
@@ -248,19 +280,21 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
 
         switch ($fetchMode) {
             case FetchMode::CUSTOM_OBJECT:
-                while ($row = $this->fetch(...func_get_args())) {
+                while (($row = $this->fetch(...func_get_args())) !== false) {
                     $rows[] = $row;
                 }
+
                 break;
 
             case FetchMode::COLUMN:
-                while ($row = $this->fetchColumn()) {
+                while (($row = $this->fetchColumn()) !== false) {
                     $rows[] = $row;
                 }
+
                 break;
 
             default:
-                while ($row = $this->fetch($fetchMode)) {
+                while (($row = $this->fetch($fetchMode)) !== false) {
                     $rows[] = $row;
                 }
         }
@@ -270,6 +304,8 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Use fetchOne() instead.
      */
     public function fetchColumn($columnIndex = 0)
     {
@@ -284,10 +320,77 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Use iterateNumeric(), iterateAssociative() or iterateColumn() instead.
      */
+    #[ReturnTypeWillChange]
     public function getIterator()
     {
         return new StatementIterator($this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchNumeric()
+    {
+        if (! is_resource($this->result)) {
+            return false;
+        }
+
+        return sasql_fetch_row($this->result);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function fetchAssociative()
+    {
+        if (! is_resource($this->result)) {
+            return false;
+        }
+
+        return sasql_fetch_assoc($this->result);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws Exception
+     */
+    public function fetchOne()
+    {
+        return FetchUtils::fetchOne($this);
+    }
+
+    /**
+     * @return array<int,array<int,mixed>>
+     *
+     * @throws Exception
+     */
+    public function fetchAllNumeric(): array
+    {
+        return FetchUtils::fetchAllNumeric($this);
+    }
+
+    /**
+     * @return array<int,array<string,mixed>>
+     *
+     * @throws Exception
+     */
+    public function fetchAllAssociative(): array
+    {
+        return FetchUtils::fetchAllAssociative($this);
+    }
+
+    /**
+     * @return array<int,mixed>
+     *
+     * @throws Exception
+     */
+    public function fetchFirstColumn(): array
+    {
+        return FetchUtils::fetchFirstColumn($this);
     }
 
     /**
@@ -298,22 +401,31 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
         return sasql_stmt_affected_rows($this->stmt);
     }
 
+    public function free(): void
+    {
+        sasql_stmt_reset($this->stmt);
+    }
+
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Use one of the fetch- or iterate-related methods.
      */
     public function setFetchMode($fetchMode, $arg2 = null, $arg3 = null)
     {
         $this->defaultFetchMode          = $fetchMode;
         $this->defaultFetchClass         = $arg2 ?: $this->defaultFetchClass;
         $this->defaultFetchClassCtorArgs = $arg3 ? (array) $arg3 : $this->defaultFetchClassCtorArgs;
+
+        return true;
     }
 
     /**
      * Casts a stdClass object to the given class name mapping its' properties.
      *
-     * @param stdClass      $sourceObject     Object to cast from.
-     * @param string|object $destinationClass Name of the class or class instance to cast to.
-     * @param mixed[]       $ctorArgs         Arguments to use for constructing the destination class instance.
+     * @param stdClass            $sourceObject     Object to cast from.
+     * @param class-string|object $destinationClass Name of the class or class instance to cast to.
+     * @param mixed[]             $ctorArgs         Arguments to use for constructing the destination class instance.
      *
      * @return object
      *

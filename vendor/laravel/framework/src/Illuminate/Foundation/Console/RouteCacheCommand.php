@@ -3,10 +3,12 @@
 namespace Illuminate\Foundation\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Routing\RouteCollection;
-use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+#[AsCommand(name: 'route:cache')]
 class RouteCacheCommand extends Command
 {
     /**
@@ -15,6 +17,17 @@ class RouteCacheCommand extends Command
      * @var string
      */
     protected $name = 'route:cache';
+
+    /**
+     * The name of the console command.
+     *
+     * This name is used to identify the command during lazy loading.
+     *
+     * @var string|null
+     *
+     * @deprecated
+     */
+    protected static $defaultName = 'route:cache';
 
     /**
      * The console command description.
@@ -50,12 +63,12 @@ class RouteCacheCommand extends Command
      */
     public function handle()
     {
-        $this->call('route:clear');
+        $this->callSilent('route:clear');
 
         $routes = $this->getFreshApplicationRoutes();
 
         if (count($routes) === 0) {
-            return $this->error("Your application doesn't have any routes.");
+            return $this->components->error("Your application doesn't have any routes.");
         }
 
         foreach ($routes as $route) {
@@ -66,7 +79,7 @@ class RouteCacheCommand extends Command
             $this->laravel->getCachedRoutesPath(), $this->buildRouteCacheFile($routes)
         );
 
-        $this->info('Routes cached successfully!');
+        $this->components->info('Routes cached successfully.');
     }
 
     /**
@@ -85,7 +98,7 @@ class RouteCacheCommand extends Command
     /**
      * Get a fresh application instance.
      *
-     * @return \Illuminate\Foundation\Application
+     * @return \Illuminate\Contracts\Foundation\Application
      */
     protected function getFreshApplication()
     {
@@ -104,6 +117,6 @@ class RouteCacheCommand extends Command
     {
         $stub = $this->files->get(__DIR__.'/stubs/routes.stub');
 
-        return str_replace('{{routes}}', base64_encode(serialize($routes)), $stub);
+        return str_replace('{{routes}}', var_export($routes->compile(), true), $stub);
     }
 }

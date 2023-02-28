@@ -1,13 +1,184 @@
 # Change Log
 
-
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## Unreleased
+
+## 2.4.3 - 2022-10-26
+
+### Changed
+
+- Replaced `sha1(uniqid())` by `bin2hex(random_bytes(20))`
+
+## 2.4.2 - 2022-10-25
+
+### Fixed
+
+- Fixed erroneous behaviour when combining host and relative path
+
+## 2.4.1 - 2022-08-28
+
+### Fixed
+
+- Rewind body before reading in `Message::bodySummary`
+
+## 2.4.0 - 2022-06-20
+
+### Added
+
+- Added provisional PHP 8.2 support
+- Added `UriComparator::isCrossOrigin` method
+
+## 2.3.0 - 2022-06-09
+
+### Fixed
+
+- Added `Header::splitList` method
+- Added `Utils::tryGetContents` method
+- Improved `Stream::getContents` method
+- Updated mimetype mappings
+
+## 2.2.2 - 2022-06-08
+
+### Fixed
+
+- Fix `Message::parseRequestUri` for numeric headers
+- Re-wrap exceptions thrown in `fread` into runtime exceptions
+- Throw an exception when multipart options is misformatted
+
+## 2.2.1 - 2022-03-20
+
+### Fixed
+
+- Correct header value validation
+
+## 2.2.0 - 2022-03-20
+
+### Added
+
+- A more compressive list of mime types
+- Add JsonSerializable to Uri
+- Missing return types
+
+### Fixed
+
+- Bug MultipartStream no `uri` metadata
+- Bug MultipartStream with filename for `data://` streams
+- Fixed new line handling in MultipartStream
+- Reduced RAM usage when copying streams
+- Updated parsing in `Header::normalize()`
+
+## 2.1.1 - 2022-03-20
+
+### Fixed
+
+- Validate header values properly
+
+## 2.1.0 - 2021-10-06
+
+### Changed
+
+- Attempting to create a `Uri` object from a malformed URI will no longer throw a generic
+  `InvalidArgumentException`, but rather a `MalformedUriException`, which inherits from the former
+  for backwards compatibility. Callers relying on the exception being thrown to detect invalid
+  URIs should catch the new exception.
+
+### Fixed
+
+- Return `null` in caching stream size if remote size is `null`
+
+## 2.0.0 - 2021-06-30
+
+Identical to the RC release.
+
+## 2.0.0@RC-1 - 2021-04-29
+
+### Fixed
+
+- Handle possibly unset `url` in `stream_get_meta_data`
+
+## 2.0.0@beta-1 - 2021-03-21
+
+### Added
+
+- PSR-17 factories
+- Made classes final
+- PHP7 type hints
+
+### Changed
+
+- When building a query string, booleans are represented as 1 and 0.
+
+### Removed
+
+- PHP < 7.2 support
+- All functions in the `GuzzleHttp\Psr7` namespace
+
+## 1.8.1 - 2021-03-21
+
+### Fixed
+
+- Issue parsing IPv6 URLs
+- Issue modifying ServerRequest lost all its attributes
+
+## 1.8.0 - 2021-03-21
+
+### Added
+
+- Locale independent URL parsing
+- Most classes got a `@final` annotation to prepare for 2.0
+
+### Fixed
+
+- Issue when creating stream from `php://input` and curl-ext is not installed
+- Broken `Utils::tryFopen()` on PHP 8
+
+## 1.7.0 - 2020-09-30
+
+### Added
+
+- Replaced functions by static methods
+
+### Fixed
+
+- Converting a non-seekable stream to a string
+- Handle multiple Set-Cookie correctly
+- Ignore array keys in header values when merging
+- Allow multibyte characters to be parsed in `Message:bodySummary()`
+
+### Changed
+
+- Restored partial HHVM 3 support
 
 
-## [Unreleased]
+## [1.6.1] - 2019-07-02
+
+### Fixed
+
+- Accept null and bool header values again
+
+
+## [1.6.0] - 2019-06-30
+
+### Added
+
+- Allowed version `^3.0` of `ralouphie/getallheaders` dependency (#244)
+- Added MIME type for WEBP image format (#246)
+- Added more validation of values according to PSR-7 and RFC standards, e.g. status code range (#250, #272)
+
+### Changed
+
+- Tests don't pass with HHVM 4.0, so HHVM support got dropped. Other libraries like composer have done the same. (#262)
+- Accept port number 0 to be valid (#270)
+
+### Fixed
+
+- Fixed subsequent reads from `php://input` in ServerRequest (#247)
+- Fixed readable/writable detection for certain stream modes (#248)
+- Fixed encoding of special characters in the `userInfo` component of an URI (#253)
 
 
 ## [1.5.2] - 2018-12-04
@@ -209,7 +380,7 @@ Currently unsupported:
 
 
 
-[Unreleased]: https://github.com/guzzle/psr7/compare/1.5.2...HEAD
+[1.6.0]: https://github.com/guzzle/psr7/compare/1.5.2...1.6.0
 [1.5.2]: https://github.com/guzzle/psr7/compare/1.5.1...1.5.2
 [1.5.1]: https://github.com/guzzle/psr7/compare/1.5.0...1.5.1
 [1.5.0]: https://github.com/guzzle/psr7/compare/1.4.2...1.5.0

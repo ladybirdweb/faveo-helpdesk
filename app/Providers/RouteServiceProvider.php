@@ -2,19 +2,20 @@
 
 namespace App\Providers;
 
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
     /**
-     * This namespace is applied to your controller routes.
-     *
-     * In addition, it is set as the URL generator's root namespace.
+     * The path to the "home" route for your application.
      *
      * @var string
      */
-    protected $namespace = 'App\Http\Controllers';
+    public const HOME = '/home';
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -23,22 +24,15 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-        parent::boot();
-    }
+        $this->configureRateLimiting();
 
-    /**
-     * Define the routes for the application.
-     *
-     * @return void
-     */
-    public function map()
-    {
-        $this->mapApiRoutes();
-        $this->mapWebRoutes();
-        $this->mapInstallerRoutes();
-        $this->mapUpdateRoutes();
-        //
+        $this->routes(function () {
+            $this->mapApiRoutes();
+            $this->mapWebRoutes();
+            $this->mapInstallerRoutes();
+            $this->mapUpdateRoutes();
+            //
+        });
     }
 
     /**
@@ -50,10 +44,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        Route::group([
-            'middleware' => 'web',
-            'namespace'  => $this->namespace,
-        ], function ($router) {
+        Route::middleware('web')->group(function ($router) {
             require base_path('routes/web.php');
         });
     }
@@ -67,11 +58,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        Route::group([
-            'middleware' => 'api',
-            'namespace'  => $this->namespace,
-            'prefix'     => 'api',
-        ], function ($router) {
+        Route::middleware('api')->prefix('api')->group(function ($router) {
             require base_path('routes/api.php');
         });
     }
@@ -85,10 +72,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapInstallerRoutes()
     {
-        Route::group([
-            'middleware' => ['web', 'installer'],
-            'namespace'  => $this->namespace,
-        ], function ($router) {
+        Route::middleware('web', 'installer')->group(function ($router) {
             require base_path('routes/installer.php');
         });
     }
@@ -102,12 +86,20 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapUpdateRoutes()
     {
-        Route::group([
-            'middleware' => ['web', 'redirect', 'install'],
-            'namespace'  => $this->namespace,
-            'prefix'     => 'app/update',
-        ], function ($router) {
+        Route::middleware('web', 'redirect', 'install')->prefix('app/update')->group(function ($router) {
             require base_path('routes/update.php');
+        });
+    }
+
+    /**
+     * Configure the rate limiters for the application.
+     *
+     * @return void
+     */
+    protected function configureRateLimiting()
+    {
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
     }
 }

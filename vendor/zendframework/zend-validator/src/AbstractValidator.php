@@ -126,7 +126,7 @@ abstract class AbstractValidator implements
      */
     public function setOptions($options = [])
     {
-        if (! is_array($options) && ! $options instanceof Traversable) {
+        if (!is_array($options) && !$options instanceof Traversable) {
             throw new Exception\InvalidArgumentException(__METHOD__ . ' expects an array or Traversable');
         }
 
@@ -208,7 +208,7 @@ abstract class AbstractValidator implements
             return $this;
         }
 
-        if (! isset($this->abstractOptions['messageTemplates'][$messageKey])) {
+        if (!isset($this->abstractOptions['messageTemplates'][$messageKey])) {
             throw new Exception\InvalidArgumentException("No message template exists for key '$messageKey'");
         }
 
@@ -278,7 +278,7 @@ abstract class AbstractValidator implements
      */
     protected function createMessage($messageKey, $value)
     {
-        if (! isset($this->abstractOptions['messageTemplates'][$messageKey])) {
+        if (!isset($this->abstractOptions['messageTemplates'][$messageKey])) {
             return;
         }
 
@@ -287,7 +287,7 @@ abstract class AbstractValidator implements
         $message = $this->translateMessage($messageKey, $message);
 
         if (is_object($value) &&
-            ! in_array('__toString', get_class_methods($value))
+            !in_array('__toString', get_class_methods($value))
         ) {
             $value = get_class($value) . ' object';
         } elseif (is_array($value)) {
@@ -565,7 +565,7 @@ abstract class AbstractValidator implements
     protected function translateMessage($messageKey, $message)
     {
         $translator = $this->getTranslator();
-        if (! $translator) {
+        if (!$translator) {
             return $message;
         }
 

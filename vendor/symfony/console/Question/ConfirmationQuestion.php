@@ -18,7 +18,7 @@ namespace Symfony\Component\Console\Question;
  */
 class ConfirmationQuestion extends Question
 {
-    private $trueAnswerRegex;
+    private string $trueAnswerRegex;
 
     /**
      * @param string $question        The question to ask to the user
@@ -35,10 +35,8 @@ class ConfirmationQuestion extends Question
 
     /**
      * Returns the default answer normalizer.
-     *
-     * @return callable
      */
-    private function getDefaultNormalizer()
+    private function getDefaultNormalizer(): callable
     {
         $default = $this->getDefault();
         $regex = $this->trueAnswerRegex;
@@ -53,7 +51,7 @@ class ConfirmationQuestion extends Question
                 return $answer && $answerIsTrue;
             }
 
-            return !$answer || $answerIsTrue;
+            return '' === $answer || $answerIsTrue;
         };
     }
 }

@@ -13,23 +13,29 @@ namespace Symfony\Component\HttpKernel\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+
+trigger_deprecation('symfony/http-kernel', '6.1', 'The "%s" class is deprecated.', StreamedResponseListener::class);
 
 /**
  * StreamedResponseListener is responsible for sending the Response
  * to the client.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ *
+ * @final
+ *
+ * @deprecated since Symfony 6.1
  */
 class StreamedResponseListener implements EventSubscriberInterface
 {
     /**
      * Filters the Response.
      */
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 
@@ -40,10 +46,10 @@ class StreamedResponseListener implements EventSubscriberInterface
         }
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
-        return array(
-            KernelEvents::RESPONSE => array('onKernelResponse', -1024),
-        );
+        return [
+            KernelEvents::RESPONSE => ['onKernelResponse', -1024],
+        ];
     }
 }

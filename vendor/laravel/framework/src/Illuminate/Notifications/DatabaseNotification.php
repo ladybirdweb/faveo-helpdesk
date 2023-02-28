@@ -2,10 +2,18 @@
 
 namespace Illuminate\Notifications;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class DatabaseNotification extends Model
 {
+    /**
+     * The "type" of the primary key ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
     /**
      * Indicates if the IDs are auto-incrementing.
      *
@@ -39,6 +47,8 @@ class DatabaseNotification extends Model
 
     /**
      * Get the notifiable entity that the notification belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function notifiable()
     {
@@ -87,6 +97,28 @@ class DatabaseNotification extends Model
     public function unread()
     {
         return $this->read_at === null;
+    }
+
+    /**
+     * Scope a query to only include read notifications.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeRead(Builder $query)
+    {
+        return $query->whereNotNull('read_at');
+    }
+
+    /**
+     * Scope a query to only include unread notifications.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeUnread(Builder $query)
+    {
+        return $query->whereNull('read_at');
     }
 
     /**

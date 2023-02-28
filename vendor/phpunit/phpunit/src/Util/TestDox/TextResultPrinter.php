@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,12 +9,17 @@
  */
 namespace PHPUnit\Util\TestDox;
 
+use PHPUnit\Framework\TestResult;
+
 /**
- * Prints TestDox documentation in text format to files.
- * For the CLI testdox printer please refer to \PHPUnit\TextUI\TextDoxPrinter.
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-class TextResultPrinter extends ResultPrinter
+final class TextResultPrinter extends ResultPrinter
 {
+    public function printResult(TestResult $result): void
+    {
+    }
+
     /**
      * Handler for 'start class' event.
      */
@@ -26,7 +31,7 @@ class TextResultPrinter extends ResultPrinter
     /**
      * Handler for 'on test' event.
      */
-    protected function onTest($name, bool $success = true): void
+    protected function onTest(string $name, bool $success = true): void
     {
         if ($success) {
             $this->write(' [x] ');

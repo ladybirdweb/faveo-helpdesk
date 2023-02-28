@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the ramsey/uuid library
  *
@@ -7,10 +8,9 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
- * @link https://benramsey.com/projects/ramsey-uuid/ Documentation
- * @link https://packagist.org/packages/ramsey/uuid Packagist
- * @link https://github.com/ramsey/uuid GitHub
  */
+
+declare(strict_types=1);
 
 namespace Ramsey\Uuid\Generator;
 
@@ -19,49 +19,22 @@ use Ramsey\Uuid\Provider\NodeProviderInterface;
 use Ramsey\Uuid\Provider\TimeProviderInterface;
 
 /**
- * A factory for retrieving a time generator, based on the environment
+ * TimeGeneratorFactory retrieves a default time generator, based on the
+ * environment
  */
 class TimeGeneratorFactory
 {
-    /**
-     * @var NodeProviderInterface
-     */
-    private $nodeProvider;
-
-    /**
-     * @var TimeConverterInterface
-     */
-    private $timeConverter;
-
-    /**
-     * @var TimeProviderInterface
-     */
-    private $timeProvider;
-
-    /**
-     * Constructs a `TimeGeneratorFactory` using a node provider, time converter,
-     * and time provider
-     *
-     * @param NodeProviderInterface $nodeProvider
-     * @param TimeConverterInterface $timeConverter
-     * @param TimeProviderInterface $timeProvider
-     */
     public function __construct(
-        NodeProviderInterface $nodeProvider,
-        TimeConverterInterface $timeConverter,
-        TimeProviderInterface $timeProvider
+        private NodeProviderInterface $nodeProvider,
+        private TimeConverterInterface $timeConverter,
+        private TimeProviderInterface $timeProvider
     ) {
-        $this->nodeProvider = $nodeProvider;
-        $this->timeConverter = $timeConverter;
-        $this->timeProvider = $timeProvider;
     }
 
     /**
      * Returns a default time generator, based on the current environment
-     *
-     * @return TimeGeneratorInterface
      */
-    public function getGenerator()
+    public function getGenerator(): TimeGeneratorInterface
     {
         return new DefaultTimeGenerator(
             $this->nodeProvider,

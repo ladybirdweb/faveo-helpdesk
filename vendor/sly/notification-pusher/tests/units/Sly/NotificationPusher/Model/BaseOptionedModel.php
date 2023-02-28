@@ -15,7 +15,7 @@ class BaseOptionedModel extends Units\Test
 {
     public function testMethods()
     {
-        $this->if($object = new Message('Test', ['param' => 'test']))
+        $this->if($object = new Message('Test', array('param' => 'test')))
             ->boolean($object->hasOption('param'))
                 ->isTrue()
             ->string($object->getOption('param'))
@@ -28,7 +28,7 @@ class BaseOptionedModel extends Units\Test
             ->string($object->getOption('renotExist', '12345'))
                 ->isEqualTo('12345')
 
-            ->when($object->setOptions(['chuck' => 'norris']))
+            ->when($object->setOptions(array('chuck' => 'norris')))
             ->boolean($object->hasOption('chuck'))
                 ->isTrue()
             ->string($object->getOption('chuck'))

@@ -70,16 +70,16 @@ class Bitwise extends AbstractValidator
             $options = iterator_to_array($options);
         }
 
-        if (! is_array($options)) {
+        if (!is_array($options)) {
             $options = func_get_args();
 
             $temp['control'] = array_shift($options);
 
-            if (! empty($options)) {
+            if (!empty($options)) {
                 $temp['operator'] = array_shift($options);
             }
 
-            if (! empty($options)) {
+            if (!empty($options)) {
                 $temp['strict'] = array_shift($options);
             }
 

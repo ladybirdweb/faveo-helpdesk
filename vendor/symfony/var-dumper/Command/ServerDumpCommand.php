@@ -11,7 +11,10 @@
 
 namespace Symfony\Component\VarDumper\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Completion\CompletionInput;
+use Symfony\Component\Console\Completion\CompletionSuggestions;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -32,33 +35,29 @@ use Symfony\Component\VarDumper\Server\DumpServer;
  *
  * @final
  */
+#[AsCommand(name: 'server:dump', description: 'Start a dump server that collects and displays dumps in a single place')]
 class ServerDumpCommand extends Command
 {
-    protected static $defaultName = 'server:dump';
-
-    private $server;
+    private DumpServer $server;
 
     /** @var DumpDescriptorInterface[] */
-    private $descriptors;
+    private array $descriptors;
 
-    public function __construct(DumpServer $server, array $descriptors = array())
+    public function __construct(DumpServer $server, array $descriptors = [])
     {
         $this->server = $server;
-        $this->descriptors = $descriptors + array(
+        $this->descriptors = $descriptors + [
             'cli' => new CliDescriptor(new CliDumper()),
             'html' => new HtmlDescriptor(new HtmlDumper()),
-        );
+        ];
 
         parent::__construct();
     }
 
     protected function configure()
     {
-        $availableFormats = implode(', ', array_keys($this->descriptors));
-
         $this
-            ->addOption('format', null, InputOption::VALUE_REQUIRED, sprintf('The output format (%s)', $availableFormats), 'cli')
-            ->setDescription('Starts a dump server that collects and displays dumps in a single place')
+            ->addOption('format', null, InputOption::VALUE_REQUIRED, sprintf('The output format (%s)', implode(', ', $this->getAvailableFormats())), 'cli')
             ->setHelp(<<<'EOF'
 <info>%command.name%</info> starts a dump server that collects and displays
 dumps in a single place for debugging you application:
@@ -75,7 +74,7 @@ EOF
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $format = $input->getOption('format');
@@ -95,5 +94,19 @@ EOF
         $this->server->listen(function (Data $data, array $context, int $clientId) use ($descriptor, $io) {
             $descriptor->describe($io, $data, $context, $clientId);
         });
+
+        return 0;
+    }
+
+    public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
+    {
+        if ($input->mustSuggestOptionValuesFor('format')) {
+            $suggestions->suggestValues($this->getAvailableFormats());
+        }
+    }
+
+    private function getAvailableFormats(): array
+    {
+        return array_keys($this->descriptors);
     }
 }

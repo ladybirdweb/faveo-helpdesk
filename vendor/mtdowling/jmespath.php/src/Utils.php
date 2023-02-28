@@ -3,7 +3,7 @@ namespace JmesPath;
 
 class Utils
 {
-    static $typeMap = [
+    public static $typeMap = [
         'boolean' => 'boolean',
         'string'  => 'string',
         'NULL'    => 'null',
@@ -127,6 +127,31 @@ class Utils
     }
 
     /**
+     * Safely add together two values.
+     *
+     * @param mixed $a First value to add
+     * @param mixed $b Second value to add
+     *
+     * @return int|float
+     */
+    public static function add($a, $b)
+    {
+        if (is_numeric($a)) {
+            if (is_numeric($b)) {
+                return $a + $b;
+            } else {
+                return $a;
+            }
+        } else {
+            if (is_numeric($b)) {
+                return $b;
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    /**
      * JMESPath requires a stable sorting algorithm, so here we'll implement
      * a simple Schwartzian transform that uses array index positions as tie
      * breakers.
@@ -140,14 +165,18 @@ class Utils
     public static function stableSort(array $data, callable $sortFn)
     {
         // Decorate each item by creating an array of [value, index]
-        array_walk($data, function (&$v, $k) { $v = [$v, $k]; });
+        array_walk($data, function (&$v, $k) {
+            $v = [$v, $k];
+        });
         // Sort by the sort function and use the index as a tie-breaker
         uasort($data, function ($a, $b) use ($sortFn) {
             return $sortFn($a[0], $b[0]) ?: ($a[1] < $b[1] ? -1 : 1);
         });
 
         // Undecorate each item and return the resulting sorted array
-        return array_map(function ($v) { return $v[0]; }, array_values($data));
+        return array_map(function ($v) {
+            return $v[0];
+        }, array_values($data));
     }
 
     /**
@@ -210,7 +239,7 @@ class Utils
     private static function sliceIndices($subject, $start, $stop, $step)
     {
         $type = gettype($subject);
-        $len = $type == 'string' ? strlen($subject) : count($subject);
+        $len = $type == 'string' ? mb_strlen($subject, 'UTF-8') : count($subject);
         list($start, $stop, $step) = self::adjustSlice($len, $start, $stop, $step);
 
         $result = [];
@@ -224,6 +253,6 @@ class Utils
             }
         }
 
-        return $type == 'string' ? implode($result, '') : $result;
+        return $type == 'string' ? implode('', $result) : $result;
     }
 }

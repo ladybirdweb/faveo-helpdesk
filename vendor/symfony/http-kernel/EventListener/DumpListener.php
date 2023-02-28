@@ -25,9 +25,9 @@ use Symfony\Component\VarDumper\VarDumper;
  */
 class DumpListener implements EventSubscriberInterface
 {
-    private $cloner;
-    private $dumper;
-    private $connection;
+    private ClonerInterface $cloner;
+    private DataDumperInterface $dumper;
+    private ?Connection $connection;
 
     public function __construct(ClonerInterface $cloner, DataDumperInterface $dumper, Connection $connection = null)
     {
@@ -51,13 +51,13 @@ class DumpListener implements EventSubscriberInterface
         });
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         if (!class_exists(ConsoleEvents::class)) {
-            return array();
+            return [];
         }
 
         // Register early to have a working dump() as early as possible
-        return array(ConsoleEvents::COMMAND => array('configure', 1024));
+        return [ConsoleEvents::COMMAND => ['configure', 1024]];
     }
 }

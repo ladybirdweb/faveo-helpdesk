@@ -27,25 +27,19 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Esi extends AbstractSurrogate
 {
-    public function getName()
+    public function getName(): string
     {
         return 'esi';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addSurrogateControl(Response $response)
     {
-        if (false !== strpos($response->getContent(), '<esi:include')) {
+        if (str_contains($response->getContent(), '<esi:include')) {
             $response->headers->set('Surrogate-Control', 'content="ESI/1.0"');
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function renderIncludeTag($uri, $alt = null, $ignoreErrors = true, $comment = '')
+    public function renderIncludeTag(string $uri, string $alt = null, bool $ignoreErrors = true, string $comment = ''): string
     {
         $html = sprintf('<esi:include src="%s"%s%s />',
             $uri,
@@ -60,10 +54,7 @@ class Esi extends AbstractSurrogate
         return $html;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function process(Request $request, Response $response)
+    public function process(Request $request, Response $response): Response
     {
         $type = $response->headers->get('Content-Type');
         if (empty($type)) {
@@ -80,13 +71,13 @@ class Esi extends AbstractSurrogate
         $content = preg_replace('#<esi\:remove>.*?</esi\:remove>#s', '', $content);
         $content = preg_replace('#<esi\:comment[^>]+>#s', '', $content);
 
-        $chunks = preg_split('#<esi\:include\s+(.*?)\s*(?:/|</esi\:include)>#', $content, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $chunks = preg_split('#<esi\:include\s+(.*?)\s*(?:/|</esi\:include)>#', $content, -1, \PREG_SPLIT_DELIM_CAPTURE);
         $chunks[0] = str_replace($this->phpEscapeMap[0], $this->phpEscapeMap[1], $chunks[0]);
 
         $i = 1;
         while (isset($chunks[$i])) {
-            $options = array();
-            preg_match_all('/(src|onerror|alt)="([^"]*?)"/', $chunks[$i], $matches, PREG_SET_ORDER);
+            $options = [];
+            preg_match_all('/(src|onerror|alt)="([^"]*?)"/', $chunks[$i], $matches, \PREG_SET_ORDER);
             foreach ($matches as $set) {
                 $options[$set[1]] = $set[2];
             }
@@ -97,7 +88,7 @@ class Esi extends AbstractSurrogate
 
             $chunks[$i] = sprintf('<?php echo $this->surrogate->handle($this, %s, %s, %s) ?>'."\n",
                 var_export($options['src'], true),
-                var_export(isset($options['alt']) ? $options['alt'] : '', true),
+                var_export($options['alt'] ?? '', true),
                 isset($options['onerror']) && 'continue' === $options['onerror'] ? 'true' : 'false'
             );
             ++$i;
@@ -111,5 +102,7 @@ class Esi extends AbstractSurrogate
 
         // remove ESI/1.0 from the Surrogate-Control header
         $this->removeFromControl($response);
+
+        return $response;
     }
 }

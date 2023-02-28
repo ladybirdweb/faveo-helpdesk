@@ -92,14 +92,14 @@ class InstallerApiController extends Controller
                 $ENV['DB_USERNAME'] = $dbusername;
                 $ENV['DB_PASSWORD'] = $dbpassword;
                 $ENV['DB_INSTALL'] = '%0%';
-                $ENV['MAIL_DRIVER'] = 'smtp';
+                $ENV['MAIL_MAILER'] = 'smtp';
                 $ENV['MAIL_HOST'] = 'mailtrap.io';
                 $ENV['MAIL_PORT'] = '2525';
                 $ENV['MAIL_USERNAME'] = 'null';
                 $ENV['MAIL_PASSWORD'] = 'null';
                 $ENV['CACHE_DRIVER'] = 'file';
                 $ENV['SESSION_DRIVER'] = 'file';
-                $ENV['QUEUE_DRIVER'] = 'sync';
+                $ENV['QUEUE_CONNECTION'] = 'sync';
                 $ENV['JWT_TTL'] = 4;
                 $ENV['FCM_SERVER_KEY'] = 'AIzaSyCyx5OFnsRFUmDLTMbPV50ZMDUGSG-bLw4';
                 $ENV['FCM_SENDER_ID'] = '661051343223';

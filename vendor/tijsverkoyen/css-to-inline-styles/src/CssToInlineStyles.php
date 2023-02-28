@@ -8,7 +8,6 @@ use Symfony\Component\CssSelector\Exception\ExceptionInterface;
 use TijsVerkoyen\CssToInlineStyles\Css\Processor;
 use TijsVerkoyen\CssToInlineStyles\Css\Property\Processor as PropertyProcessor;
 use TijsVerkoyen\CssToInlineStyles\Css\Rule\Processor as RuleProcessor;
-use TijsVerkoyen\CssToInlineStyles\Css\Rule\Rule;
 
 class CssToInlineStyles
 {
@@ -29,6 +28,7 @@ class CssToInlineStyles
      *
      * @param string $html
      * @param string $css
+     *
      * @return string
      */
     public function convert($html, $css = null)
@@ -55,6 +55,7 @@ class CssToInlineStyles
      *
      * @param \DOMElement             $element
      * @param Css\Property\Property[] $properties
+     *
      * @return \DOMElement
      */
     public function inlineCssOnElement(\DOMElement $element, array $properties)
@@ -89,6 +90,7 @@ class CssToInlineStyles
      * Get the current inline styles for a given DOMElement
      *
      * @param \DOMElement $element
+     *
      * @return Css\Property\Property[]
      */
     public function getInlineStyles(\DOMElement $element)
@@ -104,13 +106,14 @@ class CssToInlineStyles
 
     /**
      * @param string $html
+     *
      * @return \DOMDocument
      */
     protected function createDomDocumentFromHtml($html)
     {
         $document = new \DOMDocument('1.0', 'UTF-8');
         $internalErrors = libxml_use_internal_errors(true);
-        $document->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+        $document->loadHTML(mb_encode_numericentity($html, [0x80, 0x10FFFF, 0, 0x1FFFFF], 'UTF-8'));
         libxml_use_internal_errors($internalErrors);
         $document->formatOutput = true;
 
@@ -119,6 +122,7 @@ class CssToInlineStyles
 
     /**
      * @param \DOMDocument $document
+     *
      * @return string
      */
     protected function getHtmlFromDocument(\DOMDocument $document)
@@ -145,6 +149,7 @@ class CssToInlineStyles
     /**
      * @param \DOMDocument    $document
      * @param Css\Rule\Rule[] $rules
+     *
      * @return \DOMDocument
      */
     protected function inline(\DOMDocument $document, array $rules)

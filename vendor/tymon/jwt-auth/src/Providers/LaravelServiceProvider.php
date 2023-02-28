@@ -11,6 +11,9 @@
 
 namespace Tymon\JWTAuth\Providers;
 
+use Tymon\JWTAuth\Http\Parser\Cookies;
+use Tymon\JWTAuth\Http\Parser\RouteParams;
+
 class LaravelServiceProvider extends AbstractServiceProvider
 {
     /**
@@ -26,6 +29,27 @@ class LaravelServiceProvider extends AbstractServiceProvider
         $this->aliasMiddleware();
 
         $this->extendAuthGuard();
+
+        $this->app['tymon.jwt.parser']->addParser([
+            new RouteParams,
+            new Cookies($this->config('decrypt_cookies')),
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function registerStorageProvider()
+    {
+        $this->app->singleton('tymon.jwt.provider.storage', function () {
+            $instance = $this->getConfigInstance('providers.storage');
+
+            if (method_exists($instance, 'setLaravelVersion')) {
+                $instance->setLaravelVersion($this->app->version());
+            }
+
+            return $instance;
+        });
     }
 
     /**

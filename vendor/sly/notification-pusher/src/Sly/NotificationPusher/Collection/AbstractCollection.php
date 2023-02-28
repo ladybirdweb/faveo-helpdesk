@@ -17,19 +17,13 @@ namespace Sly\NotificationPusher\Collection;
  * @uses \IteratorAggregate
  * @author Cédric Dugat <cedric@dugat.me>
  */
-abstract class AbstractCollection implements \IteratorAggregate, \Countable
+abstract class AbstractCollection
 {
     /**
      * @var \ArrayIterator
      */
     protected $coll;
-
-    /**
-     * @inheritdoc
-     * @return \ArrayIterator|\SeekableIterator
-     */
-    abstract public function getIterator();
-
+    
     /**
      * Get.
      *
@@ -49,7 +43,7 @@ abstract class AbstractCollection implements \IteratorAggregate, \Countable
      */
     public function count()
     {
-        return $this->getIterator()->count();
+        return count($this->getIterator());
     }
 
     /**
@@ -59,7 +53,7 @@ abstract class AbstractCollection implements \IteratorAggregate, \Countable
      */
     public function isEmpty()
     {
-        return $this->count() === 0;
+        return (bool) $this->count();
     }
 
     /**
@@ -68,39 +62,5 @@ abstract class AbstractCollection implements \IteratorAggregate, \Countable
     public function clear()
     {
         $this->coll = new \ArrayIterator();
-    }
-
-    /**
-     * @return mixed|null
-     */
-    public function first()
-    {
-        $tmp = clone $this->coll;
-
-        //go to the beginning
-        $tmp->rewind();
-
-        if (!$tmp->valid()) {
-            return null;
-        }
-
-        return $tmp->current();
-    }
-
-    /**
-     * @return mixed|null
-     */
-    public function last()
-    {
-        $tmp = clone $this->coll;
-
-        //go to the end
-        $tmp->seek($tmp->count() - 1);
-
-        if (!$tmp->valid()) {
-            return null;
-        }
-
-        return $tmp->current();
     }
 }

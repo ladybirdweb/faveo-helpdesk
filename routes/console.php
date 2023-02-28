@@ -15,12 +15,12 @@ use Illuminate\Foundation\Inspiring;
 */
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
-})->describe('Display an inspiring quote');
+})->purpose('Display an inspiring quote');
 
 Artisan::command('mac-update', function () {
     $emails = new App\Model\helpdesk\Email\Emails();
-    $emails->update(['password'=>encrypt('')]);
-})->describe('Updating encrypted value to null');
+    $emails->update(['password' => encrypt('')]);
+})->purpose('Updating encrypted value to null');
 
 /*
  * Command for pre install check
@@ -38,7 +38,7 @@ Artisan::command('preinsatall:check', function () {
         //throw new \Exception($ex->getMessage());
     }
     $this->info('Preinstall has checked successfully');
-})->describe('check for the pre installation');
+})->purpose('check for the pre installation');
 
 /*
  * Migration for installation
@@ -54,7 +54,7 @@ Artisan::command('install:migrate', function () {
         throw new \Exception($ex->getMessage());
     }
     $this->info('Migrated successfully');
-})->describe('migration for install');
+})->purpose('migration for install');
 
 /*
  * Seeding for installation
@@ -70,4 +70,4 @@ Artisan::command('install:seed', function () {
     }
     $this->call('db:seed', ['--force' => true]);
     $this->info('seeded successfully');
-})->describe('Seeding for install');
+})->purpose('Seeding for install');

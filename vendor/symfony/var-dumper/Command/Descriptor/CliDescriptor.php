@@ -26,8 +26,8 @@ use Symfony\Component\VarDumper\Dumper\CliDumper;
  */
 class CliDescriptor implements DumpDescriptorInterface
 {
-    private $dumper;
-    private $lastIdentifier;
+    private CliDumper $dumper;
+    private mixed $lastIdentifier = null;
 
     public function __construct(CliDumper $dumper)
     {
@@ -36,10 +36,10 @@ class CliDescriptor implements DumpDescriptorInterface
 
     public function describe(OutputInterface $output, Data $data, array $context, int $clientId): void
     {
-        $io = $output instanceof SymfonyStyle ? $output : new SymfonyStyle(new ArrayInput(array()), $output);
+        $io = $output instanceof SymfonyStyle ? $output : new SymfonyStyle(new ArrayInput([]), $output);
         $this->dumper->setColors($output->isDecorated());
 
-        $rows = array(array('date', date('r', $context['timestamp'])));
+        $rows = [['date', date('r', (int) $context['timestamp'])]];
         $lastIdentifier = $this->lastIdentifier;
         $this->lastIdentifier = $clientId;
 
@@ -49,7 +49,7 @@ class CliDescriptor implements DumpDescriptorInterface
             $this->lastIdentifier = $request['identifier'];
             $section = sprintf('%s %s', $request['method'], $request['uri']);
             if ($controller = $request['controller']) {
-                $rows[] = array('controller', rtrim($this->dumper->dump($controller, true), "\n"));
+                $rows[] = ['controller', rtrim($this->dumper->dump($controller, true), "\n")];
             }
         } elseif (isset($context['cli'])) {
             $this->lastIdentifier = $context['cli']['identifier'];
@@ -62,18 +62,16 @@ class CliDescriptor implements DumpDescriptorInterface
 
         if (isset($context['source'])) {
             $source = $context['source'];
-            $rows[] = array('source', sprintf('%s on line %d', $source['name'], $source['line']));
+            $sourceInfo = sprintf('%s on line %d', $source['name'], $source['line']);
+            if ($fileLink = $source['file_link'] ?? null) {
+                $sourceInfo = sprintf('<href=%s>%s</>', $fileLink, $sourceInfo);
+            }
+            $rows[] = ['source', $sourceInfo];
             $file = $source['file_relative'] ?? $source['file'];
-            $rows[] = array('file', $file);
-            $fileLink = $source['file_link'] ?? null;
+            $rows[] = ['file', $file];
         }
 
-        $io->table(array(), $rows);
-
-        if (isset($fileLink)) {
-            $io->writeln(array('<info>Open source in your IDE/browser:</info>', $fileLink));
-            $io->newLine();
-        }
+        $io->table([], $rows);
 
         $this->dumper->dump($data);
         $io->newLine();

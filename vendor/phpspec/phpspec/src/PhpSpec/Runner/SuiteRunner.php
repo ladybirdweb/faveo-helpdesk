@@ -16,10 +16,13 @@ namespace PhpSpec\Runner;
 use PhpSpec\Event\SuiteEvent;
 use PhpSpec\Exception\Example\StopOnFailureException;
 use PhpSpec\Loader\Suite;
+use PhpSpec\Util\DispatchTrait;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class SuiteRunner
 {
+    use DispatchTrait;
+
     /**
      * @var EventDispatcher
      */
@@ -29,24 +32,17 @@ class SuiteRunner
      */
     private $specRunner;
 
-    /**
-     * @param EventDispatcher     $dispatcher
-     * @param SpecificationRunner $specRunner
-     */
+    
     public function __construct(EventDispatcher $dispatcher, SpecificationRunner $specRunner)
     {
         $this->dispatcher = $dispatcher;
         $this->specRunner = $specRunner;
     }
 
-    /**
-     * @param Suite $suite
-     *
-     * @return integer
-     */
+    
     public function run(Suite $suite): int
     {
-        $this->dispatcher->dispatch('beforeSuite', new SuiteEvent($suite));
+        $this->dispatch($this->dispatcher, new SuiteEvent($suite), 'beforeSuite');
 
         $result = 0;
         $startTime = microtime(true);
@@ -61,9 +57,10 @@ class SuiteRunner
         }
 
         $endTime = microtime(true);
-        $this->dispatcher->dispatch(
-            'afterSuite',
-            new SuiteEvent($suite, $endTime-$startTime, $result)
+        $this->dispatch(
+            $this->dispatcher,
+            new SuiteEvent($suite, $endTime-$startTime, $result),
+            'afterSuite'
         );
 
         return $result;

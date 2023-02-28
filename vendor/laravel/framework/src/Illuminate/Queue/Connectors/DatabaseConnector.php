@@ -2,8 +2,8 @@
 
 namespace Illuminate\Queue\Connectors;
 
-use Illuminate\Queue\DatabaseQueue;
 use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Queue\DatabaseQueue;
 
 class DatabaseConnector implements ConnectorInterface
 {
@@ -37,7 +37,8 @@ class DatabaseConnector implements ConnectorInterface
             $this->connections->connection($config['connection'] ?? null),
             $config['table'],
             $config['queue'],
-            $config['retry_after'] ?? 60
+            $config['retry_after'] ?? 60,
+            $config['after_commit'] ?? null
         );
     }
 }

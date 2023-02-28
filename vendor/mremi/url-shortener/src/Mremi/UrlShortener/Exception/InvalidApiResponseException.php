@@ -12,7 +12,7 @@
 namespace Mremi\UrlShortener\Exception;
 
 /**
- * Invalid API response exception class
+ * Invalid API response exception class.
  *
  * @author Rémi Marseille <marseille.remi@gmail.com>
  */

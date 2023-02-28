@@ -11,9 +11,7 @@ final class IterablesMatcher
      */
     private $presenter;
 
-    /**
-     * @param Presenter $presenter
-     */
+    
     public function __construct(Presenter $presenter)
     {
         $this->presenter = $presenter;
@@ -22,14 +20,13 @@ final class IterablesMatcher
     /**
      * @param array|\Traversable $subject
      * @param array|\Traversable $expected
-     * @param bool               $strict
      *
      * @throws \InvalidArgumentException
      * @throws SubjectElementDoesNotMatchException
      * @throws SubjectHasFewerElementsException
      * @throws SubjectHasMoreElementsException
      */
-    public function match($subject, $expected, bool $strict = true)
+    public function match($subject, $expected, bool $strict = true): void
     {
         if (!$this->isIterable($subject)) {
             throw new \InvalidArgumentException('Subject value should be an array or implement \Traversable.');
@@ -66,11 +63,7 @@ final class IterablesMatcher
         }
     }
 
-    /**
-     * @param mixed $variable
-     *
-     * @return bool
-     */
+    
     private function isIterable($variable): bool
     {
         return \is_array($variable) || $variable instanceof \Traversable;
@@ -78,8 +71,6 @@ final class IterablesMatcher
 
     /**
      * @param array|\Traversable $iterable
-     *
-     * @return \Iterator
      */
     private function createIteratorFromIterable($iterable): \Iterator
     {
@@ -93,7 +84,7 @@ final class IterablesMatcher
         return $iterator;
     }
 
-    private function valueIsEqual($expected, $value, bool $strict) : bool
+    private function valueIsEqual($expected, $value, bool $strict): bool
     {
         return $strict ? $expected === $value : $expected == $value;
     }

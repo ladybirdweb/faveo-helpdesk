@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddForeignKeysToSettingsSystemTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -34,4 +33,4 @@ class AddForeignKeysToSettingsSystemTable extends Migration
             $table->dropForeign('settings_system_ibfk_4');
         });
     }
-}
+};

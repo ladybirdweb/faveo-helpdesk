@@ -3,7 +3,7 @@
 /*
  * This file is part of Psy Shell.
  *
- * (c) 2012-2018 Justin Hileman
+ * (c) 2012-2023 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,11 +17,21 @@ namespace Psy\Readline;
 interface Readline
 {
     /**
-     * Check whether this Readline class is supported by the current system.
-     *
-     * @return bool
+     * @param string|false $historyFile
+     * @param int|null     $historySize
+     * @param bool|null    $eraseDups
      */
-    public static function isSupported();
+    public function __construct($historyFile = null, $historySize = 0, $eraseDups = false);
+
+    /**
+     * Check whether this Readline class is supported by the current system.
+     */
+    public static function isSupported(): bool;
+
+    /**
+     * Check whether this Readline class supports bracketed paste.
+     */
+    public static function supportsBracketedPaste(): bool;
 
     /**
      * Add a line to the command history.
@@ -30,37 +40,37 @@ interface Readline
      *
      * @return bool Success
      */
-    public function addHistory($line);
+    public function addHistory(string $line): bool;
 
     /**
      * Clear the command history.
      *
      * @return bool Success
      */
-    public function clearHistory();
+    public function clearHistory(): bool;
 
     /**
      * List the command history.
      *
-     * @return array
+     * @return string[]
      */
-    public function listHistory();
+    public function listHistory(): array;
 
     /**
      * Read the command history.
      *
      * @return bool Success
      */
-    public function readHistory();
+    public function readHistory(): bool;
 
     /**
      * Read a single line of input from the user.
      *
-     * @param null|string $prompt
+     * @param string|null $prompt
      *
      * @return false|string
      */
-    public function readline($prompt = null);
+    public function readline(string $prompt = null);
 
     /**
      * Redraw readline to redraw the display.
@@ -72,5 +82,5 @@ interface Readline
      *
      * @return bool Success
      */
-    public function writeHistory();
+    public function writeHistory(): bool;
 }

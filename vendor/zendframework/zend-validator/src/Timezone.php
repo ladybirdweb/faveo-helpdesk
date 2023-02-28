@@ -87,7 +87,7 @@ class Timezone extends AbstractValidator
     {
         $type = $this->calculateTypeValue($type);
 
-        if (! is_int($type) || ($type < 1) || ($type > self::ALL)) {
+        if (!is_int($type) || ($type < 1) || ($type > self::ALL)) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'Unknown type "%s" provided',
                 (is_string($type) || is_int($type))
@@ -107,7 +107,7 @@ class Timezone extends AbstractValidator
      */
     public function isValid($value)
     {
-        if ($value !== null && ! is_string($value)) {
+        if ($value !== null && !is_string($value)) {
             $this->error(self::INVALID);
             return false;
         }
@@ -121,7 +121,7 @@ class Timezone extends AbstractValidator
                 $abbrs = DateTimeZone::listAbbreviations();
                 $locations = DateTimeZone::listIdentifiers();
 
-                if (! array_key_exists($value, $abbrs) && ! in_array($value, $locations)) {
+                if (!array_key_exists($value, $abbrs) && !in_array($value, $locations)) {
                     $this->error(self::INVALID);
                     return false;
                 }
@@ -131,7 +131,7 @@ class Timezone extends AbstractValidator
             case ($type & self::LOCATION):
                 $locations = DateTimeZone::listIdentifiers();
 
-                if (! in_array($value, $locations)) {
+                if (!in_array($value, $locations)) {
                     $this->error(self::INVALID_TIMEZONE_LOCATION);
                     return false;
                 }
@@ -141,7 +141,7 @@ class Timezone extends AbstractValidator
             case ($type & self::ABBREVIATION):
                 $abbrs = DateTimeZone::listAbbreviations();
 
-                if (! array_key_exists($value, $abbrs)) {
+                if (!array_key_exists($value, $abbrs)) {
                     $this->error(self::INVALID_TIMEZONE_ABBREVIATION);
                     return false;
                 }

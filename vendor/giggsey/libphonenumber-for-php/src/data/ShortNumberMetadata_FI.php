@@ -62,7 +62,7 @@ return array (
   ),
   'shortCode' => 
   array (
-    'NationalNumberPattern' => '11(?:2|6111)|75[12]\\d\\d',
+    'NationalNumberPattern' => '11(?:2|6(?:00[06]|1(?:1[17]|23)))|75[12]\\d\\d',
     'ExampleNumber' => '112',
     'PossibleLength' => 
     array (
@@ -112,6 +112,5 @@ return array (
   array (
   ),
   'mainCountryForCode' => false,
-  'leadingZeroPossible' => false,
   'mobileNumberPortableRegion' => false,
 );

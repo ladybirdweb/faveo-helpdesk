@@ -14,8 +14,9 @@
 namespace PhpSpec\Matcher;
 
 use PhpSpec\Formatter\Presenter\Presenter;
-use PhpSpec\Exception\Example\FailureException;
+use PhpSpec\Exception\Example\MethodFailureException;
 use PhpSpec\Exception\Fracture\MethodNotFoundException;
+use PhpSpec\Wrapper\DelayedCall;
 
 final class ObjectStateMatcher implements Matcher
 {
@@ -28,21 +29,13 @@ final class ObjectStateMatcher implements Matcher
      */
     private $presenter;
 
-    /**
-     * @param Presenter $presenter
-     */
+    
     public function __construct(Presenter $presenter)
     {
         $this->presenter = $presenter;
     }
 
-    /**
-     * @param string $name
-     * @param mixed  $subject
-     * @param array  $arguments
-     *
-     * @return bool
-     */
+    
     public function supports(string $name, $subject, array $arguments): bool
     {
         return \is_object($subject) && !is_callable($subject)
@@ -51,14 +44,10 @@ final class ObjectStateMatcher implements Matcher
     }
 
     /**
-     * @param string $name
-     * @param mixed  $subject
-     * @param array  $arguments
-     *
-     * @throws \PhpSpec\Exception\Example\FailureException
+     * @throws \PhpSpec\Exception\Example\MethodFailureException
      * @throws \PhpSpec\Exception\Fracture\MethodNotFoundException
      */
-    public function positiveMatch(string $name, $subject, array $arguments)
+    public function positiveMatch(string $name, $subject, array $arguments) : ?DelayedCall
     {
         preg_match(self::$regex, $name, $matches);
         $method   = ('be' === $matches[1] ? 'is' : 'has').ucfirst($matches[2]);
@@ -72,19 +61,17 @@ final class ObjectStateMatcher implements Matcher
         }
 
         if (true !== $result = \call_user_func_array($callable, $arguments)) {
-            throw $this->getFailureExceptionFor($callable, true, $result);
+            throw $this->getMethodFailureExceptionFor($callable, true, $result);
         }
+
+        return null;
     }
 
     /**
-     * @param string $name
-     * @param mixed  $subject
-     * @param array  $arguments
-     *
-     * @throws \PhpSpec\Exception\Example\FailureException
+     * @throws \PhpSpec\Exception\Example\MethodFailureException
      * @throws \PhpSpec\Exception\Fracture\MethodNotFoundException
      */
-    public function negativeMatch(string $name, $subject, array $arguments)
+    public function negativeMatch(string $name, $subject, array $arguments) : ?DelayedCall
     {
         preg_match(self::$regex, $name, $matches);
         $method   = ('be' === $matches[1] ? 'is' : 'has').ucfirst($matches[2]);
@@ -98,32 +85,25 @@ final class ObjectStateMatcher implements Matcher
         }
 
         if (false !== $result = \call_user_func_array($callable, $arguments)) {
-            throw $this->getFailureExceptionFor($callable, false, $result);
+            throw $this->getMethodFailureExceptionFor($callable, false, $result);
         }
+
+        return null;
     }
 
-    /**
-     * @return int
-     */
+    
     public function getPriority(): int
     {
         return 50;
     }
 
-    /**
-     * @param callable $callable
-     * @param Boolean  $expectedBool
-     * @param Boolean  $result
-     *
-     * @return FailureException
-     */
-    private function getFailureExceptionFor(callable $callable, bool $expectedBool, bool $result): FailureException
+    private function getMethodFailureExceptionFor(array $callable, bool $expectedBool, $result): MethodFailureException
     {
-        return new FailureException(sprintf(
+        return new MethodFailureException(sprintf(
             "Expected %s to return %s, but got %s.",
             $this->presenter->presentValue($callable),
             $this->presenter->presentValue($expectedBool),
             $this->presenter->presentValue($result)
-        ));
+        ), $expectedBool, $result, $callable[0], $callable[1]);
     }
 }

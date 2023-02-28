@@ -11,7 +11,11 @@
 
 namespace Symfony\Component\Yaml\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\CI\GithubActionReporter;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Completion\CompletionInput;
+use Symfony\Component\Console\Completion\CompletionSuggestions;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
@@ -29,41 +33,37 @@ use Symfony\Component\Yaml\Yaml;
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  * @author Robin Chalas <robin.chalas@gmail.com>
  */
+#[AsCommand(name: 'lint:yaml', description: 'Lint a YAML file and outputs encountered errors')]
 class LintCommand extends Command
 {
-    protected static $defaultName = 'lint:yaml';
-
-    private $parser;
-    private $format;
-    private $displayCorrectFiles;
-    private $directoryIteratorProvider;
-    private $isReadableProvider;
+    private Parser $parser;
+    private ?string $format = null;
+    private bool $displayCorrectFiles;
+    private ?\Closure $directoryIteratorProvider;
+    private ?\Closure $isReadableProvider;
 
     public function __construct(string $name = null, callable $directoryIteratorProvider = null, callable $isReadableProvider = null)
     {
         parent::__construct($name);
 
-        $this->directoryIteratorProvider = $directoryIteratorProvider;
-        $this->isReadableProvider = $isReadableProvider;
+        $this->directoryIteratorProvider = null === $directoryIteratorProvider ? null : $directoryIteratorProvider(...);
+        $this->isReadableProvider = null === $isReadableProvider ? null : $isReadableProvider(...);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configure()
     {
         $this
-            ->setDescription('Lints a file and outputs encountered errors')
-            ->addArgument('filename', InputArgument::IS_ARRAY, 'A file or a directory or STDIN')
-            ->addOption('format', null, InputOption::VALUE_REQUIRED, 'The output format', 'txt')
-            ->addOption('parse-tags', null, InputOption::VALUE_NONE, 'Parse custom tags')
+            ->addArgument('filename', InputArgument::IS_ARRAY, 'A file, a directory or "-" for reading from STDIN')
+            ->addOption('format', null, InputOption::VALUE_REQUIRED, 'The output format')
+            ->addOption('exclude', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Path(s) to exclude')
+            ->addOption('parse-tags', null, InputOption::VALUE_NEGATABLE, 'Parse custom tags', null)
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command lints a YAML file and outputs to STDOUT
 the first encountered syntax error.
 
 You can validates YAML contents passed from STDIN:
 
-  <info>cat filename | php %command.full_name%</info>
+  <info>cat filename | php %command.full_name% -</info>
 
 You can also validate the syntax of a file:
 
@@ -74,45 +74,64 @@ Or of a whole directory:
   <info>php %command.full_name% dirname</info>
   <info>php %command.full_name% dirname --format=json</info>
 
+You can also exclude one or more specific files:
+
+  <info>php %command.full_name% dirname --exclude="dirname/foo.yaml" --exclude="dirname/bar.yaml"</info>
+
 EOF
             )
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $filenames = (array) $input->getArgument('filename');
+        $excludes = $input->getOption('exclude');
         $this->format = $input->getOption('format');
-        $this->displayCorrectFiles = $output->isVerbose();
-        $flags = $input->getOption('parse-tags') ? Yaml::PARSE_CUSTOM_TAGS : 0;
+        $flags = $input->getOption('parse-tags');
 
-        if (0 === \count($filenames)) {
-            if (!$stdin = $this->getStdin()) {
-                throw new RuntimeException('Please provide a filename or pipe file content to STDIN.');
-            }
-
-            return $this->display($io, array($this->validate($stdin, $flags)));
+        if ('github' === $this->format && !class_exists(GithubActionReporter::class)) {
+            throw new \InvalidArgumentException('The "github" format is only available since "symfony/console" >= 5.3.');
         }
 
-        $filesInfo = array();
+        if (null === $this->format) {
+            // Autodetect format according to CI environment
+            $this->format = class_exists(GithubActionReporter::class) && GithubActionReporter::isGithubActionEnvironment() ? 'github' : 'txt';
+        }
+
+        $flags = $flags ? Yaml::PARSE_CUSTOM_TAGS : 0;
+
+        $this->displayCorrectFiles = $output->isVerbose();
+
+        if (['-'] === $filenames) {
+            return $this->display($io, [$this->validate(file_get_contents('php://stdin'), $flags)]);
+        }
+
+        if (!$filenames) {
+            throw new RuntimeException('Please provide a filename or pipe file content to STDIN.');
+        }
+
+        $filesInfo = [];
         foreach ($filenames as $filename) {
             if (!$this->isReadable($filename)) {
                 throw new RuntimeException(sprintf('File or directory "%s" is not readable.', $filename));
             }
 
             foreach ($this->getFiles($filename) as $file) {
-                $filesInfo[] = $this->validate(file_get_contents($file), $flags, $file);
+                if (!\in_array($file->getPathname(), $excludes, true)) {
+                    $filesInfo[] = $this->validate(file_get_contents($file), $flags, $file);
+                }
             }
         }
 
         return $this->display($io, $filesInfo);
     }
 
-    private function validate($content, $flags, $file = null)
+    private function validate(string $content, int $flags, string $file = null)
     {
         $prevErrorHandler = set_error_handler(function ($level, $message, $file, $line) use (&$prevErrorHandler) {
-            if (E_USER_DEPRECATED === $level) {
+            if (\E_USER_DEPRECATED === $level) {
                 throw new ParseException($message, $this->getParser()->getRealCurrentLineNb() + 1);
             }
 
@@ -122,30 +141,33 @@ EOF
         try {
             $this->getParser()->parse($content, Yaml::PARSE_CONSTANT | $flags);
         } catch (ParseException $e) {
-            return array('file' => $file, 'line' => $e->getParsedLine(), 'valid' => false, 'message' => $e->getMessage());
+            return ['file' => $file, 'line' => $e->getParsedLine(), 'valid' => false, 'message' => $e->getMessage()];
         } finally {
             restore_error_handler();
         }
 
-        return array('file' => $file, 'valid' => true);
+        return ['file' => $file, 'valid' => true];
     }
 
-    private function display(SymfonyStyle $io, array $files)
+    private function display(SymfonyStyle $io, array $files): int
     {
-        switch ($this->format) {
-            case 'txt':
-                return $this->displayTxt($io, $files);
-            case 'json':
-                return $this->displayJson($io, $files);
-            default:
-                throw new InvalidArgumentException(sprintf('The format "%s" is not supported.', $this->format));
-        }
+        return match ($this->format) {
+            'txt' => $this->displayTxt($io, $files),
+            'json' => $this->displayJson($io, $files),
+            'github' => $this->displayTxt($io, $files, true),
+            default => throw new InvalidArgumentException(sprintf('The format "%s" is not supported.', $this->format)),
+        };
     }
 
-    private function displayTxt(SymfonyStyle $io, array $filesInfo)
+    private function displayTxt(SymfonyStyle $io, array $filesInfo, bool $errorAsGithubAnnotations = false): int
     {
         $countFiles = \count($filesInfo);
         $erroredFiles = 0;
+        $suggestTagOption = false;
+
+        if ($errorAsGithubAnnotations) {
+            $githubReporter = new GithubActionReporter($io);
+        }
 
         foreach ($filesInfo as $info) {
             if ($info['valid'] && $this->displayCorrectFiles) {
@@ -154,19 +176,27 @@ EOF
                 ++$erroredFiles;
                 $io->text('<error> ERROR </error>'.($info['file'] ? sprintf(' in %s', $info['file']) : ''));
                 $io->text(sprintf('<error> >> %s</error>', $info['message']));
+
+                if (str_contains($info['message'], 'PARSE_CUSTOM_TAGS')) {
+                    $suggestTagOption = true;
+                }
+
+                if ($errorAsGithubAnnotations) {
+                    $githubReporter->error($info['message'], $info['file'] ?? 'php://stdin', $info['line']);
+                }
             }
         }
 
         if (0 === $erroredFiles) {
             $io->success(sprintf('All %d YAML files contain valid syntax.', $countFiles));
         } else {
-            $io->warning(sprintf('%d YAML files have valid syntax and %d contain errors.', $countFiles - $erroredFiles, $erroredFiles));
+            $io->warning(sprintf('%d YAML files have valid syntax and %d contain errors.%s', $countFiles - $erroredFiles, $erroredFiles, $suggestTagOption ? ' Use the --parse-tags option if you want parse custom tags.' : ''));
         }
 
         return min($erroredFiles, 1);
     }
 
-    private function displayJson(SymfonyStyle $io, array $filesInfo)
+    private function displayJson(SymfonyStyle $io, array $filesInfo): int
     {
         $errors = 0;
 
@@ -175,14 +205,18 @@ EOF
             if (!$v['valid']) {
                 ++$errors;
             }
+
+            if (isset($v['message']) && str_contains($v['message'], 'PARSE_CUSTOM_TAGS')) {
+                $v['message'] .= ' Use the --parse-tags option if you want parse custom tags.';
+            }
         });
 
-        $io->writeln(json_encode($filesInfo, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $io->writeln(json_encode($filesInfo, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
 
         return min($errors, 1);
     }
 
-    private function getFiles($fileOrDirectory)
+    private function getFiles(string $fileOrDirectory): iterable
     {
         if (is_file($fileOrDirectory)) {
             yield new \SplFileInfo($fileOrDirectory);
@@ -191,7 +225,7 @@ EOF
         }
 
         foreach ($this->getDirectoryIterator($fileOrDirectory) as $file) {
-            if (!\in_array($file->getExtension(), array('yml', 'yaml'))) {
+            if (!\in_array($file->getExtension(), ['yml', 'yaml'])) {
                 continue;
             }
 
@@ -199,30 +233,12 @@ EOF
         }
     }
 
-    private function getStdin()
+    private function getParser(): Parser
     {
-        if (0 !== ftell(STDIN)) {
-            return;
-        }
-
-        $inputs = '';
-        while (!feof(STDIN)) {
-            $inputs .= fread(STDIN, 1024);
-        }
-
-        return $inputs;
+        return $this->parser ??= new Parser();
     }
 
-    private function getParser()
-    {
-        if (!$this->parser) {
-            $this->parser = new Parser();
-        }
-
-        return $this->parser;
-    }
-
-    private function getDirectoryIterator($directory)
+    private function getDirectoryIterator(string $directory): iterable
     {
         $default = function ($directory) {
             return new \RecursiveIteratorIterator(
@@ -232,22 +248,29 @@ EOF
         };
 
         if (null !== $this->directoryIteratorProvider) {
-            return \call_user_func($this->directoryIteratorProvider, $directory, $default);
+            return ($this->directoryIteratorProvider)($directory, $default);
         }
 
         return $default($directory);
     }
 
-    private function isReadable($fileOrDirectory)
+    private function isReadable(string $fileOrDirectory): bool
     {
         $default = function ($fileOrDirectory) {
             return is_readable($fileOrDirectory);
         };
 
         if (null !== $this->isReadableProvider) {
-            return \call_user_func($this->isReadableProvider, $fileOrDirectory, $default);
+            return ($this->isReadableProvider)($fileOrDirectory, $default);
         }
 
         return $default($fileOrDirectory);
+    }
+
+    public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
+    {
+        if ($input->mustSuggestOptionValuesFor('format')) {
+            $suggestions->suggestValues(['txt', 'json', 'github']);
+        }
     }
 }

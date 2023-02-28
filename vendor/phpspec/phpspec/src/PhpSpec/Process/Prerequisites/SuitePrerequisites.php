@@ -22,9 +22,7 @@ final class SuitePrerequisites implements PrerequisiteTester
      */
     private $executionContext;
 
-    /**
-     * @param ExecutionContext $executionContext
-     */
+    
     public function __construct(ExecutionContext $executionContext)
     {
         $this->executionContext = $executionContext;
@@ -33,7 +31,7 @@ final class SuitePrerequisites implements PrerequisiteTester
     /**
      * @throws PrerequisiteFailedException
      */
-    public function guardPrerequisites()
+    public function guardPrerequisites(): void
     {
         $undefinedTypes = array();
 

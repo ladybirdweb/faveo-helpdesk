@@ -107,6 +107,7 @@ class GeoIP
      * @param string $ip
      *
      * @return \Torann\GeoIP\Location
+     * @throws \Exception
      */
     public function getLocation($ip = null)
     {
@@ -114,7 +115,7 @@ class GeoIP
         $this->location = $this->find($ip);
 
         // Should cache location
-        if ($this->shouldCache($ip, $this->location)) {
+        if ($this->shouldCache($this->location, $ip)) {
             $this->getCache()->set($ip, $this->location);
         }
 
@@ -133,7 +134,7 @@ class GeoIP
     {
         // If IP not set, user remote IP
         $ip = $ip ?: $this->remote_ip;
-        
+
         // Check cache for location
         if ($this->config('cache', 'none') !== 'none' && $location = $this->getCache()->get($ip)) {
             $location->cached = true;
@@ -148,7 +149,7 @@ class GeoIP
                 $location = $this->getService()->locate($ip);
 
                 // Set currency if not already set by the service
-                if (!$location->currency) {
+                if (! $location->currency) {
                     $location->currency = $this->getCurrency($location->iso_code);
                 }
 
@@ -156,12 +157,11 @@ class GeoIP
                 $location->default = false;
 
                 return $location;
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 if ($this->config('log_failures', true) === true) {
                     $log = new Logger('geoip');
                     $log->pushHandler(new StreamHandler(storage_path('logs/geoip.log'), Logger::ERROR));
-                    $log->addError($e);
+                    $log->error($e);
                 }
             }
         }
@@ -232,6 +232,7 @@ class GeoIP
         $remotes_keys = [
             'HTTP_X_FORWARDED_FOR',
             'HTTP_CLIENT_IP',
+            'HTTP_X_REAL_IP',
             'HTTP_X_FORWARDED',
             'HTTP_FORWARDED_FOR',
             'HTTP_FORWARDED',
@@ -261,8 +262,8 @@ class GeoIP
      */
     private function isValid($ip)
     {
-        if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)
-            && !filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 | FILTER_FLAG_NO_PRIV_RANGE)
+        if (! filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)
+            && ! filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 | FILTER_FLAG_NO_PRIV_RANGE)
         ) {
             return false;
         }
@@ -273,20 +274,19 @@ class GeoIP
     /**
      * Determine if the location should be cached.
      *
-     * @param string   $ip
-     * @param Location $location
+     * @param Location    $location
+     * @param string|null $ip
      *
      * @return bool
      */
-    private function shouldCache($ip = null, Location $location)
+    private function shouldCache(Location $location, $ip = null)
     {
         if ($location->default === true || $location->cached === true) {
             return false;
         }
 
-        switch($this->config('cache', 'none')) {
+        switch ($this->config('cache', 'none')) {
             case 'all':
-                return true;
             case 'some' && $ip === null:
                 return true;
         }

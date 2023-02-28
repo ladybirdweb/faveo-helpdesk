@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Admin\helpdesk;
 
 // controllers
 use App\Http\Controllers\Controller;
-// requests
 use App\Http\Requests\helpdesk\CompanyRequest;
+// requests
 use App\Http\Requests\helpdesk\EmailRequest;
 use App\Http\Requests\helpdesk\Job\TaskRequest;
 use App\Http\Requests\helpdesk\RatingUpdateRequest;
 use App\Http\Requests\helpdesk\StatusRequest;
-// models
 use App\Http\Requests\helpdesk\SystemRequest;
+// models
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Email\Template;
@@ -32,13 +32,14 @@ use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Workflow\WorkflowClose;
-// classes
 use DateTime;
+// classes
 use DB;
 use Exception;
 use File;
 use Illuminate\Http\Request;
-use Input;
+use Illuminate\Support\Facades\Request as Input;
+use Illuminate\Support\Str;
 use Lang;
 
 /**
@@ -210,7 +211,7 @@ class SettingsController extends Controller
 
             if ($request->has('itil')) {
                 $itil = $request->input('itil');
-                $sett = CommonSettings::firstOrCreate(['option_name'=>'itil']);
+                $sett = CommonSettings::firstOrCreate(['option_name' => 'itil']);
                 $sett->status = $itil;
                 $sett->save();
             }
@@ -586,7 +587,7 @@ class SettingsController extends Controller
      */
     public function generateApiKey()
     {
-        $key = str_random(32);
+        $key = Str::random(32);
 
         return $key;
     }
@@ -886,17 +887,17 @@ class SettingsController extends Controller
 
     public function saveConditions()
     {
-        if (\Input::get('fetching-commands') && \Input::get('notification-commands')) {
-            $fetching_commands = \Input::get('fetching-commands');
-            $fetching_dailyAt = \Input::get('fetching-dailyAt');
-            $notification_commands = \Input::get('notification-commands');
-            $notification_dailyAt = \Input::get('notification-dailyAt');
-            $work_commands = \Input::get('work-commands');
-            $workflow_dailyAt = \Input::get('workflow-dailyAt');
+        if (Input::get('fetching-commands') && Input::get('notification-commands')) {
+            $fetching_commands = Input::get('fetching-commands');
+            $fetching_dailyAt = Input::get('fetching-dailyAt');
+            $notification_commands = Input::get('notification-commands');
+            $notification_dailyAt = Input::get('notification-dailyAt');
+            $work_commands = Input::get('work-commands');
+            $workflow_dailyAt = Input::get('workflow-dailyAt');
             $fetching_command = $this->getCommand($fetching_commands, $fetching_dailyAt);
             $notification_command = $this->getCommand($notification_commands, $notification_dailyAt);
             $work_command = $this->getCommand($work_commands, $workflow_dailyAt);
-            $jobs = ['fetching'=>$fetching_command, 'notification'=>$notification_command, 'work'=>$work_command];
+            $jobs = ['fetching' => $fetching_command, 'notification' => $notification_command, 'work' => $work_command];
             $this->storeCommand($jobs);
         }
     }
@@ -920,10 +921,10 @@ class SettingsController extends Controller
             }
         }
         if (count($array) > 0) {
-            foreach ($array as $key=>$save) {
+            foreach ($array as $key => $save) {
                 $command->create([
-                    'job'  => $key,
-                    'value'=> $save,
+                    'job'   => $key,
+                    'value' => $save,
                 ]);
             }
         }

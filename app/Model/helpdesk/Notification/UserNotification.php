@@ -7,6 +7,7 @@ use App\BaseModel;
 class UserNotification extends BaseModel
 {
     protected $table = 'user_notification';
+
     protected $fillable = [
 
         'notification_id', 'user_id', 'is_read',
@@ -14,7 +15,7 @@ class UserNotification extends BaseModel
 
     public function notification()
     {
-        $related = 'App\Model\helpdesk\Notification\Notification';
+        $related = \App\Model\helpdesk\Notification\Notification::class;
         $id = 'notification_id';
 
         return $this->belongsTo($related, $id);
@@ -22,7 +23,7 @@ class UserNotification extends BaseModel
 
     public function users()
     {
-        $related = 'App\User';
+        $related = \App\User::class;
         $id = 'user_id';
 
         return $this->belongsTo($related, $id);

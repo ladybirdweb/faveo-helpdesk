@@ -17,7 +17,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class,
     ];
 
     /**
@@ -27,7 +27,7 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+            \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class,
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
@@ -37,8 +37,8 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
         'api' => [
-            'throttle:60,1',
-            'bindings',
+            'throttle:api',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
 
@@ -48,24 +48,25 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth'            => \App\Http\Middleware\Authenticate::class,
-        'auth.basic'      => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'can'             => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest'           => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle'        => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'roles'           => \App\Http\Middleware\CheckRole::class,
-        'role.agent'      => \App\Http\Middleware\CheckRoleAgent::class,
-        'role.user'       => \App\Http\Middleware\CheckRoleUser::class,
-        'api'             => \App\Http\Middleware\ApiKey::class,
-        'jwt.auth'        => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
-        'jwt.refresh'     => \Tymon\JWTAuth\Middleware\RefreshToken::class,
-        'jwt.authOveride' => \App\Http\Middleware\JwtAuthenticate::class,
-        'update'          => \App\Http\Middleware\CheckUpdate::class,
-        'board'           => \App\Http\Middleware\CheckBoard::class,
-        'install'         => \App\Http\Middleware\Install::class,
-        'redirect'        => \App\Http\Middleware\Redirect::class,
-        'bindings'        => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        'installer'       => \App\Http\Middleware\IsInstalled::class,
-        'force.option'    => \App\Http\Middleware\TicketViewURL::class,
+        'auth'             => \App\Http\Middleware\Authenticate::class,
+        'auth.basic'       => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'can'              => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest'            => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'throttle'         => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'roles'            => \App\Http\Middleware\CheckRole::class,
+        'role.agent'       => \App\Http\Middleware\CheckRoleAgent::class,
+        'role.user'        => \App\Http\Middleware\CheckRoleUser::class,
+        'api'              => \App\Http\Middleware\ApiKey::class,
+        'jwt.authOveride'  => \App\Http\Middleware\JwtAuthenticate::class,
+        'update'           => \App\Http\Middleware\CheckUpdate::class,
+        'board'            => \App\Http\Middleware\CheckBoard::class,
+        'install'          => \App\Http\Middleware\Install::class,
+        'redirect'         => \App\Http\Middleware\Redirect::class,
+        'installer'        => \App\Http\Middleware\IsInstalled::class,
+        'force.option'     => \App\Http\Middleware\TicketViewURL::class,
+        'verified'         => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
+        'cache.headers'    => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'signed'           => \Illuminate\Routing\Middleware\ValidateSignature::class,
     ];
 }

@@ -2,13 +2,10 @@
 
 ## Getting started
 
-**NOTE** If you want even easier start, please check our facades
-* [Facades](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/facades.md)
-
 First, we are going to discover this library entities:
 
 * Models (messages, pushes, devices)
-* Adapters (APNS, GCM (FCM) etc.)
+* Adapters (APNS, GCM etc.)
 * The Manager
 
 Here is the basic principle of a notification push:
@@ -23,28 +20,24 @@ Here is how to translate this with code (just a little not-working example):
 <?php
 
 // First, instantiate the manager and declare an adapter.
-$pushManager    = new Sly\NotificationPusher\PushManager();
-$exampleAdapter = new Sly\NotificationPusher\Adapter\Apns();
+$pushManager    = new PushManager();
+$exampleAdapter = new ApnsAdapter();
 
 // Set the device(s) to push the notification to.
-$devices = new Sly\NotificationPusher\Collection\DeviceCollection(array(
-    new Sly\NotificationPusher\Model\Device('Token1'),
-    new Sly\NotificationPusher\Model\Device('Token2'),
-    new Sly\NotificationPusher\Model\Device('Token3'),
+$devices = new DeviceCollection(array(
+    new Device('Token1'),
+    new Device('Token2'),
+    new Device('Token3'),
     // ...
 ));
 
 // Then, create the push skel.
-$message = new Sly\NotificationPusher\Model\Message('This is an example.');
+$message = new Message('This is an example.');
 
 // Finally, create and add the push to the manager, and push it!
-$push = new Sly\NotificationPusher\Model\Push($exampleAdapter, $devices, $message);
+$push = new Push($exampleAdapter, $devices, $message);
 $pushManager->add($push);
 $pushManager->push();
-
-foreach($push->getResponses() as $token => $response) {
-    // ...
-}
 ```
 
 ## More about the Message entity
@@ -56,7 +49,7 @@ instance constructor second argument:
 ``` php
 <?php
 
-$message = new Sly\NotificationPusher\Model\Message('This is an example.', array(
+$message = new Message('This is an example.', array(
     'badge' => 1,
     'sound' => 'example.aiff',
     // ...
@@ -73,13 +66,13 @@ Here is an example of this:
 ``` php
 <?php
 
-$message = new Sly\NotificationPusher\Model\Message('This is an example.', array(
+$message = new Message('This is an example.', array(
     'badge' => 1,
     // ...
 ));
 
-$devices = new Sly\NotificationPusher\Collection\DeviceCollection(array(
-    new Sly\NotificationPusher\Model\Device('Token1', array('badge' => 5)),
+$devices = new DeviceCollection(array(
+    new Device('Token1', array('badge' => 5)),
     // ...
 ));
 ```
@@ -89,7 +82,6 @@ $devices = new Sly\NotificationPusher\Collection\DeviceCollection(array(
 * [Installation](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/installation.md)
 * Getting started
 * [APNS adapter](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/apns-adapter.md)
-* [GCM (FCM) adapter](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/gcm-fcm-adapter.md)
+* [GCM adapter](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/gcm-adapter.md)
 * [Create an adapter](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/create-an-adapter.md)
 * [Push from CLI](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/push-from-cli.md)
-* [Facades](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/facades.md)

@@ -14,13 +14,13 @@ class TraceablePDO extends PDO
     /** @var PDO */
     protected $pdo;
 
-    /** @var array */
-    protected $executedStatements = array();
+    /** @var TracedStatement[] */
+    protected $executedStatements = [];
 
     public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
-        $this->pdo->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('DebugBar\DataCollector\PDO\TraceablePDOStatement', array($this)));
+        $this->pdo->setAttribute(PDO::ATTR_STATEMENT_CLASS, [TraceablePDOStatement::class, [$this]]);
     }
 
 	/**
@@ -130,7 +130,7 @@ class TraceablePDO extends PDO
    * PDO::prepare returns a PDOStatement object. If the database server cannot successfully prepare
    * the statement, PDO::prepare returns FALSE or emits PDOException (depending on error handling).
 	 */
-    public function prepare($statement, $driver_options = array())
+    public function prepare($statement, $driver_options = [])
     {
         return $this->pdo->prepare($statement, $driver_options);
     }
@@ -140,10 +140,12 @@ class TraceablePDO extends PDO
    *
 	 * @link   http://php.net/manual/en/pdo.query.php
 	 * @param  string $statement
+	 * @param  int $fetchMode
+	 * @param  mixed ...$fetchModeArgs
 	 * @return TraceablePDOStatement|bool PDO::query returns a PDOStatement object, or FALSE on
    * failure.
    */
-    public function query($statement)
+    public function query($statement, $fetchMode = null, ...$fetchModeArgs)
     {
         return $this->profileCall('query', $statement, func_get_args());
     }
@@ -202,7 +204,7 @@ class TraceablePDO extends PDO
 
         $ex = null;
         try {
-            $result = call_user_func_array(array($this->pdo, $method), $args);
+            $result = $this->__call($method, $args);
         } catch (PDOException $e) {
             $ex = $e;
         }
@@ -264,7 +266,7 @@ class TraceablePDO extends PDO
     /**
      * Returns the list of executed statements as TracedStatement objects
      *
-     * @return array
+     * @return TracedStatement[]
      */
     public function getExecutedStatements()
     {
@@ -274,7 +276,7 @@ class TraceablePDO extends PDO
     /**
      * Returns the list of failed statements
      *
-     * @return array
+     * @return TracedStatement[]
      */
     public function getFailedExecutedStatements()
     {
@@ -306,6 +308,6 @@ class TraceablePDO extends PDO
      */
     public function __call($name, $args)
     {
-        return call_user_func_array(array($this->pdo, $name), $args);
+        return call_user_func_array([$this->pdo, $name], $args);
     }
 }

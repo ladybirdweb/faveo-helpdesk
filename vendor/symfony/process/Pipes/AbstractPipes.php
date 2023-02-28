@@ -20,7 +20,7 @@ use Symfony\Component\Process\Exception\InvalidArgumentException;
  */
 abstract class AbstractPipes implements PipesInterface
 {
-    public $pipes = array();
+    public array $pipes = [];
 
     private $inputBuffer = '';
     private $input;
@@ -30,7 +30,7 @@ abstract class AbstractPipes implements PipesInterface
     /**
      * @param resource|string|int|float|bool|\Iterator|null $input
      */
-    public function __construct($input)
+    public function __construct(mixed $input)
     {
         if (\is_resource($input) || $input instanceof \Iterator) {
             $this->input = $input;
@@ -41,23 +41,20 @@ abstract class AbstractPipes implements PipesInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function close()
     {
         foreach ($this->pipes as $pipe) {
-            fclose($pipe);
+            if (\is_resource($pipe)) {
+                fclose($pipe);
+            }
         }
-        $this->pipes = array();
+        $this->pipes = [];
     }
 
     /**
      * Returns true if a system call has been interrupted.
-     *
-     * @return bool
      */
-    protected function hasSystemCallBeenInterrupted()
+    protected function hasSystemCallBeenInterrupted(): bool
     {
         $lastError = $this->lastError;
         $this->lastError = null;
@@ -90,10 +87,10 @@ abstract class AbstractPipes implements PipesInterface
      *
      * @throws InvalidArgumentException When an input iterator yields a non supported value
      */
-    protected function write()
+    protected function write(): ?array
     {
         if (!isset($this->pipes[0])) {
-            return;
+            return null;
         }
         $input = $this->input;
 
@@ -104,8 +101,8 @@ abstract class AbstractPipes implements PipesInterface
                 stream_set_blocking($input, 0);
             } elseif (!isset($this->inputBuffer[0])) {
                 if (!\is_string($input)) {
-                    if (!is_scalar($input)) {
-                        throw new InvalidArgumentException(sprintf('%s yielded a value of type "%s", but only scalars and stream resources are supported', \get_class($this->input), \gettype($input)));
+                    if (!\is_scalar($input)) {
+                        throw new InvalidArgumentException(sprintf('"%s" yielded a value of type "%s", but only scalars and stream resources are supported.', get_debug_type($this->input), get_debug_type($input)));
                     }
                     $input = (string) $input;
                 }
@@ -117,12 +114,12 @@ abstract class AbstractPipes implements PipesInterface
             }
         }
 
-        $r = $e = array();
-        $w = array($this->pipes[0]);
+        $r = $e = [];
+        $w = [$this->pipes[0]];
 
         // let's have a look if something changed in streams
         if (false === @stream_select($r, $w, $e, 0, 0)) {
-            return;
+            return null;
         }
 
         foreach ($w as $stdin) {
@@ -130,12 +127,12 @@ abstract class AbstractPipes implements PipesInterface
                 $written = fwrite($stdin, $this->inputBuffer);
                 $this->inputBuffer = substr($this->inputBuffer, $written);
                 if (isset($this->inputBuffer[0])) {
-                    return array($this->pipes[0]);
+                    return [$this->pipes[0]];
                 }
             }
 
             if ($input) {
-                for (;;) {
+                while (true) {
                     $data = fread($input, self::CHUNK_SIZE);
                     if (!isset($data[0])) {
                         break;
@@ -145,7 +142,7 @@ abstract class AbstractPipes implements PipesInterface
                     if (isset($data[0])) {
                         $this->inputBuffer = $data;
 
-                        return array($this->pipes[0]);
+                        return [$this->pipes[0]];
                     }
                 }
                 if (feof($input)) {
@@ -164,14 +161,16 @@ abstract class AbstractPipes implements PipesInterface
             fclose($this->pipes[0]);
             unset($this->pipes[0]);
         } elseif (!$w) {
-            return array($this->pipes[0]);
+            return [$this->pipes[0]];
         }
+
+        return null;
     }
 
     /**
      * @internal
      */
-    public function handleError($type, $msg)
+    public function handleError(int $type, string $msg)
     {
         $this->lastError = $msg;
     }

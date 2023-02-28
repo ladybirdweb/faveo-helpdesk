@@ -1,6 +1,70 @@
 CHANGELOG
 =========
 
+6.2
+---
+
+ * Add support for `!php/enum` and `!php/enum *->value`
+ * Deprecate the `!php/const:` tag in key which will be replaced by the `!php/const` tag (without the colon) since 3.4
+
+6.1
+---
+
+ * In cases where it will likely improve readability, strings containing single quotes will be double-quoted
+
+5.4
+---
+
+ * Add new `lint:yaml dirname --exclude=/dirname/foo.yaml --exclude=/dirname/bar.yaml`
+   option to exclude one or more specific files from multiple file list
+ * Allow negatable for the parse tags option with `--no-parse-tags`
+
+5.3
+---
+
+ * Added `github` format support & autodetection to render errors as annotations
+   when running the YAML linter command in a Github Action environment.
+
+5.1.0
+-----
+
+ * Added support for parsing numbers prefixed with `0o` as octal numbers.
+ * Deprecated support for parsing numbers starting with `0` as octal numbers. They will be parsed as strings as of Symfony 6.0. Prefix numbers with `0o`
+   so that they are parsed as octal numbers.
+
+   Before:
+
+   ```yaml
+   Yaml::parse('072');
+   ```
+
+   After:
+
+   ```yaml
+   Yaml::parse('0o72');
+   ```
+
+ * Added `yaml-lint` binary.
+ * Deprecated using the `!php/object` and `!php/const` tags without a value.
+
+5.0.0
+-----
+
+ * Removed support for mappings inside multi-line strings.
+ * removed support for implicit STDIN usage in the `lint:yaml` command, use `lint:yaml -` (append a dash) instead to make it explicit.
+
+4.4.0
+-----
+
+ * Added support for parsing the inline notation spanning multiple lines.
+ * Added support to dump `null` as `~` by using the `Yaml::DUMP_NULL_AS_TILDE` flag.
+ * deprecated accepting STDIN implicitly when using the `lint:yaml` command, use `lint:yaml -` (append a dash) instead to make it explicit.
+
+4.3.0
+-----
+
+ * Using a mapping inside a multi-line string is deprecated and will throw a `ParseException` in 5.0.
+
 4.2.0
 -----
 
@@ -148,7 +212,7 @@ CHANGELOG
  * Added support for customizing the dumped YAML string through an optional bit field:
 
    ```php
-   Yaml::dump(array('foo' => new A(), 'bar' => 1), 0, 0, Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE | Yaml::DUMP_OBJECT);
+   Yaml::dump(['foo' => new A(), 'bar' => 1], 0, 0, Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE | Yaml::DUMP_OBJECT);
    ```
 
 3.0.0

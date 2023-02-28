@@ -2,6 +2,7 @@
 
 namespace LaravelFCM;
 
+use Illuminate\Support\Str;
 use LaravelFCM\Sender\FCMGroup;
 use LaravelFCM\Sender\FCMSender;
 use Illuminate\Support\ServiceProvider;
@@ -12,7 +13,7 @@ class FCMServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        if (str_contains($this->app->version(), 'Lumen')) {
+        if (Str::contains($this->app->version(), 'Lumen')) {
             $this->app->configure('fcm');
         } else {
             $this->publishes([
@@ -23,7 +24,7 @@ class FCMServiceProvider extends ServiceProvider
 
     public function register()
     {
-		if (!str_contains($this->app->version(), 'Lumen')) {
+		if (!Str::contains($this->app->version(), 'Lumen')) {
             $this->mergeConfigFrom(__DIR__.'/../config/fcm.php', 'fcm');
         }
 

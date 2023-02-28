@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\Routing\Loader\Configurator;
 
-use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
@@ -19,14 +18,26 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class ImportConfigurator
 {
+    use Traits\HostTrait;
+    use Traits\PrefixTrait;
     use Traits\RouteTrait;
 
-    private $parent;
+    private RouteCollection $parent;
 
     public function __construct(RouteCollection $parent, RouteCollection $route)
     {
         $this->parent = $parent;
         $this->route = $route;
+    }
+
+    public function __sleep(): array
+    {
+        throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
+    }
+
+    public function __wakeup()
+    {
+        throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
     }
 
     public function __destruct()
@@ -41,40 +52,9 @@ class ImportConfigurator
      *
      * @return $this
      */
-    final public function prefix($prefix, bool $trailingSlashOnRoot = true)
+    final public function prefix(string|array $prefix, bool $trailingSlashOnRoot = true): static
     {
-        if (!\is_array($prefix)) {
-            $this->route->addPrefix($prefix);
-            if (!$trailingSlashOnRoot) {
-                $rootPath = (new Route(trim(trim($prefix), '/').'/'))->getPath();
-                foreach ($this->route->all() as $route) {
-                    if ($route->getPath() === $rootPath) {
-                        $route->setPath(rtrim($rootPath, '/'));
-                    }
-                }
-            }
-        } else {
-            foreach ($prefix as $locale => $localePrefix) {
-                $prefix[$locale] = trim(trim($localePrefix), '/');
-            }
-            foreach ($this->route->all() as $name => $route) {
-                if (null === $locale = $route->getDefault('_locale')) {
-                    $this->route->remove($name);
-                    foreach ($prefix as $locale => $localePrefix) {
-                        $localizedRoute = clone $route;
-                        $localizedRoute->setDefault('_locale', $locale);
-                        $localizedRoute->setDefault('_canonical_route', $name);
-                        $localizedRoute->setPath($localePrefix.(!$trailingSlashOnRoot && '/' === $route->getPath() ? '' : $route->getPath()));
-                        $this->route->add($name.'.'.$locale, $localizedRoute);
-                    }
-                } elseif (!isset($prefix[$locale])) {
-                    throw new \InvalidArgumentException(sprintf('Route "%s" with locale "%s" is missing a corresponding prefix in its parent collection.', $name, $locale));
-                } else {
-                    $route->setPath($prefix[$locale].(!$trailingSlashOnRoot && '/' === $route->getPath() ? '' : $route->getPath()));
-                    $this->route->add($name, $route);
-                }
-            }
-        }
+        $this->addPrefix($this->route, $prefix, $trailingSlashOnRoot);
 
         return $this;
     }
@@ -84,9 +64,23 @@ class ImportConfigurator
      *
      * @return $this
      */
-    final public function namePrefix(string $namePrefix)
+    final public function namePrefix(string $namePrefix): static
     {
         $this->route->addNamePrefix($namePrefix);
+
+        return $this;
+    }
+
+    /**
+     * Sets the host to use for all child routes.
+     *
+     * @param string|array $host the host, or the localized hosts
+     *
+     * @return $this
+     */
+    final public function host(string|array $host): static
+    {
+        $this->addHost($this->route, $host);
 
         return $this;
     }

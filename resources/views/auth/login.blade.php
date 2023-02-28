@@ -106,7 +106,7 @@
                     </div>
 
                     <!-- form open -->
-                    {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}
+                    {!!  Form::open(['route' => 'auth.post.login']) !!}
 
                         <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}" style="display: -webkit-box;">
                             {!! Form::text('email',null,['placeholder'=> Lang::get("lang.email") ,'class' => 'form-control']) !!}

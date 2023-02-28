@@ -26,13 +26,13 @@ class ComposerPsrNamespaceProvider
     }
 
     /**
-     * @return string[] a map associating a namespace to a location, e.g
+     * @return NamespaceLocation[] a map associating a namespace to a location, e.g
      *                  [
      *                      'My\PSR4Namespace' => 'my/PSR4Namespace',
      *                      'My\PSR0Namespace' => '',
      *                  ]
      */
-    public function getNamespaces() : array
+    public function getNamespaces(): array
     {
         $vendors = array();
         foreach (get_declared_classes() as $class) {
@@ -61,7 +61,7 @@ class ComposerPsrNamespaceProvider
         return $namespaces;
     }
 
-    private function getNamespacesFromPrefixes(array $prefixes, array $vendors, $standard)
+    private function getNamespacesFromPrefixes(array $prefixes, array $vendors, $standard) : array
     {
         $namespaces = array();
         foreach ($prefixes as $namespace => $psrPrefix) {
@@ -75,10 +75,7 @@ class ComposerPsrNamespaceProvider
                 if (strpos($namespace, $this->specPrefix) !== 0) {
                     $namespaces[$namespace] = new NamespaceLocation(
                         $namespace,
-                        substr(
-                            realpath($location),
-                            \strlen(realpath($this->rootDirectory)) + 1 // trailing slash
-                        ),
+                        $this->normaliseLocation($location),
                         $standard
                     );
                 }
@@ -86,5 +83,14 @@ class ComposerPsrNamespaceProvider
         }
 
         return $namespaces;
+    }
+
+    private function normaliseLocation($location)
+    {
+        return strpos(realpath($location), realpath($this->rootDirectory)) === 0 ?
+            substr(
+                realpath($location),
+                \strlen(realpath($this->rootDirectory)) + 1 // trailing slash
+            ) : '';
     }
 }

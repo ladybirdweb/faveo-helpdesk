@@ -34,11 +34,7 @@ class SubjectWithArrayAccess
      */
     private $dispatcher;
 
-    /**
-     * @param Caller                   $caller
-     * @param Presenter       $presenter
-     * @param EventDispatcherInterface $dispatcher
-     */
+    
     public function __construct(
         Caller $caller,
         Presenter $presenter,
@@ -50,9 +46,7 @@ class SubjectWithArrayAccess
     }
 
     /**
-     * @param string|integer $key
-     *
-     * @return bool
+     * @param int|string $key
      */
     public function offsetExists($key): bool
     {
@@ -62,13 +56,12 @@ class SubjectWithArrayAccess
 
         $this->checkIfSubjectImplementsArrayAccess($subject);
 
+        /** @var \ArrayAccess|array $subject */
         return isset($subject[$key]);
     }
 
     /**
-     * @param string|integer $key
-     *
-     * @return mixed
+     * @param int|string $key
      */
     public function offsetGet($key)
     {
@@ -78,14 +71,14 @@ class SubjectWithArrayAccess
 
         $this->checkIfSubjectImplementsArrayAccess($subject);
 
+        /** @var \ArrayAccess|array $subject */
         return $subject[$key];
     }
 
     /**
-     * @param string|integer $key
-     * @param mixed          $value
+     * @param int|string $key
      */
-    public function offsetSet($key, $value)
+    public function offsetSet($key, $value): void
     {
         $unwrapper = new Unwrapper();
         $subject = $this->caller->getWrappedObject();
@@ -94,13 +87,14 @@ class SubjectWithArrayAccess
 
         $this->checkIfSubjectImplementsArrayAccess($subject);
 
+        /** @var \ArrayAccess|array $subject */
         $subject[$key] = $value;
     }
 
     /**
-     * @param string|integer $key
+     * @param int|string $key
      */
-    public function offsetUnset($key)
+    public function offsetUnset($key): void
     {
         $unwrapper = new Unwrapper();
         $subject = $this->caller->getWrappedObject();
@@ -108,16 +102,15 @@ class SubjectWithArrayAccess
 
         $this->checkIfSubjectImplementsArrayAccess($subject);
 
+        /** @var \ArrayAccess|array $subject */
         unset($subject[$key]);
     }
 
     /**
-     * @param mixed $subject
-     *
      * @throws \PhpSpec\Exception\Wrapper\SubjectException
      * @throws \PhpSpec\Exception\Fracture\InterfaceNotImplementedException
      */
-    private function checkIfSubjectImplementsArrayAccess($subject)
+    private function checkIfSubjectImplementsArrayAccess($subject): void
     {
         if (\is_object($subject) && !($subject instanceof \ArrayAccess)) {
             throw $this->interfaceNotImplemented();
@@ -126,9 +119,7 @@ class SubjectWithArrayAccess
         }
     }
 
-    /**
-     * @return InterfaceNotImplementedException
-     */
+    
     private function interfaceNotImplemented(): InterfaceNotImplementedException
     {
         return new InterfaceNotImplementedException(
@@ -142,11 +133,7 @@ class SubjectWithArrayAccess
         );
     }
 
-    /**
-     * @param mixed $subject
-     *
-     * @return SubjectException
-     */
+    
     private function cantUseAsArray($subject): SubjectException
     {
         return new SubjectException(sprintf(

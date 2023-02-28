@@ -22,9 +22,7 @@ final class PrioritizedResourceManager implements ResourceManager
      */
     private $locators = array();
 
-    /**
-     * @param ResourceLocator $locator
-     */
+    
     public function registerLocator(ResourceLocator $locator)
     {
         $this->locators[] = $locator;
@@ -35,11 +33,9 @@ final class PrioritizedResourceManager implements ResourceManager
     }
 
     /**
-     * @param string $query
-     *
      * @return Resource[]
      */
-    public function locateResources(string $query)
+    public function locateResources(string $query): array
     {
         $resources = array();
         foreach ($this->locators as $locator) {
@@ -59,17 +55,15 @@ final class PrioritizedResourceManager implements ResourceManager
     }
 
     /**
-     * @param string $classname
-     *
-     * @return Resource
-     *
      * @throws \RuntimeException
      */
     public function createResource(string $classname): Resource
     {
         foreach ($this->locators as $locator) {
             if ($locator->supportsClass($classname)) {
-                return $locator->createResource($classname);
+                if ($resource = $locator->createResource($classname)) {
+                    return $resource;
+                }
             }
         }
 
@@ -82,11 +76,9 @@ final class PrioritizedResourceManager implements ResourceManager
     }
 
     /**
-     * @param array $resources
-     *
      * @return Resource[]
      */
-    private function removeDuplicateResources(array $resources)
+    private function removeDuplicateResources(array $resources): array
     {
         $filteredResources = array();
 

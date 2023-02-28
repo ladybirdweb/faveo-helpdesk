@@ -7,6 +7,7 @@ use App\BaseModel;
 class Tickets extends BaseModel
 {
     protected $table = 'tickets';
+
     protected $fillable = ['id', 'ticket_number', 'num_sequence', 'user_id', 'priority_id', 'sla', 'help_topic_id', 'max_open_ticket', 'captcha', 'status', 'lock_by', 'lock_at', 'source', 'isoverdue', 'reopened', 'isanswered', 'is_deleted', 'closed', 'is_transfer', 'transfer_at', 'reopened_at', 'duedate', 'closed_at', 'last_message_at', 'last_response_at', 'created_at', 'updated_at', 'assigned_to'];
 
 //        public function attach(){
@@ -15,17 +16,17 @@ class Tickets extends BaseModel
 //        }
     public function thread()
     {
-        return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_Thread', 'ticket_id');
+        return $this->hasMany(\App\Model\helpdesk\Ticket\Ticket_Thread::class, 'ticket_id');
     }
 
     public function collaborator()
     {
-        return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_Collaborator', 'ticket_id');
+        return $this->hasMany(\App\Model\helpdesk\Ticket\Ticket_Collaborator::class, 'ticket_id');
     }
 
     public function helptopic()
     {
-        $related = 'App\Model\helpdesk\Manage\Help_topic';
+        $related = \App\Model\helpdesk\Manage\Help_topic::class;
         $foreignKey = 'help_topic_id';
 
         return $this->belongsTo($related, $foreignKey);
@@ -33,7 +34,7 @@ class Tickets extends BaseModel
 
     public function formdata()
     {
-        return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_Form_Data', 'ticket_id');
+        return $this->hasMany(\App\Model\helpdesk\Ticket\Ticket_Form_Data::class, 'ticket_id');
     }
 
     public function extraFields()
@@ -95,7 +96,7 @@ class Tickets extends BaseModel
 
     public function user()
     {
-        $related = "App\User";
+        $related = \App\User::class;
         $foreignKey = 'user_id';
 
         return $this->belongsTo($related, $foreignKey);

@@ -27,15 +27,13 @@ final class OneTimeGenerator implements Generator
      */
     private $alreadyGenerated = array();
 
-    /**
-     * @param Generator $generator
-     */
+    
     public function __construct(Generator $generator)
     {
         $this->generator = $generator;
     }
 
-    public function supports(Resource $resource, string $generation, array $data) : bool
+    public function supports(Resource $resource, string $generation, array $data): bool
     {
         return $this->generator->supports($resource, $generation, $data);
     }
@@ -43,7 +41,7 @@ final class OneTimeGenerator implements Generator
     /**
      * {@inheritdoc}
      */
-    public function generate(Resource $resource, array $data)
+    public function generate(Resource $resource, array $data): void
     {
         $classname = $resource->getSrcClassname();
         if (\in_array($classname, $this->alreadyGenerated)) {
@@ -54,7 +52,7 @@ final class OneTimeGenerator implements Generator
         $this->alreadyGenerated[] = $classname;
     }
 
-    public function getPriority() : int
+    public function getPriority(): int
     {
         return $this->generator->getPriority();
     }

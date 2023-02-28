@@ -7,6 +7,7 @@ use App\BaseModel;
 class Emails extends BaseModel
 {
     protected $table = 'emails';
+
     protected $fillable = [
         'email_address', 'email_name', 'department', 'priority', 'help_topic',
         'user_name', 'password', 'fetching_host', 'fetching_port', 'fetching_protocol', 'fetching_encryption', 'mailbox_protocol',
@@ -43,7 +44,7 @@ class Emails extends BaseModel
 
     public function extraFieldRelation()
     {
-        $related = "App\Model\MailJob\FaveoMail";
+        $related = \App\Model\MailJob\FaveoMail::class;
 
         return $this->hasMany($related, 'email_id');
     }

@@ -3,7 +3,7 @@
 /*
  * This file is part of Psy Shell.
  *
- * (c) 2012-2018 Justin Hileman
+ * (c) 2012-2023 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,7 +21,7 @@ class Context
 {
     private static $specialNames = ['_', '_e', '__out', '__psysh__', 'this'];
 
-    // Whitelist a very limited number of command-scope magic variable names.
+    // Include a very limited number of command-scope magic variable names.
     // This might be a bad idea, but future me can sort it out.
     private static $commandScopeNames = [
         '__function', '__method', '__class', '__namespace', '__file', '__line', '__dir',
@@ -38,13 +38,13 @@ class Context
     /**
      * Get a context variable.
      *
-     * @throws InvalidArgumentException If the variable is not found in the current context
+     * @throws \InvalidArgumentException If the variable is not found in the current context
      *
      * @param string $name
      *
      * @return mixed
      */
-    public function get($name)
+    public function get(string $name)
     {
         switch ($name) {
             case '_':
@@ -87,25 +87,21 @@ class Context
                 break;
         }
 
-        throw new \InvalidArgumentException('Unknown variable: $' . $name);
+        throw new \InvalidArgumentException('Unknown variable: $'.$name);
     }
 
     /**
      * Get all defined variables.
-     *
-     * @return array
      */
-    public function getAll()
+    public function getAll(): array
     {
         return \array_merge($this->scopeVariables, $this->getSpecialVariables());
     }
 
     /**
      * Get all defined magic variables: $_, $_e, $__out, $__class, $__file, etc.
-     *
-     * @return array
      */
-    public function getSpecialVariables()
+    public function getSpecialVariables(): array
     {
         $vars = [
             '_' => $this->returnValue,
@@ -168,21 +164,21 @@ class Context
     }
 
     /**
-     * Set the most recent Exception.
+     * Set the most recent Exception or Error.
      *
-     * @param \Exception $e
+     * @param \Throwable $e
      */
-    public function setLastException(\Exception $e)
+    public function setLastException(\Throwable $e)
     {
         $this->lastException = $e;
     }
 
     /**
-     * Get the most recent Exception.
+     * Get the most recent Exception or Error.
      *
      * @throws \InvalidArgumentException If no Exception has been caught
      *
-     * @return null|\Exception
+     * @return \Throwable|null
      */
     public function getLastException()
     {
@@ -198,7 +194,7 @@ class Context
      *
      * @param string $lastStdout
      */
-    public function setLastStdout($lastStdout)
+    public function setLastStdout(string $lastStdout)
     {
         $this->lastStdout = $lastStdout;
     }
@@ -208,7 +204,7 @@ class Context
      *
      * @throws \InvalidArgumentException If no output has happened yet
      *
-     * @return null|string
+     * @return string|null
      */
     public function getLastStdout()
     {
@@ -285,10 +281,8 @@ class Context
 
     /**
      * Get command-scope magic variables: $__class, $__file, etc.
-     *
-     * @return array
      */
-    public function getCommandScopeVariables()
+    public function getCommandScopeVariables(): array
     {
         return $this->commandScopeVariables;
     }
@@ -301,7 +295,7 @@ class Context
      *
      * @return array Array of unused variable names
      */
-    public function getUnusedCommandScopeVariableNames()
+    public function getUnusedCommandScopeVariableNames(): array
     {
         return \array_diff(self::$commandScopeNames, \array_keys($this->commandScopeVariables));
     }
@@ -310,10 +304,8 @@ class Context
      * Check whether a variable name is a magic variable.
      *
      * @param string $name
-     *
-     * @return bool
      */
-    public static function isSpecialVariableName($name)
+    public static function isSpecialVariableName(string $name): bool
     {
         return \in_array($name, self::$specialNames) || \in_array($name, self::$commandScopeNames);
     }

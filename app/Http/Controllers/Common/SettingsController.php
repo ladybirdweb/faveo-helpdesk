@@ -4,20 +4,21 @@ namespace App\Http\Controllers\Common;
 
 // controllers
 use App\Http\Controllers\Controller;
-// requests
 use App\Http\Requests;
+// requests
 use App\Http\Requests\helpdesk\SmtpRequest;
 use App\Model\helpdesk\Email\Smtp;
-// models
 use App\Model\helpdesk\Settings\Plugin;
+// models
 use App\Model\helpdesk\Theme\Widgets;
 use Config;
-// classes
 use Crypt;
+// classes
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Input;
+use Illuminate\Support\Facades\Request as Input;
 use Lang;
 
 /**
@@ -306,7 +307,7 @@ class SettingsController extends Controller
         return \Datatable::collection(new Collection($plugins))
                         ->searchColumns('name')
                         ->addColumn('name', function ($model) {
-                            if (array_has($model, 'path')) {
+                            if (Arr::has($model, 'path')) {
                                 if ($model['status'] == 0) {
                                     $activate = '<a href='.url('plugin/status/'.$model['path']).'>Activate</a>';
                                     $settings = ' ';

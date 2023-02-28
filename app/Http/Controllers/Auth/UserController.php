@@ -24,7 +24,7 @@ use App\User;
 /* include tickets model */
 /* TicketRequest to validate the ticket response */
 /* Validate post check ticket */
-use Input;
+use Illuminate\Support\Facades\Request;
 use Redirect;
 
 /**
@@ -292,7 +292,7 @@ class UserController extends Controller
      */
     public function UserAssignOrg($id)
     {
-        $org = Input::get('org');
+        $org = Request::get('org');
         $user_org = new User_org();
         $user_org->org_id = $org;
         $user_org->user_id = $id;
@@ -308,17 +308,17 @@ class UserController extends Controller
      */
     public function User_Create_Org($id)
     {
-        if (Input::get('website') != null) {
+        if (Request::get('website') != null) {
             // checking website
-            $check = Organization::where('website', '=', Input::get('website'))->first();
+            $check = Organization::where('website', '=', Request::get('website'))->first();
         } else {
             $check = null;
         }
 
         // checking name
-        $check2 = Organization::where('name', '=', Input::get('name'))->first();
+        $check2 = Organization::where('name', '=', Request::get('name'))->first();
 
-        if (\Input::get('name') == null) {
+        if (Request::get('name') == null) {
             return 'Name is required';
         } elseif ($check2 != null) {
             return 'Name should be Unique';
@@ -326,11 +326,11 @@ class UserController extends Controller
             return 'Website should be Unique';
         } else {
             $org = new Organization();
-            $org->name = Input::get('name');
-            $org->phone = Input::get('phone');
-            $org->website = Input::get('website');
-            $org->address = Input::get('address');
-            $org->internal_notes = Input::get('internal');
+            $org->name = Request::get('name');
+            $org->phone = Request::get('phone');
+            $org->website = Request::get('website');
+            $org->address = Request::get('address');
+            $org->internal_notes = Request::get('internal');
             $org->save();
 
             $user_org = new User_org();

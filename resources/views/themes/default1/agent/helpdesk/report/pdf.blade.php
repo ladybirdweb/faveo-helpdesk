@@ -51,13 +51,13 @@
             <thead>
                 <tr>
                     <td>Date</td>
-                    @if(array_key_exists('open', $table_datas[1]))
+                    @if(array_key_exists(1, $table_datas) && $table_datas[1]->open)
                     <td>Created</td>
                     @endif
-                    @if(array_key_exists('closed', $table_datas[1]))
+                    @if(array_key_exists(1, $table_datas) && $table_datas[1]->closed)
                     <td>Closed</td>
                     @endif
-                    @if(array_key_exists('reopened', $table_datas[1]))
+                    @if(array_key_exists(1, $table_datas) && $table_datas[1]->reopened)
                     <td>Reopened</td>
                     @endif
                 </tr>
@@ -71,15 +71,15 @@
                 foreach ($table_datas as $table_data) {
                     echo '<tr>';
                     echo '<td>' . $table_data->date . '</td>';
-                    if (array_key_exists('open', $table_data)) {
+                    if ($table_data->open) {
                         echo '<td>' . $table_data->open . '</td>';
                         $table_open += $table_data->open;
                     }
-                    if (array_key_exists('closed', $table_data)) {
+                    if ($table_data->closed) {
                         echo '<td>' . $table_data->closed . '</td>';
                         $table_closed += $table_data->closed;
                     }
-                    if (array_key_exists('reopened', $table_data)) {
+                    if ($table_data->reopened) {
                         echo '<td>' . $table_data->reopened . '</td>';
                         $table_reopened += $table_data->reopened;
                     }
@@ -91,21 +91,23 @@
 
         <table>
             <tr>
+                @if(array_key_exists(1, $table_datas))
                 <td>
                     <span style="color:#F7CF07;">TOTAL IN PROGRESS</span> : {!! $table_datas[1]->inprogress !!}
                 </td>
+                @endif
                 <td>
-                    @if(array_key_exists('open', $table_data))
+                    @if($table_data->open)
                     <span style="color:blue;">TOTAL CREATED</span>  : {!! $table_open !!}
                     @endif
                 </td>
                 <td>
-                    @if(array_key_exists('reopened', $table_data))
+                    @if($table_data->reopened)
                     <span style="color:orange;">TOTAL REOPENED</span>  : {!! $table_reopened !!}
                     @endif
                 </td>
                 <td>
-                    @if(array_key_exists('closed', $table_data))
+                    @if($table_data->closed)
                     <span style="color:#00e765;">TOTAL CLOSED</span> : {!! $table_closed !!}
                     @endif    
                 </td>

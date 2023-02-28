@@ -5,15 +5,16 @@ namespace App\Http\Controllers\Agent\kb;
 // Controllers
 use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
-// Requests
 use App\Http\Requests\kb\CategoryRequest;
+// Requests
 use App\Http\Requests\kb\CategoryUpdate;
-// Model
 use App\Model\kb\Category;
+// Model
 use App\Model\kb\Relationship;
-// Classes
 use Datatable;
+// Classes
 use Exception;
+use Illuminate\Support\Str;
 use Lang;
 use Redirect;
 
@@ -78,7 +79,7 @@ class CategoryController extends Controller
                         ->addColumn('name', function ($model) {
                             $string = strip_tags($model->name);
 
-                            return str_limit($string, 20);
+                            return Str::limit($string, 20);
                         })
                         /* add column Created */
                         ->addColumn('Created', function ($model) {
@@ -143,7 +144,7 @@ class CategoryController extends Controller
     {
         /* Get the whole request from the form and insert into table via model */
         $sl = $request->input('name');
-        $slug = str_slug($sl, '-');
+        $slug = Str::slug($sl, '-');
         $category->slug = $slug;
         // send success message to index page
         try {
@@ -187,7 +188,7 @@ class CategoryController extends Controller
         /* Edit the selected category via id */
         $category = Category::where('id', $id)->first();
         $sl = $request->input('name');
-        $slug = str_slug($sl, '-');
+        $slug = Str::slug($sl, '-');
         /* update the values at the table via model according with the request */
         //redirct to index page with success message
         try {

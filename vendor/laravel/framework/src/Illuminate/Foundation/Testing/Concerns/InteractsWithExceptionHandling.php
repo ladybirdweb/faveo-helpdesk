@@ -2,18 +2,20 @@
 
 namespace Illuminate\Foundation\Testing\Concerns;
 
-use Exception;
-use Illuminate\Validation\ValidationException;
+use Closure;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Testing\Assert;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 trait InteractsWithExceptionHandling
 {
     /**
      * The original exception handler.
      *
-     * @var ExceptionHandler|null
+     * @var \Illuminate\Contracts\Debug\ExceptionHandler|null
      */
     protected $originalExceptionHandler;
 
@@ -64,7 +66,8 @@ trait InteractsWithExceptionHandling
             $this->originalExceptionHandler = app(ExceptionHandler::class);
         }
 
-        $this->app->instance(ExceptionHandler::class, new class($this->originalExceptionHandler, $except) implements ExceptionHandler {
+        $this->app->instance(ExceptionHandler::class, new class($this->originalExceptionHandler, $except) implements ExceptionHandler
+        {
             protected $except;
             protected $originalHandler;
 
@@ -82,54 +85,109 @@ trait InteractsWithExceptionHandling
             }
 
             /**
-             * Report the given exception.
+             * Report or log an exception.
              *
-             * @param  \Exception  $e
+             * @param  \Throwable  $e
              * @return void
+             *
+             * @throws \Exception
              */
-            public function report(Exception $e)
+            public function report(Throwable $e)
             {
                 //
             }
 
             /**
-             * Render the given exception.
+             * Determine if the exception should be reported.
+             *
+             * @param  \Throwable  $e
+             * @return bool
+             */
+            public function shouldReport(Throwable $e)
+            {
+                return false;
+            }
+
+            /**
+             * Render an exception into an HTTP response.
              *
              * @param  \Illuminate\Http\Request  $request
-             * @param  \Exception  $e
-             * @return mixed
+             * @param  \Throwable  $e
+             * @return \Symfony\Component\HttpFoundation\Response
              *
-             * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException|\Exception
+             * @throws \Throwable
              */
-            public function render($request, Exception $e)
+            public function render($request, Throwable $e)
             {
-                if ($e instanceof NotFoundHttpException) {
-                    throw new NotFoundHttpException(
-                        "{$request->method()} {$request->url()}", null, $e->getCode()
-                    );
-                }
-
                 foreach ($this->except as $class) {
                     if ($e instanceof $class) {
                         return $this->originalHandler->render($request, $e);
                     }
                 }
 
+                if ($e instanceof NotFoundHttpException) {
+                    throw new NotFoundHttpException(
+                        "{$request->method()} {$request->url()}", $e, is_int($e->getCode()) ? $e->getCode() : 0
+                    );
+                }
+
                 throw $e;
             }
 
             /**
-             * Render the exception for the console.
+             * Render an exception to the console.
              *
              * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-             * @param  \Exception  $e
+             * @param  \Throwable  $e
              * @return void
              */
-            public function renderForConsole($output, Exception $e)
+            public function renderForConsole($output, Throwable $e)
             {
-                (new ConsoleApplication)->renderException($e, $output);
+                (new ConsoleApplication)->renderThrowable($e, $output);
             }
         });
+
+        return $this;
+    }
+
+    /**
+     * Assert that the given callback throws an exception with the given message when invoked.
+     *
+     * @param  \Closure  $test
+     * @param  class-string<\Throwable>  $expectedClass
+     * @param  string|null  $expectedMessage
+     * @return $this
+     */
+    protected function assertThrows(Closure $test, string $expectedClass = Throwable::class, ?string $expectedMessage = null)
+    {
+        try {
+            $test();
+
+            $thrown = false;
+        } catch (Throwable $exception) {
+            $thrown = $exception instanceof $expectedClass;
+
+            $actualMessage = $exception->getMessage();
+        }
+
+        Assert::assertTrue(
+            $thrown,
+            sprintf('Failed asserting that exception of type "%s" was thrown.', $expectedClass)
+        );
+
+        if (isset($expectedMessage)) {
+            if (! isset($actualMessage)) {
+                Assert::fail(
+                    sprintf(
+                        'Failed asserting that exception of type "%s" with message "%s" was thrown.',
+                        $expectedClass,
+                        $expectedMessage
+                    )
+                );
+            } else {
+                Assert::assertStringContainsString($expectedMessage, $actualMessage);
+            }
+        }
 
         return $this;
     }

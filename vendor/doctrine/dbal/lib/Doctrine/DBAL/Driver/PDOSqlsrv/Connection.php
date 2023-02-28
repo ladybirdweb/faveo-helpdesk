@@ -2,24 +2,30 @@
 
 namespace Doctrine\DBAL\Driver\PDOSqlsrv;
 
-use Doctrine\DBAL\Driver\PDOConnection;
-use Doctrine\DBAL\ParameterType;
-use PDO;
-use function strpos;
-use function substr;
+use Doctrine\DBAL\Driver\PDO;
+use Doctrine\DBAL\Driver\Result;
 
 /**
  * Sqlsrv Connection implementation.
+ *
+ * @deprecated Use {@link PDO\SQLSrv\Connection} instead.
  */
-class Connection extends PDOConnection
+class Connection extends PDO\Connection
 {
     /**
      * {@inheritdoc}
+     *
+     * @internal The connection can be only instantiated by its driver.
+     *
+     * @param string       $dsn
+     * @param string|null  $user
+     * @param string|null  $password
+     * @param mixed[]|null $options
      */
     public function __construct($dsn, $user = null, $password = null, ?array $options = null)
     {
         parent::__construct($dsn, $user, $password, $options);
-        $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, [Statement::class, []]);
+        $this->setAttribute(\PDO::ATTR_STATEMENT_CLASS, [PDO\SQLSrv\Statement::class, []]);
     }
 
     /**
@@ -34,21 +40,10 @@ class Connection extends PDOConnection
         $stmt = $this->prepare('SELECT CONVERT(VARCHAR(MAX), current_value) FROM sys.sequences WHERE name = ?');
         $stmt->execute([$name]);
 
-        return $stmt->fetchColumn();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function quote($value, $type = ParameterType::STRING)
-    {
-        $val = parent::quote($value, $type);
-
-        // Fix for a driver version terminating all values with null byte
-        if (strpos($val, "\0") !== false) {
-            $val = substr($val, 0, -1);
+        if ($stmt instanceof Result) {
+            return $stmt->fetchOne();
         }
 
-        return $val;
+        return $stmt->fetchColumn();
     }
 }

@@ -8,11 +8,12 @@ use Lang;
 class QueueService extends Model
 {
     protected $table = 'queue_services';
+
     protected $fillable = ['name', 'short_name', 'status'];
 
     public function extraFieldRelation()
     {
-        $related = "App\Model\MailJob\FaveoQueue";
+        $related = \App\Model\MailJob\FaveoQueue::class;
 
         return $this->hasMany($related, 'service_id');
     }

@@ -90,7 +90,19 @@ class Validator
 
     private function check_structure(StructureShape $shape, $value)
     {
-        if (!$this->checkAssociativeArray($value)) {
+        $isDocument = (isset($shape['document']) && $shape['document']);
+        $isUnion = (isset($shape['union']) && $shape['union']);
+        if ($isDocument) {
+            if (!$this->checkDocumentType($value)) {
+                $this->addError("is not a valid document type");
+                return;
+            }
+        } elseif ($isUnion) {
+            if (!$this->checkUnion($value)) {
+                $this->addError("is a union type and must have exactly one non null value");
+                return;
+            }
+        } elseif (!$this->checkAssociativeArray($value)) {
             return;
         }
 
@@ -103,15 +115,16 @@ class Validator
                 }
             }
         }
-
-        foreach ($value as $name => $v) {
-            if ($shape->hasMember($name)) {
-                $this->path[] = $name;
-                $this->dispatch(
-                    $shape->getMember($name),
-                    isset($value[$name]) ? $value[$name] : null
-                );
-                array_pop($this->path);
+        if (!$isDocument) {
+            foreach ($value as $name => $v) {
+                if ($shape->hasMember($name)) {
+                    $this->path[] = $name;
+                    $this->dispatch(
+                        $shape->getMember($name),
+                        isset($value[$name]) ? $value[$name] : null
+                    );
+                    array_pop($this->path);
+                }
             }
         }
     }
@@ -203,6 +216,7 @@ class Validator
             return;
         }
 
+        $value = isset($value) ? $value : '';
         $this->validateRange($shape, strlen($value), "string length");
 
         if ($this->constraints['pattern']) {
@@ -232,6 +246,21 @@ class Validator
         }
     }
 
+    private function checkArray($arr)
+    {
+        return $this->isIndexed($arr) || $this->isAssociative($arr);
+    }
+
+    private function isAssociative($arr)
+    {
+        return count(array_filter(array_keys($arr), "is_string")) == count($arr);
+    }
+
+    private function isIndexed(array $arr)
+    {
+        return $arr == array_values($arr);
+    }
+
     private function checkCanString($value)
     {
         static $valid = [
@@ -249,13 +278,57 @@ class Validator
 
     private function checkAssociativeArray($value)
     {
-        if (!is_array($value) || isset($value[0])) {
+        $isAssociative = false;
+
+        if (is_array($value)) {
+            $expectedIndex = 0;
+            $key = key($value);
+
+            do {
+                $isAssociative = $key !== $expectedIndex++;
+                next($value);
+                $key = key($value);
+            } while (!$isAssociative && null !== $key);
+        }
+
+        if (!$isAssociative) {
             $this->addError('must be an associative array. Found '
                 . Aws\describe_type($value));
             return false;
         }
 
         return true;
+    }
+
+    private function checkDocumentType($value)
+    {
+        if (is_array($value)) {
+            $typeOfFirstKey = gettype(key($value));
+            foreach ($value as $key => $val) {
+               if (!$this->checkDocumentType($val) || gettype($key) != $typeOfFirstKey) {
+                   return false;
+               }
+            }
+            return $this->checkArray($value);
+        }
+        return is_null($value)
+            || is_numeric($value)
+            || is_string($value)
+            || is_bool($value);
+    }
+
+    private function checkUnion($value)
+    {
+        if (is_array($value)) {
+            $nonNullCount = 0;
+            foreach ($value as $key => $val) {
+                if (!is_null($val) && !(strpos($key, "@") === 0)) {
+                    $nonNullCount++;
+                }
+            }
+            return $nonNullCount == 1;
+        }
+        return !is_null($value);
     }
 
     private function addError($message)

@@ -15,7 +15,7 @@ interface Paginator
     /**
      * Add a set of query string values to the paginator.
      *
-     * @param  array|string  $key
+     * @param  array|string|null  $key
      * @param  string|null  $value
      * @return $this
      */
@@ -25,7 +25,7 @@ interface Paginator
      * Get / set the URL fragment to be appended to URLs.
      *
      * @param  string|null  $fragment
-     * @return $this|string
+     * @return $this|string|null
      */
     public function fragment($fragment = null);
 
@@ -86,11 +86,18 @@ interface Paginator
     public function hasPages();
 
     /**
-     * Determine if there is more items in the data store.
+     * Determine if there are more items in the data store.
      *
      * @return bool
      */
     public function hasMorePages();
+
+    /**
+     * Get the base path for paginator generated URLs.
+     *
+     * @return string|null
+     */
+    public function path();
 
     /**
      * Determine if the list of items is empty or not.

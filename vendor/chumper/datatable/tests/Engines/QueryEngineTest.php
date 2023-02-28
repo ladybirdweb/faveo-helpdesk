@@ -21,7 +21,7 @@ class QueryEngineTest extends PHPUnit_Framework_TestCase {
     public function setUp()
     {
 
-        Config::shouldReceive('get')->zeroOrMoreTimes()->with("chumper.datatable.engine")->andReturn(
+        Config::shouldReceive('get')->zeroOrMoreTimes()->with("datatable::engine")->andReturn(
             array(
                 'exactWordSearch' => false,
             )

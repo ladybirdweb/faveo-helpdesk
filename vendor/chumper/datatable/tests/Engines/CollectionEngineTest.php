@@ -23,19 +23,23 @@ class CollectionEngineTest extends TestCase {
      * @var
      */
     private $input;
-    
-    protected function getEnvironmentSetUp($app)
-    {
-        $app['config']->set('chumper.datatable.engine', array(
-                'exactWordSearch' => false,
-            ));
-    }
 
     public function setUp()
     {
-        
+        Config::shouldReceive('get')->zeroOrMoreTimes()->with("datatable::engine")->andReturn(
+            array(
+                'exactWordSearch' => false,
+            )
+        );
+
         parent::setUp();
-        
+
+        Config::shouldReceive('get')->zeroOrMoreTimes()->with("datatable::engine")->andReturn(
+            array(
+                'exactWordSearch' => false,
+            )
+        );
+
         $this->collection = Mockery::mock('Illuminate\Support\Collection');
         $this->c = new CollectionEngine($this->collection);
     }
@@ -273,7 +277,7 @@ class CollectionEngineTest extends TestCase {
 
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         Mockery::close();
     }

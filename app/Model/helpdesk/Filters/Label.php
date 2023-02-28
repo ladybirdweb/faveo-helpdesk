@@ -8,6 +8,7 @@ use Lang;
 class Label extends Model
 {
     protected $table = 'labels';
+
     protected $fillable = ['title', 'color', 'order', 'status'];
 
     public function titleWithColor()

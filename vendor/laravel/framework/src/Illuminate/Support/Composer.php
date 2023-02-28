@@ -3,8 +3,8 @@
 namespace Illuminate\Support;
 
 use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\Process;
 
 class Composer
 {
@@ -18,7 +18,7 @@ class Composer
     /**
      * The working path to regenerate from.
      *
-     * @var string
+     * @var string|null
      */
     protected $workingPath;
 
@@ -38,50 +38,61 @@ class Composer
     /**
      * Regenerate the Composer autoloader files.
      *
-     * @param  string  $extra
-     * @return void
+     * @param  string|array  $extra
+     * @return int
      */
     public function dumpAutoloads($extra = '')
     {
-        $process = $this->getProcess();
+        $extra = $extra ? (array) $extra : [];
 
-        $process->setCommandLine(trim($this->findComposer().' dump-autoload '.$extra));
+        $command = array_merge($this->findComposer(), ['dump-autoload'], $extra);
 
-        $process->run();
+        return $this->getProcess($command)->run();
     }
 
     /**
      * Regenerate the optimized Composer autoloader files.
      *
-     * @return void
+     * @return int
      */
     public function dumpOptimized()
     {
-        $this->dumpAutoloads('--optimize');
+        return $this->dumpAutoloads('--optimize');
     }
 
     /**
      * Get the composer command for the environment.
      *
-     * @return string
+     * @return array
      */
-    protected function findComposer()
+    public function findComposer()
     {
         if ($this->files->exists($this->workingPath.'/composer.phar')) {
-            return ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false)).' composer.phar';
+            return [$this->phpBinary(), 'composer.phar'];
         }
 
-        return 'composer';
+        return ['composer'];
+    }
+
+    /**
+     * Get the PHP binary.
+     *
+     * @return string
+     */
+    protected function phpBinary()
+    {
+        return ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false));
     }
 
     /**
      * Get a new Symfony process instance.
      *
+     * @param  array  $command
      * @return \Symfony\Component\Process\Process
      */
-    protected function getProcess()
+    protected function getProcess(array $command)
     {
-        return (new Process('', $this->workingPath))->setTimeout(null);
+        return (new Process($command, $this->workingPath))->setTimeout(null);
     }
 
     /**
@@ -95,5 +106,27 @@ class Composer
         $this->workingPath = realpath($path);
 
         return $this;
+    }
+
+    /**
+     * Get the version of Composer.
+     *
+     * @return string|null
+     */
+    public function getVersion()
+    {
+        $command = array_merge($this->findComposer(), ['-V', '--no-ansi']);
+
+        $process = $this->getProcess($command);
+
+        $process->run();
+
+        $output = $process->getOutput();
+
+        if (preg_match('/(\d+(\.\d+){2})/', $output, $version)) {
+            return $version[1];
+        }
+
+        return explode(' ', $output)[2] ?? null;
     }
 }

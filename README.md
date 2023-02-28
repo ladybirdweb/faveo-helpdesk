@@ -22,12 +22,12 @@ Faveo can be customised according to requirement and we do undertake such reques
 
 Flavors of Faveo
 --------------------------
-  * Faveo Community Edition – Free, Open source edition
-  * Faveo Freelancer - Free version with features available in Faveo Pro Edition for two agents
-  * Faveo Pro Edition – Paid version with many advance features and integrations
+  * Faveo Help Desk Community Edition – Free, Open source edition
+  * Faveo Help Desk Freelancer - Free version with features available in Faveo Enterprise Edition for two agents
+  * Faveo Help Desk Enterprise Edition – Paid version with many advance features and integrations
   * Faveo Service Desk - Paid version for IT Assest management
   
-[View complete comparision list of all flavors of Faveo to select the most suitable solution for your business](https://www.faveohelpdesk.com/pricing-india/)
+[View complete comparision list of all flavors of Faveo to select the most suitable solution for your business](https://www.faveohelpdesk.com/pricing/)
 
 Faveo Documentation
 --------------------------
@@ -40,8 +40,8 @@ Requirements
 --------------------------
 To run Faveo your host just needs a couple of things:
 
-  * PHP Version: 7.1+
-  * Database: MySQL 5.0+
+  * PHP Version: 8.1+
+  * Database: MySQL 8.0.x or MariaDB 10.6.x
   * Web Server: Apache / IIS / Nginx
   * PHP Extensions: Imap, Mbstring, Mcrypt, OpenSSL, PDO, Tokenizer, XML, Zip
   * Web Server Extension: Pretty URLs or Search Engine Friendly URLs have to be enabled in your web server configuration
@@ -85,7 +85,7 @@ If you are using our product and want to support us <a href="https://github.com/
 Language translate
 --------------------------
 Help us translate Faveo into your native language <a href="https://github.com/ladybirdweb/faveo-helpdesk/wiki/Help-in-language-translate" target="_blank">Click here</a><br/>
-We are following Laravel <a href="https://laravel.com/docs/5.2/localization">localization</a> module, you can create language file in your branch and send a pull request.
+We are following Laravel <a href="https://laravel.com/docs/9.x/localization">localization</a> module, you can create language file in your branch and send a pull request.
 
 Contributing
 --------------------------
@@ -101,12 +101,8 @@ Help
 --------------------------
 Visit the <a href="https://github.com/ladybirdweb/faveo-helpdesk/issues">issue</a> page. And if you'd like professional help commercial support is available, email us through the <a href="http://www.faveohelpdesk.com/contact-us/">contact form</a>.
 
-Download Faveo mobile apps
---------------------------
-
-<a href='https://play.google.com/store/apps/details?id=co.helpdesk.faveo&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1' target="_blank"><img alt='Get it on Google Play' src='http://www.faveohelpdesk.com/wp-content/uploads/2016/12/google-1.png'  width="200px"/></a> <a href="https://appsto.re/in/cTjQgb.i" target="_blank"><img src="http://www.faveohelpdesk.com/wp-content/uploads/2016/12/apple.png"  width="200px"/></a>
 
 
 Follow Us
 --------------------------
-<a href="https://www.facebook.com/faveohelpdesk" ><img src="http://www.faveohelpdesk.com/wp-content/uploads/2016/12/fb.png" /></a> <a href="https://twitter.com/faveohelpdesk" ><img src="http://www.faveohelpdesk.com/wp-content/uploads/2016/12/twitter.png" /></a> <a href="https://www.linkedin.com/company/627599" ><img src="http://www.faveohelpdesk.com/wp-content/uploads/2016/12/linkedin.png" /></a> <a href="https://www.youtube.com/channel/UC-eqh-h241b1janp6sU7Iiw" ><img src="http://www.faveohelpdesk.com/wp-content/uploads/2016/12/youtube.png" /></a> <a href="https://plus.google.com/117596052965493985407" ><img src="http://www.faveohelpdesk.com/wp-content/uploads/2016/12/google.png" /></a>
+<a href="https://www.facebook.com/faveohelpdesk" ><img src="http://www.faveohelpdesk.com/wp-content/uploads/2016/12/fb.png" /></a> <a href="https://twitter.com/faveohelpdesk" ><img src="http://www.faveohelpdesk.com/wp-content/uploads/2016/12/twitter.png" /></a> <a href="https://www.linkedin.com/showcase/faveohelpdesk/" ><img src="http://www.faveohelpdesk.com/wp-content/uploads/2016/12/linkedin.png" /></a> <a href="https://www.youtube.com/channel/UC-eqh-h241b1janp6sU7Iiw" ><img src="http://www.faveohelpdesk.com/wp-content/uploads/2016/12/youtube.png" /></a> 

@@ -1,4 +1,9 @@
 body {
+ font-family: sans-serif;
+ font-size: 1em;
+ font-kerning: normal;
+ font-variant-ligatures: common-ligatures;
+ text-rendering: optimizeLegibility;
  padding-top: 10px;
 }
 
@@ -8,6 +13,8 @@ body {
 
 .octicon {
  margin-right:.25em;
+ vertical-align: baseline;
+ width: 0.75em;
 }
 
 .table-bordered>thead>tr>td {
@@ -48,7 +55,7 @@ body {
  background-color: #f2dede;
 }
 
-.table tbody td.warning, li.warning, span.warning {
+.table tbody tr.warning, .table tbody td.warning, li.warning, span.warning {
  background-color: #fcf8e3;
 }
 
@@ -57,6 +64,7 @@ body {
 }
 
 td.big {
+ vertical-align: middle;
  width: 117px;
 }
 
@@ -65,7 +73,7 @@ td.small {
 
 td.codeLine {
  font-family: "Source Code Pro", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
- white-space: pre;
+ white-space: pre-wrap;
 }
 
 td span.comment {
@@ -96,11 +104,6 @@ span.success, span.warning, span.danger {
  text-align: center;
 }
 
-#classCoverageDistribution, #classComplexity {
- height: 200px;
- width: 475px;
-}
-
 #toplink {
  position: fixed;
  left: 5px;
@@ -119,4 +122,9 @@ svg text {
  height:245px;
  overflow-x:hidden;
  overflow-y:scroll;
+}
+
+table + .structure-heading {
+ border-top: 1px solid lightgrey;
+ padding-top: 0.5em;
 }

@@ -42,12 +42,7 @@ final class PrivateConstructorGenerator implements Generator
      */
     private $codeWriter;
 
-    /**
-     * @param ConsoleIO $io
-     * @param TemplateRenderer $templates
-     * @param Filesystem $filesystem
-     * @param CodeWriter $codeWriter
-     */
+    
     public function __construct(ConsoleIO $io, TemplateRenderer $templates, Filesystem $filesystem, CodeWriter $codeWriter)
     {
         $this->io         = $io;
@@ -56,16 +51,13 @@ final class PrivateConstructorGenerator implements Generator
         $this->codeWriter = $codeWriter;
     }
 
-    public function supports(Resource $resource, string $generation, array $data) : bool
+    public function supports(Resource $resource, string $generation, array $data): bool
     {
         return 'private-constructor' === $generation;
     }
 
-    /**
-     * @param Resource $resource
-     * @param array $data
-     */
-    public function generate(Resource $resource, array $data)
+    
+    public function generate(Resource $resource, array $data): void
     {
         $filepath  = $resource->getSrcFilename();
 
@@ -83,12 +75,12 @@ final class PrivateConstructorGenerator implements Generator
         $this->io->writeln("<info>Private constructor has been created.</info>\n", 2);
     }
 
-    public function getPriority() : int
+    public function getPriority(): int
     {
         return 0;
     }
 
-    protected function getTemplate() : string
+    protected function getTemplate(): string
     {
         return file_get_contents(__DIR__.'/templates/private-constructor.template');
     }

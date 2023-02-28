@@ -4,11 +4,11 @@ ZendService\Apple\Apns [![Build Status](https://travis-ci.org/zendframework/Zend
 Provides support for Apple push notifications.
 
 
-## Requirements
+## Requirements ##
 
-* PHP >= 5.6
+* PHP >= 5.3.3
 
-## Getting Started
+## Getting Started ##
 
 Install this library using [Composer](http://getcomposer.org/):
 
@@ -16,7 +16,7 @@ Install this library using [Composer](http://getcomposer.org/):
 $ composer require zendframework/zendservice-apple-apns
 ```
 
-## Documentation
+## Documentation ##
 
 The documentation can be found at: http://framework.zend.com/manual/current/en/modules/zendservice.apple.apns.html
 

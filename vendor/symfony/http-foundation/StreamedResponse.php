@@ -28,14 +28,12 @@ class StreamedResponse extends Response
 {
     protected $callback;
     protected $streamed;
-    private $headersSent;
+    private bool $headersSent;
 
     /**
-     * @param callable|null $callback A valid PHP callback or null to set it later
-     * @param int           $status   The response status code
-     * @param array         $headers  An array of response headers
+     * @param int $status The HTTP status code (200 "OK" by default)
      */
-    public function __construct(callable $callback = null, int $status = 200, array $headers = array())
+    public function __construct(callable $callback = null, int $status = 200, array $headers = [])
     {
         parent::__construct(null, $status, $headers);
 
@@ -47,27 +45,11 @@ class StreamedResponse extends Response
     }
 
     /**
-     * Factory method for chainability.
-     *
-     * @param callable|null $callback A valid PHP callback or null to set it later
-     * @param int           $status   The response status code
-     * @param array         $headers  An array of response headers
-     *
-     * @return static
-     */
-    public static function create($callback = null, $status = 200, $headers = array())
-    {
-        return new static($callback, $status, $headers);
-    }
-
-    /**
      * Sets the PHP callback associated with this Response.
-     *
-     * @param callable $callback A valid PHP callback
      *
      * @return $this
      */
-    public function setCallback(callable $callback)
+    public function setCallback(callable $callback): static
     {
         $this->callback = $callback;
 
@@ -75,13 +57,11 @@ class StreamedResponse extends Response
     }
 
     /**
-     * {@inheritdoc}
-     *
      * This method only sends the headers once.
      *
      * @return $this
      */
-    public function sendHeaders()
+    public function sendHeaders(): static
     {
         if ($this->headersSent) {
             return $this;
@@ -93,13 +73,11 @@ class StreamedResponse extends Response
     }
 
     /**
-     * {@inheritdoc}
-     *
      * This method only sends the content once.
      *
      * @return $this
      */
-    public function sendContent()
+    public function sendContent(): static
     {
         if ($this->streamed) {
             return $this;
@@ -111,19 +89,17 @@ class StreamedResponse extends Response
             throw new \LogicException('The Response callback must not be null.');
         }
 
-        \call_user_func($this->callback);
+        ($this->callback)();
 
         return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @return $this
      *
      * @throws \LogicException when the content is not null
-     *
-     * @return $this
      */
-    public function setContent($content)
+    public function setContent(?string $content): static
     {
         if (null !== $content) {
             throw new \LogicException('The content cannot be set on a StreamedResponse instance.');
@@ -134,12 +110,7 @@ class StreamedResponse extends Response
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return false
-     */
-    public function getContent()
+    public function getContent(): string|false
     {
         return false;
     }

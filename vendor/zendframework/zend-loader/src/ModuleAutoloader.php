@@ -1,8 +1,10 @@
 <?php
 /**
- * @see       https://github.com/zendframework/zend-loader for the canonical source repository
- * @copyright Copyright (c) 2005-2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-loader/blob/master/LICENSE.md New BSD License
+ * Zend Framework (http://framework.zend.com/)
+ *
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
 namespace Zend\Loader;
@@ -21,17 +23,17 @@ class ModuleAutoloader implements SplAutoloader
     /**
      * @var array An array of module paths to scan
      */
-    protected $paths = [];
+    protected $paths = array();
 
     /**
      * @var array An array of modulename => path
      */
-    protected $explicitPaths = [];
+    protected $explicitPaths = array();
 
     /**
      * @var array An array of namespaceName => namespacePath
      */
-    protected $namespacedPaths = [];
+    protected $namespacedPaths = array();
 
     /**
      * @var string Will contain the absolute phar:// path to the executable when packaged as phar file
@@ -41,12 +43,12 @@ class ModuleAutoloader implements SplAutoloader
     /**
      * @var array An array of supported phar extensions (filled on constructor)
      */
-    protected $pharExtensions = [];
+    protected $pharExtensions = array();
 
     /**
      * @var array An array of module classes to their containing files
      */
-    protected $moduleClassMap = [];
+    protected $moduleClassMap = array();
 
     /**
      * Constructor
@@ -59,11 +61,11 @@ class ModuleAutoloader implements SplAutoloader
     {
         if (extension_loaded('phar')) {
             $this->pharBasePath = Phar::running(true);
-            $this->pharExtensions = [
+            $this->pharExtensions = array(
                 'phar',
                 'phar.tar',
                 'tar',
-            ];
+            );
 
             // ext/zlib enabled -> phar can read gzip & zip compressed files
             if (extension_loaded('zlib')) {
@@ -191,7 +193,7 @@ class ModuleAutoloader implements SplAutoloader
             $path = $path . $moduleClassPath;
 
             if ($path == '.' || substr($path, 0, 2) == './' || substr($path, 0, 2) == '.\\') {
-                if (! $basePath = $this->pharBasePath) {
+                if (!$basePath = $this->pharBasePath) {
                     $basePath = realpath('.');
                 }
 
@@ -214,7 +216,7 @@ class ModuleAutoloader implements SplAutoloader
                         continue;
                     }
 
-                    if (! preg_match('#.+\.' . $pharSuffixPattern . '$#', $entry->getPathname())) {
+                    if (!preg_match('#.+\.' . $pharSuffixPattern . '$#', $entry->getPathname())) {
                         continue;
                     }
 
@@ -272,7 +274,7 @@ class ModuleAutoloader implements SplAutoloader
     {
         $pharPath = static::normalizePath($pharPath, false);
         $file = new SplFileInfo($pharPath);
-        if (! $file->isReadable() || ! $file->isFile()) {
+        if (!$file->isReadable() || !$file->isFile()) {
             return false;
         }
 
@@ -323,7 +325,7 @@ class ModuleAutoloader implements SplAutoloader
      */
     public function register()
     {
-        spl_autoload_register([$this, 'autoload']);
+        spl_autoload_register(array($this, 'autoload'));
     }
 
     /**
@@ -333,7 +335,7 @@ class ModuleAutoloader implements SplAutoloader
      */
     public function unregister()
     {
-        spl_autoload_unregister([$this, 'autoload']);
+        spl_autoload_unregister(array($this, 'autoload'));
     }
 
     /**
@@ -345,7 +347,7 @@ class ModuleAutoloader implements SplAutoloader
      */
     public function registerPaths($paths)
     {
-        if (! is_array($paths) && ! $paths instanceof Traversable) {
+        if (!is_array($paths) && !$paths instanceof Traversable) {
             require_once __DIR__ . '/Exception/InvalidArgumentException.php';
             throw new Exception\InvalidArgumentException(
                 'Parameter to \\Zend\\Loader\\ModuleAutoloader\'s '
@@ -375,7 +377,7 @@ class ModuleAutoloader implements SplAutoloader
      */
     public function registerPath($path, $moduleName = false)
     {
-        if (! is_string($path)) {
+        if (!is_string($path)) {
             require_once __DIR__ . '/Exception/InvalidArgumentException.php';
             throw new Exception\InvalidArgumentException(sprintf(
                 'Invalid path provided; must be a string, received %s',
@@ -383,7 +385,7 @@ class ModuleAutoloader implements SplAutoloader
             ));
         }
         if ($moduleName) {
-            if (in_array(substr($moduleName, -2), ['\\*', '\\%'])) {
+            if (in_array(substr($moduleName, -2), array('\\*', '\\%'))) {
                 $this->namespacedPaths[substr($moduleName, 0, -2)] = static::normalizePath($path);
             } else {
                 $this->explicitPaths[$moduleName] = static::normalizePath($path);

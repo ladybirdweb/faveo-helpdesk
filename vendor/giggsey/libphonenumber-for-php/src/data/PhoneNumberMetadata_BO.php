@@ -14,7 +14,7 @@
 return array (
   'generalDesc' => 
   array (
-    'NationalNumberPattern' => '(?:[2-467]\\d{3}|80017)\\d{4}',
+    'NationalNumberPattern' => '(?:[2-467]\\d\\d|8001)\\d{5}',
     'PossibleLength' => 
     array (
       0 => 8,
@@ -52,7 +52,7 @@ return array (
   ),
   'tollFree' => 
   array (
-    'NationalNumberPattern' => '80017\\d{4}',
+    'NationalNumberPattern' => '8001[07]\\d{4}',
     'ExampleNumber' => '800171234',
     'PossibleLength' => 
     array (
@@ -134,9 +134,10 @@ return array (
   ),
   'noInternationalDialling' => 
   array (
+    'NationalNumberPattern' => '8001[07]\\d{4}',
     'PossibleLength' => 
     array (
-      0 => -1,
+      0 => 9,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -156,7 +157,7 @@ return array (
       'format' => '$1 $2',
       'leadingDigitsPatterns' => 
       array (
-        0 => '[2-4]',
+        0 => '[23]|4[46]',
       ),
       'nationalPrefixFormattingRule' => '',
       'domesticCarrierCodeFormattingRule' => '0$CC $1',
@@ -191,6 +192,5 @@ return array (
   array (
   ),
   'mainCountryForCode' => false,
-  'leadingZeroPossible' => false,
   'mobileNumberPortableRegion' => false,
 );

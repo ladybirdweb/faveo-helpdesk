@@ -177,9 +177,7 @@ function getNewValidTlds($string)
 function getPunycodeDecoder()
 {
     if (function_exists('idn_to_utf8')) {
-        return function ($domain) {
-            return idn_to_utf8($domain, 0, INTL_IDNA_VARIANT_UTS46);
-        };
+        return 'idn_to_utf8';
     }
 
     $hostnameValidator = new Hostname();

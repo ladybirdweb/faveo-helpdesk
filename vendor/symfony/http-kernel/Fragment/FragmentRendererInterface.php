@@ -24,19 +24,11 @@ interface FragmentRendererInterface
 {
     /**
      * Renders a URI and returns the Response content.
-     *
-     * @param string|ControllerReference $uri     A URI as a string or a ControllerReference instance
-     * @param Request                    $request A Request instance
-     * @param array                      $options An array of options
-     *
-     * @return Response A Response instance
      */
-    public function render($uri, Request $request, array $options = array());
+    public function render(string|ControllerReference $uri, Request $request, array $options = []): Response;
 
     /**
      * Gets the name of the strategy.
-     *
-     * @return string The strategy name
      */
-    public function getName();
+    public function getName(): string;
 }

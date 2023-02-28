@@ -11,8 +11,8 @@
 
 namespace Tymon\JWTAuth;
 
-use Tymon\JWTAuth\Support\Utils;
 use Tymon\JWTAuth\Contracts\Providers\Storage;
+use Tymon\JWTAuth\Support\Utils;
 
 class Blacklist
 {
@@ -48,7 +48,6 @@ class Blacklist
      * Constructor.
      *
      * @param  \Tymon\JWTAuth\Contracts\Providers\Storage  $storage
-     *
      * @return void
      */
     public function __construct(Storage $storage)
@@ -60,7 +59,6 @@ class Blacklist
      * Add the token (jti claim) to the blacklist.
      *
      * @param  \Tymon\JWTAuth\Payload  $payload
-     *
      * @return bool
      */
     public function add(Payload $payload)
@@ -69,6 +67,11 @@ class Blacklist
         // the blacklist indefinitely
         if (! $payload->hasKey('exp')) {
             return $this->addForever($payload);
+        }
+
+        // if we have already added this token to the blacklist
+        if (! empty($this->storage->get($this->getKey($payload)))) {
+            return true;
         }
 
         $this->storage->add(
@@ -84,7 +87,6 @@ class Blacklist
      * Get the number of minutes until the token expiry.
      *
      * @param  \Tymon\JWTAuth\Payload  $payload
-     *
      * @return int
      */
     protected function getMinutesUntilExpired(Payload $payload)
@@ -95,14 +97,13 @@ class Blacklist
         // get the latter of the two expiration dates and find
         // the number of minutes until the expiration date,
         // plus 1 minute to avoid overlap
-        return $exp->max($iat->addMinutes($this->refreshTTL))->addMinute()->diffInMinutes();
+        return $exp->max($iat->addMinutes($this->refreshTTL))->addMinute()->diffInRealMinutes();
     }
 
     /**
      * Add the token (jti claim) to the blacklist indefinitely.
      *
      * @param  \Tymon\JWTAuth\Payload  $payload
-     *
      * @return bool
      */
     public function addForever(Payload $payload)
@@ -116,7 +117,6 @@ class Blacklist
      * Determine whether the token has been blacklisted.
      *
      * @param  \Tymon\JWTAuth\Payload  $payload
-     *
      * @return bool
      */
     public function has(Payload $payload)
@@ -136,7 +136,6 @@ class Blacklist
      * Remove the token (jti claim) from the blacklist.
      *
      * @param  \Tymon\JWTAuth\Payload  $payload
-     *
      * @return bool
      */
     public function remove(Payload $payload)
@@ -171,7 +170,6 @@ class Blacklist
      * Set the grace period.
      *
      * @param  int  $gracePeriod
-     *
      * @return $this
      */
     public function setGracePeriod($gracePeriod)
@@ -195,7 +193,6 @@ class Blacklist
      * Get the unique key held within the blacklist.
      *
      * @param  \Tymon\JWTAuth\Payload  $payload
-     *
      * @return mixed
      */
     public function getKey(Payload $payload)
@@ -207,7 +204,6 @@ class Blacklist
      * Set the unique key held within the blacklist.
      *
      * @param  string  $key
-     *
      * @return $this
      */
     public function setKey($key)
@@ -221,7 +217,6 @@ class Blacklist
      * Set the refresh time limit.
      *
      * @param  int  $ttl
-     *
      * @return $this
      */
     public function setRefreshTTL($ttl)

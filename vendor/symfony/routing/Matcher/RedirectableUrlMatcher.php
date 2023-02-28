@@ -19,15 +19,12 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
  */
 abstract class RedirectableUrlMatcher extends UrlMatcher implements RedirectableUrlMatcherInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function match($pathinfo)
+    public function match(string $pathinfo): array
     {
         try {
             return parent::match($pathinfo);
         } catch (ResourceNotFoundException $e) {
-            if (!\in_array($this->context->getMethod(), array('HEAD', 'GET'), true)) {
+            if (!\in_array($this->context->getMethod(), ['HEAD', 'GET'], true)) {
                 throw $e;
             }
 
@@ -39,20 +36,20 @@ abstract class RedirectableUrlMatcher extends UrlMatcher implements Redirectable
                     $ret = parent::match($pathinfo);
 
                     return $this->redirect($pathinfo, $ret['_route'] ?? null, $this->context->getScheme()) + $ret;
-                } catch (ExceptionInterface $e2) {
+                } catch (ExceptionInterface) {
                     throw $e;
                 } finally {
                     $this->context->setScheme($scheme);
                 }
-            } elseif ('/' === $pathinfo) {
+            } elseif ('/' === $trimmedPathinfo = rtrim($pathinfo, '/') ?: '/') {
                 throw $e;
             } else {
                 try {
-                    $pathinfo = '/' !== $pathinfo[-1] ? $pathinfo.'/' : substr($pathinfo, 0, -1);
+                    $pathinfo = $trimmedPathinfo === $pathinfo ? $pathinfo.'/' : $trimmedPathinfo;
                     $ret = parent::match($pathinfo);
 
                     return $this->redirect($pathinfo, $ret['_route'] ?? null) + $ret;
-                } catch (ExceptionInterface $e2) {
+                } catch (ExceptionInterface) {
                     if ($this->allowSchemes) {
                         goto redirect_scheme;
                     }

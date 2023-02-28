@@ -12,7 +12,7 @@
 namespace Mremi\UrlShortener\Model;
 
 /**
- * Link class
+ * Link class.
  *
  * @author Rémi Marseille <marseille.remi@gmail.com>
  */
@@ -39,11 +39,11 @@ class Link implements LinkInterface
     protected $createdAt;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->setCreatedAt(new \DateTime);
+        $this->setCreatedAt(new \DateTime());
     }
 
     /**

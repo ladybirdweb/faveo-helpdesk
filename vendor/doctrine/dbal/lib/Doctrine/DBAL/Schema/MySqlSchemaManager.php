@@ -5,26 +5,45 @@ namespace Doctrine\DBAL\Schema;
 use Doctrine\DBAL\Platforms\MariaDb1027Platform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Types\Type;
-use const CASE_LOWER;
+
 use function array_change_key_case;
 use function array_shift;
-use function array_values;
-use function end;
+use function assert;
 use function explode;
+use function is_string;
 use function preg_match;
-use function preg_replace;
-use function str_replace;
-use function stripslashes;
 use function strpos;
 use function strtok;
 use function strtolower;
-use function trim;
+use function strtr;
+
+use const CASE_LOWER;
 
 /**
  * Schema manager for the MySql RDBMS.
  */
 class MySqlSchemaManager extends AbstractSchemaManager
 {
+    /**
+     * @see https://mariadb.com/kb/en/library/string-literals/#escape-sequences
+     */
+    private const MARIADB_ESCAPE_SEQUENCES = [
+        '\\0' => "\0",
+        "\\'" => "'",
+        '\\"' => '"',
+        '\\b' => "\b",
+        '\\n' => "\n",
+        '\\r' => "\r",
+        '\\t' => "\t",
+        '\\Z' => "\x1a",
+        '\\\\' => '\\',
+        '\\%' => '%',
+        '\\_' => '_',
+
+        // Internally, MariaDB escapes single quotes using the standard syntax
+        "''" => "'",
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -64,25 +83,22 @@ class MySqlSchemaManager extends AbstractSchemaManager
             } else {
                 $v['primary'] = false;
             }
+
             if (strpos($v['index_type'], 'FULLTEXT') !== false) {
                 $v['flags'] = ['FULLTEXT'];
             } elseif (strpos($v['index_type'], 'SPATIAL') !== false) {
                 $v['flags'] = ['SPATIAL'];
             }
-            $v['length'] = $v['sub_part'] ?? null;
+
+            // Ignore prohibited prefix `length` for spatial index
+            if (strpos($v['index_type'], 'SPATIAL') === false) {
+                $v['length'] = isset($v['sub_part']) ? (int) $v['sub_part'] : null;
+            }
 
             $tableIndexes[$k] = $v;
         }
 
         return parent::_getPortableTableIndexesList($tableIndexes, $tableName);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _getPortableSequenceDefinition($sequence)
-    {
-        return end($sequence);
     }
 
     /**
@@ -102,6 +118,8 @@ class MySqlSchemaManager extends AbstractSchemaManager
 
         $dbType = strtolower($tableColumn['type']);
         $dbType = strtok($dbType, '(), ');
+        assert(is_string($dbType));
+
         $length = $tableColumn['length'] ?? strtok('(), ');
 
         $fixed = null;
@@ -126,6 +144,7 @@ class MySqlSchemaManager extends AbstractSchemaManager
             case 'binary':
                 $fixed = true;
                 break;
+
             case 'float':
             case 'double':
             case 'real':
@@ -136,25 +155,33 @@ class MySqlSchemaManager extends AbstractSchemaManager
                     $scale     = $match[2];
                     $length    = null;
                 }
+
                 break;
+
             case 'tinytext':
                 $length = MySqlPlatform::LENGTH_LIMIT_TINYTEXT;
                 break;
+
             case 'text':
                 $length = MySqlPlatform::LENGTH_LIMIT_TEXT;
                 break;
+
             case 'mediumtext':
                 $length = MySqlPlatform::LENGTH_LIMIT_MEDIUMTEXT;
                 break;
+
             case 'tinyblob':
                 $length = MySqlPlatform::LENGTH_LIMIT_TINYBLOB;
                 break;
+
             case 'blob':
                 $length = MySqlPlatform::LENGTH_LIMIT_BLOB;
                 break;
+
             case 'mediumblob':
                 $length = MySqlPlatform::LENGTH_LIMIT_MEDIUMBLOB;
                 break;
+
             case 'tinyint':
             case 'smallint':
             case 'mediumint':
@@ -193,6 +220,10 @@ class MySqlSchemaManager extends AbstractSchemaManager
 
         $column = new Column($tableColumn['field'], Type::getType($type), $options);
 
+        if (isset($tableColumn['characterset'])) {
+            $column->setPlatformOption('charset', $tableColumn['characterset']);
+        }
+
         if (isset($tableColumn['collation'])) {
             $column->setPlatformOption('collation', $tableColumn['collation']);
         }
@@ -216,28 +247,27 @@ class MySqlSchemaManager extends AbstractSchemaManager
      *
      * @param string|null $columnDefault default value as stored in information_schema for MariaDB >= 10.2.7
      */
-    private function getMariaDb1027ColumnDefault(MariaDb1027Platform $platform, ?string $columnDefault) : ?string
+    private function getMariaDb1027ColumnDefault(MariaDb1027Platform $platform, ?string $columnDefault): ?string
     {
         if ($columnDefault === 'NULL' || $columnDefault === null) {
             return null;
         }
-        if ($columnDefault[0] === "'") {
-            return stripslashes(
-                str_replace(
-                    "''",
-                    "'",
-                    preg_replace('/^\'(.*)\'$/', '$1', $columnDefault)
-                )
-            );
+
+        if (preg_match('/^\'(.*)\'$/', $columnDefault, $matches)) {
+            return strtr($matches[1], self::MARIADB_ESCAPE_SEQUENCES);
         }
+
         switch ($columnDefault) {
             case 'current_timestamp()':
                 return $platform->getCurrentTimestampSQL();
+
             case 'curdate()':
                 return $platform->getCurrentDateSQL();
+
             case 'curtime()':
                 return $platform->getCurrentTimeSQL();
         }
+
         return $columnDefault;
     }
 
@@ -253,6 +283,7 @@ class MySqlSchemaManager extends AbstractSchemaManager
                 if (! isset($value['delete_rule']) || $value['delete_rule'] === 'RESTRICT') {
                     $value['delete_rule'] = null;
                 }
+
                 if (! isset($value['update_rule']) || $value['update_rule'] === 'RESTRICT') {
                     $value['update_rule'] = null;
                 }
@@ -266,6 +297,7 @@ class MySqlSchemaManager extends AbstractSchemaManager
                     'onUpdate' => $value['update_rule'],
                 ];
             }
+
             $list[$value['constraint_name']]['local'][]   = $value['column_name'];
             $list[$value['constraint_name']]['foreign'][] = $value['referenced_column_name'];
         }
@@ -273,9 +305,9 @@ class MySqlSchemaManager extends AbstractSchemaManager
         $result = [];
         foreach ($list as $constraint) {
             $result[] = new ForeignKeyConstraint(
-                array_values($constraint['local']),
+                $constraint['local'],
                 $constraint['foreignTable'],
-                array_values($constraint['foreign']),
+                $constraint['foreign'],
                 $constraint['name'],
                 [
                     'onDelete' => $constraint['onDelete'],
@@ -287,43 +319,56 @@ class MySqlSchemaManager extends AbstractSchemaManager
         return $result;
     }
 
-    public function listTableDetails($tableName)
+    /**
+     * {@inheritdoc}
+     */
+    public function listTableDetails($name)
     {
-        $table = parent::listTableDetails($tableName);
+        $table = parent::listTableDetails($name);
 
-        /** @var MySqlPlatform $platform */
         $platform = $this->_platform;
-        $sql      = $platform->getListTableMetadataSQL($tableName);
+        assert($platform instanceof MySqlPlatform);
+        $sql = $platform->getListTableMetadataSQL($name);
 
-        $tableOptions = $this->_conn->fetchAssoc($sql);
+        $tableOptions = $this->_conn->fetchAssociative($sql);
 
-        $table->addOption('engine', $tableOptions['ENGINE']);
-        if ($tableOptions['TABLE_COLLATION'] !== null) {
-            $table->addOption('collation', $tableOptions['TABLE_COLLATION']);
-        }
-        if ($tableOptions['AUTO_INCREMENT'] !== null) {
-            $table->addOption('autoincrement', $tableOptions['AUTO_INCREMENT']);
-        }
-        $table->addOption('comment', $tableOptions['TABLE_COMMENT']);
-
-        if ($tableOptions['CREATE_OPTIONS'] === null) {
+        if ($tableOptions === false) {
             return $table;
         }
 
-        $createOptionsString = trim($tableOptions['CREATE_OPTIONS']);
+        $table->addOption('engine', $tableOptions['ENGINE']);
 
-        $createOptions = [];
-
-        if ($createOptionsString !== '') {
-            foreach (explode(' ', $createOptionsString) as $option) {
-                [$createOption, $value] = explode('=', $option);
-
-                $createOptions[$createOption] = $value;
-            }
+        if ($tableOptions['TABLE_COLLATION'] !== null) {
+            $table->addOption('collation', $tableOptions['TABLE_COLLATION']);
         }
 
-        $table->addOption('create_options', $createOptions);
+        if ($tableOptions['AUTO_INCREMENT'] !== null) {
+            $table->addOption('autoincrement', $tableOptions['AUTO_INCREMENT']);
+        }
+
+        $table->addOption('comment', $tableOptions['TABLE_COMMENT']);
+        $table->addOption('create_options', $this->parseCreateOptions($tableOptions['CREATE_OPTIONS']));
 
         return $table;
+    }
+
+    /**
+     * @return string[]|true[]
+     */
+    private function parseCreateOptions(?string $string): array
+    {
+        $options = [];
+
+        if ($string === null || $string === '') {
+            return $options;
+        }
+
+        foreach (explode(' ', $string) as $pair) {
+            $parts = explode('=', $pair, 2);
+
+            $options[$parts[0]] = $parts[1] ?? true;
+        }
+
+        return $options;
     }
 }

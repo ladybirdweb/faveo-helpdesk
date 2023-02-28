@@ -9,13 +9,33 @@ class PartitionEndpointProvider
     private $partitions;
     /** @var string */
     private $defaultPartition;
+    /** @var array  */
+    private $options;
 
-    public function __construct(array $partitions, $defaultPartition = 'aws')
-    {
+    /**
+     * The 'options' parameter accepts the following arguments:
+     *
+     * - sts_regional_endpoints: For STS legacy regions, set to 'regional' to
+     *   use regional endpoints, 'legacy' to use the legacy global endpoint.
+     *   Defaults to 'legacy'.
+     * - s3_us_east_1_regional_endpoint: For S3 us-east-1 region, set to 'regional'
+     *   to use the regional endpoint, 'legacy' to use the legacy global endpoint.
+     *   Defaults to 'legacy'.
+     *
+     * @param array $partitions
+     * @param string $defaultPartition
+     * @param array $options
+     */
+    public function __construct(
+        array $partitions,
+        $defaultPartition = 'aws',
+        $options = []
+    ) {
         $this->partitions = array_map(function (array $definition) {
             return new Partition($definition);
         }, array_values($partitions));
         $this->defaultPartition = $defaultPartition;
+        $this->options = $options;
     }
 
     public function __invoke(array $args = [])
@@ -24,6 +44,7 @@ class PartitionEndpointProvider
             isset($args['region']) ? $args['region'] : '',
             isset($args['service']) ? $args['service'] : ''
         );
+        $args['options'] = $this->options;
 
         return $partition($args);
     }
@@ -68,15 +89,16 @@ class PartitionEndpointProvider
     /**
      * Creates and returns the default SDK partition provider.
      *
+     * @param array $options
      * @return PartitionEndpointProvider
      */
-    public static function defaultProvider()
+    public static function defaultProvider($options = [])
     {
         $data = \Aws\load_compiled_json(__DIR__ . '/../data/endpoints.json');
         $prefixData = \Aws\load_compiled_json(__DIR__ . '/../data/endpoints_prefix_history.json');
         $mergedData = self::mergePrefixData($data, $prefixData);
 
-        return new self($mergedData['partitions']);
+        return new self($mergedData['partitions'], 'aws', $options);
     }
 
     /**
@@ -92,10 +114,10 @@ class PartitionEndpointProvider
 
         foreach ($data["partitions"] as $index => $partition) {
             foreach ($prefixGroups as $current => $old) {
-                $serviceData = Env::search("services.{$current}", $partition);
+                $serviceData = Env::search("services.\"{$current}\"", $partition);
                 if (!empty($serviceData)) {
                     foreach ($old as $prefix) {
-                        if (empty(Env::search("services.{$prefix}", $partition))) {
+                        if (empty(Env::search("services.\"{$prefix}\"", $partition))) {
                             $data["partitions"][$index]["services"][$prefix] = $serviceData;
                         }
                     }

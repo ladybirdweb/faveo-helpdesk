@@ -2,8 +2,8 @@
 
 namespace Illuminate\Notifications;
 
-use Illuminate\Support\Str;
 use Illuminate\Contracts\Notifications\Dispatcher;
+use Illuminate\Support\Str;
 
 trait RoutesNotifications
 {
@@ -43,13 +43,10 @@ trait RoutesNotifications
             return $this->{$method}($notification);
         }
 
-        switch ($driver) {
-            case 'database':
-                return $this->notifications();
-            case 'mail':
-                return $this->email;
-            case 'nexmo':
-                return $this->phone_number;
-        }
+        return match ($driver) {
+            'database' => $this->notifications(),
+            'mail' => $this->email,
+            default => null,
+        };
     }
 }

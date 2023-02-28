@@ -2,8 +2,8 @@
 
 namespace Illuminate\Database\Console\Migrations;
 
-use Illuminate\Support\Collection;
 use Illuminate\Database\Migrations\Migrator;
+use Illuminate\Support\Collection;
 use Symfony\Component\Console\Input\InputOption;
 
 class StatusCommand extends BaseCommand
@@ -32,7 +32,7 @@ class StatusCommand extends BaseCommand
     /**
      * Create a new migration rollback command instance.
      *
-     * @param  \Illuminate\Database\Migrations\Migrator $migrator
+     * @param  \Illuminate\Database\Migrations\Migrator  $migrator
      * @return void
      */
     public function __construct(Migrator $migrator)
@@ -45,29 +45,43 @@ class StatusCommand extends BaseCommand
     /**
      * Execute the console command.
      *
-     * @return void
+     * @return int|null
      */
     public function handle()
     {
-        $this->migrator->setConnection($this->option('database'));
+        return $this->migrator->usingConnection($this->option('database'), function () {
+            if (! $this->migrator->repositoryExists()) {
+                $this->components->error('Migration table not found.');
 
-        if (! $this->migrator->repositoryExists()) {
-            return $this->error('No migrations found.');
-        }
+                return 1;
+            }
 
-        $ran = $this->migrator->getRepository()->getRan();
+            $ran = $this->migrator->getRepository()->getRan();
 
-        $batches = $this->migrator->getRepository()->getMigrationBatches();
+            $batches = $this->migrator->getRepository()->getMigrationBatches();
 
-        if (count($migrations = $this->getStatusFor($ran, $batches)) > 0) {
-            $this->table(['Ran?', 'Migration', 'Batch'], $migrations);
-        } else {
-            $this->error('No migrations found');
-        }
+            if (count($migrations = $this->getStatusFor($ran, $batches)) > 0) {
+                $this->newLine();
+
+                $this->components->twoColumnDetail('<fg=gray>Migration name</>', '<fg=gray>Batch / Status</>');
+
+                $migrations
+                    ->when($this->option('pending'), fn ($collection) => $collection->filter(function ($migration) {
+                        return str($migration[1])->contains('Pending');
+                    }))
+                    ->each(
+                        fn ($migration) => $this->components->twoColumnDetail($migration[0], $migration[1])
+                    );
+
+                $this->newLine();
+            } else {
+                $this->components->info('No migrations found');
+            }
+        });
     }
 
     /**
-     * Get the status for the given ran migrations.
+     * Get the status for the given run migrations.
      *
      * @param  array  $ran
      * @param  array  $batches
@@ -79,9 +93,15 @@ class StatusCommand extends BaseCommand
                     ->map(function ($migration) use ($ran, $batches) {
                         $migrationName = $this->migrator->getMigrationName($migration);
 
-                        return in_array($migrationName, $ran)
-                                ? ['<info>Y</info>', $migrationName, $batches[$migrationName]]
-                                : ['<fg=red>N</fg=red>', $migrationName];
+                        $status = in_array($migrationName, $ran)
+                            ? '<fg=green;options=bold>Ran</>'
+                            : '<fg=yellow;options=bold>Pending</>';
+
+                        if (in_array($migrationName, $ran)) {
+                            $status = '['.$batches[$migrationName].'] '.$status;
+                        }
+
+                        return [$migrationName, $status];
                     });
     }
 
@@ -103,11 +123,10 @@ class StatusCommand extends BaseCommand
     protected function getOptions()
     {
         return [
-            ['database', null, InputOption::VALUE_OPTIONAL, 'The database connection to use.'],
-
-            ['path', null, InputOption::VALUE_OPTIONAL, 'The path to the migrations files to use.'],
-
-            ['realpath', null, InputOption::VALUE_NONE, 'Indicate any provided migration file paths are pre-resolved absolute paths.'],
+            ['database', null, InputOption::VALUE_OPTIONAL, 'The database connection to use'],
+            ['pending', null, InputOption::VALUE_NONE, 'Only list pending migrations'],
+            ['path', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The path(s) to the migrations files to use'],
+            ['realpath', null, InputOption::VALUE_NONE, 'Indicate any provided migration file paths are pre-resolved absolute paths'],
         ];
     }
 }

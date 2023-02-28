@@ -18,6 +18,7 @@ use App\Model\helpdesk\Utility\MailboxProtocol;
 use Crypt;
 use Exception;
 use Lang;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 
 /**
  * ======================================
@@ -124,6 +125,7 @@ class EmailsController extends Controller
 
             return $this->validateEmailError($send, $fetch);
         } catch (Exception $ex) {
+            dd($ex->getMessage());
             $message = $ex->getMessage();
             if ($request->input('fetching_status') && imap_last_error()) {
                 $message = imap_last_error();
@@ -253,11 +255,10 @@ class EmailsController extends Controller
 
         $this->emailService($driver, $service_request);
         $this->setMailConfig($driver, $address, $name, $username, $password, $enc, $host, $port);
-        $transport = (new \Swift_SmtpTransport($host, $port, $enc));
+        $transport = new EsmtpTransport($host, $port);
         $transport->setUsername($username);
         $transport->setPassword($password);
-        $mailer = (new \Swift_Mailer($transport));
-        $mailer->getTransport()->start();
+        $transport->start();
 
         return 1;
     }

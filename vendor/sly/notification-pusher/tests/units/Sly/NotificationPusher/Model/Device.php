@@ -20,7 +20,7 @@ class Device extends Units\Test
             ->array($object->getParameters())->isEmpty()
         ;
 
-        $this->if($object = new TestedModel('t0k3n', ['param' => 'test']))
+        $this->if($object = new TestedModel('t0k3n', array('param' => 'test')))
             ->string($object->getToken())->isEqualTo('t0k3n')
             ->when($object->setToken('t0k3ns3tt3d'))
             ->string($object->getToken())->isEqualTo('t0k3ns3tt3d')

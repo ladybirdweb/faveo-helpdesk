@@ -7,6 +7,7 @@ use App\BaseModel;
 class Forms extends BaseModel
 {
     protected $table = 'forms';
+
     /*
       this is a custom Forms created by user himself
      */

@@ -28,7 +28,7 @@ use Exception;
 use GeoIP;
 use Hash;
 use Illuminate\Http\Request;
-use Input;
+use Illuminate\Support\Facades\Request as Input;
 use Lang;
 use Socialite;
 
@@ -125,7 +125,7 @@ class GuestController extends Controller
     /**
      *@category fucntion to check if mobile number is unqique or not
      *
-     *@param string $mobile
+     *@param  string  $mobile
      *
      *@return bool true(if mobile exists in users table)/false (if mobile does not exist in user table)
      */
@@ -392,7 +392,7 @@ class GuestController extends Controller
         if (\Schema::hasTable('sms')) {
             $sms = DB::table('sms')->get();
             if (count($sms) > 0) {
-                \Event::fire(new \App\Events\LoginEvent($request));
+                event(new \App\Events\LoginEvent($request));
 
                 return 1;
             }

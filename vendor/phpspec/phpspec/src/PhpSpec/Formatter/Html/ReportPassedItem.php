@@ -27,20 +27,14 @@ class ReportPassedItem
      */
     private $event;
 
-    /**
-     * @param TemplateInterface $template
-     * @param ExampleEvent      $event
-     */
+    
     public function __construct(TemplateInterface $template, ExampleEvent $event)
     {
         $this->template = $template;
         $this->event = $event;
     }
 
-    /**
-     *
-     */
-    public function write()
+    public function write(): void
     {
         $this->template->render(Template::DIR.'/Template/ReportPass.html', array(
             'title' => $this->event->getTitle()

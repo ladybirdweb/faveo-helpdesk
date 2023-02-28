@@ -2,9 +2,10 @@
 
 namespace Illuminate\Routing;
 
-use ReflectionMethod;
-use ReflectionFunction;
+use Illuminate\Support\Reflector;
 use Illuminate\Support\Str;
+use ReflectionFunction;
+use ReflectionMethod;
 
 class RouteSignatureParameters
 {
@@ -12,18 +13,24 @@ class RouteSignatureParameters
      * Extract the route action's signature parameters.
      *
      * @param  array  $action
-     * @param  string  $subClass
+     * @param  array  $conditions
      * @return array
      */
-    public static function fromAction(array $action, $subClass = null)
+    public static function fromAction(array $action, $conditions = [])
     {
-        $parameters = is_string($action['uses'])
-                        ? static::fromClassMethodString($action['uses'])
-                        : (new ReflectionFunction($action['uses']))->getParameters();
+        $callback = RouteAction::containsSerializedClosure($action)
+                        ? unserialize($action['uses'])->getClosure()
+                        : $action['uses'];
 
-        return is_null($subClass) ? $parameters : array_filter($parameters, function ($p) use ($subClass) {
-            return $p->getClass() && $p->getClass()->isSubclassOf($subClass);
-        });
+        $parameters = is_string($callback)
+                        ? static::fromClassMethodString($callback)
+                        : (new ReflectionFunction($callback))->getParameters();
+
+        return match (true) {
+            ! empty($conditions['subClass']) => array_filter($parameters, fn ($p) => Reflector::isParameterSubclassOf($p, $conditions['subClass'])),
+            ! empty($conditions['backedEnum']) => array_filter($parameters, fn ($p) => Reflector::isParameterBackedEnumWithStringBackingType($p)),
+            default => $parameters,
+        };
     }
 
     /**
@@ -34,9 +41,9 @@ class RouteSignatureParameters
      */
     protected static function fromClassMethodString($uses)
     {
-        list($class, $method) = Str::parseCallback($uses);
+        [$class, $method] = Str::parseCallback($uses);
 
-        if (! method_exists($class, $method) && is_callable($class, $method)) {
+        if (! method_exists($class, $method) && Reflector::isCallable($class, $method)) {
             return [];
         }
 

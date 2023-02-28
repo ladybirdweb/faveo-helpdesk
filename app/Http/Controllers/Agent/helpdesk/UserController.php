@@ -39,7 +39,7 @@ use Exception;
 use GeoIP;
 use Hash;
 use Illuminate\Http\Request;
-use Input;
+use Illuminate\Support\Facades\Request as Input;
 use Lang;
 use Redirect;
 
@@ -151,7 +151,7 @@ class UserController extends Controller
         }
         // displaying list of users with chumper datatables
         // return \Datatable::collection(User::where('role', "!=", "admin")->get())
-        return \Datatables::of($users)
+        return \Yajra\DataTables\Facades\DataTables::of($users)
                         /* column username */
                         ->removeColumn('id', 'last_name', 'country_code', 'phone_number')
                         ->addColumn('user_name', function ($model) {
@@ -231,6 +231,7 @@ class UserController extends Controller
                                 }
                             }
                         })
+                        ->rawColumns(['user_name', 'email', 'mobile', 'active', 'updated_at', 'role', 'Actions'])
                         ->make();
     }
 
@@ -332,7 +333,7 @@ class UserController extends Controller
                 // returns for the success case
                 $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
                 if (($request->input('active') == '0' || $request->input('active') == 0) || ($email_mandatory->status == '0') || $email_mandatory->status == 0) {
-                    \Event::fire(new \App\Events\LoginEvent($request));
+                    event(new \App\Events\LoginEvent($request));
                 }
 
                 return redirect('user')->with('success', Lang::get('lang.User-Created-Successfully'));
@@ -656,7 +657,7 @@ class UserController extends Controller
             // $org_name=Organization::where('id','=',$org_id)->pluck('name')->first();
             // dd($org_name);
 
-            return view('themes.default1.agent.helpdesk.user.edit', compact('users', 'orgs', '$settings', '$email_mandatory', 'organization_id'))->with('phonecode', $phonecode->phonecode);
+            return view('themes.default1.agent.helpdesk.user.edit', compact('users', 'orgs', 'settings', 'email_mandatory', 'organization_id'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -912,7 +913,7 @@ class UserController extends Controller
         // checking if the name is unique
         $check2 = Organization::where('name', '=', Input::get('name'))->first();
         // if any of the fields is not available then return false
-        if (\Input::get('name') == null) {
+        if (Input::get('name') == null) {
             return 'Name is required';
         } elseif ($check2 != null) {
             return 'Name should be Unique';
@@ -995,7 +996,7 @@ class UserController extends Controller
             $users = $this->getUsers($first_date, $second_date);
             $excel_controller = new \App\Http\Controllers\Common\ExcelController();
             $filename = 'users'.$date;
-            $excel_controller->export($filename, $users);
+            return $excel_controller->export($filename, $users);
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -1028,7 +1029,7 @@ class UserController extends Controller
         if (\Schema::hasTable('sms')) {
             $sms = DB::table('sms')->get();
             if (count($sms) > 0) {
-                \Event::fire(new \App\Events\LoginEvent($request));
+                event(new \App\Events\LoginEvent($request));
 
                 return 1;
             }

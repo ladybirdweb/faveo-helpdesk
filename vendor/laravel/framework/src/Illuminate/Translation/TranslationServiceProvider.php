@@ -2,17 +2,11 @@
 
 namespace Illuminate\Translation;
 
+use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 
-class TranslationServiceProvider extends ServiceProvider
+class TranslationServiceProvider extends ServiceProvider implements DeferrableProvider
 {
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = true;
-
     /**
      * Register the service provider.
      *
@@ -28,11 +22,11 @@ class TranslationServiceProvider extends ServiceProvider
             // When registering the translator component, we'll need to set the default
             // locale as well as the fallback locale. So, we'll grab the application
             // configuration so we can easily get both of these values from there.
-            $locale = $app['config']['app.locale'];
+            $locale = $app->getLocale();
 
             $trans = new Translator($loader, $locale);
 
-            $trans->setFallback($app['config']['app.fallback_locale']);
+            $trans->setFallback($app->getFallbackLocale());
 
             return $trans;
         });

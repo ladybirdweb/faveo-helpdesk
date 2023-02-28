@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddForeignKeysToTicketCollaboratorTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -30,4 +29,4 @@ class AddForeignKeysToTicketCollaboratorTable extends Migration
             $table->dropForeign('ticket_collaborator_ibfk_2');
         });
     }
-}
+};

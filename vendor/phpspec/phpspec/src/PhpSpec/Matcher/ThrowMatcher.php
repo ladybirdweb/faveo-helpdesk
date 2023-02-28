@@ -44,11 +44,6 @@ final class ThrowMatcher implements Matcher
      */
     private $factory;
 
-    /**
-     * @param Unwrapper              $unwrapper
-     * @param Presenter              $presenter
-     * @param ReflectionFactory|null $factory
-     */
     public function __construct(Unwrapper $unwrapper, Presenter $presenter, ReflectionFactory $factory)
     {
         $this->unwrapper = $unwrapper;
@@ -56,45 +51,25 @@ final class ThrowMatcher implements Matcher
         $this->factory   = $factory;
     }
 
-    /**
-     * @param string $name
-     * @param mixed  $subject
-     * @param array  $arguments
-     *
-     * @return bool
-     */
+
     public function supports(string $name, $subject, array $arguments): bool
     {
         return 'throw' === $name;
     }
 
-    /**
-     * @param string $name
-     * @param mixed  $subject
-     * @param array  $arguments
-     *
-     * @return DelayedCall
-     */
+
     public function positiveMatch(string $name, $subject, array $arguments): DelayedCall
     {
         return $this->getDelayedCall(array($this, 'verifyPositive'), $subject, $arguments);
     }
 
-    /**
-     * @param string $name
-     * @param mixed  $subject
-     * @param array  $arguments
-     *
-     * @return DelayedCall
-     */
+
     public function negativeMatch(string $name, $subject, array $arguments): DelayedCall
     {
         return $this->getDelayedCall(array($this, 'verifyNegative'), $subject, $arguments);
     }
 
     /**
-     * @param callable           $callable
-     * @param array              $arguments
      * @param null|object|string $exception
      *
      * @throws \PhpSpec\Exception\Example\FailureException
@@ -145,8 +120,16 @@ final class ThrowMatcher implements Matcher
                 }
 
                 $property->setAccessible(true);
-                $expected = $property->getValue($exception);
-                $actual = $property->getValue($exceptionThrown);
+
+                /** @psalm-suppress RedundantCondition */
+                if (method_exists($property, 'isInitialized')) {
+                    $expected = $property->isInitialized($exception) ? $property->getValue($exception) : null;
+                    $actual = $property->isInitialized($exceptionThrown) ? $property->getValue($exceptionThrown) : null;
+                } else {
+                    /** @todo remove error suppression when PHP 7.3 is no longer supported */
+                    $expected = @$property->getValue($exception);
+                    $actual = @$property->getValue($exceptionThrown);
+                }
 
                 if (null !== $expected && $actual !== $expected) {
                     throw new NotEqualException(
@@ -163,9 +146,7 @@ final class ThrowMatcher implements Matcher
     }
 
     /**
-     * @param callable           $callable
-     * @param array              $arguments
-     * @param string|null|object $exception
+     * @param null|object|string $exception
      *
      * @throws \PhpSpec\Exception\Example\FailureException
      */
@@ -200,8 +181,17 @@ final class ThrowMatcher implements Matcher
                     }
 
                     $property->setAccessible(true);
-                    $expected = $property->getValue($exception);
-                    $actual = $property->getValue($exceptionThrown);
+
+                    /** @psalm-suppress RedundantCondition */
+                    if (method_exists($property, 'isInitialized')) {
+                        $expected = $property->isInitialized($exception) ?
+                            $property->getValue($exception) : null;
+                        $actual = $property->isInitialized($exceptionThrown) ?
+                            $property->getValue($exceptionThrown) : null;
+                    } else {
+                        $expected = $property->getValue($exception);
+                        $actual = $property->getValue($exceptionThrown);
+                    }
 
                     if (null !== $expected && $actual === $expected) {
                         $invalidProperties[] = sprintf(
@@ -231,21 +221,13 @@ final class ThrowMatcher implements Matcher
         }
     }
 
-    /**
-     * @return int
-     */
+
     public function getPriority(): int
     {
         return 1;
     }
 
-    /**
-     * @param callable $check
-     * @param mixed    $subject
-     * @param array    $arguments
-     *
-     * @return DelayedCall
-     */
+
     private function getDelayedCall(callable $check, $subject, array $arguments): DelayedCall
     {
         $exception = $this->getException($arguments);
@@ -275,9 +257,8 @@ final class ThrowMatcher implements Matcher
     }
 
     /**
-     * @param array $arguments
-     *
      * @return null|string|\Throwable
+     *
      * @throws \PhpSpec\Exception\Example\MatcherException
      */
     private function getException(array $arguments)

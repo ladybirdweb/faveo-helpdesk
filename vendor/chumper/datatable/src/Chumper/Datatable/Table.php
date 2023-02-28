@@ -146,7 +146,7 @@ class Table {
     {
         if(func_num_args() == 2)
         {
-           $this->options[func_get_arg(0)] =func_get_arg(1);
+            $this->options[func_get_arg(0)] =func_get_arg(1);
         }
         else if(func_num_args() == 1 && is_array(func_get_arg(0)))
         {
@@ -286,7 +286,7 @@ class Table {
 
         return View::make($this->table_view, $this->getViewParameters());
     }
-    
+
     /**
      * returns an array with the parameters that will be passed to the view when it's rendered
      * @return array
@@ -325,45 +325,45 @@ class Table {
         return $this;
     }
 
-	private function convertData($options) {
-		$is_obj = false;
-		$first = true;
-		$data = "";
-		foreach ($options as $k => $o) {
-			if ($first == true) {
-				if (!is_numeric($k)) {
-					$is_obj = true;
-				}
-				$first = false;
-			} else {
-				$data .= ",\n";
-			}
-			if (!is_numeric($k)) {
-				$data .= json_encode($k) . ":";
-			}
-			if (is_string($o)) {
-				if (@preg_match("#^\s*function\s*\([^\)]*#", $o)) {
-					$data .= $o;
-				} else {
-					$data .= json_encode($o);
-				}
-			} else {
-				if (is_array($o)) {
-					$data .= $this->convertData($o);
-				} else {
-					$data .= json_encode($o);
-				}
-			}
-		}
+    private function convertData($options) {
+        $is_obj = false;
+        $first = true;
+        $data = "";
+        foreach ($options as $k => $o) {
+            if ($first == true) {
+                if (!is_numeric($k)) {
+                    $is_obj = true;
+                }
+                $first = false;
+            } else {
+                $data .= ",\n";
+            }
+            if (!is_numeric($k)) {
+                $data .= json_encode($k) . ":";
+            }
+            if (is_string($o)) {
+                if (@preg_match("#^\s*function\s*\([^\)]*#", $o)) {
+                    $data .= $o;
+                } else {
+                    $data .= json_encode($o);
+                }
+            } else {
+                if (is_array($o)) {
+                    $data .= $this->convertData($o);
+                } else {
+                    $data .= json_encode($o);
+                }
+            }
+        }
 
-		if ($is_obj) {
-			$data = "{ $data }";
-		} else {
-			$data = "[ $data ]";
-		}
+        if ($is_obj) {
+            $data = "{ $data }";
+        } else {
+            $data = "[ $data ]";
+        }
 
-		return $data;
-	}
+        return $data;
+    }
 
     public function script($view = null)
     {

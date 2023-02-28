@@ -11,7 +11,7 @@
 
 namespace Symfony\Component\EventDispatcher\Debug;
 
-use Symfony\Component\EventDispatcher\Event;
+use Psr\EventDispatcher\StoppableEventInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\VarDumper\Caster\ClassStub;
@@ -19,34 +19,38 @@ use Symfony\Component\VarDumper\Caster\ClassStub;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class WrappedListener
+final class WrappedListener
 {
-    private $listener;
-    private $name;
-    private $called;
-    private $stoppedPropagation;
-    private $stopwatch;
-    private $dispatcher;
-    private $pretty;
-    private $stub;
-    private static $hasClassStub;
+    private string|array|object $listener;
+    private ?\Closure $optimizedListener;
+    private string $name;
+    private bool $called = false;
+    private bool $stoppedPropagation = false;
+    private Stopwatch $stopwatch;
+    private ?EventDispatcherInterface $dispatcher;
+    private string $pretty;
+    private string $callableRef;
+    private ClassStub|string $stub;
+    private ?int $priority = null;
+    private static bool $hasClassStub;
 
-    public function __construct($listener, $name, Stopwatch $stopwatch, EventDispatcherInterface $dispatcher = null)
+    public function __construct(callable|array $listener, ?string $name, Stopwatch $stopwatch, EventDispatcherInterface $dispatcher = null, int $priority = null)
     {
         $this->listener = $listener;
+        $this->optimizedListener = $listener instanceof \Closure ? $listener : (\is_callable($listener) ? $listener(...) : null);
         $this->stopwatch = $stopwatch;
         $this->dispatcher = $dispatcher;
-        $this->called = false;
-        $this->stoppedPropagation = false;
+        $this->priority = $priority;
 
         if (\is_array($listener)) {
-            $this->name = \is_object($listener[0]) ? \get_class($listener[0]) : $listener[0];
+            [$this->name, $this->callableRef] = $this->parseListener($listener);
             $this->pretty = $this->name.'::'.$listener[1];
+            $this->callableRef .= '::'.$listener[1];
         } elseif ($listener instanceof \Closure) {
             $r = new \ReflectionFunction($listener);
-            if (false !== strpos($r->name, '{closure}')) {
+            if (str_contains($r->name, '{closure}')) {
                 $this->pretty = $this->name = 'closure';
-            } elseif ($class = $r->getClosureScopeClass()) {
+            } elseif ($class = \PHP_VERSION_ID >= 80111 ? $r->getClosureCalledClass() : $r->getClosureScopeClass()) {
                 $this->name = $class->name;
                 $this->pretty = $this->name.'::'.$r->name;
             } else {
@@ -55,67 +59,84 @@ class WrappedListener
         } elseif (\is_string($listener)) {
             $this->pretty = $this->name = $listener;
         } else {
-            $this->name = \get_class($listener);
+            $this->name = get_debug_type($listener);
             $this->pretty = $this->name.'::__invoke';
+            $this->callableRef = $listener::class.'::__invoke';
         }
 
         if (null !== $name) {
             $this->name = $name;
         }
 
-        if (null === self::$hasClassStub) {
-            self::$hasClassStub = class_exists(ClassStub::class);
-        }
+        self::$hasClassStub ??= class_exists(ClassStub::class);
     }
 
-    public function getWrappedListener()
+    public function getWrappedListener(): callable|array
     {
         return $this->listener;
     }
 
-    public function wasCalled()
+    public function wasCalled(): bool
     {
         return $this->called;
     }
 
-    public function stoppedPropagation()
+    public function stoppedPropagation(): bool
     {
         return $this->stoppedPropagation;
     }
 
-    public function getPretty()
+    public function getPretty(): string
     {
         return $this->pretty;
     }
 
-    public function getInfo($eventName)
+    public function getInfo(string $eventName): array
     {
-        if (null === $this->stub) {
-            $this->stub = self::$hasClassStub ? new ClassStub($this->pretty.'()', $this->listener) : $this->pretty.'()';
-        }
+        $this->stub ??= self::$hasClassStub ? new ClassStub($this->pretty.'()', $this->callableRef ?? $this->listener) : $this->pretty.'()';
 
-        return array(
+        return [
             'event' => $eventName,
-            'priority' => null !== $this->dispatcher ? $this->dispatcher->getListenerPriority($eventName, $this->listener) : null,
+            'priority' => $this->priority ??= $this->dispatcher?->getListenerPriority($eventName, $this->listener),
             'pretty' => $this->pretty,
             'stub' => $this->stub,
-        );
+        ];
     }
 
-    public function __invoke(Event $event, $eventName, EventDispatcherInterface $dispatcher)
+    public function __invoke(object $event, string $eventName, EventDispatcherInterface $dispatcher): void
     {
+        $dispatcher = $this->dispatcher ?: $dispatcher;
+
         $this->called = true;
+        $this->priority ??= $dispatcher->getListenerPriority($eventName, $this->listener);
 
         $e = $this->stopwatch->start($this->name, 'event_listener');
 
-        \call_user_func($this->listener, $event, $eventName, $this->dispatcher ?: $dispatcher);
+        ($this->optimizedListener ?? $this->listener)($event, $eventName, $dispatcher);
 
         if ($e->isStarted()) {
             $e->stop();
         }
 
-        if ($event->isPropagationStopped()) {
+        if ($event instanceof StoppableEventInterface && $event->isPropagationStopped()) {
             $this->stoppedPropagation = true;
         }
+    }
+
+    private function parseListener(array $listener): array
+    {
+        if ($listener[0] instanceof \Closure) {
+            foreach ((new \ReflectionFunction($listener[0]))->getAttributes(\Closure::class) as $attribute) {
+                if ($name = $attribute->getArguments()['name'] ?? false) {
+                    return [$name, $attribute->getArguments()['class'] ?? $name];
+                }
+            }
+        }
+
+        if (\is_object($listener[0])) {
+            return [get_debug_type($listener[0]), \get_class($listener[0])];
+        }
+
+        return [$listener[0], $listener[0]];
     }
 }

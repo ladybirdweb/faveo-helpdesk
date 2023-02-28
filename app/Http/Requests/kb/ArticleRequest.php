@@ -24,7 +24,7 @@ class ArticleRequest extends Request
     public function rules()
     {
         return [
-            'name'        => 'required',
+            'name' => 'required',
             //'slug'        => 'required|unique:kb_article',
             'description' => 'required',
             'category_id' => 'required',

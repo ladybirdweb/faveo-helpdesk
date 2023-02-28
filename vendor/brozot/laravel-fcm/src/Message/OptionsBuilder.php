@@ -93,6 +93,7 @@ class OptionsBuilder
      * @return \LaravelFCM\Message\OptionsBuilder
      *
      * @throws InvalidOptionsException
+     * @throws \ReflectionException
      */
     public function setPriority($priority)
     {
@@ -160,12 +161,12 @@ class OptionsBuilder
      *
      * @return \LaravelFCM\Message\OptionsBuilder
      *
-     * @throws InvalidOptionException
+     * @throws InvalidOptionsException
      */
     public function setTimeToLive($timeToLive)
     {
         if ($timeToLive < 0 || $timeToLive > 2419200) {
-            throw new InvalidOptionException("time to live must be between 0 and 2419200, current value is: {$timeToLive}");
+            throw new InvalidOptionsException("time to live must be between 0 and 2419200, current value is: {$timeToLive}");
         }
         $this->timeToLive = $timeToLive;
 
@@ -309,6 +310,8 @@ final class OptionsPriorities
 
     /**
      * @return array priorities available in fcm
+     *
+     * @throws \ReflectionException
      */
     public static function getPriorities()
     {
@@ -323,6 +326,8 @@ final class OptionsPriorities
      * @param $priority
      *
      * @return bool
+     *
+     * @throws \ReflectionException
      */
     public static function isValid($priority)
     {

@@ -7,6 +7,7 @@ use App\BaseModel;
 class Access extends BaseModel
 {
     protected $table = 'access';
+
     protected $fillable = [
         'password_expire', 'reg_method', 'user_session',
         'agent_session', 'reset_ticket_expire', 'password_reset',

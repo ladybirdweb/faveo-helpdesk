@@ -2,11 +2,13 @@
 
 namespace Laravel\Dusk\Concerns;
 
-use Illuminate\Support\Str;
+use Facebook\WebDriver\Interactions\WebDriverActions;
+use Facebook\WebDriver\Remote\LocalFileDetector;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverKeys;
-use Facebook\WebDriver\Remote\LocalFileDetector;
-use Facebook\WebDriver\Interactions\WebDriverActions;
+use Facebook\WebDriver\WebDriverSelect;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 trait InteractsWithElements
 {
@@ -39,13 +41,15 @@ trait InteractsWithElements
      * @param  string  $element
      * @return $this
      */
-    public function clickLink($link, $element = "a")
+    public function clickLink($link, $element = 'a')
     {
         $this->ensurejQueryIsAvailable();
 
-        $selector = addslashes(trim($this->resolver->format("{$element}:contains({$link})")));
+        $selector = addslashes(trim($this->resolver->format("{$element}")));
 
-        $this->driver->executeScript("jQuery.find(\"{$selector}\")[0].click();");
+        $link = str_replace("'", "\\\\'", $link);
+
+        $this->driver->executeScript("jQuery.find(`{$selector}:contains('{$link}'):visible`)[0].click();");
 
         return $this;
     }
@@ -66,7 +70,7 @@ trait InteractsWithElements
         $selector = $this->resolver->format($selector);
 
         $this->driver->executeScript(
-            "document.querySelector('{$selector}').value = '{$value}';"
+            'document.querySelector('.json_encode($selector).').value = '.json_encode($value).';'
         );
 
         return $this;
@@ -99,7 +103,7 @@ trait InteractsWithElements
      * Send the given keys to the element matching the given selector.
      *
      * @param  string  $selector
-     * @param  dynamic  $keys
+     * @param  mixed  $keys
      * @return $this
      */
     public function keys($selector, ...$keys)
@@ -145,6 +149,21 @@ trait InteractsWithElements
     }
 
     /**
+     * Type the given value in the given field slowly.
+     *
+     * @param  string  $field
+     * @param  string  $value
+     * @param  int  $pause
+     * @return $this
+     */
+    public function typeSlowly($field, $value, $pause = 100)
+    {
+        $this->clear($field)->appendSlowly($field, $value, $pause);
+
+        return $this;
+    }
+
+    /**
      * Type the given value in the given field without clearing it.
      *
      * @param  string  $field
@@ -154,6 +173,23 @@ trait InteractsWithElements
     public function append($field, $value)
     {
         $this->resolver->resolveForTyping($field)->sendKeys($value);
+
+        return $this;
+    }
+
+    /**
+     * Type the given value in the given field slowly without clearing it.
+     *
+     * @param  string  $field
+     * @param  string  $value
+     * @param  int  $pause
+     * @return $this
+     */
+    public function appendSlowly($field, $value, $pause = 100)
+    {
+        foreach (preg_split('//u', $value, -1, PREG_SPLIT_NO_EMPTY) as $char) {
+            $this->append($field, $char)->pause($pause);
+        }
 
         return $this;
     }
@@ -175,23 +211,43 @@ trait InteractsWithElements
      * Select the given value or random value of a drop-down field.
      *
      * @param  string  $field
-     * @param  string  $value
+     * @param  string|array|null  $value
      * @return $this
      */
     public function select($field, $value = null)
     {
         $element = $this->resolver->resolveForSelection($field);
 
-        $options = $element->findElements(WebDriverBy::tagName('option'));
+        $options = $element->findElements(WebDriverBy::cssSelector('option:not([disabled])'));
 
-        if (is_null($value)) {
+        $select = $element->getTagName() === 'select' ? new WebDriverSelect($element) : null;
+
+        $isMultiple = false;
+
+        if (! is_null($select)) {
+            if ($isMultiple = $select->isMultiple()) {
+                $select->deselectAll();
+            }
+        }
+
+        if (func_num_args() === 1) {
             $options[array_rand($options)]->click();
         } else {
+            $value = collect(Arr::wrap($value))->transform(function ($value) {
+                if (is_bool($value)) {
+                    return $value ? '1' : '0';
+                }
+
+                return (string) $value;
+            })->all();
+
             foreach ($options as $option) {
-                if ((string) $option->getAttribute('value') === (string) $value) {
+                if (in_array((string) $option->getAttribute('value'), $value)) {
                     $option->click();
 
-                    break;
+                    if (! $isMultiple) {
+                        break;
+                    }
                 }
             }
         }
@@ -217,7 +273,7 @@ trait InteractsWithElements
      * Check the given checkbox.
      *
      * @param  string  $field
-     * @param  string  $value
+     * @param  string|null  $value
      * @return $this
      */
     public function check($field, $value = null)
@@ -235,7 +291,7 @@ trait InteractsWithElements
      * Uncheck the given checkbox.
      *
      * @param  string  $field
-     * @param  string  $value
+     * @param  string|null  $value
      * @return $this
      */
     public function uncheck($field, $value = null)

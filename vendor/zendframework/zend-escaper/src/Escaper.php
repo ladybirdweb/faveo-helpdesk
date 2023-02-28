@@ -95,11 +95,7 @@ class Escaper
     public function __construct($encoding = null)
     {
         if ($encoding !== null) {
-            if (! is_string($encoding)) {
-                throw new Exception\InvalidArgumentException(
-                    get_class($this) . ' constructor parameter must be a string, received ' . gettype($encoding)
-                );
-            }
+            $encoding = (string) $encoding;
             if ($encoding === '') {
                 throw new Exception\InvalidArgumentException(
                     get_class($this) . ' constructor parameter does not allow a blank value'
@@ -107,7 +103,7 @@ class Escaper
             }
 
             $encoding = strtolower($encoding);
-            if (! in_array($encoding, $this->supportedEncodings)) {
+            if (!in_array($encoding, $this->supportedEncodings)) {
                 throw new Exception\InvalidArgumentException(
                     'Value of \'' . $encoding . '\' passed to ' . get_class($this)
                     . ' constructor parameter is invalid. Provide an encoding supported by htmlspecialchars()'
@@ -325,7 +321,7 @@ class Escaper
             $result = $this->convertEncoding($string, 'UTF-8', $this->getEncoding());
         }
 
-        if (! $this->isUtf8($result)) {
+        if (!$this->isUtf8($result)) {
             throw new Exception\RuntimeException(
                 sprintf('String to be escaped was not valid UTF-8 or could not be converted: %s', $result)
             );

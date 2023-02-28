@@ -1,19 +1,13 @@
 language: php
 
 php:
-    - 5.6
-    - 7.0
-    - 7.1
-    - 7.2
+    - 5.3
+    - 5.4
+    - 5.5
 
 before_script:
-    - composer self-update || true
-    - composer install --dev --prefer-source
-    - mkdir -p web/code-coverage data
-    - wget https://scrutinizer-ci.com/ocular.phar
-
-after_script:
-    - php ocular.phar code-coverage:upload --format=php-clover data/coverage.clover
+    - wget http://getcomposer.org/composer.phar
+    - php composer.phar install --dev --prefer-source
 
 script:
     - bin/atoum
@@ -22,6 +16,7 @@ notifications:
   email:
     recipients:
       - cedric@dugat.me
-      - seyferseed@gmail.com
     on_success: change
     on_failure: change
+  irc:
+    - "irc.freenode.org#slynett"

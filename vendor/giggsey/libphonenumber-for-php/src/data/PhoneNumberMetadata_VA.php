@@ -14,7 +14,25 @@
 return array (
   'generalDesc' => 
   array (
-    'NationalNumberPattern' => '0\\d{6}(?:\\d{4})?|3[0-8]\\d{9}|(?:[0138]\\d?|55)\\d{8}|[08]\\d{5}(?:\\d{2})?',
+    'NationalNumberPattern' => '0\\d{5,10}|3[0-8]\\d{7,10}|55\\d{8}|8\\d{5}(?:\\d{2,4})?|(?:1\\d|39)\\d{7,8}',
+    'PossibleLength' => 
+    array (
+      0 => 6,
+      1 => 7,
+      2 => 8,
+      3 => 9,
+      4 => 10,
+      5 => 11,
+      6 => 12,
+    ),
+    'PossibleLengthLocalOnly' => 
+    array (
+    ),
+  ),
+  'fixedLine' => 
+  array (
+    'NationalNumberPattern' => '06698\\d{1,6}',
+    'ExampleNumber' => '0669812345',
     'PossibleLength' => 
     array (
       0 => 6,
@@ -28,26 +46,14 @@ return array (
     array (
     ),
   ),
-  'fixedLine' => 
-  array (
-    'NationalNumberPattern' => '06698\\d{1,6}',
-    'ExampleNumber' => '0669812345',
-    'PossibleLength' => 
-    array (
-    ),
-    'PossibleLengthLocalOnly' => 
-    array (
-    ),
-  ),
   'mobile' => 
   array (
-    'NationalNumberPattern' => '33\\d{9}|3[1-9]\\d{8}|3[2-9]\\d{7}',
+    'NationalNumberPattern' => '3[1-9]\\d{8}|3[2-9]\\d{7}',
     'ExampleNumber' => '3123456789',
     'PossibleLength' => 
     array (
       0 => 9,
       1 => 10,
-      2 => 11,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -68,7 +74,7 @@ return array (
   ),
   'premiumRate' => 
   array (
-    'NationalNumberPattern' => '(?:(?:0878|1(?:44|6[346])\\d)\\d\\d|89(?:2|(?:4[5-9]|(?:5[5-9]|9)\\d\\d)\\d))\\d{3}|89[45][0-4]\\d\\d',
+    'NationalNumberPattern' => '(?:0878\\d{3}|89(?:2\\d|3[04]|4(?:[0-4]|[5-9]\\d\\d)|5[0-4]))\\d\\d|(?:1(?:44|6[346])|89(?:38|5[5-9]|9))\\d{6}',
     'ExampleNumber' => '899123456',
     'PossibleLength' => 
     array (
@@ -141,9 +147,12 @@ return array (
   ),
   'voicemail' => 
   array (
+    'NationalNumberPattern' => '3[2-8]\\d{9,10}',
+    'ExampleNumber' => '33101234501',
     'PossibleLength' => 
     array (
-      0 => -1,
+      0 => 11,
+      1 => 12,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -171,6 +180,5 @@ return array (
   ),
   'mainCountryForCode' => false,
   'leadingDigits' => '06698',
-  'leadingZeroPossible' => false,
   'mobileNumberPortableRegion' => true,
 );

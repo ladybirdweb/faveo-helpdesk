@@ -4,22 +4,23 @@ namespace App\Http\Controllers\Agent\kb;
 
 // Controllers
 use App\Http\Controllers\Controller;
-// Requests
 use App\Http\Requests\kb\ArticleRequest;
+// Requests
 use App\Http\Requests\kb\ArticleUpdate;
-// Models
 use App\Model\kb\Article;
+// Models
 use App\Model\kb\Category;
 use App\Model\kb\Comment;
 use App\Model\kb\Relationship;
 use App\Model\kb\Settings;
-// Classes
 use Auth;
+// Classes
 use Chumper\Datatable\Table;
 use Datatable;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Lang;
 use Redirect;
 
@@ -72,7 +73,7 @@ class ArticleController extends Controller
 
                         /* add column name */
                         ->addColumn('name', function ($model) {
-                            $name = str_limit($model->name, 20, '...');
+                            $name = Str::limit($model->name, 20, '...');
 
                             return "<p title=$model->name>$name</p>";
                         })
@@ -157,7 +158,7 @@ class ArticleController extends Controller
         $publishTime = $request->input('year').'-'.$request->input('month').'-'.$request->input('day').' '.$request->input('hour').':'.$request->input('minute').':00';
 
         $sl = $request->input('name');
-        $slug = str_slug($sl, '-');
+        $slug = Str::slug($sl, '-');
         $article->slug = $slug;
         $article->publish_time = $publishTime;
         $article->fill($request->except('created_at', 'slug'))->save();
@@ -229,7 +230,7 @@ class ArticleController extends Controller
 
         $id = $aid->id;
         $sl = $request->input('slug');
-        $slug = str_slug($sl, '-');
+        $slug = Str::slug($sl, '-');
         // dd($slug);
 
         $article->slug = $slug;

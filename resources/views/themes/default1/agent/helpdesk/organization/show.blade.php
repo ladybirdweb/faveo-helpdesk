@@ -66,7 +66,7 @@ class="nav-link active"
         <div class="card card-light card-outline">
 
             <div class="card-body box-profile">
-                <h3 class="profile-username text-center has-tooltip" title="{{$orgs->name}}">{{str_limit($orgs->name,15)}}</h3> 
+                <h3 class="profile-username text-center has-tooltip" title="{{$orgs->name}}">{{Str::limit($orgs->name,15)}}</h3> 
 
                 <p class="text-muted text-center">Organization</p> 
 
@@ -80,14 +80,14 @@ class="nav-link active"
                     <li class="list-group-item">
 
                         <label>{!! Lang::get('lang.website') !!}</label> 
-                        <a class="float-right" title="{{$orgs->website}}">{!! str_limit($orgs->website,15) !!}</a>
+                        <a class="float-right" title="{{$orgs->website}}">{!! Str::limit($orgs->website,15) !!}</a>
                     </li>
 
                     @if($orgs->phone)
                     <li class="list-group-item">
 
                         <label>{!! Lang::get('lang.phone') !!}</label> 
-                        <a class="float-right" title="{{$orgs->phone}}">{!! str_limit($orgs->phone,15) !!}</a>
+                        <a class="float-right" title="{{$orgs->phone}}">{!! Str::limit($orgs->phone,15) !!}</a>
                     </li>
                     @endif
 
@@ -129,7 +129,7 @@ class="nav-link active"
                         <img src="{{ Gravatar::src( $users->email) }}" class="img-circle elevation-2">
                     </div>
 
-                    <h3 class="widget-user-username" title="{{$users->user_name}}">{!! str_limit($users->user_name,15) !!}</h3> 
+                    <h3 class="widget-user-username" title="{{$users->user_name}}">{!! Str::limit($users->user_name,15) !!}</h3> 
 
                     <h5 class="widget-user-desc" style="font-size: 14px;">Organization Manager</h5>
                 </div>
@@ -142,7 +142,7 @@ class="nav-link active"
 
                             <a href="javascript:;" class="nav-link text-dark"> {!! Lang::get('lang.e-mail') !!}  
 
-                                <span class="float-right" title="{{$users->email}}">{!! str_limit($users->email,15) !!}</span>
+                                <span class="float-right" title="{{$users->email}}">{!! Str::limit($users->email,15) !!}</span>
                             </a>
                         </li>
 
@@ -150,7 +150,7 @@ class="nav-link active"
 
                             <a href="javascript:;" class="nav-link text-dark"> {!! Lang::get('lang.phone') !!}  
 
-                                <span class="float-right" title="{{$users->phone_number}}">{!! str_limit($users->phone_number,15) !!}</span>
+                                <span class="float-right" title="{{$users->phone_number}}">{!! Str::limit($users->phone_number,15) !!}</span>
                             </a>
                         </li>
                     </ul>

@@ -14,7 +14,7 @@
 return array (
   'generalDesc' => 
   array (
-    'NationalNumberPattern' => '\\d{8}',
+    'NationalNumberPattern' => '(?:00|[1-9]\\d)\\d{6}',
     'PossibleLength' => 
     array (
       0 => 8,
@@ -45,7 +45,7 @@ return array (
   ),
   'tollFree' => 
   array (
-    'NationalNumberPattern' => '\\d{8}',
+    'NationalNumberPattern' => '(?:00|[1-9]\\d)\\d{6}',
     'ExampleNumber' => '12345678',
     'PossibleLength' => 
     array (
@@ -146,6 +146,7 @@ return array (
       'format' => '$1 $2',
       'leadingDigitsPatterns' => 
       array (
+        0 => '\\d',
       ),
       'nationalPrefixFormattingRule' => '',
       'domesticCarrierCodeFormattingRule' => '',
@@ -156,6 +157,5 @@ return array (
   array (
   ),
   'mainCountryForCode' => false,
-  'leadingZeroPossible' => false,
   'mobileNumberPortableRegion' => false,
 );

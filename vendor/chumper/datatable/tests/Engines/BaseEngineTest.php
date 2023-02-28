@@ -18,7 +18,7 @@ class BaseEngineTest extends TestCase {
     public function setUp()
     {
         // set up config
-        Config::shouldReceive('get')->zeroOrMoreTimes()->with("chumper.datatable.engine")->andReturn(
+        Config::shouldReceive('get')->zeroOrMoreTimes()->with("datatable::engine")->andReturn(
             array(
                 'exactWordSearch' => false,
                 )

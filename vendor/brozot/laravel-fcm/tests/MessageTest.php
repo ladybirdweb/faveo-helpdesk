@@ -1,5 +1,6 @@
 <?php
 
+use LaravelFCM\Message\Exceptions\InvalidOptionsException;
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\OptionsPriorities;
 use LaravelFCM\Message\PayloadDataBuilder;
@@ -126,5 +127,17 @@ class PayloadTest extends FCMTestCase
 
         $json = json_encode($notificationBuilder->build()->toArray());
         $this->assertJsonStringEqualsJsonString($targetFull, $json);
+    }
+
+    /**
+     * @test
+     */
+    public function it_throws_an_invalidoptionsexception_if_the_interval_is_too_big()
+    {
+        $this->setExpectedException(InvalidOptionsException::class);
+
+        $optionBuilder = new OptionsBuilder();
+        $optionBuilder->setTimeToLive(2419200 * 10);
+
     }
 }

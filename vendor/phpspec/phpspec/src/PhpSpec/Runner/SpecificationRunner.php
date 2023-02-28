@@ -13,12 +13,15 @@
 
 namespace PhpSpec\Runner;
 
+use PhpSpec\Util\DispatchTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PhpSpec\Event;
 use PhpSpec\Loader\Node\SpecificationNode;
 
 class SpecificationRunner
 {
+    use DispatchTrait;
+
     /**
      * @var EventDispatcherInterface
      */
@@ -28,10 +31,7 @@ class SpecificationRunner
      */
     private $exampleRunner;
 
-    /**
-     * @param EventDispatcherInterface $dispatcher
-     * @param ExampleRunner            $exampleRunner
-     */
+    
     public function __construct(EventDispatcherInterface $dispatcher, ExampleRunner $exampleRunner)
     {
         $this->dispatcher    = $dispatcher;
@@ -39,26 +39,30 @@ class SpecificationRunner
     }
 
     /**
-     * @param  SpecificationNode $specification
-     * @return int|mixed
+     * @return int
      */
-    public function run(SpecificationNode $specification)
+    public function run(SpecificationNode $specification): int
     {
         $startTime = microtime(true);
-        $this->dispatcher->dispatch(
-            'beforeSpecification',
-            new Event\SpecificationEvent($specification)
+        $this->dispatch(
+            $this->dispatcher,
+            new Event\SpecificationEvent($specification),
+            'beforeSpecification'
         );
 
         $result = Event\ExampleEvent::PASSED;
-        foreach ($specification->getExamples() as $example) {
-            $result = max($result, $this->exampleRunner->run($example));
-        }
 
-        $this->dispatcher->dispatch(
-            'afterSpecification',
-            new Event\SpecificationEvent($specification, microtime(true) - $startTime, $result)
-        );
+        try {
+            foreach ($specification->getExamples() as $example) {
+                $result = max($result, $this->exampleRunner->run($example));
+            }
+        } finally {
+            $this->dispatch(
+                $this->dispatcher,
+                new Event\SpecificationEvent($specification, microtime(true) - $startTime, $result),
+                'afterSpecification'
+            );
+        }
 
         return $result;
     }

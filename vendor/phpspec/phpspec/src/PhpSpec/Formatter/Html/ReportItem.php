@@ -15,8 +15,6 @@ namespace PhpSpec\Formatter\Html;
 
 interface ReportItem
 {
-    /**
-     * @return mixed
-     */
-    public function write();
+    
+    public function write(): void;
 }

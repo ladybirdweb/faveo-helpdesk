@@ -4,7 +4,7 @@ namespace Doctrine\DBAL\Platforms;
 
 use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\TableDiff;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 
 /**
  * Provides the behavior, features and SQL dialect of the MySQL 5.7 (5.7.9 GA) database platform.
@@ -22,7 +22,7 @@ class MySQL57Platform extends MySqlPlatform
     /**
      * {@inheritdoc}
      */
-    public function getJsonTypeDeclarationSQL(array $field)
+    public function getJsonTypeDeclarationSQL(array $column)
     {
         return 'JSON';
     }
@@ -66,6 +66,6 @@ class MySQL57Platform extends MySqlPlatform
     {
         parent::initializeDoctrineTypeMappings();
 
-        $this->doctrineTypeMapping['json'] = Type::JSON;
+        $this->doctrineTypeMapping['json'] = Types::JSON;
     }
 }

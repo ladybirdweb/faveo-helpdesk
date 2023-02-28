@@ -2,8 +2,8 @@
 
 namespace Laravel\Socialite\Two;
 
+use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Arr;
-use GuzzleHttp\ClientInterface;
 
 class FacebookProvider extends AbstractProvider implements ProviderInterface
 {
@@ -19,7 +19,7 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
      *
      * @var string
      */
-    protected $version = 'v3.0';
+    protected $version = 'v3.3';
 
     /**
      * The user fields being requested.
@@ -50,6 +50,13 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
     protected $reRequest = false;
 
     /**
+     * The access token that was last used to retrieve a user.
+     *
+     * @var string|null
+     */
+    protected $lastToken;
+
+    /**
      * {@inheritdoc}
      */
     protected function getAuthUrl($state)
@@ -70,13 +77,9 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
      */
     public function getAccessTokenResponse($code)
     {
-        $postKey = (version_compare(ClientInterface::VERSION, '6') === 1) ? 'form_params' : 'body';
-
         $response = $this->getHttpClient()->post($this->getTokenUrl(), [
-            $postKey => $this->getTokenFields($code),
+            RequestOptions::FORM_PARAMS => $this->getTokenFields($code),
         ]);
-
-        $data = [];
 
         $data = json_decode($response->getBody(), true);
 
@@ -88,18 +91,22 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
      */
     protected function getUserByToken($token)
     {
-        $meUrl = $this->graphUrl.'/'.$this->version.'/me?access_token='.$token.'&fields='.implode(',', $this->fields);
+        $this->lastToken = $token;
+
+        $params = [
+            'access_token' => $token,
+            'fields' => implode(',', $this->fields),
+        ];
 
         if (! empty($this->clientSecret)) {
-            $appSecretProof = hash_hmac('sha256', $token, $this->clientSecret);
-
-            $meUrl .= '&appsecret_proof='.$appSecretProof;
+            $params['appsecret_proof'] = hash_hmac('sha256', $token, $this->clientSecret);
         }
 
-        $response = $this->getHttpClient()->get($meUrl, [
-            'headers' => [
+        $response = $this->getHttpClient()->get($this->graphUrl.'/'.$this->version.'/me', [
+            RequestOptions::HEADERS => [
                 'Accept' => 'application/json',
             ],
+            RequestOptions::QUERY => $params,
         ]);
 
         return json_decode($response->getBody(), true);
@@ -113,10 +120,13 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
         $avatarUrl = $this->graphUrl.'/'.$this->version.'/'.$user['id'].'/picture';
 
         return (new User)->setRaw($user)->map([
-            'id' => $user['id'], 'nickname' => null, 'name' => isset($user['name']) ? $user['name'] : null,
-            'email' => isset($user['email']) ? $user['email'] : null, 'avatar' => $avatarUrl.'?type=normal',
+            'id' => $user['id'],
+            'nickname' => null,
+            'name' => $user['name'] ?? null,
+            'email' => $user['email'] ?? null,
+            'avatar' => $avatarUrl.'?type=normal',
             'avatar_original' => $avatarUrl.'?width=1920',
-            'profileUrl' => isset($user['link']) ? $user['link'] : null,
+            'profileUrl' => $user['link'] ?? null,
         ]);
     }
 
@@ -171,6 +181,29 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
     public function reRequest()
     {
         $this->reRequest = true;
+
+        return $this;
+    }
+
+    /**
+     * Get the last access token used.
+     *
+     * @return string|null
+     */
+    public function lastToken()
+    {
+        return $this->lastToken;
+    }
+
+    /**
+     * Specify which graph version should be used.
+     *
+     * @param  string  $version
+     * @return $this
+     */
+    public function usingGraphVersion(string $version)
+    {
+        $this->version = $version;
 
         return $this;
     }

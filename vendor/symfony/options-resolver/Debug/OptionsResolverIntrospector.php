@@ -32,7 +32,7 @@ class OptionsResolverIntrospector
                 throw new UndefinedOptionsException(sprintf('The option "%s" does not exist.', $option));
             }
 
-            if (!array_key_exists($option, $this->{$property})) {
+            if (!\array_key_exists($option, $this->{$property})) {
                 throw new NoConfigurationException($message);
             }
 
@@ -41,13 +41,11 @@ class OptionsResolverIntrospector
     }
 
     /**
-     * @return mixed
-     *
      * @throws NoConfigurationException on no configured value
      */
-    public function getDefault(string $option)
+    public function getDefault(string $option): mixed
     {
-        return \call_user_func($this->get, 'defaults', $option, sprintf('No default value was set for the "%s" option.', $option));
+        return ($this->get)('defaults', $option, sprintf('No default value was set for the "%s" option.', $option));
     }
 
     /**
@@ -57,7 +55,7 @@ class OptionsResolverIntrospector
      */
     public function getLazyClosures(string $option): array
     {
-        return \call_user_func($this->get, 'lazy', $option, sprintf('No lazy closures were set for the "%s" option.', $option));
+        return ($this->get)('lazy', $option, sprintf('No lazy closures were set for the "%s" option.', $option));
     }
 
     /**
@@ -67,7 +65,7 @@ class OptionsResolverIntrospector
      */
     public function getAllowedTypes(string $option): array
     {
-        return \call_user_func($this->get, 'allowedTypes', $option, sprintf('No allowed types were set for the "%s" option.', $option));
+        return ($this->get)('allowedTypes', $option, sprintf('No allowed types were set for the "%s" option.', $option));
     }
 
     /**
@@ -77,7 +75,7 @@ class OptionsResolverIntrospector
      */
     public function getAllowedValues(string $option): array
     {
-        return \call_user_func($this->get, 'allowedValues', $option, sprintf('No allowed values were set for the "%s" option.', $option));
+        return ($this->get)('allowedValues', $option, sprintf('No allowed values were set for the "%s" option.', $option));
     }
 
     /**
@@ -85,16 +83,22 @@ class OptionsResolverIntrospector
      */
     public function getNormalizer(string $option): \Closure
     {
-        return \call_user_func($this->get, 'normalizers', $option, sprintf('No normalizer was set for the "%s" option.', $option));
+        return current($this->getNormalizers($option));
     }
 
     /**
-     * @return string|\Closure
-     *
+     * @throws NoConfigurationException when no normalizer is configured
+     */
+    public function getNormalizers(string $option): array
+    {
+        return ($this->get)('normalizers', $option, sprintf('No normalizer was set for the "%s" option.', $option));
+    }
+
+    /**
      * @throws NoConfigurationException on no configured deprecation
      */
-    public function getDeprecationMessage(string $option)
+    public function getDeprecation(string $option): array
     {
-        return \call_user_func($this->get, 'deprecated', $option, sprintf('No deprecation was set for the "%s" option.', $option));
+        return ($this->get)('deprecated', $option, sprintf('No deprecation was set for the "%s" option.', $option));
     }
 }

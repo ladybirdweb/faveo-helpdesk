@@ -13,6 +13,7 @@
 
 namespace PhpSpec\CodeGenerator\Writer;
 
+use PhpSpec\Exception\Generator\GenerationFailed;
 use PhpSpec\Util\ClassFileAnalyser;
 
 final class TokenizedCodeWriter implements CodeWriter
@@ -22,15 +23,13 @@ final class TokenizedCodeWriter implements CodeWriter
      */
     private $analyser;
 
-    /**
-     * @param ClassFileAnalyser $analyser
-     */
+    
     public function __construct(ClassFileAnalyser $analyser)
     {
         $this->analyser = $analyser;
     }
 
-    public function insertMethodFirstInClass(string $class, string $method) : string
+    public function insertMethodFirstInClass(string $class, string $method): string
     {
         if (!$this->analyser->classHasMethods($class)) {
             return $this->writeAtEndOfClass($class, $method);
@@ -41,7 +40,7 @@ final class TokenizedCodeWriter implements CodeWriter
         return $this->insertStringBeforeLine($class, $method, $line);
     }
 
-    public function insertMethodLastInClass(string $class, string $method) : string
+    public function insertMethodLastInClass(string $class, string $method): string
     {
         if ($this->analyser->classHasMethods($class)) {
             $line = $this->analyser->getEndLineOfLastMethod($class);
@@ -51,14 +50,14 @@ final class TokenizedCodeWriter implements CodeWriter
         return $this->writeAtEndOfClass($class, $method);
     }
 
-    public function insertAfterMethod(string $class, string $methodName, string $method) : string
+    public function insertAfterMethod(string $class, string $methodName, string $method): string
     {
         $line = $this->analyser->getEndLineOfNamedMethod($class, $methodName);
 
         return $this->insertStringAfterLine($class, $method, $line);
     }
 
-    private function insertStringAfterLine(string $target, string $toInsert, int $line, bool $leadingNewline = true) : string
+    private function insertStringAfterLine(string $target, string $toInsert, int $line, bool $leadingNewline = true): string
     {
         $lines = explode("\n", $target);
         $lastLines = \array_slice($lines, $line);
@@ -72,7 +71,7 @@ final class TokenizedCodeWriter implements CodeWriter
         return implode("\n", $lines);
     }
 
-    private function insertStringBeforeLine(string $target, string $toInsert, int $line) : string
+    private function insertStringBeforeLine(string $target, string $toInsert, int $line): string
     {
         $line--;
         $lines = explode("\n", $target);
@@ -83,7 +82,7 @@ final class TokenizedCodeWriter implements CodeWriter
         return implode("\n", $lines);
     }
 
-    private function writeAtEndOfClass(string $class, string $method, bool $prependNewLine = false) : string
+    private function writeAtEndOfClass(string $class, string $method): string
     {
         $tokens = token_get_all($class);
         $searching = false;
@@ -108,8 +107,9 @@ final class TokenizedCodeWriter implements CodeWriter
             }
 
             if ($this->isWritePoint($token)) {
-                $line = $token[2];
-                return $this->insertStringAfterLine($class, $method, $line, $token[0] === T_COMMENT ?: $prependNewLine);
+                $line = (int) $token[2];
+                $prependNewLine = $token[0] === T_COMMENT || ($i != 0 && $tokens[$i-1][0] === T_COMMENT);
+                return $this->insertStringAfterLine($class, $method, $line, $prependNewLine);
             }
 
             array_unshift($searchPattern, \is_array($token) ? $token[1] : $token);
@@ -121,12 +121,14 @@ final class TokenizedCodeWriter implements CodeWriter
                 return substr_replace($class, "\n" . $method . "\n", $position, 0);
             }
         }
+
+        throw new GenerationFailed('Could not locate end of class');
     }
 
     /**
      * @param $token
      */
-    private function isWritePoint($token) : bool
+    private function isWritePoint($token): bool
     {
         return \is_array($token) && ($token[1] === "\n" || $token[0] === T_COMMENT);
     }

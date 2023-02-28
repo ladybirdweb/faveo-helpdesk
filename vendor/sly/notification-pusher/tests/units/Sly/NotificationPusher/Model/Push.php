@@ -43,10 +43,10 @@ class Push extends Units\Test
     {
         $this->if($this->mockClass('\Sly\NotificationPusher\Adapter\AdapterInterface', '\Mock'))
             ->and($adapter = new \Mock\AdapterInterface())
-            ->and($devices = new BaseDeviceCollection([new BaseDevice('Token1'), new BaseDevice('Token2'), new BaseDevice('Token3')]))
+            ->and($devices = new BaseDeviceCollection(array(new BaseDevice('Token1'), new BaseDevice('Token2'), new BaseDevice('Token3'))))
             ->and($message = new BaseMessage('Test'))
 
-            ->and($object = new TestedModel($adapter, $devices, $message, ['param' => 'test']))
+            ->and($object = new TestedModel($adapter, $devices, $message, array('param' => 'test')))
 
             ->object($object->getDevices())
                 ->isInstanceOf('\Sly\NotificationPusher\Collection\DeviceCollection')
@@ -62,10 +62,9 @@ class Push extends Units\Test
 
     public function testStatus()
     {
-        date_default_timezone_set('UTC');
         $this->if($this->mockClass('\Sly\NotificationPusher\Adapter\AdapterInterface', '\Mock'))
             ->and($adapter = new \Mock\AdapterInterface())
-            ->and($devices = new BaseDeviceCollection([new BaseDevice('Token1'), new BaseDevice('Token2'), new BaseDevice('Token3')]))
+            ->and($devices = new BaseDeviceCollection(array(new BaseDevice('Token1'), new BaseDevice('Token2'), new BaseDevice('Token3'))))
             ->and($message = new BaseMessage('Test'))
 
             ->and($object = new TestedModel($adapter, $devices, $message))
@@ -82,7 +81,7 @@ class Push extends Units\Test
             ->boolean($object->isPushed())
                 ->isTrue()
             ->dateTime($object->getPushedAt())
-                ->hasDate($dt->format("Y"), $dt->format("m"), $dt->format('d'))
+                ->isCloneOf($dt)
 
             ->when($object->setStatus(TestedModel::STATUS_PENDING))
             ->string($object->getStatus())
@@ -93,7 +92,7 @@ class Push extends Units\Test
             ->when($fDt = new \DateTime('2013-01-01'))
             ->and($object->setPushedAt($fDt))
             ->dateTime($object->getPushedAt())
-                ->isIdenticalTo($fDt)
+                ->isCloneOf(new \DateTime('2013-01-01'))
         ;
     }
 
@@ -137,7 +136,7 @@ class Push extends Units\Test
                 ->isInstanceOf('\Sly\NotificationPusher\Adapter\Apns')
 
             ->when($object->setAdapter($gcmAdapter))
-            ->and($object->setDevices(new BaseDeviceCollection([new BaseDevice(self::GCM_TOKEN_EXAMPLE)])))
+            ->and($object->setDevices(new BaseDeviceCollection(array(new BaseDevice(self::GCM_TOKEN_EXAMPLE)))))
             ->object($object->getAdapter())
                 ->isInstanceOf('\Sly\NotificationPusher\Adapter\Gcm')
         ;
@@ -147,7 +146,7 @@ class Push extends Units\Test
     {
         $this->if($this->mockClass('\Sly\NotificationPusher\Adapter\AdapterInterface', '\Mock'))
             ->and($adapter = new \Mock\AdapterInterface())
-            ->and($devices = new BaseDeviceCollection([new BaseDevice('Token1'), new BaseDevice('Token2'), new BaseDevice('Token3')]))
+            ->and($devices = new BaseDeviceCollection(array(new BaseDevice('Token1'), new BaseDevice('Token2'), new BaseDevice('Token3'))))
             ->and($message = new BaseMessage('Test'))
 
             ->and($object = new TestedModel($adapter, $devices, $message))
@@ -163,5 +162,4 @@ class Push extends Units\Test
                 ->isEqualTo('Test 2')
         ;
     }
-
 }

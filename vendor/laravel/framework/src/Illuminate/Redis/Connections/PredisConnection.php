@@ -11,6 +11,13 @@ use Illuminate\Contracts\Redis\Connection as ConnectionContract;
 class PredisConnection extends Connection implements ConnectionContract
 {
     /**
+     * The Predis client.
+     *
+     * @var \Predis\Client
+     */
+    protected $client;
+
+    /**
      * Create a new Predis connection.
      *
      * @param  \Predis\Client  $client
@@ -33,11 +40,11 @@ class PredisConnection extends Connection implements ConnectionContract
     {
         $loop = $this->pubSubLoop();
 
-        call_user_func_array([$loop, $method], (array) $channels);
+        $loop->{$method}(...array_values((array) $channels));
 
         foreach ($loop as $message) {
             if ($message->kind === 'message' || $message->kind === 'pmessage') {
-                call_user_func($callback, $message->payload, $message->channel);
+                $callback($message->payload, $message->channel);
             }
         }
 

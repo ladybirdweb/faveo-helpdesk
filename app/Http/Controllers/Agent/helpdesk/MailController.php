@@ -13,8 +13,9 @@ use App\Model\helpdesk\Settings\Ticket;
 use App\Model\helpdesk\Ticket\Ticket_attachments;
 use App\Model\helpdesk\Ticket\Ticket_source;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
-// classes
 use App\Model\helpdesk\Ticket\Tickets;
+// classes
+use Illuminate\Support\Str;
 
 /**
  * MailController.
@@ -258,7 +259,7 @@ class MailController extends Controller
                     $disposition = $structure->disposition;
                 }
 
-                $filename = str_random(16).'-'.$attachment->getFileName();
+                $filename = Str::random(16).'-'.$attachment->getFileName();
                 $type = $attachment->getMimeType();
                 $size = $attachment->getSize();
                 $data = $attachment->getData();

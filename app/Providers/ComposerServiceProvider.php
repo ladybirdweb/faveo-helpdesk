@@ -27,20 +27,20 @@ class ComposerServiceProvider extends ServiceProvider
                 'themes.default1.admin.helpdesk.setting',
                 $service_desk,
             ],
-            'App\Http\ViewComposers\AgentLayout'
+            \App\Http\ViewComposers\AgentLayout::class
         );
         view()->composer(
             [
                 'themes.default1.update.notification',
             ],
-            'App\Http\ViewComposers\UpdateNotification'
+            \App\Http\ViewComposers\UpdateNotification::class
         );
         view()->composer(
             [
                 'themes.default1.agent.layout.agent',
                 'themes.default1.admin.layout.admin',
             ],
-            'App\Http\ViewComposers\AuthUser'
+            \App\Http\ViewComposers\AuthUser::class
         );
         view()->composer(
             [
@@ -48,7 +48,7 @@ class ComposerServiceProvider extends ServiceProvider
                 'themes.default1.agent.layout.agent',
                 'themes.default1.client.layout.client',
             ],
-            'App\Http\ViewComposers\UserLanguage'
+            \App\Http\ViewComposers\UserLanguage::class
         );
     }
 

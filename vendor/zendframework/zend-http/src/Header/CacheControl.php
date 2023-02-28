@@ -1,8 +1,10 @@
 <?php
 /**
- * @see       https://github.com/zendframework/zend-http for the canonical source repository
- * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
+ * Zend Framework (http://framework.zend.com/)
+ *
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
 namespace Zend\Http\Header;
@@ -39,7 +41,7 @@ class CacheControl implements HeaderInterface
         // check to ensure proper header type for this factory
         if (strtolower($name) !== 'cache-control') {
             throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid header line for Cache-Control string: "%s"',
+                'Invalid header line for Cache-Control string: ""',
                 $name
             ));
         }
@@ -143,9 +145,9 @@ class CacheControl implements HeaderInterface
                 $parts[] = $key;
             } else {
                 if (preg_match('#[^a-zA-Z0-9._-]#', $value)) {
-                    $value = '"' . $value . '"';
+                    $value = '"' . $value.'"';
                 }
-                $parts[] = $key . '=' . $value;
+                $parts[] = "$key=$value";
             }
         }
         return implode(', ', $parts);
@@ -221,6 +223,7 @@ class CacheControl implements HeaderInterface
 
             default:
                 throw new Exception\InvalidArgumentException('expected SEPARATOR or END');
+
         }
     }
 

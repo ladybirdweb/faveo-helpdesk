@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateKbPagesTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -32,4 +31,4 @@ class CreateKbPagesTable extends Migration
     {
         Schema::drop('kb_pages');
     }
-}
+};

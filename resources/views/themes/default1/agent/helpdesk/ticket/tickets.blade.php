@@ -17,13 +17,13 @@ class="active"
 @stop
 
 <?php
-$inputs     = \Input::get('show');
+$inputs     = Request::get('show');
 $activepage = $inputs[0];
-if (\Input::has('assigned'))
+if (Request::has('assigned'))
 {
-    $activepage = \Input::get('assigned')[0];
-} elseif (\Input::has('last-response-by')){
-    $activepage = \Input::get('last-response-by')[0];
+    $activepage = Request::get('assigned')[0];
+} elseif (Request::has('last-response-by')){
+    $activepage = Request::get('last-response-by')[0];
 }
 ?>
 
@@ -125,12 +125,12 @@ if (\Input::has('assigned'))
             @else
             {{Lang::get('lang.inbox')}}
             @endif 
-            @if(count(Input::all()) > 2 && $activepage != '0')
+            @if(count(Request::all()) > 2 && $activepage != '0')
             / {{Lang::get('lang.filtered-results')}}
             @else()
-            @if(count(Input::get('departments')) == 1 && Input::get('departments')[0] != 'All')
+            @if(count(Request::get('departments')) == 1 && Request::get('departments')[0] != 'All')
             / {{Lang::get('lang.filtered-results')}}
-            @elseif (count(Input::get('departments')) > 1)
+            @elseif (count(Request::get('departments')) > 1)
             / {{Lang::get('lang.filtered-results')}}
             @endif
             @endif
@@ -171,7 +171,7 @@ if (\Input::has('assigned'))
             <i class="fas fa-cogs"> </i> {!! Lang::get('lang.merge') !!}
         </button>
         
-        <?php $inputs   = Input::all(); ?>
+        <?php $inputs   = Request::all(); ?>
         
         <div class="btn-group">
         <?php $statuses = Finder::getCustomedStatus(); ?>

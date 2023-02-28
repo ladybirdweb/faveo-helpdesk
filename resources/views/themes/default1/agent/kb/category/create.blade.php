@@ -34,7 +34,7 @@ class="nav-item menu-open"
 @stop
 
 @section('content')
-{!! Form::open(array('action' => 'Agent\kb\CategoryController@store' , 'method' => 'post') )!!}
+{!! Form::open(array('route' => 'category.store' , 'method' => 'post') )!!}
 @if(Session::has('success'))
 <div class="alert alert-success alert-dismissable">
     <i class="fas fa-check-circle"></i>

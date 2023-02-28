@@ -7,5 +7,6 @@ use App\BaseModel;
 class Page extends BaseModel
 {
     protected $table = 'kb_pages';
+
     protected $fillable = ['name', 'slug', 'status', 'visibility', 'description'];
 }

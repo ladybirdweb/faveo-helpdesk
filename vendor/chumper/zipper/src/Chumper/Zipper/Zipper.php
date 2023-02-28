@@ -63,7 +63,7 @@ class Zipper
      */
     public function __destruct()
     {
-        if (null !== $this->repository) {
+        if (is_object($this->repository)) {
             $this->repository->close();
         }
     }
@@ -84,21 +84,27 @@ class Zipper
     public function make($pathToFile, $type = 'zip')
     {
         $new = $this->createArchiveFile($pathToFile);
-        $this->filePath = $pathToFile;
 
         $objectOrName = $type;
         if (is_string($type)) {
-            $objectOrName = 'Chumper\Zipper\Repositories\\'.ucwords($type).'Repository';
+            $objectOrName = 'Chumper\Zipper\Repositories\\' . ucwords($type) . 'Repository';
         }
 
         if (!is_subclass_of($objectOrName, 'Chumper\Zipper\Repositories\RepositoryInterface')) {
             throw new \InvalidArgumentException("Class for '{$objectOrName}' must implement RepositoryInterface interface");
         }
 
-        $this->repository = $type;
-        if (is_string($objectOrName)) {
-            $this->repository = new $objectOrName($pathToFile, $new);
+        try {
+            if (is_string($objectOrName)) {
+                $this->repository = new $objectOrName($pathToFile, $new);
+            } else {
+                $this->repository = $type;
+            }
+        } catch(Exception $e) {
+            throw $e;
         }
+
+        $this->filePath = $pathToFile;
 
         return $this;
     }
@@ -561,9 +567,8 @@ class Zipper
      */
     private function addFile($pathToAdd, $fileName = null)
     {
-        $info = pathinfo($pathToAdd);
-
         if (!$fileName) {
+            $info = pathinfo($pathToAdd);
             $fileName = isset($info['extension']) ?
                 $info['filename'].'.'.$info['extension'] :
                 $info['filename'];
@@ -608,6 +613,11 @@ class Zipper
     private function extractOneFileInternal($fileName, $path)
     {
         $tmpPath = str_replace($this->getInternalPath(), '', $fileName);
+        
+        //Prevent Zip traversal attacks
+        if (strpos($fileName, '../') !== false || strpos($fileName, '..\\') !== false) {
+            throw new \RuntimeException('Special characters found within filenames');
+        }
 
         // We need to create the directory first in case it doesn't exist
         $dir = pathinfo($path.DIRECTORY_SEPARATOR.$tmpPath, PATHINFO_DIRNAME);

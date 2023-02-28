@@ -2,18 +2,24 @@
 
 namespace Illuminate\Foundation\Http;
 
-use Exception;
-use Throwable;
-use Illuminate\Routing\Router;
-use Illuminate\Routing\Pipeline;
-use Illuminate\Support\Facades\Facade;
+use Carbon\CarbonInterval;
+use DateTimeInterface;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Http\Kernel as KernelContract;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Illuminate\Foundation\Http\Events\RequestHandled;
+use Illuminate\Routing\Pipeline;
+use Illuminate\Routing\Router;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\InteractsWithTime;
+use InvalidArgumentException;
+use Throwable;
 
 class Kernel implements KernelContract
 {
+    use InteractsWithTime;
+
     /**
      * The application implementation.
      *
@@ -31,7 +37,7 @@ class Kernel implements KernelContract
     /**
      * The bootstrap classes for the application.
      *
-     * @var array
+     * @var string[]
      */
     protected $bootstrappers = [
         \Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables::class,
@@ -45,36 +51,54 @@ class Kernel implements KernelContract
     /**
      * The application's middleware stack.
      *
-     * @var array
+     * @var array<int, class-string|string>
      */
     protected $middleware = [];
 
     /**
      * The application's route middleware groups.
      *
-     * @var array
+     * @var array<string, array<int, class-string|string>>
      */
     protected $middlewareGroups = [];
 
     /**
      * The application's route middleware.
      *
-     * @var array
+     * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [];
 
     /**
-     * The priority-sorted list of middleware.
-     *
-     * Forces the listed middleware to always be in the given order.
+     * All of the registered request duration handlers.
      *
      * @var array
      */
+    protected $requestLifecycleDurationHandlers = [];
+
+    /**
+     * When the kernel starting handling the current request.
+     *
+     * @var \Illuminate\Support\Carbon|null
+     */
+    protected $requestStartedAt;
+
+    /**
+     * The priority-sorted list of middleware.
+     *
+     * Forces non-global middleware to always be in the given order.
+     *
+     * @var string[]
+     */
     protected $middlewarePriority = [
+        \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
+        \Illuminate\Cookie\Middleware\EncryptCookies::class,
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        \Illuminate\Auth\Middleware\Authenticate::class,
-        \Illuminate\Session\Middleware\AuthenticateSession::class,
+        \Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests::class,
+        \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class,
+        \Illuminate\Contracts\Session\Middleware\AuthenticatesSessions::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
         \Illuminate\Auth\Middleware\Authorize::class,
     ];
@@ -91,15 +115,7 @@ class Kernel implements KernelContract
         $this->app = $app;
         $this->router = $router;
 
-        $router->middlewarePriority = $this->middlewarePriority;
-
-        foreach ($this->middlewareGroups as $key => $middleware) {
-            $router->middlewareGroup($key, $middleware);
-        }
-
-        foreach ($this->routeMiddleware as $key => $middleware) {
-            $router->aliasMiddleware($key, $middleware);
-        }
+        $this->syncMiddlewareToRouter();
     }
 
     /**
@@ -110,22 +126,20 @@ class Kernel implements KernelContract
      */
     public function handle($request)
     {
+        $this->requestStartedAt = Carbon::now();
+
         try {
             $request->enableHttpMethodParameterOverride();
 
             $response = $this->sendRequestThroughRouter($request);
-        } catch (Exception $e) {
-            $this->reportException($e);
-
-            $response = $this->renderException($request, $e);
         } catch (Throwable $e) {
-            $this->reportException($e = new FatalThrowableError($e));
+            $this->reportException($e);
 
             $response = $this->renderException($request, $e);
         }
 
         $this->app['events']->dispatch(
-            new Events\RequestHandled($request, $response)
+            new RequestHandled($request, $response)
         );
 
         return $response;
@@ -189,6 +203,16 @@ class Kernel implements KernelContract
         $this->terminateMiddleware($request, $response);
 
         $this->app->terminate();
+
+        foreach ($this->requestLifecycleDurationHandlers as ['threshold' => $threshold, 'handler' => $handler]) {
+            $end ??= Carbon::now();
+
+            if ($this->requestStartedAt->diffInMilliseconds($end) > $threshold) {
+                $handler($this->requestStartedAt, $request, $response);
+            }
+        }
+
+        $this->requestStartedAt = null;
     }
 
     /**
@@ -210,7 +234,7 @@ class Kernel implements KernelContract
                 continue;
             }
 
-            list($name) = $this->parseMiddleware($middleware);
+            [$name] = $this->parseMiddleware($middleware);
 
             $instance = $this->app->make($name);
 
@@ -218,6 +242,39 @@ class Kernel implements KernelContract
                 $instance->terminate($request, $response);
             }
         }
+    }
+
+    /**
+     * Register a callback to be invoked when the requests lifecycle duration exceeds a given amount of time.
+     *
+     * @param  \DateTimeInterface|\Carbon\CarbonInterval|float|int  $threshold
+     * @param  callable  $handler
+     * @return void
+     */
+    public function whenRequestLifecycleIsLongerThan($threshold, $handler)
+    {
+        $threshold = $threshold instanceof DateTimeInterface
+            ? $this->secondsUntil($threshold) * 1000
+            : $threshold;
+
+        $threshold = $threshold instanceof CarbonInterval
+            ? $threshold->totalMilliseconds
+            : $threshold;
+
+        $this->requestLifecycleDurationHandlers[] = [
+            'threshold' => $threshold,
+            'handler' => $handler,
+        ];
+    }
+
+    /**
+     * When the request being handled started.
+     *
+     * @return \Illuminate\Support\Carbon|null
+     */
+    public function requestStartedAt()
+    {
+        return $this->requestStartedAt;
     }
 
     /**
@@ -243,7 +300,7 @@ class Kernel implements KernelContract
      */
     protected function parseMiddleware($middleware)
     {
-        list($name, $parameters) = array_pad(explode(':', $middleware, 2), 2, []);
+        [$name, $parameters] = array_pad(explode(':', $middleware, 2), 2, []);
 
         if (is_string($parameters)) {
             $parameters = explode(',', $parameters);
@@ -264,7 +321,7 @@ class Kernel implements KernelContract
     }
 
     /**
-     * Add a new middleware to beginning of the stack if it does not already exist.
+     * Add a new middleware to the beginning of the stack if it does not already exist.
      *
      * @param  string  $middleware
      * @return $this
@@ -294,6 +351,116 @@ class Kernel implements KernelContract
     }
 
     /**
+     * Prepend the given middleware to the given middleware group.
+     *
+     * @param  string  $group
+     * @param  string  $middleware
+     * @return $this
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function prependMiddlewareToGroup($group, $middleware)
+    {
+        if (! isset($this->middlewareGroups[$group])) {
+            throw new InvalidArgumentException("The [{$group}] middleware group has not been defined.");
+        }
+
+        if (array_search($middleware, $this->middlewareGroups[$group]) === false) {
+            array_unshift($this->middlewareGroups[$group], $middleware);
+        }
+
+        $this->syncMiddlewareToRouter();
+
+        return $this;
+    }
+
+    /**
+     * Append the given middleware to the given middleware group.
+     *
+     * @param  string  $group
+     * @param  string  $middleware
+     * @return $this
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function appendMiddlewareToGroup($group, $middleware)
+    {
+        if (! isset($this->middlewareGroups[$group])) {
+            throw new InvalidArgumentException("The [{$group}] middleware group has not been defined.");
+        }
+
+        if (array_search($middleware, $this->middlewareGroups[$group]) === false) {
+            $this->middlewareGroups[$group][] = $middleware;
+        }
+
+        $this->syncMiddlewareToRouter();
+
+        return $this;
+    }
+
+    /**
+     * Prepend the given middleware to the middleware priority list.
+     *
+     * @param  string  $middleware
+     * @return $this
+     */
+    public function prependToMiddlewarePriority($middleware)
+    {
+        if (! in_array($middleware, $this->middlewarePriority)) {
+            array_unshift($this->middlewarePriority, $middleware);
+        }
+
+        $this->syncMiddlewareToRouter();
+
+        return $this;
+    }
+
+    /**
+     * Append the given middleware to the middleware priority list.
+     *
+     * @param  string  $middleware
+     * @return $this
+     */
+    public function appendToMiddlewarePriority($middleware)
+    {
+        if (! in_array($middleware, $this->middlewarePriority)) {
+            $this->middlewarePriority[] = $middleware;
+        }
+
+        $this->syncMiddlewareToRouter();
+
+        return $this;
+    }
+
+    /**
+     * Sync the current state of the middleware to the router.
+     *
+     * @return void
+     */
+    protected function syncMiddlewareToRouter()
+    {
+        $this->router->middlewarePriority = $this->middlewarePriority;
+
+        foreach ($this->middlewareGroups as $key => $middleware) {
+            $this->router->middlewareGroup($key, $middleware);
+        }
+
+        foreach ($this->routeMiddleware as $key => $middleware) {
+            $this->router->aliasMiddleware($key, $middleware);
+        }
+    }
+
+    /**
+     * Get the priority-sorted list of middleware.
+     *
+     * @return array
+     */
+    public function getMiddlewarePriority()
+    {
+        return $this->middlewarePriority;
+    }
+
+    /**
      * Get the bootstrap classes for the application.
      *
      * @return array
@@ -306,10 +473,10 @@ class Kernel implements KernelContract
     /**
      * Report the exception to the exception handler.
      *
-     * @param  \Exception  $e
+     * @param  \Throwable  $e
      * @return void
      */
-    protected function reportException(Exception $e)
+    protected function reportException(Throwable $e)
     {
         $this->app[ExceptionHandler::class]->report($e);
     }
@@ -318,12 +485,32 @@ class Kernel implements KernelContract
      * Render the exception to a response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $e
+     * @param  \Throwable  $e
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function renderException($request, Exception $e)
+    protected function renderException($request, Throwable $e)
     {
         return $this->app[ExceptionHandler::class]->render($request, $e);
+    }
+
+    /**
+     * Get the application's route middleware groups.
+     *
+     * @return array
+     */
+    public function getMiddlewareGroups()
+    {
+        return $this->middlewareGroups;
+    }
+
+    /**
+     * Get the application's route middleware.
+     *
+     * @return array
+     */
+    public function getRouteMiddleware()
+    {
+        return $this->routeMiddleware;
     }
 
     /**
@@ -334,5 +521,18 @@ class Kernel implements KernelContract
     public function getApplication()
     {
         return $this->app;
+    }
+
+    /**
+     * Set the Laravel application instance.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @return $this
+     */
+    public function setApplication(Application $app)
+    {
+        $this->app = $app;
+
+        return $this;
     }
 }

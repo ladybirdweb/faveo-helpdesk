@@ -15,7 +15,7 @@ use App\Model\helpdesk\Ticket\Tickets;
 use App\User;
 use Auth;
 use Hash;
-use Input;
+use Illuminate\Support\Facades\Request;
 use Mail;
 
 /**
@@ -275,7 +275,7 @@ class TicketController extends Controller
             $source = $eventthread->source;
 
             $form_data = $request->except('reply_content', 'ticket_ID', 'attachment');
-            \Event::fire(new \App\Events\ClientTicketFormPost($form_data, $emailadd, $source));
+            event(new \App\Events\ClientTicketFormPost($form_data, $emailadd, $source));
             $reply_content = $request->input('reply_content');
             $thread->ticket_id = $request->input('ticket_id');
             $thread->poster = 'support';
@@ -323,7 +323,7 @@ class TicketController extends Controller
             } else {
                 $agentsign = null;
             }
-            \Event::fire(new \App\Events\FaveoAfterReply($reply_content, $user->phone_number, $request, $tickets));
+            event(new \App\Events\FaveoAfterReply($reply_content, $user->phone_number, $request, $tickets));
 
 //             Mail::send(array('html' => 'emails.ticket_re-reply'), ['content' => $reply_content, 'ticket_number' => $ticket_number, 'From' => $company, 'name' => $username, 'Agent_Signature' => $agentsign], function ($message) use ($email, $user_name, $ticket_number, $ticket_subject, $check_attachment) {
 //                 $message->to($email, $user_name)->subject($ticket_subject . '[#' . $ticket_number . ']');
@@ -414,15 +414,15 @@ class TicketController extends Controller
         try {
             $ticket = $ticket->where('id', '=', $ticket_id)->first();
 
-            $ticket->sla = Input::get('sla_plan');
-            $ticket->help_topic_id = Input::get('help_topic');
-            $ticket->source = Input::get('ticket_source');
-            $ticket->priority_id = Input::get('ticket_priority');
-            $ticket->status = Input::get('status');
+            $ticket->sla = Request::get('sla_plan');
+            $ticket->help_topic_id = Request::get('help_topic');
+            $ticket->source = Request::get('ticket_source');
+            $ticket->priority_id = Request::get('ticket_priority');
+            $ticket->status = Request::get('status');
             $ticket->save();
 
             $threads = $thread->where('ticket_id', '=', $ticket_id)->first();
-            $threads->title = Input::get('subject');
+            $threads->title = Request::get('subject');
             $threads->save();
         } catch (\Exception $ex) {
             $result = $ex->getMessage();
@@ -444,7 +444,7 @@ class TicketController extends Controller
     public function assign($id)
     {
         try {
-            $UserEmail = Input::get('user');
+            $UserEmail = Request::get('user');
             //dd($UserEmail);
             // $UserEmail = 'sujitprasad12@yahoo.in';
             $user = User::where('email', '=', $UserEmail)->first();
@@ -624,7 +624,7 @@ class TicketController extends Controller
      */
     public function autosearch()
     {
-        $term = \Input::get('term');
+        $term = Request::get('term');
         $user = \App\User::where('email', 'LIKE', '%'.$term.'%')->orWhere('first_name', 'LIKE', '%'.$term.'%')->orWhere('last_name', 'LIKE', '%'.$term.'%')->orWhere('user_name', 'LIKE', '%'.$term.'%')->pluck('email');
 
         return $user;
@@ -639,8 +639,8 @@ class TicketController extends Controller
      */
     public function useradd()
     {
-        $email = Input::get('email');
-        $ticket_id = Input::get('ticket_id');
+        $email = Request::get('email');
+        $ticket_id = Request::get('ticket_id');
         $company = $this->company();
         $user = new User();
         $user->user_name = $email;
@@ -673,8 +673,8 @@ class TicketController extends Controller
      */
     public function userremove()
     {
-        $email = Input::get('email');
-        $ticketid = Input::get('ticketid');
+        $email = Request::get('email');
+        $ticketid = Request::get('ticketid');
         $user = new User();
         $user = $user->where('email', $email)->first();
         $ticket_collaborator = Ticket_Collaborator::where('ticket_id', '=', $ticketid)
@@ -692,7 +692,7 @@ class TicketController extends Controller
     public function getCollaboratorForTicket()
     {
         try {
-            $ticketid = Input::get('ticket_id');
+            $ticketid = Request::get('ticket_id');
 
             $ticket_collaborator = \DB::table('users')
                     ->join('ticket_collaborator', function ($join) use ($ticketid) {

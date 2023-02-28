@@ -13,6 +13,8 @@
 
 namespace PhpSpec\Config;
 
+use Symfony\Component\Console\Output\OutputInterface;
+
 class OptionsConfig
 {
     /**
@@ -34,54 +36,55 @@ class OptionsConfig
      * @var bool
      */
     private $fakingEnabled;
+
     /**
-     * @var string|bool
+     * @var bool|string
      */
     private $bootstrapPath;
 
     /**
-     * @param bool $stopOnFailureEnabled
-     * @param bool $codeGenerationEnabled
-     * @param bool $reRunEnabled
-     * @param bool $fakingEnabled
-     * @param string|bool $bootstrapPath
+     * @var bool
+     */
+    private $isVerbose;
+
+    /**
+     * @param bool|string $bootstrapPath
+     * @param bool $isVerbose
      */
     public function __construct(
         bool $stopOnFailureEnabled,
         bool $codeGenerationEnabled,
         bool $reRunEnabled,
         bool $fakingEnabled,
-        $bootstrapPath
+        $bootstrapPath,
+        $isVerbose
     ) {
         $this->stopOnFailureEnabled  = $stopOnFailureEnabled;
         $this->codeGenerationEnabled = $codeGenerationEnabled;
         $this->reRunEnabled = $reRunEnabled;
         $this->fakingEnabled = $fakingEnabled;
         $this->bootstrapPath = $bootstrapPath;
+        $this->isVerbose = $isVerbose;
     }
 
-    /**
-     * @return bool
-     */
+    
     public function isStopOnFailureEnabled(): bool
     {
         return $this->stopOnFailureEnabled;
     }
 
-    /**
-     * @return bool
-     */
+    
     public function isCodeGenerationEnabled(): bool
     {
         return $this->codeGenerationEnabled;
     }
 
-    public function isReRunEnabled()
+    public function isReRunEnabled(): bool
     {
         return $this->reRunEnabled;
     }
 
-    public function isFakingEnabled()
+    public function isFakingEnabled(): bool
     {
         return $this->fakingEnabled;
     }
@@ -89,5 +92,10 @@ class OptionsConfig
     public function getBootstrapPath()
     {
         return $this->bootstrapPath;
+    }
+
+    public function isVerbose(): bool
+    {
+        return $this->isVerbose;
     }
 }

@@ -61,7 +61,7 @@ class LibraryController extends Controller
             $public_key = openssl_get_publickey($key_content);
 
             $encrypted = $e = null;
-            openssl_seal($data, $encrypted, $e, [$public_key]);
+            openssl_seal($data, $encrypted, $e, [$public_key], 'rc4');
 
             $sealed_data = base64_encode($encrypted);
             $envelope = base64_encode($e[0]);

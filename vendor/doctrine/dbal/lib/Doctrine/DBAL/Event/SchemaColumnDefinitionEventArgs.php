@@ -5,14 +5,15 @@ namespace Doctrine\DBAL\Event;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Column;
+use Doctrine\Deprecations\Deprecation;
 
 /**
- * Event Arguments used when the portable column definition is generated inside Doctrine\DBAL\Schema\AbstractSchemaManager.
+ * Event Arguments used when the portable column definition is generated inside {@link AbstractPlatform}.
  */
 class SchemaColumnDefinitionEventArgs extends SchemaEventArgs
 {
     /** @var Column|null */
-    private $column = null;
+    private $column;
 
     /**
      * Raw column data as fetched from the database.
@@ -47,7 +48,7 @@ class SchemaColumnDefinitionEventArgs extends SchemaEventArgs
      * Allows to clear the column which means the column will be excluded from
      * tables column list.
      *
-     * @return \Doctrine\DBAL\Event\SchemaColumnDefinitionEventArgs
+     * @return SchemaColumnDefinitionEventArgs
      */
     public function setColumn(?Column $column = null)
     {
@@ -97,10 +98,19 @@ class SchemaColumnDefinitionEventArgs extends SchemaEventArgs
     }
 
     /**
+     * @deprecated Use SchemaColumnDefinitionEventArgs::getConnection() and Connection::getDatabasePlatform() instead.
+     *
      * @return AbstractPlatform
      */
     public function getDatabasePlatform()
     {
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/issues/3580',
+            'SchemaColumnDefinitionEventArgs::getDatabasePlatform() is deprecated, ' .
+            'use SchemaColumnDefinitionEventArgs::getConnection()->getDatabasePlatform() instead.'
+        );
+
         return $this->connection->getDatabasePlatform();
     }
 }

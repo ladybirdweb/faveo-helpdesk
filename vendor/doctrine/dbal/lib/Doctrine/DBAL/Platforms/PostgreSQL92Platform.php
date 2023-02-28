@@ -2,18 +2,21 @@
 
 namespace Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
+
 use function sprintf;
 
 /**
  * Provides the behavior, features and SQL dialect of the PostgreSQL 9.2 database platform.
+ *
+ * @deprecated Use PostgreSQL 9.4 or newer
  */
 class PostgreSQL92Platform extends PostgreSQL91Platform
 {
     /**
      * {@inheritdoc}
      */
-    public function getJsonTypeDeclarationSQL(array $field)
+    public function getJsonTypeDeclarationSQL(array $column)
     {
         return 'JSON';
     }
@@ -21,13 +24,13 @@ class PostgreSQL92Platform extends PostgreSQL91Platform
     /**
      * {@inheritdoc}
      */
-    public function getSmallIntTypeDeclarationSQL(array $field)
+    public function getSmallIntTypeDeclarationSQL(array $column)
     {
-        if (! empty($field['autoincrement'])) {
+        if (! empty($column['autoincrement'])) {
             return 'SMALLSERIAL';
         }
 
-        return parent::getSmallIntTypeDeclarationSQL($field);
+        return parent::getSmallIntTypeDeclarationSQL($column);
     }
 
     /**
@@ -53,7 +56,7 @@ class PostgreSQL92Platform extends PostgreSQL91Platform
     {
         parent::initializeDoctrineTypeMappings();
 
-        $this->doctrineTypeMapping['json'] = Type::JSON;
+        $this->doctrineTypeMapping['json'] = Types::JSON;
     }
 
     /**

@@ -14,7 +14,7 @@
 return array (
   'generalDesc' => 
   array (
-    'NationalNumberPattern' => '[2-57-9]\\d{5}',
+    'NationalNumberPattern' => '(?:050|[2-57-9]\\d\\d)\\d{3}',
     'PossibleLength' => 
     array (
       0 => 6,
@@ -47,9 +47,10 @@ return array (
   ),
   'tollFree' => 
   array (
+    'NationalNumberPattern' => '050\\d{3}',
+    'ExampleNumber' => '050012',
     'PossibleLength' => 
     array (
-      0 => -1,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -144,11 +145,23 @@ return array (
   array (
     0 => 
     array (
+      'pattern' => '(\\d{3})',
+      'format' => '$1',
+      'leadingDigitsPatterns' => 
+      array (
+        0 => '5[6-8]',
+      ),
+      'nationalPrefixFormattingRule' => '',
+      'domesticCarrierCodeFormattingRule' => '',
+      'nationalPrefixOptionalWhenFormatting' => false,
+    ),
+    1 => 
+    array (
       'pattern' => '(\\d{2})(\\d{2})(\\d{2})',
       'format' => '$1.$2.$3',
       'leadingDigitsPatterns' => 
       array (
-        0 => '[247-9]|3[0-6]|5[0-4]',
+        0 => '[02-57-9]',
       ),
       'nationalPrefixFormattingRule' => '',
       'domesticCarrierCodeFormattingRule' => '',
@@ -157,8 +170,19 @@ return array (
   ),
   'intlNumberFormat' => 
   array (
+    0 => 
+    array (
+      'pattern' => '(\\d{2})(\\d{2})(\\d{2})',
+      'format' => '$1.$2.$3',
+      'leadingDigitsPatterns' => 
+      array (
+        0 => '[02-57-9]',
+      ),
+      'nationalPrefixFormattingRule' => '',
+      'domesticCarrierCodeFormattingRule' => '',
+      'nationalPrefixOptionalWhenFormatting' => false,
+    ),
   ),
   'mainCountryForCode' => false,
-  'leadingZeroPossible' => false,
   'mobileNumberPortableRegion' => false,
 );

@@ -28,18 +28,14 @@ class MatcherManager
      */
     private $matchers = array();
 
-    /**
-     * @param Presenter $presenter
-     */
+    
     public function __construct(Presenter $presenter)
     {
         $this->presenter = $presenter;
     }
 
-    /**
-     * @param Matcher $matcher
-     */
-    public function add(Matcher $matcher)
+    
+    public function add(Matcher $matcher): void
     {
         $this->matchers[] = $matcher;
         @usort($this->matchers, function (Matcher $matcher1, Matcher $matcher2) {
@@ -52,18 +48,12 @@ class MatcherManager
      *
      * @param Matcher[] $matchers
      */
-    public function replace(array $matchers)
+    public function replace(array $matchers): void
     {
         $this->matchers = $matchers;
     }
 
     /**
-     * @param string $keyword
-     * @param mixed  $subject
-     * @param array  $arguments
-     *
-     * @return Matcher
-     *
      * @throws \PhpSpec\Exception\Wrapper\MatcherNotFoundException
      */
     public function find(string $keyword, $subject, array $arguments): Matcher

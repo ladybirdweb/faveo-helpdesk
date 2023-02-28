@@ -11,7 +11,7 @@ trait HasDatabaseNotifications
      */
     public function notifications()
     {
-        return $this->morphMany(DatabaseNotification::class, 'notifiable')->orderBy('created_at', 'desc');
+        return $this->morphMany(DatabaseNotification::class, 'notifiable')->latest();
     }
 
     /**
@@ -21,7 +21,7 @@ trait HasDatabaseNotifications
      */
     public function readNotifications()
     {
-        return $this->notifications()->whereNotNull('read_at');
+        return $this->notifications()->read();
     }
 
     /**
@@ -31,6 +31,6 @@ trait HasDatabaseNotifications
      */
     public function unreadNotifications()
     {
-        return $this->notifications()->whereNull('read_at');
+        return $this->notifications()->unread();
     }
 }

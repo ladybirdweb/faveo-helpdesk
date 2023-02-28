@@ -11,7 +11,6 @@ namespace Zend\Validator;
 
 use Traversable;
 use Zend\Stdlib\ArrayUtils;
-use Zend\ServiceManager\ServiceManager;
 
 class Explode extends AbstractValidator implements ValidatorPluginManagerAwareInterface
 {
@@ -85,8 +84,8 @@ class Explode extends AbstractValidator implements ValidatorPluginManagerAwareIn
      */
     public function getValidatorPluginManager()
     {
-        if (! $this->pluginManager) {
-            $this->setValidatorPluginManager(new ValidatorPluginManager(new ServiceManager));
+        if (!$this->pluginManager) {
+            $this->setValidatorPluginManager(new ValidatorPluginManager());
         }
 
         return $this->pluginManager;
@@ -102,7 +101,7 @@ class Explode extends AbstractValidator implements ValidatorPluginManagerAwareIn
     public function setValidator($validator)
     {
         if (is_array($validator)) {
-            if (! isset($validator['name'])) {
+            if (!isset($validator['name'])) {
                 throw new Exception\RuntimeException(
                     'Invalid validator specification provided; does not include "name" key'
                 );
@@ -112,7 +111,7 @@ class Explode extends AbstractValidator implements ValidatorPluginManagerAwareIn
             $validator = $this->getValidatorPluginManager()->get($name, $options);
         }
 
-        if (! $validator instanceof ValidatorInterface) {
+        if (!$validator instanceof ValidatorInterface) {
             throw new Exception\RuntimeException(
                 'Invalid validator given'
             );
@@ -189,7 +188,7 @@ class Explode extends AbstractValidator implements ValidatorPluginManagerAwareIn
 
         $validator = $this->getValidator();
 
-        if (! $validator) {
+        if (!$validator) {
             throw new Exception\RuntimeException(sprintf(
                 '%s expects a validator to be set; none given',
                 __METHOD__
@@ -197,7 +196,7 @@ class Explode extends AbstractValidator implements ValidatorPluginManagerAwareIn
         }
 
         foreach ($values as $value) {
-            if (! $validator->isValid($value, $context)) {
+            if (!$validator->isValid($value, $context)) {
                 $this->abstractOptions['messages'][] = $validator->getMessages();
 
                 if ($this->isBreakOnFirstFailure()) {

@@ -3,10 +3,12 @@
 namespace App\Model\helpdesk\Ticket;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Ticket_attachments extends Model
 {
     protected $table = 'ticket_attachment';
+
     protected $fillable = [
         'id', 'thread_id', 'name', 'size', 'type', 'file', 'data', 'poster', 'updated_at', 'created_at',
     ];
@@ -59,7 +61,7 @@ class Ticket_attachments extends Model
 
                 return '<li style="background-color:#f4f4f4;"><span class="mailbox-attachment-icon has-img">'.$var.'</span><div class="mailbox-attachment-info"><b style="word-wrap: break-word;">'.$this->name.'</b><br/><p>'.$value.'</p></div></li>';
             } else {
-                $var = '<a style="max-width:200px;height:133px;color:#666;" href="'.\URL::route('image', ['image_id' => $this->id]).'" target="_blank"><span class="mailbox-attachment-icon" style="background-color:#fff; font-size:18px;">'.strtoupper(str_limit($this->type, 15)).'</span><div class="mailbox-attachment-info"><span ><b style="word-wrap: break-word;">'.$this->name.'</b><br/><p>'.$value.'</p></span></div></a>';
+                $var = '<a style="max-width:200px;height:133px;color:#666;" href="'.\URL::route('image', ['image_id' => $this->id]).'" target="_blank"><span class="mailbox-attachment-icon" style="background-color:#fff; font-size:18px;">'.strtoupper(Str::limit($this->type, 15)).'</span><div class="mailbox-attachment-info"><span ><b style="word-wrap: break-word;">'.$this->name.'</b><br/><p>'.$value.'</p></span></div></a>';
 
                 return '<li style="background-color:#f4f4f4;">'.$var.'</li>';
             }

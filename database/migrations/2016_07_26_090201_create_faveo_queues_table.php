@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateFaveoQueuesTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -30,4 +29,4 @@ class CreateFaveoQueuesTable extends Migration
     {
         Schema::drop('faveo_queues');
     }
-}
+};

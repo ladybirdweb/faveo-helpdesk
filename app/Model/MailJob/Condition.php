@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Condition extends Model
 {
     protected $table = 'conditions';
+
     protected $fillable = ['job', 'value'];
 
     public function getConditionValue($job)

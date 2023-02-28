@@ -2,8 +2,9 @@
 
 namespace Illuminate\Database\Schema\Grammars;
 
-use Illuminate\Support\Fluent;
+use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Fluent;
 
 class SqlServerGrammar extends Grammar
 {
@@ -17,16 +18,45 @@ class SqlServerGrammar extends Grammar
     /**
      * The possible column modifiers.
      *
-     * @var array
+     * @var string[]
      */
-    protected $modifiers = ['Increment', 'Collate', 'Nullable', 'Default'];
+    protected $modifiers = ['Increment', 'Collate', 'Nullable', 'Default', 'Persisted'];
 
     /**
      * The columns available as serials.
      *
-     * @var array
+     * @var string[]
      */
     protected $serials = ['tinyInteger', 'smallInteger', 'mediumInteger', 'integer', 'bigInteger'];
+
+    /**
+     * Compile a create database command.
+     *
+     * @param  string  $name
+     * @param  \Illuminate\Database\Connection  $connection
+     * @return string
+     */
+    public function compileCreateDatabase($name, $connection)
+    {
+        return sprintf(
+            'create database %s',
+            $this->wrapValue($name),
+        );
+    }
+
+    /**
+     * Compile a drop database if exists command.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    public function compileDropDatabaseIfExists($name)
+    {
+        return sprintf(
+            'drop database if exists %s',
+            $this->wrapValue($name)
+        );
+    }
 
     /**
      * Compile the query to determine if a table exists.
@@ -35,7 +65,7 @@ class SqlServerGrammar extends Grammar
      */
     public function compileTableExists()
     {
-        return "select * from sysobjects where type = 'U' and name = ?";
+        return "select * from sys.sysobjects where id = object_id(?) and xtype in ('U', 'V')";
     }
 
     /**
@@ -46,9 +76,7 @@ class SqlServerGrammar extends Grammar
      */
     public function compileColumnListing($table)
     {
-        return "select col.name from sys.columns as col
-                join sys.objects as obj on col.object_id = obj.object_id
-                where obj.type = 'U' and obj.name = '$table'";
+        return "select name from sys.columns where object_id = object_id('$table')";
     }
 
     /**
@@ -78,6 +106,24 @@ class SqlServerGrammar extends Grammar
             $this->wrapTable($blueprint),
             implode(', ', $this->getColumns($blueprint))
         );
+    }
+
+    /**
+     * Compile a rename column command.
+     *
+     * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
+     * @param  \Illuminate\Support\Fluent  $command
+     * @param  \Illuminate\Database\Connection  $connection
+     * @return array|string
+     */
+    public function compileRenameColumn(Blueprint $blueprint, Fluent $command, Connection $connection)
+    {
+        return $connection->usingNativeSchemaOperations()
+            ? sprintf("sp_rename '%s', %s, 'COLUMN'",
+                $this->wrap($blueprint->getTable().'.'.$command->from),
+                $this->wrap($command->to)
+            )
+            : parent::compileRenameColumn($blueprint, $command, $connection);
     }
 
     /**
@@ -165,7 +211,7 @@ class SqlServerGrammar extends Grammar
      */
     public function compileDropIfExists(Blueprint $blueprint, Fluent $command)
     {
-        return sprintf('if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = %s) drop table %s',
+        return sprintf('if exists (select * from sys.sysobjects where id = object_id(%s, \'U\')) drop table %s',
             "'".str_replace("'", "''", $this->getTablePrefix().$blueprint->getTable())."'",
             $this->wrapTable($blueprint)
         );
@@ -192,7 +238,31 @@ class SqlServerGrammar extends Grammar
     {
         $columns = $this->wrapArray($command->columns);
 
-        return 'alter table '.$this->wrapTable($blueprint).' drop column '.implode(', ', $columns);
+        $dropExistingConstraintsSql = $this->compileDropDefaultConstraint($blueprint, $command).';';
+
+        return $dropExistingConstraintsSql.'alter table '.$this->wrapTable($blueprint).' drop column '.implode(', ', $columns);
+    }
+
+    /**
+     * Compile a drop default constraint command.
+     *
+     * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
+     * @param  \Illuminate\Support\Fluent  $command
+     * @return string
+     */
+    public function compileDropDefaultConstraint(Blueprint $blueprint, Fluent $command)
+    {
+        $columns = "'".implode("','", $command->columns)."'";
+
+        $tableName = $this->getTablePrefix().$blueprint->getTable();
+
+        $sql = "DECLARE @sql NVARCHAR(MAX) = '';";
+        $sql .= "SELECT @sql += 'ALTER TABLE [dbo].[{$tableName}] DROP CONSTRAINT ' + OBJECT_NAME([default_object_id]) + ';' ";
+        $sql .= 'FROM sys.columns ';
+        $sql .= "WHERE [object_id] = OBJECT_ID('[dbo].[{$tableName}]') AND [name] in ({$columns}) AND [default_object_id] <> 0;";
+        $sql .= 'EXEC(@sql)';
+
+        return $sql;
     }
 
     /**
@@ -280,8 +350,8 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile a rename index command.
      *
-     * @param  \Illuminate\Database\Schema\Blueprint $blueprint
-     * @param  \Illuminate\Support\Fluent $command
+     * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
+     * @param  \Illuminate\Support\Fluent  $command
      * @return string
      */
     public function compileRenameIndex(Blueprint $blueprint, Fluent $command)
@@ -313,6 +383,56 @@ class SqlServerGrammar extends Grammar
     }
 
     /**
+     * Compile the command to drop all foreign keys.
+     *
+     * @return string
+     */
+    public function compileDropAllForeignKeys()
+    {
+        return "DECLARE @sql NVARCHAR(MAX) = N'';
+            SELECT @sql += 'ALTER TABLE '
+                + QUOTENAME(OBJECT_SCHEMA_NAME(parent_object_id)) + '.' + + QUOTENAME(OBJECT_NAME(parent_object_id))
+                + ' DROP CONSTRAINT ' + QUOTENAME(name) + ';'
+            FROM sys.foreign_keys;
+
+            EXEC sp_executesql @sql;";
+    }
+
+    /**
+     * Compile the command to drop all views.
+     *
+     * @return string
+     */
+    public function compileDropAllViews()
+    {
+        return "DECLARE @sql NVARCHAR(MAX) = N'';
+            SELECT @sql += 'DROP VIEW ' + QUOTENAME(OBJECT_SCHEMA_NAME(object_id)) + '.' + QUOTENAME(name) + ';'
+            FROM sys.views;
+
+            EXEC sp_executesql @sql;";
+    }
+
+    /**
+     * Compile the SQL needed to retrieve all table names.
+     *
+     * @return string
+     */
+    public function compileGetAllTables()
+    {
+        return "select name, type from sys.tables where type = 'U'";
+    }
+
+    /**
+     * Compile the SQL needed to retrieve all view names.
+     *
+     * @return string
+     */
+    public function compileGetAllViews()
+    {
+        return "select name, type from sys.objects where type = 'V'";
+    }
+
+    /**
      * Create the column definition for a char type.
      *
      * @param  \Illuminate\Support\Fluent  $column
@@ -332,6 +452,17 @@ class SqlServerGrammar extends Grammar
     protected function typeString(Fluent $column)
     {
         return "nvarchar({$column->length})";
+    }
+
+    /**
+     * Create the column definition for a tiny text type.
+     *
+     * @param  \Illuminate\Support\Fluent  $column
+     * @return string
+     */
+    protected function typeTinyText(Fluent $column)
+    {
+        return 'nvarchar(255)';
     }
 
     /**
@@ -522,7 +653,7 @@ class SqlServerGrammar extends Grammar
      */
     protected function typeDateTime(Fluent $column)
     {
-        return $column->precision ? "datetime2($column->precision)" : 'datetime';
+        return $this->typeTimestamp($column);
     }
 
     /**
@@ -533,7 +664,7 @@ class SqlServerGrammar extends Grammar
      */
     protected function typeDateTimeTz(Fluent $column)
     {
-        return $column->precision ? "datetimeoffset($column->precision)" : 'datetimeoffset';
+        return $this->typeTimestampTz($column);
     }
 
     /**
@@ -574,20 +705,16 @@ class SqlServerGrammar extends Grammar
     /**
      * Create the column definition for a timestamp (with time zone) type.
      *
-     * @link https://msdn.microsoft.com/en-us/library/bb630289(v=sql.120).aspx
+     * @link https://docs.microsoft.com/en-us/sql/t-sql/data-types/datetimeoffset-transact-sql?view=sql-server-ver15
      *
      * @param  \Illuminate\Support\Fluent  $column
      * @return string
      */
     protected function typeTimestampTz(Fluent $column)
     {
-        if ($column->useCurrent) {
-            $columnType = $column->precision ? "datetimeoffset($column->precision)" : 'datetimeoffset';
+        $columnType = $column->precision ? "datetimeoffset($column->precision)" : 'datetimeoffset';
 
-            return "$columnType default CURRENT_TIMESTAMP";
-        }
-
-        return "datetimeoffset($column->precision)";
+        return $column->useCurrent ? "$columnType default CURRENT_TIMESTAMP" : $columnType;
     }
 
     /**
@@ -734,6 +861,17 @@ class SqlServerGrammar extends Grammar
     }
 
     /**
+     * Create the column definition for a generated, computed column type.
+     *
+     * @param  \Illuminate\Support\Fluent  $column
+     * @return string|null
+     */
+    protected function typeComputed(Fluent $column)
+    {
+        return "as ({$column->expression})";
+    }
+
+    /**
      * Get the SQL for a collation column modifier.
      *
      * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
@@ -756,7 +894,9 @@ class SqlServerGrammar extends Grammar
      */
     protected function modifyNullable(Blueprint $blueprint, Fluent $column)
     {
-        return $column->nullable ? ' null' : ' not null';
+        if ($column->type !== 'computed') {
+            return $column->nullable ? ' null' : ' not null';
+        }
     }
 
     /**
@@ -788,6 +928,20 @@ class SqlServerGrammar extends Grammar
     }
 
     /**
+     * Get the SQL for a generated stored column modifier.
+     *
+     * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
+     * @param  \Illuminate\Support\Fluent  $column
+     * @return string|null
+     */
+    protected function modifyPersisted(Blueprint $blueprint, Fluent $column)
+    {
+        if ($column->persisted) {
+            return ' persisted';
+        }
+    }
+
+    /**
      * Wrap a table in keyword identifiers.
      *
      * @param  \Illuminate\Database\Query\Expression|string  $table
@@ -800,5 +954,20 @@ class SqlServerGrammar extends Grammar
         }
 
         return parent::wrapTable($table);
+    }
+
+    /**
+     * Quote the given string literal.
+     *
+     * @param  string|array  $value
+     * @return string
+     */
+    public function quoteString($value)
+    {
+        if (is_array($value)) {
+            return implode(', ', array_map([$this, __FUNCTION__], $value));
+        }
+
+        return "N'$value'";
     }
 }

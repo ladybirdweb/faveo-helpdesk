@@ -48,7 +48,7 @@ class UserController extends Controller
         $article->setPath('article-list');
         $categorys = $category->get();
 
-        return view('themes.default1.client.kb.article-list.articles', compact('time', 'categorys', 'article'));
+        return view('themes.default1.client.kb.article-list.articles', compact('categorys', 'article'));
     }
 
     /**

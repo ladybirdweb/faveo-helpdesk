@@ -3,8 +3,9 @@
 namespace Laravel\Socialite;
 
 use ArrayAccess;
+use Laravel\Socialite\Contracts\User;
 
-abstract class AbstractUser implements ArrayAccess, Contracts\User
+abstract class AbstractUser implements ArrayAccess, User
 {
     /**
      * The unique identifier for the user.
@@ -49,6 +50,13 @@ abstract class AbstractUser implements ArrayAccess, Contracts\User
     public $user;
 
     /**
+     * The user's other attributes.
+     *
+     * @var array
+     */
+    public $attributes = [];
+
+    /**
      * Get the unique identifier for the user.
      *
      * @return string
@@ -61,7 +69,7 @@ abstract class AbstractUser implements ArrayAccess, Contracts\User
     /**
      * Get the nickname / username for the user.
      *
-     * @return string
+     * @return string|null
      */
     public function getNickname()
     {
@@ -71,7 +79,7 @@ abstract class AbstractUser implements ArrayAccess, Contracts\User
     /**
      * Get the full name of the user.
      *
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
@@ -81,7 +89,7 @@ abstract class AbstractUser implements ArrayAccess, Contracts\User
     /**
      * Get the e-mail address of the user.
      *
-     * @return string
+     * @return string|null
      */
     public function getEmail()
     {
@@ -91,7 +99,7 @@ abstract class AbstractUser implements ArrayAccess, Contracts\User
     /**
      * Get the avatar / image URL for the user.
      *
-     * @return string
+     * @return string|null
      */
     public function getAvatar()
     {
@@ -129,8 +137,12 @@ abstract class AbstractUser implements ArrayAccess, Contracts\User
      */
     public function map(array $attributes)
     {
+        $this->attributes = $attributes;
+
         foreach ($attributes as $key => $value) {
-            $this->{$key} = $value;
+            if (property_exists($this, $key)) {
+                $this->{$key} = $value;
+            }
         }
 
         return $this;
@@ -142,6 +154,7 @@ abstract class AbstractUser implements ArrayAccess, Contracts\User
      * @param  string  $offset
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return array_key_exists($offset, $this->user);
@@ -153,6 +166,7 @@ abstract class AbstractUser implements ArrayAccess, Contracts\User
      * @param  string  $offset
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->user[$offset];
@@ -165,6 +179,7 @@ abstract class AbstractUser implements ArrayAccess, Contracts\User
      * @param  mixed  $value
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->user[$offset] = $value;
@@ -176,8 +191,20 @@ abstract class AbstractUser implements ArrayAccess, Contracts\User
      * @param  string  $offset
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->user[$offset]);
+    }
+
+    /**
+     * Get a user attribute value dynamically.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function __get($key)
+    {
+        return $this->attributes[$key] ?? null;
     }
 }

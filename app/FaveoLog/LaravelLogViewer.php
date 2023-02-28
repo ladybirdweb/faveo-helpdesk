@@ -16,6 +16,7 @@ class LaravelLogViewer
      * @var string file
      */
     private static $file;
+
     private static $levels_classes = [
         'debug'     => 'info',
         'info'      => 'info',
@@ -26,6 +27,7 @@ class LaravelLogViewer
         'alert'     => 'danger',
         'emergency' => 'danger',
     ];
+
     private static $levels_imgs = [
         'debug'     => 'info',
         'info'      => 'info',

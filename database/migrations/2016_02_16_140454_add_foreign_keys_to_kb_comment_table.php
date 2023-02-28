@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddForeignKeysToKbCommentTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -28,4 +27,4 @@ class AddForeignKeysToKbCommentTable extends Migration
             $table->dropForeign('comment_article_id_foreign');
         });
     }
-}
+};

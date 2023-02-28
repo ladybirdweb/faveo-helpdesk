@@ -14,7 +14,7 @@
 return array (
   'generalDesc' => 
   array (
-    'NationalNumberPattern' => '[2357]\\d{8}|[1-9]\\d{7}',
+    'NationalNumberPattern' => '[235-7]\\d{8}|[1-9]\\d{7}',
     'PossibleLength' => 
     array (
       0 => 8,
@@ -54,11 +54,10 @@ return array (
   ),
   'tollFree' => 
   array (
-    'NationalNumberPattern' => '[48]0\\d{6}',
+    'NationalNumberPattern' => '(?:[48]0\\d|680[29])\\d{5}',
     'ExampleNumber' => '80123456',
     'PossibleLength' => 
     array (
-      0 => 8,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -142,10 +141,9 @@ return array (
   ),
   'noInternationalDialling' => 
   array (
-    'NationalNumberPattern' => '[48]0\\d{6}',
+    'NationalNumberPattern' => '(?:[48]0\\d|680[29])\\d{5}',
     'PossibleLength' => 
     array (
-      0 => 8,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -167,11 +165,23 @@ return array (
       array (
         0 => '1',
       ),
-      'nationalPrefixFormattingRule' => '($1)',
+      'nationalPrefixFormattingRule' => '(06 $1)',
       'domesticCarrierCodeFormattingRule' => '',
       'nationalPrefixOptionalWhenFormatting' => false,
     ),
     1 => 
+    array (
+      'pattern' => '(\\d{2})(\\d{3})(\\d{3})',
+      'format' => '$1 $2 $3',
+      'leadingDigitsPatterns' => 
+      array (
+        0 => '[27][2-9]|3[2-7]|4[24-9]|5[2-79]|6|8[2-57-9]|9[2-69]',
+      ),
+      'nationalPrefixFormattingRule' => '(06 $1)',
+      'domesticCarrierCodeFormattingRule' => '',
+      'nationalPrefixOptionalWhenFormatting' => false,
+    ),
+    2 => 
     array (
       'pattern' => '(\\d{2})(\\d{3})(\\d{3,4})',
       'format' => '$1 $2 $3',
@@ -179,7 +189,7 @@ return array (
       array (
         0 => '[2-9]',
       ),
-      'nationalPrefixFormattingRule' => '($1)',
+      'nationalPrefixFormattingRule' => '06 $1',
       'domesticCarrierCodeFormattingRule' => '',
       'nationalPrefixOptionalWhenFormatting' => false,
     ),
@@ -188,6 +198,5 @@ return array (
   array (
   ),
   'mainCountryForCode' => false,
-  'leadingZeroPossible' => false,
   'mobileNumberPortableRegion' => true,
 );

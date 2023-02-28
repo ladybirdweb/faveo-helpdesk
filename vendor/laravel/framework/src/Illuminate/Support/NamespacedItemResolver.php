@@ -29,7 +29,7 @@ class NamespacedItemResolver
         // If the key does not contain a double colon, it means the key is not in a
         // namespace, and is just a regular configuration item. Namespaces are a
         // tool for organizing configuration items for things such as modules.
-        if (strpos($key, '::') === false) {
+        if (! str_contains($key, '::')) {
             $segments = explode('.', $key);
 
             $parsed = $this->parseBasicSegments($segments);
@@ -74,7 +74,7 @@ class NamespacedItemResolver
      */
     protected function parseNamespacedSegments($key)
     {
-        list($namespace, $item) = explode('::', $key);
+        [$namespace, $item] = explode('::', $key);
 
         // First we'll just explode the first segment to get the namespace and group
         // since the item should be in the remaining segments. Once we have these
@@ -92,11 +92,21 @@ class NamespacedItemResolver
      * Set the parsed value of a key.
      *
      * @param  string  $key
-     * @param  array   $parsed
+     * @param  array  $parsed
      * @return void
      */
     public function setParsedKey($key, $parsed)
     {
         $this->parsed[$key] = $parsed;
+    }
+
+    /**
+     * Flush the cache of parsed keys.
+     *
+     * @return void
+     */
+    public function flushParsedKeys()
+    {
+        $this->parsed = [];
     }
 }

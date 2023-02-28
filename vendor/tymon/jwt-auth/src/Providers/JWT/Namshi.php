@@ -12,11 +12,11 @@
 namespace Tymon\JWTAuth\Providers\JWT;
 
 use Exception;
+use InvalidArgumentException;
 use Namshi\JOSE\JWS;
+use Namshi\JOSE\Signer\OpenSSL\PublicKey;
 use ReflectionClass;
 use ReflectionException;
-use InvalidArgumentException;
-use Namshi\JOSE\Signer\OpenSSL\PublicKey;
 use Tymon\JWTAuth\Contracts\Providers\JWT;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
@@ -37,7 +37,6 @@ class Namshi extends Provider implements JWT
      * @param  string  $secret
      * @param  string  $algo
      * @param  array  $keys
-     *
      * @return void
      */
     public function __construct(JWS $jws, $secret, $algo, array $keys)
@@ -51,10 +50,9 @@ class Namshi extends Provider implements JWT
      * Create a JSON Web Token.
      *
      * @param  array  $payload
+     * @return string
      *
      * @throws \Tymon\JWTAuth\Exceptions\JWTException
-     *
-     * @return string
      */
     public function encode(array $payload)
     {
@@ -71,10 +69,9 @@ class Namshi extends Provider implements JWT
      * Decode a JSON Web Token.
      *
      * @param  string  $token
+     * @return array
      *
      * @throws \Tymon\JWTAuth\Exceptions\JWTException
-     *
-     * @return array
      */
     public function decode($token)
     {

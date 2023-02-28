@@ -24,8 +24,6 @@ final class ProcOpenReRunner extends PhpExecutableReRunner
     private $executionContext;
 
     /**
-     * @param PhpExecutableFinder $phpExecutableFinder
-     * @param ExecutionContext $executionContext
      * @return static
      */
     public static function withExecutionContext(PhpExecutableFinder $phpExecutableFinder, ExecutionContext $executionContext)
@@ -36,9 +34,6 @@ final class ProcOpenReRunner extends PhpExecutableReRunner
         return $reRunner;
     }
 
-    /**
-     * @return boolean
-     */
     public function isSupported(): bool
     {
         return (php_sapi_name() == 'cli')
@@ -47,7 +42,7 @@ final class ProcOpenReRunner extends PhpExecutableReRunner
             && (stripos(PHP_OS, "win") !== 0);
     }
 
-    public function reRunSuite()
+    public function reRunSuite(): void
     {
         $args = $_SERVER['argv'];
         $command = $this->buildArgString() . escapeshellcmd($this->getExecutablePath()).' '.join(' ', array_map('escapeshellarg', $args)) . ' 2>&1';
@@ -67,7 +62,7 @@ final class ProcOpenReRunner extends PhpExecutableReRunner
         exit($status['exitcode']);
     }
 
-    private function buildArgString()
+    private function buildArgString() : string
     {
         $argstring = '';
 

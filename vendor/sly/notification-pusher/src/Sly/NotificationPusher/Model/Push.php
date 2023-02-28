@@ -11,9 +11,10 @@
 
 namespace Sly\NotificationPusher\Model;
 
-use Sly\NotificationPusher\Adapter\AdapterInterface;
 use Sly\NotificationPusher\Collection\DeviceCollection;
-use Sly\NotificationPusher\Collection\ResponseCollection;
+use Sly\NotificationPusher\Adapter\AdapterInterface;
+use Sly\NotificationPusher\Model\DeviceInterface;
+use Sly\NotificationPusher\Model\MessageInterface;
 use Sly\NotificationPusher\Exception\AdapterException;
 
 /**
@@ -50,27 +51,22 @@ class Push extends BaseOptionedModel implements PushInterface
     private $pushedAt;
 
     /**
-     * @var \Sly\NotificationPusher\Collection\ResponseCollection
-     */
-    private $responses;
-
-    /**
      * Constructor.
      *
-     * @param \Sly\NotificationPusher\Adapter\AdapterInterface $adapter Adapter
-     * @param DeviceInterface|DeviceCollection $devices Device(s)
-     * @param \Sly\NotificationPusher\Model\MessageInterface $message Message
-     * @param array $options Options
+     * @param \Sly\NotificationPusher\Adapter\AdapterInterface  $adapter Adapter
+     * @param DeviceInterface|DeviceCollection                           $devices Device(s)
+     * @param \Sly\NotificationPusher\Model\MessageInterface             $message Message
+     * @param array                                             $options Options
      *
      * Options are adapters specific ones, like Apns "badge" or "sound" option for example.
      * Of course, they can be more general.
      *
      * @throws \Sly\NotificationPusher\Exception\AdapterException
      */
-    public function __construct(AdapterInterface $adapter, $devices, MessageInterface $message, array $options = [])
+    public function __construct(AdapterInterface $adapter, $devices, MessageInterface $message, array $options = array())
     {
         if ($devices instanceof DeviceInterface) {
-            $devices = new DeviceCollection([$devices]);
+            $devices = new DeviceCollection(array($devices));
         }
 
         $this->adapter = $adapter;
@@ -84,7 +80,6 @@ class Push extends BaseOptionedModel implements PushInterface
 
     /**
      * Check devices tokens.
-     * @throws \Sly\NotificationPusher\Exception\AdapterException
      */
     private function checkDevicesTokens()
     {
@@ -95,8 +90,8 @@ class Push extends BaseOptionedModel implements PushInterface
             if (false === $adapter->supports($device->getToken())) {
                 throw new AdapterException(
                     sprintf(
-                        'Adapter %s does not support %s token\'s device',
-                        (string)$adapter,
+                        'Adapter %s does not supports %s token\'s device',
+                        (string) $adapter,
                         $device->getToken()
                     )
                 );
@@ -135,7 +130,7 @@ class Push extends BaseOptionedModel implements PushInterface
      */
     public function isPushed()
     {
-        return (bool)(self::STATUS_PUSHED === $this->status);
+        return (bool) (self::STATUS_PUSHED === $this->status);
     }
 
     /**
@@ -223,28 +218,6 @@ class Push extends BaseOptionedModel implements PushInterface
         $this->checkDevicesTokens();
 
         return $this;
-    }
-
-    /**
-     * Get Responses
-     * @return \Sly\NotificationPusher\Collection\ResponseCollection
-     */
-    public function getResponses()
-    {
-        if (!$this->responses)
-            $this->responses = new ResponseCollection();
-
-        return $this->responses;
-    }
-
-    /**
-     * adds a response
-     * @param \Sly\NotificationPusher\Model\DeviceInterface $device
-     * @param mixed $response
-     */
-    public function addResponse(DeviceInterface $device, $response)
-    {
-        $this->getResponses()->add($device->getToken(), $response);
     }
 
     /**

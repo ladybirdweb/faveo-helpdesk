@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateTicketSourceTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -28,4 +27,4 @@ class CreateTicketSourceTable extends Migration
     {
         Schema::drop('ticket_source');
     }
-}
+};

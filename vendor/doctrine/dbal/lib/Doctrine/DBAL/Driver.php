@@ -14,6 +14,8 @@ interface Driver
     /**
      * Attempts to create a connection with the database.
      *
+     * The usage of NULL to indicate empty username or password is deprecated. Use an empty string instead.
+     *
      * @param mixed[]     $params        All connection parameters passed by the user.
      * @param string|null $username      The username to use when connecting.
      * @param string|null $password      The password to use when connecting.
@@ -42,12 +44,16 @@ interface Driver
     /**
      * Gets the name of the driver.
      *
+     * @deprecated
+     *
      * @return string The name of the driver.
      */
     public function getName();
 
     /**
      * Gets the name of the database connected to for this driver.
+     *
+     * @deprecated Use Connection::getDatabase() instead.
      *
      * @return string The name of the database.
      */

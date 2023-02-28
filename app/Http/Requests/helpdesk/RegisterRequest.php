@@ -45,7 +45,7 @@ class RegisterRequest extends Request
     /**
      *@category Funcion to set rule if send opt is enabled
      *
-     *@param object $settings (instance of Model common settings)
+     *@param  object  $settings (instance of Model common settings)
      *
      *@author manish.verma@ladybirdweb.com
      *

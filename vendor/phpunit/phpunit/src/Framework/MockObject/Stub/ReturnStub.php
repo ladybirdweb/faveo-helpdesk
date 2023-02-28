@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,14 +9,14 @@
  */
 namespace PHPUnit\Framework\MockObject\Stub;
 
+use function sprintf;
 use PHPUnit\Framework\MockObject\Invocation;
-use PHPUnit\Framework\MockObject\Stub;
 use SebastianBergmann\Exporter\Exporter;
 
 /**
- * Stubs a method by returning a user-defined value.
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-class ReturnStub implements Stub
+final class ReturnStub implements Stub
 {
     /**
      * @var mixed
@@ -37,7 +37,7 @@ class ReturnStub implements Stub
     {
         $exporter = new Exporter;
 
-        return \sprintf(
+        return sprintf(
             'return user-specified value %s',
             $exporter->export($this->value)
         );

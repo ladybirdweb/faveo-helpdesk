@@ -3,10 +3,10 @@
         Lang::get('lang.status')=>$status->name,
         Lang::get('lang.priority')=>$priority->priority_desc,
         Lang::get('lang.department')=>$dept123->name,
-        Lang::get('lang.email')=>str_limit($user->email,30),
+        Lang::get('lang.email')=>Str::limit($user->email,30),
         Lang::get('lang.source')=>$ticket_source,
         Lang::get('lang.help_topic')=>$help_topic->topic,
-        Lang::get('lang.last_message')=>str_limit($username,30),
+        Lang::get('lang.last_message')=>Str::limit($username,30),
         Lang::get('lang.organization') => $LastResponse->getOrgWithLink(),   
     ];
     
@@ -34,5 +34,5 @@
 </div>
 @endforeach
 @include('themes.default1.agent.helpdesk.filters.tags')
-<?php Event::fire(new App\Events\TicketDetailTable($TicketData)); ?>
+<?php \Illuminate\Support\Facades\Event::dispatch(new App\Events\TicketDetailTable($TicketData)); ?>
         

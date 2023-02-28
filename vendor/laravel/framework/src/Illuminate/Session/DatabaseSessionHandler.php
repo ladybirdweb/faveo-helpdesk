@@ -2,16 +2,16 @@
 
 namespace Illuminate\Session;
 
-use Illuminate\Support\Arr;
-use SessionHandlerInterface;
-use Illuminate\Support\Carbon;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Database\QueryException;
-use Illuminate\Support\InteractsWithTime;
-use Illuminate\Database\ConnectionInterface;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\InteractsWithTime;
+use SessionHandlerInterface;
 
-class DatabaseSessionHandler implements SessionHandlerInterface, ExistenceAwareInterface
+class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerInterface
 {
     use InteractsWithTime;
 
@@ -39,7 +39,7 @@ class DatabaseSessionHandler implements SessionHandlerInterface, ExistenceAwareI
     /**
      * The container instance.
      *
-     * @var \Illuminate\Contracts\Container\Container
+     * @var \Illuminate\Contracts\Container\Container|null
      */
     protected $container;
 
@@ -69,24 +69,30 @@ class DatabaseSessionHandler implements SessionHandlerInterface, ExistenceAwareI
 
     /**
      * {@inheritdoc}
+     *
+     * @return bool
      */
-    public function open($savePath, $sessionName)
+    public function open($savePath, $sessionName): bool
     {
         return true;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @return bool
      */
-    public function close()
+    public function close(): bool
     {
         return true;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @return string|false
      */
-    public function read($sessionId)
+    public function read($sessionId): string|false
     {
         $session = (object) $this->getQuery()->find($sessionId);
 
@@ -119,8 +125,10 @@ class DatabaseSessionHandler implements SessionHandlerInterface, ExistenceAwareI
 
     /**
      * {@inheritdoc}
+     *
+     * @return bool
      */
-    public function write($sessionId, $data)
+    public function write($sessionId, $data): bool
     {
         $payload = $this->getDefaultPayload($data);
 
@@ -141,7 +149,7 @@ class DatabaseSessionHandler implements SessionHandlerInterface, ExistenceAwareI
      * Perform an insert operation on the session ID.
      *
      * @param  string  $sessionId
-     * @param  string  $payload
+     * @param  array<string, mixed>  $payload
      * @return bool|null
      */
     protected function performInsert($sessionId, $payload)
@@ -157,7 +165,7 @@ class DatabaseSessionHandler implements SessionHandlerInterface, ExistenceAwareI
      * Perform an update operation on the session ID.
      *
      * @param  string  $sessionId
-     * @param  string  $payload
+     * @param  array<string, mixed>  $payload
      * @return int
      */
     protected function performUpdate($sessionId, $payload)
@@ -234,7 +242,7 @@ class DatabaseSessionHandler implements SessionHandlerInterface, ExistenceAwareI
     /**
      * Get the IP address for the current request.
      *
-     * @return string
+     * @return string|null
      */
     protected function ipAddress()
     {
@@ -253,8 +261,10 @@ class DatabaseSessionHandler implements SessionHandlerInterface, ExistenceAwareI
 
     /**
      * {@inheritdoc}
+     *
+     * @return bool
      */
-    public function destroy($sessionId)
+    public function destroy($sessionId): bool
     {
         $this->getQuery()->where('id', $sessionId)->delete();
 
@@ -263,10 +273,12 @@ class DatabaseSessionHandler implements SessionHandlerInterface, ExistenceAwareI
 
     /**
      * {@inheritdoc}
+     *
+     * @return int
      */
-    public function gc($lifetime)
+    public function gc($lifetime): int
     {
-        $this->getQuery()->where('last_activity', '<=', $this->currentTime() - $lifetime)->delete();
+        return $this->getQuery()->where('last_activity', '<=', $this->currentTime() - $lifetime)->delete();
     }
 
     /**
@@ -277,6 +289,19 @@ class DatabaseSessionHandler implements SessionHandlerInterface, ExistenceAwareI
     protected function getQuery()
     {
         return $this->connection->table($this->table);
+    }
+
+    /**
+     * Set the application instance used by the handler.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $container
+     * @return $this
+     */
+    public function setContainer($container)
+    {
+        $this->container = $container;
+
+        return $this;
     }
 
     /**

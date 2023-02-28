@@ -1,5 +1,0 @@
-preset: psr2
-
-finder:
-  exclude:
-    - "data"

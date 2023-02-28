@@ -2,12 +2,15 @@
 
 namespace Doctrine\DBAL\Cache;
 
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception;
 
-class CacheException extends DBALException
+/**
+ * @psalm-immutable
+ */
+class CacheException extends Exception
 {
     /**
-     * @return \Doctrine\DBAL\Cache\CacheException
+     * @return CacheException
      */
     public static function noCacheKey()
     {
@@ -15,7 +18,7 @@ class CacheException extends DBALException
     }
 
     /**
-     * @return \Doctrine\DBAL\Cache\CacheException
+     * @return CacheException
      */
     public static function noResultDriverConfigured()
     {

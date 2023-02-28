@@ -5,11 +5,18 @@ namespace Illuminate\Queue;
 class WorkerOptions
 {
     /**
-     * The number of seconds before a released job will be available.
+     * The name of the worker.
      *
      * @var int
      */
-    public $delay;
+    public $name;
+
+    /**
+     * The number of seconds to wait before retrying a job that encountered an uncaught exception.
+     *
+     * @var int|int[]
+     */
+    public $backoff;
 
     /**
      * The maximum amount of RAM the worker may consume.
@@ -33,7 +40,14 @@ class WorkerOptions
     public $sleep;
 
     /**
-     * The maximum amount of times a job may be attempted.
+     * The number of seconds to rest between jobs.
+     *
+     * @var int
+     */
+    public $rest;
+
+    /**
+     * The maximum number of times a job may be attempted.
      *
      * @var int
      */
@@ -47,23 +61,55 @@ class WorkerOptions
     public $force;
 
     /**
+     * Indicates if the worker should stop when the queue is empty.
+     *
+     * @var bool
+     */
+    public $stopWhenEmpty;
+
+    /**
+     * The maximum number of jobs to run.
+     *
+     * @var int
+     */
+    public $maxJobs;
+
+    /**
+     * The maximum number of seconds a worker may live.
+     *
+     * @var int
+     */
+    public $maxTime;
+
+    /**
      * Create a new worker options instance.
      *
-     * @param  int  $delay
+     * @param  string  $name
+     * @param  int|int[]  $backoff
      * @param  int  $memory
      * @param  int  $timeout
      * @param  int  $sleep
      * @param  int  $maxTries
      * @param  bool  $force
+     * @param  bool  $stopWhenEmpty
+     * @param  int  $maxJobs
+     * @param  int  $maxTime
+     * @param  int  $rest
      * @return void
      */
-    public function __construct($delay = 0, $memory = 128, $timeout = 60, $sleep = 3, $maxTries = 0, $force = false)
+    public function __construct($name = 'default', $backoff = 0, $memory = 128, $timeout = 60, $sleep = 3, $maxTries = 1,
+                                $force = false, $stopWhenEmpty = false, $maxJobs = 0, $maxTime = 0, $rest = 0)
     {
-        $this->delay = $delay;
+        $this->name = $name;
+        $this->backoff = $backoff;
         $this->sleep = $sleep;
+        $this->rest = $rest;
         $this->force = $force;
         $this->memory = $memory;
         $this->timeout = $timeout;
         $this->maxTries = $maxTries;
+        $this->stopWhenEmpty = $stopWhenEmpty;
+        $this->maxJobs = $maxJobs;
+        $this->maxTime = $maxTime;
     }
 }

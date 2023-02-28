@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Auth;
 // controllers
 use App\Http\Controllers\Common\PhpMailController;
 use App\Http\Controllers\Controller;
-// request
 use App\User;
+// request
+use Illuminate\Foundation\Auth\ResetsPasswords;
 // model
 // classes
-use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Lang;
 
 /**
@@ -53,12 +54,12 @@ class PasswordController extends Controller
         try {
             $date = date('Y-m-d H:i:s');
             $this->validate($request, ['email' => 'required']);
-            \Event::fire('reset.password', []);
+            event('reset.password', []);
             $user = User::where('email', '=', $request->all('email'))->orWhere('mobile', '=', $request->all('email'))->first();
             if (isset($user)) {
                 $user1 = $user->email;
                 //gen new code and pass
-                $code = str_random(60);
+                $code = Str::random(60);
                 $password_reset_table = \DB::table('password_resets')->where('email', '=', $user->email)->first();
                 if (isset($password_reset_table)) {
                     $password_reset_table = \DB::table('password_resets')->where('email', '=', $user->email)->update(['token' => $code, 'created_at' => $date]);
@@ -79,7 +80,7 @@ class PasswordController extends Controller
                         'name'   => $name,
                         'mobile' => $user->mobile,
                         'code'   => $user->country_code, ];
-                    \Event::fire('reset.password2', [$value]);
+                    event('reset.password2', [$value]);
                 }
 
                 return redirect()->back()->with('status', Lang::get('lang.we_have_e-mailed_your_password_reset_link'));

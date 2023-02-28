@@ -22,67 +22,49 @@ use PhpSpec\Exception\Example as ExampleException;
 final class ErrorMaintainer implements Maintainer
 {
     /**
-     * @var integer
+     * @var int
      */
     private $errorLevel;
     /**
-     * @var callable|null
+     * @var null|callable
      */
     private $errorHandler;
 
-    /**
-     * @param integer $errorLevel
-     */
+
     public function __construct(int $errorLevel)
     {
         $this->errorLevel = $errorLevel;
     }
 
-    /**
-     * @param ExampleNode $example
-     *
-     * @return bool
-     */
+
     public function supports(ExampleNode $example): bool
     {
         return true;
     }
 
-    /**
-     * @param ExampleNode            $example
-     * @param Specification $context
-     * @param MatcherManager         $matchers
-     * @param CollaboratorManager    $collaborators
-     */
+
     public function prepare(
         ExampleNode $example,
         Specification $context,
         MatcherManager $matchers,
         CollaboratorManager $collaborators
-    ) {
+    ): void {
         $this->errorHandler = set_error_handler(array($this, 'errorHandler'), $this->errorLevel);
     }
 
-    /**
-     * @param ExampleNode            $example
-     * @param Specification $context
-     * @param MatcherManager         $matchers
-     * @param CollaboratorManager    $collaborators
-     */
+
     public function teardown(
         ExampleNode $example,
         Specification $context,
         MatcherManager $matchers,
         CollaboratorManager $collaborators
-    ) {
+    ): void {
         if (null !== $this->errorHandler) {
             set_error_handler($this->errorHandler);
         }
     }
 
-    /**
-     * @return int
-     */
+
     public function getPriority(): int
     {
         return 999;
@@ -95,19 +77,12 @@ final class ErrorMaintainer implements Maintainer
      *
      * @see set_error_handler()
      *
-     * @param integer $level
-     * @param string  $message
-     * @param string  $file
-     * @param integer $line
-     *
-     * @return bool
-     *
      * @throws ExampleException\ErrorException
      */
     final public function errorHandler(int $level, string $message, string $file, int $line): bool
     {
         $regex = '/^Argument (\d)+ passed to (?:(?P<class>[\w\\\]+)::)?(\w+)\(\)' .
-                 ' must (?:be an instance of|implement interface) ([\w\\\]+),(?: instance of)? ([\w\\\]+) given/';
+            ' must (?:be an instance of|implement interface) ([\w\\\]+),(?: instance of)? ([\w\\\]+) given/';
 
         if (E_RECOVERABLE_ERROR === $level && preg_match($regex, $message, $matches)) {
             $class = $matches['class'];
@@ -117,11 +92,11 @@ final class ErrorMaintainer implements Maintainer
             }
         }
 
-        if (0 !== error_reporting()) {
-            throw new ExampleException\ErrorException($level, $message, $file, $line);
+        // error reporting turned off or more likely suppressed with error control operator "@"
+        if (0 === (error_reporting() & $level)) {
+            return false;
         }
 
-        // error reporting turned off or more likely suppressed with @
-        return false;
+        throw new ExampleException\ErrorException($level, $message, $file, $line);
     }
 }

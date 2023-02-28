@@ -29,7 +29,6 @@ Here is a concrete GCM adapter example:
 * [Installation](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/installation.md)
 * [Getting started](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/getting-started.md)
 * [APNS adapter](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/apns-adapter.md)
-* [GCM (FCM) adapter](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/gcm-fcm-adapter.md)
+* [GCM adapter](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/gcm-adapter.md)
 * [Create an adapter](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/create-an-adapter.md)
 * Push from CLI
-* [Facades](https://github.com/Ph3nol/NotificationPusher/blob/master/doc/facades.md)

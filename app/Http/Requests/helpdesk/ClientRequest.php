@@ -4,6 +4,7 @@ namespace App\Http\Requests\helpdesk;
 
 use App\Http\Requests\Request;
 use App\Model\helpdesk\Settings\CommonSettings;
+use Illuminate\Support\Arr;
 
 /**
  * CompanyRequest.
@@ -118,7 +119,7 @@ class ClientRequest extends Request
     /**
      *@category Funcion to set rule if send opt is enabled
      *
-     *@param object $settings (instance of Model common settings)
+     *@param  object  $settings (instance of Model common settings)
      *
      *@author manish.verma@ladybirdweb.com
      *
@@ -158,6 +159,6 @@ class ClientRequest extends Request
 //                $purified[] = $this->purifyArray($value);
 //            }
 //        }
-//        return array_dot($purified);
+//        return Arr::dot($purified);
 //    }
 }

@@ -35,7 +35,6 @@ final class MatchersMaintainer implements Maintainer
     private $defaultMatchers = array();
 
     /**
-     * @param Presenter $presenter
      * @param Matcher[] $matchers
      */
     public function __construct(Presenter $presenter, array $matchers)
@@ -47,28 +46,19 @@ final class MatchersMaintainer implements Maintainer
         });
     }
 
-    /**
-     * @param ExampleNode $example
-     *
-     * @return bool
-     */
+    
     public function supports(ExampleNode $example): bool
     {
         return true;
     }
 
-    /**
-     * @param ExampleNode            $example
-     * @param Specification $context
-     * @param MatcherManager         $matchers
-     * @param CollaboratorManager    $collaborators
-     */
+    
     public function prepare(
         ExampleNode $example,
         Specification $context,
         MatcherManager $matchers,
         CollaboratorManager $collaborators
-    ) {
+    ): void {
 
         $matchers->replace($this->defaultMatchers);
 
@@ -89,23 +79,16 @@ final class MatchersMaintainer implements Maintainer
         }
     }
 
-    /**
-     * @param ExampleNode            $example
-     * @param Specification $context
-     * @param MatcherManager         $matchers
-     * @param CollaboratorManager    $collaborators
-     */
+    
     public function teardown(
         ExampleNode $example,
         Specification $context,
         MatcherManager $matchers,
         CollaboratorManager $collaborators
-    ) {
+    ): void {
     }
 
-    /**
-     * @return int
-     */
+    
     public function getPriority(): int
     {
         return 50;

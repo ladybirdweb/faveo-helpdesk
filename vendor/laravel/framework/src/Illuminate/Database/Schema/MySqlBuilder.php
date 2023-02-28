@@ -5,6 +5,32 @@ namespace Illuminate\Database\Schema;
 class MySqlBuilder extends Builder
 {
     /**
+     * Create a database in the schema.
+     *
+     * @param  string  $name
+     * @return bool
+     */
+    public function createDatabase($name)
+    {
+        return $this->connection->statement(
+            $this->grammar->compileCreateDatabase($name, $this->connection)
+        );
+    }
+
+    /**
+     * Drop a database from the schema if the database exists.
+     *
+     * @param  string  $name
+     * @return bool
+     */
+    public function dropDatabaseIfExists($name)
+    {
+        return $this->connection->statement(
+            $this->grammar->compileDropDatabaseIfExists($name)
+        );
+    }
+
+    /**
      * Determine if the given table exists.
      *
      * @param  string  $table
@@ -14,7 +40,7 @@ class MySqlBuilder extends Builder
     {
         $table = $this->connection->getTablePrefix().$table;
 
-        return count($this->connection->select(
+        return count($this->connection->selectFromWriteConnection(
             $this->grammar->compileTableExists(), [$this->connection->getDatabaseName(), $table]
         )) > 0;
     }
@@ -29,7 +55,7 @@ class MySqlBuilder extends Builder
     {
         $table = $this->connection->getTablePrefix().$table;
 
-        $results = $this->connection->select(
+        $results = $this->connection->selectFromWriteConnection(
             $this->grammar->compileColumnListing(), [$this->connection->getDatabaseName(), $table]
         );
 
@@ -93,7 +119,7 @@ class MySqlBuilder extends Builder
      *
      * @return array
      */
-    protected function getAllTables()
+    public function getAllTables()
     {
         return $this->connection->select(
             $this->grammar->compileGetAllTables()
@@ -105,7 +131,7 @@ class MySqlBuilder extends Builder
      *
      * @return array
      */
-    protected function getAllViews()
+    public function getAllViews()
     {
         return $this->connection->select(
             $this->grammar->compileGetAllViews()

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Facade;
+
 return [
     'env' => env('APP_ENV', 'production'),
     /*
@@ -22,7 +24,7 @@ return [
       | reporting about the errors we at faveo will start solving the issues already.
       | The errors mails will never share your files or data. it will only share
       | the line number and error occured.
-      | To dissable you may just change '%1%' to 0.
+      | To dissable you may just change '%0%' to 0.
      */
     'ErrorLog' => '1',
     /*
@@ -33,7 +35,7 @@ return [
       | This tells about aplication current version.
       |
      */
-    'version' => 'Community 1.11.1',
+    'version' => parse_ini_file(storage_path('faveoconfig.ini'), false, INI_SCANNER_RAW)['APP_VERSION'],
     /*
       |--------------------------------------------------------------------------
       | Application Name
@@ -42,7 +44,7 @@ return [
       | This Applocation name is used for installation and update checking
       |
      */
-    'name' => 'Faveo Helpdesk Community',
+    'name' => parse_ini_file(storage_path('faveoconfig.ini'), false, INI_SCANNER_RAW)['APP_NAME'],
     /*
       |--------------------------------------------------------------------------
       | Application URL
@@ -53,7 +55,7 @@ return [
       | your application so that it is used when running Artisan tasks.
       |
      */
-    'url' => env('APP_URL'),
+    'url' => env('APP_URL', 'http://localhost'),
     /*
       |--------------------------------------------------------------------------
       | Application Timezone
@@ -133,7 +135,6 @@ return [
      */
     'providers' => [
         'Illuminate\Broadcasting\BroadcastServiceProvider',
-        'DaveJamesMiller\Breadcrumbs\ServiceProvider',
         /*
          * Laravel Framework Service Providers...
          */
@@ -163,24 +164,16 @@ return [
         /*
          * Application Service Providers...
          */
-        'App\Providers\AppServiceProvider',
-        'App\Providers\EventServiceProvider',
-        'App\Providers\RouteServiceProvider',
-        'App\Providers\ConfigServiceProvider',
-        'App\Providers\ComposerServiceProvider',
-        'Propaganistas\LaravelPhone\LaravelPhoneServiceProvider',
-        'Bugsnag\BugsnagLaravel\BugsnagLaravelServiceProvider',
+        App\Providers\AppServiceProvider::class,
+        App\Providers\EventServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
+        App\Providers\ConfigServiceProvider::class,
+        App\Providers\ComposerServiceProvider::class,
         'Vsmoraes\Pdf\PdfServiceProvider',
-        'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
-        'Chumper\Datatable\DatatableServiceProvider',
-        'Chumper\Zipper\ZipperServiceProvider',
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         \Torann\GeoIP\GeoIPServiceProvider::class,
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        Unisharp\Ckeditor\ServiceProvider::class,
-        LaravelFCM\FCMServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
         //Collective\Bus\BusServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
@@ -188,7 +181,11 @@ return [
         App\FaveoStorage\StorageServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
         \App\Api\ApiServiceProvider::class,
-
+        Barryvdh\Debugbar\ServiceProvider::class,
+        \Chumper\Datatable\DatatableServiceProvider::class,
+        \Yajra\DataTables\DataTablesServiceProvider::class,
+        \Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
     /*
       |--------------------------------------------------------------------------
@@ -200,62 +197,32 @@ return [
       | the aliases are "lazy" loaded so they don't hinder performance.
       |
      */
-    'aliases' => [
-        'App'          => 'Illuminate\Support\Facades\App',
-        'Artisan'      => 'Illuminate\Support\Facades\Artisan',
-        'Auth'         => 'Illuminate\Support\Facades\Auth',
-        'Blade'        => 'Illuminate\Support\Facades\Blade',
-        'Cache'        => 'Illuminate\Support\Facades\Cache',
-        'Config'       => 'Illuminate\Support\Facades\Config',
-        'Cookie'       => 'Illuminate\Support\Facades\Cookie',
-        'Crypt'        => 'Illuminate\Support\Facades\Crypt',
-        'DB'           => 'Illuminate\Support\Facades\DB',
-        'Eloquent'     => 'Illuminate\Database\Eloquent\Model',
-        'Event'        => 'Illuminate\Support\Facades\Event',
-        'File'         => 'Illuminate\Support\Facades\File',
-        'Hash'         => 'Illuminate\Support\Facades\Hash',
-        'Input'        => 'Illuminate\Support\Facades\Input',
-        'Inspiring'    => 'Illuminate\Foundation\Inspiring',
-        'Lang'         => 'Illuminate\Support\Facades\Lang',
-        'Log'          => 'Illuminate\Support\Facades\Log',
-        'Mail'         => 'Illuminate\Support\Facades\Mail',
-        'Password'     => 'Illuminate\Support\Facades\Password',
-        'Queue'        => 'Illuminate\Support\Facades\Queue',
-        'Redirect'     => 'Illuminate\Support\Facades\Redirect',
-        'Redis'        => 'Illuminate\Support\Facades\Redis',
-        'Request'      => 'Illuminate\Support\Facades\Request',
-        'Response'     => 'Illuminate\Support\Facades\Response',
-        'Route'        => 'Illuminate\Support\Facades\Route',
-        'Schema'       => 'Illuminate\Support\Facades\Schema',
-        'Session'      => 'Illuminate\Support\Facades\Session',
-        'Storage'      => 'Illuminate\Support\Facades\Storage',
-        'URL'          => 'Illuminate\Support\Facades\URL',
-        'Validator'    => 'Illuminate\Support\Facades\Validator',
-        'View'         => 'Illuminate\Support\Facades\View',
-        'Form'         => Collective\Html\FormFacade::class,
-        'Html'         => Collective\Html\HtmlFacade::class,
-        'phone'        => 'The :attribute field contains an invalid number.',
-        'Bugsnag'      => 'Bugsnag\BugsnagLaravel\BugsnagFacade',
-        'PDF'          => 'Vsmoraes\Pdf\PdfFacade',
-        'Gravatar'     => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
-        'UTC'          => 'App\Http\Controllers\Agent\helpdesk\TicketController',
-        'Ttable'       => 'App\Http\Controllers\Agent\helpdesk\TicketController', //to use getTable function.
-        'SMTPS'        => 'App\Http\Controllers\HomeController',
-        'Datatable'    => 'Chumper\Datatable\Facades\DatatableFacade',
-        'Zipper'       => 'Chumper\Zipper\Zipper',
-        'JWTAuth'      => 'Tymon\JWTAuth\Facades\JWTAuth',
-        'JWTFactory'   => 'Tymon\JWTAuth\Facades\JWTFactory',
-        'Breadcrumbs'  => 'DaveJamesMiller\Breadcrumbs\Facade',
-        'GeoIP'        => \Torann\GeoIP\Facades\GeoIP::class,
-        'Image'        => Intervention\Image\Facades\Image::class,
-        'FCM'          => LaravelFCM\Facades\FCM::class,
-        'FCMGroup'     => LaravelFCM\Facades\FCMGroup::class,
-        'Debugbar'     => Barryvdh\Debugbar\Facade::class,
-        'Excel'        => Maatwebsite\Excel\Facades\Excel::class,
-        'Socialite'    => Laravel\Socialite\Facades\Socialite::class,
-        'UnAuth'       => 'App\Http\Controllers\Client\helpdesk\UnAuthController',
-        'Finder'       => App\Helper\Finder::class,
-        'Datatables'   => Yajra\Datatables\Facades\Datatables::class,
-        'Notification' => Illuminate\Support\Facades\Notification::class,
-    ],
+    'aliases' => Facade::defaultAliases()->merge([
+        'Breadcrumbs' => 'DaveJamesMiller\Breadcrumbs\Facade',
+        'Bugsnag'     => 'Bugsnag\BugsnagLaravel\BugsnagFacade',
+        'Datatable'   => 'Chumper\Datatable\Facades\DatatableFacade',
+        'Datatables'  => Yajra\Datatables\Facades\Datatables::class,
+        'Debugbar'    => Barryvdh\Debugbar\Facades\Debugbar::class,
+        'Excel'       => Maatwebsite\Excel\Facades\Excel::class,
+        'FCM'         => LaravelFCM\Facades\FCM::class,
+        'FCMGroup'    => LaravelFCM\Facades\FCMGroup::class,
+        'Finder'      => App\Helper\Finder::class,
+        'Form'        => Collective\Html\FormFacade::class,
+        'GeoIP'       => \Torann\GeoIP\Facades\GeoIP::class,
+        'Gravatar'    => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
+        'Html'        => Collective\Html\HtmlFacade::class,
+        'Image'       => Intervention\Image\Facades\Image::class,
+        'Inspiring'   => 'Illuminate\Foundation\Inspiring',
+        'JWTAuth'     => 'Tymon\JWTAuth\Facades\JWTAuth',
+        'JWTFactory'  => 'Tymon\JWTAuth\Facades\JWTFactory',
+        'PDF'         => 'Vsmoraes\Pdf\PdfFacade',
+        'Redis'       => 'Illuminate\Support\Facades\Redis',
+        'SMTPS'       => App\Http\Controllers\HomeController::class,
+        'Socialite'   => Laravel\Socialite\Facades\Socialite::class,
+        'Ttable'      => App\Http\Controllers\Agent\helpdesk\TicketController::class, //to use getTable function.
+        'UTC'         => App\Http\Controllers\Agent\helpdesk\TicketController::class,
+        'UnAuth'      => App\Http\Controllers\Client\helpdesk\UnAuthController::class,
+        'Zipper'      => 'Chumper\Zipper\Zipper',
+        'phone'       => 'The :attribute field contains an invalid number.',
+    ])->toArray(),
 ];

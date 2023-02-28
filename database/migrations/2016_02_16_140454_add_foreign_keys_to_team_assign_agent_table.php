@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddForeignKeysToTeamAssignAgentTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -30,4 +29,4 @@ class AddForeignKeysToTeamAssignAgentTable extends Migration
             $table->dropForeign('team_assign_agent_ibfk_2');
         });
     }
-}
+};

@@ -3,7 +3,7 @@
 /*
  * This file is part of Psy Shell.
  *
- * (c) 2012-2018 Justin Hileman
+ * (c) 2012-2023 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -35,6 +35,9 @@ class ValidConstructorPass extends CodeCleanerPass
 {
     private $namespace;
 
+    /**
+     * @return Node[]|null Array of nodes
+     */
     public function beforeTraverse(array $nodes)
     {
         $this->namespace = [];
@@ -47,6 +50,8 @@ class ValidConstructorPass extends CodeCleanerPass
      * @throws FatalErrorException the constructor function has a return type
      *
      * @param Node $node
+     *
+     * @return int|Node|null Replacement node (or special return value)
      */
     public function enterNode(Node $node)
     {
@@ -94,7 +99,7 @@ class ValidConstructorPass extends CodeCleanerPass
                 \implode('\\', \array_merge($this->namespace, (array) $className)),
                 $constructor->name
             );
-            throw new FatalErrorException($msg, 0, E_ERROR, null, $classNode->getLine());
+            throw new FatalErrorException($msg, 0, \E_ERROR, null, $classNode->getLine());
         }
 
         if (\method_exists($constructor, 'getReturnType') && $constructor->getReturnType()) {
@@ -106,7 +111,7 @@ class ValidConstructorPass extends CodeCleanerPass
                 \implode('\\', \array_merge($this->namespace, (array) $className)),
                 $constructor->name
             );
-            throw new FatalErrorException($msg, 0, E_ERROR, null, $classNode->getLine());
+            throw new FatalErrorException($msg, 0, \E_ERROR, null, $classNode->getLine());
         }
     }
 }

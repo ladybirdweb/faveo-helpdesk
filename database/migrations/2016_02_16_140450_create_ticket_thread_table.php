@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateTicketThreadTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -39,4 +38,4 @@ class CreateTicketThreadTable extends Migration
     {
         Schema::drop('ticket_thread');
     }
-}
+};

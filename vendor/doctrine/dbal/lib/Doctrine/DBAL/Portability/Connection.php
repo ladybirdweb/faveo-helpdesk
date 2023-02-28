@@ -4,16 +4,20 @@ namespace Doctrine\DBAL\Portability;
 
 use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Doctrine\DBAL\ColumnCase;
-use Doctrine\DBAL\Driver\PDOConnection;
+use Doctrine\DBAL\Connection as BaseConnection;
+use Doctrine\DBAL\Driver\PDO\Connection as PDOConnection;
+use Doctrine\DBAL\ForwardCompatibility;
 use PDO;
+
+use function func_get_args;
+
 use const CASE_LOWER;
 use const CASE_UPPER;
-use function func_get_args;
 
 /**
  * Portability wrapper for a Connection.
  */
-class Connection extends \Doctrine\DBAL\Connection
+class Connection extends BaseConnection
 {
     public const PORTABILITY_ALL           = 255;
     public const PORTABILITY_NONE          = 0;
@@ -21,6 +25,10 @@ class Connection extends \Doctrine\DBAL\Connection
     public const PORTABILITY_EMPTY_TO_NULL = 4;
     public const PORTABILITY_FIX_CASE      = 8;
 
+    /**#@+
+     *
+     * @deprecated Will be removed as internal implementation details.
+     */
     public const PORTABILITY_DB2          = 13;
     public const PORTABILITY_ORACLE       = 9;
     public const PORTABILITY_POSTGRESQL   = 13;
@@ -29,11 +37,12 @@ class Connection extends \Doctrine\DBAL\Connection
     public const PORTABILITY_DRIZZLE      = 13;
     public const PORTABILITY_SQLANYWHERE  = 13;
     public const PORTABILITY_SQLSRV       = 13;
+    /**#@-*/
 
     /** @var int */
     private $portability = self::PORTABILITY_NONE;
 
-    /** @var int */
+    /** @var int|null */
     private $case;
 
     /**
@@ -45,24 +54,10 @@ class Connection extends \Doctrine\DBAL\Connection
         if ($ret) {
             $params = $this->getParams();
             if (isset($params['portability'])) {
-                if ($this->getDatabasePlatform()->getName() === 'oracle') {
-                    $params['portability'] &= self::PORTABILITY_ORACLE;
-                } elseif ($this->getDatabasePlatform()->getName() === 'postgresql') {
-                    $params['portability'] &= self::PORTABILITY_POSTGRESQL;
-                } elseif ($this->getDatabasePlatform()->getName() === 'sqlite') {
-                    $params['portability'] &= self::PORTABILITY_SQLITE;
-                } elseif ($this->getDatabasePlatform()->getName() === 'drizzle') {
-                    $params['portability'] &= self::PORTABILITY_DRIZZLE;
-                } elseif ($this->getDatabasePlatform()->getName() === 'sqlanywhere') {
-                    $params['portability'] &= self::PORTABILITY_SQLANYWHERE;
-                } elseif ($this->getDatabasePlatform()->getName() === 'db2') {
-                    $params['portability'] &= self::PORTABILITY_DB2;
-                } elseif ($this->getDatabasePlatform()->getName() === 'mssql') {
-                    $params['portability'] &= self::PORTABILITY_SQLSRV;
-                } else {
-                    $params['portability'] &= self::PORTABILITY_OTHERVENDORS;
-                }
-                $this->portability = $params['portability'];
+                $this->portability = $params['portability'] = (new OptimizeFlags())(
+                    $this->getDatabasePlatform(),
+                    $params['portability']
+                );
             }
 
             if (isset($params['fetch_case']) && $this->portability & self::PORTABILITY_FIX_CASE) {
@@ -87,7 +82,7 @@ class Connection extends \Doctrine\DBAL\Connection
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getFetchCase()
     {
@@ -97,20 +92,24 @@ class Connection extends \Doctrine\DBAL\Connection
     /**
      * {@inheritdoc}
      */
-    public function executeQuery($query, array $params = [], $types = [], ?QueryCacheProfile $qcp = null)
+    public function executeQuery($sql, array $params = [], $types = [], ?QueryCacheProfile $qcp = null)
     {
-        $stmt = new Statement(parent::executeQuery($query, $params, $types, $qcp), $this);
+        $stmt = new Statement(parent::executeQuery($sql, $params, $types, $qcp), $this);
         $stmt->setFetchMode($this->defaultFetchMode);
 
-        return $stmt;
+        return new ForwardCompatibility\Result($stmt);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param string $sql
+     *
+     * @return Statement
      */
-    public function prepare($statement)
+    public function prepare($sql)
     {
-        $stmt = new Statement(parent::prepare($statement), $this);
+        $stmt = new Statement(parent::prepare($sql), $this);
         $stmt->setFetchMode($this->defaultFetchMode);
 
         return $stmt;
@@ -121,9 +120,9 @@ class Connection extends \Doctrine\DBAL\Connection
      */
     public function query()
     {
-        $this->connect();
+        $connection = $this->getWrappedConnection();
 
-        $stmt = $this->_conn->query(...func_get_args());
+        $stmt = $connection->query(...func_get_args());
         $stmt = new Statement($stmt, $this);
         $stmt->setFetchMode($this->defaultFetchMode);
 

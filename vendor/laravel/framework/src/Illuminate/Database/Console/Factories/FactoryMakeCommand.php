@@ -3,8 +3,11 @@
 namespace Illuminate\Database\Console\Factories;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputOption;
 
+#[AsCommand(name: 'make:factory')]
 class FactoryMakeCommand extends GeneratorCommand
 {
     /**
@@ -13,6 +16,17 @@ class FactoryMakeCommand extends GeneratorCommand
      * @var string
      */
     protected $name = 'make:factory';
+
+    /**
+     * The name of the console command.
+     *
+     * This name is used to identify the command during lazy loading.
+     *
+     * @var string|null
+     *
+     * @deprecated
+     */
+    protected static $defaultName = 'make:factory';
 
     /**
      * The console command description.
@@ -35,7 +49,20 @@ class FactoryMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/factory.stub';
+        return $this->resolveStubPath('/stubs/factory.stub');
+    }
+
+    /**
+     * Resolve the fully-qualified path to the stub.
+     *
+     * @param  string  $stub
+     * @return string
+     */
+    protected function resolveStubPath($stub)
+    {
+        return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
+            ? $customPath
+            : __DIR__.$stub;
     }
 
     /**
@@ -46,12 +73,32 @@ class FactoryMakeCommand extends GeneratorCommand
      */
     protected function buildClass($name)
     {
-        $model = $this->option('model')
-                        ? $this->qualifyClass($this->option('model'))
-                        : 'Model';
+        $factory = class_basename(Str::ucfirst(str_replace('Factory', '', $name)));
+
+        $namespaceModel = $this->option('model')
+                        ? $this->qualifyModel($this->option('model'))
+                        : $this->qualifyModel($this->guessModelName($name));
+
+        $model = class_basename($namespaceModel);
+
+        $namespace = $this->getNamespace(
+            Str::replaceFirst($this->rootNamespace(), 'Database\\Factories\\', $this->qualifyClass($this->getNameInput()))
+        );
+
+        $replace = [
+            '{{ factoryNamespace }}' => $namespace,
+            'NamespacedDummyModel' => $namespaceModel,
+            '{{ namespacedModel }}' => $namespaceModel,
+            '{{namespacedModel}}' => $namespaceModel,
+            'DummyModel' => $model,
+            '{{ model }}' => $model,
+            '{{model}}' => $model,
+            '{{ factory }}' => $factory,
+            '{{factory}}' => $factory,
+        ];
 
         return str_replace(
-            'DummyModel', $model, parent::buildClass($name)
+            array_keys($replace), array_values($replace), parent::buildClass($name)
         );
     }
 
@@ -63,11 +110,34 @@ class FactoryMakeCommand extends GeneratorCommand
      */
     protected function getPath($name)
     {
-        $name = str_replace(
-            ['\\', '/'], '', $this->argument('name')
-        );
+        $name = (string) Str::of($name)->replaceFirst($this->rootNamespace(), '')->finish('Factory');
 
-        return $this->laravel->databasePath()."/factories/{$name}.php";
+        return $this->laravel->databasePath().'/factories/'.str_replace('\\', '/', $name).'.php';
+    }
+
+    /**
+     * Guess the model name from the Factory name or return a default model name.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function guessModelName($name)
+    {
+        if (str_ends_with($name, 'Factory')) {
+            $name = substr($name, 0, -7);
+        }
+
+        $modelName = $this->qualifyModel(Str::after($name, $this->rootNamespace()));
+
+        if (class_exists($modelName)) {
+            return $modelName;
+        }
+
+        if (is_dir(app_path('Models/'))) {
+            return $this->rootNamespace().'Models\Model';
+        }
+
+        return $this->rootNamespace().'Model';
     }
 
     /**

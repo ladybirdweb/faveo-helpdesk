@@ -33,7 +33,7 @@ class="nav-link active"
 <!-- content -->
 @section('content')
 <!-- open a form -->
-{!! Form::open(array('action' => 'Admin\helpdesk\TeamController@store' , 'method' => 'post') )!!}
+{!! Form::open(array('route' => 'teams.store') )!!}
 
 @if(Session::has('errors'))
     <div class="alert alert-danger alert-dismissable">

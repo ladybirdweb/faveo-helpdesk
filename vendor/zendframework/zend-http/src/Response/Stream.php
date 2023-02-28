@@ -1,8 +1,10 @@
 <?php
 /**
- * @see       https://github.com/zendframework/zend-http for the canonical source repository
- * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
+ * Zend Framework (http://framework.zend.com/)
+ *
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
 namespace Zend\Http\Response;
@@ -21,7 +23,7 @@ class Stream extends Response
      *
      * @var int
      */
-    protected $contentLength;
+    protected $contentLength = null;
 
     /**
      * The portion of the body that has already been streamed
@@ -148,7 +150,7 @@ class Stream extends Response
      */
     public static function fromStream($responseString, $stream)
     {
-        if (! is_resource($stream) || get_resource_type($stream) !== 'stream') {
+        if (!is_resource($stream) || get_resource_type($stream) !== 'stream') {
             throw new Exception\InvalidArgumentException('A valid stream is required');
         }
 
@@ -160,9 +162,9 @@ class Stream extends Response
             $responseArray = explode("\n", $responseString);
         }
 
-        while (! empty($responseArray)) {
+        while (count($responseArray)) {
             $nextLine        = array_shift($responseArray);
-            $headersString  .= $nextLine . "\n";
+            $headersString  .= $nextLine."\n";
             $nextLineTrimmed = trim($nextLine);
             if ($nextLineTrimmed == '') {
                 $headerComplete = true;
@@ -170,9 +172,9 @@ class Stream extends Response
             }
         }
 
-        if (! $headerComplete) {
+        if (!$headerComplete) {
             while (false !== ($nextLine = fgets($stream))) {
-                $headersString .= trim($nextLine) . "\r\n";
+                $headersString .= trim($nextLine)."\r\n";
                 if ($nextLine == "\r\n" || $nextLine == "\n") {
                     $headerComplete = true;
                     break;
@@ -180,18 +182,18 @@ class Stream extends Response
             }
         }
 
-        if (! $headerComplete) {
+        if (!$headerComplete) {
             throw new Exception\OutOfRangeException('End of header not found');
         }
 
-        /** @var Stream $response */
+        /** @var Stream $response  */
         $response = static::fromString($headersString);
 
         if (is_resource($stream)) {
             $response->setStream($stream);
         }
 
-        if (! empty($responseArray)) {
+        if (count($responseArray)) {
             $response->content = implode("\n", $responseArray);
         }
 
@@ -266,7 +268,7 @@ class Stream extends Response
             $bytes = -1; // Read the whole buffer
         }
 
-        if (! is_resource($this->stream) || $bytes == 0) {
+        if (!is_resource($this->stream) || $bytes == 0) {
             return '';
         }
 

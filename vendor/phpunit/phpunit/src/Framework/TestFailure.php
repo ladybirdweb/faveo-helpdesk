@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,23 +9,26 @@
  */
 namespace PHPUnit\Framework;
 
+use function get_class;
+use function sprintf;
+use function trim;
 use PHPUnit\Framework\Error\Error;
 use Throwable;
 
 /**
- * A TestFailure collects a failed test together with the caught exception.
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-class TestFailure
+final class TestFailure
 {
     /**
      * @var null|Test
      */
-    protected $failedTest;
+    private $failedTest;
 
     /**
      * @var Throwable
      */
-    protected $thrownException;
+    private $thrownException;
 
     /**
      * @var string
@@ -34,8 +37,6 @@ class TestFailure
 
     /**
      * Returns a description for an exception.
-     *
-     * @throws \InvalidArgumentException
      */
     public static function exceptionToString(Throwable $e): string
     {
@@ -46,8 +47,12 @@ class TestFailure
                 $buffer .= $e->getComparisonFailure()->getDiff();
             }
 
+            if ($e instanceof PHPTAssertionFailedError) {
+                $buffer .= $e->getDiff();
+            }
+
             if (!empty($buffer)) {
-                $buffer = \trim($buffer) . "\n";
+                $buffer = trim($buffer) . "\n";
             }
 
             return $buffer;
@@ -61,20 +66,18 @@ class TestFailure
             return $e->getClassName() . ': ' . $e->getMessage() . "\n";
         }
 
-        return \get_class($e) . ': ' . $e->getMessage() . "\n";
+        return get_class($e) . ': ' . $e->getMessage() . "\n";
     }
 
     /**
      * Constructs a TestFailure with the given test and exception.
-     *
-     * @param Throwable $t
      */
-    public function __construct(Test $failedTest, $t)
+    public function __construct(Test $failedTest, Throwable $t)
     {
         if ($failedTest instanceof SelfDescribing) {
             $this->testName = $failedTest->toString();
         } else {
-            $this->testName = \get_class($failedTest);
+            $this->testName = get_class($failedTest);
         }
 
         if (!$failedTest instanceof TestCase || !$failedTest->isInIsolation()) {
@@ -89,7 +92,7 @@ class TestFailure
      */
     public function toString(): string
     {
-        return \sprintf(
+        return sprintf(
             '%s: %s',
             $this->testName,
             $this->thrownException->getMessage()
@@ -98,8 +101,6 @@ class TestFailure
 
     /**
      * Returns a description for the thrown exception.
-     *
-     * @throws \InvalidArgumentException
      */
     public function getExceptionAsString(): string
     {

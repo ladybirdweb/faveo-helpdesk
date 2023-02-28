@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateKbArticleRelationshipTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -29,4 +28,4 @@ class CreateKbArticleRelationshipTable extends Migration
     {
         Schema::drop('kb_article_relationship');
     }
-}
+};

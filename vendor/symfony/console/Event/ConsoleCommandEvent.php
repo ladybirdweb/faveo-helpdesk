@@ -16,44 +16,35 @@ namespace Symfony\Component\Console\Event;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ConsoleCommandEvent extends ConsoleEvent
+final class ConsoleCommandEvent extends ConsoleEvent
 {
     /**
      * The return code for skipped commands, this will also be passed into the terminate event.
      */
-    const RETURN_CODE_DISABLED = 113;
+    public const RETURN_CODE_DISABLED = 113;
 
     /**
      * Indicates if the command should be run or skipped.
      */
-    private $commandShouldRun = true;
+    private bool $commandShouldRun = true;
 
     /**
      * Disables the command, so it won't be run.
-     *
-     * @return bool
      */
-    public function disableCommand()
+    public function disableCommand(): bool
     {
         return $this->commandShouldRun = false;
     }
 
-    /**
-     * Enables the command.
-     *
-     * @return bool
-     */
-    public function enableCommand()
+    public function enableCommand(): bool
     {
         return $this->commandShouldRun = true;
     }
 
     /**
      * Returns true if the command is runnable, false otherwise.
-     *
-     * @return bool
      */
-    public function commandShouldRun()
+    public function commandShouldRun(): bool
     {
         return $this->commandShouldRun;
     }

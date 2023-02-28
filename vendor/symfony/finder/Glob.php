@@ -18,7 +18,7 @@ namespace Symfony\Component\Finder;
  *
  *     // prints foo.bar and foo.baz
  *     $regex = glob_to_regex("foo.*");
- *     for (array('foo.bar', 'foo.baz', 'foo', 'bar') as $t)
+ *     for (['foo.bar', 'foo.baz', 'foo', 'bar'] as $t)
  *     {
  *         if (/$regex/) echo "matched: $car\n";
  *     }
@@ -37,15 +37,8 @@ class Glob
 {
     /**
      * Returns a regexp which is the equivalent of the glob pattern.
-     *
-     * @param string $glob                The glob pattern
-     * @param bool   $strictLeadingDot
-     * @param bool   $strictWildcardSlash
-     * @param string $delimiter           Optional delimiter
-     *
-     * @return string regex The regexp
      */
-    public static function toRegex($glob, $strictLeadingDot = true, $strictWildcardSlash = true, $delimiter = '#')
+    public static function toRegex(string $glob, bool $strictLeadingDot = true, bool $strictWildcardSlash = true, string $delimiter = '#'): string
     {
         $firstByte = true;
         $escaping = false;

@@ -2,10 +2,13 @@
 
 namespace Illuminate\Routing;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Reflector;
+use ReflectionClass;
+use ReflectionFunctionAbstract;
 use ReflectionMethod;
 use ReflectionParameter;
-use Illuminate\Support\Arr;
-use ReflectionFunctionAbstract;
+use stdClass;
 
 trait RouteDependencyResolverTrait
 {
@@ -41,12 +44,12 @@ trait RouteDependencyResolverTrait
 
         $values = array_values($parameters);
 
-        foreach ($reflector->getParameters() as $key => $parameter) {
-            $instance = $this->transformDependency(
-                $parameter, $parameters
-            );
+        $skippableValue = new stdClass;
 
-            if (! is_null($instance)) {
+        foreach ($reflector->getParameters() as $key => $parameter) {
+            $instance = $this->transformDependency($parameter, $parameters, $skippableValue);
+
+            if ($instance !== $skippableValue) {
                 $instanceCount++;
 
                 $this->spliceIntoParameters($parameters, $key, $instance);
@@ -64,20 +67,25 @@ trait RouteDependencyResolverTrait
      *
      * @param  \ReflectionParameter  $parameter
      * @param  array  $parameters
+     * @param  object  $skippableValue
      * @return mixed
      */
-    protected function transformDependency(ReflectionParameter $parameter, $parameters)
+    protected function transformDependency(ReflectionParameter $parameter, $parameters, $skippableValue)
     {
-        $class = $parameter->getClass();
+        $className = Reflector::getParameterClassName($parameter);
 
         // If the parameter has a type-hinted class, we will check to see if it is already in
         // the list of parameters. If it is we will just skip it as it is probably a model
         // binding and we do not want to mess with those; otherwise, we resolve it here.
-        if ($class && ! $this->alreadyInParameters($class->name, $parameters)) {
+        if ($className && ! $this->alreadyInParameters($className, $parameters)) {
+            $isEnum = method_exists(ReflectionClass::class, 'isEnum') && (new ReflectionClass($className))->isEnum();
+
             return $parameter->isDefaultValueAvailable()
-                ? $parameter->getDefaultValue()
-                : $this->container->make($class->name);
+                ? ($isEnum ? $parameter->getDefaultValue() : null)
+                : $this->container->make($className);
         }
+
+        return $skippableValue;
     }
 
     /**
@@ -89,9 +97,7 @@ trait RouteDependencyResolverTrait
      */
     protected function alreadyInParameters($class, array $parameters)
     {
-        return ! is_null(Arr::first($parameters, function ($value) use ($class) {
-            return $value instanceof $class;
-        }));
+        return ! is_null(Arr::first($parameters, fn ($value) => $value instanceof $class));
     }
 
     /**

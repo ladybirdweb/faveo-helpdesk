@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Request;
+
 Breadcrumbs::register('dashboard', function ($breadcrumbs) {
     //$breadcrumbs->parent('/');
     $breadcrumbs->push(Lang::get('lang.dashboard'), route('dashboard'));
@@ -561,7 +563,7 @@ Breadcrumbs::register('queue', function ($breadcrumbs) {
     $breadcrumbs->push(Lang::get('lang.queues'), route('queue'));
 });
 Breadcrumbs::register('queue.edit', function ($breadcrumbs) {
-    $id = \Input::segment(2);
+    $id = Request::segment(2);
     $breadcrumbs->parent('queue');
     $breadcrumbs->push(Lang::get('lang.edit'), route('queue.edit', $id));
 });
@@ -576,7 +578,7 @@ Breadcrumbs::register('social', function ($breadcrumbs) {
     $breadcrumbs->push(Lang::get('lang.social-media'), route('social'));
 });
 Breadcrumbs::register('social.media', function ($breadcrumbs) {
-    $id = \Input::segment(2);
+    $id = Request::segment(2);
     $breadcrumbs->parent('social');
     $breadcrumbs->push(Lang::get('lang.settings'), route('social.media', $id));
 });

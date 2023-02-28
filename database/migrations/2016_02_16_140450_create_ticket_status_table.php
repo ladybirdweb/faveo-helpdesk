@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateTicketStatusTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -20,8 +19,8 @@ class CreateTicketStatusTable extends Migration
             $table->string('message');
             $table->integer('flags');
             $table->integer('sort');
-            $table->integer('email_user');
-            $table->string('icon_class');
+            $table->integer('email_user')->nullable();
+            $table->string('icon_class')->nullable();
             $table->string('properties');
             $table->timestamps();
         });
@@ -36,4 +35,4 @@ class CreateTicketStatusTable extends Migration
     {
         Schema::drop('ticket_status');
     }
-}
+};

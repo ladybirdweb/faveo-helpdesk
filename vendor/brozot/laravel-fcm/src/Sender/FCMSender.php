@@ -105,7 +105,7 @@ class FCMSender extends HTTPSender
      *
      * @return null|\Psr\Http\Message\ResponseInterface
      */
-    private function post($request)
+    protected function post($request)
     {
         try {
             $responseGuzzle = $this->client->request('post', $this->url, $request->build());

@@ -12,7 +12,7 @@ class UserLanguage
 
     public function compose(View $view)
     {
-        $path = base_path().DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'lang';
+        $path = lang_path();
         $langs = scandir($path);
         $langs = array_diff($langs, ['.', '..']);
         $languages = [];

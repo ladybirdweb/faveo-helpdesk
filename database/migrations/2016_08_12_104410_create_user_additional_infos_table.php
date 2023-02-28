@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateUserAdditionalInfosTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -31,4 +30,4 @@ class CreateUserAdditionalInfosTable extends Migration
     {
         Schema::drop('user_additional_infos');
     }
-}
+};

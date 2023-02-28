@@ -4,7 +4,7 @@ class PushNotification {
 
     public function app($appName)
     {
-        $config = is_array($appName) ? $appName : config('push-notification.'.$appName);
+        $config = is_array($appName) ? $appName : \Config::get('laravel-push-notification::'.$appName);
         return new App($config);
     }
 

@@ -28,7 +28,7 @@ return array (
   ),
   'tollFree' => 
   array (
-    'NationalNumberPattern' => '112|[69]11',
+    'NationalNumberPattern' => '112|611|9(?:11|33|88)',
     'ExampleNumber' => '112',
     'PossibleLength' => 
     array (
@@ -40,7 +40,7 @@ return array (
   ),
   'premiumRate' => 
   array (
-    'NationalNumberPattern' => '2(?:4280|5209|7(?:449|663))|3(?:2340|3786|5564|8(?:135|254))|4(?:1(?:366|463)|3355|6(?:15|32)7|7553|82(?:21|77))|5(?:2944|4892|5928|9(?:187|342))|69388|7(?:20(?:78|87)|3(?:288|909)|6426)|8(?:6234|9616)|9(?:5297|6(?:040|835)|7(?:294|688)|9(?:689|796))',
+    'NationalNumberPattern' => '24280|(?:381|968)35|4(?:3355|7553|8221)|5(?:(?:489|934)2|5928)|72078|(?:323|960)40|(?:276|414)63|(?:2(?:520|744)|7390|9968)9|(?:693|732|976)88|(?:3(?:556|825)|5294|8623|9729)4|(?:3378|4136|7642|8961|9979)6|(?:4(?:6(?:15|32)|827)|(?:591|720)8|9529)7',
     'ExampleNumber' => '24280',
     'PossibleLength' => 
     array (
@@ -64,7 +64,7 @@ return array (
   ),
   'shortCode' => 
   array (
-    'NationalNumberPattern' => '11(?:2|5[1-47]|[68]\\d|7[0-57]|98)|[2-9]\\d{3,5}|[2-9]11',
+    'NationalNumberPattern' => '11(?:2|5[1-47]|[68]\\d|7[0-57]|98)|[2-9]\\d{3,5}|[2-8]11|9(?:11|33|88)',
     'ExampleNumber' => '112',
     'PossibleLength' => 
     array (
@@ -124,6 +124,5 @@ return array (
   array (
   ),
   'mainCountryForCode' => false,
-  'leadingZeroPossible' => false,
   'mobileNumberPortableRegion' => false,
 );

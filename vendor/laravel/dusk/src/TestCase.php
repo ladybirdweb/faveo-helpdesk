@@ -3,22 +3,22 @@
 namespace Laravel\Dusk;
 
 use Exception;
-use Laravel\Dusk\Chrome\SupportsChrome;
-use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
+use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Illuminate\Foundation\Testing\TestCase as FoundationTestCase;
+use Laravel\Dusk\Chrome\SupportsChrome;
+use Laravel\Dusk\Concerns\ProvidesBrowser;
 
 abstract class TestCase extends FoundationTestCase
 {
-    use Concerns\ProvidesBrowser,
-        SupportsChrome;
+    use ProvidesBrowser, SupportsChrome;
 
     /**
      * Register the base URL with Dusk.
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -27,6 +27,8 @@ abstract class TestCase extends FoundationTestCase
         Browser::$storeScreenshotsAt = base_path('tests/Browser/screenshots');
 
         Browser::$storeConsoleLogAt = base_path('tests/Browser/console');
+
+        Browser::$storeSourceAt = base_path('tests/Browser/source');
 
         Browser::$userResolver = function () {
             return $this->user();
@@ -52,17 +54,28 @@ abstract class TestCase extends FoundationTestCase
      */
     protected function baseUrl()
     {
-        return config('app.url');
+        return rtrim(config('app.url'), '/');
     }
 
     /**
      * Return the default user to authenticate.
      *
      * @return \App\User|int|null
+     *
      * @throws \Exception
      */
     protected function user()
     {
-        throw new Exception("User resolver has not been set.");
+        throw new Exception('User resolver has not been set.');
+    }
+
+    /**
+     * Determine if the tests are running within Laravel Sail.
+     *
+     * @return bool
+     */
+    protected static function runningInSail()
+    {
+        return isset($_ENV['LARAVEL_SAIL']) && $_ENV['LARAVEL_SAIL'] == '1';
     }
 }

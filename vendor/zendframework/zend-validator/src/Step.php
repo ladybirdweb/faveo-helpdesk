@@ -43,10 +43,10 @@ class Step extends AbstractValidator
     {
         if ($options instanceof Traversable) {
             $options = iterator_to_array($options);
-        } elseif (! is_array($options)) {
+        } elseif (!is_array($options)) {
             $options = func_get_args();
             $temp['baseValue'] = array_shift($options);
-            if (! empty($options)) {
+            if (!empty($options)) {
                 $temp['step'] = array_shift($options);
             }
 
@@ -115,7 +115,7 @@ class Step extends AbstractValidator
      */
     public function isValid($value)
     {
-        if (! is_numeric($value)) {
+        if (!is_numeric($value)) {
             $this->error(self::INVALID);
             return false;
         }

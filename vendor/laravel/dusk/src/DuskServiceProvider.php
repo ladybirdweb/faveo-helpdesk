@@ -2,7 +2,6 @@
 
 namespace Laravel\Dusk;
 
-use Exception;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,41 +14,39 @@ class DuskServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Route::get('/_dusk/login/{userId}/{guard?}', [
-            'middleware' => 'web',
-            'uses' => 'Laravel\Dusk\Http\Controllers\UserController@login',
-        ]);
+        if (! $this->app->environment('production')) {
+            Route::group(array_filter([
+                'prefix' => config('dusk.path', '_dusk'),
+                'domain' => config('dusk.domain', null),
+                'middleware' => config('dusk.middleware', 'web'),
+            ]), function () {
+                Route::get('/login/{userId}/{guard?}', [
+                    'uses' => 'Laravel\Dusk\Http\Controllers\UserController@login',
+                    'as' => 'dusk.login',
+                ]);
 
-        Route::get('/_dusk/logout/{guard?}', [
-            'middleware' => 'web',
-            'uses' => 'Laravel\Dusk\Http\Controllers\UserController@logout',
-        ]);
+                Route::get('/logout/{guard?}', [
+                    'uses' => 'Laravel\Dusk\Http\Controllers\UserController@logout',
+                    'as' => 'dusk.logout',
+                ]);
 
-        Route::get('/_dusk/user/{guard?}', [
-            'middleware' => 'web',
-            'uses' => 'Laravel\Dusk\Http\Controllers\UserController@user',
-        ]);
-    }
-
-    /**
-     * Register any package services.
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function register()
-    {
-        if ($this->app->environment('production')) {
-            throw new Exception('It is unsafe to run Dusk in production.');
+                Route::get('/user/{guard?}', [
+                    'uses' => 'Laravel\Dusk\Http\Controllers\UserController@user',
+                    'as' => 'dusk.user',
+                ]);
+            });
         }
 
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Console\InstallCommand::class,
                 Console\DuskCommand::class,
+                Console\DuskFailsCommand::class,
                 Console\MakeCommand::class,
                 Console\PageCommand::class,
+                Console\PurgeCommand::class,
                 Console\ComponentCommand::class,
+                Console\ChromeDriverCommand::class,
             ]);
         }
     }

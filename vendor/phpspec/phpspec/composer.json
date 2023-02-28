@@ -1,6 +1,6 @@
 {
     "name":         "phpspec/phpspec",
-    "description":  "Specification-oriented BDD framework for PHP 5.6+",
+    "description":  "Specification-oriented BDD framework for PHP 7.1+",
     "keywords":     ["BDD", "SpecBDD", "TDD", "spec", "specification", "tests", "testing"],
     "homepage":     "http://phpspec.net/",
     "type":         "library",
@@ -22,27 +22,32 @@
     ],
 
     "require": {
-        "php":                      "^7.0,<7.3",
-        "phpspec/prophecy":         "^1.5",
+        "php":                      "^7.3 || 8.0.* || 8.1.* || 8.2.*",
+        "phpspec/prophecy":         "^1.9",
         "phpspec/php-diff":         "^1.0.0",
-        "sebastian/exporter":       "^1.0 || ^2.0 || ^3.0",
-        "symfony/console":          "^3.2 || ^4.0",
-        "symfony/event-dispatcher": "^3.2 || ^4.0",
-        "symfony/process":          "^3.2 || ^4.0",
-        "symfony/finder":           "^3.2 || ^4.0",
-        "symfony/yaml":             "^3.2 || ^4.0",
+        "sebastian/exporter":       "^3.0 || ^4.0",
+        "symfony/console":          "^3.4 || ^4.4 || ^5.0 || ^6.0",
+        "symfony/event-dispatcher": "^3.4 || ^4.4 || ^5.0 || ^6.0",
+        "symfony/process":          "^3.4 || ^4.4 || ^5.0 || ^6.0",
+        "symfony/finder":           "^3.4 || ^4.4 || ^5.0 || ^6.0",
+        "symfony/yaml":             "^3.4 || ^4.4 || ^5.0 || ^6.0",
         "doctrine/instantiator":    "^1.0.5",
         "ext-tokenizer":            "*"
     },
 
     "require-dev": {
         "behat/behat":           "^3.3",
-        "symfony/filesystem":    "^3.2 || ^4.0",
-        "phpunit/phpunit":       "^5.7|^6.0"
+        "symfony/filesystem":    "^3.4 || ^4.0 || ^5.0 || ^6.0",
+        "phpunit/phpunit":       "^8.0 || ^9.0",
+        "vimeo/psalm": "^4.3"
     },
 
     "suggest": {
         "phpspec/nyan-formatters": "Adds Nyan formatters"
+    },
+
+    "conflict": {
+        "sebastian/comparator" : "<1.2.4"
     },
 
     "autoload": {
@@ -61,7 +66,8 @@
 
     "extra": {
         "branch-alias": {
-            "dev-master": "4.3.x-dev"
+            "dev-main": "7.3.x-dev"
         }
     }
+
 }

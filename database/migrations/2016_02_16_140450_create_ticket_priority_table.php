@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateTicketPriorityTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -20,7 +19,7 @@ class CreateTicketPriorityTable extends Migration
             $table->string('priority_color');
             $table->boolean('priority_urgency');
             $table->boolean('ispublic');
-            $table->string('is_default');
+            $table->string('is_default')->nullable();
             $table->timestamps();
         });
     }
@@ -34,4 +33,4 @@ class CreateTicketPriorityTable extends Migration
     {
         Schema::drop('ticket_priority');
     }
-}
+};

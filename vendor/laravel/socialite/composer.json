@@ -3,6 +3,11 @@
     "description": "Laravel wrapper around OAuth 1 & OAuth 2 libraries.",
     "keywords": ["oauth", "laravel"],
     "license": "MIT",
+    "homepage": "https://laravel.com",
+    "support": {
+        "issues": "https://github.com/laravel/socialite/issues",
+        "source": "https://github.com/laravel/socialite"
+    },
     "authors": [
         {
             "name": "Taylor Otwell",
@@ -10,16 +15,18 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "guzzlehttp/guzzle": "~6.0",
-        "illuminate/contracts": "~5.4",
-        "illuminate/http": "~5.4",
-        "illuminate/support": "~5.4",
-        "league/oauth1-client": "~1.0"
+        "php": "^7.2|^8.0",
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^6.0|^7.0",
+        "illuminate/contracts": "^6.0|^7.0|^8.0|^9.0|^10.0",
+        "illuminate/http": "^6.0|^7.0|^8.0|^9.0|^10.0",
+        "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0",
+        "league/oauth1-client": "^1.10.1"
     },
     "require-dev": {
-        "mockery/mockery": "~0.9",
-        "phpunit/phpunit": "~4.0|~5.0"
+        "mockery/mockery": "^1.0",
+        "orchestra/testbench": "^4.0|^5.0|^6.0|^7.0|^8.0",
+        "phpunit/phpunit": "^8.0|^9.3"
     },
     "autoload": {
         "psr-4": {
@@ -28,12 +35,12 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Laravel\\Socialite\\Tests\\": "tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.0-dev"
+            "dev-master": "5.x-dev"
         },
         "laravel": {
             "providers": [

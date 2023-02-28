@@ -20,6 +20,7 @@ class Install extends Command
      * @var string
      */
     protected $description = 'to install faveo';
+
     protected $install;
 
     /**

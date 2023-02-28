@@ -3,17 +3,23 @@
 namespace UniSharp\LaravelFilemanager\Middlewares;
 
 use Closure;
-use UniSharp\LaravelFilemanager\Traits\LfmHelpers;
+use Illuminate\Support\Str;
+use UniSharp\LaravelFilemanager\Lfm;
 
 class MultiUser
 {
-    use LfmHelpers;
+    private $helper;
+
+    public function __construct()
+    {
+        $this->helper = app(Lfm::class);
+    }
 
     public function handle($request, Closure $next)
     {
-        if ($this->allowMultiUser()) {
+        if ($this->helper->allowFolderType('user')) {
             $previous_dir = $request->input('working_dir');
-            $working_dir = $this->rootFolder('user');
+            $working_dir = $this->helper->getRootFolder('user');
 
             if ($previous_dir == null) {
                 $request->merge(compact('working_dir'));
@@ -27,11 +33,11 @@ class MultiUser
 
     private function validDir($previous_dir)
     {
-        if (starts_with($previous_dir, $this->rootFolder('share'))) {
+        if (Str::startsWith($previous_dir, $this->helper->getRootFolder('share'))) {
             return true;
         }
 
-        if (starts_with($previous_dir, $this->rootFolder('user'))) {
+        if (Str::startsWith($previous_dir, $this->helper->getRootFolder('user'))) {
             return true;
         }
 

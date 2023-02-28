@@ -2,8 +2,8 @@
 
 namespace Illuminate\Redis\Limiters;
 
-use Illuminate\Support\InteractsWithTime;
 use Illuminate\Contracts\Redis\LimiterTimeoutException;
+use Illuminate\Support\InteractsWithTime;
 
 class DurationLimiterBuilder
 {
@@ -24,7 +24,7 @@ class DurationLimiterBuilder
     public $name;
 
     /**
-     * The maximum number of locks that can obtained per time window.
+     * The maximum number of locks that can be obtained per time window.
      *
      * @var int
      */
@@ -45,6 +45,13 @@ class DurationLimiterBuilder
     public $timeout = 3;
 
     /**
+     * The number of milliseconds to wait between attempts to acquire the lock.
+     *
+     * @var int
+     */
+    public $sleep = 750;
+
+    /**
      * Create a new builder instance.
      *
      * @param  \Illuminate\Redis\Connections\Connection  $connection
@@ -58,7 +65,7 @@ class DurationLimiterBuilder
     }
 
     /**
-     * Set the maximum number of locks that can obtained per time window.
+     * Set the maximum number of locks that can be obtained per time window.
      *
      * @param  int  $maxLocks
      * @return $this
@@ -73,7 +80,7 @@ class DurationLimiterBuilder
     /**
      * Set the amount of time the lock window is maintained.
      *
-     * @param  int  $decay
+     * @param  \DateTimeInterface|\DateInterval|int  $decay
      * @return $this
      */
     public function every($decay)
@@ -97,6 +104,19 @@ class DurationLimiterBuilder
     }
 
     /**
+     * The number of milliseconds to wait between lock acquisition attempts.
+     *
+     * @param  int  $sleep
+     * @return $this
+     */
+    public function sleep($sleep)
+    {
+        $this->sleep = $sleep;
+
+        return $this;
+    }
+
+    /**
      * Execute the given callback if a lock is obtained, otherwise call the failure callback.
      *
      * @param  callable  $callback
@@ -110,7 +130,7 @@ class DurationLimiterBuilder
         try {
             return (new DurationLimiter(
                 $this->connection, $this->name, $this->maxLocks, $this->decay
-            ))->block($this->timeout, $callback);
+            ))->block($this->timeout, $callback, $this->sleep);
         } catch (LimiterTimeoutException $e) {
             if ($failure) {
                 return $failure($e);

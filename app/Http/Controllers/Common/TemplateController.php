@@ -19,6 +19,7 @@ use Lang;
 class TemplateController extends Controller
 {
     public $template;
+
     public $type;
 
     public function __construct()

@@ -9,6 +9,7 @@ class Ticket extends BaseModel
     /* Using Ticket table  */
 
     protected $table = 'settings_ticket';
+
     /* Set fillable fields in table */
     protected $fillable = [
         'id', 'num_format', 'num_sequence', 'priority', 'sla', 'help_topic', 'max_open_ticket', 'collision_avoid', 'lock_ticket_frequency',

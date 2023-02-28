@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 /*
- * This file is part of the php-code-coverage package.
+ * This file is part of phpunit/php-code-coverage.
  *
  * (c) Sebastian Bergmann <sebastian@phpunit.de>
  *
@@ -9,6 +9,11 @@
  */
 namespace SebastianBergmann\CodeCoverage\Report\Xml;
 
+use DOMElement;
+
+/**
+ * @internal This class is not covered by the backward compatibility promise for phpunit/php-code-coverage
+ */
 final class Tests
 {
     private $contextNode;
@@ -24,7 +29,7 @@ final class Tests
         6  => 'WARNING',     // PHPUnit_Runner_BaseTestRunner::STATUS_WARNING
     ];
 
-    public function __construct(\DOMElement $context)
+    public function __construct(DOMElement $context)
     {
         $this->contextNode = $context;
     }
@@ -40,7 +45,7 @@ final class Tests
 
         $node->setAttribute('name', $test);
         $node->setAttribute('size', $result['size']);
-        $node->setAttribute('result', (int) $result['status']);
+        $node->setAttribute('result', (string) $result['status']);
         $node->setAttribute('status', $this->codeMap[(int) $result['status']]);
     }
 }

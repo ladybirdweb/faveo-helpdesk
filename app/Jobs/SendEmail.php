@@ -13,8 +13,11 @@ class SendEmail extends Job implements ShouldQueue
     use SerializesModels;
 
     protected $from;
+
     protected $to;
+
     protected $message;
+
     protected $template;
 
     /**

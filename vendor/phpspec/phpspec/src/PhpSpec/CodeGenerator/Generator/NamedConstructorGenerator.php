@@ -41,12 +41,7 @@ final class NamedConstructorGenerator implements Generator
      */
     private $codeWriter;
 
-    /**
-     * @param ConsoleIO $io
-     * @param TemplateRenderer $templates
-     * @param Filesystem $filesystem
-     * @param CodeWriter $codeWriter
-     */
+    
     public function __construct(ConsoleIO $io, TemplateRenderer $templates, Filesystem $filesystem, CodeWriter $codeWriter)
     {
         $this->io         = $io;
@@ -55,16 +50,13 @@ final class NamedConstructorGenerator implements Generator
         $this->codeWriter = $codeWriter;
     }
 
-    public function supports(Resource $resource, string $generation, array $data) : bool
+    public function supports(Resource $resource, string $generation, array $data): bool
     {
         return 'named_constructor' === $generation;
     }
 
-    /**
-     * @param Resource $resource
-     * @param array             $data
-     */
-    public function generate(Resource $resource, array $data = array())
+    
+    public function generate(Resource $resource, array $data = array()): void
     {
         $filepath   = $resource->getSrcFilename();
         $methodName = $data['name'];
@@ -86,12 +78,12 @@ final class NamedConstructorGenerator implements Generator
         ), 2);
     }
 
-    public function getPriority() : int
+    public function getPriority(): int
     {
         return 0;
     }
 
-    private function getContent(Resource $resource, string $methodName, array $arguments) : string
+    private function getContent(Resource $resource, string $methodName, array $arguments): string
     {
         $className = $resource->getName();
         $class = $resource->getSrcClassname();
@@ -111,7 +103,7 @@ final class NamedConstructorGenerator implements Generator
         return $template->getContent();
     }
 
-    private function appendMethodToCode(string $code, string $method) : string
+    private function appendMethodToCode(string $code, string $method): string
     {
         try {
             return $this->codeWriter->insertAfterMethod($code, '__construct', $method);

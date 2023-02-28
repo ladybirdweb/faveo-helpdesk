@@ -3,7 +3,7 @@
     "type": "library",
     "description": "A library to read, parse, export and make subsets of different types of font files.",
     "homepage": "https://github.com/PhenX/php-font-lib",
-    "license": "LGPL",
+    "license": "LGPL-3.0",
     "authors": [
         {
             "name": "Fabien Ménager",
@@ -11,6 +11,22 @@
         }
     ],
     "autoload": {
-        "classmap": ["classes/"]
+        "psr-4": {
+            "FontLib\\": "src/FontLib"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "FontLib\\Tests\\": "tests/FontLib"
+        }
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "require": {
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
+        "symfony/phpunit-bridge" : "^3 || ^4 || ^5"
     }
 }

@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateTemplateTypesTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -28,4 +27,4 @@ class CreateTemplateTypesTable extends Migration
     {
         Schema::drop('settings_types');
     }
-}
+};

@@ -44,9 +44,9 @@ class CreateTicketRequest extends Request
         }
 
         return [
-            'email'       => 'required|email|max:60',
-            'first_name'  => 'required|min:3|max:40',
-            'helptopic'   => 'required',
+            'email'      => 'required|email|max:60',
+            'first_name' => 'required|min:3|max:40',
+            'helptopic'  => 'required',
             // 'dept' => 'required',
             'sla'      => 'required',
             'subject'  => 'required|min:5',
@@ -58,7 +58,7 @@ class CreateTicketRequest extends Request
     /**
      *@category Funcion to set rule if send opt is enabled
      *
-     *@param object $settings (instance of Model common settings)
+     *@param  object  $settings (instance of Model common settings)
      *
      *@author manish.verma@ladybirdweb.com
      *
@@ -71,9 +71,9 @@ class CreateTicketRequest extends Request
         // dd($settings->status, $email_mandatory->status);
         if (($settings->status == '1' || $settings->status == 1) && ($email_mandatory->status == '1' || $email_mandatory->status == 1)) {
             return [
-                'email'       => 'required|email|max:60',
-                'first_name'  => 'required|min:3|max:40',
-                'helptopic'   => 'required',
+                'email'      => 'required|email|max:60',
+                'first_name' => 'required|min:3|max:40',
+                'helptopic'  => 'required',
                 // 'dept' => 'required',
                 'sla'      => 'required',
                 'subject'  => 'required|min:5',
@@ -107,9 +107,9 @@ class CreateTicketRequest extends Request
     public function onlyMobleRequired()
     {
         return [
-            'email'       => 'email|max:60',
-            'first_name'  => 'required|min:3|max:40',
-            'helptopic'   => 'required',
+            'email'      => 'email|max:60',
+            'first_name' => 'required|min:3|max:40',
+            'helptopic'  => 'required',
             // 'dept' => 'required',
             'sla'      => 'required',
             'subject'  => 'required|min:5',

@@ -19,8 +19,11 @@ class AgentLayout
      * @var UserRepository
      */
     protected $company;
+
     protected $users;
+
     protected $tickets;
+
     protected $department;
 
     /**

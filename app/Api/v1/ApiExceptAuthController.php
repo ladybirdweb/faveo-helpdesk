@@ -4,6 +4,7 @@ namespace App\Api\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ApiExceptAuthController extends Controller
 {
@@ -34,8 +35,8 @@ class ApiExceptAuthController extends Controller
             }
 
             $url = $this->request->input('url');
-            if (!str_is('*/', $url)) {
-                $url = str_finish($url, '/');
+            if (!Str::is('*/', $url)) {
+                $url = Str::finish($url, '/');
             }
 
             $url = $url.'api/v1/helpdesk/check-url';

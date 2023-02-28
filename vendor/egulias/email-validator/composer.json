@@ -1,44 +1,37 @@
 {
-  "name":         "egulias/email-validator",
-  "description":  "A library for validating emails against several RFCs",
-  "homepage":     "https://github.com/egulias/EmailValidator",
-  "type":         "Library",
-  "keywords":     ["email", "validation", "validator", "emailvalidation", "emailvalidator"],
-  "license":      "MIT",
+  "name":        "egulias/email-validator",
+  "description": "A library for validating emails against several RFCs",
+  "homepage":    "https://github.com/egulias/EmailValidator",
+  "keywords":    ["email", "validation", "validator", "emailvalidation", "emailvalidator"],
+  "license":     "MIT",
   "authors": [
     {"name": "Eduardo Gulias Davis"}
   ],
   "extra": {
     "branch-alias": {
-      "dev-master": "2.0.x-dev"
+      "dev-master": "4.0.x-dev"
     }
   },
-  "repositories": [
-    {
-      "type": "git",
-      "url": "https://github.com/dominicsayers/isemail"
-    }
-  ],
-  "require":      {
-    "php": ">= 5.5",
-    "doctrine/lexer": "^1.0.1"
+  "require": {
+    "php": ">=8.1",
+    "doctrine/lexer": "^2.0 || ^3.0",
+    "symfony/polyfill-intl-idn": "^1.26"
   },
-  "require-dev" :   {
-    "satooshi/php-coveralls": "^1.0.1",
-    "phpunit/phpunit": "^4.8.35||^5.7||^6.0",
-    "dominicsayers/isemail": "dev-master"
+  "require-dev": {
+    "phpunit/phpunit": "^9.5.27",
+    "vimeo/psalm": "^4.30"
   },
   "suggest": {
     "ext-intl": "PHP Internationalization Libraries are required to use the SpoofChecking validation"
   },
   "autoload": {
     "psr-4": {
-      "Egulias\\EmailValidator\\": "EmailValidator"
+      "Egulias\\EmailValidator\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Egulias\\Tests\\": "test"
+      "Egulias\\EmailValidator\\Tests\\": "tests"
     }
   }
 }

@@ -36,7 +36,7 @@ class="nav-item menu-open"
 
 @section('content')
 
-{!! Form::open(array('action' => 'Agent\kb\ArticleController@store' , 'method' => 'post') )!!}
+{!! Form::open(array('route' => 'article.store' , 'method' => 'post') )!!}
 
 @if(Session::has('success'))
 <div class="alert alert-success alert-dismissable">
@@ -237,7 +237,7 @@ class="nav-item menu-open"
                     <div class="modal-dialog">
                     
                         <div class="modal-content">
-                            {!! Form::open(['method'=>'post','action'=>'Agent\kb\CategoryController@store']) !!}
+                            {!! Form::open(['method'=>'post','route'=>'category.store']) !!}
                             
                             <div class="modal-header">          
                                 <h4 class="modal-title">{{Lang::get('lang.addcategory')}}</h4>

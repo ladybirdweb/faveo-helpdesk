@@ -24,9 +24,7 @@ final class TraversableKeyValueMatcher extends BasicMatcher
      */
     private $presenter;
 
-    /**
-     * @param Presenter $presenter
-     */
+
     public function __construct(Presenter $presenter)
     {
         $this->presenter = $presenter;
@@ -35,7 +33,7 @@ final class TraversableKeyValueMatcher extends BasicMatcher
     /**
      * {@inheritdoc}
      */
-    public function supports(string $name, $subject, array $arguments) : bool
+    public function supports(string $name, $subject, array $arguments): bool
     {
         return 'haveKeyWithValue' === $name
             && 2 === \count($arguments)
@@ -46,7 +44,15 @@ final class TraversableKeyValueMatcher extends BasicMatcher
     /**
      * {@inheritdoc}
      */
-    protected function matches($subject, array $arguments) : bool
+    public function getPriority(): int
+    {
+        return 101;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function matches($subject, array $arguments): bool
     {
         foreach ($subject as $key => $value) {
             if ($key === $arguments[0] && $value === $arguments[1]) {

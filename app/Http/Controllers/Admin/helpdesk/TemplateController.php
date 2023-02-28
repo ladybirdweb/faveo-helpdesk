@@ -16,7 +16,7 @@ use App\Model\helpdesk\Utility\Languages;
 // classes
 use Exception;
 use Illuminate\Http\Request;
-use Input;
+use Illuminate\Support\Facades\Request as Input;
 
 /**
  * TemplateController.

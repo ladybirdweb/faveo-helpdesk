@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddForeignKeysToUsersTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -30,4 +29,4 @@ class AddForeignKeysToUsersTable extends Migration
             $table->dropForeign('users_ibfk_2');
         });
     }
-}
+};

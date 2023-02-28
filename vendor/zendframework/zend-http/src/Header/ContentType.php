@@ -1,8 +1,10 @@
 <?php
 /**
- * @see       https://github.com/zendframework/zend-http for the canonical source repository
- * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
+ * Zend Framework (http://framework.zend.com/)
+ *
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
 namespace Zend\Http\Header;
@@ -48,15 +50,15 @@ class ContentType implements HeaderInterface
             ));
         }
 
-        $parts     = explode(';', $value);
-        $mediaType = array_shift($parts);
-        $header    = new static($value, trim($mediaType));
+        $parts             = explode(';', $value);
+        $mediaType         = array_shift($parts);
+        $header = new static($value, trim($mediaType));
 
         if (count($parts) > 0) {
             $parameters = [];
             foreach ($parts as $parameter) {
                 $parameter = trim($parameter);
-                if (! preg_match('/^(?P<key>[^\s\=]+)\="?(?P<value>[^\s\"]*)"?$/', $parameter, $matches)) {
+                if (!preg_match('/^(?P<key>[^\s\=]+)\="?(?P<value>[^\s\"]*)"?$/', $parameter, $matches)) {
                     continue;
                 }
                 $parameters[$matches['key']] = $matches['value'];
@@ -226,7 +228,7 @@ class ContentType implements HeaderInterface
         if (isset($this->parameters['charset'])) {
             return $this->parameters['charset'];
         }
-        return null;
+        return;
     }
 
     /**
@@ -280,7 +282,7 @@ class ContentType implements HeaderInterface
      */
     protected function getMediaTypeObjectFromString($string)
     {
-        if (! is_string($string)) {
+        if (!is_string($string)) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'Non-string mediatype "%s" provided',
                 (is_object($string) ? get_class($string) : gettype($string))
@@ -298,7 +300,7 @@ class ContentType implements HeaderInterface
         $type    = array_shift($parts);
         $subtype = array_shift($parts);
         $format  = $subtype;
-        if (false !== strpos($subtype, '+')) {
+        if (strstr($subtype, '+')) {
             $parts   = explode('+', $subtype, 2);
             $subtype = array_shift($parts);
             $format  = array_shift($parts);
@@ -335,7 +337,7 @@ class ContentType implements HeaderInterface
         // Is the right side a partial wildcard?
         if ('*' == substr($right->subtype, -1)) {
             // validate partial-wildcard subtype
-            if (! $this->validatePartialWildcard($right->subtype, $left->subtype)) {
+            if (!$this->validatePartialWildcard($right->subtype, $left->subtype)) {
                 return false;
             }
             // Finally, verify format is valid

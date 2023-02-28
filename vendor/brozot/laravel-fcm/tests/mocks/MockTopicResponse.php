@@ -79,7 +79,7 @@ class MockTopicResponse implements TopicResponseContract
      */
     public function error()
     {
-        $this->error;
+        return $this->error;
     }
 
     /**
@@ -89,6 +89,6 @@ class MockTopicResponse implements TopicResponseContract
      */
     public function shouldRetry()
     {
-        $this->error;
+        return (bool) $this->error;
     }
 }

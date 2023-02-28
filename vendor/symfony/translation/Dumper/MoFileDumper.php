@@ -21,23 +21,20 @@ use Symfony\Component\Translation\MessageCatalogue;
  */
 class MoFileDumper extends FileDumper
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = array())
+    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []): string
     {
         $sources = $targets = $sourceOffsets = $targetOffsets = '';
-        $offsets = array();
+        $offsets = [];
         $size = 0;
 
         foreach ($messages->all($domain) as $source => $target) {
-            $offsets[] = array_map('strlen', array($sources, $source, $targets, $target));
+            $offsets[] = array_map('strlen', [$sources, $source, $targets, $target]);
             $sources .= "\0".$source;
             $targets .= "\0".$target;
             ++$size;
         }
 
-        $header = array(
+        $header = [
             'magicNumber' => MoFileLoader::MO_LITTLE_ENDIAN_MAGIC,
             'formatRevision' => 0,
             'count' => $size,
@@ -45,7 +42,7 @@ class MoFileDumper extends FileDumper
             'offsetTranslated' => MoFileLoader::MO_HEADER_SIZE + (8 * $size),
             'sizeHashes' => 0,
             'offsetHashes' => MoFileLoader::MO_HEADER_SIZE + (16 * $size),
-        );
+        ];
 
         $sourcesSize = \strlen($sources);
         $sourcesStart = $header['offsetHashes'] + 1;
@@ -57,25 +54,22 @@ class MoFileDumper extends FileDumper
                           .$this->writeLong($offset[2] + $sourcesStart + $sourcesSize);
         }
 
-        $output = implode('', array_map(array($this, 'writeLong'), $header))
+        $output = implode('', array_map($this->writeLong(...), $header))
                .$sourceOffsets
                .$targetOffsets
                .$sources
                .$targets
-                ;
+        ;
 
         return $output;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getExtension()
+    protected function getExtension(): string
     {
         return 'mo';
     }
 
-    private function writeLong($str)
+    private function writeLong(mixed $str): string
     {
         return pack('V*', $str);
     }

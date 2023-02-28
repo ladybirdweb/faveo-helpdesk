@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults
@@ -11,10 +12,12 @@ return [
     | as required, but they're a perfect start for most applications.
     |
     */
+
     'defaults' => [
         'guard'     => 'web',
         'passwords' => 'users',
     ],
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
@@ -28,19 +31,17 @@ return [
     | users are actually retrieved out of your database or other storage
     | mechanisms used by this application to persist your user's data.
     |
-    | Supported: "session", "token"
+    | Supported: "session"
     |
     */
+
     'guards' => [
         'web' => [
             'driver'   => 'session',
             'provider' => 'users',
         ],
-        'api' => [
-            'driver'   => 'token',
-            'provider' => 'users',
-        ],
     ],
+
     /*
     |--------------------------------------------------------------------------
     | User Providers
@@ -57,40 +58,54 @@ return [
     | Supported: "database", "eloquent"
     |
     */
+
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
             'model'  => App\User::class,
         ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
     ],
+
     /*
     |--------------------------------------------------------------------------
     | Resetting Passwords
     |--------------------------------------------------------------------------
     |
-    | Here you may set the options for resetting passwords including the view
-    | that is your password reset e-mail. You may also set the name of the
-    | table that maintains all of the reset tokens for your application.
-    |
     | You may specify multiple password reset configurations if you have more
     | than one user table or model in the application and you want to have
     | separate password reset settings based on the specific user types.
     |
-    | The expire time is the number of minutes that the reset token should be
+    | The expire time is the number of minutes that each reset token will be
     | considered valid. This security feature keeps tokens short-lived so
     | they have less time to be guessed. You may change this as needed.
     |
     */
+
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'email'    => 'auth.emails.password',
             'table'    => 'password_resets',
             'expire'   => 60,
+            'throttle' => 60,
         ],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Password Confirmation Timeout
+    |--------------------------------------------------------------------------
+    |
+    | Here you may define the amount of seconds before a password confirmation
+    | times out and the user is prompted to re-enter their password via the
+    | confirmation screen. By default, the timeout lasts for three hours.
+    |
+    */
+
+    'password_timeout' => 10800,
+
 ];

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Common;
 
+use App\Exports\UserExport;
 use App\Http\Controllers\Controller;
-use Excel;
+//use Excel;
 use Exception;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ExcelController extends Controller
 {
@@ -13,10 +15,7 @@ class ExcelController extends Controller
         if (count($data) == 0) {
             throw new Exception('No data');
         }
-        Excel::create($filename, function ($excel) use ($data) {
-            $excel->sheet('sheet', function ($sheet) use ($data) {
-                $sheet->fromArray($data);
-            });
-        })->export('xls');
+        //dd(Excel::download(new UserExport($data), $filename.'.'.'xls'));
+        return Excel::download(new UserExport($data), $filename.'.'.'xlsx');
     }
 }

@@ -11,18 +11,17 @@
 
 namespace Sly\NotificationPusher\Adapter;
 
-use Sly\NotificationPusher\Model\BaseParameteredModel;
-use Sly\NotificationPusher\Model\Response;
-use Sly\NotificationPusher\Model\ResponseInterface;
-use Sly\NotificationPusher\PushManager;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use Sly\NotificationPusher\Model\BaseParameteredModel;
+use Sly\NotificationPusher\PushManager;
 
 /**
  * BaseAdapter.
  *
  * @author Cédric Dugat <cedric@dugat.me>
  */
-abstract class BaseAdapter extends BaseParameteredModel implements AdapterInterface
+abstract class BaseAdapter extends BaseParameteredModel
 {
     /**
      * @var string
@@ -35,7 +34,7 @@ abstract class BaseAdapter extends BaseParameteredModel implements AdapterInterf
     protected $environment;
 
     /**
-     * @var ResponseInterface
+     * @var mixed
      */
     protected $response;
 
@@ -44,33 +43,15 @@ abstract class BaseAdapter extends BaseParameteredModel implements AdapterInterf
      *
      * @param array $parameters Adapter specific parameters
      */
-    public function __construct(array $parameters = [])
+    public function __construct(array $parameters = array())
     {
         $resolver = new OptionsResolver();
-        $resolver->setDefined($this->getDefinedParameters());
         $resolver->setDefaults($this->getDefaultParameters());
         $resolver->setRequired($this->getRequiredParameters());
 
         $reflectedClass   = new \ReflectionClass($this);
         $this->adapterKey = lcfirst($reflectedClass->getShortName());
         $this->parameters = $resolver->resolve($parameters);
-        $this->response   = new Response();
-    }
-
-    /**
-     * @return ResponseInterface
-     */
-    public function getResponse()
-    {
-        return $this->response;
-    }
-
-    /**
-     * @param ResponseInterface $response
-     */
-    public function setResponse(ResponseInterface $response)
-    {
-        $this->response = $response;
     }
 
     /**
@@ -81,6 +62,16 @@ abstract class BaseAdapter extends BaseParameteredModel implements AdapterInterf
     public function __toString()
     {
         return ucfirst($this->getAdapterKey());
+    }
+
+    /**
+     * Return the original response.
+     * 
+     * @return mixed
+     */
+    public function getResponse()
+    {
+        return $this->response;
     }
 
     /**
@@ -136,5 +127,4 @@ abstract class BaseAdapter extends BaseParameteredModel implements AdapterInterf
     {
         return (PushManager::ENVIRONMENT_PROD === $this->getEnvironment());
     }
-
 }

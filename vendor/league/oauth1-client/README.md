@@ -12,12 +12,14 @@ OAuth 1 Client is an OAuth [RFC 5849 standards-compliant](http://tools.ietf.org/
 It has built in support for:
 
 - Bitbucket
+- Magento
 - Trello
 - Tumblr
 - Twitter
+- Uservoice
 - Xing
 
-Adding support for other providers is trivial. The library requires PHP 5.3+ and is PSR-2 compatible.
+Adding support for other providers is trivial. The library requires PHP 7.1+ and is PSR-2 compatible.
 
 ### Third-Party Providers
 
@@ -31,6 +33,8 @@ so please help them out with a pull request if you notice this.
 - [500px](https://packagist.org/packages/mechant/oauth1-500px)
 - [Etsy](https://packagist.org/packages/y0lk/oauth1-etsy)
 - [Xero](https://packagist.org/packages/Invoiced/oauth1-xero)
+- [Garmin](https://packagist.org/packages/techgyani/garmin-wellness)
+- [Goodreads](https://packagist.org/packages/netgalley/oauth1-goodreads)
 
 #### Terminology (as per the RFC 5849 specification):
 
@@ -96,54 +100,55 @@ $ composer require league/oauth1-client
 ### Bitbucket
 
 ```php
-$server = new League\OAuth1\Client\Server\Bitbucket(array(
+$server = new League\OAuth1\Client\Server\Bitbucket([
     'identifier' => 'your-identifier',
     'secret' => 'your-secret',
     'callback_uri' => "http://your-callback-uri/",
-));
+]);
 ```
 
 ### Trello
 
 ```php
-$server =  new League\OAuth1\Client\Server\Trello(array(
+$server =  new League\OAuth1\Client\Server\Trello([
     'identifier' => 'your-identifier',
     'secret' => 'your-secret',
     'callback_uri' => 'http://your-callback-uri/',
     'name' => 'your-application-name', // optional, defaults to null
     'expiration' => 'your-application-expiration', // optional ('never', '1day', '2days'), defaults to '1day'
     'scope' => 'your-application-scope' // optional ('read', 'read,write'), defaults to 'read'
-));
+]);
 ```
 
 ### Tumblr
 
 ```php
-$server = new League\OAuth1\Client\Server\Tumblr(array(
+$server = new League\OAuth1\Client\Server\Tumblr([
     'identifier' => 'your-identifier',
     'secret' => 'your-secret',
     'callback_uri' => "http://your-callback-uri/",
-));
+]);
 ```
 
 ### Twitter
 
 ```php
-$server = new League\OAuth1\Client\Server\Twitter(array(
+$server = new League\OAuth1\Client\Server\Twitter([
     'identifier' => 'your-identifier',
     'secret' => 'your-secret',
     'callback_uri' => "http://your-callback-uri/",
-));
+    'scope' => 'your-application-scope' // optional ('read', 'write'), empty by default
+]);
 ```
 
 ### Xing
 
 ```php
-$server = new League\OAuth1\Client\Server\Xing(array(
+$server = new League\OAuth1\Client\Server\Xing([
     'identifier' => 'your-consumer-key',
     'secret' => 'your-consumer-secret',
     'callback_uri' => "http://your-callback-uri/",
-));
+]);
 ```
 
 ### Showing a Login Button

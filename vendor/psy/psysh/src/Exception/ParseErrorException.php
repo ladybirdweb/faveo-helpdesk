@@ -3,7 +3,7 @@
 /*
  * This file is part of Psy Shell.
  *
- * (c) 2012-2018 Justin Hileman
+ * (c) 2012-2023 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,7 +22,7 @@ class ParseErrorException extends \PhpParser\Error implements Exception
      * @param string $message (default: "")
      * @param int    $line    (default: -1)
      */
-    public function __construct($message = '', $line = -1)
+    public function __construct(string $message = '', int $line = -1)
     {
         $message = \sprintf('PHP Parse error: %s', $message);
         parent::__construct($message, $line);
@@ -32,10 +32,8 @@ class ParseErrorException extends \PhpParser\Error implements Exception
      * Create a ParseErrorException from a PhpParser Error.
      *
      * @param \PhpParser\Error $e
-     *
-     * @return ParseErrorException
      */
-    public static function fromParseError(\PhpParser\Error $e)
+    public static function fromParseError(\PhpParser\Error $e): self
     {
         return new self($e->getRawMessage(), $e->getStartLine());
     }

@@ -23,20 +23,14 @@ final class TypeHintRewriter implements SpecTransformer
      */
     private $rewriter;
 
-    /**
-     * @param TypeHintRewriterInterface $rewriter
-     */
+    
     public function __construct(TypeHintRewriterInterface $rewriter)
     {
         $this->rewriter = $rewriter;
     }
 
-    /**
-     * @param string $spec
-     *
-     * @return string
-     */
-    function transform(string $spec): string
+    
+    public function transform(string $spec): string
     {
         return $this->rewriter->rewrite($spec);
     }

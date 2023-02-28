@@ -1,31 +1,58 @@
 Datatable
 =========
 
-This is a __Laravel 5 package__ for the server and client side of datatables at http://datatables.net/
+## Important
 
-![Image](https://raw.githubusercontent.com/Chumper/Datatable/master/datatable.jpg)
+> **This package will not receive any new updates!**
+> You can still use this package, but be preparared that there is no active development for this project.
+>
+> This package is `abandoned` and not recommended for new projects. 
+> We recommend to use instead [Yajra's Package](https://github.com/yajra/laravel-datatables) which offers a nearly-similar API.
 
-##Known Issues
+## Introduction
+This is a __Laravel 4 package__ for the server and client side of datatables at http://datatables.net/
+
+> A __Laravel 5__ package is [close to being completed](https://github.com/Chumper/Datatable/tree/develop). To install it:
+>
+>         composer require chumper/datatable "dev-develop"
+>
+> If you find any issues, please report them in the bug tracker!
+
+*Please Note*, if you want Datatable 1.10 support & Laravel 5 support, try out our newest branch!
+
+If you upgrade from version 2.1.* or below please make sure you adjust your app.php with the new alias:
+
+```php
+    // aliases array:
+
+    //old
+    //'Datatable' => 'Chumper\Datatable\Facades\Datatable',
+
+    //new
+    'Datatable' => 'Chumper\Datatable\Facades\DatatableFacade',
+```
+
+## Known Issues
 
 * none i know of so far
 
-##TODO
+## TODO
 
 * fix incoming bugs
 * code documentaion
 
-##Features
+## Features
 
 This package supports:
 
-* Support for Collections and Query Builder
-* Easy to add and order columns
-* Includes a simple helper for the HTML side
-* Use your own functions and presenters in your columns
-* Search in your custom defined columns ( Collection only!!! )
-* Define your specific fields for searching and ordering
-* Add custom javascript values for the table
-* Tested! (Ok, maybe not fully, but I did my best :) )
+*   Support for Collections and Query Builder
+*   Easy to add and order columns
+*   Includes a simple helper for the HTML side
+*   Use your own functions and presenters in your columns
+*   Search in your custom defined columns ( Collection only!!! )
+*   Define your specific fields for searching and ordering
+*   Add custom javascript values for the table
+*   Tested! (Ok, maybe not fully, but I did my best :) )
 
 ## Please note!
 
@@ -46,41 +73,40 @@ http://www.youtube.com/watch?v=c9fao_5Jo3Y
 Please let me know any issues or features you want to have in the issues section.
 I would be really thankful if you can provide a test that points to the issue.
 
-##Installation
+## Installation
 
 This package is available on http://packagist.org, just add it to your composer.json
 
-        "chumper/datatable": "dev-develop"
+	"chumper/datatable": "2.*"
 
 Alternatively, you can install it using the `composer` command:
 
-        composer require chumper/datatable "dev-develop"
+        composer require chumper/datatable "2.*"
 
-
-In Config/App.php: Add line Provider:
+It also has a ServiceProvider for usage in Laravel4. Add these lines to app.php:
 
 ```php
-        'Chumper\Datatable\DatatableServiceProvider',
-```
+    // providers array:
+	'Chumper\Datatable\DatatableServiceProvider',
 
-__If using Laravel 5.1:__ you will want to add:
-```php
-        Chumper\Datatable\DatatableServiceProvider::class,
-```
-
-Add line Alias:
-```php
-    //new
+    // aliases array:
     'Datatable' => 'Chumper\Datatable\Facades\DatatableFacade',
 ```
 
 You can then access it under the `Datatable` alias.
 
-##Basic Usage
+To override the default configuration options you can publish the config file.
+
+    php artisan config:publish chumper/datatable
+
+You may now edit these options at app/config/packages/chumper/datatable/config.php.
+
+
+## Basic Usage
 
 There are two ways you can use the plugin, within one route or within two routes:
 
-###Two routes
+### Two routes
 
 * Create two routes: One to deliver the view to the user, the other for datatable data, eg:
 
@@ -96,10 +122,10 @@ There are two ways you can use the plugin, within one route or within two routes
     <script type="text/javascript" src="/assets/js/jquery.js"></script>
     <script type="text/javascript" src="/assets/js/jquery.dataTables.min.js"></script>
 
-    {!! Datatable::table()
+    {{ Datatable::table()
     ->addColumn('id','Name')       // these are the column headings to be shown
     ->setUrl(route('api.users'))   // this is the route where data will be retrieved
-    ->render() !!}
+    ->render() }}
 ```
 
 * Create a controller function to return your data in a way that can be read by Datatables:
@@ -117,7 +143,7 @@ There are two ways you can use the plugin, within one route or within two routes
 
 You should now have a working datatable on your page.
 
-###One route
+### One route
 
 In your route you should use the Datatable::shouldHandle method which will check whether the plugin should handle the request or not.
 
@@ -134,7 +160,7 @@ In your route you should use the Datatable::shouldHandle method which will check
 
 The plugin will then query the same url for information. The shouldHandle method just checks for an ajax request and if sEcho is set.
 
-##HTML Example
+## HTML Example
 
 ```php
 	Datatable::table()
@@ -169,7 +195,7 @@ If you want to provide your own template for the table just provide the path to 
     	->setUrl(URL::to('auth/users/table'))
         ->render('views.templates.datatable');
 ```
-##Server Example
+## Server Example
 
 ```php
 	Datatable::collection(User::all())
@@ -202,7 +228,7 @@ You could now also access all relationship, so it would be easy for a book model
 
 The order of the columns is always defined by the user and will be the same order the user adds the columns to the Datatable.
 
-##Query or Collection?
+## Query or Collection?
 
 There is a difference between query() and collection().
 A collection will be compiled before any operation - like search or order - will be performed so that it can also include your custom fields.
@@ -221,7 +247,7 @@ Please see the following video for more details.
 
 http://www.youtube.com/watch?v=c9fao_5Jo3Y
 
-##Available functions
+## Available functions
 
 This package is separated into two smaller parts:
 
@@ -231,7 +257,7 @@ This package is separated into two smaller parts:
 
 The second and third one is for the server side, the first one is a helper to generate the needed table and javascript calls.
 
-###Collection & Query
+### Collection & Query
 
 **collection($collection)**
 
@@ -297,10 +323,10 @@ You can also just add a predefined Column, like a DateColumn, a FunctionColumn, 
 E.g.:
 
 ```php
-	$column = new TextColumn('foo', 'bar'); // Will always return the text bar
-	//$column = new FunctionColumn('foo', function($model){return $model->bar}); // Will return the bar column
-	//$column = new DateColumn('foo', DateColumn::TIME); // Will return the foo date object as toTimeString() representation
-	//$column = new DateColumn('foo', DateColumn::CUSTOM, 'd.M.Y H:m:i'); // Will return the foo date object as custom representation
+	$column = new \Chumper\Datatable\Columns\TextColumn('foo', 'bar'); // Will always return the text bar
+	//$column = new \Chumper\Datatable\Columns\FunctionColumn('foo', function($model){return $model->bar}); // Will return the bar column
+	//$column = new \Chumper\Datatable\Columns\DateColumn('foo', DateColumn::TIME); // Will return the foo date object as toTimeString() representation
+	//$column = new \Chumper\Datatable\Columns\DateColumn('foo', DateColumn::CUSTOM, 'd.M.Y H:m:i'); // Will return the foo date object as custom representation
 
 	Datatable::collection(User::all())
     ->addColumn($column)
@@ -311,8 +337,8 @@ You can also overwrite the results returned by the QueryMethod by using addColum
 You must name the column exactly like the database column that you're displaying using showColumns in order for this to work.
 
 ```php
-	$column = new FunctionColumn('foo', function ($row) { return strtolower($row->foo); }
-	Datatable::query(DB::table('table')->lists('foo'))
+	$column = new \Chumper\Datatable\Columns\FunctionColumn('foo', function ($row) { return strtolower($row->foo); }
+	Datatable::query(DB::table('table')->select(array('foo')))
 	         ->showColumns('foo')
 	         ->addColumn($column)
 	         ->orderColumns('foo')
@@ -323,8 +349,8 @@ This will allow you to have sortable and searchable columns using the QueryEngin
 
 Eg: linking an user_id column to it's page listing
 ```php
-	$column = new FunctionColumn('user_id', function ($row) { return link_to('users/'.$row->user_id, $row->username) }
-	Datatable::query(DB::table('table')->lists('user_id', 'username'))
+	$column = new \Chumper\Datatable\Columns\FunctionColumn('user_id', function ($row) { return link_to('users/'.$row->user_id, $row->username) }
+	Datatable::query(DB::table('table')->select(array('user_id', 'username')))
 	         ->showColumns('user_id')
 	         ->addColumn($column)
 	         ->orderColumns('user_id')
@@ -379,14 +405,14 @@ This will return an array with the columns that will be shown, mainly used for t
 
 Will get a column by its name, mainly used for testing and debugging, not really useful for you.
 
-###Specific QueryEngine methods
+### Specific QueryEngine methods
 
 **setSearchWithAlias()**
 
 If you want to use an alias column on the query engine and you don't get the correct results back while searching then you should try this flag.
 E.g.:
 ```php
-		Datatable::from(DB::table("users")->select('firstname', "users.email as email2")->join('partners','users.partner_id','=','partners.id'))
+		Datatable::from(DB::table("users")->select(array('firstname', "users.email as email2"))->join('partners','users.partner_id','=','partners.id'))
         ->showColumns('firstname','email2')
         ->setSearchWithAlias()
         ->searchColumns("email2")
@@ -398,6 +424,11 @@ With this flag you enable aliases in the search part (email2 in searchColumns).
 
 Please be aware that this flag will slow down your application, since we are getting the results back twice to count them manually.
 
+**setDistinctCountGroup($value = true)**
+
+If you are using `GROUP BY`'s inside the query that you are passing into the Datatable, then you may receive incorrect
+totals from your SQL engine. Setting setDistinctCountGroup (__which most likely only works on MySQL__) will ensure that
+the totals are based on your GROUP BY.
 
 **setSearchOperator($value = "LIKE")**
 
@@ -407,7 +438,7 @@ With this method you can set the operator on searches like "ILIKE" on PostgreSQL
 
 Will advice the engines only to search for the exact given search string.
 
-###Specific CollectionEngine methods
+### Specific CollectionEngine methods
 
 **setSearchStrip() & setOrderStrip()**
 
@@ -420,7 +451,7 @@ This can be useful if you return a link to the model detail but still want to pr
 
 Set the search method to case sensitive or not, default is false
 
-###Table
+### Table
 
 **noScript()**
 
@@ -567,10 +598,10 @@ Defines the order that a datatable will be ordered by on first page load.
     ->setOrder(array(2=>'asc', 1=>'asc')) // sort by last name then first name
     ->render('my.datatable.template') }}
 ```
-##Extras
+## Extras
 Some extras features, using the Datatables api.
 
-### - TableTools
+### TableTools
 
 To use TableTools you will need to add some files in your project (https://datatables.net/extensions/tabletools/), if you want some help download the datatable's package and inside the extension folder go to /tabletools and study the examples. After, all the files include, don't forget to pass the parameters like this:
 
@@ -581,34 +612,36 @@ To use TableTools you will need to add some files in your project (https://datat
     Datatable::table()
         ->addColumn('your columns here separated by comma')
         ->setUrl('your URL for server side')
-        ->setOptions(array(
-                            'dom' =>"T<'clear'>lfrtip",
-                            'tabletools' => array(
-                                                    "aSwfPath" => "your/path/to/swf/copy_csv_cls_pdf.swf",
-                                                    "aButtons" => array("copy", "pdf", "xls")
-                                                )
-                    ))
+        ->setOptions(
+            array(
+                'dom' =>"T<'clear'>lfrtip",
+                'tableTools' => array(
+                    "sSwfPath" => "your/path/to/swf/copy_csv_cls_pdf.swf",
+                    "aButtons" => array("copy", "pdf", "xls")
+                )
+            )
+        )
 }}
 
 ```
 If you want to get some properties like "which row did i click?", see the javascript.blade.php and the variable $values.
 
-##Contributors
+## Contributors
 
 * [jgoux](https://github.com/jgoux) for helping with searching on number columns in the database
 * [jijoel](https://github.com/jijoel) for helping with callback options and documentation
 
-##Changelog
+## Changelog
 
 * 2.0.0:
 	* Seperated Query and Collection Engine
 	* Added single column search
 	* Code cleanup
 
-##Applications
+## Applications
 
 https://github.com/hillelcoren/invoice-ninja (by Hillel Coren)
 
-##License
+## License
 
 This package is licensed under the MIT License

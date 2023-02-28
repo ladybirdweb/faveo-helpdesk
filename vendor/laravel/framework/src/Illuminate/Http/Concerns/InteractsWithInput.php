@@ -2,20 +2,22 @@
 
 namespace Illuminate\Http\Concerns;
 
-use stdClass;
-use SplFileInfo;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Date;
+use SplFileInfo;
+use stdClass;
+use Symfony\Component\HttpFoundation\InputBag;
+use Symfony\Component\VarDumper\VarDumper;
 
 trait InteractsWithInput
 {
     /**
      * Retrieve a server variable from the request.
      *
-     * @param  string  $key
+     * @param  string|null  $key
      * @param  string|array|null  $default
-     * @return string|array
+     * @return string|array|null
      */
     public function server($key = null, $default = null)
     {
@@ -36,9 +38,9 @@ trait InteractsWithInput
     /**
      * Retrieve a header from the request.
      *
-     * @param  string  $key
+     * @param  string|null  $key
      * @param  string|array|null  $default
-     * @return string|array
+     * @return string|array|null
      */
     public function header($key = null, $default = null)
     {
@@ -54,8 +56,12 @@ trait InteractsWithInput
     {
         $header = $this->header('Authorization', '');
 
-        if (Str::startsWith($header, 'Bearer ')) {
-            return Str::substr($header, 7);
+        $position = strrpos($header, 'Bearer ');
+
+        if ($position !== false) {
+            $header = substr($header, $position + 7);
+
+            return str_contains($header, ',') ? strstr($header, ',', true) : $header;
         }
     }
 
@@ -103,13 +109,28 @@ trait InteractsWithInput
 
         $input = $this->all();
 
-        foreach ($keys as $key) {
-            if (Arr::has($input, $key)) {
-                return true;
-            }
+        return Arr::hasAny($input, $keys);
+    }
+
+    /**
+     * Apply the callback if the request contains the given input item key.
+     *
+     * @param  string  $key
+     * @param  callable  $callback
+     * @param  callable|null  $default
+     * @return $this|mixed
+     */
+    public function whenHas($key, callable $callback, callable $default = null)
+    {
+        if ($this->has($key)) {
+            return $callback(data_get($this->all(), $key)) ?: $this;
         }
 
-        return false;
+        if ($default) {
+            return $default();
+        }
+
+        return $this;
     }
 
     /**
@@ -124,6 +145,25 @@ trait InteractsWithInput
 
         foreach ($keys as $value) {
             if ($this->isEmptyString($value)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Determine if the request contains an empty value for an input item.
+     *
+     * @param  string|array  $key
+     * @return bool
+     */
+    public function isNotFilled($key)
+    {
+        $keys = is_array($key) ? $key : func_get_args();
+
+        foreach ($keys as $value) {
+            if (! $this->isEmptyString($value)) {
                 return false;
             }
         }
@@ -151,7 +191,62 @@ trait InteractsWithInput
     }
 
     /**
-     * Determine if the given input key is an empty string for "has".
+     * Apply the callback if the request contains a non-empty value for the given input item key.
+     *
+     * @param  string  $key
+     * @param  callable  $callback
+     * @param  callable|null  $default
+     * @return $this|mixed
+     */
+    public function whenFilled($key, callable $callback, callable $default = null)
+    {
+        if ($this->filled($key)) {
+            return $callback(data_get($this->all(), $key)) ?: $this;
+        }
+
+        if ($default) {
+            return $default();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Determine if the request is missing a given input item key.
+     *
+     * @param  string|array  $key
+     * @return bool
+     */
+    public function missing($key)
+    {
+        $keys = is_array($key) ? $key : func_get_args();
+
+        return ! $this->has($keys);
+    }
+
+    /**
+     * Apply the callback if the request is missing the given input item key.
+     *
+     * @param  string  $key
+     * @param  callable  $callback
+     * @param  callable|null  $default
+     * @return $this|mixed
+     */
+    public function whenMissing($key, callable $callback, callable $default = null)
+    {
+        if ($this->missing($key)) {
+            return $callback(data_get($this->all(), $key)) ?: $this;
+        }
+
+        if ($default) {
+            return $default();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Determine if the given input key is an empty string for "filled".
      *
      * @param  string  $key
      * @return bool
@@ -176,7 +271,7 @@ trait InteractsWithInput
     /**
      * Get all of the input and files for the request.
      *
-     * @param  array|mixed  $keys
+     * @param  array|mixed|null  $keys
      * @return array
      */
     public function all($keys = null)
@@ -200,14 +295,131 @@ trait InteractsWithInput
      * Retrieve an input item from the request.
      *
      * @param  string|null  $key
-     * @param  string|array|null  $default
-     * @return string|array|null
+     * @param  mixed  $default
+     * @return mixed
      */
     public function input($key = null, $default = null)
     {
         return data_get(
             $this->getInputSource()->all() + $this->query->all(), $key, $default
         );
+    }
+
+    /**
+     * Retrieve input from the request as a Stringable instance.
+     *
+     * @param  string  $key
+     * @param  mixed  $default
+     * @return \Illuminate\Support\Stringable
+     */
+    public function str($key, $default = null)
+    {
+        return $this->string($key, $default);
+    }
+
+    /**
+     * Retrieve input from the request as a Stringable instance.
+     *
+     * @param  string  $key
+     * @param  mixed  $default
+     * @return \Illuminate\Support\Stringable
+     */
+    public function string($key, $default = null)
+    {
+        return str($this->input($key, $default));
+    }
+
+    /**
+     * Retrieve input as a boolean value.
+     *
+     * Returns true when value is "1", "true", "on", and "yes". Otherwise, returns false.
+     *
+     * @param  string|null  $key
+     * @param  bool  $default
+     * @return bool
+     */
+    public function boolean($key = null, $default = false)
+    {
+        return filter_var($this->input($key, $default), FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
+     * Retrieve input as an integer value.
+     *
+     * @param  string  $key
+     * @param  int  $default
+     * @return int
+     */
+    public function integer($key, $default = 0)
+    {
+        return intval($this->input($key, $default));
+    }
+
+    /**
+     * Retrieve input as a float value.
+     *
+     * @param  string  $key
+     * @param  float  $default
+     * @return float
+     */
+    public function float($key, $default = 0.0)
+    {
+        return floatval($this->input($key, $default));
+    }
+
+    /**
+     * Retrieve input from the request as a Carbon instance.
+     *
+     * @param  string  $key
+     * @param  string|null  $format
+     * @param  string|null  $tz
+     * @return \Illuminate\Support\Carbon|null
+     *
+     * @throws \Carbon\Exceptions\InvalidFormatException
+     */
+    public function date($key, $format = null, $tz = null)
+    {
+        if ($this->isNotFilled($key)) {
+            return null;
+        }
+
+        if (is_null($format)) {
+            return Date::parse($this->input($key), $tz);
+        }
+
+        return Date::createFromFormat($format, $this->input($key), $tz);
+    }
+
+    /**
+     * Retrieve input from the request as an enum.
+     *
+     * @template TEnum
+     *
+     * @param  string  $key
+     * @param  class-string<TEnum>  $enumClass
+     * @return TEnum|null
+     */
+    public function enum($key, $enumClass)
+    {
+        if ($this->isNotFilled($key) ||
+            ! function_exists('enum_exists') ||
+            ! enum_exists($enumClass) ||
+            ! method_exists($enumClass, 'tryFrom')) {
+            return null;
+        }
+
+        return $enumClass::tryFrom($this->input($key));
+    }
+
+    /**
+     * Retrieve input from the request as a collection.
+     *
+     * @param  array|string|null  $key
+     * @return \Illuminate\Support\Collection
+     */
+    public function collect($key = null)
+    {
+        return collect(is_array($key) ? $this->only($key) : $this->input($key));
     }
 
     /**
@@ -255,9 +467,9 @@ trait InteractsWithInput
     /**
      * Retrieve a query string item from the request.
      *
-     * @param  string  $key
+     * @param  string|null  $key
      * @param  string|array|null  $default
-     * @return string|array
+     * @return string|array|null
      */
     public function query($key = null, $default = null)
     {
@@ -267,10 +479,9 @@ trait InteractsWithInput
     /**
      * Retrieve a request payload item from the request.
      *
-     * @param  string  $key
+     * @param  string|null  $key
      * @param  string|array|null  $default
-     *
-     * @return string|array
+     * @return string|array|null
      */
     public function post($key = null, $default = null)
     {
@@ -291,9 +502,9 @@ trait InteractsWithInput
     /**
      * Retrieve a cookie from the request.
      *
-     * @param  string  $key
+     * @param  string|null  $key
      * @param  string|array|null  $default
-     * @return string|array
+     * @return string|array|null
      */
     public function cookie($key = null, $default = null)
     {
@@ -309,9 +520,7 @@ trait InteractsWithInput
     {
         $files = $this->files->all();
 
-        return $this->convertedFiles
-                    ? $this->convertedFiles
-                    : $this->convertedFiles = $this->convertUploadedFiles($files);
+        return $this->convertedFiles = $this->convertedFiles ?? $this->convertUploadedFiles($files);
     }
 
     /**
@@ -368,9 +577,9 @@ trait InteractsWithInput
     /**
      * Retrieve a file from the request.
      *
-     * @param  string  $key
+     * @param  string|null  $key
      * @param  mixed  $default
-     * @return \Illuminate\Http\UploadedFile|array|null
+     * @return \Illuminate\Http\UploadedFile|\Illuminate\Http\UploadedFile[]|array|null
      */
     public function file($key = null, $default = null)
     {
@@ -381,9 +590,9 @@ trait InteractsWithInput
      * Retrieve a parameter item from a given source.
      *
      * @param  string  $source
-     * @param  string  $key
+     * @param  string|null  $key
      * @param  string|array|null  $default
-     * @return string|array
+     * @return string|array|null
      */
     protected function retrieveItem($source, $key, $default)
     {
@@ -391,6 +600,38 @@ trait InteractsWithInput
             return $this->$source->all();
         }
 
+        if ($this->$source instanceof InputBag) {
+            return $this->$source->all()[$key] ?? $default;
+        }
+
         return $this->$source->get($key, $default);
+    }
+
+    /**
+     * Dump the request items and end the script.
+     *
+     * @param  mixed  ...$keys
+     * @return never
+     */
+    public function dd(...$keys)
+    {
+        $this->dump(...$keys);
+
+        exit(1);
+    }
+
+    /**
+     * Dump the items.
+     *
+     * @param  mixed  $keys
+     * @return $this
+     */
+    public function dump($keys = [])
+    {
+        $keys = is_array($keys) ? $keys : func_get_args();
+
+        VarDumper::dump(count($keys) > 0 ? $this->only($keys) : $this->all());
+
+        return $this;
     }
 }

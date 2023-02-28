@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreatePasswordResetsTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -15,7 +14,7 @@ class CreatePasswordResetsTable extends Migration
         Schema::create('password_resets', function (Blueprint $table) {
             $table->string('email')->index();
             $table->string('token')->index();
-            $table->dateTime('created_at')->default('0000-00-00 00:00:00');
+            $table->timestamp('created_at');
         });
     }
 
@@ -28,4 +27,4 @@ class CreatePasswordResetsTable extends Migration
     {
         Schema::drop('password_resets');
     }
-}
+};

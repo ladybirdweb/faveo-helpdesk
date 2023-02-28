@@ -37,33 +37,14 @@ abstract class FileDumper implements DumperInterface
      *
      * @param string $relativePathTemplate A template for the relative paths to files
      */
-    public function setRelativePathTemplate($relativePathTemplate)
+    public function setRelativePathTemplate(string $relativePathTemplate)
     {
         $this->relativePathTemplate = $relativePathTemplate;
     }
 
-    /**
-     * Sets backup flag.
-     *
-     * @param bool $backup
-     *
-     * @deprecated since Symfony 4.1
-     */
-    public function setBackup($backup)
+    public function dump(MessageCatalogue $messages, array $options = [])
     {
-        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.1.', __METHOD__), E_USER_DEPRECATED);
-
-        if (false !== $backup) {
-            throw new \LogicException('The backup feature is no longer supported.');
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dump(MessageCatalogue $messages, $options = array())
-    {
-        if (!array_key_exists('path', $options)) {
+        if (!\array_key_exists('path', $options)) {
             throw new InvalidArgumentException('The file dumper needs a path option.');
         }
 
@@ -84,7 +65,7 @@ abstract class FileDumper implements DumperInterface
                 $intlPath = $options['path'].'/'.$this->getRelativePath($intlDomain, $messages->getLocale());
                 file_put_contents($intlPath, $this->formatCatalogue($messages, $intlDomain, $options));
 
-                $messages->replace(array(), $intlDomain);
+                $messages->replace([], $intlDomain);
 
                 try {
                     if ($messages->all($domain)) {
@@ -102,31 +83,23 @@ abstract class FileDumper implements DumperInterface
 
     /**
      * Transforms a domain of a message catalogue to its string representation.
-     *
-     * @param MessageCatalogue $messages
-     * @param string           $domain
-     * @param array            $options
-     *
-     * @return string representation
      */
-    abstract public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = array());
+    abstract public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []): string;
 
     /**
      * Gets the file extension of the dumper.
-     *
-     * @return string file extension
      */
-    abstract protected function getExtension();
+    abstract protected function getExtension(): string;
 
     /**
      * Gets the relative file path using the template.
      */
     private function getRelativePath(string $domain, string $locale): string
     {
-        return strtr($this->relativePathTemplate, array(
+        return strtr($this->relativePathTemplate, [
             '%domain%' => $domain,
             '%locale%' => $locale,
             '%extension%' => $this->getExtension(),
-        ));
+        ]);
     }
 }

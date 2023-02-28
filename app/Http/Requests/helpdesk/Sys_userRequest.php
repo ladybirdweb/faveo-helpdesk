@@ -35,17 +35,17 @@ class Sys_userRequest extends Request
         }
 
         return [
-            'first_name'    => 'required',
-            'user_name'     => 'required|min:3|unique:users,user_name',
-            'email'         => 'required|unique:users,email',
-            'mobile'        => 'unique:users',
+            'first_name' => 'required',
+            'user_name'  => 'required|min:3|unique:users,user_name',
+            'email'      => 'required|unique:users,email',
+            'mobile'     => 'unique:users',
         ];
     }
 
     /**
      *@category Funcion to set rule if send opt is enabled
      *
-     *@param object $settings (instance of Model common settings)
+     *@param  object  $settings (instance of Model common settings)
      *
      *@author manish.verma@ladybirdweb.com
      *
@@ -57,11 +57,11 @@ class Sys_userRequest extends Request
         $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
         if (($settings->status == '1' || $settings->status == 1) && ($email_mandatory->status == '1' || $email_mandatory->status == 1)) {
             return [
-                'first_name'            => 'required',
-                'user_name'             => 'required|min:3|unique:users,user_name',
-                'email'                 => 'required|unique:users,email',
-                'country_code'          => 'required',
-                'mobile'                => 'required|unique:users',
+                'first_name'   => 'required',
+                'user_name'    => 'required|min:3|unique:users,user_name',
+                'email'        => 'required|unique:users,email',
+                'country_code' => 'required',
+                'mobile'       => 'required|unique:users',
             ];
         } elseif (($settings->status == '0' || $settings->status == 0) && ($email_mandatory->status == '1' || $email_mandatory->status == 1)) {
             return 0;
@@ -88,11 +88,11 @@ class Sys_userRequest extends Request
     public function onlyMobleRequired()
     {
         return [
-            'first_name'            => 'required',
-            'user_name'             => 'required|min:3|unique:users,user_name',
-            'email'                 => 'unique:users,email',
-            'country_code'          => 'required',
-            'mobile'                => 'required|unique:users',
+            'first_name'   => 'required',
+            'user_name'    => 'required|min:3|unique:users,user_name',
+            'email'        => 'unique:users,email',
+            'country_code' => 'required',
+            'mobile'       => 'required|unique:users',
         ];
     }
 }

@@ -59,21 +59,22 @@ if (DB_HOST && DB_USER && DB_NAME) {
     ?>
     <?php
     $mysqli_ok = true;
-    $results = array();
+    $results = [];
     // error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
     error_reporting(0);
+try {
     if ($default == 'mysql') {
-    	if(DB_PORT != '' && is_numeric(DB_PORT)) {
-    		$connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
-    	} else {
-    		$connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-    	}
+        if(DB_PORT != '' && is_numeric(DB_PORT)) {
+            $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
+        } else {
+            $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        }
         if ($connection) {
             $results[] = new TestResult('Connected to database as ' . DB_USER . '@' . DB_HOST . DB_PORT, STATUS_OK);
             if (mysqli_select_db($connection, DB_NAME)) {
                 $results[] = new TestResult('Database "' . DB_NAME . '" selected', STATUS_OK);
                 $mysqli_version = mysqli_get_server_info($connection);
-                if (version_compare($mysqli_version, '5') >= 0) {
+                if (version_compare($mysqli_version, '8') >= 0) {
                     $results[] = new TestResult('MySQL version is ' . $mysqli_version, STATUS_OK);
                     // $have_inno = check_have_inno($connection);
                     $sql = "SHOW TABLES FROM " . DB_NAME;
@@ -86,7 +87,7 @@ if (DB_HOST && DB_USER && DB_NAME) {
                         $mysqli_ok = false;
                     }
                 } else {
-                    $results[] = new TestResult('Your MySQL version is ' . $mysqli_version . '. We recommend upgrading to at least MySQL5!', STATUS_ERROR);
+                    $results[] = new TestResult('Your MySQL version is ' . $mysqli_version . '. We recommend upgrading to at least MySQL8!', STATUS_ERROR);
                     $mysqli_ok = false;
                 } // if
             } else {
@@ -98,6 +99,11 @@ if (DB_HOST && DB_USER && DB_NAME) {
             $mysqli_ok = false;
         } // if
     }
+}catch (\Exception $exception) {
+    $results[] = new TestResult('Failed to connect to database. ' . $exception->getMessage(), STATUS_ERROR);
+    $mysqli_ok = false;
+}
+
     // elseif($default == 'pgsql') {
     //     if ($connection2 = pg_connect("'host='.DB_HOST.' port='.DB_PORT.' dbname='.DB_NAME.' user='.DB_USER.' password='.DB_PASS.")) {
     //         $results[] = new TestResult('Connected to database as ' . DB_USER . '@' . DB_HOST, STATUS_OK);

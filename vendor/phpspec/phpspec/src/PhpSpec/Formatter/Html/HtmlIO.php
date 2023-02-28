@@ -20,16 +20,18 @@ final class HtmlIO implements IO
     /**
      * @param $message
      */
-    public function write($message)
+    public function write(string $message): void
     {
         echo $message;
     }
-
-    /**
-     * @return bool
-     */
+    
     public function isVerbose(): bool
     {
         return true;
+    }
+
+    public function writeln(string $message = '', int $indent = null): void
+    {
+        echo $message . "<br>";
     }
 }

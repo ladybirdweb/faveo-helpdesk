@@ -12,9 +12,9 @@
 namespace Symfony\Component\HttpKernel\DependencyInjection;
 
 use Composer\Autoload\ClassLoader;
-use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\ErrorHandler\DebugClassLoader;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
@@ -24,24 +24,23 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 class AddAnnotatedClassesToCachePass implements CompilerPassInterface
 {
-    private $kernel;
+    private Kernel $kernel;
 
     public function __construct(Kernel $kernel)
     {
         $this->kernel = $kernel;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
-        $annotatedClasses = $this->kernel->getAnnotatedClassesToCompile();
+        $annotatedClasses = [];
         foreach ($container->getExtensions() as $extension) {
             if ($extension instanceof Extension) {
-                $annotatedClasses = array_merge($annotatedClasses, $extension->getAnnotatedClassesToCompile());
+                $annotatedClasses[] = $extension->getAnnotatedClassesToCompile();
             }
         }
+
+        $annotatedClasses = array_merge($this->kernel->getAnnotatedClassesToCompile(), ...$annotatedClasses);
 
         $existingClasses = $this->getClassesInComposerClassMaps();
 
@@ -54,16 +53,14 @@ class AddAnnotatedClassesToCachePass implements CompilerPassInterface
      *
      * @param array $patterns The class patterns to expand
      * @param array $classes  The existing classes to match against the patterns
-     *
-     * @return array A list of classes derivated from the patterns
      */
-    private function expandClasses(array $patterns, array $classes)
+    private function expandClasses(array $patterns, array $classes): array
     {
-        $expanded = array();
+        $expanded = [];
 
         // Explicit classes declared in the patterns are returned directly
         foreach ($patterns as $key => $pattern) {
-            if ('\\' !== substr($pattern, -1) && false === strpos($pattern, '*')) {
+            if (!str_ends_with($pattern, '\\') && !str_contains($pattern, '*')) {
                 unset($patterns[$key]);
                 $expanded[] = ltrim($pattern, '\\');
             }
@@ -83,9 +80,9 @@ class AddAnnotatedClassesToCachePass implements CompilerPassInterface
         return array_unique($expanded);
     }
 
-    private function getClassesInComposerClassMaps()
+    private function getClassesInComposerClassMaps(): array
     {
-        $classes = array();
+        $classes = [];
 
         foreach (spl_autoload_functions() as $function) {
             if (!\is_array($function)) {
@@ -104,19 +101,19 @@ class AddAnnotatedClassesToCachePass implements CompilerPassInterface
         return array_keys($classes);
     }
 
-    private function patternsToRegexps($patterns)
+    private function patternsToRegexps(array $patterns): array
     {
-        $regexps = array();
+        $regexps = [];
 
         foreach ($patterns as $pattern) {
             // Escape user input
             $regex = preg_quote(ltrim($pattern, '\\'));
 
             // Wildcards * and **
-            $regex = strtr($regex, array('\\*\\*' => '.*?', '\\*' => '[^\\\\]*?'));
+            $regex = strtr($regex, ['\\*\\*' => '.*?', '\\*' => '[^\\\\]*?']);
 
             // If this class does not end by a slash, anchor the end
-            if ('\\' !== substr($regex, -1)) {
+            if (!str_ends_with($regex, '\\')) {
                 $regex .= '$';
             }
 
@@ -126,12 +123,12 @@ class AddAnnotatedClassesToCachePass implements CompilerPassInterface
         return $regexps;
     }
 
-    private function matchAnyRegexps($class, $regexps)
+    private function matchAnyRegexps(string $class, array $regexps): bool
     {
-        $blacklisted = false !== strpos($class, 'Test');
+        $isTest = str_contains($class, 'Test');
 
         foreach ($regexps as $regex) {
-            if ($blacklisted && false === strpos($regex, 'Test')) {
+            if ($isTest && !str_contains($regex, 'Test')) {
                 continue;
             }
 

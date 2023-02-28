@@ -143,7 +143,7 @@ class="nav-link active"
                         <i class="fa fa-user"> </i>
                         {!! Form::label('profile_pic',Lang::get('lang.profile_pic'),['style'=>'font-weight:400;margin-bottom:0px;']) !!}
                         {!! Form::file('profile_pic',['class' => 'form-file']) !!}
-                    </div>  
+                    </div>
                 </div>
                 {!! Form::token() !!}
                 {!! Form::close() !!}

@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateApiSettingsTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -29,4 +28,4 @@ class CreateApiSettingsTable extends Migration
     {
         Schema::drop('api_settings');
     }
-}
+};

@@ -1,6 +1,125 @@
 CHANGELOG
 =========
 
+6.2
+---
+
+ * The HTTP cache store uses the `xxh128` algorithm
+ * Deprecate calling `JsonResponse::setCallback()`, `Response::setExpires/setLastModified/setEtag()`, `MockArraySessionStorage/NativeSessionStorage::setMetadataBag()`, `NativeSessionStorage::setSaveHandler()` without arguments
+ * Add request matchers under the `Symfony\Component\HttpFoundation\RequestMatcher` namespace
+ * Deprecate `RequestMatcher` in favor of `ChainRequestMatcher`
+ * Deprecate `Symfony\Component\HttpFoundation\ExpressionRequestMatcher` in favor of `Symfony\Component\HttpFoundation\RequestMatcher\ExpressionRequestMatcher`
+
+6.1
+---
+
+ * Add stale while revalidate and stale if error cache header
+ * Allow dynamic session "ttl" when using a remote storage
+ * Deprecate `Request::getContentType()`, use `Request::getContentTypeFormat()` instead
+
+6.0
+---
+
+ * Remove the `NamespacedAttributeBag` class
+ * Removed `Response::create()`, `JsonResponse::create()`,
+   `RedirectResponse::create()`, `StreamedResponse::create()` and
+   `BinaryFileResponse::create()` methods (use `__construct()` instead)
+ * Not passing a `Closure` together with `FILTER_CALLBACK` to `ParameterBag::filter()` throws an `\InvalidArgumentException`; wrap your filter in a closure instead
+ * Not passing a `Closure` together with `FILTER_CALLBACK` to `InputBag::filter()` throws an `\InvalidArgumentException`; wrap your filter in a closure instead
+ * Removed the `Request::HEADER_X_FORWARDED_ALL` constant, use either `Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_HOST | Request::HEADER_X_FORWARDED_PORT | Request::HEADER_X_FORWARDED_PROTO` or `Request::HEADER_X_FORWARDED_AWS_ELB` or `Request::HEADER_X_FORWARDED_TRAEFIK`constants instead
+ * Rename `RequestStack::getMasterRequest()` to `getMainRequest()`
+ * Not passing `FILTER_REQUIRE_ARRAY` or `FILTER_FORCE_ARRAY` flags to `InputBag::filter()` when filtering an array will throw `BadRequestException`
+ * Removed the `Request::HEADER_X_FORWARDED_ALL` constant
+ * Retrieving non-scalar values using `InputBag::get()` will throw `BadRequestException` (use `InputBad::all()` instead to retrieve an array)
+ * Passing non-scalar default value as the second argument `InputBag::get()` will throw `\InvalidArgumentException`
+ * Passing non-scalar, non-array value as the second argument `InputBag::set()` will throw `\InvalidArgumentException`
+ * Passing `null` as `$requestIp` to `IpUtils::__checkIp()`, `IpUtils::__checkIp4()` or `IpUtils::__checkIp6()` is not supported anymore.
+
+5.4
+---
+
+ * Deprecate passing `null` as `$requestIp` to `IpUtils::__checkIp()`, `IpUtils::__checkIp4()` or `IpUtils::__checkIp6()`, pass an empty string instead.
+ * Add the `litespeed_finish_request` method to work with Litespeed
+ * Deprecate `upload_progress.*` and `url_rewriter.tags` session options
+ * Allow setting session options via DSN
+
+5.3
+---
+
+ * Add the `SessionFactory`, `NativeSessionStorageFactory`, `PhpBridgeSessionStorageFactory` and `MockFileSessionStorageFactory` classes
+ * Calling `Request::getSession()` when there is no available session throws a `SessionNotFoundException`
+ * Add the `RequestStack::getSession` method
+ * Deprecate the `NamespacedAttributeBag` class
+ * Add `ResponseFormatSame` PHPUnit constraint
+ * Deprecate the `RequestStack::getMasterRequest()` method and add `getMainRequest()` as replacement
+
+5.2.0
+-----
+
+ * added support for `X-Forwarded-Prefix` header
+ * added `HeaderUtils::parseQuery()`: it does the same as `parse_str()` but preserves dots in variable names
+ * added `File::getContent()`
+ * added ability to use comma separated ip addresses for `RequestMatcher::matchIps()`
+ * added `Request::toArray()` to parse a JSON request body to an array
+ * added `RateLimiter\RequestRateLimiterInterface` and `RateLimiter\AbstractRequestRateLimiter`
+ * deprecated not passing a `Closure` together with `FILTER_CALLBACK` to `ParameterBag::filter()`; wrap your filter in a closure instead.
+ * Deprecated the `Request::HEADER_X_FORWARDED_ALL` constant, use either `HEADER_X_FORWARDED_FOR | HEADER_X_FORWARDED_HOST | HEADER_X_FORWARDED_PORT | HEADER_X_FORWARDED_PROTO` or `HEADER_X_FORWARDED_AWS_ELB` or `HEADER_X_FORWARDED_TRAEFIK` constants instead.
+ * Deprecated `BinaryFileResponse::create()`, use `__construct()` instead
+
+5.1.0
+-----
+
+ * added `Cookie::withValue`, `Cookie::withDomain`, `Cookie::withExpires`,
+   `Cookie::withPath`, `Cookie::withSecure`, `Cookie::withHttpOnly`,
+   `Cookie::withRaw`, `Cookie::withSameSite`
+ * Deprecate `Response::create()`, `JsonResponse::create()`,
+   `RedirectResponse::create()`, and `StreamedResponse::create()` methods (use
+   `__construct()` instead)
+ * added `Request::preferSafeContent()` and `Response::setContentSafe()` to handle "safe" HTTP preference
+   according to [RFC 8674](https://tools.ietf.org/html/rfc8674)
+ * made the Mime component an optional dependency
+ * added `MarshallingSessionHandler`, `IdentityMarshaller`
+ * made `Session` accept a callback to report when the session is being used
+ * Add support for all core cache control directives
+ * Added `Symfony\Component\HttpFoundation\InputBag`
+ * Deprecated retrieving non-string values using `InputBag::get()`, use `InputBag::all()` if you need access to the collection of values
+
+5.0.0
+-----
+
+ * made `Cookie` auto-secure and lax by default
+ * removed classes in the `MimeType` namespace, use the Symfony Mime component instead
+ * removed method `UploadedFile::getClientSize()` and the related constructor argument
+ * made `Request::getSession()` throw if the session has not been set before
+ * removed `Response::HTTP_RESERVED_FOR_WEBDAV_ADVANCED_COLLECTIONS_EXPIRED_PROPOSAL`
+ * passing a null url when instantiating a `RedirectResponse` is not allowed
+
+4.4.0
+-----
+
+ * passing arguments to `Request::isMethodSafe()` is deprecated.
+ * `ApacheRequest` is deprecated, use the `Request` class instead.
+ * passing a third argument to `HeaderBag::get()` is deprecated, use method `all()` instead
+ * [BC BREAK] `PdoSessionHandler` with MySQL changed the type of the lifetime column,
+   make sure to run `ALTER TABLE sessions MODIFY sess_lifetime INTEGER UNSIGNED NOT NULL` to
+   update your database.
+ * `PdoSessionHandler` now precalculates the expiry timestamp in the lifetime column,
+    make sure to run `CREATE INDEX expiry ON sessions (sess_lifetime)` to update your database
+    to speed up garbage collection of expired sessions.
+ * added `SessionHandlerFactory` to create session handlers with a DSN
+ * added `IpUtils::anonymize()` to help with GDPR compliance.
+
+4.3.0
+-----
+
+ * added PHPUnit constraints: `RequestAttributeValueSame`, `ResponseCookieValueSame`, `ResponseHasCookie`,
+   `ResponseHasHeader`, `ResponseHeaderSame`, `ResponseIsRedirected`, `ResponseIsSuccessful`, and `ResponseStatusCodeSame`
+ * deprecated `MimeTypeGuesserInterface` and `ExtensionGuesserInterface` in favor of `Symfony\Component\Mime\MimeTypesInterface`.
+ * deprecated `MimeType` and `MimeTypeExtensionGuesser` in favor of `Symfony\Component\Mime\MimeTypes`.
+ * deprecated `FileBinaryMimeTypeGuesser` in favor of `Symfony\Component\Mime\FileBinaryMimeTypeGuesser`.
+ * deprecated `FileinfoMimeTypeGuesser` in favor of `Symfony\Component\Mime\FileinfoMimeTypeGuesser`.
+ * added `UrlHelper` that allows to get an absolute URL and a relative path for a given path
+
 4.2.0
 -----
 
@@ -67,7 +186,7 @@ CHANGELOG
 -----
 
  * the `Request::setTrustedProxies()` method takes a new `$trustedHeaderSet` argument,
-   see http://symfony.com/doc/current/components/http_foundation/trusting_proxies.html for more info,
+   see https://symfony.com/doc/current/deployment/proxies.html for more info,
  * deprecated the `Request::setTrustedHeaderName()` and `Request::getTrustedHeaderName()` methods,
  * added `File\Stream`, to be passed to `BinaryFileResponse` when the size of the served file is unknown,
    disabling `Range` and `Content-Length` handling, switching to chunked encoding instead
@@ -190,10 +309,10 @@ CHANGELOG
  * Added `FlashBag`. Flashes expire when retrieved by `get()` or `all()`. This
    implementation is ESI compatible.
  * Added `AutoExpireFlashBag` (default) to replicate Symfony 2.0.x auto expire
-   behaviour of messages auto expiring after one page page load.  Messages must
+   behavior of messages auto expiring after one page page load.  Messages must
    be retrieved by `get()` or `all()`.
  * Added `Symfony\Component\HttpFoundation\Attribute\AttributeBag` to replicate
-   attributes storage behaviour from 2.0.x (default).
+   attributes storage behavior from 2.0.x (default).
  * Added `Symfony\Component\HttpFoundation\Attribute\NamespacedAttributeBag` for
    namespace session attributes.
  * Flash API can stores messages in an array so there may be multiple messages

@@ -2,8 +2,9 @@
 
 namespace Illuminate\Session;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\ServiceProvider;
 
 class SessionServiceProvider extends ServiceProvider
 {
@@ -18,7 +19,11 @@ class SessionServiceProvider extends ServiceProvider
 
         $this->registerSessionDriver();
 
-        $this->app->singleton(StartSession::class);
+        $this->app->singleton(StartSession::class, function ($app) {
+            return new StartSession($app->make(SessionManager::class), function () use ($app) {
+                return $app->make(CacheFactory::class);
+            });
+        });
     }
 
     /**

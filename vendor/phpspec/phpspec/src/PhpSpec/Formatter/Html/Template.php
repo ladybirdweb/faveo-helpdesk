@@ -25,19 +25,14 @@ final class Template implements TemplateInterface
      */
     private $io;
 
-    /**
-     * @param IO $io
-     */
+    
     public function __construct(IO $io)
     {
         $this->io = $io;
     }
 
-    /**
-     * @param string $text
-     * @param array  $templateVars
-     */
-    public function render(string $text, array $templateVars = array())
+    
+    public function render(string $text, array $templateVars = array()): void
     {
         if (file_exists($text)) {
             $text = file_get_contents($text);
@@ -47,11 +42,7 @@ final class Template implements TemplateInterface
         $this->io->write($output);
     }
 
-    /**
-     * @param array $templateVars
-     *
-     * @return array
-     */
+    
     private function extractKeys(array $templateVars): array
     {
         return array_map(function ($e) {

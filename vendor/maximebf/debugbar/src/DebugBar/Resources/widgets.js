@@ -216,11 +216,11 @@ if (typeof(PhpDebugBar) == 'undefined') {
     });
 
     // ------------------------------------------------------------------
-    
+
     /**
      * An extension of KVListWidget where the data represents a list
      * of variables
-     * 
+     *
      * Options:
      *  - data
      */
@@ -428,10 +428,29 @@ if (typeof(PhpDebugBar) == 'undefined') {
 
         render: function() {
             this.bindAttr('data', function(data) {
+
+                // ported from php DataFormatter
+                var formatDuration = function(seconds) {
+                    if (seconds < 0.001)
+                        return (seconds * 1000000).toFixed() + 'μs';
+                    else if (seconds < 1)
+                        return (seconds * 1000).toFixed(2) + 'ms';
+                    return (seconds).toFixed(2) +  's';
+                };
+
                 this.$el.empty();
                 if (data.measures) {
+                    var aggregate = {};
+
                     for (var i = 0; i < data.measures.length; i++) {
                         var measure = data.measures[i];
+
+                        if(!aggregate[measure.label])
+                            aggregate[measure.label] = { count: 0, duration: 0 };
+
+                        aggregate[measure.label]['count'] += 1;
+                        aggregate[measure.label]['duration'] += measure.duration;
+
                         var m = $('<div />').addClass(csscls('measure')),
                             li = $('<li />'),
                             left = (measure.relative_start * 100 / data.duration).toFixed(2),
@@ -449,7 +468,7 @@ if (typeof(PhpDebugBar) == 'undefined') {
 
                         m.appendTo(li);
                         this.$el.append(li);
-                        
+
                         if (measure.params && !$.isEmptyObject(measure.params)) {
                             var table = $('<table><tr><th colspan="2">Params</th></tr></table>').addClass(csscls('params')).appendTo(li);
                             for (var key in measure.params) {
@@ -468,6 +487,30 @@ if (typeof(PhpDebugBar) == 'undefined') {
                             });
                         }
                     }
+
+                    // convert to array and sort by duration
+                    aggregate = $.map(aggregate, function(data, label) {
+                       return {
+                           label: label,
+                           data: data
+                       }
+                    }).sort(function(a, b) {
+                        return b.data.duration - a.data.duration
+                    });
+
+                    // build table and add
+                    var aggregateTable = $('<table style="display: table; border: 0; width: 99%"></table>').addClass(csscls('params'));
+                    $.each(aggregate, function(i, aggregate) {
+                        width = Math.min((aggregate.data.duration * 100 / data.duration).toFixed(2), 100);
+
+                        aggregateTable.append('<tr><td class="' + csscls('name') + '">' + aggregate.data.count + ' x ' + aggregate.label + ' (' + width + '%)</td><td class="' + csscls('value') + '">' +
+                            '<div class="' + csscls('measure') +'">' +
+                                '<span class="' + csscls('value') + '" style="width:' + width + '%"></span>' +
+                                '<span class="' + csscls('label') + '">' + formatDuration(aggregate.data.duration) + '</span>' +
+                            '</div></td></tr>');
+                    });
+
+                    this.$el.append('<li/>').find('li:last').append(aggregateTable);
                 }
             });
         }
@@ -475,7 +518,7 @@ if (typeof(PhpDebugBar) == 'undefined') {
     });
 
     // ------------------------------------------------------------------
-    
+
     /**
      * Widget for the displaying exceptions
      *
@@ -507,12 +550,25 @@ if (typeof(PhpDebugBar) == 'undefined') {
                 }
                 if (e.surrounding_lines) {
                     var pre = createCodeBlock(e.surrounding_lines.join(""), 'php').addClass(csscls('file')).appendTo(li);
-                    li.click(function() {
-                        if (pre.is(':visible')) {
-                            pre.hide();
-                        } else {
-                            pre.show();
-                        }
+                    if (!e.stack_trace_html) {
+                        // This click event makes the var-dumper hard to use.
+                        li.click(function () {
+                            if (pre.is(':visible')) {
+                                pre.hide();
+                            } else {
+                                pre.show();
+                            }
+                        });
+                    }
+                }
+                if (e.stack_trace_html) {
+                    var $trace = $('<span />').addClass(csscls('filename')).html(e.stack_trace_html);
+                    $trace.appendTo(li);
+                } else if (e.stack_trace) {
+                    e.stack_trace.split("\n").forEach(function (trace) {
+                        var $traceLine = $('<div />');
+                        $('<span />').addClass(csscls('filename')).text(trace).appendTo($traceLine);
+                        $traceLine.appendTo(li);
                     });
                 }
             }});
@@ -528,6 +584,6 @@ if (typeof(PhpDebugBar) == 'undefined') {
         }
 
     });
-    
+
 
 })(PhpDebugBar.$);

@@ -5,7 +5,7 @@ namespace Illuminate\View;
 class ViewName
 {
     /**
-     * Normalize the given event name.
+     * Normalize the given view name.
      *
      * @param  string  $name
      * @return string
@@ -14,11 +14,11 @@ class ViewName
     {
         $delimiter = ViewFinderInterface::HINT_PATH_DELIMITER;
 
-        if (strpos($name, $delimiter) === false) {
+        if (! str_contains($name, $delimiter)) {
             return str_replace('/', '.', $name);
         }
 
-        list($namespace, $name) = explode($delimiter, $name);
+        [$namespace, $name] = explode($delimiter, $name);
 
         return $namespace.$delimiter.str_replace('/', '.', $name);
     }

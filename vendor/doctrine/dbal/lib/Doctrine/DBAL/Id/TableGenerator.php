@@ -3,13 +3,17 @@
 namespace Doctrine\DBAL\Id;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver;
 use Doctrine\DBAL\DriverManager;
-use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\LockMode;
 use Throwable;
-use const CASE_LOWER;
+
 use function array_change_key_case;
+use function assert;
+use function is_int;
+
+use const CASE_LOWER;
 
 /**
  * Table ID Generator for those poor languages that are missing sequences.
@@ -62,34 +66,39 @@ class TableGenerator
     /**
      * @param string $generatorTableName
      *
-     * @throws DBALException
+     * @throws Exception
      */
     public function __construct(Connection $conn, $generatorTableName = 'sequences')
     {
-        $params = $conn->getParams();
-        if ($params['driver'] === 'pdo_sqlite') {
-            throw new DBALException('Cannot use TableGenerator with SQLite.');
+        if ($conn->getDriver() instanceof Driver\PDOSqlite\Driver) {
+            throw new Exception('Cannot use TableGenerator with SQLite.');
         }
-        $this->conn               = DriverManager::getConnection($params, $conn->getConfiguration(), $conn->getEventManager());
+
+        $this->conn = DriverManager::getConnection(
+            $conn->getParams(),
+            $conn->getConfiguration(),
+            $conn->getEventManager()
+        );
+
         $this->generatorTableName = $generatorTableName;
     }
 
     /**
      * Generates the next unused value for the given sequence name.
      *
-     * @param string $sequenceName
+     * @param string $sequence
      *
      * @return int
      *
-     * @throws DBALException
+     * @throws Exception
      */
-    public function nextValue($sequenceName)
+    public function nextValue($sequence)
     {
-        if (isset($this->sequences[$sequenceName])) {
-            $value = $this->sequences[$sequenceName]['value'];
-            $this->sequences[$sequenceName]['value']++;
-            if ($this->sequences[$sequenceName]['value'] >= $this->sequences[$sequenceName]['max']) {
-                unset($this->sequences[$sequenceName]);
+        if (isset($this->sequences[$sequence])) {
+            $value = $this->sequences[$sequence]['value'];
+            $this->sequences[$sequence]['value']++;
+            if ($this->sequences[$sequence]['value'] >= $this->sequences[$sequence]['max']) {
+                unset($this->sequences[$sequence]);
             }
 
             return $value;
@@ -102,8 +111,7 @@ class TableGenerator
             $sql      = 'SELECT sequence_value, sequence_increment_by'
                 . ' FROM ' . $platform->appendLockHint($this->generatorTableName, LockMode::PESSIMISTIC_WRITE)
                 . ' WHERE sequence_name = ? ' . $platform->getWriteLockSQL();
-            $stmt     = $this->conn->executeQuery($sql, [$sequenceName]);
-            $row      = $stmt->fetch(FetchMode::ASSOCIATIVE);
+            $row      = $this->conn->fetchAssociative($sql, [$sequence]);
 
             if ($row !== false) {
                 $row = array_change_key_case($row, CASE_LOWER);
@@ -111,8 +119,10 @@ class TableGenerator
                 $value = $row['sequence_value'];
                 $value++;
 
+                assert(is_int($value));
+
                 if ($row['sequence_increment_by'] > 1) {
-                    $this->sequences[$sequenceName] = [
+                    $this->sequences[$sequence] = [
                         'value' => $value,
                         'max' => $row['sequence_value'] + $row['sequence_increment_by'],
                     ];
@@ -121,15 +131,15 @@ class TableGenerator
                 $sql  = 'UPDATE ' . $this->generatorTableName . ' ' .
                        'SET sequence_value = sequence_value + sequence_increment_by ' .
                        'WHERE sequence_name = ? AND sequence_value = ?';
-                $rows = $this->conn->executeUpdate($sql, [$sequenceName, $row['sequence_value']]);
+                $rows = $this->conn->executeStatement($sql, [$sequence, $row['sequence_value']]);
 
                 if ($rows !== 1) {
-                    throw new DBALException('Race-condition detected while updating sequence. Aborting generation');
+                    throw new Exception('Race-condition detected while updating sequence. Aborting generation');
                 }
             } else {
                 $this->conn->insert(
                     $this->generatorTableName,
-                    ['sequence_name' => $sequenceName, 'sequence_value' => 1, 'sequence_increment_by' => 1]
+                    ['sequence_name' => $sequence, 'sequence_value' => 1, 'sequence_increment_by' => 1]
                 );
                 $value = 1;
             }
@@ -137,7 +147,12 @@ class TableGenerator
             $this->conn->commit();
         } catch (Throwable $e) {
             $this->conn->rollBack();
-            throw new DBALException('Error occurred while generating ID with TableGenerator, aborted generation: ' . $e->getMessage(), 0, $e);
+
+            throw new Exception(
+                'Error occurred while generating ID with TableGenerator, aborted generation: ' . $e->getMessage(),
+                0,
+                $e
+            );
         }
 
         return $value;

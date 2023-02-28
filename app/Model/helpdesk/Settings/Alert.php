@@ -9,6 +9,7 @@ class Alert extends BaseModel
     /* Using alert_notice table  */
 
     protected $table = 'settings_alert_notice';
+
     /* Set fillable fields in table */
     protected $fillable = [
 

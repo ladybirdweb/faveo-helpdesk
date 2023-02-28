@@ -38,11 +38,7 @@ final class MethodSignatureGenerator implements Generator
      */
     private $filesystem;
 
-    /**
-     * @param ConsoleIO               $io
-     * @param TemplateRenderer $templates
-     * @param Filesystem       $filesystem
-     */
+    
     public function __construct(ConsoleIO $io, TemplateRenderer $templates, Filesystem $filesystem)
     {
         $this->io         = $io;
@@ -50,12 +46,12 @@ final class MethodSignatureGenerator implements Generator
         $this->filesystem = $filesystem;
     }
 
-    public function supports(Resource $resource, string $generation, array $data) : bool
+    public function supports(Resource $resource, string $generation, array $data): bool
     {
         return 'method-signature' === $generation;
     }
 
-    public function generate(Resource $resource, array $data = array())
+    public function generate(Resource $resource, array $data = array()): void
     {
         $filepath  = $resource->getSrcFilename();
         $name      = $data['name'];
@@ -78,12 +74,12 @@ final class MethodSignatureGenerator implements Generator
         ), 2);
     }
 
-    public function getPriority() : int
+    public function getPriority(): int
     {
         return 0;
     }
 
-    protected function getTemplate() : string
+    protected function getTemplate(): string
     {
         return file_get_contents(__DIR__.'/templates/interface_method_signature.template');
     }
@@ -95,7 +91,7 @@ final class MethodSignatureGenerator implements Generator
         $this->filesystem->putFileContents($filepath, $code);
     }
 
-    private function buildArgumentString(array $arguments) : string
+    private function buildArgumentString(array $arguments): string
     {
         $argString = \count($arguments)
             ? '$argument' . implode(', $argument', range(1, \count($arguments)))

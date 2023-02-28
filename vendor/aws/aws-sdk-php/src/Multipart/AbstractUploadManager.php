@@ -94,7 +94,7 @@ abstract class AbstractUploadManager implements Promise\PromisorInterface
             return $this->promise;
         }
 
-        return $this->promise = Promise\coroutine(function () {
+        return $this->promise = Promise\Coroutine::of(function () {
             // Initiate the upload.
             if ($this->state->isCompleted()) {
                 throw new \LogicException('This multipart upload has already '
@@ -137,13 +137,29 @@ abstract class AbstractUploadManager implements Promise\PromisorInterface
             // Complete the multipart upload.
             yield $this->execCommand('complete', $this->getCompleteParams());
             $this->state->setStatus(UploadState::COMPLETED);
-        })->otherwise(function (\Exception $e) {
-            // Throw errors from the operations as a specific Multipart error.
-            if ($e instanceof AwsException) {
-                $e = new $this->config['exception_class']($this->state, $e);
-            }
-            throw $e;
-        });
+        })->otherwise($this->buildFailureCatch());
+    }
+
+    private function transformException($e)
+    {
+        // Throw errors from the operations as a specific Multipart error.
+        if ($e instanceof AwsException) {
+            $e = new $this->config['exception_class']($this->state, $e);
+        }
+        throw $e;
+    }
+
+    private function buildFailureCatch()
+    {
+        if (interface_exists("Throwable")) {
+            return function (\Throwable $e) {
+                return $this->transformException($e);
+            };
+        } else {
+            return function (\Exception $e) {
+                return $this->transformException($e);
+            };
+        }
     }
 
     protected function getConfig()

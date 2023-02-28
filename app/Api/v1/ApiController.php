@@ -4,9 +4,9 @@ namespace App\Api\v1;
 
 use App\Http\Controllers\Agent\helpdesk\TicketController as CoreTicketController;
 use App\Http\Controllers\Controller;
-//use Illuminate\Support\Facades\Request as Value;
 use App\Http\Requests\helpdesk\TicketRequest;
 use App\Model\helpdesk\Agent\Department;
+//use Illuminate\Support\Facades\Request as Value;
 use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Manage\Sla_plan;
@@ -21,6 +21,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Request as Input;
+use Illuminate\Support\Str;
 
 /**
  * -----------------------------------------------------------------------------
@@ -37,19 +39,33 @@ use Illuminate\Support\Collection;
 class ApiController extends Controller
 {
     public $user;
+
     public $request;
+
     public $ticket;
+
     public $model;
+
     public $thread;
+
     public $attach;
+
     public $ticketRequest;
+
     public $faveoUser;
+
     public $team;
+
     public $setting;
+
     public $helptopic;
+
     public $slaPlan;
+
     public $department;
+
     public $priority;
+
     public $source;
 
     /**
@@ -717,8 +733,8 @@ class ApiController extends Controller
             }
 
             $url = $this->request->input('url');
-            if (!str_is('*/', $url)) {
-                $url = str_finish($url, '/');
+            if (!Str::is('*/', $url)) {
+                $url = Str::finish($url, '/');
             }
 
             $url = $url.'/api/v1/helpdesk/check-url?api_key='.$this->request->input('api_key').'&token='.\Config::get('app.token');
@@ -807,7 +823,7 @@ class ApiController extends Controller
             $set = $this->setting->where('id', '1')->first();
             //dd($set);
             if ($set->api_enable == 1) {
-                $key = str_random(32);
+                $key = Str::random(32);
                 $set->api_key = $key;
                 $set->save();
                 $result = $set->api_key;
@@ -1407,7 +1423,7 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make(
-                \Input::get(),
+                Input::all(),
                 [
                     'email'     => 'required|email|unique:users',
                     'ticket_id' => 'required',
@@ -1440,7 +1456,7 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make(
-                \Input::get(),
+                Input::all(),
                 [
                     'ticket_id' => 'required',
                 ]
@@ -1472,7 +1488,7 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make(
-                \Input::get(),
+                Input::all(),
                 [
                     'ticketid' => 'required',
                     'email'    => 'required',
@@ -1544,11 +1560,11 @@ class ApiController extends Controller
                     ->value('my_ticket');
             $depend = collect([['name' => 'unassigned', 'count' => $unassigned], ['name' => 'mytickets', 'count' => $mytickets]]);
             $collection = $statuses->merge($depend);
-            $result = ['departments'   => $department, 'sla'           => $sla, 'staffs'        => $staff, 'teams'         => $team,
-                'priorities'           => $priority, 'helptopics'    => $helptopic,
-                'status'               => $status,
-                'sources'              => $source,
-                'tickets_count'        => $collection, ];
+            $result = ['departments' => $department, 'sla' => $sla, 'staffs' => $staff, 'teams' => $team,
+                'priorities'         => $priority, 'helptopics' => $helptopic,
+                'status'             => $status,
+                'sources'            => $source,
+                'tickets_count'      => $collection, ];
 
             return response()->json(compact('result'));
 //            $result     = ['departments' => $department, 'sla'         => $sla, 'staffs'      => $staff, 'teams'       => $team,
@@ -1652,7 +1668,7 @@ class ApiController extends Controller
 
                 return response()->json(compact('error'));
             }
-            $str = str_random(8);
+            $str = Str::random(8);
             $array = ['password' => $str, 'password_confirmation' => $str, 'email' => $this->request->input('email'), 'full_name' => $this->request->input('first_name')];
             $all = $this->request->input();
             $merged = $array + $all;

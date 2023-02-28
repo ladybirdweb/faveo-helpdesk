@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateDateFormatTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -27,4 +26,4 @@ class CreateDateFormatTable extends Migration
     {
         Schema::drop('date_format');
     }
-}
+};

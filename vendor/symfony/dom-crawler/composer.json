@@ -1,7 +1,7 @@
 {
     "name": "symfony/dom-crawler",
     "type": "library",
-    "description": "Symfony DomCrawler Component",
+    "description": "Eases DOM navigation for HTML and XML documents",
     "keywords": [],
     "homepage": "https://symfony.com",
     "license": "MIT",
@@ -16,11 +16,13 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9",
-        "symfony/polyfill-mbstring": "~1.0"
+        "php": ">=8.1",
+        "symfony/polyfill-ctype": "~1.8",
+        "symfony/polyfill-mbstring": "~1.0",
+        "masterminds/html5": "^2.6"
     },
     "require-dev": {
-        "symfony/css-selector": "~2.8|~3.0"
+        "symfony/css-selector": "^5.4|^6.0"
     },
     "suggest": {
         "symfony/css-selector": ""
@@ -31,10 +33,5 @@
             "/Tests/"
         ]
     },
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.1-dev"
-        }
-    }
+    "minimum-stability": "dev"
 }

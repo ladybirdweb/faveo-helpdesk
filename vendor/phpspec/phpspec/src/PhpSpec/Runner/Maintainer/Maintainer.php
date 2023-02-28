@@ -20,41 +20,25 @@ use PhpSpec\Runner\CollaboratorManager;
 
 interface Maintainer
 {
-    /**
-     * @param ExampleNode $example
-     *
-     * @return boolean
-     */
+    
     public function supports(ExampleNode $example): bool;
 
-    /**
-     * @param ExampleNode            $example
-     * @param Specification $context
-     * @param MatcherManager         $matchers
-     * @param CollaboratorManager    $collaborators
-     */
+    
     public function prepare(
         ExampleNode $example,
         Specification $context,
         MatcherManager $matchers,
         CollaboratorManager $collaborators
-    );
+    ): void;
 
-    /**
-     * @param ExampleNode            $example
-     * @param Specification $context
-     * @param MatcherManager         $matchers
-     * @param CollaboratorManager    $collaborators
-     */
+    
     public function teardown(
         ExampleNode $example,
         Specification $context,
         MatcherManager $matchers,
         CollaboratorManager $collaborators
-    );
+    ): void;
 
-    /**
-     * @return integer
-     */
+    
     public function getPriority(): int;
 }

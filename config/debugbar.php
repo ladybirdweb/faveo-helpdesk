@@ -119,14 +119,14 @@ return [
             'show_name' => false,   // Also show the users name/email in the debugbar
         ],
         'db' => [
-            'with_params'       => true,   // Render SQL with the parameters substituted
-            'timeline'          => false,  // Add the queries to the timeline
-            'backtrace'         => false,  // EXPERIMENTAL: Use a backtrace to find the origin of the query in your files.
-            'explain'           => [            // EXPERIMENTAL: Show EXPLAIN output on queries
+            'with_params' => true,   // Render SQL with the parameters substituted
+            'timeline'    => false,  // Add the queries to the timeline
+            'backtrace'   => false,  // EXPERIMENTAL: Use a backtrace to find the origin of the query in your files.
+            'explain'     => [            // EXPERIMENTAL: Show EXPLAIN output on queries
                 'enabled' => false,
                 'types'   => ['SELECT'], // array('SELECT', 'INSERT', 'UPDATE', 'DELETE'); for MySQL 5.6.3+
             ],
-            'hints'             => true,    // Show hints for common mistakes
+            'hints' => true,    // Show hints for common mistakes
         ],
         'mail' => [
             'full_log' => false,

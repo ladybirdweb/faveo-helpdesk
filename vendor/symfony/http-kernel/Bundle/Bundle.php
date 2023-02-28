@@ -18,8 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
- * An implementation of BundleInterface that adds a few conventions
- * for DependencyInjection extensions and Console commands.
+ * An implementation of BundleInterface that adds a few conventions for DependencyInjection extensions.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -30,25 +29,17 @@ abstract class Bundle implements BundleInterface
     protected $name;
     protected $extension;
     protected $path;
-    private $namespace;
+    private string $namespace;
 
-    /**
-     * {@inheritdoc}
-     */
     public function boot()
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function shutdown()
     {
     }
 
     /**
-     * {@inheritdoc}
-     *
      * This method can be overridden to register compilation passes,
      * other extensions, ...
      */
@@ -59,18 +50,16 @@ abstract class Bundle implements BundleInterface
     /**
      * Returns the bundle's container extension.
      *
-     * @return ExtensionInterface|null The container extension
-     *
      * @throws \LogicException
      */
-    public function getContainerExtension()
+    public function getContainerExtension(): ?ExtensionInterface
     {
         if (null === $this->extension) {
             $extension = $this->createContainerExtension();
 
             if (null !== $extension) {
                 if (!$extension instanceof ExtensionInterface) {
-                    throw new \LogicException(sprintf('Extension %s must implement Symfony\Component\DependencyInjection\Extension\ExtensionInterface.', \get_class($extension)));
+                    throw new \LogicException(sprintf('Extension "%s" must implement Symfony\Component\DependencyInjection\Extension\ExtensionInterface.', get_debug_type($extension)));
                 }
 
                 // check naming convention
@@ -87,27 +76,19 @@ abstract class Bundle implements BundleInterface
             }
         }
 
-        if ($this->extension) {
-            return $this->extension;
-        }
+        return $this->extension ?: null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getNamespace()
+    public function getNamespace(): string
     {
-        if (null === $this->namespace) {
+        if (!isset($this->namespace)) {
             $this->parseClassName();
         }
 
         return $this->namespace;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getPath()
+    public function getPath(): string
     {
         if (null === $this->path) {
             $reflected = new \ReflectionObject($this);
@@ -119,10 +100,8 @@ abstract class Bundle implements BundleInterface
 
     /**
      * Returns the bundle name (the class short name).
-     *
-     * @return string The Bundle name
      */
-    final public function getName()
+    final public function getName(): string
     {
         if (null === $this->name) {
             $this->parseClassName();
@@ -137,10 +116,8 @@ abstract class Bundle implements BundleInterface
 
     /**
      * Returns the bundle's container extension class.
-     *
-     * @return string
      */
-    protected function getContainerExtensionClass()
+    protected function getContainerExtensionClass(): string
     {
         $basename = preg_replace('/Bundle$/', '', $this->getName());
 
@@ -149,22 +126,16 @@ abstract class Bundle implements BundleInterface
 
     /**
      * Creates the bundle's container extension.
-     *
-     * @return ExtensionInterface|null
      */
-    protected function createContainerExtension()
+    protected function createContainerExtension(): ?ExtensionInterface
     {
-        if (class_exists($class = $this->getContainerExtensionClass())) {
-            return new $class();
-        }
+        return class_exists($class = $this->getContainerExtensionClass()) ? new $class() : null;
     }
 
     private function parseClassName()
     {
         $pos = strrpos(static::class, '\\');
         $this->namespace = false === $pos ? '' : substr(static::class, 0, $pos);
-        if (null === $this->name) {
-            $this->name = false === $pos ? static::class : substr(static::class, $pos + 1);
-        }
+        $this->name ??= false === $pos ? static::class : substr(static::class, $pos + 1);
     }
 }

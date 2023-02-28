@@ -21,7 +21,7 @@ abstract class BaseOptionedModel
     /**
      * @var array
      */
-    protected $options = [];
+    protected $options = array();
 
     /**
      * Get options.
@@ -48,8 +48,8 @@ abstract class BaseOptionedModel
     /**
      * Get option.
      *
-     * @param string $key Key
-     * @param mixed $default Default
+     * @param string $key     Key
+     * @param mixed  $default Default
      *
      * @return mixed
      */
@@ -75,8 +75,8 @@ abstract class BaseOptionedModel
     /**
      * Set option.
      *
-     * @param string $key Key
-     * @param mixed $value Value
+     * @param string $key   Key
+     * @param mixed  $value Value
      *
      * @return mixed
      */

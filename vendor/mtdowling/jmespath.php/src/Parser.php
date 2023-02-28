@@ -55,7 +55,7 @@ class Parser
     ];
 
     /**
-     * @param Lexer $lexer Lexer used to tokenize expressions
+     * @param Lexer|null $lexer Lexer used to tokenize expressions
      */
     public function __construct(Lexer $lexer = null)
     {
@@ -142,7 +142,8 @@ class Parser
         return ['type' => T::T_NOT, 'children' => [$this->expr(self::$bp[T::T_NOT])]];
     }
 
-    private function nud_lparen() {
+    private function nud_lparen()
+    {
         $this->next();
         $result = $this->expr(0);
         if ($this->token['type'] !== T::T_RPAREN) {

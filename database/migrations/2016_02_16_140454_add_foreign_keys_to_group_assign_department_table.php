@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddForeignKeysToGroupAssignDepartmentTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -30,4 +29,4 @@ class AddForeignKeysToGroupAssignDepartmentTable extends Migration
             $table->dropForeign('group_assign_department_ibfk_2');
         });
     }
-}
+};

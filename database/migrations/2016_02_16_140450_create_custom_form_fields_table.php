@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateCustomFormFieldsTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -33,4 +32,4 @@ class CreateCustomFormFieldsTable extends Migration
     {
         Schema::drop('custom_form_fields');
     }
-}
+};

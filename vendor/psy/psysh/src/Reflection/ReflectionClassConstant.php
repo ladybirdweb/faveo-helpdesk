@@ -3,7 +3,7 @@
 /*
  * This file is part of Psy Shell.
  *
- * (c) 2012-2018 Justin Hileman
+ * (c) 2012-2023 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -28,18 +28,18 @@ class ReflectionClassConstant implements \Reflector
      * @param string|object $class
      * @param string        $name
      */
-    public function __construct($class, $name)
+    public function __construct($class, string $name)
     {
         if (!$class instanceof \ReflectionClass) {
             $class = new \ReflectionClass($class);
         }
 
         $this->class = $class;
-        $this->name  = $name;
+        $this->name = $name;
 
         $constants = $class->getConstants();
         if (!\array_key_exists($name, $constants)) {
-            throw new \InvalidArgumentException('Unknown constant: ' . $name);
+            throw new \InvalidArgumentException('Unknown constant: '.$name);
         }
 
         $this->value = $constants[$name];
@@ -52,9 +52,9 @@ class ReflectionClassConstant implements \Reflector
      * @param string        $name
      * @param bool          $return pass true to return the export, as opposed to emitting it
      *
-     * @return null|string
+     * @return string|null
      */
-    public static function export($class, $name, $return = false)
+    public static function export($class, string $name, bool $return = false)
     {
         $refl = new self($class, $name);
         $value = $refl->getValue();
@@ -65,15 +65,13 @@ class ReflectionClassConstant implements \Reflector
             return $str;
         }
 
-        echo $str . "\n";
+        echo $str."\n";
     }
 
     /**
      * Gets the declaring class.
-     *
-     * @return \ReflectionClass
      */
-    public function getDeclaringClass()
+    public function getDeclaringClass(): \ReflectionClass
     {
         $parent = $this->class;
 
@@ -83,7 +81,7 @@ class ReflectionClassConstant implements \Reflector
         //
         // While this isn't _technically_ correct, it's prolly close enough.
         do {
-            $class  = $parent;
+            $class = $parent;
             $parent = $class->getParentClass();
         } while ($parent && $parent->hasConstant($this->name) && $parent->getConstant($this->name) === $this->value);
 
@@ -95,7 +93,7 @@ class ReflectionClassConstant implements \Reflector
      *
      * @return false
      */
-    public function getDocComment()
+    public function getDocComment(): bool
     {
         return false;
     }
@@ -106,20 +104,16 @@ class ReflectionClassConstant implements \Reflector
      * Since this is only used for PHP < 7.1, we can just return "public". All
      * the fancier modifiers are only available on PHP versions which have their
      * own ReflectionClassConstant class :)
-     *
-     * @return int
      */
-    public function getModifiers()
+    public function getModifiers(): int
     {
         return \ReflectionMethod::IS_PUBLIC;
     }
 
     /**
      * Gets the constant name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -139,7 +133,7 @@ class ReflectionClassConstant implements \Reflector
      *
      * @return bool false
      */
-    public function isPrivate()
+    public function isPrivate(): bool
     {
         return false;
     }
@@ -149,7 +143,7 @@ class ReflectionClassConstant implements \Reflector
      *
      * @return bool false
      */
-    public function isProtected()
+    public function isProtected(): bool
     {
         return false;
     }
@@ -159,17 +153,15 @@ class ReflectionClassConstant implements \Reflector
      *
      * @return bool true
      */
-    public function isPublic()
+    public function isPublic(): bool
     {
         return true;
     }
 
     /**
      * To string.
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getName();
     }
@@ -217,9 +209,9 @@ class ReflectionClassConstant implements \Reflector
      *
      * @return ReflectionClassConstant|\ReflectionClassConstant
      */
-    public static function create($class, $name)
+    public static function create($class, string $name)
     {
-        if (\class_exists('\\ReflectionClassConstant')) {
+        if (\class_exists(\ReflectionClassConstant::class)) {
             return new \ReflectionClassConstant($class, $name);
         }
 

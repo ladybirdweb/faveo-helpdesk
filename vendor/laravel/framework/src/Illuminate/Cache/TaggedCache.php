@@ -6,7 +6,9 @@ use Illuminate\Contracts\Cache\Store;
 
 class TaggedCache extends Repository
 {
-    use RetrievesMultipleKeys;
+    use RetrievesMultipleKeys {
+        putMany as putManyAlias;
+    }
 
     /**
      * The tag set instance.
@@ -30,37 +32,55 @@ class TaggedCache extends Repository
     }
 
     /**
+     * Store multiple items in the cache for a given number of seconds.
+     *
+     * @param  array  $values
+     * @param  int|null  $ttl
+     * @return bool
+     */
+    public function putMany(array $values, $ttl = null)
+    {
+        if ($ttl === null) {
+            return $this->putManyForever($values);
+        }
+
+        return $this->putManyAlias($values, $ttl);
+    }
+
+    /**
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed   $value
-     * @return void
+     * @param  mixed  $value
+     * @return int|bool
      */
     public function increment($key, $value = 1)
     {
-        $this->store->increment($this->itemKey($key), $value);
+        return $this->store->increment($this->itemKey($key), $value);
     }
 
     /**
      * Decrement the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed   $value
-     * @return void
+     * @param  mixed  $value
+     * @return int|bool
      */
     public function decrement($key, $value = 1)
     {
-        $this->store->decrement($this->itemKey($key), $value);
+        return $this->store->decrement($this->itemKey($key), $value);
     }
 
     /**
      * Remove all items from the cache.
      *
-     * @return void
+     * @return bool
      */
     public function flush()
     {
         $this->tags->reset();
+
+        return true;
     }
 
     /**
@@ -85,11 +105,21 @@ class TaggedCache extends Repository
     /**
      * Fire an event for this cache instance.
      *
-     * @param  string  $event
+     * @param  \Illuminate\Cache\Events\CacheEvent  $event
      * @return void
      */
     protected function event($event)
     {
         parent::event($event->setTags($this->tags->getNames()));
+    }
+
+    /**
+     * Get the tag set instance.
+     *
+     * @return \Illuminate\Cache\TagSet
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 }

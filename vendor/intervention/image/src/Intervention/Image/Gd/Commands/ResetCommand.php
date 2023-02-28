@@ -2,7 +2,10 @@
 
 namespace Intervention\Image\Gd\Commands;
 
-class ResetCommand extends \Intervention\Image\Commands\AbstractCommand
+use Intervention\Image\Commands\AbstractCommand;
+use Intervention\Image\Exception\RuntimeException;
+
+class ResetCommand extends AbstractCommand
 {
     /**
      * Resets given image to its backup state
@@ -13,8 +16,9 @@ class ResetCommand extends \Intervention\Image\Commands\AbstractCommand
     public function execute($image)
     {
         $backupName = $this->argument(0)->value();
-
-        if (is_resource($backup = $image->getBackup($backupName))) {
+        $backup = $image->getBackup($backupName);
+        
+        if (is_resource($backup) || $backup instanceof \GdImage) {
 
             // destroy current resource
             imagedestroy($image->getCore());
@@ -28,7 +32,7 @@ class ResetCommand extends \Intervention\Image\Commands\AbstractCommand
             return true;
         }
 
-        throw new \Intervention\Image\Exception\RuntimeException(
+        throw new RuntimeException(
             "Backup not available. Call backup() before reset()."
         );
     }

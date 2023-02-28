@@ -1,14 +1,13 @@
 # pdf-laravel5
 
-DOMPDF module for Laravel 5
+DOMPDF module for Laravel 5. Export your views as PDFs - with css support.
 
-[![Build Status](https://api.travis-ci.org/vsmoraes/pdf-laravel5.svg)](https://travis-ci.org/vsmoraes/pdf-laravel5)
-[![License](https://poser.pugx.org/vsmoraes/laravel-pdf/license.svg)](https://packagist.org/packages/vsmoraes/laravel-pdf)
+[![Build Status](https://api.travis-ci.org/vsmoraes/pdf-laravel5.svg)](https://travis-ci.org/vsmoraes/pdf-laravel5) [![Latest Stable Version](https://poser.pugx.org/vsmoraes/laravel-pdf/v/stable)](https://packagist.org/packages/vsmoraes/laravel-pdf) [![Total Downloads](https://poser.pugx.org/vsmoraes/laravel-pdf/downloads)](https://packagist.org/packages/vsmoraes/laravel-pdf) [![Latest Unstable Version](https://poser.pugx.org/vsmoraes/laravel-pdf/v/unstable)](https://packagist.org/packages/vsmoraes/laravel-pdf) [![License](https://poser.pugx.org/vsmoraes/laravel-pdf/license)](https://packagist.org/packages/vsmoraes/laravel-pdf)
 
 ## Instalation
 Add:
 ```
-"vsmoraes/laravel-pdf": "dev-master"
+"vsmoraes/laravel-pdf": "^2.0"
 ```
 To your `composer.json`
 
@@ -19,7 +18,7 @@ composer require vsmoraes/laravel-pdf
 
 Then add:
 ```php
-'Vsmoraes\Pdf\PdfServiceProvider'
+Vsmoraes\Pdf\PdfServiceProvider::class
 ```
 To the `providers` array on your `config/app.php`
 
@@ -33,7 +32,7 @@ To the `aliases` array on yout `config/app.php` in order to enable the PDF facad
 ## Usage
 
 ```php
-$router->get('/pdf/view', function() {
+Route::get('/pdf/view', function() {
     $html = view('pdfs.example')->render();
 
     return PDF::load($html)->show();
@@ -42,16 +41,36 @@ $router->get('/pdf/view', function() {
 
 ### Force download
 ```php
-$router->get('/pdf/download', function() {
+Route::get('/pdf/download', function() {
     $html = view('pdfs.example')->render();
 
     return PDF::load($html)->download();
 });
 ```
 
+### Return PDF as string
+```php
+Route::get('/pdf/output', function() {
+    $html = view('pdfs.example')->render();
+
+    return PDF::load($html)
+        ->output();
+});
+```
+
+### Set paper size and orientation
+```php
+    Route::get('/pdf/output', function() {
+        $html = view('pdfs.example')->render();
+    
+        return PDF::load($html, 'A4', 'landscape')
+            ->output();
+    });
+```
+
 ### Output to a file
 ```php
-$router->get('/pdf/output', function() {
+Route::get('/pdf/output', function() {
     $html = view('pdfs.example')->render();
 
     PDF::load($html)
@@ -87,3 +106,19 @@ class HomeController extends BaseControler
     }
 }
 ```
+
+## Configuration
+Dompdf allows you to configure a bunch of things on your PDF file. In previous versions we used to accomplish this through environment vars, now you can change this configuration keys on the fly:
+
+```php
+Route::get('/pdf/view', function() {
+    $html = view('pdfs.example')->render();
+    
+    $defaultOptions = PDF::getOptions();
+    $defaultOptions->setDefaultFont('Courier');
+    
+    return PDF::setOptions($defaultOptions)->load($html)->download();
+});
+```
+
+For the complete configuration reference: [Dompdf options](https://github.com/dompdf/dompdf/blob/master/src/Options.php)

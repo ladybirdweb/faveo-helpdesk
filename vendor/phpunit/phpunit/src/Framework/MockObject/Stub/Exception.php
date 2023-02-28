@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -9,22 +9,26 @@
  */
 namespace PHPUnit\Framework\MockObject\Stub;
 
+use function sprintf;
 use PHPUnit\Framework\MockObject\Invocation;
-use PHPUnit\Framework\MockObject\Stub;
 use SebastianBergmann\Exporter\Exporter;
+use Throwable;
 
 /**
- * Stubs a method by raising a user-defined exception.
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-class Exception implements Stub
+final class Exception implements Stub
 {
     private $exception;
 
-    public function __construct(\Throwable $exception)
+    public function __construct(Throwable $exception)
     {
         $this->exception = $exception;
     }
 
+    /**
+     * @throws Throwable
+     */
     public function invoke(Invocation $invocation): void
     {
         throw $this->exception;
@@ -34,7 +38,7 @@ class Exception implements Stub
     {
         $exporter = new Exporter;
 
-        return \sprintf(
+        return sprintf(
             'raise user-specified exception %s',
             $exporter->export($this->exception)
         );

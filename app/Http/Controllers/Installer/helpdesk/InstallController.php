@@ -5,25 +5,27 @@ namespace App\Http\Controllers\Installer\helpdesk;
 // controllers
 use App\Http\Controllers\Controller;
 // requests
+use App\Http\Controllers\Update\SyncFaveoToLatestVersion;
 use App\Http\Requests\helpdesk\InstallerRequest;
 use App\Model\helpdesk\Settings\System;
 // models
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\User;
-use Artisan;
+Use Illuminate\Support\Facades\Artisan;
 // classes
-use Cache;
+use Illuminate\Support\Facades\Cache;
 use DB;
 use Exception;
-use File;
+use Illuminate\Support\Facades\File;
 use Hash;
 use Illuminate\Http\Request;
-use Input;
-use Redirect;
-use Session;
+use Illuminate\Support\Facades\Request as Input;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use UnAuth;
-use View;
+use Illuminate\Support\Facades\View;
 
 /**
  * |=======================================================================
@@ -257,7 +259,7 @@ class InstallController extends Controller
             return redirect()->back()->with('fails', 'invalid date-time format');
         }
 
-        $lang_path = base_path('resources/lang');
+        $lang_path = base_path('lang');
 
         //check user input language package is available or not in the system
         if (array_key_exists($language, \Config::get('languages')) && in_array($language, scandir($lang_path))) {
@@ -285,15 +287,15 @@ class InstallController extends Controller
         $admin_tzone = $timezones->id;
         // creating an user
         $user = User::updateOrCreate(['id' => 1], [
-            'first_name'   => $firstname,
-            'last_name'    => $lastname,
-            'email'        => $email,
-            'user_name'    => $username,
-            'password'     => Hash::make($password),
+            'first_name' => $firstname,
+            'last_name'  => $lastname,
+            'email'      => $email,
+            'user_name'  => $username,
+            'password'   => Hash::make($password),
             //'assign_group' => 1,
-            'primary_dpt'  => 1,
-            'active'       => 1,
-            'role'         => 'admin',
+            'primary_dpt' => 1,
+            'active'      => 1,
+            'role'        => 'admin',
         ]);
 
         // checking if the user have been created
@@ -434,7 +436,8 @@ class InstallController extends Controller
         $ENV['DB_DATABASE'] = '"'.$database.'"';
         $ENV['DB_USERNAME'] = '"'.$dbusername.'"';
         $ENV['DB_PASSWORD'] = '"'.$dbpassword.'"';
-        $ENV['MAIL_DRIVER'] = 'smtp';
+        $ENV['DB_ENGINE']   = 'InnoDB';
+        $ENV['MAIL_MAILER'] = 'smtp';
         $ENV['MAIL_HOST'] = 'mailtrap.io';
         $ENV['MAIL_PORT'] = '2525';
         $ENV['MAIL_USERNAME'] = 'null';
@@ -442,7 +445,7 @@ class InstallController extends Controller
         $ENV['CACHE_DRIVER'] = 'file';
         $ENV['SESSION_DRIVER'] = 'file';
         $ENV['SESSION_COOKIE_NAME'] = 'faveo_'.rand(0, 10000);
-        $ENV['QUEUE_DRIVER'] = 'sync';
+        $ENV['QUEUE_CONNECTION'] = 'sync';
         $ENV['JWT_TTL'] = 4;
         $ENV['FCM_SERVER_KEY'] = 'AIzaSyCyx5OFnsRFUmDLTMbPV50ZMDUGSG-bLw4';
         $ENV['FCM_SENDER_ID'] = '661051343223';
@@ -489,29 +492,23 @@ class InstallController extends Controller
 
     public function migrate()
     {
-        $db_install_method = '';
-
         try {
-            $tableNames = \Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
+            $tableNames = Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
             if (count($tableNames) === 0) {
-                if (!Cache::get('dummy_data_installation')) {
-                    Artisan::call('migrate', ['--force' => true]);
-                    $db_install_method = 'migrate';
-                } else {
+                (new SyncFaveoToLatestVersion())->sync();
+                if (Cache::get('dummy_data_installation')) {
                     $path = base_path().DIRECTORY_SEPARATOR.'DB'.DIRECTORY_SEPARATOR.'dummy-data.sql';
                     DB::unprepared(file_get_contents($path));
-                    $db_install_method = 'dump';
                 }
             }
         } catch (Exception $ex) {
+            dd($ex);
             $this->rollBackMigration();
             $result = ['error' => $ex->getMessage()];
 
             return response()->json(compact('result'), 500);
         }
-        $url = ($db_install_method == 'migrate') ? url('seed') : '';
-        $message = ($db_install_method == 'migrate') ? 'Tables have been migrated successfully in database.' : 'Database has been setup successfully.';
-        $result = ['success' => $message, 'next' => 'Seeding pre configurations data', 'api' => $url];
+        $result = ['success' => 'Database has been setup successfully.'];
 
         return response()->json(compact('result'));
     }

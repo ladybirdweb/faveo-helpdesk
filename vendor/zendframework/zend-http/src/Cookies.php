@@ -1,8 +1,10 @@
 <?php
 /**
- * @see       https://github.com/zendframework/zend-http for the canonical source repository
- * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
+ * Zend Framework (http://framework.zend.com/)
+ *
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
 namespace Zend\Http;
@@ -33,16 +35,19 @@ class Cookies extends Headers
 {
     /**
      * Return cookie(s) as a Zend\Http\Cookie object
+     *
      */
     const COOKIE_OBJECT = 0;
 
     /**
      * Return cookie(s) as a string (suitable for sending in an HTTP request)
+     *
      */
     const COOKIE_STRING_ARRAY = 1;
 
     /**
      * Return all cookies as one long string (suitable for sending in an HTTP request)
+     *
      */
     const COOKIE_STRING_CONCAT = 2;
 
@@ -61,7 +66,7 @@ class Cookies extends Headers
     /**
      * @var \Zend\Http\Headers
      */
-    protected $headers;
+    protected $headers = null;
 
     /**
      * @var array
@@ -83,7 +88,7 @@ class Cookies extends Headers
     }
 
     /**
-     * Add a cookie to the class. Cookie should be passed either as a Zend\Http\Header\SetCookie object
+     * Add a cookie to the class. Cookie should be passed either as a Zend\Http\Header\Cookie object
      * or as a string - in which case an object is created from the string.
      *
      * @param SetCookie|string $cookie
@@ -99,10 +104,10 @@ class Cookies extends Headers
         if ($cookie instanceof SetCookie) {
             $domain = $cookie->getDomain();
             $path   = $cookie->getPath();
-            if (! isset($this->cookies[$domain])) {
+            if (!isset($this->cookies[$domain])) {
                 $this->cookies[$domain] = [];
             }
-            if (! isset($this->cookies[$domain][$path])) {
+            if (!isset($this->cookies[$domain][$path])) {
                 $this->cookies[$domain][$path] = [];
             }
             $this->cookies[$domain][$path][$cookie->getName()] = $cookie;
@@ -163,8 +168,8 @@ class Cookies extends Headers
     ) {
         if (is_string($uri)) {
             $uri = Uri\UriFactory::factory($uri, 'http');
-        } elseif (! $uri instanceof Uri\Uri) {
-            throw new Exception\InvalidArgumentException('Invalid URI string or object passed');
+        } elseif (!$uri instanceof Uri\Uri) {
+            throw new Exception\InvalidArgumentException("Invalid URI string or object passed");
         }
 
         $host = $uri->getHost();
@@ -203,7 +208,7 @@ class Cookies extends Headers
     {
         if (is_string($uri)) {
             $uri = Uri\UriFactory::factory($uri, 'http');
-        } elseif (! $uri instanceof Uri\Uri) {
+        } elseif (!$uri instanceof Uri\Uri) {
             throw new Exception\InvalidArgumentException('Invalid URI specified');
         }
 
@@ -232,10 +237,7 @@ class Cookies extends Headers
                     return $cookie->__toString();
 
                 default:
-                    throw new Exception\InvalidArgumentException(sprintf(
-                        'Invalid value passed for $retAs: %s',
-                        $retAs
-                    ));
+                    throw new Exception\InvalidArgumentException("Invalid value passed for \$retAs: {$retAs}");
             }
         }
 
@@ -250,10 +252,8 @@ class Cookies extends Headers
      * @param int $retAs What value to return
      * @return array|string
      */
-    // @codingStandardsIgnoreStart
     protected function _flattenCookiesArray($ptr, $retAs = self::COOKIE_OBJECT)
     {
-        // @codingStandardsIgnoreEnd
         if (is_array($ptr)) {
             $ret = ($retAs == self::COOKIE_STRING_CONCAT ? '' : []);
             foreach ($ptr as $item) {
@@ -287,10 +287,8 @@ class Cookies extends Headers
      * @param string $domain
      * @return array
      */
-    // @codingStandardsIgnoreStart
     protected function _matchDomain($domain)
     {
-        // @codingStandardsIgnoreEnd
         $ret = [];
 
         foreach (array_keys($this->cookies) as $cdom) {
@@ -309,10 +307,8 @@ class Cookies extends Headers
      * @param string $path
      * @return array
      */
-    // @codingStandardsIgnoreStart
     protected function _matchPath($domains, $path)
     {
-        // @codingStandardsIgnoreEnd
         $ret = [];
 
         foreach ($domains as $dom => $pathsArray) {

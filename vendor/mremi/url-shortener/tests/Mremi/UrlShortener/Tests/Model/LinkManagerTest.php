@@ -11,14 +11,18 @@
 
 namespace Mremi\UrlShortener\Tests\Model;
 
+use Mremi\UrlShortener\Model\Link;
 use Mremi\UrlShortener\Model\LinkManager;
+use Mremi\UrlShortener\Provider\ChainProvider;
+use Mremi\UrlShortener\Provider\UrlShortenerProviderInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Tests Link manager class
+ * Tests Link manager class.
  *
  * @author Rémi Marseille <marseille.remi@gmail.com>
  */
-class LinkManagerTest extends \PHPUnit_Framework_TestCase
+class LinkManagerTest extends TestCase
 {
     /**
      * @var LinkManager
@@ -31,11 +35,11 @@ class LinkManagerTest extends \PHPUnit_Framework_TestCase
     private $chainProvider;
 
     /**
-     * Tests the findOneByProviderAndShortUrl method
+     * Tests the findOneByProviderAndShortUrl method.
      */
     public function testFindOneByProviderAndShortUrl()
     {
-        $provider = $this->getMock('Mremi\UrlShortener\Provider\UrlShortenerProviderInterface');
+        $provider = $this->createMock(UrlShortenerProviderInterface::class);
 
         $provider
             ->expects($this->once())
@@ -54,16 +58,16 @@ class LinkManagerTest extends \PHPUnit_Framework_TestCase
 
         $link = $this->manager->findOneByProviderAndShortUrl('bitly', 'http://bit.ly/ZGUlzK');
 
-        $this->assertInstanceOf('Mremi\UrlShortener\Model\Link', $link);
-        $this->assertEquals('http://bit.ly/ZGUlzK', $link->getShortUrl());
+        $this->assertInstanceOf(Link::class, $link);
+        $this->assertSame('http://bit.ly/ZGUlzK', $link->getShortUrl());
     }
 
     /**
-     * Tests the findOneByProviderAndLongUrl method
+     * Tests the findOneByProviderAndLongUrl method.
      */
     public function testFindOneByProviderAndLongUrl()
     {
-        $provider = $this->getMock('Mremi\UrlShortener\Provider\UrlShortenerProviderInterface');
+        $provider = $this->createMock(UrlShortenerProviderInterface::class);
 
         $provider
             ->expects($this->once())
@@ -82,19 +86,19 @@ class LinkManagerTest extends \PHPUnit_Framework_TestCase
 
         $link = $this->manager->findOneByProviderAndLongUrl('google', 'http://www.google.com/');
 
-        $this->assertInstanceOf('Mremi\UrlShortener\Model\Link', $link);
-        $this->assertEquals('http://www.google.com/', $link->getLongUrl());
+        $this->assertInstanceOf(Link::class, $link);
+        $this->assertSame('http://www.google.com/', $link->getLongUrl());
     }
 
     /**
-     * Initializes chainProvider & manager properties
+     * Initializes chainProvider & manager properties.
      */
     protected function setUp()
     {
-        $this->chainProvider = $this->getMockBuilder('Mremi\UrlShortener\Provider\ChainProvider')
+        $this->chainProvider = $this->getMockBuilder(ChainProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->manager = new LinkManager($this->chainProvider, 'Mremi\UrlShortener\Model\Link');
+        $this->manager = new LinkManager($this->chainProvider, Link::class);
     }
 }

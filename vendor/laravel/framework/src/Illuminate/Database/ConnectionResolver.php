@@ -7,7 +7,7 @@ class ConnectionResolver implements ConnectionResolverInterface
     /**
      * All of the registered connections.
      *
-     * @var array
+     * @var \Illuminate\Database\ConnectionInterface[]
      */
     protected $connections = [];
 
@@ -21,7 +21,7 @@ class ConnectionResolver implements ConnectionResolverInterface
     /**
      * Create a new connection resolver instance.
      *
-     * @param  array  $connections
+     * @param  array<string, \Illuminate\Database\ConnectionInterface>  $connections
      * @return void
      */
     public function __construct(array $connections = [])
@@ -34,7 +34,7 @@ class ConnectionResolver implements ConnectionResolverInterface
     /**
      * Get a database connection instance.
      *
-     * @param  string  $name
+     * @param  string|null  $name
      * @return \Illuminate\Database\ConnectionInterface
      */
     public function connection($name = null)

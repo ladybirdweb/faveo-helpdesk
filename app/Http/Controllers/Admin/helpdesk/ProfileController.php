@@ -13,7 +13,7 @@ use App\User;
 use Auth;
 use Exception;
 use Hash;
-use Input;
+use Illuminate\Support\Facades\Request;
 
 /**
  * ProfileController.
@@ -95,13 +95,13 @@ class ProfileController extends Controller
                 $user->profile_pic = $name;
             }
         }
-        if (Input::file('profile_pic')) {
-            //$extension = Input::file('profile_pic')->getClientOriginalExtension();
-            $name = Input::file('profile_pic')->getClientOriginalName();
+        if (Request::file('profile_pic')) {
+            //$extension = Request::file('profile_pic')->getClientOriginalExtension();
+            $name = Request::file('profile_pic')->getClientOriginalName();
             $destinationPath = 'lb-faveo/profilepic';
             $fileName = rand(0000, 9999).'.'.$name;
             //echo $fileName;
-            Input::file('profile_pic')->move($destinationPath, $fileName);
+            Request::file('profile_pic')->move($destinationPath, $fileName);
             $user->profile_pic = $fileName;
         } else {
             $user->fill($request->except('profile_pic', 'gender', 'active', 'role', 'is_delete', 'ban'))->save();

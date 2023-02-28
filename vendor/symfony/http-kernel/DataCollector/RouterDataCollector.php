@@ -14,17 +14,15 @@ namespace Symfony\Component\HttpKernel\DataCollector;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 /**
- * RouterDataCollector.
- *
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class RouterDataCollector extends DataCollector
 {
     /**
-     * @var \SplObjectStorage
+     * @var \SplObjectStorage<Request, callable>
      */
     protected $controllers;
 
@@ -34,9 +32,9 @@ class RouterDataCollector extends DataCollector
     }
 
     /**
-     * {@inheritdoc}
+     * @final
      */
-    public function collect(Request $request, Response $response, \Exception $exception = null)
+    public function collect(Request $request, Response $response, \Throwable $exception = null)
     {
         if ($response instanceof RedirectResponse) {
             $this->data['redirect'] = true;
@@ -54,14 +52,14 @@ class RouterDataCollector extends DataCollector
     {
         $this->controllers = new \SplObjectStorage();
 
-        $this->data = array(
+        $this->data = [
             'redirect' => false,
             'url' => null,
             'route' => null,
-        );
+        ];
     }
 
-    protected function guessRoute(Request $request, $controller)
+    protected function guessRoute(Request $request, string|object|array $controller)
     {
         return 'n/a';
     }
@@ -69,7 +67,7 @@ class RouterDataCollector extends DataCollector
     /**
      * Remembers the controller associated to each request.
      */
-    public function onKernelController(FilterControllerEvent $event)
+    public function onKernelController(ControllerEvent $event)
     {
         $this->controllers[$event->getRequest()] = $event->getController();
     }
@@ -77,31 +75,22 @@ class RouterDataCollector extends DataCollector
     /**
      * @return bool Whether this request will result in a redirect
      */
-    public function getRedirect()
+    public function getRedirect(): bool
     {
         return $this->data['redirect'];
     }
 
-    /**
-     * @return string|null The target URL
-     */
-    public function getTargetUrl()
+    public function getTargetUrl(): ?string
     {
         return $this->data['url'];
     }
 
-    /**
-     * @return string|null The target route
-     */
-    public function getTargetRoute()
+    public function getTargetRoute(): ?string
     {
         return $this->data['route'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'router';
     }

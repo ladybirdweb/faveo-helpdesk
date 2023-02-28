@@ -25,7 +25,7 @@ return array (
   ),
   'tollFree' => 
   array (
-    'NationalNumberPattern' => '333|9(?:11|99)',
+    'NationalNumberPattern' => '333|9(?:11|88|99)',
     'ExampleNumber' => '333',
     'PossibleLength' => 
     array (
@@ -57,7 +57,7 @@ return array (
   ),
   'shortCode' => 
   array (
-    'NationalNumberPattern' => '333|9(?:11|99)',
+    'NationalNumberPattern' => '333|9(?:11|88|99)',
     'ExampleNumber' => '333',
     'PossibleLength' => 
     array (
@@ -107,6 +107,5 @@ return array (
   array (
   ),
   'mainCountryForCode' => false,
-  'leadingZeroPossible' => false,
   'mobileNumberPortableRegion' => false,
 );

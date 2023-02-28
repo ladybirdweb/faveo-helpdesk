@@ -49,22 +49,14 @@ final class IndexedServiceContainer implements ServiceContainer
 
     /**
      * Sets a param in the container
-     *
-     * @param string $id
-     * @param mixed  $value
      */
-    public function setParam(string $id, $value)
+    public function setParam(string $id, $value): void
     {
         $this->parameters[$id] = $value;
     }
 
     /**
      * Gets a param from the container or a default value.
-     *
-     * @param string $id
-     * @param mixed  $default
-     *
-     * @return mixed
      */
     public function getParam(string $id, $default = null)
     {
@@ -74,13 +66,11 @@ final class IndexedServiceContainer implements ServiceContainer
     /**
      * Sets a object to be used as a service
      *
-     * @param string $id
      * @param object $service
-     * @param array  $tags
      *
      * @throws \InvalidArgumentException if service is not an object
      */
-    public function set(string $id, $service, array $tags = [])
+    public function set(string $id, $service, array $tags = []): void
     {
         if (!\is_object($service)) {
             throw new InvalidArgumentException(sprintf(
@@ -98,12 +88,8 @@ final class IndexedServiceContainer implements ServiceContainer
     /**
      * Sets a factory for the service creation. The same service will
      * be returned every time
-     *
-     * @param string   $id
-     * @param callable $definition
-     * @param array    $tags
      */
-    public function define(string $id, callable $definition, array $tags = [])
+    public function define(string $id, callable $definition, array $tags = []): void
     {
         $this->definitions[$id] = $definition;
         unset($this->services[$id]);
@@ -114,7 +100,6 @@ final class IndexedServiceContainer implements ServiceContainer
     /**
      * Retrieves a service from the container
      *
-     * @param string $id
      *
      * @return object
      *
@@ -135,9 +120,6 @@ final class IndexedServiceContainer implements ServiceContainer
 
     /**
      * Determines whether a service is defined
-     *
-     * @param string $id
-     * @return bool
      */
     public function has(string $id): bool
     {
@@ -147,11 +129,10 @@ final class IndexedServiceContainer implements ServiceContainer
     /**
      * Removes a service from the container
      *
-     * @param string $id
      *
      * @throws \InvalidArgumentException if service is not defined
      */
-    public function remove(string $id)
+    public function remove(string $id): void
     {
         if (!$this->has($id)) {
             throw new InvalidArgumentException(sprintf('Service "%s" is not defined.', $id));
@@ -162,11 +143,8 @@ final class IndexedServiceContainer implements ServiceContainer
 
     /**
      * Adds a service or service definition to the index
-     *
-     * @param string $id
-     * @param array  $tags
      */
-    private function indexTags(string $id, array $tags)
+    private function indexTags(string $id, array $tags): void
     {
         foreach ($tags as $tag) {
             $this->tags[$tag][] = $id;
@@ -175,10 +153,6 @@ final class IndexedServiceContainer implements ServiceContainer
 
     /**
      * Finds all services tagged with a particular string
-     *
-     * @param string $tag
-     *
-     * @return array
      */
     public function getByTag(string $tag): array
     {
@@ -190,11 +164,9 @@ final class IndexedServiceContainer implements ServiceContainer
      *
      * @internal
      *
-     * @param callable $configurator
-     *
      * @throws \InvalidArgumentException if configurator is not a value
      */
-    public function addConfigurator(callable $configurator)
+    public function addConfigurator(callable $configurator): void
     {
         $this->configurators[] = $configurator;
     }
@@ -204,7 +176,7 @@ final class IndexedServiceContainer implements ServiceContainer
      *
      * @internal
      */
-    public function configure()
+    public function configure(): void
     {
         foreach ($this->configurators as $configurator) {
             \call_user_func($configurator, $this);

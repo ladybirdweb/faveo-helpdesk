@@ -565,12 +565,12 @@ $data = $ConvDate[0];
                                                 imagejpeg($image, null, 80);
                                                 $data = ob_get_contents();
                                                 ob_end_clean();
-                                                $var = '<a href="'.URL::route('image', array('image_id' => $attachment->id)).'" target="_blank"><img src="data:image/jpg;base64,' . base64_encode($data)  . '"/></a>';
+                                                $var = '<a href="'.URL::route('image', ['image_id' => $attachment->id]).'" target="_blank"><img src="data:image/jpg;base64,' . base64_encode($data)  . '"/></a>';
                                                 echo '<li><span class="mailbox-attachment-icon has-img">'.$var.'</span></li>';
                                                 }
                                                 else
                                                 {
-                                                $var = '<a href="'.URL::route('image', array('image_id' => $attachment->id)).'" target="_blank">'.$attachment->name.'</a>';
+                                                $var = '<a href="'.URL::route('image', ['image_id' => $attachment->id]).'" target="_blank">'.$attachment->name.'</a>';
                                                 echo '<li>'.$var.'</li>';   
                                                 }                                            
                                             }

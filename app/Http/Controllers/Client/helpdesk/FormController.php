@@ -83,7 +83,7 @@ class FormController extends Controller
                 $phonecode = '';
             }
 
-            list($max_size_in_bytes, $max_size_in_actual) = $this->fileUploadController->file_upload_max_size();
+            [$max_size_in_bytes, $max_size_in_actual] = $this->fileUploadController->file_upload_max_size();
 
             return view('themes.default1.client.helpdesk.form', compact('topics', 'codes', 'email_mandatory', 'max_size_in_bytes', 'max_size_in_actual'))->with('phonecode', $phonecode);
         } else {
@@ -229,7 +229,7 @@ class FormController extends Controller
                     }
                 }
             }
-            \Event::fire(new \App\Events\ClientTicketFormPost($form_extras, $email, $source));
+            event(new \App\Events\ClientTicketFormPost($form_extras, $email, $source));
             $result = $this->TicketWorkflowController->workflow($email, $name, $subject, $details, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $department, $assignto, $team_assign, $status, $form_extras, $auto_response);
             // dd($result);
             if ($result[1] == 1) {

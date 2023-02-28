@@ -2,7 +2,7 @@
     jQuery(document).ready(function(){
         // dynamic table
         oTable = jQuery('#{!! $id !!}').dataTable(
-            {!! $options !!}
+                {!! $options !!}
         );
     });
 </script>

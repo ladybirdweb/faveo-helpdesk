@@ -13,8 +13,8 @@ use Config;
 use File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
-use Input;
 use Lang;
 use UnAuth;
 use Validator;
@@ -81,7 +81,7 @@ class LanguageController extends Controller
      */
     public function getLanguages()
     {
-        $path = base_path('resources/lang');
+        $path = base_path('lang');
         $values = scandir($path);  //Extracts names of directories present in lang directory
         $values = array_slice($values, 2); // skips array element $value[0] = '.' & $value[1] = '..'
         $sysLanguage = \Cache::get('language');
@@ -107,18 +107,18 @@ class LanguageController extends Controller
                         })
                         ->addColumn('status', function ($model) use ($sysLanguage) {
                             if ($sysLanguage === $model) {
-                                return "<span style='color:green'>".Lang::trans('lang.yes').'</span>';
+                                return "<span style='color:green'>".Lang::get('lang.yes').'</span>';
                             } else {
-                                return "<span style='color:red'>".Lang::trans('lang.no').'</span>';
+                                return "<span style='color:red'>".Lang::get('lang.no').'</span>';
                             }
                         })
                         ->addColumn('Action', function ($model) use ($sysLanguage) {
                             if ($model === $sysLanguage) {
-                                return "<a href='change-language/".$model."' disabled><input type='button' class='btn btn-primary btn-xs' disabled value='".Lang::trans('lang.set_as_sys_lang')."'/></a>  
-                <button disabled class='btn btn-danger btn-xs'><i class='fas fa-trash'> </i> ".Lang::trans('lang.delete').'</button>';
+                                return "<a href='change-language/".$model."' disabled><input type='button' class='btn btn-primary btn-xs' disabled value='".Lang::get('lang.set_as_sys_lang')."'/></a>  
+                <button disabled class='btn btn-danger btn-xs'><i class='fas fa-trash'> </i> ".Lang::get('lang.delete').'</button>';
                             } else {
-                                return "<a href='change-language/".$model."'><input type='button' class='btn btn-primary btn-xs' value='".Lang::trans('lang.set_as_sys_lang')."'/></a>  
-                <a href='delete-language/".$model."' class='btn btn-danger btn-xs'><i class='fas fa-trash'> </i> ".Lang::trans('lang.delete').'</a>';
+                                return "<a href='change-language/".$model."'><input type='button' class='btn btn-primary btn-xs' value='".Lang::get('lang.set_as_sys_lang')."'/></a>  
+                <a href='delete-language/".$model."' class='btn btn-danger btn-xs'><i class='fas fa-trash'> </i> ".Lang::get('lang.delete').'</a>';
                             }
                         })
                         ->searchColumns('language', 'id')
@@ -135,9 +135,9 @@ class LanguageController extends Controller
         try {
             // getting all of the post data
             $file = [
-                'File'          => Input::file('File'),
-                'language-name' => Input::input('language-name'),
-                'iso-code'      => Input::input('iso-code'),
+                'File'          => Request::file('File'),
+                'language-name' => Request::input('language-name'),
+                'iso-code'      => Request::input('iso-code'),
             ];
 
             // setting up rules
@@ -155,15 +155,15 @@ class LanguageController extends Controller
             } else {
 
                 //Checking if package already exists or not in lang folder
-                $path = base_path('resources/lang');
-                if (in_array(strtolower(Input::get('iso-code')), scandir($path))) {
+                $path = base_path('lang');
+                if (in_array(strtolower(Request::get('iso-code')), scandir($path))) {
 
                     //sending back with error message
                     Session::flash('fails', Lang::get('lang.package_exist'));
-                    Session::flash('link', 'change-language/'.strtolower(Input::get('iso-code')));
+                    Session::flash('link', 'change-language/'.strtolower(Request::get('iso-code')));
 
                     return Redirect::back()->withInput();
-                } elseif (!array_key_exists(strtolower(Input::get('iso-code')), Config::get('languages'))) {//Checking Valid ISO code form Languages.php
+                } elseif (!array_key_exists(strtolower(Request::get('iso-code')), Config::get('languages'))) {//Checking Valid ISO code form Languages.php
                     //sending back with error message
                     Session::flash('fails', Lang::get('lang.iso-code-error'));
 
@@ -171,13 +171,13 @@ class LanguageController extends Controller
                 } else {
 
                     // checking file is valid.
-                    if (Input::file('File')->isValid()) {
-                        $name = Input::file('File')->getClientOriginalName(); //uploaded file's original name
+                    if (Request::file('File')->isValid()) {
+                        $name = Request::file('File')->getClientOriginalName(); //uploaded file's original name
                         $destinationPath = base_path('public/uploads/'); // defining uploading path
-                        $extractpath = base_path('resources/lang').'/'.strtolower(Input::get('iso-code')); //defining extracting path
+                        $extractpath = base_path('lang').'/'.strtolower(Request::get('iso-code')); //defining extracting path
                         mkdir($extractpath); //creating directroy for extracting uploadd file
                         //mkdir($destinationPath);
-                        Input::file('File')->move($destinationPath, $name); // uploading file to given path
+                        Request::file('File')->move($destinationPath, $name); // uploading file to given path
                         \Zipper::make($destinationPath.'/'.$name)->extractTo($extractpath); //extracting file to give path
                         //check if Zip extract foldercontains any subfolder
                         $directories = File::directories($extractpath);
@@ -195,7 +195,7 @@ class LanguageController extends Controller
                         } else {
                             // sending back with success message
                             Session::flash('success', Lang::get('lang.upload-success'));
-                            Session::flash('link', 'change-language/'.strtolower(Input::get('iso-code')));
+                            Session::flash('link', 'change-language/'.strtolower(Request::get('iso-code')));
 
                             return Redirect::route('LanguageController');
                         }
@@ -237,7 +237,7 @@ class LanguageController extends Controller
     {
         if ($lang !== App::getLocale()) {
             if ($lang !== Config::get('app.fallback_locale')) {
-                $deletePath = base_path('resources/lang').'/'.$lang;     //define file path to delete
+                $deletePath = base_path('lang').'/'.$lang;     //define file path to delete
                 $success = File::deleteDirectory($deletePath); //remove extracted folder and it's subfolder from lang
                 if ($success) {
                     //sending back with success message

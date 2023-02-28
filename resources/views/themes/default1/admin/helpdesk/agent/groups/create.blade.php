@@ -33,7 +33,7 @@ class="nav-link active"
 <!-- content -->
 @section('content')
 <!-- open a form -->
-{!! Form::open(array('action' => 'Admin\helpdesk\GroupController@store' , 'method' => 'post') )!!}
+{!! Form::open(array('route' => 'groups.store' , 'method' => 'post') )!!}
 @if(Session::has('errors'))
 <div class="alert alert-danger alert-dismissable">
     <i class="fas fa-ban"></i>

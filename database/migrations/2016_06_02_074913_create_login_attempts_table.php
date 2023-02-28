@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateLoginAttemptsTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -17,7 +16,7 @@ class CreateLoginAttemptsTable extends Migration
             $table->string('User');
             $table->string('IP');
             $table->string('Attempts');
-            $table->datetime('LastLogin');
+            $table->timestamp('LastLogin')->nullable();
             $table->timestamps();
         });
     }
@@ -31,4 +30,4 @@ class CreateLoginAttemptsTable extends Migration
     {
         Schema::drop('login_attempts');
     }
-}
+};

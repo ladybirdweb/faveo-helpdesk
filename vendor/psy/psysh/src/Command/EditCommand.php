@@ -3,7 +3,7 @@
 /*
  * This file is part of Psy Shell.
  *
- * (c) 2012-2018 Justin Hileman
+ * (c) 2012-2023 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -74,6 +74,8 @@ class EditCommand extends Command implements ContextAware
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
+     * @return int 0 if everything went fine, or an exit code
+     *
      * @throws \InvalidArgumentException when both exec and no-exec flags are given or if a given variable is not found in the current context
      * @throws \UnexpectedValueException if file_get_contents on the edited file returns false instead of a string
      */
@@ -104,16 +106,16 @@ class EditCommand extends Command implements ContextAware
         if ($execute) {
             $this->getApplication()->addInput($editedContent);
         }
+
+        return 0;
     }
 
     /**
      * @param bool        $execOption
      * @param bool        $noExecOption
      * @param string|null $filePath
-     *
-     * @return bool
      */
-    private function shouldExecuteFile($execOption, $noExecOption, $filePath)
+    private function shouldExecuteFile(bool $execOption, bool $noExecOption, string $filePath = null): bool
     {
         if ($execOption) {
             return true;
@@ -134,11 +136,11 @@ class EditCommand extends Command implements ContextAware
      *
      * @throws \InvalidArgumentException If the variable is not found in the current context
      */
-    private function extractFilePath($fileArgument)
+    private function extractFilePath(string $fileArgument = null)
     {
         // If the file argument was a variable, get it from the context
         if ($fileArgument !== null &&
-            \strlen($fileArgument) > 0 &&
+            $fileArgument !== '' &&
             $fileArgument[0] === '$') {
             $fileArgument = $this->context->get(\preg_replace('/^\$/', '', $fileArgument));
         }
@@ -148,18 +150,17 @@ class EditCommand extends Command implements ContextAware
 
     /**
      * @param string $filePath
-     * @param string $shouldRemoveFile
-     *
-     * @return string
+     * @param bool   $shouldRemoveFile
      *
      * @throws \UnexpectedValueException if file_get_contents on $filePath returns false instead of a string
      */
-    private function editFile($filePath, $shouldRemoveFile)
+    private function editFile(string $filePath, bool $shouldRemoveFile): string
     {
         $escapedFilePath = \escapeshellarg($filePath);
+        $editor = (isset($_SERVER['EDITOR']) && $_SERVER['EDITOR']) ? $_SERVER['EDITOR'] : 'nano';
 
         $pipes = [];
-        $proc = \proc_open((\getenv('EDITOR') ?: 'nano') . " {$escapedFilePath}", [STDIN, STDOUT, STDERR], $pipes);
+        $proc = \proc_open("{$editor} {$escapedFilePath}", [\STDIN, \STDOUT, \STDERR], $pipes);
         \proc_close($proc);
 
         $editedContent = @\file_get_contents($filePath);

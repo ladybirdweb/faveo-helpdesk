@@ -4,6 +4,8 @@ namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use InvalidArgumentException;
+
+use function array_filter;
 use function array_keys;
 use function array_map;
 use function array_search;
@@ -45,18 +47,24 @@ class Index extends AbstractAsset implements Constraint
     private $options = [];
 
     /**
-     * @param string   $indexName
+     * @param string   $name
      * @param string[] $columns
      * @param bool     $isUnique
      * @param bool     $isPrimary
      * @param string[] $flags
      * @param mixed[]  $options
      */
-    public function __construct($indexName, array $columns, $isUnique = false, $isPrimary = false, array $flags = [], array $options = [])
-    {
+    public function __construct(
+        $name,
+        array $columns,
+        $isUnique = false,
+        $isPrimary = false,
+        array $flags = [],
+        array $options = []
+    ) {
         $isUnique = $isUnique || $isPrimary;
 
-        $this->_setName($indexName);
+        $this->_setName($name);
         $this->_isUnique  = $isUnique;
         $this->_isPrimary = $isPrimary;
         $this->options    = $options;
@@ -64,6 +72,7 @@ class Index extends AbstractAsset implements Constraint
         foreach ($columns as $column) {
             $this->_addColumn($column);
         }
+
         foreach ($flags as $flag) {
             $this->addFlag($flag);
         }
@@ -153,17 +162,17 @@ class Index extends AbstractAsset implements Constraint
     }
 
     /**
-     * @param string $columnName
+     * @param string $name
      * @param int    $pos
      *
      * @return bool
      */
-    public function hasColumnAtPosition($columnName, $pos = 0)
+    public function hasColumnAtPosition($name, $pos = 0)
     {
-        $columnName   = $this->trimQuotes(strtolower($columnName));
+        $name         = $this->trimQuotes(strtolower($name));
         $indexColumns = array_map('strtolower', $this->getUnquotedColumns());
 
-        return array_search($columnName, $indexColumns) === $pos;
+        return array_search($name, $indexColumns) === $pos;
     }
 
     /**
@@ -180,7 +189,10 @@ class Index extends AbstractAsset implements Constraint
         $sameColumns     = true;
 
         for ($i = 0; $i < $numberOfColumns; $i++) {
-            if (isset($columnNames[$i]) && $this->trimQuotes(strtolower($columns[$i])) === $this->trimQuotes(strtolower($columnNames[$i]))) {
+            if (
+                isset($columnNames[$i])
+                && $this->trimQuotes(strtolower($columns[$i])) === $this->trimQuotes(strtolower($columnNames[$i]))
+            ) {
                 continue;
             }
 
@@ -211,6 +223,10 @@ class Index extends AbstractAsset implements Constraint
                 return false;
             }
 
+            if (! $this->hasSameColumnLengths($other)) {
+                return false;
+            }
+
             if (! $this->isUnique() && ! $this->isPrimary()) {
                 // this is a special case: If the current key is neither primary or unique, any unique or
                 // primary key will always have the same effect for the index and there cannot be any constraint
@@ -238,11 +254,15 @@ class Index extends AbstractAsset implements Constraint
     {
         if ($other->isPrimary()) {
             return false;
-        } elseif ($this->isSimpleIndex() && $other->isUnique()) {
+        }
+
+        if ($this->isSimpleIndex() && $other->isUnique()) {
             return false;
         }
 
-        return $this->spansColumns($other->getColumns()) && ($this->isPrimary() || $this->isUnique()) && $this->samePartialIndex($other);
+        return $this->spansColumns($other->getColumns())
+            && ($this->isPrimary() || $this->isUnique())
+            && $this->samePartialIndex($other);
     }
 
     /**
@@ -330,10 +350,27 @@ class Index extends AbstractAsset implements Constraint
      */
     private function samePartialIndex(Index $other)
     {
-        if ($this->hasOption('where') && $other->hasOption('where') && $this->getOption('where') === $other->getOption('where')) {
+        if (
+            $this->hasOption('where')
+            && $other->hasOption('where')
+            && $this->getOption('where') === $other->getOption('where')
+        ) {
             return true;
         }
 
         return ! $this->hasOption('where') && ! $other->hasOption('where');
+    }
+
+    /**
+     * Returns whether the index has the same column lengths as the other
+     */
+    private function hasSameColumnLengths(self $other): bool
+    {
+        $filter = static function (?int $length): bool {
+            return $length !== null;
+        };
+
+        return array_filter($this->options['lengths'] ?? [], $filter)
+            === array_filter($other->options['lengths'] ?? [], $filter);
     }
 }

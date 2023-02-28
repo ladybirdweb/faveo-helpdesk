@@ -4,16 +4,17 @@ namespace App\Http\Controllers\Admin\helpdesk;
 
 // Controller
 use App\Http\Controllers\Controller;
-// Model
 use App\Model\helpdesk\Form\Fields;
+// Model
 use App\Model\helpdesk\Form\Forms;
 use App\Model\helpdesk\Manage\Help_topic;
-// Request
 use Exception;
-// Class
+// Request
 use Form;
+// Class
 use Illuminate\Http\Request;
-use Input;
+use Illuminate\Support\Facades\Request as Input;
+use Illuminate\Support\Str;
 use Lang;
 use Redirect;
 
@@ -26,6 +27,7 @@ use Redirect;
 class FormController extends Controller
 {
     private $fields;
+
     private $forms;
 
     public function __construct(Fields $fields, Forms $forms)
@@ -137,7 +139,7 @@ class FormController extends Controller
             $fields = [];
             for ($i = 0; $i <= $count; $i++) {
                 if (!empty(Input::get('name')[$i])) {
-                    $name = str_slug(Input::get('name')[$i], '_');
+                    $name = Str::slug(Input::get('name')[$i], '_');
                     $field = Fields::create([
                         'forms_id' => $forms->id,
                         'label'    => Input::get('label')[$i],
@@ -253,7 +255,7 @@ class FormController extends Controller
             }
             //dd(Input::get('label'),Input::get('name'),Input::get('type'),Input::get('required'));
             for ($i = 0; $i < $count; $i++) {
-                $name = str_slug(Input::get('name')[$i], '_');
+                $name = Str::slug(Input::get('name')[$i], '_');
                 $field = $field->create([
                     'forms_id' => $forms->id,
                     'label'    => Input::get('label')[$i],
@@ -386,7 +388,7 @@ class FormController extends Controller
                         'field_id'    => $fieldid,
                         'child_id'    => $childid,
                         'field_key'   => $key,
-                        'field_value' => str_slug($value, '_'),
+                        'field_value' => Str::slug($value, '_'),
                     ]);
                 }
             }
@@ -445,12 +447,12 @@ class FormController extends Controller
         }
 
         return '<script>
-            $("#'.str_slug($value).'").on("change", function () {
-                var valueid = $("#'.str_slug($value).'").val();
-                var fieldid = $("#'.$fieldid.str_slug($value).'").val();
-                send'.$fieldid.str_slug($value).'(valueid,fieldid);
+            $("#'.Str::slug($value).'").on("change", function () {
+                var valueid = $("#'.Str::slug($value).'").val();
+                var fieldid = $("#'.$fieldid.Str::slug($value).'").val();
+                send'.$fieldid.Str::slug($value).'(valueid,fieldid);
             });
-            function send'.$fieldid.str_slug($value).'(valueid,fieldid) {
+            function send'.$fieldid.Str::slug($value).'(valueid,fieldid) {
                 $.ajax({
                     url: "'.url('forms/render/child/').'",
                     dataType: "html",
@@ -556,8 +558,8 @@ class FormController extends Controller
         if (count($values) > 0) {
             foreach ($values as $field_value) {
                 $script = self::jqueryScript($field_value, $field->id, $field->name, $field_type);
-                $radio .= '<div>'.Form::hidden('fieldid[]', $field->id, ['id' => $field->id.str_slug($field_value)]);
-                $radio .= Form::$field_type($field->name, $field_value, null, ['class' => "$field->id", 'id' => str_slug($field_value), 'required' => $required]).$script.'<span>   '.removeUnderscore($field_value).'</span></div>';
+                $radio .= '<div>'.Form::hidden('fieldid[]', $field->id, ['id' => $field->id.Str::slug($field_value)]);
+                $radio .= Form::$field_type($field->name, $field_value, null, ['class' => "$field->id", 'id' => Str::slug($field_value), 'required' => $required]).$script.'<span>   '.removeUnderscore($field_value).'</span></div>';
             }
             $html = Form::label($field->label, $field->label, ['class' => $required_class]).'</br>'.$radio.'<div id='.$field->name.'></br></div>';
         }

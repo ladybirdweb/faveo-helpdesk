@@ -6,7 +6,7 @@ use Chumper\Datatable\Columns\DateColumn;
 use Chumper\Datatable\Columns\FunctionColumn;
 use Chumper\Datatable\Columns\TextColumn;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Config;
 
@@ -54,9 +54,9 @@ abstract class BaseEngine {
     /**
      * @var array
      * support for DB::raw fields on where
-     * sburkett - added for column-based exact matching                                                                                                            
-     */                                                                                                                                                            
-    protected $columnSearchExact = array(); 
+     * sburkett - added for column-based exact matching
+     */
+    protected $columnSearchExact = array();
 
     /**
      * @var
@@ -218,7 +218,7 @@ abstract class BaseEngine {
             else
             {
                 $this->columns->put($property, new FunctionColumn($property, function($model) use($property){
-                    try{return is_array($model)?$model[$property]:$model->$property;}catch(Exception $e){return null;}    
+                    try{return is_array($model)?$model[$property]:$model->$property;}catch(Exception $e){return null;}
                 }));
             }
             $this->showColumns[] = $property;
@@ -317,17 +317,17 @@ abstract class BaseEngine {
         $this->exactWordSearch = $value;
         return $this;
     }
-    
+
     /**
      * @param $columnNames Sets up a lookup table for which columns should use exact matching -sburkett
      * @return $this
      */
     public function setExactMatchColumns($columnNames)
     {
-      foreach($columnNames as $columnIndex)
-        $this->columnSearchExact[ $columnIndex ] = true;
+        foreach($columnNames as $columnIndex)
+            $this->columnSearchExact[ $columnIndex ] = true;
 
-      return $this;
+        return $this;
     }
 
     public function getRowClass()
@@ -393,7 +393,7 @@ abstract class BaseEngine {
      */
     protected function handleiSortCol_0($value)
     {
-        if(Input::get('sSortDir_0') == 'desc')
+        if(Request::get('sSortDir_0') == 'desc')
             $direction = BaseEngine::ORDER_DESC;
         else
             $direction = BaseEngine::ORDER_ASC;
@@ -453,7 +453,7 @@ abstract class BaseEngine {
     protected function handleInputs()
     {
         //Handle all inputs magically
-        foreach (Input::all() as $key => $input) {
+        foreach (Request::all() as $key => $input) {
 
             // handle single column search
             if ($this->isParameterForSingleColumnSearch($key))

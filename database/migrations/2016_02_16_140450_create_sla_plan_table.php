@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateSlaPlanTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -16,10 +15,10 @@ class CreateSlaPlanTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('grace_period');
-            $table->string('admin_note');
+            $table->string('admin_note')->nullable();
             $table->boolean('status');
-            $table->boolean('transient');
-            $table->boolean('ticket_overdue');
+            $table->boolean('transient')->nullable();
+            $table->boolean('ticket_overdue')->nullable();
             $table->timestamps();
         });
     }
@@ -33,4 +32,4 @@ class CreateSlaPlanTable extends Migration
     {
         Schema::drop('sla_plan');
     }
-}
+};

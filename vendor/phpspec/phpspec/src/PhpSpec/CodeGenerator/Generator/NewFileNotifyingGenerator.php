@@ -4,11 +4,14 @@ namespace PhpSpec\CodeGenerator\Generator;
 
 use PhpSpec\Event\FileCreationEvent;
 use PhpSpec\Locator\Resource;
+use PhpSpec\Util\DispatchTrait;
 use PhpSpec\Util\Filesystem;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class NewFileNotifyingGenerator implements Generator
 {
+    use DispatchTrait;
+
     /**
      * @var Generator
      */
@@ -24,11 +27,7 @@ final class NewFileNotifyingGenerator implements Generator
      */
     private $filesystem;
 
-    /**
-     * @param Generator $generator
-     * @param EventDispatcherInterface $dispatcher
-     * @param Filesystem $filesystem
-     */
+    
     public function __construct(Generator $generator, EventDispatcherInterface $dispatcher, Filesystem $filesystem)
     {
         $this->generator = $generator;
@@ -36,12 +35,12 @@ final class NewFileNotifyingGenerator implements Generator
         $this->filesystem = $filesystem;
     }
 
-    public function supports(Resource $resource, string $generation, array $data) : bool
+    public function supports(Resource $resource, string $generation, array $data): bool
     {
         return $this->generator->supports($resource, $generation, $data);
     }
 
-    public function generate(Resource $resource, array $data)
+    public function generate(Resource $resource, array $data): void
     {
         $filePath = $this->getFilePath($resource);
 
@@ -52,12 +51,12 @@ final class NewFileNotifyingGenerator implements Generator
         $this->dispatchEventIfFileWasCreated($fileExisted, $filePath);
     }
 
-    public function getPriority() : int
+    public function getPriority(): int
     {
         return $this->generator->getPriority();
     }
 
-    private function getFilePath(Resource $resource) : string
+    private function getFilePath(Resource $resource): string
     {
         if ($this->generator->supports($resource, 'specification', array())) {
             return $resource->getSpecFilename();
@@ -66,16 +65,16 @@ final class NewFileNotifyingGenerator implements Generator
         return $resource->getSrcFilename();
     }
 
-    private function fileExists(string $filePath) : bool
+    private function fileExists(string $filePath): bool
     {
         return $this->filesystem->pathExists($filePath);
     }
 
-    private function dispatchEventIfFileWasCreated(bool $fileExisted, string $filePath)
+    private function dispatchEventIfFileWasCreated(bool $fileExisted, string $filePath): void
     {
         if (!$fileExisted && $this->fileExists($filePath)) {
             $event = new FileCreationEvent($filePath);
-            $this->dispatcher->dispatch('afterFileCreation', $event);
+            $this->dispatch($this->dispatcher, $event, 'afterFileCreation');
         }
     }
 }

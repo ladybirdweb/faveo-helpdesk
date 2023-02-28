@@ -25,18 +25,14 @@ class Exception extends \Exception
      */
     private $cause;
 
-    /**
-     * @return ReflectionFunctionAbstract
-     */
+    
     public function getCause(): ReflectionFunctionAbstract
     {
         return $this->cause;
     }
 
-    /**
-     * @param ReflectionFunctionAbstract $cause
-     */
-    public function setCause(ReflectionFunctionAbstract $cause)
+    
+    public function setCause(ReflectionFunctionAbstract $cause): void
     {
         $this->cause = $cause;
     }

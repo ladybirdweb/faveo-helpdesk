@@ -16,8 +16,8 @@ use App\Model\kb\Settings;
 use Config;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request as Input;
 use Image;
-use Input;
 use Lang;
 
 /**

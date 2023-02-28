@@ -18,38 +18,24 @@ interface ResourceLocator
     /**
      * @return Resource[]
      */
-    public function getAllResources();
+    public function getAllResources(): array;
 
-    /**
-     * @param string $query
-     *
-     * @return boolean
-     */
+    
     public function supportsQuery(string $query): bool;
 
     /**
-     * @param string $query
-     *
      * @return Resource[]
      */
     public function findResources(string $query);
 
-    /**
-     * @param string $classname
-     *
-     * @return boolean
-     */
+    
     public function supportsClass(string $classname): bool;
 
     /**
-     * @param string $classname
-     *
-     * @return Resource|null
+     * @return null|Resource
      */
     public function createResource(string $classname);
 
-    /**
-     * @return integer
-     */
+    
     public function getPriority(): int;
 }

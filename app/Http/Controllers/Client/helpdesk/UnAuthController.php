@@ -326,7 +326,7 @@ class UnAuthController extends Controller
     /**
      *@category function to change system's language
      *
-     *@param string $lang //desired language's iso code
+     *@param  string  $lang //desired language's iso code
      *
      *@return response
      */
@@ -337,7 +337,7 @@ class UnAuthController extends Controller
         //  return Cache::get('language');
         //} else return 'false';
         // Cache::put('language',$)
-        $path = base_path('resources/lang');  // Path to check available language packages
+        $path = base_path('lang');  // Path to check available language packages
         if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
             // dd(array_key_exists($lang, Config::get('languages')));
             // app()->setLocale($lang);
@@ -431,7 +431,7 @@ class UnAuthController extends Controller
      */
     public static function changeUserLanguage($lang)
     {
-        $path = base_path('resources/lang');  // Path to check available language packages
+        $path = base_path('lang');  // Path to check available language packages
         if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
             if (\Auth::check()) {
                 $id = \Auth::user()->id;

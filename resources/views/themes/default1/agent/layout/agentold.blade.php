@@ -66,7 +66,7 @@
 
                 }
                 $replacetop = 0;
-                $replacetop = \Event::fire('service.desk.agent.topbar.replace', array());
+                $replacetop = \Illuminate\Support\Facades\Event::dispatch('service.desk.agent.topbar.replace', []);
 
                 if (count($replacetop) == 0) {
                     $replacetop = 0;
@@ -74,7 +74,7 @@
                     $replacetop = $replacetop[0];
                 }
                 $replaceside = 0;
-                $replaceside = \Event::fire('service.desk.agent.sidebar.replace', array());
+                $replaceside = \Illuminate\Support\Facades\Event::dispatch('service.desk.agent.sidebar.replace', []);
 
                 if (count($replaceside) == 0) {
                     $replaceside = 0;
@@ -105,10 +105,10 @@
                             @if(Auth::user()->role == 'admin')
                                 <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">{!! Lang::get('lang.report') !!}</a></li>
                             @endif
-                            <?php \Event::fire('calendar.topbar', array()); ?>
+                            <?php \Illuminate\Support\Facades\Event::dispatch('calendar.topbar', []); ?>
                         </ul>
                         @else
-                            <?php \Event::fire('service.desk.agent.topbar', array()); ?>
+                            <?php \Illuminate\Support\Facades\Event::dispatch('service.desk.agent.topbar', []); ?>
                             @endif
                         <?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id', '=', Auth::user()->id)->where('is_read', '0')->get(); ?>
                         <ul class="nav navbar-nav navbar-right">
@@ -259,7 +259,7 @@
 //$inbox = App\Model\helpdesk\Ticket\Tickets::all();
                             $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status', '1')->get();
                             $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('status', '=', '1')->get();
-                            $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status',  array(1, 7))->get();
+                            $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status',  [1, 7])->get();
                             $followup_ticket= App\Model\helpdesk\Ticket\Tickets::where('status', '1')->where('follow_up', '1')->get();
                             $closingapproval = App\Model\helpdesk\Ticket\Tickets::where('status', '7')->get();
 
@@ -268,7 +268,7 @@
 //$inbox = App\Model\helpdesk\Ticket\Tickets::where('dept_id','',Auth::user()->primary_dpt)->get();
                             $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status', '1')->get();
                             $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('status', '=', '1')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
-                            $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status',  array(1, 7))->where('dept_id', '=', Auth::user()->primary_dpt)->get();
+                            $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status',  [1, 7])->where('dept_id', '=', Auth::user()->primary_dpt)->get();
                             $followup_ticket= App\Model\helpdesk\Ticket\Tickets::where('status', '1')->where('follow_up', '1')->get();
                             $closingapproval = App\Model\helpdesk\Ticket\Tickets::where('status', '7')->get();
 
@@ -388,7 +388,7 @@
                         }
                         ?>
                         @else
-<?php \Event::fire('service.desk.agent.sidebar', array()); ?>
+<?php \Illuminate\Support\Facades\Event::dispatch('service.desk.agent.sidebar', []); ?>
                         @endif
                     </ul>
                 </section>
@@ -444,13 +444,13 @@
                                 </div>
                             @endif
                             @endif
-<?php \Event::fire('service.desk.agent.topsubbar', array()); ?>
+<?php \Illuminate\Support\Facades\Event::dispatch('service.desk.agent.topsubbar', []); ?>
                         </div>
                     </div>
                 </div>
                 <section class="content-header">
                     @yield('PageHeader')
-                    {!! Breadcrumbs::renderIfExists() !!}
+                    {!! Breadcrumbs::render() !!}
                 </section>
                 <!-- Main content -->
                 <section class="content">
@@ -613,8 +613,8 @@
 
     });
 </script>-->
-<?php Event::fire('show.calendar.script', array()); ?>
-<?php Event::fire('load-calendar-scripts', array()); ?>
+<?php \Illuminate\Support\Facades\Event::dispatch('show.calendar.script', []); ?>
+<?php \Illuminate\Support\Facades\Event::dispatch('load-calendar-scripts', []); ?>
 @yield('FooterInclude')
 </body>
 </html>

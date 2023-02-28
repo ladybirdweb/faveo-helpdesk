@@ -3,8 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateSettingsAutoResponseTable extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -14,11 +13,11 @@ class CreateSettingsAutoResponseTable extends Migration
     {
         Schema::create('settings_auto_response', function (Blueprint $table) {
             $table->increments('id');
-            $table->boolean('new_ticket');
-            $table->boolean('agent_new_ticket');
-            $table->boolean('submitter');
-            $table->boolean('participants');
-            $table->boolean('overlimit');
+            $table->boolean('new_ticket')->default(0);
+            $table->boolean('agent_new_ticket')->default(0);
+            $table->boolean('submitter')->default(0);
+            $table->boolean('participants')->default(0);
+            $table->boolean('overlimit')->default(0);
             $table->timestamps();
         });
     }
@@ -32,4 +31,4 @@ class CreateSettingsAutoResponseTable extends Migration
     {
         Schema::drop('settings_auto_response');
     }
-}
+};

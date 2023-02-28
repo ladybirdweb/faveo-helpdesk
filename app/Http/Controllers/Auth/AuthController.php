@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 // controllers
 use App\Http\Controllers\Admin\helpdesk\SocialMedia\SocialMediaController;
 use App\Http\Controllers\Common\PhpMailController;
-// requests
 use App\Http\Controllers\Controller;
+// requests
 use App\Http\Requests\helpdesk\LoginRequest;
 use App\Http\Requests\helpdesk\OtpVerifyRequest;
 use App\Http\Requests\helpdesk\RegisterRequest;
@@ -14,8 +14,8 @@ use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Plugin;
 use App\Model\helpdesk\Settings\Security;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
-// classes
 use App\Model\helpdesk\Ticket\Tickets;
+// classes
 use App\Model\helpdesk\Utility\Otp;
 use App\User;
 use Auth;
@@ -23,6 +23,7 @@ use DateTime;
 use DB;
 use Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Lang;
 use Socialite;
 
@@ -42,11 +43,15 @@ class AuthController extends Controller
 
     // if auth is agent
     protected $redirectTo = '/dashboard';
+
     // if auth is user
     protected $redirectToUser = '/profile';
+
     /* Direct After Logout */
     protected $redirectAfterLogout = '/';
+
     protected $loginPath = '/auth/login';
+
     protected $social;
 
     /**
@@ -127,7 +132,7 @@ class AuthController extends Controller
         $settings = $settings->select('status')->where('option_name', '=', 'send_otp')->first();
         $email_mandatory = $settings->select('status')->where('option_name', '=', 'email_mandatory')->first();
         //dd($settings->status);
-        \Event::fire(new \App\Events\FormRegisterEvent());
+        event(new \App\Events\FormRegisterEvent());
         if (Auth::user()) {
             if (Auth::user()->role == 'admin' || Auth::user()->role == 'agent') {
                 return \Redirect::route('dashboard');
@@ -177,14 +182,14 @@ class AuthController extends Controller
                 $user->user_name = $request->input('email');
             }
             $user->role = 'user';
-            $code = str_random(60);
+            $code = Str::random(60);
             $user->remember_token = $code;
             $user->save();
             $message12 = '';
             $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
             $sms = Plugin::select('status')->where('name', '=', 'SMS')->first();
             // Event for login
-            \Event::fire(new \App\Events\LoginEvent($request));
+            event(new \App\Events\LoginEvent($request));
             if ($request->input('email') !== '') {
                 $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/'.$code)]);
             }
@@ -296,7 +301,7 @@ class AuthController extends Controller
     {
         try {
             // dd($request->input());
-            \Event::fire('auth.login.event', []); //added 5/5/2016
+            event('auth.login.event', []); //added 5/5/2016
             // Set login attempts and login time
             $value = $_SERVER['REMOTE_ADDR'];
             $usernameinput = $request->input('email');
@@ -321,10 +326,10 @@ class AuthController extends Controller
                 return redirect()->back()
                                 ->withInput($request->only('email', 'remember'))
                                 ->withErrors([
-                                    'email'                 => $this->getFailedLoginMessage(),
-                                    'password'              => $this->getFailedLoginMessage(),
-                                ])->with(['error'           => Lang::get('lang.not-registered'),
-                                    'referer'               => $referer, ]);
+                                    'email'       => $this->getFailedLoginMessage(),
+                                    'password'    => $this->getFailedLoginMessage(),
+                                ])->with(['error' => Lang::get('lang.not-registered'),
+                                    'referer'     => $referer, ]);
             }
 
             //if user exists
@@ -343,11 +348,11 @@ class AuthController extends Controller
                                 // user has mobile number return verify OTP screen
                                 return \Redirect::route('otp-verification')
                                                 ->withInput($request->input())
-                                                ->with(['values'  => $request->input(),
-                                                    'referer'     => $referer,
-                                                    'name'        => $check_active->first_name,
-                                                    'number'      => $check_active->mobile,
-                                                    'code'        => $check_active->country_code, ]);
+                                                ->with(['values' => $request->input(),
+                                                    'referer'    => $referer,
+                                                    'name'       => $check_active->first_name,
+                                                    'number'     => $check_active->mobile,
+                                                    'code'       => $check_active->country_code, ]);
                             } else {
                                 goto a; //attenmpt login  (be careful while using goto statements)
                             }
@@ -367,10 +372,10 @@ class AuthController extends Controller
                     return redirect()->back()
                                     ->withInput($request->only('email', 'remember'))
                                     ->withErrors([
-                                        'email'                 => $this->getFailedLoginMessage(),
-                                        'password'              => $this->getFailedLoginMessage(),
-                                    ])->with(['error'           => Lang::get('lang.this_account_is_currently_inactive'),
-                                        'referer'               => $referer, ]);
+                                        'email'       => $this->getFailedLoginMessage(),
+                                        'password'    => $this->getFailedLoginMessage(),
+                                    ])->with(['error' => Lang::get('lang.this_account_is_currently_inactive'),
+                                        'referer'     => $referer, ]);
                 } else {
                     // try login
                     $loginAttempts = 1;
@@ -416,10 +421,10 @@ class AuthController extends Controller
             return redirect()->back()
                             ->withInput($request->only('email', 'remember'))
                             ->withErrors([
-                                'email'                 => $this->getFailedLoginMessage(),
-                                'password'              => $this->getFailedLoginMessage(),
-                            ])->with(['error'           => Lang::get('lang.invalid'),
-                                'referer'               => $referer, ]);
+                                'email'       => $this->getFailedLoginMessage(),
+                                'password'    => $this->getFailedLoginMessage(),
+                            ])->with(['error' => Lang::get('lang.invalid'),
+                                'referer'     => $referer, ]);
             // Increment login attempts
         } catch (\Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -592,7 +597,7 @@ class AuthController extends Controller
         } else {
             $sms = DB::table('sms')->get();
             if (count($sms) > 0) {
-                \Event::fire(new \App\Events\LoginEvent($request));
+                event(new \App\Events\LoginEvent($request));
 
                 return 1;
             } else {
@@ -651,7 +656,7 @@ class AuthController extends Controller
      */
     public function getLogout(Request $request)
     {
-        \Event::fire('user.logout', []);
+        event('user.logout', []);
         $login = new LoginController();
 
         return $login->logout($request);

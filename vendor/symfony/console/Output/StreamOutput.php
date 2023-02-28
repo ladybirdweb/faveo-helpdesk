@@ -12,7 +12,6 @@
 namespace Symfony\Component\Console\Output;
 
 use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 
 /**
@@ -48,9 +47,7 @@ class StreamOutput extends Output
 
         $this->stream = $stream;
 
-        if (null === $decorated) {
-            $decorated = $this->hasColorSupport();
-        }
+        $decorated ??= $this->hasColorSupport();
 
         parent::__construct($verbosity, $decorated, $formatter);
     }
@@ -58,26 +55,20 @@ class StreamOutput extends Output
     /**
      * Gets the stream attached to this StreamOutput instance.
      *
-     * @return resource A stream resource
+     * @return resource
      */
     public function getStream()
     {
         return $this->stream;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function doWrite($message, $newline)
+    protected function doWrite(string $message, bool $newline)
     {
         if ($newline) {
-            $message .= PHP_EOL;
+            $message .= \PHP_EOL;
         }
 
-        if (false === @fwrite($this->stream, $message)) {
-            // should never happen
-            throw new RuntimeException('Unable to write output.');
-        }
+        @fwrite($this->stream, $message);
 
         fflush($this->stream);
     }
@@ -95,8 +86,13 @@ class StreamOutput extends Output
      *
      * @return bool true if the stream supports colorization, false otherwise
      */
-    protected function hasColorSupport()
+    protected function hasColorSupport(): bool
     {
+        // Follow https://no-color.org/
+        if (isset($_SERVER['NO_COLOR']) || false !== getenv('NO_COLOR')) {
+            return false;
+        }
+
         if ('Hyper' === getenv('TERM_PROGRAM')) {
             return true;
         }
@@ -109,16 +105,6 @@ class StreamOutput extends Output
                 || 'xterm' === getenv('TERM');
         }
 
-        if (\function_exists('stream_isatty')) {
-            return @stream_isatty($this->stream);
-        }
-
-        if (\function_exists('posix_isatty')) {
-            return @posix_isatty($this->stream);
-        }
-
-        $stat = @fstat($this->stream);
-        // Check if formatted mode is S_IFCHR
-        return $stat ? 0020000 === ($stat['mode'] & 0170000) : false;
+        return stream_isatty($this->stream);
     }
 }

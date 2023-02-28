@@ -1,3 +1,103 @@
+1.16.0 / 2022/11/29
+===================
+
+* [added] Allow install with PHP 8.2 [@gquemener]
+* [added] Use shorter object IDs for object comparison [@TysonAndre]
+* [added] Support standalone false,true and null types [@kschatzle]
+* [added] Support doubling readonly classes [@gquemener]
+* [fixed] Remove workarounds for unsupported HHVM [@TysonAndre]
+* [fixed] Clear error message when doubling DNF types [@kschatzle]
+
+
+1.15.0 / 2021/12/08
+===================
+
+* [added] Support for the `static` return type [@denis-rolling-scopes]
+* [fixed] Add return types for Comparator implementations to avoid deprecation warnings from Symfony's DebugClassLoader [@stof]
+
+1.14.0 / 2021/09/16
+===================
+
+* [added] Support for static closures in will and should [@ntzm]
+* [added] Allow install on PHP 8.1 (with test suite fixes) [@javer]
+* [added] Support for the 'never' return type [@ciaranmcnulty]
+* [fixed] Better error message when doubling intersection return types [@ciaranmcnulty]
+
+1.13.0 / 2021/03/17
+===================
+
+* [added] willYield can now specify a return value [@camilledejoye]
+* [added] Prophecy exception interfaces are explicitly Throwable [@ciaranmcnulty]
+* [fixed] Argument::in() and notIn() now marked as static [@tyteen4a03]
+* [fixed] Can now double unions containing false [@ciaranmcnulty]
+* [fixed] Virtual magic methods with arguments are now doublable in PHP 8 [@ciaranmcnulty]
+
+1.12.2 / 2020/12/19
+===================
+
+* [fixed] MethodNotFoundException sometimes thrown with wrong class attached [@ciaranmcnulty]
+
+1.12.1 / 2020/10/29
+===================
+
+* [fixed] Incorrect handling of inherited 'self' return types [@ciaranmcnulty]
+
+1.12.0 / 2020/10/28
+===================
+
+* [added] PHP 8 support [@ciaranmcnulty]
+* [added] Argument::in() and Argument::notIn() [@viniciusalonso]
+* [added] Support for union and mixed types [@ciaranmcnulty]
+* [fixed] Issues caused by introduction of named parameters [@ciaranmcnulty]
+* [fixed] Issues caused by stricter rounding [@ciaranmcnulty]
+
+1.11.1 / 2020/07/08
+===================
+
+* [fixed] can't double objects with `self` type hints (@greg0ire)
+* [fixed] cloned doubes were not loosely comparable (@tkulka)
+
+1.11.0 / 2020/07/07
+===================
+
+* [changed] dropped support for PHP versions earlier than 7.2 (@ciaranmcnulty)
+* [fixed] removed use of Reflection APIs deprecated in PHP 8.0 (@Ayesh)
+
+1.10.3 / 2020/03/05
+===================
+
+* [fixed] removed fatal error when phpdocumentor/reflection-docblock 5 parses an invalid `@method` tag (@stof)
+
+1.10.2 / 2020/01/20
+===================
+
+* [added] support for new versions of `sebastian/comparator` and `sebastian/recursion-context` (@sebastianbergmann)
+
+1.10.1 / 2019/12/22
+===================
+
+* [fixed] identical callables no longer match as arguments (@ciaranmcnulty)
+
+1.10.0 / 2019/12/17
+===================
+
+* [added] shouldHaveBeenCalled evaluation happens later so un-stubbed calls don't throw (@elvetemedve)
+* [added] methods can now be doubled case-insensitively to match PHP semantics (@michalbundyra)
+* [fixed] reduced memory usage by optimising CachedDoubler (@DonCallisto)
+* [fixed] removed fatal error nesting level when comparing large objects (@scroach)
+
+1.9.0 / 2019/10/03
+==================
+
+* [added] Add willYield feature to Method Prophecy(@tkotosz)
+* [fixed] Allow `MethodProphecy::willThrow()` to accept Throwable as string (@timoschinkel )
+* [fixed] Allow new version of phpdocumentor/reflection-docblock (@ricpelo)
+
+1.8.1 / 2019/06/13
+==================
+
+* [fixed] Don't try to patch final constructors (@NiR)
+
 1.8.0 / 2018/08/05
 ==================
 

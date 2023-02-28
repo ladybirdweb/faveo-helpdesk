@@ -13,13 +13,13 @@
 
 namespace PhpSpec\CodeGenerator\Generator;
 
-use PhpSpec\IO\IO;
+use PhpSpec\Console\ConsoleIO;
 use PhpSpec\Locator\Resource;
 
 final class ConfirmingGenerator implements Generator
 {
     /**
-     * @var IO
+     * @var ConsoleIO
      */
     private $io;
 
@@ -33,14 +33,14 @@ final class ConfirmingGenerator implements Generator
      */
     private $generator;
 
-    public function __construct(IO $io, string $message, Generator $generator)
+    public function __construct(ConsoleIO $io, string $message, Generator $generator)
     {
         $this->io = $io;
         $this->message = $message;
         $this->generator = $generator;
     }
 
-    public function supports(Resource $resource, string $generation, array $data) : bool
+    public function supports(Resource $resource, string $generation, array $data): bool
     {
         return $this->generator->supports($resource, $generation, $data);
     }
@@ -48,19 +48,19 @@ final class ConfirmingGenerator implements Generator
     /**
      * {@inheritdoc}
      */
-    public function generate(Resource $resource, array $data)
+    public function generate(Resource $resource, array $data): void
     {
         if ($this->io->askConfirmation($this->composeMessage($resource))) {
             $this->generator->generate($resource, $data);
         }
     }
 
-    private function composeMessage(Resource $resource) : string
+    private function composeMessage(Resource $resource): string
     {
         return str_replace('{CLASSNAME}', $resource->getSrcClassname(), $this->message);
     }
 
-    public function getPriority() : int
+    public function getPriority(): int
     {
         return $this->generator->getPriority();
     }

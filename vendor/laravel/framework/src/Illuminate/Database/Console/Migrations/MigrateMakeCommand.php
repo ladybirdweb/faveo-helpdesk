@@ -2,22 +2,24 @@
 
 namespace Illuminate\Database\Console\Migrations;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Composer;
+use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Database\Migrations\MigrationCreator;
+use Illuminate\Support\Composer;
+use Illuminate\Support\Str;
 
-class MigrateMakeCommand extends BaseCommand
+class MigrateMakeCommand extends BaseCommand implements PromptsForMissingInput
 {
     /**
      * The console command signature.
      *
      * @var string
      */
-    protected $signature = 'make:migration {name : The name of the migration.}
-        {--create= : The table to be created.}
-        {--table= : The table to migrate.}
-        {--path= : The location where the migration file should be created.}
-        {--realpath : Indicate any provided migration file paths are pre-resolved absolute paths.}';
+    protected $signature = 'make:migration {name : The name of the migration}
+        {--create= : The table to be created}
+        {--table= : The table to migrate}
+        {--path= : The location where the migration file should be created}
+        {--realpath : Indicate any provided migration file paths are pre-resolved absolute paths}
+        {--fullpath : Output the full path of the migration (Deprecated)}';
 
     /**
      * The console command description.
@@ -100,16 +102,16 @@ class MigrateMakeCommand extends BaseCommand
      *
      * @param  string  $name
      * @param  string  $table
-     * @param  bool    $create
+     * @param  bool  $create
      * @return string
      */
     protected function writeMigration($name, $table, $create)
     {
-        $file = pathinfo($this->creator->create(
+        $file = $this->creator->create(
             $name, $this->getMigrationPath(), $table, $create
-        ), PATHINFO_FILENAME);
+        );
 
-        $this->line("<info>Created Migration:</info> {$file}");
+        $this->components->info(sprintf('Migration [%s] created successfully.', $file));
     }
 
     /**
@@ -129,12 +131,14 @@ class MigrateMakeCommand extends BaseCommand
     }
 
     /**
-     * Determine if the given path(s) are pre-resolved "real" paths.
+     * Prompt for missing input arguments using the returned questions.
      *
-     * @return bool
+     * @return array
      */
-    protected function usingRealPath()
+    protected function promptForMissingArgumentsUsing()
     {
-        return $this->input->hasOption('realpath') && $this->option('realpath');
+        return [
+            'name' => 'What should the migration be named?',
+        ];
     }
 }

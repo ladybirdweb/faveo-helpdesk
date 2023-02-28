@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Agent\helpdesk;
 
 // controllers
+use App\Http\Controllers\Agent\helpdesk\Filter\FilterControllerOld;
 use App\Http\Controllers\Common\FileuploadController;
 use App\Http\Controllers\Common\NotificationController as Notify;
 use App\Http\Controllers\Common\PhpMailController;
 use App\Http\Controllers\Controller;
-// requests
 use App\Http\Requests\helpdesk\CreateTicketRequest;
+// requests
 use App\Http\Requests\helpdesk\TicketRequest;
-// models
 use App\Model\helpdesk\Agent\Department;
+// models
 use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Form\Fields;
@@ -36,19 +37,23 @@ use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\User;
 use Auth;
+use Chumper\Datatable\Facades\DatatableFacade;
 use Crypt;
 use DB;
 use Exception;
-// classes
 use GeoIP;
+// classes
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\support\Collection;
-use Input;
+use Illuminate\Support\Facades\Request as Input;
+use Illuminate\Support\Str;
 use Lang;
 use Mail;
-use PDF;
 use UTC;
+use Vsmoraes\Pdf\Pdf;
+use Vsmoraes\Pdf\PdfFacade;
+use Yajra\DataTables\Facades\DataTables;
 
 /**
  * TicketController.
@@ -277,7 +282,7 @@ class TicketController extends Controller
      */
     public function reply(Ticket_Thread $thread, Request $request, Ticket_attachments $ta, $mail = true, $system_reply = true, $user_id = '')
     {
-        \Event::fire('reply.request', [$request]);
+        event('reply.request', [$request]);
 
         try {
             if (is_array($request->file('attachment'))) {
@@ -304,7 +309,7 @@ class TicketController extends Controller
             $emailadd = User::where('id', $eventuserid)->first()->email;
             $source = $eventthread->source;
             $form_data = $request->except('reply_content', 'ticket_ID', 'attachment');
-            \Event::fire(new \App\Events\ClientTicketFormPost($form_data, $emailadd, $source));
+            event(new \App\Events\ClientTicketFormPost($form_data, $emailadd, $source));
             $reply_content = $request->input('reply_content');
 
             $thread->ticket_id = $request->input('ticket_ID');
@@ -338,7 +343,7 @@ class TicketController extends Controller
                     $data = [
                         'id' => $tickets->id,
                     ];
-                    \Event::fire('ticket-assignment', [$data]);
+                    event('ticket-assignment', [$data]);
                 }
                 if ($tickets->status > 1) {
                     $this->open($ticket_id, new Tickets());
@@ -383,7 +388,7 @@ class TicketController extends Controller
             }
 
             // Event
-            \Event::fire(new \App\Events\FaveoAfterReply($reply_content, $user->mobile, $user->country_code, $request, $tickets, $thread));
+            event(new \App\Events\FaveoAfterReply($reply_content, $user->mobile, $user->country_code, $request, $tickets, $thread));
             if (Auth::user()) {
                 $u_id = Auth::user()->first_name.' '.Auth::user()->last_name;
             } else {
@@ -395,7 +400,7 @@ class TicketController extends Controller
                 'body'      => $request->input('reply_content'),
             ];
             if (!$request->has('do-not-send')) {
-                \Event::fire('Reply-Ticket', [$data]);
+                event('Reply-Ticket', [$data]);
             }
             // sending attachments via php mail function
             $message = '';
@@ -503,7 +508,7 @@ class TicketController extends Controller
          * @see https://github.com/dompdf/dompdf/issues/1272
          * For time bieng we are silencing the error using "@" operator in front of it
          */
-        return @PDF::load($html1)->show();
+        return PdfFacade::load($html1)->show(false, false, false);
     }
 
     /**
@@ -674,10 +679,10 @@ class TicketController extends Controller
             }
             $user->role = 'user';
             $user->active = $user_status;
-            $token = str_random(60);
+            $token = Str::random(60);
             $user->remember_token = $token;
             // mail user his/her password
-            //\Event::fire(new \App\Events\ClientTicketFormPost($from_data, $emailadd, $source));
+            //\Illuminate\Support\Facades\Event::dispatch(new \App\Events\ClientTicketFormPost($from_data, $emailadd, $source));
             if ($user->save()) {
                 $user_id = $user->id;
                 $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
@@ -690,10 +695,10 @@ class TicketController extends Controller
                         'user_name' => $unique,
                         'password'  => $password,
                     ];
-                    \Event::fire(new \App\Events\LoginEvent($value));
+                    event(new \App\Events\LoginEvent($value));
                 }
                 // Event fire
-                \Event::fire(new \App\Events\ReadMailEvent($user_id, $password));
+                event(new \App\Events\ReadMailEvent($user_id, $password));
 
                 try {
                     if ($auto_response == 0) {
@@ -710,7 +715,7 @@ class TicketController extends Controller
             $username = $checkemail->first_name;
             $user_id = $checkemail->id;
         }
-        \Event::fire(new \App\Events\ClientTicketFormPost($from_data, $emailadd, $source));
+        event(new \App\Events\ClientTicketFormPost($from_data, $emailadd, $source));
         $ticket_number = $this->check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $status);
 
         $ticket_number2 = $ticket_number[0];
@@ -850,11 +855,11 @@ class TicketController extends Controller
                 'status'        => $status,
                 'Priority'      => $priority,
             ];
-            \Event::fire('Create-Ticket', [$data]);
+            event('Create-Ticket', [$data]);
             $data = [
                 'id' => $ticketdata->id,
             ];
-            \Event::fire('ticket-assignment', [$data]);
+            event('ticket-assignment', [$data]);
             $this->NotificationController->create($ticketdata->id, $user_id, '3');
 
             return ['0' => $ticket_number2, '1' => true];
@@ -953,7 +958,7 @@ class TicketController extends Controller
                         'first_name' => $username,
                         'last_name'  => '',
                     ];
-                    \Event::fire('change-status', [$data]);
+                    event('change-status', [$data]);
                 }
                 if (isset($id)) {
                     if ($this->ticketThread($subject, $body, $id, $user_id)) {
@@ -1061,7 +1066,7 @@ class TicketController extends Controller
                 }
             }
         }
-        \Event::fire('after.ticket.created', [['ticket' => $ticket, 'form_data' => $form_data]]);
+        event('after.ticket.created', [['ticket' => $ticket, 'form_data' => $form_data]]);
 
         // store collaborators
         $this->storeCollaborators($headers, $id);
@@ -1089,7 +1094,7 @@ class TicketController extends Controller
         $thread->title = $subject;
         $thread->body = $body;
         if ($thread->save()) {
-            \Event::fire('ticket.details', ['ticket' => $thread]); //get the ticket details
+            event('ticket.details', ['ticket' => $thread]); //get the ticket details
 
             return true;
         }
@@ -1173,7 +1178,7 @@ class TicketController extends Controller
             'first_name' => Auth::user()->first_name,
             'last_name'  => Auth::user()->last_name,
         ];
-        \Event::fire('change-status', [$data]);
+        event('change-status', [$data]);
 
         return 'your ticket'.$ticket_status->ticket_number.' has been closed';
     }
@@ -1219,7 +1224,7 @@ class TicketController extends Controller
             'first_name' => Auth::user()->first_name,
             'last_name'  => Auth::user()->last_name,
         ];
-        \Event::fire('change-status', [$data]);
+        event('change-status', [$data]);
 
         return 'your ticket'.$ticket_status->ticket_number.' has been resolved';
     }
@@ -1259,7 +1264,7 @@ class TicketController extends Controller
             'first_name' => Auth::user()->first_name,
             'last_name'  => Auth::user()->last_name,
         ];
-        \Event::fire('change-status', [$data]);
+        event('change-status', [$data]);
 
         return 'your ticket'.$ticket_status->ticket_number.' has been opened';
     }
@@ -1291,7 +1296,7 @@ class TicketController extends Controller
                 'first_name' => Auth::user()->first_name,
                 'last_name'  => Auth::user()->last_name,
             ];
-            \Event::fire('change-status', [$data]);
+            event('change-status', [$data]);
 
             return 'your ticket has been delete';
         } else {
@@ -1311,7 +1316,7 @@ class TicketController extends Controller
                 'first_name' => Auth::user()->first_name,
                 'last_name'  => Auth::user()->last_name,
             ];
-            \Event::fire('change-status', [$data]);
+            event('change-status', [$data]);
 
             return 'your ticket'.$ticket_delete->ticket_number.' has been delete';
         }
@@ -1384,7 +1389,7 @@ class TicketController extends Controller
                 $data = [
                     'id' => $id,
                 ];
-                \Event::fire('ticket-assignment', [$data]);
+                event('ticket-assignment', [$data]);
                 $ticket_thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
                 $ticket_subject = $ticket_thread->title;
                 $thread = new Ticket_Thread();
@@ -1434,7 +1439,7 @@ class TicketController extends Controller
             'u_id'      => Auth::user()->first_name.' '.Auth::user()->last_name,
             'body'      => $InternalContent,
         ];
-        \Event::fire('Reply-Ticket', [$data]);
+        event('Reply-Ticket', [$data]);
 
         return 1;
     }
@@ -1613,7 +1618,7 @@ class TicketController extends Controller
      */
     public function autosearch($id)
     {
-        $term = \Input::get('term');
+        $term = Input::get('term');
         $user = \App\User::where('email', 'LIKE', '%'.$term.'%')->pluck('email');
         echo json_encode($user);
     }
@@ -1786,7 +1791,7 @@ class TicketController extends Controller
                     $tickets = Tickets::find($ticket->id);
                     $tickets->delete();
                     $data = ['id' => $ticket->id];
-                    \Event::fire('ticket-permanent-delete', [$data]);
+                    event('ticket-permanent-delete', [$data]);
                 }
             }
             if ($value == 'Delete') {
@@ -2125,9 +2130,9 @@ class TicketController extends Controller
         $email = $email;
         $ticket_id = $ticket_id;
         $validator = \Validator::make(
-            ['email'         => $email,
-                'name'       => $name, ],
-            ['email'         => 'required|email',
+            ['email'   => $email,
+                'name' => $name, ],
+            ['email'   => 'required|email',
             ]
         );
         $user = User::where('email', '=', $email)->first();
@@ -2248,7 +2253,7 @@ class TicketController extends Controller
             Tickets::where('id', '=', $value)
                     ->update(['status' => 3]);
             //event has $p_id and $value
-            \Event::fire('ticket.merge', [['parent' => $p_id, 'child' => $value]]);
+            event('ticket.merge', [['parent' => $p_id, 'child' => $value]]);
             if (!empty(Input::get('reason'))) {
                 $reason = Input::get('reason');
             } else {
@@ -2440,7 +2445,7 @@ class TicketController extends Controller
              * @see https://github.com/dompdf/dompdf/issues/1272
              * For time bieng we are silencing the error using "@" operator in front of it
              */
-            return @PDF::load($html1)->show();
+            return PdfFacade::load($html1)->show(false, false, false);
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -2608,7 +2613,7 @@ class TicketController extends Controller
         $url = [];
         $encode = [];
         $img = [];
-        foreach ($result as $key=>$img_tag) {
+        foreach ($result as $key => $img_tag) {
             //dd($img_tag);
             preg_match_all('/(src)=("[^"]*")/i', $img_tag[$key], $img[$key]);
         }
@@ -2664,7 +2669,7 @@ class TicketController extends Controller
                         array_push($child_ticket_numbers, $value->ticket_number);
                     }
                     // dd(implode(", ",$child_ticket_numbers), $ticket_details->ticket_number);
-                    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket_details->dept_id), $to = ['user'  => $user_detail->full_name, 'email' => $user_detail->email], $message = ['subject' => '', 'body'    => '', 'scenario' => 'merge-ticket-notification'], $template_variables = ['user' => $user_detail->full_name, 'ticket_number' => $ticket_details->ticket_number, 'ticket_link'   => route('ticket.thread', $p_id), 'merged_ticket_numbers' => implode(', ', $child_ticket_numbers)]);
+                    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket_details->dept_id), $to = ['user' => $user_detail->full_name, 'email' => $user_detail->email], $message = ['subject' => '', 'body' => '', 'scenario' => 'merge-ticket-notification'], $template_variables = ['user' => $user_detail->full_name, 'ticket_number' => $ticket_details->ticket_number, 'ticket_link' => route('ticket.thread', $p_id), 'merged_ticket_numbers' => implode(', ', $child_ticket_numbers)]);
                 }
             }
         } catch (\Exception $e) {
@@ -2683,7 +2688,7 @@ class TicketController extends Controller
      */
     public function getTableFormat()
     {
-        return \Datatable::table()
+        return DatatableFacade::table()
             ->addColumn(
                 '<a class="checkbox-toggle"><i class="far fa-square fa-2x"></i></a>',
                 Lang::get('lang.subject'),
@@ -2715,7 +2720,7 @@ class TicketController extends Controller
      */
     public static function genreateTableJson($tickets)
     {
-        return \Datatables::of($tickets)
+        return DataTables::of($tickets)
                         ->editColumn('id', function ($tickets) {
                             $rep = ($tickets->last_replier == 'client') ? '#F39C12'
                                         : '#000';
@@ -2726,7 +2731,7 @@ class TicketController extends Controller
                             if (isset($tickets->ticket_title)) {
                                 $string = utfEncoding($tickets->ticket_title);
                                 if (strlen($string) > 25) {
-                                    $string = str_limit($string, 30).'...';
+                                    $string = Str::limit($string, 30).'...';
                                 }
                             } else {
                                 $string = Lang::get('lang.no-subject');
@@ -2795,7 +2800,7 @@ class TicketController extends Controller
                                 $color = "<i class='fa fa-exclamation-triangle'  title='".Lang::get('lang.accoutn-not-verified')."'></i>";
                             }
 
-                            return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.strip_tags($name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:#508983'>".str_limit(strip_tags($name), 30).' <span style="color:#f75959">'.$color.'</span></span></a>';
+                            return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.strip_tags($name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:#508983'>".Str::limit(strip_tags($name), 30).' <span style="color:#f75959">'.$color.'</span></span></a>';
                         })
                         ->editColumn('a_uname', function ($tickets) {
                             if ($tickets->assigned_to == null && $tickets->name == null) {
@@ -2814,7 +2819,16 @@ class TicketController extends Controller
                                 }
                             }
                         })
+                        ->editColumn('updated_at', function ($tickets) {
+                            $TicketDatarow = $tickets->updated_at;
+                            $updated = '--';
+                            if ($TicketDatarow) {
+                                $updated = $tickets->updated_at;
+                            }
 
+                            return '<span style="display:none">'.$updated.'</span>'.UTC::usertimezone($updated);
+                        })
+                        ->rawColumns(['id', 'title', 'ticket_number', 'c_uname', 'a_uname', 'updated_at'])
                         ->make();
     }
 
@@ -3158,13 +3172,13 @@ class TicketController extends Controller
 
     public static function getTable($tickets)
     {
-        return \Datatables::of($tickets)
+        return DataTables::of($tickets)
             ->addColumn('id', function ($tickets) {
                 return "<input type='checkbox' name='select_all[]' id='".$tickets->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='".$tickets->id."'></input>";
             })
             ->addColumn('title', function ($tickets) {
                 if (isset($tickets->ticket_title)) {
-                    $string = str_limit($tickets->ticket_title, 20);
+                    $string = Str::limit($tickets->ticket_title, 20);
                 } else {
                     $string = '(no subject)';
                 }
@@ -3220,7 +3234,7 @@ class TicketController extends Controller
                     $color = "<i class='fa fa-exclamation-triangle'  title='".Lang::get('lang.accoutn-not-verified')."'></i>";
                 }
 
-                return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.ucfirst($tickets->user_name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:#508983'>".ucfirst(str_limit($name, 30)).' <span style="color:#f75959">'.$color.'</span></span></a>';
+                return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.ucfirst($tickets->user_name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:#508983'>".ucfirst(Str::limit($name, 30)).' <span style="color:#f75959">'.$color.'</span></span></a>';
             })
             ->addColumn('assign_user_name', function ($tickets) {
                 if ($tickets->assigned_to == null) {
@@ -3250,6 +3264,7 @@ class TicketController extends Controller
 
                     return '<span style="display:none">'.$updated.'</span>'.UTC::usertimezone($updated);
                 })
+                ->rawColumns(['id', 'title', 'ticket_number', 'priority', 'user_name', 'assign_user_name', 'updated_at', 'created_at'])
                 ->make();
     }
 }
