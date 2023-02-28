@@ -68,6 +68,9 @@ class DatabaseSeeder extends Seeder
                 }
             }
         }
+        if (isInstall()) {
+            return;
+        }
         /* Date time format */
         $date_time_formats = [
             'd/m/Y H:i:s',
