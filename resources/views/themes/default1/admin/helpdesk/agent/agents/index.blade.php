@@ -72,7 +72,7 @@ class="nav-link active"
     </div>
     <div class="card-body">
         <?php
-        $user = App\User::where('role', '!=', 'user')->orderBy('id', 'ASC')->paginate(10);
+        $user = App\User::where('role', '!=', 'user')->orderBy('id', 'ASC')->simplePaginate(10);
         ?>
         <!-- Agent table -->
         <table class="table table-bordered dataTable" style="overflow:hidden;">

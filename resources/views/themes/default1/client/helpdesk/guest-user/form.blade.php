@@ -56,7 +56,7 @@
         $encrypted_token = $encrypter->encrypt(csrf_token());
  ?>
 <input id="token" type="hidden" value="{{$encrypted_token}}">
-{!! Form::open(['action'=>'Client\helpdesk\FormController@postedForm','method'=>'post']) !!}
+{!! Form::open(['route'=>'client.form.post','method'=>'post']) !!}
 <div>
     <div class="content-header">
         <h4>Ticket {!! Form::submit(Lang::get('lang.send'),['class'=>'form-group btn btn-info pull-right'])!!}</h4>

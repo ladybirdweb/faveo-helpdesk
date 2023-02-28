@@ -501,7 +501,7 @@ if ($thread->title != "") {
 
             <!-- ticket  conversations -->
             <?php
-            $conversations = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->orderBy('id', 'DESC')->paginate(10);
+            $conversations = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->orderBy('id', 'DESC')->simplePaginate(10);
             $ij = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->first();
             ?>
 

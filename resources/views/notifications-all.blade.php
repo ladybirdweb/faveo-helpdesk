@@ -117,7 +117,7 @@ class="active"
                                 <ul class="todo-list">
                                     @if($notifications)
                            
-                                    @foreach($notifications->orderBy('created_at', 'desc')->paginate(10) as $notification)
+                                    @foreach($notifications->orderBy('created_at', 'desc')->simplePaginate() as $notification)
                                     @if($notification->notification && $notification->notification->type && $notification->notification->type->type == 'registration')
                                     @if($notification->is_read == 1)
                                     <li class="task">
@@ -189,7 +189,7 @@ class="active"
 
                                     </li>
                                     @endif
-{!!$notifications->paginate(10)->render()!!}
+{!!$notifications->Simplepaginate(10)!!}
                                 </ul>
                             </div>
 

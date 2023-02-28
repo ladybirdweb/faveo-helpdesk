@@ -92,7 +92,7 @@ class = "nav-item active"
         $encrypted_token = $encrypter->encrypt(csrf_token());
         ?>
         <input id="token" type="hidden" value="{{$encrypted_token}}">
-        {!! Form::open(['action'=>'Client\helpdesk\FormController@postedForm','method'=>'post', 'enctype'=>'multipart/form-data']) !!}
+        {!! Form::open(['route'=>'client.form.post','method'=>'post', 'enctype'=>'multipart/form-data']) !!}
 
         <article class="hentry">
 
