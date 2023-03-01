@@ -614,7 +614,7 @@ class SettingsController2 extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param type         $id
+     * @param type $id
      * @param type Alert   $alert
      * @param type Request $request
      *
