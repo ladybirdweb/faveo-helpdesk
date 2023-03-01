@@ -128,7 +128,7 @@ class TicketController extends Controller
             $source = Ticket_source::where('name', '=', 'agent')->first();
             $headers = null;
             $help = Help_topic::where('id', '=', $helptopic)->first();
-            $form_data = $request->except('name', 'phone', 'email', 'subject', 'body', 'helptopic', '_wysihtml5_mode', '_token', 'mobile', 'code', 'priority', 'attachment', 'first_name', 'last_name', 'sla', 'duedate', 'assignto', 'files'); //added "files" in exception list because some genius has added a new editor 'summernote' to impress his boss and screwed the functional code with his genius ability. Hence to make world capable of handling this genius's work I am adding a shitty workaround for it. After looking for solution everywhere and referring to https://stackoverflow.com/questions/59938588/summernote-adds-files-field-to-post
+            $form_data = $request->except('name', 'phone', 'email', 'subject', 'body', 'helptopic', '_wysihtml5_mode', '_token', 'mobile', 'code', 'priority', 'attachment', 'first_name', 'last_name', 'sla',  'duedate','assignto', 'files'); //added "files" in exception list because some genius has added a new editor 'summernote' to impress his boss and screwed the functional code with his genius ability. Hence to make world capable of handling this genius's work I am adding a shitty workaround for it. After looking for solution everywhere and referring to https://stackoverflow.com/questions/59938588/summernote-adds-files-field-to-post
             $auto_response = 0;
             $status = 1;
             if ($phone != null || $mobile_number != null) {
@@ -2344,15 +2344,23 @@ class TicketController extends Controller
     {
         $ticketid = $request->input('ticketid');
         $ticket = Tickets::find($ticketid);
-        $firstThread = $ticket->thread()->select('user_id', 'poster', 'body')->first();
-        $lastThread = $ticket->thread()->select('user_id', 'poster', 'body')->orderBy('id', 'desc')->first();
+        if ($ticket) {
+            $threads = $ticket->thread()->select('user_id', 'poster', 'body')->get();
+            $numThreads = $threads->count();
+            $tooltip = '';
 
-        return '<b>'.$firstThread->user->user_name.' ('.$firstThread->poster.')</b></br>'
-                .$firstThread->purify().'<br><hr>'
-                .'<b>'.$lastThread->user->user_name.'('.$lastThread->poster.')</b>'
-                .$lastThread->purify().'<br><hr>';
+            foreach ($threads as $thread) {
+                $tooltip .= '<b>'.$thread->user->user_name.' ('.$thread->poster.')</b></br>'
+                    .$thread->purify().'<br><hr>';
+            }
+
+            $tooltip .= 'This ticket has '.$numThreads.' threads.';
+
+            return $tooltip;
+        }
+
+        //  return '';
     }
-
     //Auto-close tickets
     public function autoCloseTickets()
     {

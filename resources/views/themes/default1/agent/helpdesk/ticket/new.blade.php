@@ -191,6 +191,7 @@ class="active"
                             <div class="form-group" id="duedate">
                                 <label>{!! Lang::get('lang.due_date') !!}:</label>
                                 {!! Form::text('duedate',null,['class' => 'form-control','id'=>'datemask']) !!}
+                                <button class="btn  clear-input" id="duedates" style="display: none" type="button"><i class="fas fa-times"></i></button>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -351,12 +352,39 @@ class="active"
                     });
                 });
 
-    $(function () {
-        $('#datemask').datetimepicker({
-            format: 'DD/MM/YYYY'
+   $(function () {
+        var picker = $('#datemask').datetimepicker({
+            format: 'DD/MM/YYYY',
+        });
+        picker.on('dp.change', function(e) {
+            if (e.date) {
+                $('.clear-input').show();
+            } else {
+                $('.clear-input').hide();
+            }
+        });
+
+        $('.clear-input').click(function() {
+            $('#datemask').val('');
+            $('.clear-input').hide();
+
         });
     });
 </script>
+    <style>
+
+        .clear-input {
+            position: absolute;
+            top: 20%;
+            right: 5%;
+            bottom: 0;
+            width: 30px;
+            margin: auto;
+
+        }
+
+
+    </style>
 @stop
 
 

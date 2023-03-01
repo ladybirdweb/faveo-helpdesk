@@ -588,13 +588,13 @@ class="nav-link active"
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>{!! Lang::get('lang.address') !!}</label>
-                                <textarea name="address" class="form-control"></textarea>
+                                <textarea name="address" id="address" class="form-control"></textarea>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>{!! Lang::get('lang.internal_notes') !!}</label>
-                                <textarea name="internal" class="form-control"></textarea>
+                                <textarea name="internal" id="internal" class="form-control"></textarea>
                             </div>
                         </div>
                     </div>
@@ -617,6 +617,15 @@ class="nav-link active"
                 {!! Form::close() !!}
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
+        <script>
+
+            $('#create_org').on('hidden.bs.modal', function (e) {
+                $(this).find('form')[0].reset();
+                $('#address').summernote('reset');
+                $('#internal').summernote('reset');
+            });
+
+        </script>
     </div><!-- /.modal -->
     <script type="text/javascript">
         jQuery(document).ready(function($) {
