@@ -2,10 +2,8 @@
 
 namespace App\Providers;
 
-use App\Model\helpdesk\Settings\System;
 use App\Model\Update\BarNotification;
 use Illuminate\Queue\Events\JobFailed;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Dusk\DuskServiceProvider;
