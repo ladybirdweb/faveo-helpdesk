@@ -171,7 +171,7 @@ class SettingsController extends Controller
     /**
      * Admin can publish the comment.
      *
-     * @param type         $id
+     * @param type $id
      * @param type Comment $comment
      *
      * @return bool
@@ -190,7 +190,7 @@ class SettingsController extends Controller
     /**
      * delete the comment.
      *
-     * @param type         $id
+     * @param type $id
      * @param type Comment $comment
      *
      * @return type
@@ -264,7 +264,7 @@ class SettingsController extends Controller
     /**
      * post profile password.
      *
-     * @param type                 $id
+     * @param type $id
      * @param type ProfilePassword $request
      *
      * @return type redirect

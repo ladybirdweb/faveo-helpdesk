@@ -404,7 +404,7 @@ class TicketController extends Controller
     /**
      * Ticket edit and save ticket data.
      *
-     * @param type               $ticket_id
+     * @param type $ticket_id
      * @param type Ticket_Thread $thread
      *
      * @return type bool
@@ -500,7 +500,7 @@ class TicketController extends Controller
     /**
      * Function to delete ticket.
      *
-     * @param type         $id
+     * @param type $id
      * @param type Tickets $ticket
      *
      * @return type string

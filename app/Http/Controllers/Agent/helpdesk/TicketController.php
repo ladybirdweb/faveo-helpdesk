@@ -441,7 +441,7 @@ class TicketController extends Controller
     /**
      * Ticket edit and save ticket data.
      *
-     * @param type               $ticket_id
+     * @param type $ticket_id
      * @param type Ticket_Thread $thread
      *
      * @return type bool
@@ -485,8 +485,7 @@ class TicketController extends Controller
      */
     public function ticket_print($id)
     {
-        $tickets = Tickets::
-                leftJoin('ticket_thread', function ($join) {
+        $tickets = Tickets::leftJoin('ticket_thread', function ($join) {
                     $join->on('tickets.id', '=', 'ticket_thread.ticket_id')
                         ->whereNotNull('ticket_thread.title');
                 })
@@ -1113,7 +1112,7 @@ class TicketController extends Controller
     /**
      * function to Ticket Close.
      *
-     * @param type         $id
+     * @param type $id
      * @param type Tickets $ticket
      *
      * @return type string
@@ -1177,7 +1176,7 @@ class TicketController extends Controller
     /**
      * function to Ticket resolved.
      *
-     * @param type         $id
+     * @param type $id
      * @param type Tickets $ticket
      *
      * @return type string
@@ -1223,7 +1222,7 @@ class TicketController extends Controller
     /**
      * function to Open Ticket.
      *
-     * @param type         $id
+     * @param type $id
      * @param type Tickets $ticket
      *
      * @return type
@@ -1263,7 +1262,7 @@ class TicketController extends Controller
     /**
      * Function to delete ticket.
      *
-     * @param type         $id
+     * @param type $id
      * @param type Tickets $ticket
      *
      * @return type string
@@ -1316,7 +1315,7 @@ class TicketController extends Controller
     /**
      * Function to ban an email.
      *
-     * @param type         $id
+     * @param type $id
      * @param type Tickets $ticket
      *
      * @return type string
@@ -2700,9 +2699,9 @@ class TicketController extends Controller
     /**
      * chumper's function to return data to chumper datatable.
      *
-     * @param Array-object $tickets
+     * @param array-object $tickets
      *
-     * @return Array-object
+     * @return array-object
      */
     public static function genreateTableJson($tickets)
     {
