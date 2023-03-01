@@ -29,6 +29,7 @@ class Sync extends Command
     public function handle()
     {
         (new SyncFaveoToLatestVersion())->sync();
+
         return Command::SUCCESS;
     }
 }
