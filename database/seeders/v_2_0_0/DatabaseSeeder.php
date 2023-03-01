@@ -51,18 +51,18 @@ class DatabaseSeeder extends Seeder
         $tables = Schema::getAllTables();
 
         foreach ($tables as $table) {
-            $tableName = (array)$table;
+            $tableName = (array) $table;
             $tableName = reset($tableName);
 
             $columns = Schema::getColumnListing($tableName);
 
             foreach ($columns as $column) {
                 if (Schema::getColumnType($tableName, $column) == 'string') {
-                    Schema::table($tableName, function ($table) use($column) {
+                    Schema::table($tableName, function ($table) use ($column) {
                         $table->string($column)->nullable()->change();
                     });
                 } elseif (Schema::getColumnType($tableName, $column) == 'boolean') {
-                    Schema::table($tableName, function ($table) use($column) {
+                    Schema::table($tableName, function ($table) use ($column) {
                         $table->boolean($column)->default(0)->change();
                     });
                 }
