@@ -222,10 +222,17 @@ if ($thread->title != "") {
                 <div class="col-md-3">
                     <b>{!! Lang::get('lang.due_date') !!}: </b>
                     <?php
-                    $time = $tickets->created_at;
-                    $time = date_create($time);
-                    date_add($time, date_interval_create_from_date_string($SlaPlan->grace_period));
-                    echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
+                    $duedate = $tickets->duedate;
+
+// Convert the duedate to the user's timezone
+                    $timezone = new DateTimeZone('Asia/Kolkata');
+                    $duedate_datetime = new DateTime($duedate, new DateTimeZone('UTC') );
+                    $duedate_datetime->setTimezone($timezone);
+                    $duedate_formatted = $duedate_datetime->format('Y-m-d H:i:s');
+
+// Display the duedate on the webpage
+                    echo " $duedate_formatted";
+                    ;
                     ?>
                 </div>
                 <div class="col-md-3">
