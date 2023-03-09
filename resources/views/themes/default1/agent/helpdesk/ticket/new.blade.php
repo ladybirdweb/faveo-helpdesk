@@ -15,12 +15,22 @@ class="nav-link active"
 @section('ticket')
 class="active"
 @stop
-
+<style>
+    .clear-input {
+        position: absolute;
+        top: 20%;
+        right: 5%;
+        bottom: 0;
+        width: 30px;
+        margin: auto;
+    }
+</style>
 @section('PageHeader')
 <h1>{{Lang::get('lang.tickets')}}</h1>
 @stop
 
 @section('content')
+
 <!-- Main content -->
 {!! Form::open(['route'=>'post.newticket','method'=>'post','id'=>'form']) !!}
 @if(Session::has('success'))       
@@ -371,20 +381,7 @@ class="active"
         });
     });
 </script>
-    <style>
 
-        .clear-input {
-            position: absolute;
-            top: 20%;
-            right: 5%;
-            bottom: 0;
-            width: 30px;
-            margin: auto;
-
-        }
-
-
-    </style>
 @stop
 
 
