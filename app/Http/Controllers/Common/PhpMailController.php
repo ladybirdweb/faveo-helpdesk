@@ -237,6 +237,7 @@ class PhpMailController extends Controller
         //dd($to, $toname, $subject, $data, $cc, $attach);
         //dd(\Config::get('mail'));
         //dd($attach);
+
         $mail = Mail::send('emails.mail', ['data' => $data], function ($m) use ($to, $subject, $toname, $cc, $attach, $from_address) {
             $m->to($to, $toname)->subject($subject);
             $m->from($from_address->email_address, $from_address->email_name);
@@ -263,6 +264,7 @@ class PhpMailController extends Controller
                         $name = $attach[$i]['file_name'];
                         $mime = $attach[$i]['mime'];
                         $this->attachmentMode($m, $file, $name, $mime, $mode);
+                        break;
                     }
                 }
             }

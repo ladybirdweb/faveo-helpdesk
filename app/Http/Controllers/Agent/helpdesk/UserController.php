@@ -995,7 +995,8 @@ class UserController extends Controller
             $users = $this->getUsers($first_date, $second_date);
             $excel_controller = new \App\Http\Controllers\Common\ExcelController();
             $filename = 'users'.$date;
-            $excel_controller->export($filename, $users);
+
+            return $excel_controller->export($filename, $users);
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }

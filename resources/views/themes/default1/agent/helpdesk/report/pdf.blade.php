@@ -51,13 +51,13 @@
             <thead>
                 <tr>
                     <td>Date</td>
-                    @if($table_datas[1]->open)
+                    @if(array_key_exists(1, $table_datas) && $table_datas[1]->open)
                     <td>Created</td>
                     @endif
-                    @if($table_datas[1]->closed)
+                    @if(array_key_exists(1, $table_datas) && $table_datas[1]->closed)
                     <td>Closed</td>
                     @endif
-                    @if($table_datas[1]->reopened)
+                    @if(array_key_exists(1, $table_datas) && $table_datas[1]->reopened)
                     <td>Reopened</td>
                     @endif
                 </tr>
@@ -91,9 +91,11 @@
 
         <table>
             <tr>
+                @if(array_key_exists(1, $table_datas))
                 <td>
                     <span style="color:#F7CF07;">TOTAL IN PROGRESS</span> : {!! $table_datas[1]->inprogress !!}
                 </td>
+                @endif
                 <td>
                     @if($table_data->open)
                     <span style="color:blue;">TOTAL CREATED</span>  : {!! $table_open !!}

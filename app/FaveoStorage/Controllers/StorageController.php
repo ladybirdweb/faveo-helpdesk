@@ -204,7 +204,7 @@ class StorageController extends Controller
         if ($this->default !== 'database') {
             $this->setFileSystem();
             Storage::disk($this->default)->put($filename, $data);
-            $storagePath = Storage::disk($this->default)->getDriver()->getAdapter()->getPathPrefix().$filename;
+            $storagePath = Storage::disk($this->default)->path($filename);
             if (mime(\File::mimeType($storagePath)) != 'image' || mime(\File::extension($storagePath)) != 'image') {
                 chmod($storagePath, 1204);
             }
