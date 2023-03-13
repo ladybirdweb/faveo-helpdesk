@@ -41,6 +41,7 @@ class Handler extends ExceptionHandler
      */
     public function report(\Throwable $e)
     {
+        dd('he');
         $this->reportToBugsNag($e);
 
         return parent::report($e);
