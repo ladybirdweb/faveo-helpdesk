@@ -162,7 +162,7 @@ class TicketController extends Controller
                 }
             }
             //create user
-            $result = $this->create_user($email, $fullname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source->id, $headers, $help->department, $assignto, $form_data, $auto_response, $status);
+            $result = $this->create_user($email, $fullname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source->id, $headers, $help->department, $assignto, $form_data, $auto_response, $status ,$duedate);
             if ($result[1]) {
                 $status = $this->checkUserVerificationStatus();
                 if ($status == 1) {
@@ -630,7 +630,7 @@ class TicketController extends Controller
      *
      * @return type bool
      */
-    public function create_user($emailadd, $username, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $auto_response, $status)
+    public function create_user($emailadd, $username, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $auto_response, $status,$duedate)
     {
         // define global variables
 
@@ -714,7 +714,7 @@ class TicketController extends Controller
             $user_id = $checkemail->id;
         }
         event(new \App\Events\ClientTicketFormPost($from_data, $emailadd, $source));
-        $ticket_number = $this->check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $status);
+        $ticket_number = $this->check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $status,$duedate);
 
         $ticket_number2 = $ticket_number[0];
         $ticketdata = Tickets::where('ticket_number', '=', $ticket_number2)->first();
@@ -912,7 +912,7 @@ class TicketController extends Controller
      *
      * @return type string
      */
-    public function check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status)
+    public function check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status,$duedate)
     {
         $read_ticket_number = explode('[#', $subject);
         if (isset($read_ticket_number[1])) {
@@ -965,12 +965,12 @@ class TicketController extends Controller
                     }
                 }
             } else {
-                $ticket_number = $this->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status);
+                $ticket_number = $this->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status,$duedate);
 
                 return [$ticket_number, 0];
             }
         } else {
-            $ticket_number = $this->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status);
+            $ticket_number = $this->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status,$duedate);
 
             return [$ticket_number, 0];
         }
@@ -988,7 +988,7 @@ class TicketController extends Controller
      *
      * @return type string
      */
-    public function createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status)
+    public function createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status,$duedate)
     {
         $ticket_number = '';
         $max_number = Tickets::whereRaw('id = (select max(`id`) from tickets)')->first();
@@ -1036,10 +1036,24 @@ class TicketController extends Controller
         $ticket->save();
 
         $sla_plan = Sla_plan::where('id', '=', $sla)->first();
-        $ovdate = $ticket->created_at;
-        $new_date = date_add($ovdate, date_interval_create_from_date_string($sla_plan->grace_period));
-        $ticket->duedate = $new_date;
+        if ($duedate) {
+            $duedate_datetime = \DateTime::createFromFormat('d/m/Y', $duedate);
+
+            $grace_period = $sla_plan->grace_period;
+            $grace_interval = \DateInterval::createFromDateString($grace_period);
+            $duedate_datetime->add($grace_interval);
+
+            // Format the due date with time
+            $due_formatted = $duedate_datetime->format('Y-m-d H:i:s');
+            $ticket->duedate = $due_formatted;
+        } else {
+
+            $ovdate = $ticket->created_at;
+            $new_date = date_add($ovdate, date_interval_create_from_date_string($sla_plan->grace_period));
+            $ticket->duedate = $new_date;
+        }
         $ticket->save();
+
 
         $ticket_number = $ticket->ticket_number;
         $id = $ticket->id;
@@ -2344,13 +2358,20 @@ class TicketController extends Controller
     {
         $ticketid = $request->input('ticketid');
         $ticket = Tickets::find($ticketid);
-        $firstThread = $ticket->thread()->select('user_id', 'poster', 'body')->first();
-        $lastThread = $ticket->thread()->select('user_id', 'poster', 'body')->orderBy('id', 'desc')->first();
+        if ($ticket) {
+            $threads = $ticket->thread()->select('user_id', 'poster', 'body')->get();
+            $numThreads = $threads->count();
+            $tooltip = '';
 
-        return '<b>'.$firstThread->user->user_name.' ('.$firstThread->poster.')</b></br>'
-                .$firstThread->purify().'<br><hr>'
-                .'<b>'.$lastThread->user->user_name.'('.$lastThread->poster.')</b>'
-                .$lastThread->purify().'<br><hr>';
+            foreach ($threads as $thread) {
+                $tooltip .= '<b>'.$thread->user->user_name.' ('.$thread->poster.')</b></br>'
+                    .$thread->purify().'<br><hr>';
+            }
+
+            $tooltip .= 'This ticket has '.$numThreads.' threads.';
+
+            return $tooltip;
+        }
     }
 
     //Auto-close tickets

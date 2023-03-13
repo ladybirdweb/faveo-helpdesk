@@ -60,7 +60,7 @@ class="nav-link active"
         <div class="row">
             <div class="col-md-3">
                 {!! Form::label('pagination',Lang::get('lang.numberofelementstodisplay')) !!} <span class="text-red"> *</span>
-                <input type="number" class="form-control" name='pagination' value="{!! $settings->pagination !!}" min="2">
+                <input type="number" class="form-control" name='pagination' value="{!! $settings->pagination !!}" min="2" REQUIRED>
             </div>
         </div>
     </div>
