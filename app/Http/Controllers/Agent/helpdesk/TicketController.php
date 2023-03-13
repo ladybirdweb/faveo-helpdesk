@@ -2370,8 +2370,6 @@ class TicketController extends Controller
 
             return $tooltip;
         }
-
-        //  return '';
     }
 
     //Auto-close tickets
