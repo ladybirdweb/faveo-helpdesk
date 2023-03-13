@@ -116,25 +116,25 @@ class Finder
     public static function rolesGroup($id)
     {
         switch ($id) {
-                case null:
-                        return \Lang::get('lang.none');
-                case 1:
-                        return 'Client';
-                case 2:
-                        return 'Agent';
-                case 4:
-                        return 'Admin';
-                case 3:
-                        return 'Client,Agent';
-                case 5:
-                        return 'Client,Admin';
-                case 6:
-                        return 'Agent,Admin';
-                case 7:
-                        return 'Client,Agent,Admin';
-                default:
-                        return 'Undefined!';
-                }
+            case null:
+                return \Lang::get('lang.none');
+            case 1:
+                return 'Client';
+            case 2:
+                return 'Agent';
+            case 4:
+                return 'Admin';
+            case 3:
+                return 'Client,Agent';
+            case 5:
+                return 'Client,Admin';
+            case 6:
+                return 'Agent,Admin';
+            case 7:
+                return 'Client,Agent,Admin';
+            default:
+                return 'Undefined!';
+        }
     }
 
     /**
