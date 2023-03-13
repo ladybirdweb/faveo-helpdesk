@@ -184,7 +184,6 @@ class CategoryController extends Controller
      */
     public function update($id, CategoryRequest $request)
     {
-
         /* Edit the selected category via id */
         $category = Category::where('id', $id)->first();
         $sl = $request->input('name');
