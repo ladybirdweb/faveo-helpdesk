@@ -223,16 +223,11 @@ if ($thread->title != "") {
                     <b>{!! Lang::get('lang.due_date') !!}: </b>
                     <?php
                     $duedate = $tickets->duedate;
-
-// Convert the duedate to the user's timezone
-                    $timezone = new DateTimeZone('Asia/Kolkata');
-                    $duedate_datetime = new DateTime($duedate, new DateTimeZone('UTC') );
-                    $duedate_datetime->setTimezone($timezone);
-                    $duedate_formatted = $duedate_datetime->format('Y-m-d H:i:s');
-
-// Display the duedate on the webpage
-                    echo " $duedate_formatted";
-                    ;
+                    $user_timezone = new DateTimeZone('Asia/Kolkata');
+                    $time = date_create($tickets->duedate, $user_timezone);
+                    date_add($time, date_interval_create_from_date_string($SlaPlan->grace_period));
+                    date_add($time, date_interval_create_from_date_string('30 minutes'));
+                    echo $time->format('Y-m-d H:i:s');
                     ?>
                 </div>
                 <div class="col-md-3">
@@ -892,6 +887,12 @@ if ($thread->title != "") {
                     <div id="show" style="display:none;text-align: center;">
                         <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}">
                     </div>
+                    <script>
+                        $('#Edit').on('hidden.bs.modal', function (e) {
+                            $(this).find('form')[0].reset();
+
+                        });
+                    </script>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal" id="dismis">{!! Lang::get('lang.close') !!}</button>
                         <input type="submit" class="btn btn-primary" value="{!! Lang::get('lang.update') !!}">

@@ -705,6 +705,13 @@ class="nav-link active"
                     <button type="button" class="btn btn-default" data-dismiss="modal" id="dismis4">{!! Lang::get('lang.close') !!}</button>
                     <button type="submit" class="btn btn-success" id="submt2">{!! Lang::get('lang.assign') !!}</button>
                 </div>
+                <script>
+                    $('#assign').on('hidden.bs.modal', function (e) {
+                        $(this).find('form')[0].reset();
+
+                    });
+                </script>
+
                 {!! Form::close()!!}
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
