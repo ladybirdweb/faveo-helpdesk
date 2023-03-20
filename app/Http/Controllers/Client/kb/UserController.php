@@ -155,7 +155,7 @@ class UserController extends Controller
             $categorys = $category->get();
             // $categorys->setPath('home');
             /* direct to view with $article_id */
-            return view('themes.default1.client.kb.article-list.home', compact('categorys', 'article_id'));
+            return view('themes.default1.client.kb.article-list.home', compact('categorys'));
         }
     }
 
@@ -290,7 +290,7 @@ class UserController extends Controller
         $categorys = $category->get();
         // $categorys->setPath('home');
         /* direct to view with $article_id */
-        return view('themes.default1.client.kb.article-list.categoryList', compact('categorys', 'article_id'));
+        return view('themes.default1.client.kb.article-list.categoryList', compact('categorys'));
     }
 
     // static function timezone($utc) {
