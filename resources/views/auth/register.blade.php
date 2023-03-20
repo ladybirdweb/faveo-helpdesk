@@ -94,11 +94,11 @@
 
                 <div>
                     
-                    <placeholder="Let’s set up your account in just a couple of steps.">
+                    <placeholder ="Let’s set up your account in just a couple of steps.">
                 </div>      
 
                 <!-- form open -->
-                {!!  Form::open(['action'=>'Auth\AuthController@postRegister', 'method'=>'post']) !!}
+                {!!  Form::open(['url'=>'auth/register', 'method'=>'post']) !!}
 
                 <!-- fullname -->
                 <div class="form-group has-feedback {{ $errors->has('full_name') ? 'has-error' : '' }}" style="display: -webkit-box;">
