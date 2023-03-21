@@ -486,8 +486,14 @@ class AuthController extends Controller
         $time = $security->lockout_period;
         $max_attempts = $security->backlist_threshold;
         $table = 'login_attempts';
-        $result = DB::select('SELECT Attempts, (CASE when LastLogin is not NULL and DATE_ADD(LastLogin, INTERVAL '.$time.' MINUTE)>NOW() then 1 else 0 end) as Denied '.
-                        ' FROM '.$table." WHERE IP = '$value' OR User = '$field'");
+        $result = DB::table($table)
+            ->select('Attempts', DB::raw('(CASE when LastLogin is not NULL and DATE_ADD(LastLogin, INTERVAL ? MINUTE) > NOW() then 1 else 0 end) as Denied'))
+            ->where(function ($query) use ($value, $field) {
+                $query->where('IP', '=', $value)
+                    ->orWhere('User', '=', $field);
+            })
+            ->setBindings([$time, $value, $field])
+            ->get();
         $data = $result;
         //Verify that at least one login attempt is in database
         if (!$data) {
