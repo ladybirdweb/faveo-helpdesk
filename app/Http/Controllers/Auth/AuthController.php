@@ -550,7 +550,7 @@ class AuthController extends Controller
             $otp = Otp::select('otp', 'updated_at')->where('user_id', '=', $user->id)
                     ->first();
             if ($otp != null) {
-                if (($otp_length == 6 && !preg_match('/[a-z]/i', $request->input('otp')))) {
+                if ($otp_length == 6 && !preg_match('/[a-z]/i', $request->input('otp'))) {
                     $otp2 = Hash::make($request->input('otp'));
                     $date1 = date_format($otp->updated_at, 'Y-m-d h:i:sa');
                     $date2 = date('Y-m-d h:i:sa');
