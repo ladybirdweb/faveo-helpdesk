@@ -4,7 +4,6 @@ namespace App\Http\Requests\helpdesk;
 
 use App\Http\Requests\Request;
 use App\Model\helpdesk\Settings\CommonSettings;
-use Illuminate\Contracts\Validation\Validator;
 
 /**
  * AgentRequest.
