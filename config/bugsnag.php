@@ -13,7 +13,7 @@ return [
     | which should receive your application's uncaught exceptions.
     |
     */
-    'api_key' => '280264db78f78f46e37169b2b65bed2d',
+    'api_key' => 'e1b966a7d0cc85a2dcc75ee4469754d1',
 
     /*
     |--------------------------------------------------------------------------
