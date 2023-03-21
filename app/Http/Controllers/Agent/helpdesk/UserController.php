@@ -600,8 +600,8 @@ class UserController extends Controller
             }
         }
         // } catch (Exception $e) {
-            /* redirect to Index page with Fails Message */
-            // return redirect('user')->with('fails', $e->getMessage());
+        /* redirect to Index page with Fails Message */
+        // return redirect('user')->with('fails', $e->getMessage());
         // }
     }
 
@@ -640,7 +640,6 @@ class UserController extends Controller
     public function edit($id, CountryCode $code)
     {
         try {
-
             // dd('here');
             $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
             $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
@@ -1047,7 +1046,7 @@ class UserController extends Controller
                 ->first();
         if ($otp != null) {
             $otp_length = strlen(Input::get('otp'));
-            if (($otp_length == 6 && !preg_match('/[a-z]/i', Input::get('otp')))) {
+            if ($otp_length == 6 && !preg_match('/[a-z]/i', Input::get('otp'))) {
                 $otp2 = Hash::make(Input::get('otp'));
                 $date1 = date_format($otp->updated_at, 'Y-m-d h:i:sa');
                 $date2 = date('Y-m-d h:i:sa');

@@ -70,7 +70,7 @@ class SecureFaveoAPPKey extends Command
             }
             $this->line("\r\nAPP_KEY has been updated in the environment.");
             $this->line("\r\nNext you might want to check if your configured email is working fine or not. If it has any problem you can update the password and restart your queue workers if you are processing mail jobs in queue.\r\n");
-            exit();
+            exit;
         }
         $this->info('Alright, calm down we did not make any changes to your environment. But if you think your APP_KEY was compromised or you were using Faveo without generating APP_KEY explicitly(for version v1.10.* or older) we recommend you to run this command on priority basis.');
     }
