@@ -129,7 +129,7 @@ class ClientRequest extends Request
     {
         $settings = $settings->select('status')->where('option_name', '=', 'send_otp')->first();
         $email_mandatory = $settings->select('status')->where('option_name', '=', 'email_mandatory')->first();
-        if (($email_mandatory->status == 0 || $email_mandatory->status == '0')) {
+        if ($email_mandatory->status == 0 || $email_mandatory->status == '0') {
             if (!\Auth::check()) {
                 return [
                     'Name'    => 'required',
