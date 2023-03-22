@@ -149,15 +149,12 @@ class LanguageController extends Controller
             // doing the validation, passing post data, rules and the messages
             $validator = Validator::make($file, $rules);
             if ($validator->fails()) {
-
                 // send back to the page with the input data and errors
                 return Redirect::back()->withInput()->withErrors($validator);
             } else {
-
                 //Checking if package already exists or not in lang folder
                 $path = base_path('lang');
                 if (in_array(strtolower(Request::get('iso-code')), scandir($path))) {
-
                     //sending back with error message
                     Session::flash('fails', Lang::get('lang.package_exist'));
                     Session::flash('link', 'change-language/'.strtolower(Request::get('iso-code')));
@@ -169,7 +166,6 @@ class LanguageController extends Controller
 
                     return Redirect::back()->withInput();
                 } else {
-
                     // checking file is valid.
                     if (Request::file('File')->isValid()) {
                         $name = Request::file('File')->getClientOriginalName(); //uploaded file's original name

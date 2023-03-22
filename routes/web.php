@@ -461,10 +461,10 @@ Route::middleware('web')->group(function () {
 
         Route::get('/ticket/unassigned', [Agent\helpdesk\TicketController::class, 'get_unassigned'])->name('get.unassigned.ticket');  /* Get tickets in datatable */
         // Department ticket
-            Route::get('/{dept}/open', [Agent\helpdesk\TicketController::class, 'deptopen'])->name('dept.open.ticket'); // Open
-            Route::get('tickets/{dept}/{status}', [Agent\helpdesk\TicketController::class, 'deptTicket'])->name('dept.ticket'); // Open
+        Route::get('/{dept}/open', [Agent\helpdesk\TicketController::class, 'deptopen'])->name('dept.open.ticket'); // Open
+        Route::get('tickets/{dept}/{status}', [Agent\helpdesk\TicketController::class, 'deptTicket'])->name('dept.ticket'); // Open
 
-            Route::get('/{dept}/assigned', [Agent\helpdesk\TicketController::class, 'deptinprogress'])->name('dept.inprogress.ticket'); // Inprogress
+        Route::get('/{dept}/assigned', [Agent\helpdesk\TicketController::class, 'deptinprogress'])->name('dept.inprogress.ticket'); // Inprogress
 
         Route::get('/{dept}/closed', [Agent\helpdesk\TicketController::class, 'deptclose'])->name('dept.closed.ticket'); // Closed
         /*
@@ -473,8 +473,8 @@ Route::middleware('web')->group(function () {
         Route::get('/ticket/followup', [Agent\helpdesk\TicketController::class, 'followupTicketList'])->name('followup.ticket'); //  Get Closed Ticket /
 
         Route::get('/ticket/get-followup', [Agent\helpdesk\TicketController::class, 'getFollowup'])->name('get.followup.ticket');  // Get tickets in datatable /
-            Route::get('/ticket/close/get-approval/{id}', [Agent\helpdesk\TicketController::class, 'getCloseapproval'])->name('get.close.approval.ticket');  // Get tickets in datatable /
-            Route::get('filter', [Agent\helpdesk\Filter\FilterControllerOld::class, 'getFilter'])->name('filter');
+        Route::get('/ticket/close/get-approval/{id}', [Agent\helpdesk\TicketController::class, 'getCloseapproval'])->name('get.close.approval.ticket');  // Get tickets in datatable /
+        Route::get('filter', [Agent\helpdesk\Filter\FilterControllerOld::class, 'getFilter'])->name('filter');
 
         /*
          *=======================================================================
@@ -527,7 +527,7 @@ Route::middleware('web')->group(function () {
     // show ticket via have a ticket
     Route::get('show-ticket/{id}/{code}', [Client\helpdesk\UnAuthController::class, 'showTicketCode'])->name('show.ticket'); //detail ticket information
 
-//testing ckeditor
+    //testing ckeditor
     //===================================================================================
     Route::middleware('auth')->group(function () {
         Route::get('client-profile', [Client\helpdesk\GuestController::class, 'getProfile'])->name('client.profile'); /*  User profile get  */

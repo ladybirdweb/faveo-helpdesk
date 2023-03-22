@@ -158,7 +158,8 @@ class UserController extends Controller
             $page = Relationship::where('category_id', '=', $category->id)->get();
             /* from whole attribute pick the article_id */
             $articles_id = $page->pluck('article_id');
-            return view('themes.default1.client.kb.article-list.home', compact('categorys','articles_id'));
+
+            return view('themes.default1.client.kb.article-list.home', compact('categorys', 'articles_id'));
         }
     }
 
@@ -296,7 +297,8 @@ class UserController extends Controller
         $page = Relationship::where('category_id', '=', $category->id)->get();
         /* from whole attribute pick the article_id */
         $articles_id = $page->pluck('article_id');
-        return view('themes.default1.client.kb.article-list.categoryList', compact('categorys','articles_id'));
+
+        return view('themes.default1.client.kb.article-list.categoryList', compact('categorys', 'articles_id'));
     }
 
     // static function timezone($utc) {
