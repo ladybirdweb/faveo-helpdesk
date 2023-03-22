@@ -32,6 +32,7 @@ use Illuminate\Support\Str;
  *
  * @author Vijay Sebastian <vijay.sebastian@ladybirdweb.com>
  * @copyright (c) 2016, Ladybird Web Solution
+ *
  * @name Faveo HELPDESK
  *
  * @version v1
