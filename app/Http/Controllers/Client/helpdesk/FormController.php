@@ -188,7 +188,7 @@ class FormController extends Controller
             // $priority = $ticket_settings->first()->priority;
             $default_priority = Ticket_Priority::where('is_default', '=', 1)->first();
             $user_priority = CommonSettings::where('option_name', '=', 'user_priority')->first();
-            if (!($request->input('priority'))) {
+            if (!$request->input('priority')) {
                 $priority = $default_priority->priority_id;
                 if ($helpTopicObj->exists() && ($helpTopicObj->value('status') == 1)) {
                     $priority = $helpTopicObj->value('priority');

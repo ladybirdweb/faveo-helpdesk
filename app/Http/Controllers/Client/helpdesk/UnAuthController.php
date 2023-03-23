@@ -344,7 +344,7 @@ class UnAuthController extends Controller
 
             \Cache::forever('language', $lang);
         // dd(Cache::get('language'));
-            // dd()
+        // dd()
         } else {
             return false;
         }
@@ -361,31 +361,31 @@ class UnAuthController extends Controller
 
         switch ($condition) {
             case 'everyMinute':
-              $followup_set = ' + 1 minute';
+                $followup_set = ' + 1 minute';
                 break;
             case 'everyFiveMinutes':
-               $followup_set = ' + 5 minute';
+                $followup_set = ' + 5 minute';
                 break;
             case 'everyTenMinutes':
-               $followup_set = ' + 10 minute';
+                $followup_set = ' + 10 minute';
                 break;
             case 'everyThirtyMinutes':
-               $followup_set = ' + 30 minute';
+                $followup_set = ' + 30 minute';
                 break;
             case 'hourly':
-               $followup_set = ' + 1 hours';
+                $followup_set = ' + 1 hours';
                 break;
             case 'daily':
-               $followup_set = ' + 1 day';
+                $followup_set = ' + 1 day';
                 break;
             case 'weekly':
-               $followup_set = ' + 7 day';
+                $followup_set = ' + 7 day';
                 break;
             case 'monthly':
-               $followup_set = ' + 30 day';
+                $followup_set = ' + 30 day';
                 break;
             case 'yearly':
-               $followup_set = ' + 365 day';
+                $followup_set = ' + 365 day';
                 break;
         }
 
@@ -410,12 +410,12 @@ class UnAuthController extends Controller
                     $ticket->follow_up = 1;
                     $ticket->save();
                     //  Tickets::where('id', '=',$id)
-             // ->update(['follow_up' => 1]);
+                    // ->update(['follow_up' => 1]);
 
-            // }
+                    // }
                 }
                 //       if($id=2)
-        // {dd($ticket);}
+                // {dd($ticket);}
             }
         }
     }
