@@ -318,7 +318,7 @@ class FilterController extends Controller
                 return $table;
                 break;
 
-            // case 'show-overdue':
+                // case 'show-overdue':
             //     $table = $this->filterByDate('overdue', $value, $table);
             //     return $table;
             //     break;
@@ -610,7 +610,7 @@ class FilterController extends Controller
 
                 return $table;
                 break;
-            // case 'overdue':
+                // case 'overdue':
             //     if ($value[0] == 1 || $value[0] == '1') {
             //         $table = $table->where('isanswered', '=', 0)
             //         ->whereNotNull('tickets.duedate')
@@ -857,7 +857,7 @@ class FilterController extends Controller
 
                 return [$start, $end];
                 break;
-            // cases for due date
+                // cases for due date
 
             case 'any-time':
                 return ['any'];
@@ -952,6 +952,7 @@ class FilterController extends Controller
      * @category function to filter tickets by SLA
      *
      * @param string array $value, builder $table
+     *
      * @
      *
      * @return builder
