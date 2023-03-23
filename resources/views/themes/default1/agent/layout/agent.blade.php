@@ -32,7 +32,7 @@
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <link href="{{asset("lb-faveo/css/editor.css")}}" rel="stylesheet" type="text/css"/>
 
-        <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.3.2.0.css")}}" rel="stylesheet"  type="text/css"/>
+        <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet"  type="text/css"/>
 
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
     
@@ -47,7 +47,7 @@
         <link href="{{asset("lb-faveo/css/jquery.ui.3.2.0css")}}" rel="stylesheet" type="text/css" />
         <script src="{{asset("lb-faveo/js/jquery-3.2.0.min.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/js/jquery-migrate.js")}}" type="text/javascript"></script>
-        <script src="{{asset("lb-faveo/js/popper.3.2.0.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/popper.min.js")}}" type="text/javascript"></script>
         <!-- Bootstrap 3.3.2 JS -->
         <script src="{{asset("lb-faveo/js/bootstrap4.min.js")}}" type="text/javascript"></script>
 
