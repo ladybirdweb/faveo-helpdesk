@@ -68,6 +68,6 @@ Artisan::command('install:seed', function () {
         }
         \DB::table($name)->truncate();
     }
-    $this->call('db:seed', ['--force' => true]);
+    (new \App\Http\Controllers\Update\SyncFaveoToLatestVersion())->sync();
     $this->info('seeded successfully');
 })->purpose('Seeding for install');
