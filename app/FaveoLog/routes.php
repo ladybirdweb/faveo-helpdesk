@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\App;
 use Illuminate\Support\Facades\Route;
 
 Breadcrumbs::register('logs', function ($breadcrumbs) {
