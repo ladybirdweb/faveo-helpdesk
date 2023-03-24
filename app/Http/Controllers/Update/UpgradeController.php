@@ -98,7 +98,7 @@ class UpgradeController extends Controller
         $dlHandler = fopen($this->dir.'/UPDATES/'.'/faveo-helpdesk-master.zip', 'w');
         if (!fwrite($dlHandler, $newUpdate)) {
             echo '<p>Could not save new update. Operation aborted.</p>';
-            exit();
+            exit;
         }
         fclose($dlHandler);
         echo '<p>Update Downloaded And Saved</p>';
@@ -205,7 +205,7 @@ class UpgradeController extends Controller
             echo "<li style='color:red;'>".$ex->getMessage().'</li>';
             echo '</ul>';
         }
-        exit();
+        exit;
     }
 
     public function deleteBarNotification($key)
@@ -293,7 +293,7 @@ class UpgradeController extends Controller
                             }
                         } else {
                             echo '<p>Latest code found. <a href='.url('file-upgrade?dodownload=true').'>&raquo; Download Now?</a></p>';
-                            exit();
+                            exit;
                         }
                     } else {
                         echo '<p>Update already downloaded.</p>';
@@ -302,7 +302,7 @@ class UpgradeController extends Controller
                         $updated = $this->doUpdate();
                     } else {
                         echo '<p>Update ready. <a href='.url('file-upgrade?doUpdate=true').'>&raquo; Install Now?</a></p>';
-                        exit();
+                        exit;
                     }
 
                     if ($updated == true) {
