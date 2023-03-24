@@ -159,7 +159,7 @@ class PriorityController extends Controller
                     ->update(['is_default' => 1]);
         }
 
-        return \Redirect::route('priority.index')->with('success', (Lang::get('lang.priority_successfully_updated')));
+        return \Redirect::route('priority.index')->with('success', Lang::get('lang.priority_successfully_updated'));
     }
 
     /**
@@ -187,6 +187,6 @@ class PriorityController extends Controller
 
         $tk_priority->delete();
 
-        return \Redirect::route('priority.index')->with('success', (Lang::get('lang.delete_successfully')));
+        return \Redirect::route('priority.index')->with('success', Lang::get('lang.delete_successfully'));
     }
 }

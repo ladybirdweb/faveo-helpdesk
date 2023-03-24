@@ -102,12 +102,12 @@ class FilterControllerOld extends Controller
                                 ->whereIn('ticket_status.state', ['closed']);
                     });
             case '/ticket/myticket':
-                    return $table
-                      ->leftJoin('ticket_status', function ($join) {
-                          $join->on('ticket_status.id', '=', 'tickets.status');
-                      })
-                    ->orWhere('tickets.assigned_to', '=', Auth::user()->id)
-                    ->where('tickets.status', '=', 1);
+                return $table
+                  ->leftJoin('ticket_status', function ($join) {
+                      $join->on('ticket_status.id', '=', 'tickets.status');
+                  })
+                ->orWhere('tickets.assigned_to', '=', Auth::user()->id)
+                ->where('tickets.status', '=', 1);
             case '/unassigned':
                 if (Auth::user()->role == 'agent') {
                     $id = Auth::user()->primary_dpt;
@@ -126,17 +126,17 @@ class FilterControllerOld extends Controller
                     $table = $table->where('tickets.dept_id', '=', $id);
                 }
 
-                  return $table
-                    ->leftJoin('ticket_status', function ($join) {
-                        $join->on('ticket_status.id', '=', 'tickets.status');
-                    })
-                    ->where('tickets.status', '=', 1)
-                    ->where('tickets.isanswered', '=', 0)
-                    ->whereNotNull('tickets.duedate')
-                    ->where('tickets.duedate', '!=', '00-00-00 00:00:00')
+                return $table
+                  ->leftJoin('ticket_status', function ($join) {
+                      $join->on('ticket_status.id', '=', 'tickets.status');
+                  })
+                  ->where('tickets.status', '=', 1)
+                  ->where('tickets.isanswered', '=', 0)
+                  ->whereNotNull('tickets.duedate')
+                  ->where('tickets.duedate', '!=', '00-00-00 00:00:00')
 
-                    // ->where('duedate','>',\Carbon\Carbon::now());
-                    ->where('tickets.duedate', '<', \Carbon\Carbon::now());
+                  // ->where('duedate','>',\Carbon\Carbon::now());
+                  ->where('tickets.duedate', '<', \Carbon\Carbon::now());
             case '/ticket/approval/closed':
                 if (Auth::user()->role == 'agent') {
                     $id = Auth::user()->primary_dpt;
@@ -203,14 +203,14 @@ class FilterControllerOld extends Controller
                     $table = $table->where('tickets.dept_id', '=', $id);
                 }
 
-               return $table
-                    ->leftJoin('ticket_status', function ($join) {
-                        $join->on('ticket_status.id', '=', 'tickets.status');
-                    })
-                    ->where('tickets.status', '=', 1)
+                return $table
+                     ->leftJoin('ticket_status', function ($join) {
+                         $join->on('ticket_status.id', '=', 'tickets.status');
+                     })
+                     ->where('tickets.status', '=', 1)
 
-                    ->whereNotNull('tickets.duedate')
-                    ->whereDate('tickets.duedate', '=', \Carbon\Carbon::now()->format('Y-m-d'));
+                     ->whereNotNull('tickets.duedate')
+                     ->whereDate('tickets.duedate', '=', \Carbon\Carbon::now()->format('Y-m-d'));
 
             case '/ticket/followup':
                 if (Auth::user()->role == 'agent') {

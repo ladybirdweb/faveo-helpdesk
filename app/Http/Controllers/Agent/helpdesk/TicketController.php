@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Agent\helpdesk;
 
 // controllers
-use App\Http\Controllers\Agent\helpdesk\Filter\FilterControllerOld;
 use App\Http\Controllers\Common\FileuploadController;
 use App\Http\Controllers\Common\NotificationController as Notify;
 use App\Http\Controllers\Common\PhpMailController;
@@ -51,7 +50,6 @@ use Illuminate\Support\Str;
 use Lang;
 use Mail;
 use UTC;
-use Vsmoraes\Pdf\Pdf;
 use Vsmoraes\Pdf\PdfFacade;
 use Yajra\DataTables\Facades\DataTables;
 
