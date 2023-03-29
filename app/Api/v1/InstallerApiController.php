@@ -170,8 +170,7 @@ class InstallerApiController extends Controller
             $datetime = $request->datetime;
 
             // Migrate database
-            Artisan::call('migrate', ['--force' => true]);
-            Artisan::call('db:seed', ['--force' => true]);
+            (new \App\Http\Controllers\Update\SyncFaveoToLatestVersion())->sync();
             Artisan::call('key:generate', ['--force' => true]);
             Artisan::call('jwt:secret');
             // checking requested timezone for the admin and system
@@ -195,8 +194,6 @@ class InstallerApiController extends Controller
             $system->date_time_format = $date_time_format->id;
             $system->time_zone = $timezones->id;
             $version = \Config::get('app.version');
-            $version = explode(' ', $version);
-            $version = $version[1];
             $system->version = $version;
             $system->save();
 
