@@ -16,7 +16,7 @@ return [
     */
 
     'default' => env('DB_CONNECTION', 'mysql'),
-
+    'install' => env('DB_INSTALL'),
     /*
     |--------------------------------------------------------------------------
     | Database Connections
