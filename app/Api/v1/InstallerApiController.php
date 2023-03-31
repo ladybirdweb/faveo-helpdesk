@@ -91,7 +91,7 @@ class InstallerApiController extends Controller
                 $ENV['DB_DATABASE'] = $database;
                 $ENV['DB_USERNAME'] = $dbusername;
                 $ENV['DB_PASSWORD'] = $dbpassword;
-                $ENV['DB_ENGINE']   = 'InnoDB';
+                $ENV['DB_ENGINE'] = 'InnoDB';
                 $ENV['DB_INSTALL'] = '%0%';
                 $ENV['MAIL_MAILER'] = 'smtp';
                 $ENV['MAIL_HOST'] = 'mailtrap.io';
