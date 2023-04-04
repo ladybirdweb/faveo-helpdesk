@@ -97,6 +97,27 @@ Faveo uses [Bugsnag](https://www.bugsnag.com/) to monitor application stability 
 
 You can still report the issues on our [Github Issue page](https://github.com/ladybirdweb/faveo-helpdesk/issues) by providing proper information about the changes you are trying to implement. We assure you that Faveo community will help you and your customization can be a part of Faveo application if it follows our contributing guidelines.
 
+# Security Policy
+
+## Supported Versions
+
+Check mark versions are supported with security patches.
+
+| Version | Supported          |
+| ------- | ------------------ |
+| 2.0.1   | :white_check_mark:                |
+| 2.0.0   | :x: |
+| < 1.0   | :x:                |
+
+## Supported Updates
+
+Security updates will be released once in a month. If it's high priority, we will make it twice a month
+
+## Reporting a Vulnerability
+
+Please report (suspected) security vulnerabilities to support@faveohelpdesk.com. You will receive a response from us within 48 hours. If the issue is confirmed, we will release a patch as soon as possible depending on complexity but historically within a few days.
+
+
 Help
 --------------------------
 Visit the <a href="https://github.com/ladybirdweb/faveo-helpdesk/issues">issue</a> page. And if you'd like professional help commercial support is available, email us through the <a href="http://www.faveohelpdesk.com/contact-us/">contact form</a>.
