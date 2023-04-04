@@ -34,6 +34,7 @@ class ErrorAndDebuggingController extends Controller
      * function to show error and debugging setting page.
      *
      * @param void
+     *
      * @return response
      */
     public function showSettings()
@@ -97,6 +98,7 @@ class ErrorAndDebuggingController extends Controller
      * function to show error log table page.
      *
      * @param void
+     *
      * @return response view
      */
     public function showErrorLogs()

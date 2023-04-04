@@ -104,7 +104,8 @@ class BanlistController extends Controller
     /**
      * Editing the details of the banned users.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return type Response
      */
     public function edit($id, User $ban)
@@ -121,7 +122,8 @@ class BanlistController extends Controller
     /**
      * Update the banned users.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return type Response
      */
     public function update($id, User $ban, BanlistRequest $request)
@@ -143,7 +145,8 @@ class BanlistController extends Controller
     /**
      * delete the banned users.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return type view
      */
     public function delete($id, User $ban)

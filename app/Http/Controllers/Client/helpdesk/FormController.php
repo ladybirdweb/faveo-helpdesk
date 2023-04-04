@@ -59,6 +59,7 @@ class FormController extends Controller
      * getform.
      *
      * @param type Help_topic $topic
+     *
      * @return type
      */
     public function getForm(Help_topic $topic, CountryCode $code)
@@ -68,7 +69,7 @@ class FormController extends Controller
         }
         $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
         $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
-        if (! \Auth::check() && ($settings->status == 1 || $settings->status == '1')) {
+        if (!\Auth::check() && ($settings->status == 1 || $settings->status == '1')) {
             return redirect('auth/login')->with(['login_require' => 'Please login to your account for submitting a ticket', 'referer' => 'form']);
         }
         $location = GeoIP::getLocation();
@@ -95,6 +96,7 @@ class FormController extends Controller
      *
      * @param type Form_name    $name
      * @param type Form_details $details
+     *
      * @return type string
      */
     public function postForm($id, Help_topic $topic)
@@ -103,7 +105,7 @@ class FormController extends Controller
             $helptopic = $topic->where('id', '=', $id)->first();
             $custom_form = $helptopic->custom_form;
             $values = Fields::where('forms_id', '=', $custom_form)->get();
-            if (! $values) {
+            if (!$values) {
             }
             if ($values) {
                 foreach ($values as $form_data) {
@@ -186,7 +188,7 @@ class FormController extends Controller
             // $priority = $ticket_settings->first()->priority;
             $default_priority = Ticket_Priority::where('is_default', '=', 1)->first();
             $user_priority = CommonSettings::where('option_name', '=', 'user_priority')->first();
-            if (! $request->input('priority')) {
+            if (!$request->input('priority')) {
                 $priority = $default_priority->priority_id;
                 if ($helpTopicObj->exists() && ($helpTopicObj->value('status') == 1)) {
                     $priority = $helpTopicObj->value('priority');
@@ -208,18 +210,18 @@ class FormController extends Controller
                 $geoipcode = $code->where('iso', '=', $location->iso_code)->first();
                 if ($phonecode == null) {
                     $data = [
-                        'fails' => Lang::get('lang.country-code-required-error'),
-                        'phonecode' => $geoipcode->phonecode,
+                        'fails'              => Lang::get('lang.country-code-required-error'),
+                        'phonecode'          => $geoipcode->phonecode,
                         'country_code_error' => 1,
                     ];
 
                     return Redirect::back()->with($data)->withInput($request->except('password'));
                 } else {
                     $code = CountryCode::select('phonecode')->where('phonecode', '=', $phonecode)->get();
-                    if (! count($code)) {
+                    if (!count($code)) {
                         $data = [
-                            'fails' => Lang::get('lang.incorrect-country-code-error'),
-                            'phonecode' => $geoipcode->phonecode,
+                            'fails'              => Lang::get('lang.incorrect-country-code-error'),
+                            'phonecode'          => $geoipcode->phonecode,
                             'country_code_error' => 1,
                         ];
 
@@ -261,14 +263,15 @@ class FormController extends Controller
     /**
      * reply.
      *
-     * @param  type  $value
+     * @param type $value
+     *
      * @return type view
      */
     public function post_ticket_reply($id, Request $request)
     {
         try {
             $comment = $request->input('comment');
-            if (! empty($comment)) {
+            if (!empty($comment)) {
                 $tickets = Tickets::where('id', '=', $id)->first();
                 $thread = Ticket_Thread::where('ticket_id', '=', $tickets->id)->first();
 
@@ -312,7 +315,7 @@ class FormController extends Controller
         $helptopic_id = $request->input('helptopic');
         $helptopics = new Help_topic();
         $helptopic = $helptopics->find($helptopic_id);
-        if (! $helptopic) {
+        if (!$helptopic) {
             throw new Exception('We can not find your request');
         }
         $custom_form = $helptopic->custom_form;

@@ -41,6 +41,7 @@ class TeamController extends Controller
      *
      * @param type Teams             $team
      * @param type Assign_team_agent $assign_team_agent
+     *
      * @return type Response
      */
     public function index(Teams $team, Assign_team_agent $assign_team_agent)
@@ -61,6 +62,7 @@ class TeamController extends Controller
      * Show the form for creating a new resource.
      *
      * @param type User $user
+     *
      * @return type Response
      */
     public function create(User $user)
@@ -79,6 +81,7 @@ class TeamController extends Controller
      *
      * @param type Teams       $team
      * @param type TeamRequest $request
+     *
      * @return type Response
      */
     public function store(Teams $team, TeamRequest $request)
@@ -93,7 +96,7 @@ class TeamController extends Controller
                     'team_lead' => $team_lead,
                 ]);
                 Assign_team_agent::create([
-                    'team_id' => $team_update->id,
+                    'team_id'  => $team_update->id,
                     'agent_id' => $team_lead,
                 ]);
             } else {
@@ -111,10 +114,11 @@ class TeamController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  type  $id
+     * @param type $id
      * @param type User              $user
      * @param type Assign_team_agent $assign_team_agent
      * @param type Teams             $team
+     *
      * @return type Response
      */
     public function show($id, User $user, Assign_team_agent $assign_team_agent, Teams $team)
@@ -196,10 +200,11 @@ class TeamController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  type  $id
+     * @param type $id
      * @param type User              $user
      * @param type Assign_team_agent $assign_team_agent
      * @param type Teams             $team
+     *
      * @return type Response
      */
     public function edit($id, User $user, Assign_team_agent $assign_team_agent, Teams $team)
@@ -227,6 +232,7 @@ class TeamController extends Controller
      * @param type int        $id
      * @param type Teams      $team
      * @param type TeamUpdate $request
+     *
      * @return type Response
      */
     public function update($id, Teams $team, TeamUpdate $request)
@@ -262,6 +268,7 @@ class TeamController extends Controller
      * @param type int               $id
      * @param type Teams             $team
      * @param type Assign_team_agent $assign_team_agent
+     *
      * @return type Response
      */
     public function destroy($id, Teams $team, Assign_team_agent $assign_team_agent)

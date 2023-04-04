@@ -53,17 +53,17 @@ class AgentLayout
     {
         $notifications = \App\Http\Controllers\Common\NotificationController::getNotifications();
         $view->with([
-            'company' => $this->company,
-            'notifications' => $notifications,
-            'myticket' => $this->myTicket(),
-            'unassigned' => $this->unassigned(),
-            'followup_ticket' => $this->followupTicket(),
-            'deleted' => $this->deleted(),
-            'tickets' => $this->inbox(),
-            'department' => $this->departments(),
-            'overdues' => $this->overdues(),
-            'due_today' => $this->getDueToday(),
-            'is_mail_conigured' => $this->getEmailConfig(),
+            'company'            => $this->company,
+            'notifications'      => $notifications,
+            'myticket'           => $this->myTicket(),
+            'unassigned'         => $this->unassigned(),
+            'followup_ticket'    => $this->followupTicket(),
+            'deleted'            => $this->deleted(),
+            'tickets'            => $this->inbox(),
+            'department'         => $this->departments(),
+            'overdues'           => $this->overdues(),
+            'due_today'          => $this->getDueToday(),
+            'is_mail_conigured'  => $this->getEmailConfig(),
             'dummy_installation' => $this->getDummyDataInstallation(),
         ]);
     }
@@ -223,12 +223,13 @@ class AgentLayout
      * @category function to check if dummy data is installed in the system or not
      *
      * @param null
+     *
      * @return builder
      */
     public function getDummyDataInstallation()
     {
         $return_collection = $this->common_settings->select('status')->where('option_name', '=', 'dummy_data_installation')->first();
-        if (! $return_collection) {
+        if (!$return_collection) {
             $return_collection = collect(['status' => 0]);
 
             return $return_collection['status'];

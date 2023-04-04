@@ -32,9 +32,9 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * @return void
-     *
      * @throws \Throwable
+     *
+     * @return void
      */
     public function report(\Throwable $e)
     {
@@ -46,7 +46,8 @@ class Handler extends ExceptionHandler
     /**
      * Convert a validation exception into a JSON response.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     protected function invalidJson($request, ValidationException $exception)
@@ -55,9 +56,9 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * @return type|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
-     *
      * @throws \Throwable
+     *
+     * @return type|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
      */
     public function render($request, \Throwable $e)
     {
@@ -84,8 +85,9 @@ class Handler extends ExceptionHandler
     /**
      * Function to render 500 error page.
      *
-     * @param  type  $request
-     * @param  type  $e
+     * @param type $request
+     * @param type $e
+     *
      * @return type mixed
      */
     public function render500($request, $e)
@@ -113,8 +115,9 @@ class Handler extends ExceptionHandler
     /**
      * Function to render 404 error page.
      *
-     * @param  type  $request
-     * @param  type  $e
+     * @param type $request
+     * @param type $e
+     *
      * @return type mixed
      */
     public function render404($request, $e)
@@ -137,8 +140,9 @@ class Handler extends ExceptionHandler
     /**
      * Function to render database connection failed.
      *
-     * @param  type  $request
-     * @param  type  $e
+     * @param type $request
+     * @param type $e
+     *
      * @return type mixed
      */
     public function renderDB($request, $e)
@@ -157,8 +161,9 @@ class Handler extends ExceptionHandler
     /**
      * Common finction to render both types of codes.
      *
-     * @param  type  $request
-     * @param  type  $e
+     * @param type $request
+     * @param type $e
+     *
      * @return type mixed
      */
     public function common($request, $e)
