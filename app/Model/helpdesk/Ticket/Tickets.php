@@ -75,7 +75,7 @@ class Tickets extends BaseModel
 
     public function setAssignedToAttribute($value)
     {
-        if (!$value) {
+        if (! $value) {
             $this->attributes['assigned_to'] = null;
         } else {
             $this->attributes['assigned_to'] = $value;

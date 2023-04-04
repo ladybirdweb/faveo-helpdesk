@@ -83,7 +83,7 @@
         "fakerphp/faker": "^1.9.1",
         "barryvdh/laravel-debugbar": "^3.7",
         "spatie/laravel-ignition": "^1.4",
-        "laravel/pint": "^1.4"
+        "laravel/pint": "^1.7"
     },
     "autoload": {
         "classmap": [

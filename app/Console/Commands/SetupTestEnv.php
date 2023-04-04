@@ -73,9 +73,8 @@ class SetupTestEnv extends Command
     /**
      * Sets up DB config for testing.
      *
-     * @param string $dbUsername mysql username
-     * @param string $dbPassword mysql password
-     *
+     * @param  string  $dbUsername mysql username
+     * @param  string  $dbPassword mysql password
      * @return null
      */
     private function setupConfig($dbUsername, $dbPassword)
@@ -165,8 +164,6 @@ class SetupTestEnv extends Command
     /**
      * Creates an env file if not exists already.
      *
-     * @param string $dbUsername
-     * @param string $dbPassword
      *
      * @return null
      */

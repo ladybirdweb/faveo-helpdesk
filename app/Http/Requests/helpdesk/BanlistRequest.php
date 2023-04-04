@@ -30,7 +30,7 @@ class BanlistRequest extends Request
     {
         return [
             'email' => 'email',
-            'ban'   => 'required',
+            'ban' => 'required',
         ];
     }
 }

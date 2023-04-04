@@ -33,8 +33,8 @@ class HelptopicRequest extends Request
             // 'parent_topic' => 'required',
             // 'custom_form' => 'required',
             'department' => 'required',
-            'priority'   => 'required',
-            'sla_plan'   => 'required',
+            'priority' => 'required',
+            'sla_plan' => 'required',
             // 'auto_assign' => 'required',
         ];
     }

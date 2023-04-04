@@ -34,7 +34,7 @@ class QueueController extends Controller
         try {
             $queues = new QueueService();
             $queue = $queues->find($id);
-            if (!$queue) {
+            if (! $queue) {
                 throw new Exception('Sorry we can not find your request');
             }
 
@@ -50,7 +50,7 @@ class QueueController extends Controller
             $values = $request->except('_token');
             $queues = new QueueService();
             $queue = $queues->find($id);
-            if (!$queue) {
+            if (! $queue) {
                 throw new Exception('Sorry we can not find your request');
             }
             $setting = new FaveoQueue();
@@ -64,8 +64,8 @@ class QueueController extends Controller
                 foreach ($values as $key => $value) {
                     $setting->create([
                         'service_id' => $id,
-                        'key'        => $key,
-                        'value'      => $value,
+                        'key' => $key,
+                        'value' => $value,
                     ]);
                 }
             }
@@ -82,7 +82,7 @@ class QueueController extends Controller
             $queues = new QueueService();
             $queue = $queues->find($id);
             $active_queue = $queues->where('status', 1)->first();
-            if (!$queue) {
+            if (! $queue) {
                 throw new Exception('Sorry we can not find your request');
             }
             if ($queue->isActivate() == false && $id != 1 && $id != 2) {

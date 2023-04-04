@@ -124,7 +124,6 @@ class SettingsController extends Controller
      *
      * @param type Footer  $footer
      * @param type Request $request
-     *
      * @return type response
      */
     public function edit_widget($id, Widgets $widgets, Request $request)
@@ -202,7 +201,6 @@ class SettingsController extends Controller
      *
      * @param type Footer  $footer
      * @param type Request $request
-     *
      * @return type response
      */
     public function edit_social_buttons($id, Widgets $widgets, Request $request)
@@ -262,7 +260,6 @@ class SettingsController extends Controller
      *
      * @param type Settings $set
      * @param type Request  $request
-     *
      * @return type view
      */
     public function PostSettings(Settings $set, Request $request)
@@ -373,7 +370,6 @@ class SettingsController extends Controller
     /**
      * After plugin post.
      *
-     * @param Request $request
      *
      * @return type
      */
@@ -382,7 +378,7 @@ class SettingsController extends Controller
         $this->validate($request, ['plugin' => 'required|mimes:application/zip,zip,Zip']);
 
         try {
-            if (!extension_loaded('zip')) {
+            if (! extension_loaded('zip')) {
                 throw new Exception('Please enable zip extension in your php');
             }
             $plug = new Plugin();
@@ -452,16 +448,15 @@ class SettingsController extends Controller
     /**
      * Delete the directory.
      *
-     * @param type $dir
-     *
+     * @param  type  $dir
      * @return bool
      */
     public function deleteDirectory($dir)
     {
-        if (!file_exists($dir)) {
+        if (! file_exists($dir)) {
             return true;
         }
-        if (!is_dir($dir)) {
+        if (! is_dir($dir)) {
             return unlink($dir);
         }
         foreach (scandir($dir) as $item) {
@@ -469,7 +464,7 @@ class SettingsController extends Controller
                 continue;
             }
             chmod($dir.DIRECTORY_SEPARATOR.$item, 0777);
-            if (!$this->deleteDirectory($dir.DIRECTORY_SEPARATOR.$item)) {
+            if (! $this->deleteDirectory($dir.DIRECTORY_SEPARATOR.$item)) {
                 return false;
             }
         }
@@ -582,7 +577,7 @@ class SettingsController extends Controller
     {
         $plugs = new Plugin();
         $plug = $plugs->where('name', $slug)->first();
-        if (!$plug) {
+        if (! $plug) {
             $plugs->create(['name' => $slug, 'path' => $slug, 'status' => 1]);
 
             return redirect()->back()->with('success', 'Status has changed');

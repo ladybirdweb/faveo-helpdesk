@@ -153,7 +153,6 @@ function faveotime($date, $hour = 0, $min = 0, $sec = 0)
  * @category function to return array values if status id
  *
  * @param string purpose of status
- *
  * @return array ids of status with purpose passed as string
  */
 function getStatusArray($status)
@@ -168,7 +167,6 @@ function getStatusArray($status)
  * @category function to UTF encoding
  *
  * @param string name
- *
  * @return string name
  */
 function utfEncoding($name)
@@ -187,20 +185,20 @@ function utfEncoding($name)
 
 function faveoDate($date = '', $format = '', $tz = '')
 {
-    if (!$date) {
+    if (! $date) {
         $date = \Carbon\Carbon::now();
     }
-    if (!is_object($date)) {
+    if (! is_object($date)) {
         $date = carbon($date);
     }
 
-    if (!$format || !$tz) {
+    if (! $format || ! $tz) {
         $system = App\Model\helpdesk\Settings\System::select('time_zone', 'date_time_format')->first();
     }
-    if (!$format) {
+    if (! $format) {
         $format = is_numeric($system->date_time_format) ? DB::table('date_time_format')->where('id', $system->date_time_format)->value('format') : $system->date_time_format;
     }
-    if (!$tz) {
+    if (! $tz) {
         $tz = is_numeric($system->time_zone) ? DB::table('timezone')->where('id', $system->time_zone)->value('name') : $system->time_zone;
     }
 
@@ -231,8 +229,7 @@ function timezone()
  * formats the error message into json error response.
  *
  * @param string/array $errorMsg     errorMsg can be an array of errors or string
- * @param int $responseCode
- *
+ * @param  int  $responseCode
  * @return json
  */
 function errorResponse($errorMsg, $responseCode = 400)
@@ -245,15 +242,14 @@ function errorResponse($errorMsg, $responseCode = 400)
 /**
  * formats success message/data into json success response.
  *
- * @param string $successMsg
+ * @param  string  $successMsg
  * @param array/string $data         data of the response
- * @param int $responseCode
- *
+ * @param  int  $responseCode
  * @return json
  */
 function successResponse($successMsg = '', $data = '', $responseCode = 200)
 {
-    $response = !$successMsg ? ['success' => true, 'data' => $data] : (!$data ? ['success' => true, 'message' => $successMsg] : ['success' => true, 'message' => $successMsg, 'data' => $data]);
+    $response = ! $successMsg ? ['success' => true, 'data' => $data] : (! $data ? ['success' => true, 'message' => $successMsg] : ['success' => true, 'message' => $successMsg, 'data' => $data]);
 
     return response()->json($response);
 }
@@ -261,24 +257,22 @@ function successResponse($successMsg = '', $data = '', $responseCode = 200)
 /**
  * formats exception response by giving enough information for debugginh.
  *
- * @param \Exception $exception exception object
- *
+ * @param  \Exception  $exception exception object
  * @return Response with json response content
  */
 function exceptionResponse(Exception $exception)
 {
     return errorResponse([
-        'file'        => $exception->getFile(),
+        'file' => $exception->getFile(),
         'line_number' => $exception->getLine(),
-        'exception'   => $exception->getMessage(),
+        'exception' => $exception->getMessage(),
     ], 500);
 }
 
 /**
  * Creates an empty DB with given name.
  *
- * @param string $dbName name of the DB
- *
+ * @param  string  $dbName name of the DB
  * @return null
  */
 function createDB(string $dbName)
@@ -297,8 +291,7 @@ function createDB(string $dbName)
 /**
  * parse the carbon.
  *
- * @param string $date
- *
+ * @param  string  $date
  * @return \Carbon\Carbon
  */
 function carbon($date)

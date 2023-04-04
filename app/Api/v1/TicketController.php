@@ -47,13 +47,12 @@ class TicketController extends Controller
     /**
      * Create Ticket.
      *
-     * @param type $user_id
-     * @param type $subject
-     * @param type $body
-     * @param type $helptopic
-     * @param type $sla
-     * @param type $priority
-     *
+     * @param  type  $user_id
+     * @param  type  $subject
+     * @param  type  $body
+     * @param  type  $helptopic
+     * @param  type  $sla
+     * @param  type  $priority
      * @return type string
      */
     public function createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $attach = '')
@@ -103,7 +102,7 @@ class TicketController extends Controller
             $this->storeCollaborators($headers, $id);
 
             $thread = $this->ticketThread($subject, $body, $id, $user_id);
-            if (!empty($attach)) {
+            if (! empty($attach)) {
                 $this->attach($thread, $attach);
             }
 
@@ -116,8 +115,7 @@ class TicketController extends Controller
     /**
      * store_collaborators.
      *
-     * @param type $headers
-     *
+     * @param  type  $headers
      * @return type
      */
     public function storeCollaborators($headers, $id)
@@ -167,11 +165,10 @@ class TicketController extends Controller
     /**
      * Generate Ticket Thread.
      *
-     * @param type $subject
-     * @param type $body
-     * @param type $id
-     * @param type $user_id
-     *
+     * @param  type  $subject
+     * @param  type  $body
+     * @param  type  $id
+     * @param  type  $user_id
      * @return type
      */
     public function ticketThread($subject, $body, $id, $user_id)
@@ -194,8 +191,7 @@ class TicketController extends Controller
     /**
      * Generates Ticket Number.
      *
-     * @param type $ticket_number
-     *
+     * @param  type  $ticket_number
      * @return type integer
      */
     public function ticketNumber($ticket_number)
@@ -235,8 +231,7 @@ class TicketController extends Controller
     /**
      * Generate a random string for password.
      *
-     * @param type $length
-     *
+     * @param  type  $length
      * @return type string
      */
     public function generateRandomString($length = 10)
@@ -260,7 +255,6 @@ class TicketController extends Controller
      *
      * @param type Ticket_Thread $thread
      * @param type TicketRequest $request
-     *
      * @return type bool
      */
     public function reply($thread, $request, $ta, $attach = '')
@@ -306,7 +300,7 @@ class TicketController extends Controller
             }
             $thread->save();
 
-            if (!empty($attach)) {
+            if (! empty($attach)) {
                 $check_attachment = $this->attach($thread->id, $attach);
             }
 
@@ -319,7 +313,7 @@ class TicketController extends Controller
             $ticket_number = $tickets->ticket_number;
             $company = $this->company();
             $username = $ticket_user->user_name;
-            if (!empty(Auth::user()->agent_sign)) {
+            if (! empty(Auth::user()->agent_sign)) {
                 $agentsign = Auth::user()->agent_sign;
             } else {
                 $agentsign = null;
@@ -405,9 +399,8 @@ class TicketController extends Controller
     /**
      * Ticket edit and save ticket data.
      *
-     * @param type $ticket_id
+     * @param  type  $ticket_id
      * @param type Ticket_Thread $thread
-     *
      * @return type bool
      */
     public function ticketEditPost($ticket_id, $thread, $ticket)
@@ -438,8 +431,7 @@ class TicketController extends Controller
     /**
      * function to assign ticket.
      *
-     * @param type $id
-     *
+     * @param  type  $id
      * @return type bool
      */
     public function assign($id)
@@ -449,19 +441,19 @@ class TicketController extends Controller
             //dd($UserEmail);
             // $UserEmail = 'sujitprasad12@yahoo.in';
             $user = User::where('email', '=', $UserEmail)->first();
-            if (!$user) {
+            if (! $user) {
                 return ['error' => 'No agent not found'];
             }
             $user_id = $user->id;
             $ticket = Tickets::where('id', '=', $id)->first();
-            if (!$ticket) {
+            if (! $ticket) {
                 return ['error' => 'No ticket not found'];
             }
             $ticket_number = $ticket->ticket_number;
             $ticket->assigned_to = $user_id;
             $ticket->save();
             $ticket_thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
-            if (!$ticket_thread) {
+            if (! $ticket_thread) {
                 return ['error' => 'No thread not found'];
             }
             $ticket_subject = $ticket_thread->title;
@@ -501,9 +493,8 @@ class TicketController extends Controller
     /**
      * Function to delete ticket.
      *
-     * @param type $id
+     * @param  type  $id
      * @param type Tickets $ticket
-     *
      * @return type string
      */
     public function delete($ids, $ticket)
@@ -556,8 +547,7 @@ class TicketController extends Controller
     /**
      * check email for dublicate entry.
      *
-     * @param type $email
-     *
+     * @param  type  $email
      * @return type bool
      */
     public function checkEmail($email)
@@ -598,9 +588,8 @@ class TicketController extends Controller
     /**
      * Create Attachment.
      *
-     * @param type $thread
-     * @param type $attach
-     *
+     * @param  type  $thread
+     * @param  type  $attach
      * @return int
      */
     public function attach($thread, $attach)
@@ -635,7 +624,6 @@ class TicketController extends Controller
      * useradd.
      *
      * @param type Image $image
-     *
      * @return type json
      */
     public function useradd()

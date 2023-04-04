@@ -180,10 +180,9 @@ class TicketWorkflowController extends Controller
     /**
      * function to check the rules applied to the ticket workflow.
      *
-     * @param type $to_check
-     * @param type $condition
-     * @param type $statement
-     *
+     * @param  type  $to_check
+     * @param  type  $condition
+     * @param  type  $statement
      * @return type boolean
      */
     public function checkRuleCondition($to_check, $condition, $statement)
@@ -212,9 +211,8 @@ class TicketWorkflowController extends Controller
     /**
      * function to check if the equal functions are applied.
      *
-     * @param type $statement
-     * @param type $to_check
-     *
+     * @param  type  $statement
+     * @param  type  $to_check
      * @return bool
      */
     public function checkEqual($statement, $to_check)
@@ -229,9 +227,8 @@ class TicketWorkflowController extends Controller
     /**
      * function to check if the not-equal functions are applied.
      *
-     * @param type $statement
-     * @param type $to_check
-     *
+     * @param  type  $statement
+     * @param  type  $to_check
      * @return bool
      */
     public function checkNotEqual($statement, $to_check)
@@ -246,9 +243,8 @@ class TicketWorkflowController extends Controller
     /**
      * function to check if the contains functions are applied.
      *
-     * @param type $statement
-     * @param type $to_check
-     *
+     * @param  type  $statement
+     * @param  type  $to_check
      * @return bool
      */
     public function checkContains($statement, $to_check)
@@ -263,9 +259,8 @@ class TicketWorkflowController extends Controller
     /**
      * function to check if the do not contain functions are applied.
      *
-     * @param type $statement
-     * @param type $to_check
-     *
+     * @param  type  $statement
+     * @param  type  $to_check
      * @return bool
      */
     public function checkDoNotContain($statement, $to_check)
@@ -280,9 +275,8 @@ class TicketWorkflowController extends Controller
     /**
      * function to check if the start functions are applied.
      *
-     * @param type $statement
-     * @param type $to_check
-     *
+     * @param  type  $statement
+     * @param  type  $to_check
      * @return bool
      */
     public function checkStarts($statement, $to_check)
@@ -297,9 +291,8 @@ class TicketWorkflowController extends Controller
     /**
      * function to check if the ends functions are applied.
      *
-     * @param type $statement
-     * @param type $to_check
-     *
+     * @param  type  $statement
+     * @param  type  $to_check
      * @return bool
      */
     public function checkEnds($statement, $to_check)
@@ -325,9 +318,8 @@ class TicketWorkflowController extends Controller
     /**
      * function to apply the action to a ticket.
      *
-     * @param type $workflow_id
-     * @param type $ticket_settings_details
-     *
+     * @param  type  $workflow_id
+     * @param  type  $ticket_settings_details
      * @return type array
      */
     public function applyActionCondition($workflow_id, $ticket_settings_details)
@@ -359,8 +351,7 @@ class TicketWorkflowController extends Controller
     /**
      * function to reject ticket.
      *
-     * @param array $ticket_settings_details
-     *
+     * @param  array  $ticket_settings_details
      * @return type array
      */
     public function rejectTicket($ticket_settings_details)
@@ -373,9 +364,8 @@ class TicketWorkflowController extends Controller
     /**
      * function to change the department of a ticket.
      *
-     * @param type $workflow_action
-     * @param type $ticket_settings_details
-     *
+     * @param  type  $workflow_action
+     * @param  type  $ticket_settings_details
      * @return type array
      */
     public function changeDepartment($workflow_action, $ticket_settings_details)
@@ -393,9 +383,8 @@ class TicketWorkflowController extends Controller
     /**
      * function to change the priority of a ticket.
      *
-     * @param type $workflow_action
-     * @param type $ticket_settings_details
-     *
+     * @param  type  $workflow_action
+     * @param  type  $ticket_settings_details
      * @return type array
      */
     public function changePriority($workflow_action, $ticket_settings_details)
@@ -413,9 +402,8 @@ class TicketWorkflowController extends Controller
     /**
      * function to change the SLA of a ticket.
      *
-     * @param type $workflow_action
-     * @param type $ticket_settings_details
-     *
+     * @param  type  $workflow_action
+     * @param  type  $ticket_settings_details
      * @return type array
      */
     public function changeSla($workflow_action, $ticket_settings_details)
@@ -433,9 +421,8 @@ class TicketWorkflowController extends Controller
     /**
      * function to assign tean to a ticket.
      *
-     * @param type $workflow_action
-     * @param type $ticket_settings_details
-     *
+     * @param  type  $workflow_action
+     * @param  type  $ticket_settings_details
      * @return type array
      */
     public function changeTeam($workflow_action, $ticket_settings_details)
@@ -453,9 +440,8 @@ class TicketWorkflowController extends Controller
     /**
      * function to assing a ticket to an agent.
      *
-     * @param type $workflow_action
-     * @param type $ticket_settings_details
-     *
+     * @param  type  $workflow_action
+     * @param  type  $ticket_settings_details
      * @return type array
      */
     public function changeAgent($workflow_action, $ticket_settings_details)
@@ -473,9 +459,8 @@ class TicketWorkflowController extends Controller
     /**
      * function to change the helptopic of a ticket.
      *
-     * @param type $workflow_action
-     * @param type $ticket_settings_details
-     *
+     * @param  type  $workflow_action
+     * @param  type  $ticket_settings_details
      * @return type array
      */
     public function changeHelptopic($workflow_action, $ticket_settings_details)
@@ -493,9 +478,8 @@ class TicketWorkflowController extends Controller
     /**
      * function to change the status of a ticket.
      *
-     * @param type $workflow_action
-     * @param type $ticket_settings_details
-     *
+     * @param  type  $workflow_action
+     * @param  type  $ticket_settings_details
      * @return type array
      */
     public function changeStatus($workflow_action, $ticket_settings_details)

@@ -30,8 +30,8 @@ class LogViewerController extends Controller
         $logs = LaravelLogViewer::all();
 
         return View::make('log::log', [
-            'logs'         => $logs,
-            'files'        => LaravelLogViewer::getFiles(true),
+            'logs' => $logs,
+            'files' => LaravelLogViewer::getFiles(true),
             'current_file' => LaravelLogViewer::getFileName(),
         ]);
     }

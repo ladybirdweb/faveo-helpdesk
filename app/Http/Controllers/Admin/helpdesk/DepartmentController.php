@@ -45,7 +45,6 @@ class DepartmentController extends Controller
      * Get index page.
      *
      * @param type Department $department
-     *
      * @return type Response
      */
     public function index(Department $department)
@@ -69,7 +68,6 @@ class DepartmentController extends Controller
      * @param type Template                $template
      * @param type Emails                  $email
      * @param type Groups                  $group
-     *
      * @return type Response
      */
     public function create(User $user, Group_assign_department $group_assign_department, Department $department, Sla_plan $sla, Template $template, Emails $email, Groups $group)
@@ -96,7 +94,6 @@ class DepartmentController extends Controller
      *
      * @param type Department        $department
      * @param type DepartmentRequest $request
-     *
      * @return type Response
      */
     public function store(Department $department, DepartmentRequest $request)
@@ -145,7 +142,6 @@ class DepartmentController extends Controller
      * @param type Sla_plan                $sla
      * @param type Emails                  $email
      * @param type Groups                  $group
-     *
      * @return type Response
      */
     public function edit($id, User $user, Group_assign_department $group_assign_department, Template $template, Teams $team, Department $department, Sla_plan $sla, Emails $email, Groups $group)
@@ -179,7 +175,6 @@ class DepartmentController extends Controller
      * @param type Group_assign_department $group_assign_department
      * @param type Department              $department
      * @param type DepartmentUpdate        $request
-     *
      * @return type Response
      */
     public function update($id, Group_assign_department $group_assign_department, Department $department, DepartmentUpdate $request)
@@ -228,7 +223,6 @@ class DepartmentController extends Controller
      * @param type int                     $id
      * @param type Department              $department
      * @param type Group_assign_department $group_assign_department
-     *
      * @return type Response
      */
     public function destroy($id, Department $department, Group_assign_department $group_assign_department, System $system, Tickets $tickets)

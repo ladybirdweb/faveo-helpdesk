@@ -24,11 +24,11 @@ class RatingUpdateRequest extends Request
     public function rules()
     {
         return [
-            'name'               => 'required|max:20',
-            'display_order'      => 'required|integer',
+            'name' => 'required|max:20',
+            'display_order' => 'required|integer',
             'allow_modification' => 'required',
-            'rating_scale'       => 'required',
-            'restrict'           => 'required',
+            'rating_scale' => 'required',
+            'restrict' => 'required',
         ];
     }
 }

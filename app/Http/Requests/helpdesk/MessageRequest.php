@@ -26,7 +26,7 @@ class MessageRequest extends Request
         return [
 
             'message_title' => 'required',
-            'message'       => 'required',
+            'message' => 'required',
         ];
     }
 }

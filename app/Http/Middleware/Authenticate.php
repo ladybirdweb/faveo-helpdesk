@@ -22,7 +22,6 @@ class Authenticate
     /**
      * Create a new filter instance.
      *
-     * @param Guard $auth
      *
      * @return void
      */
@@ -34,9 +33,7 @@ class Authenticate
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return mixed
      */
     public function handle($request, Closure $next)

@@ -24,7 +24,6 @@ class Finder
      *
      * @param $id type int
      * @param $custom type array/null
-     *
      * @return type string
      */
     public static function department($id, $custom = null)
@@ -44,7 +43,6 @@ class Finder
      *
      * @param $id type int
      * @param $custom type array/null
-     *
      * @return type string
      */
     public static function group($id, $custom = null)
@@ -64,7 +62,6 @@ class Finder
      *
      * @param $id type int
      * @param $custom type array/null
-     *
      * @return type string
      */
     public static function statusType($id, $custom = null)
@@ -84,7 +81,6 @@ class Finder
      *
      * @param $id type int
      * @param $custom type array/null
-     *
      * @return type string
      */
     public static function status($id, $custom = null)
@@ -110,7 +106,6 @@ class Finder
      * If the value is 1+2+4 = 7 the response is client, agent, admin.
      *
      * @param $id type int
-     *
      * @return type string
      */
     public static function rolesGroup($id)
@@ -141,8 +136,7 @@ class Finder
      * ANY TYPE STATUS
      * This function is used to return the set of status which are of any type passed in the param.
      *
-     * @param type $id
-     *
+     * @param  type  $id
      * @return type array
      */
     public static function anyTypeStatus($id)
