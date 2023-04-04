@@ -52,7 +52,8 @@ class TemplateController extends Controller
      * Show template
      * This template to show a particular template.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return type view
      */
     public function showTemplate($id)
@@ -124,7 +125,8 @@ class TemplateController extends Controller
     /**
      * function to get the edit page of template.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return type
      */
     public function edit($id)
@@ -143,7 +145,8 @@ class TemplateController extends Controller
     /**
      * function to update a template.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return type
      */
     public function update($id, TemplateUdate $request)
@@ -162,14 +165,15 @@ class TemplateController extends Controller
     /**
      * function to delete a template.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return Response
      */
     public function destroy(Request $request)
     {
         try {
             $ids = $request->input('select');
-            if (! empty($ids)) {
+            if (!empty($ids)) {
                 foreach ($ids as $id) {
                     $template = $this->template->where('id', $id)->first();
                     if ($template) {
@@ -210,7 +214,8 @@ class TemplateController extends Controller
     /**
      * function to show the templates.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return type Mixed
      */
     public function show($id)

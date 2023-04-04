@@ -2,8 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-return new class() extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -24,7 +23,7 @@ return new class() extends Migration
 
         if (Schema::hasTable('common_settings')) {
             $settings = DB::table('common_settings')->where('option_name', 'itil')->first();
-            if (! $settings) {
+            if (!$settings) {
                 DB::table('common_settings')->insert(['option_name' => 'itil', 'status' => '0']);
             }
         }

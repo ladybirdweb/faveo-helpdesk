@@ -32,6 +32,7 @@ class SecurityController extends Controller
      * list of securitys.
      *
      * @param type Security $securitys
+     *
      * @return Response
      */
     public function index(Security $securitys)
@@ -58,7 +59,8 @@ class SecurityController extends Controller
     /**
      * Show security.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return Response
      */
 //    public function show($id)
@@ -92,9 +94,10 @@ class SecurityController extends Controller
     /**
      * Delete security details.
      *
-     * @param  type  $id
-     * @param  type  $field
-     * @param  \App\Http\Controllers\Admin\helpdesk\Help_topic  $help_topic
+     * @param type                                            $id
+     * @param type                                            $field
+     * @param \App\Http\Controllers\Admin\helpdesk\Help_topic $help_topic
+     *
      * @return type redirect
      */
     public function delete($id, Security $securitys, Fields $field, Help_topic $help_topic)
