@@ -204,8 +204,9 @@ class WorkflowController extends Controller
     /**
      * Editing the details of the banned users.
      *
-     * @param  type  $id
-     * @param  User  $ban
+     * @param type $id
+     * @param User $ban
+     *
      * @return type Response
      */
     public function edit($id, WorkflowName $work_flow_name, Emails $emails, WorkflowRules $workflow_rule, WorkflowAction $workflow_action)
@@ -225,7 +226,8 @@ class WorkflowController extends Controller
     /**
      * Update ticket workflow.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return type view
      */
     public function update($id, WorkflowUpdateRequest $request)
@@ -272,7 +274,7 @@ class WorkflowController extends Controller
     /**
      * function to delete workflow.
      *
-     * @param  type  $id
+     * @param type $id
      */
     public function destroy($id)
     {
@@ -291,7 +293,8 @@ class WorkflowController extends Controller
     /**
      * function to select action.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return type void
      */
     public function selectAction($id, Request $request)

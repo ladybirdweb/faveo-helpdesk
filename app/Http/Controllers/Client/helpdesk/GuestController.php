@@ -67,14 +67,15 @@ class GuestController extends Controller
 
         return view('themes.default1.client.helpdesk.profile', compact('user'))
                         ->with(['phonecode' => $phonecode->phonecode,
-                            'verify' => $status, ]);
+                            'verify'        => $status, ]);
     }
 
     /**
      * Save profile data.
      *
-     * @param  type  $id
+     * @param type $id
      * @param type ProfileRequest $request
+     *
      * @return type Response
      */
     public function postProfile(ProfileRequest $request)
@@ -86,7 +87,7 @@ class GuestController extends Controller
                 return redirect()->back()->with(['fails' => Lang::get('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
             } else {
                 $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
-                if (! count($code)) {
+                if (!count($code)) {
                     return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
                 }
                 $user->country_code = $request->country_code;
@@ -125,6 +126,7 @@ class GuestController extends Controller
      *@category fucntion to check if mobile number is unqique or not
      *
      *@param  string  $mobile
+     *
      *@return bool true(if mobile exists in users table)/false (if mobile does not exist in user table)
      */
     public function checkMobile($mobile)
@@ -145,6 +147,7 @@ class GuestController extends Controller
      * Get Ticket page.
      *
      * @param type Help_topic $topic
+     *
      * @return type Response
      */
     public function getTicket(Help_topic $topic)
@@ -158,6 +161,7 @@ class GuestController extends Controller
      * getform.
      *
      * @param type Help_topic $topic
+     *
      * @return type
      */
     public function getForm(Help_topic $topic)
@@ -180,6 +184,7 @@ class GuestController extends Controller
      * @param type Tickets       $tickets
      * @param type Ticket_Thread $thread
      * @param type User          $user
+     *
      * @return type Response
      */
     public function getMyticket()
@@ -193,6 +198,7 @@ class GuestController extends Controller
      * @param type Ticket_Thread $thread
      * @param type Tickets       $tickets
      * @param type User          $user
+     *
      * @return type Response
      */
     public function thread(Ticket_Thread $thread, Tickets $tickets, User $user)
@@ -218,8 +224,9 @@ class GuestController extends Controller
     /**
      * Post porfile password.
      *
-     * @param  type  $id
+     * @param type $id
      * @param type ProfilePassword $request
+     *
      * @return type Response
      */
     public function postProfilePassword(ProfilePassword $request)
@@ -246,6 +253,7 @@ class GuestController extends Controller
      *
      * @param type Ticket_Thread $thread
      * @param type TicketRequest $request
+     *
      * @return type Response
      */
     public function reply(Ticket_Thread $thread, TicketRequest $request)
@@ -268,6 +276,7 @@ class GuestController extends Controller
      *
      * @param type Tickets $ticket
      * @param type User    $user
+     *
      * @return type response
      */
     public function getCheckTicket(Tickets $ticket, User $user)
@@ -282,12 +291,13 @@ class GuestController extends Controller
      * @param type User          $user
      * @param type Tickets       $ticket
      * @param type Ticket_Thread $thread
+     *
      * @return type Response
      */
     public function PostCheckTicket(Request $request)
     {
         $validator = \Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email'         => 'required|email',
             'ticket_number' => 'required',
         ]);
         if ($validator->fails()) {
@@ -333,7 +343,8 @@ class GuestController extends Controller
     /**
      * get ticket email.
      *
-     * @param  type  $id
+     * @param type $id
+     *
      * @return type
      */
     public function get_ticket_email($id, CommonSettings $common_settings)
@@ -349,6 +360,7 @@ class GuestController extends Controller
      * get ticket status.
      *
      * @param type Tickets $ticket
+     *
      * @return type
      */
     public function getTicketStat(Tickets $ticket)
@@ -395,7 +407,7 @@ class GuestController extends Controller
                                 ->first();
         if ($otp != null) {
             $otp_length = strlen(Input::get('otp'));
-            if ($otp_length == 6 && ! preg_match('/[a-z]/i', Input::get('otp'))) {
+            if ($otp_length == 6 && !preg_match('/[a-z]/i', Input::get('otp'))) {
                 $otp2 = Hash::make(Input::get('otp'));
                 $date1 = date_format($otp->updated_at, 'Y-m-d h:i:sa');
                 $date2 = date('Y-m-d h:i:sa');
@@ -523,10 +535,10 @@ class GuestController extends Controller
         if (count($user) > 0) {
             foreach ($user as $key => $value) {
                 $info->create([
-                    'owner' => $id,
+                    'owner'   => $id,
                     'service' => $provider,
-                    'key' => $key,
-                    'value' => $value,
+                    'key'     => $key,
+                    'value'   => $value,
                 ]);
             }
         }
@@ -535,7 +547,7 @@ class GuestController extends Controller
     public function changeEmail($email)
     {
         $user = \Auth::user();
-        if ($user && $email && ! $user->email) {
+        if ($user && $email && !$user->email) {
             $user->email = $email;
             $user->save();
         }

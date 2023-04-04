@@ -46,7 +46,7 @@ class SyncFaveoToLatestVersion extends Controller
 
     private function getOlderVersion()
     {
-        if (! isInstall()) {
+        if (!isInstall()) {
             return '0.0.0';
         }
 

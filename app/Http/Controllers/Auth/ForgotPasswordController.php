@@ -70,10 +70,10 @@ class ForgotPasswordController extends Controller
                         $name = $user->user_name;
                     }
                     $value = [
-                        'url' => url('password/reset/'.$code),
-                        'name' => $name,
+                        'url'    => url('password/reset/'.$code),
+                        'name'   => $name,
                         'mobile' => $user->mobile,
-                        'code' => $user->country_code, ];
+                        'code'   => $user->country_code, ];
                     event('reset.password2', [$value]);
                 }
 

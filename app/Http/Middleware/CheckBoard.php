@@ -16,7 +16,8 @@ class CheckBoard
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return type Mixed
      */
     public function handle($request, Closure $next)

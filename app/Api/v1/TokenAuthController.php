@@ -51,7 +51,7 @@ class TokenAuthController extends Controller
         //$credentials = $request->only('email', 'password');
 
         try {
-            if (! $token = JWTAuth::attempt([$field => $usernameinput, 'password' => $password, 'active' => 1])) {
+            if (!$token = JWTAuth::attempt([$field => $usernameinput, 'password' => $password, 'active' => 1])) {
                 return response()->json(['error' => 'invalid_credentials', 'status_code' => 401]);
             }
         } catch (JWTException $e) {
@@ -76,7 +76,7 @@ class TokenAuthController extends Controller
     {
         //dd(JWTAuth::parseToken()->authenticate());
         try {
-            if (! $user = JWTAuth::parseToken()->authenticate()) {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
                 return response()->json(['user_not_found', 404]);
             }
         } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
