@@ -16,19 +16,19 @@
 		<h3 class="banner-title text-info h4">Have a Ticket?</h3>
         <div class="banner-content">
         {!! Form::open(['url' => 'checkmyticket' , 'method' => 'POST'] )!!}
-	
+
             {!! Form::label('email',Lang::get('lang.email')) !!}
     		{!! $errors->first('email', '<spam class="help-block">:message</spam>') !!}
     		{!! Form::text('email',null,['class' => 'form-control']) !!}
-                
+
             {!! Form::label('ticket_number',Lang::get('lang.ticket_number'),['style' => 'display: block']) !!}
     		{!! $errors->first('ticket_number', '<spam class="help-block">:message</spam>') !!}
     		{!! Form::text('ticket_number',null,['class' => 'form-control']) !!}
             <br/><input type="submit" value="Check Ticket Status" class="btn btn-info">
-                        
+
         {!! Form::close() !!}
 		</div>
-	</div>	
+	</div>
 @stop
 <!-- content -->
 @section('content')
@@ -77,20 +77,20 @@
         @endif
 
 		<div class="form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
-			{!! Form::label('help_topic', 'Choose a Help Topic') !!} 
-			{!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}		
+			{!! Form::label('help_topic', 'Choose a Help Topic') !!}
+			{!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}
             <select name="help_topic" class="form-control" id="selectid">
                 <option>--Select--</option>
                 <option value="1">Default Help Topic</option>
             </select>
 		</div>
 
-        
+
 <!-- <label>data</label> -->
 <!-- <input name="stack" id="stack"/> -->
 
     <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}">
-        
+
     </div>
 </div>
 </div>
@@ -103,9 +103,9 @@
  -->
 <script type="text/javascript">
 jQuery(document).ready(function() {
-    
+
     $('select').on('change', function (e) {
-        
+
         var value = $('#selectid').val();
         var select = $('#selectid');
         var $_token = $('#token').val();
@@ -113,12 +113,12 @@ jQuery(document).ready(function() {
         $.ajax({
             type        :   "POST",
             headers		: 	{ 'X-XSRF-TOKEN' : $_token },
-            url         :   "postform/"+ value,  
+            url         :   "postform/"+ value,
             dataType    :   'html',
             data        :   ({data2:data1}) ,
-            
+
             success : function(response) {
-                 
+
                     var data  = response;
                     var splited = data.split(',').slice(1);
         $.each(splited, function (index, value)
@@ -134,15 +134,15 @@ jQuery(document).ready(function() {
                         +"<textarea id="+sli[1]+" class="+
                         'form-control'+" name="+sli[1]+"/></textarea>"+"</div>");
                         var wysihtml5Editor = $('textarea').wysihtml5().data("wysihtml5").editor;
-                    } else {      			
+                    } else {
                         $("#ss").append(sli[1]+"<div class="+'"form-group"'+">"
                         +"<input type="+sli[0]+" id="+sli[1]+" class="+
                         'form-control'+" name="+sli[1]+">"+"</div>");
-        	        }   
+        	        }
                 }
         		return false;
             });
-        } 
+        }
         })
         return false;
     });

@@ -18,6 +18,7 @@ use App\User;
 use Hash;
 // classes
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Lang;
 use Session;
 
@@ -332,11 +333,11 @@ class UnAuthController extends Controller
      */
     public static function changeLanguage($lang)
     {
-        //if(Cache::has('language'))
-        //{
-        //  return Cache::get('language');
-        //} else return 'false';
-        // Cache::put('language',$)
+//        if(Cache::has('language'))
+//        {
+//          return Cache::get('language');
+//        } else return 'false';
+//         Cache::put('language',$);
         $path = base_path('lang');  // Path to check available language packages
         if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
             // dd(array_key_exists($lang, Config::get('languages')));
@@ -433,8 +434,8 @@ class UnAuthController extends Controller
     {
         $path = base_path('lang');  // Path to check available language packages
         if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
-            if (\Auth::check()) {
-                $id = \Auth::user()->id;
+            if (Auth::check()) {
+                $id = Auth::user()->id;
                 $user = User::find($id);
                 $user->user_language = $lang;
                 $user->save();

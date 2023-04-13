@@ -1283,7 +1283,7 @@ return [
       |------------------------------------------------
       |   Error Pages
       |------------------------------------------------
-     */
+     */'knowledge_base'                               => 'knowledge base',
     'not_found'                                       => 'Not found',
     'oops_page_not_found'                             => 'Oops! Page not found',
     'we_could_not_find_the_page_you_were_looking_for' => 'We could not find the page you were looking for',
@@ -1353,6 +1353,8 @@ return [
       | customize your views to better match your application.
       |
      */
+    'forget_password'                                                                  => 'forget password',
+    'article_list'                                                                     => 'Article list',
     'home'                                                                             => 'Home',
     'submit_a_ticket'                                                                  => 'Submit a ticket',
     'my_profile'                                                                       => 'My profile',
@@ -1361,7 +1363,7 @@ return [
     'create_account'                                                                   => 'Create account',
     'you_are_here'                                                                     => 'You are here',
     'have_a_ticket'                                                                    => 'Have a ticket',
-    'check_ticket_status'                                                              => 'Check ticket status',
+    'check_ticket_status'                                                              => 'Submit',
     'choose_a_help_topic'                                                              => 'Choose a help topic',
     'ticket_status'                                                                    => 'Ticket status',
     'post_comment'                                                                     => 'Post comment',
@@ -1655,4 +1657,7 @@ return [
     'clean-forever'                                => 'delete permanently',
     'mail-sent-to-job-for-process'                 => 'Mail has been sent to job for process, it will appear in your mailbox once it gets processed by your selected queue service. If you don\'t recieve the mail check logs for errors or warnings.',
     'click-here-to-see-more-details'               => 'Click here to see more details',
+    'category_list'                                => 'Category list',
+    'check_ticket'                                 => 'Check ticket',
+    'search_result'                                => 'Search Results',
 ];

@@ -44,6 +44,9 @@
         <link rel="stylesheet" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet" type="text/css" />
 
         <link href="{{asset("lb-faveo/plugins/summernote/summernote-bs5.min.css")}}" rel="stylesheet" type="text/css" />
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
         <link href="{{asset("lb-faveo/css/jquery.ui.css")}}" rel="stylesheet" type="text/css" />
         <script src="{{asset("lb-faveo/js/jquery-3.6.3.min.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/js/jquery-migrate.js")}}" type="text/javascript"></script>
@@ -119,7 +122,7 @@
             }
             ?>
 
-             <nav class="main-header navbar navbar-expand navbar-dark navbar-lightblue">
+             <nav class="main-header navbar navbar-expand  navbar-light">
                 
                 <!-- Sidebar toggle button-->
                 <ul class="navbar-nav">
@@ -365,9 +368,9 @@
             </nav>
 
             <!-- Left side column. contains the logo and sidebar -->
-            <aside class="main-sidebar elevation-4 sidebar-dark-lightblue">
+            <aside class="main-sidebar elevation-4 sidebar-dark-black">
 
-                <a href="http://www.faveohelpdesk.com" class="brand-link navbar-lightblue" style="text-align: center;">
+                <a href="http://www.faveohelpdesk.com" class="brand-link " style="text-align: center;">
                     <img src="{{ asset('lb-faveo/media/images/logo.png')}}" class="brand-image" alt="Company Log0">
                 </a>
 
@@ -509,7 +512,7 @@
                   @if($replacetop==0)
                   <div @yield('user') class="tab-pane" id="tab_user">
                         
-                        <nav class="navbar navbar-expand navbar-dark navbar-lightblue">
+                        <nav class="navbar navbar-expand  navbar-light">
                           
                           <ul class="navbar-nav">
                             
@@ -526,7 +529,7 @@
 
                     <div @yield('ticket') class="tab-pane" id="tab_ticket">
                         
-                        <nav class="navbar navbar-expand navbar-dark navbar-lightblue">
+                        <nav class="navbar navbar-expand navbar-light">
                           
                           <ul class="navbar-nav">
                             
@@ -557,7 +560,7 @@
 
                     <div @yield('tool') class="tab-pane" id="tab_tools">
                         
-                        <nav class="navbar navbar-expand navbar-dark navbar-lightblue">
+                        <nav class="navbar navbar-expand  navbar-light">
                           
                           <ul class="navbar-nav">
                             

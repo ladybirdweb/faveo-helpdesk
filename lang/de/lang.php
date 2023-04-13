@@ -903,6 +903,8 @@ return [
       | customize your views to better match your application.
       |
      */
+    'article_list'        => 'Artikel liste',
+    'category'            => 'Kategorie',
     'home'                => 'Home',
     'submit_a_ticket'     => 'Ein Ticket erstellen',
     'my_profile'          => 'Mein Profil',

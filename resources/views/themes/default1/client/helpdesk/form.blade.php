@@ -9,9 +9,17 @@ class = "nav-item active"
 @stop
 <!-- breadcrumbs -->
 @section('breadcrumb')
-<div class="site-hero clearfix">
-    <ol class="breadcrumb breadcrumb-custom">
-        <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
+{{--<div class="site-hero clearfix">--}}
+    <ol class="breadcrumb float-sm-right ">
+        <style>
+            .words {
+                margin-right: 10px; /* Adjust the value to increase or decrease the gap between list items */
+            }
+        </style>
+        <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
+        <li><a class="words" href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
+        <li class="words" style="margin-right: 10px">></li>
+
         <li><a href="{!! URL::route('form') !!}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
     </ol>
 </div>
@@ -46,10 +54,12 @@ class = "nav-item active"
                 <div>
                      {!! Form::open(['url' => 'checkmyticket' , 'method' => 'POST'] )!!}
                     {!! Form::label('email',Lang::get('lang.email')) !!}<span class="text-red"> *</span>
-                    {!! Form::text('email_address',null,['class' => 'form-control']) !!}
+                    {!! Form::text('email_address',null,['class' => 'form-control form-group']) !!}
                     {!! Form::label('ticket_number',Lang::get('lang.ticket_number')) !!}<span class="text-red"> *</span>
-                    {!! Form::text('ticket_number',null,['class' => 'form-control']) !!}
-                    <br/><input type="submit" value="{!! Lang::get('lang.check_ticket_status') !!}" class="btn btn-info">
+                    {!! Form::text('ticket_number',null,['class' => 'form-control form-group']) !!}
+                    <button type="submit" class="btn btn-info" style=" background-color: #337ab7 !important; border-color: #337ab7 !important; color: white">
+                        <i class="fas fa-save"></i> {!! Lang::get('lang.check_ticket_status') !!}
+                    </button>
                     {!! Form::close() !!}
                 </div>
             </section>
@@ -97,32 +107,32 @@ class = "nav-item active"
         <article class="hentry">
 
             <div id="form-border" class="comment-respond form-border" style="background : #fff">
-                
+
                 <section id="section-categories">
-            
+
                     <h2 class="section-title h4 clearfix mb-0">
 
-                        <i class="line"></i>{!! Lang::get('lang.submit_a_ticket') !!}
+                        <i class="line" style="border-color: rgb(0, 154, 186);"></i>{!! Lang::get('lang.submit_a_ticket') !!}
                     </h2>
 
                     <div class="row mt-4">
-                      
+
                         @if(Auth::user())
-                    
+
                         {!! Form::hidden('Name',Auth::user()->user_name,['class' => 'form-control']) !!}
-                    
+
                         @else
-                        
+
                         <div class="col-md-12 form-group {{ $errors->has('Name') ? 'has-error' : '' }}">
                             {!! Form::label('Name',Lang::get('lang.name')) !!}<span class="text-red"> *</span>
                             {!! Form::text('Name',null,['class' => 'form-control']) !!}
                         </div>
                         @endif
-            
+
                         @if(Auth::user())
-                    
+
                         {!! Form::hidden('Email',Auth::user()->email,['class' => 'form-control']) !!}
-                    
+
                         @else
                         <div class="col-md-12 form-group {{ $errors->has('Email') ? 'has-error' : '' }}">
                             {!! Form::label('Email',Lang::get('lang.email')) !!}
@@ -134,7 +144,7 @@ class = "nav-item active"
                         @endif
 
                         @if(!Auth::user())
-                    
+
                         <div class="col-md-2 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
                             {!! Form::label('Code',Lang::get('lang.country-code')) !!}
                              @if($email_mandatory->status == 0 || $email_mandatory->status == '0')
@@ -154,37 +164,37 @@ class = "nav-item active"
                             {!! Form::label('Phone',Lang::get('lang.phone')) !!}
                             {!! Form::text('Phone',null,['class' => 'form-control']) !!}
                         </div>
-                        @else 
+                        @else
                             {!! Form::hidden('mobile',Auth::user()->mobile,['class' => 'form-control']) !!}
                             {!! Form::hidden('Code',Auth::user()->country_code,['class' => 'form-control']) !!}
                             {!! Form::hidden('Phone',Auth::user()->phone_number,['class' => 'form-control']) !!}
-             
+
                        @endif
                         <div class="col-md-12 form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
-                            {!! Form::label('help_topic', Lang::get('lang.choose_a_help_topic')) !!} 
+                            {!! Form::label('help_topic', Lang::get('lang.choose_a_help_topic')) !!}
                             {!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}
                             <?php
                             $forms = App\Model\helpdesk\Form\Forms::get();
                             $helptopic = App\Model\helpdesk\Manage\Help_topic::where('status', '=', 1)->get();
-                            ?>                  
+//                            ?><!---->
                             <select name="helptopic" class="form-control" id="selectid">
-                                
+
                                 @foreach($helptopic as $topic)
                                 <option value="{!! $topic->id !!}">{!! $topic->topic !!}</option>
                                 @endforeach
                             </select>
                         </div>
                         <!-- priority -->
-                         <?php 
-                         $Priority = App\Model\helpdesk\Settings\CommonSettings::select('status')->where('option_name','=', 'user_priority')->first(); 
+                         <?php
+                         $Priority = App\Model\helpdesk\Settings\CommonSettings::select('status')->where('option_name','=', 'user_priority')->first();
                          $user_Priority=$Priority->status;
                         ?>
-                         
+
                          @if(Auth::user())
 
                          @if(Auth::user()->active == 1)
                         @if($user_Priority == 1)
-             
+
                         <div class="col-md-12 form-group">
                             <div class="row">
                                 <div class="col-md-1">
@@ -215,14 +225,13 @@ class = "nav-item active"
                         <?php \Illuminate\Support\Facades\Event::dispatch(new App\Events\ClientTicketForm()); ?>
                         <div class="col-md-12" id="response"> </div>
                         <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>
-                        <div class="col-md-12 form-group">
-                            {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-info float-right', 'onclick' => 'this.disabled=true;this.value="Sending, please wait...";this.form.submit();'])!!}
-                        </div>
-       
-                        <div class="col-md-12" id="response"> </div>
+                                <div class="col-md-12 form-group">
+                                    {!! Form::button('<i class="fas fa-save"></i> ' . Lang::get('lang.submit'), ['type'=>'submit', 'class'=>'btn btn-info float-right', 'style'=>'background-color: #337ab7 !important; border-color: #337ab7 !important; color: white;', 'onclick' => 'this.disabled=true;this.innerHTML="Sending, please wait...";this.form.submit();', 'data-v-fce8d630']) !!}
+                                </div>
+                            <div class="col-md-12" id="response"> </div>
                         <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>
-                  
-                    {!! Form::close() !!}  
+
+                    {!! Form::close() !!}
                     </div>
                 </section>    
             </div>

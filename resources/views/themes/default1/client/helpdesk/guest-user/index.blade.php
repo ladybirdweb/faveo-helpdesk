@@ -14,12 +14,13 @@
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 @stop
 @section('breadcrumb')
-    <div class="site-hero clearfix">
-        <ol class="breadcrumb breadcrumb-custom">
-            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
+{{--    <div class="site-hero clearfix">--}}
+        <ol class="breadcrumb float-sm-right ">
+            <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
+
             <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.home') !!}</a></li>
         </ol>
-    </div>
+{{--    </div>--}}
 @stop
 @section('content')
 @if(!Session::has('error') && count($errors)>0)
@@ -34,6 +35,7 @@
         </ul>
     </div>
     @endif
+
 <div id="content" class="site-content col-md-12">
     <div id="corewidgetbox" class="wid">
         <div id="wbox" class="widgetrow text-center">

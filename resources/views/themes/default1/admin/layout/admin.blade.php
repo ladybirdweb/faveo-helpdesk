@@ -42,6 +42,9 @@
         <link href="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.css")}}" rel="stylesheet" type="text/css" />
 
          <script src="{{asset("lb-faveo/js/jquery-3.6.3.min.js")}}" type="text/javascript"></script>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
          <script src="{{asset("lb-faveo/js/jquery-migrate.js")}}" type="text/javascript"></script>
           <script src="{{asset("lb-faveo/js/jquery.ui.3.2.0.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/js/popper.min.js")}}" type="text/javascript"></script>
@@ -114,7 +117,7 @@
 
         <div class="wrapper">
 
-            <nav class="main-header navbar navbar-expand navbar-dark navbar-orange">
+            <nav class="main-header navbar navbar-expand  navbar-light">
 
                 <!-- Sidebar toggle button-->
                 <ul class="navbar-nav">
@@ -333,7 +336,7 @@
             <!-- Left side column. contains the logo and sidebar -->
             <aside class="main-sidebar elevation-4 sidebar-dark-orange">
 
-                <a href="http://www.faveohelpdesk.com" class="brand-link navbar-orange" style="text-align: center;">
+                <a href="http://www.faveohelpdesk.com" class="brand-link navbar-dark" style="text-align: center;">
                     <img src="{{ asset('lb-faveo/media/images/logo.png')}}" class="brand-image" alt="Company Log0">
                 </a>
 
