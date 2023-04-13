@@ -356,7 +356,7 @@ foreach ($conversations as $conversation) {
 @endif
 <?php $id2 = $tickets->id; ?>
 <div id="respond" class="comment-respond form-border">
-    <h3 id="reply-title" class="comment-reply-title section-title"><i class="line"></i>{!! Lang::get('lang.leave_a_reply') !!}</h3>   
+    <h3 id="reply-title" class="comment-reply-title section-title"><i class="line" style="border-color: rgb(0, 154, 186);"></i>{!! Lang::get('lang.leave_a_reply') !!}</h3>
     {!! Form::open(['url'=>'post-ticket-reply/'.$tickets->id.'#formabc']) !!}
     <div class="row">
         <div class="form-group">

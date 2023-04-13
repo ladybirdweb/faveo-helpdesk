@@ -5,16 +5,23 @@
 @stop
 
 @section('breadcrumb')
-    <div class="site-hero clearfix">
-        <ol class="breadcrumb breadcrumb-custom">
-            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
-            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.home') !!}</a></li>
+{{--    <div class="site-hero clearfix">--}}
+        <ol class="breadcrumb float-sm-right ">
+            <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
+
+            <li><a href="{!! URL::route('post.register') !!}">{!! Lang::get('lang.register') !!}</a></li>
         </ol>
-    </div>
+{{--    </div>--}}
 @stop
+{{--    <div class="site-hero clearfix">--}}
+{{--        <ol class="breadcrumb breadcrumb-custom">--}}
+{{--            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>--}}
+{{--            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.home') !!}</a></li>--}}
+{{--        </ol>--}}
+{{--    </div>--}}
 
 @section('content')
-   
+
     @if(Session::has('status'))
     <div class="alert alert-success alert-dismissable">
         <i class="fas fa-check-circle"> </i> <b> {!! Lang::get('lang.success') !!} </b>
@@ -73,27 +80,26 @@
             </span>
         </div>
     </div>
-    
-    <div class="col-md-6 offset-md-3 form-helper">
-        
-        <div class="login-box" style=" width: 490px;"  valign = "center">
+
+    <div class="d-flex justify-content-center">
+        <div class="login-box" style=" width: 490px;">
             
             <div class="form-border">
      
                 <div align="center">
                     
-                    <h4 style="background-color: #0084b4;"> 
-                        <a href="http://www.faveohelpdesk.com" class="logo"><img src="{{ asset('lb-faveo/media/images/logo.png')}}" width="100px;"></a>
+                    <h4 style="background-color: #0084b4;">
+                        <a href="http://www.faveohelpdesk.com" class="logo"><img src="{{ asset('lb-faveo/media/images/logo.png')}}" width="100px;" ></a>
                     </h4>    
                 </div>
                
                 <div>
-                    
-                    <h3 class="box-title" align="center">{{Lang::get('lang.registration')}}</h3>
-                </div>   
+                    <div class="text-center">
+                        <h3 class="box-title" >{{Lang::get('lang.registration')}}</h3>
+                    </div>   </div>
 
                 <div>
-                    
+
                     <placeholder ="Let’s set up your account in just a couple of steps.">
                 </div>      
 
@@ -104,19 +110,19 @@
                 <div class="form-group has-feedback {{ $errors->has('full_name') ? 'has-error' : '' }}" style="display: -webkit-box;">
             
                     {!! Form::text('full_name',null,['placeholder'=>Lang::get('lang.full_name'),'class' => 'form-control']) !!}
-                    <span class="glyphicon glyphicon-user form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
+                    <span class="fas fa-user   form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
                 </div>
 
                 <!-- Email -->
                 @if (($email_mandatory->status == 1 || $email_mandatory->status == '1'))
                 <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}" style="display: -webkit-box;">
                     {!! Form::text('email',null,['placeholder'=>Lang::get('lang.email'),'class' => 'form-control']) !!}
-                    <span class="glyphicon glyphicon-envelope form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
+                    <span class="far fa-envelope text-muted form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
                 </div>
                 @elseif (($settings->status == 0 || $settings->status == '0') && ($email_mandatory->status == 0 || $email_mandatory->status == '0'))
                 <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}" style="display: -webkit-box;">
                     {!! Form::text('email',null,['placeholder'=>Lang::get('lang.email'),'class' => 'form-control']) !!}
-                    <span class="glyphicon glyphicon-envelope form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
+                    <span class="far fa-envelope text-muted form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
                 </div>
                 @else
                     {!! Form::hidden('email', null) !!}
@@ -132,7 +138,7 @@
                     <div class="col-md-9">
                         <div class="form-group has-feedback {{ $errors->has('mobile') ? 'has-error' : '' }}" style="display: -webkit-box;">
                         {!! Form::text('mobile',null,['placeholder'=>Lang::get('lang.mobile'),'class' => 'form-control']) !!}
-                        <span class="glyphicon glyphicon-phone form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
+                        <span class="fas fa-phone  form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
                         </div>
                     </div>
                 </div>
@@ -145,20 +151,20 @@
                 <div class="form-group has-feedback {{ $errors->has('password') ? 'has-error' : '' }}" style="display: -webkit-box;">
                            
                     {!! Form::password('password',['placeholder'=>Lang::get('lang.password'),'class' => 'form-control']) !!}
-                    <span class="glyphicon glyphicon-lock form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
+                    <span class="fa fa-lock  form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
 
                 </div>
                 <!-- Confirm password -->
                 <div class="form-group has-feedback {{ $errors->has('password_confirmation') ? 'has-error' : '' }}" style="display: -webkit-box;">
                            
                     {!! Form::password('password_confirmation',['placeholder'=>Lang::get('lang.retype_password'),'class' => 'form-control']) !!}
-                    <span class="glyphicon glyphicon-log-in form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
+                    <span class="fas fa-sign-in-alt form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
 
                 </div>
                 
                 <div >
                     
-                    <button type="submit" class="btn btn-primary btn-block btn-flat">{!! Lang::get('lang.register') !!}</button>
+                    <button type="submit" class="btn btn-primary btn-block btn-flat" style="width: 100%; hov: #00c0ef; color: #fff">{!! Lang::get('lang.register') !!}</button>
                 </div>
 
                 <div>

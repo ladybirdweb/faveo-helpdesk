@@ -2,7 +2,7 @@
 $social = new \App\Model\helpdesk\Settings\SocialMedia();
 ?>
 @if($social->checkActive('twitter') || $social->checkActive('facebook') || $social->checkActive('google') || $social->checkActive('linkedin') || $social->checkActive('bitbucket') || $social->checkActive('github'))
-<center>{{Lang::get('lang.or')}}</center>
+<br>
 @endif
 
 @if($social->checkActive('twitter'))
@@ -11,7 +11,7 @@ $social = new \App\Model\helpdesk\Settings\SocialMedia();
 </a>
 @endif
 @if($social->checkActive('facebook'))
-<a class="btn btn-block btn-social btn-facebook" href="{{ route('social.login', ['facebook']) }}" style="background-color: #3B5998;color: white;">
+<a class="btn btn-block btn-social btn-facebook" href="{{ route('social.login', ['facebook']) }}" style="background-color: #3B5998;color: white; --bs-btn-font-size:none">
     <span class="fab fa-facebook-f fa-fw"></span> Sign in with Facebook
 </a>
 @endif

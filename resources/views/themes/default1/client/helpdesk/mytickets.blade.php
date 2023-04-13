@@ -7,7 +7,14 @@ My Tickets -
 @section('myticket')
 class="nav-item active"
 @stop
+@section('breadcrumb')
+    {{--<div class="site-hero clearfix">--}}
+    <ol class="breadcrumb float-sm-right ">
+        <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
+        <li><a href="{!! URL::route('ticket') !!}">{!! Lang::get('lang.my_tickets') !!}</a></li>
+    </ol>
 
+@stop
 @section('content')
 <style type="text/css">
     .table th {
@@ -20,21 +27,21 @@ class="nav-item active"
     $open = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', Auth::user()->id)
             ->where('status', '=', 1)
             ->orderBy('id', 'DESC')
-            ->paginate(20);
+            ->paginate(10);
     ?>
     <?php
     $close = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', Auth::user()->id)
             ->whereIn('status', [2, 3])
             ->orderBy('id', 'DESC')
-            ->paginate(20);
+            ->paginate(10);
     ?>
     <div class="nav-tabs-custom">
 
         <ul class="nav nav-tabs">
                     
             <li class="nav-item">
-                
-                <a style="cursor: pointer;" class="nav-link text-dark active" href="#tab_1" data-toggle="tab">
+
+                <a style="cursor: pointer;" class="nav-link text-dark active" id="tab_1-tab" data-bs-toggle="pill" href="#tab_1">
                 
                     <b>{!! Lang::get('lang.opened') !!}</b>
                 
@@ -44,8 +51,8 @@ class="nav-item active"
             </li>
 
             <li class="nav-item">
-                
-                <a style="cursor: pointer;" class="nav-link text-dark" href="#tab_2" data-toggle="tab">
+
+                <a class="nav-link" id="tab_2-tab" data-bs-toggle="pill" href="#tab_2" style="color: #343a40!important">
                 
                     <b>{!! Lang::get('lang.closed') !!}</b>
                 
@@ -60,9 +67,9 @@ class="nav-item active"
                 {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
                 <div class="mailbox-controls mt-3">
                     <!-- Check all button -->
-                    <a class="btn btn-light btn-sm checkbox-toggle"><i class="far fa-square"></i></a>
-                    <a class="btn btn-light btn-sm" id="click1"><i class="fas fa-sync"></i></a>
-                    <input type="submit" class="btn btn-light text-warning btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
+                    <a class="btn btn-light btn-sm checkbox-toggle" style="background-color: whitesmoke"><i class="far fa-square"></i></a>
+                    <a class="btn btn-light btn-sm" id="click1" style="background-color: whitesmoke"><i class="fas fa-sync"></i></a>
+                    <input type="submit" class="btn btn-light text-warning btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}"style="color: #F39C12;background-color: whitesmoke">
                     <div class="float-right" id="refresh21">
                         {!! $open->count().'-'.$open->total(); !!}
                     </div>
@@ -149,9 +156,9 @@ class="nav-item active"
                 {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
                 <div class="mailbox-controls mt-3">
                     <!-- Check all button -->
-                    <a class="btn btn-light btn-sm checkbox-toggle"><i class="far fa-square"></i></a>
-                    <a class="btn btn-light btn-sm" id="click2"><i class="fas fa-sync"></i></a>
-                    <input type="submit" class="btn btn-light text-primary btn-sm" name="submit" value="{!! Lang::get('lang.open') !!}">
+                    <a class="btn btn-light btn-sm checkbox-toggle" style="background-color: whitesmoke"><i class="far fa-square" ></i></a>
+                    <a class="btn btn-light btn-sm" id="click2" style="background-color: whitesmoke"><i class="fas fa-sync"></i></a>
+                    <input type="submit" class="btn btn-light text-primary btn-sm" name="submit" value="{!! Lang::get('lang.open') !!}" style="background-color: whitesmoke">
                     <div class="float-right" id="refresh22">
                         {!! $close->count().'-'.$close->total(); !!}
                     </div>

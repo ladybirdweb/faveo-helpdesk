@@ -15,6 +15,7 @@ use App\Model\helpdesk\Ticket\Ticket_source;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 // classes
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 /**
@@ -294,7 +295,7 @@ class MailController extends Controller
         }
         if ($disposition == 'INLINE' || $disposition == 'inline') {
             $id = str_replace('>', '', str_replace('<', '', $structure->id));
-            //$filename = $attachment->getFileName();
+//            $filename = $attachment->getFileName();
             $threads = new Ticket_Thread();
             $thread = $threads->find($thread_id);
             $body = $thread->body;
@@ -351,8 +352,9 @@ class MailController extends Controller
      *
      * @return type file
      */
-    public function get_data($id)
+    public function get_data(Request $request)
     {
+        $id = $request->input('image_id');
         $attachment = \App\Model\helpdesk\Ticket\Ticket_attachments::where('id', '=', $id)->first();
         if (mime($attachment->type) == true) {
             echo "<img src=data:$attachment->type;base64,".$attachment->file.'>';

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Client\kb;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\kb\CommentRequest;
 use App\Http\Requests\kb\ContactRequest;
 use App\Http\Requests\kb\SearchRequest;
 use App\Model\kb\Article;
@@ -90,9 +89,9 @@ class UserController extends Controller
         $pagination = $settings->pagination;
         $search = $request->input('s');
         $result = $article->where('name', 'LIKE', '%'.$search.'%')
-                ->orWhere('slug', 'LIKE', '%'.$search.'%')
-                ->orWhere('description', 'LIKE', '%'.$search.'%')
-                ->paginate($pagination);
+            ->orWhere('slug', 'LIKE', '%'.$search.'%')
+            ->orWhere('description', 'LIKE', '%'.$search.'%')
+            ->paginate($pagination);
         $result->setPath('search?s='.$search);
         $categorys = $category->get();
 
@@ -232,14 +231,31 @@ class UserController extends Controller
      *
      * @return type response
      */
-    public function postComment($slug, Article $article, CommentRequest $request, Comment $comment)
+    public function postComment($slug, Article $article, Request $request, Comment $comment)
     {
+        $request->validate([
+            'comment' => 'required',
+
+        ]);
+
         $article = $article->where('slug', $slug)->first();
         if (!$article) {
-            return Redirect::back()->with('fails', Lang::get('lang.sorry_not_processed'));
+            return response()->json(['success' => false, 'message' => Lang::get('lang.sorry_not_processed')]);
         }
-        $id = $article->id;
-        $comment->article_id = $id;
+
+        $comment->article_id = $article->id;
+
+        if (Auth::check()) {
+            // Associate the comment with the authenticated user
+            $comment->article_id = Auth::id();
+            $comment->name = Auth::user()->first_name.' '.Auth::user()->last_name;
+        } else {
+            // Set default values for non-authenticated user
+            $comment->name = $request->input('name');
+            $comment->email = $request->input('email');
+            $comment->website = $request->input('website');
+        }
+
         if ($comment->fill($request->input())->save()) {
             return Redirect::back()->with('success', Lang::get('lang.your_comment_posted'));
         } else {

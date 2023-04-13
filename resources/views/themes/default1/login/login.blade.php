@@ -13,14 +13,14 @@
 			
 			{!! Form::text('email',null,['placeholder'=>'Email','class' => 'form-control']) !!}
 			{!! $errors->first('email', '<spam class="help-block">:message</spam>') !!}
-			<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+			<span class="far fa-envelope text-muted form-control-feedback"></span>
           
           </div>
 
           <div class="form-group has-feedback {{ $errors->has('password') ? 'has-error' : '' }}">
             {!! Form::password('password',['placeholder'=>'Password','class' => 'form-control']) !!}
 			{!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
-            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            <span class="fa fa-lock text-muted form-control-feedback"></span>
           </div>
           <div class="row">
             <div class="col-xs-8">    

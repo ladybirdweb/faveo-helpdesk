@@ -25,7 +25,7 @@
 			
 			{!! Form::text('email',null,['placeholder'=>'Email','class' => 'form-control']) !!}
 			{!! $errors->first('email', '<spam class="help-block">:message</spam>') !!}
-			<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+			<span class="far fa-envelope text-muted form-control-feedback"></span>
           
           </div>
 
@@ -33,13 +33,13 @@
           <div class="form-group has-feedback {{ $errors->has('password') ? 'has-error' : '' }}">
             {!! Form::password('password',['placeholder'=>'Password','class' => 'form-control']) !!}
 			{!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
-            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            <span class="fa fa-lock form-control-feedback"></span>
           </div>
 
           <div class="form-group has-feedback {{ $errors->has('password_confirmation') ? 'has-error' : '' }}">
             {!! Form::password('password_confirmation',['placeholder'=>'Retype Password','class' => 'form-control']) !!}
 			{!! $errors->first('password_confirmation', '<spam class="help-block">:message</spam>') !!}
-            <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+            <span class="fas fa-sign-in-alt form-control-feedback"></span>
           </div>
 
           

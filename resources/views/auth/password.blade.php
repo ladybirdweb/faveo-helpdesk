@@ -5,12 +5,10 @@
 @stop
 
 @section('breadcrumb')
-    <div class="site-hero clearfix">
-        <ol class="breadcrumb breadcrumb-custom">
-            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
-            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.home') !!}</a></li>
+    <ol class="breadcrumb float-sm-right ">
+        <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} :&nbsp; </li>
+            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.forgot_password') !!}</a></li>
         </ol>
-    </div>
 @stop
 
 @section('content')
@@ -69,10 +67,9 @@
     <script type="text/javascript"> $(function(){ $('.dialogerror, .dialoginfo, .dialogalert').fadeIn('slow');$("form").bind("submit", function(e){$(this).find("input:submit").attr("disabled", "disabled");});});</script>
     <script type="text/javascript" >try {if (top.location.hostname != self.location.hostname) { throw 1; }} catch (e) { top.location.href = self.location.href; }
     </script>
-
-    <div class="col-md-6 offset-md-3 form-helper">
+    <div class="d-flex justify-content-center">
     
-        <div class="login-box" style=" width: 490px;"  valign = "center">
+        <div class="login-box" style=" width: 490px;"  >
         
             <div class="form-border">
      
@@ -98,21 +95,20 @@
             
                         <input type="email" class="form-control" name="email" placeholder="{!! Lang::get('lang.email') !!}" value="{{ old('email') }}">
 
-                         <span class="glyphicon glyphicon-envelope form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
+                         <span class="far fa-envelope text-muted  form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
                     </div>
                 
                     <div class="row">
 
-                        <div class="col-sm-8">
+                        <div class="col-sm-6">
 
                             <a href="{{url('auth/login')}}" class="text-center">{!! Lang::get('lang.i_know_my_password') !!}</a>    
                         </div>
-                        
-                        <div class="col-sm-4">
-                            
-                            <span class="input-group-btn">
 
-                                <button type="submit" class="btn btn-primary btn-block btn-flat">{!! Lang::get('lang.send') !!}</button>
+                        <div class="col-sm-6">
+                            
+                             <span class="input-group-btn" style="width: 65% ;margin-left: 35%">
+                                <button type="submit" class="btn btn-primary btn-block btn-flat" style="width: 100%; color: white">{!! Lang::get('lang.send') !!}</button>
                             </span>
                             <br/>
                         </div>

@@ -175,7 +175,7 @@ $footer4 = App\Model\helpdesk\Theme\Footer4::whereId('1')->first();
 					<div class="col-md-3">
 						<div class="widget-area">
 							<section id="section-about" class="section">
-								<h2 class="section-title h4 clearfix">{!!$footer->title!!}</h2>
+								<h2 class="section-line h4 clearfix">{!!$footer->title!!}</h2>
 								<div class="textwidget">
 									<p>{!!$footer->footer!!}</p>
 								</div>
