@@ -32,10 +32,10 @@ class = "nav-item active"
 
                 @if(Session::has('check'))
                 @if (count($errors) > 0)
-                <div class="alert alert-danger alert-dismissable">
+                <div class="alert alert-danger alert-dismissible" style="background-color: #f8d7da ;color: #721c24; border-color: #f5c6cb; padding-right:20px">
                     <i class="fa fa-ban"></i>
                     <b>{!! Lang::get('lang.alert') !!} !</b>
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close" style="opacity:.5; ">&times;</button>
                     @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                     @endforeach
@@ -46,7 +46,7 @@ class = "nav-item active"
                 <div>
                      {!! Form::open(['url' => 'checkmyticket' , 'method' => 'POST'] )!!}
                     {!! Form::label('email',Lang::get('lang.email')) !!}<span class="text-red"> *</span>
-                    {!! Form::text('email_address',null,['class' => 'form-control']) !!}
+                    {!! Form::text('email_address',null,['class' => 'form-control','style'=>'margin-bottom:1rem']) !!}
                     {!! Form::label('ticket_number',Lang::get('lang.ticket_number')) !!}<span class="text-red"> *</span>
                     {!! Form::text('ticket_number',null,['class' => 'form-control']) !!}
                     <br/><input type="submit" value="{!! Lang::get('lang.check_ticket_status') !!}" class="btn btn-info">
@@ -62,9 +62,9 @@ class = "nav-item active"
     <div id="content" class="site-content col-md-9">
 
         @if(Session::has('message'))
-        <div class="alert alert-success alert-dismissable">
+            <div class="alert alert-danger alert-dismissible" style="background-color: #f8d7da ;color: #721c24; border-color: #f5c6cb;">
             <i class="fas  fa-check-circle"></i>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="margin-right: 20%" >&times;</button>
             {!! Session::get('message') !!}
         </div>
         @endif
@@ -73,10 +73,10 @@ class = "nav-item active"
         <?php goto a; ?>
         @endif
         @if(!Session::has('error'))
-        <div class="alert alert-danger alert-dismissable">
+                <div class="alert alert-danger alert-dismissible" style="background-color: #f8d7da ;color: #721c24; border-color: #f5c6cb;">
             <i class="fas fa-ban"></i>
             <b>{!! Lang::get('lang.alert') !!} !</b>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close" style="opacity: .5; margin-right: 20px" >&times;</button>
             <ul>
                 @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -213,16 +213,15 @@ class = "nav-item active"
                         </div>
                         {{-- Event fire --}}
                         <?php \Illuminate\Support\Facades\Event::dispatch(new App\Events\ClientTicketForm()); ?>
-                        <div class="col-md-12" id="response"> </div>
+                        <div class="col-md-12" id="response" > </div>
                         <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>
-                        <div class="col-md-12 form-group">
+                        <div class="col-md-12 form-group" >
                             {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-info float-right', 'onclick' => 'this.disabled=true;this.value="Sending, please wait...";this.form.submit();'])!!}
                         </div>
        
                         <div class="col-md-12" id="response"> </div>
                         <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>
-                  
-                    {!! Form::close() !!}  
+                    {!! Form::close() !!}
                     </div>
                 </section>    
             </div>

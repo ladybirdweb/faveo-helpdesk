@@ -16,23 +16,39 @@
 
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 
-        <link href="{{asset("lb-faveo/css/widgetbox.min.css")}}" rel="stylesheet" type="text/css" />
+       <link href="{{asset("lb-faveo/css/widgetbox.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Bootstrap 4.3.1 -->
-        <link href="{{asset("lb-faveo/css/bootstrap4.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/css/bootstrap5.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Font Awesome Icons -->
         <link href="{{asset("lb-faveo/css/font-awesome-5.min.css")}}" rel="stylesheet" type="text/css" />
 
         <link href="{{asset("lb-faveo/css/intlTelInput.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
-        <link href="{{asset("lb-faveo/css/client.min.css")}}" rel="stylesheet" type="text/css" />
+{{--    <link href="{{asset("lb-faveo/css/client.min.css")}}" rel="stylesheet" type="text/css" />--}}
+
+      <link href="{{asset("lb-faveo/css/app.3.0.css")}}" rel="stylesheet" type="text/css">
+
+        <link href="{{asset("lb-faveo/css/custom.css")}}" rel="stylesheet" type="text/css">
+
+        <link href="{{asset("lb-faveo/css/edit.css")}}" rel="stylesheet" type="text/css">
 
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
 
-        <link href="{{asset("lb-faveo/plugins/summernote/summernote-bs4.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/plugins/summernote/summernote-lite.min.css")}}" rel="stylesheet" type="text/css" />
 
-        <script src="{{asset("lb-faveo/js/jquery-3.4.1.min.js")}}" type="text/javascript"></script>
+       <script src="{{asset("lb-faveo/js/jquery-3.6.3.min.js")}}" type="text/javascript"></script>
 
         @yield('HeadInclude')
+
+        <style>
+            .note-editor .dropdown-toggle::after {
+                all: unset;
+            }
+
+            .note-editor .note-dropdown-menu, .note-editor .note-modal-footer {
+                box-sizing: content-box;
+            }
+        </style>
     </head>
     <body>
 
@@ -114,13 +130,13 @@
                             </a>
                         </div>
 
-                        <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" 
+                        <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            
+
                             <span class="navbar-toggler-icon"></span>
                         </button> <!-- collapse -->
 
-                        <div class="collapse navbar-collapse links" id="navbarSupportedContent">
+                        <div class="collapse navbar-collapse links justify-content-end" id="navbarSupportedContent">
                             
                             <ul class="navbar-nav navbar-menu site-navigate ml-auto">
                                 
@@ -194,7 +210,7 @@
                                                 </div>
                                             </div>
                                         </li>
-                                    </ul>
+                         </ul>
                                 </li>
                                 @else
                                 @if(isset($errors))
@@ -207,7 +223,7 @@
                                             }
                                         }
                                         ?> 
-                                        ><a href="#"  data-toggle="collapse"  class="nav-link"
+                                        ><a href="#"  data-toggle="collapse"   class="nav-item navbar-login d-md-none  d-none d-lg-block"
                                             <?php
                                             if (is_object($errors)) {
                                                 if ($errors->first('email') || $errors->first('password')) {
@@ -241,7 +257,11 @@
                                         </ul>
                                     </li>
                                 </ul>
-                                <?php 
+                            <span class="switcher-toggle desk_none" onclick="myFunction()">
+                          <span class="icon"></span>
+                        </span>
+
+                            <?php
                                     $loginFormClass = "login-form collapse fade clearfix";
                                     if(isset($errors) && ($errors->first('email') || $errors->first('password')))
                                     {
@@ -257,10 +277,10 @@
                                         <?php goto b; ?>
                                         @endif
                                         @if(Session::has('error'))
-                                        <div class="alert alert-danger alert-dismissable">
-                                            
+                                        <div class="alert alert-danger alert-dismissible">
+
                                             {!! Session::get('error') !!}
-                                           
+
                                         </div>
                                          @endif
                                         <?php b: ?>
@@ -281,7 +301,7 @@
                                             <button type="submit" class="btn btn-custom">{!! Lang::get('lang.login') !!}</button>
                                         {!! Form::close() !!}
                                     </div>
-                                   
+
                                 <div class="col-md-12 text-center">
                                      {{Lang::get('lang.or')}}
                                     <ul class="list-unstyled">
@@ -295,17 +315,19 @@
                             </div><!-- #login-form -->
                         </div>
                     </nav>
-                
+
                     <div id="header-search" class="site-search clearfix"><!-- #header-search -->
                         {!!Form::open(['route' => 'client.search','class'=>'search-form clearfix'])!!}
                         <div class="form-border" style="z-index: 0;width: 80%;">
                             <div class="form-inline ">
-                                <div class="form-group input-group">
-                                    <input type="text" name="s" class="search-field form-control input-lg" title="Enter search term" placeholder="{!! Lang::get('lang.have_a_question?_type_your_search_term_here') !!}" required/>
+                                <div class="form-group input-group" style="width: 95%">
+                                    <input type="text" name="s" class="search-field form-control " title="Enter search term" placeholder="Have a question? Type your search term here..." required="" style="width: 80%">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-custom btn-md " style="margin-left: 5% ;background-color: #009aba; hov: #00c0ef; color: #fff">Search</button>
+                                    </span>
                                 </div>
-                                <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-custom btn-md" style="margin-left: 2px;">{!! Lang::get('lang.search') !!}</button>
-                                </span>
+
+
                             </div>
                         </div>
                         {!! Form::close() !!}
@@ -313,10 +335,10 @@
                 </div>
             </header>
             <!-- Left side column. contains the logo and sidebar -->
-   
+
     <div class="site-hero clearfix">
-  
-            
+
+
                 {!! Breadcrumbs::render() !!}
             </div>
             <!-- Main content -->
@@ -325,17 +347,16 @@
                     <div class="content-area">
                         <div>
                             @if(Session::has('success'))
-                            <div class="alert alert-success alert-dismissable">
+                            <div class="alert alert-success alert-dismissible"  style="padding-right:20px">
                                 <i class="fa  fa-check-circle"></i>
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
                                 {{Session::get('success')}}
                             </div>
                             @endif
                             @if(Session::has('warning'))
-                            <div class="alert alert-warning alert-dismissable">
+                            <div class="alert alert-warning alert-dismissible" style="padding-right:20px">
                                 <i class="fa  fa-check-circle"></i>
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                {!! Session::get('warning') !!}
+                                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">×</button>                                {!! Session::get('warning') !!}
                             </div>
                             @endif
                             <!-- failure message -->
@@ -343,10 +364,10 @@
                             @if(Session::has('check'))
                             <?php goto a; ?>
                             @endif
-                            <div class="alert alert-danger alert-dismissable">
+                            <div class="alert alert-danger alert-dismissible"  style="padding-right:20px" >
                                 <i class="fa fa-ban"></i>
                                 <b>{!! Lang::get('lang.alert') !!} !</b>
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
                                 {{Session::get('fails')}}
                             </div>
                             <?php a: ?>
@@ -427,7 +448,7 @@
                     <hr style="color:#E5E5E5"/>
                     <div class="row">
                         <div class="site-info col-md-6">
-                            <p class="text-muted">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>. {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/"  target="_blank">Faveo</a></p>
+                            <p class="text-muted">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>. {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="https://www.faveohelpdesk.com/"  target="_blank">Faveo</a></p>
                         </div>
                         <div class="site-social text-right col-md-6">
                             <?php $socials = App\Model\helpdesk\Theme\Widgets::all(); ?>
@@ -506,18 +527,22 @@
                                 @endforeach
                             </ul>
                         </div>
-                    </div>
+                    </div></div>
             </footer><!-- #colophon -->
-            
+
             <script src="{{asset("lb-faveo/js/popper.min.js")}}" type="text/javascript"></script>
             <!-- Bootstrap 3.3.2 JS -->
-            <script src="{{asset("lb-faveo/js/bootstrap4.min.js")}}" type="text/javascript"></script>
-            
-            <script src="{{asset("lb-faveo/js/client.min.js")}}" type="text/javascript"></script>
+            <script src="{{asset("lb-faveo/js/bootstrap5.min.js")}}" type="text/javascript"></script>
 
-            <script src="{{asset("lb-faveo/js/superfish.min.js")}}" type="text/javascript"></script>
+{{--          <script src="{{asset("lb-faveo/js/client.min.js")}}" type="text/javascript"></script>--}}
 
-            <script src="{{asset("lb-faveo/js/mobilemenu.min.js")}}" type="text/javascript"></script>
+           <script src="{{asset("lb-faveo/js/autocomplete.js")}}" type="text/javascript"></script>
+
+           <script src="{{asset("lb-faveo/js/superfish.min.js")}}" type="text/javascript"></script>
+
+           <script src="{{asset("lb-faveo/js/app.js")}}" type="text/javascript"></script>-
+
+            <script src="{{asset("lb-faveo/js/jquery.mobilemenu.js")}}" type="text/javascript"></script>
 
             <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
 
@@ -527,8 +552,14 @@
 
             <script src="{{asset("lb-faveo/js/languagechanger.js")}}" type="text/javascript"></script>
 
-            <script src="{{asset("lb-faveo/plugins/summernote/summernote-bs4.min.js")}}" type="text/javascript"></script>
-           
+            <script src="{{asset("lb-faveo/js/custom.js")}}" type="text/javascript"></script>
+
+          <script src="{{asset("lb-faveo/js/html5shiv.min.js")}}" type="text/javascript"></script>
+
+          <script src="{{asset("lb-faveo/js/respond.min.js")}}" type="text/javascript"></script>
+
+            <script src="{{asset("lb-faveo/plugins/summernote/summernote-lite.min.js")}}" type="text/javascript"></script>
+
             <script>
 $(function () {
 //Enable check and uncheck all functionality
@@ -562,6 +593,8 @@ $(function () {
     });
 });
             </script>
-          
+
+        </div>
+        </div>
     </body>
 </html>
