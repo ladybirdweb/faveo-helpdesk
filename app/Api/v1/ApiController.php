@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Api\v1;
-use App\Http\Requests\helpdesk\CreateTicketRequest;
+
 use App\Http\Controllers\Agent\helpdesk\TicketController as CoreTicketController;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\helpdesk\CreateTicketRequest;
 use App\Http\Requests\helpdesk\TicketRequest;
 use App\Model\helpdesk\Agent\Department;
 //use Illuminate\Support\Facades\Request as Value;
@@ -172,6 +173,7 @@ class ApiController extends Controller
 
             $request_data = $request->except(['token']);
             $response = $core->post_newticket(new CreateTicketRequest($request_data), $code, true);
+
             return response()->json(compact('response'));            //$response = $this->ticket->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $attach);
             //return $response;
             /*
