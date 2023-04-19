@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Api\v1;
-
+use App\Http\Requests\helpdesk\CreateTicketRequest;
 use App\Http\Controllers\Agent\helpdesk\TicketController as CoreTicketController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\helpdesk\TicketRequest;
@@ -168,8 +168,11 @@ class ApiController extends Controller
             $core = new CoreTicketController($PhpMailController, $NotificationController);
             $this->request->merge(['body' => preg_replace('/[ ](?=[^>]*(?:<|$))/', '&nbsp;', nl2br($this->request->get('body')))]);
             $request->replace($this->request->except('token', 'api_key'));
-            $response = $core->post_newticket($request, $code, true);
-            //$response = $this->ticket->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $attach);
+            $request->merge(['token' => '']);
+
+            $request_data = $request->except(['token']);
+            $response = $core->post_newticket(new CreateTicketRequest($request_data), $code, true);
+            return response()->json(compact('response'));            //$response = $this->ticket->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $attach);
             //return $response;
             /*
              * return ticket details
