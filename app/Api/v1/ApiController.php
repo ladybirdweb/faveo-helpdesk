@@ -173,6 +173,7 @@ class ApiController extends Controller
 
             $request_data = $request->except(['token']);
             $response = $core->post_newticket(new CreateTicketRequest($request_data), $code, true);
+
             return response()->json(compact('response'));
 
             //$response = $this->ticket->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $attach);
