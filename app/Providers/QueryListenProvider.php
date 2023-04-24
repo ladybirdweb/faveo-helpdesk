@@ -8,7 +8,6 @@ use Illuminate\Support\ServiceProvider;
 
 class QueryListenProvider extends ServiceProvider
 {
-
     /**
      * Bootstrap services.
      *
