@@ -35,6 +35,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/sandesh556/pdf-laravel5.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/ladybirdweb/clockwork.git"
         }
     ],
     "require": {
@@ -70,7 +74,8 @@
         "unisharp/laravel-ckeditor": "dev-master",
         "thomaswelton/laravel-gravatar": "dev-master",
         "symfony/mailgun-mailer": "^6.2",
-        "symfony/http-client": "^6.2"
+        "symfony/http-client": "^6.2",
+        "itsgoingd/clockwork": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5.10",
@@ -81,9 +86,10 @@
         "nunomaduro/collision": "^6.3",
         "mockery/mockery": "^1.4.4",
         "fakerphp/faker": "^1.9.1",
-        "barryvdh/laravel-debugbar": "^3.7",
+        "barryvdh/laravel-debugbar": "^3.8",
         "spatie/laravel-ignition": "^1.4",
-        "laravel/pint": "^1.4"
+        "laravel/pint": "^1.4",
+        "beyondcode/laravel-query-detector": "^1.7"
     },
     "autoload": {
         "classmap": [

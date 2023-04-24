@@ -34,6 +34,7 @@ use DebugBar\DebugBar;
 use DebugBar\Storage\PdoStorage;
 use DebugBar\Storage\RedisStorage;
 use Exception;
+use Throwable;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Session\SessionManager;
 use Illuminate\Support\Str;
@@ -204,7 +205,8 @@ class LaravelDebugbar extends DebugBar
         if ($this->shouldCollect('views', true) && isset($this->app['events'])) {
             try {
                 $collectData = $this->app['config']->get('debugbar.options.views.data', true);
-                $this->addCollector(new ViewCollector($collectData));
+                $excludePaths = $this->app['config']->get('debugbar.options.views.exclude_paths', []);
+                $this->addCollector(new ViewCollector($collectData, $excludePaths));
                 $this->app['events']->listen(
                     'composing:*',
                     function ($view, $data = []) use ($debugbar) {
@@ -258,7 +260,7 @@ class LaravelDebugbar extends DebugBar
                             try {
                                 $logMessage = (string) $message;
                                 if (mb_check_encoding($logMessage, 'UTF-8')) {
-                                    $logMessage .= (!empty($context) ? ' ' . json_encode($context) : '');
+                                    $logMessage .= (!empty($context) ? ' ' . json_encode($context, JSON_PRETTY_PRINT) : '');
                                 } else {
                                     $logMessage = "[INVALID UTF-8 DATA]";
                                 }
@@ -635,7 +637,7 @@ class LaravelDebugbar extends DebugBar
     /**
      * Adds an exception to be profiled in the debug bar
      *
-     * @param Exception $e
+     * @param Throwable $e
      */
     public function addThrowable($e)
     {

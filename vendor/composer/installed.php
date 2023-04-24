@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '2381fd7cf5b871b9db0df601f4fdd55c221c4f20',
+        'reference' => 'c25c1d94b8fa38df50e8d839730bf32cb534b8cb',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -29,11 +29,20 @@
             'dev_requirement' => false,
         ),
         'barryvdh/laravel-debugbar' => array(
-            'pretty_version' => 'v3.7.0',
-            'version' => '3.7.0.0',
-            'reference' => '3372ed65e6d2039d663ed19aa699956f9d346271',
+            'pretty_version' => 'v3.8.0',
+            'version' => '3.8.0.0',
+            'reference' => 'eb01216141e62433178c52b0cbdb785b45bae871',
             'type' => 'library',
             'install_path' => __DIR__ . '/../barryvdh/laravel-debugbar',
+            'aliases' => array(),
+            'dev_requirement' => true,
+        ),
+        'beyondcode/laravel-query-detector' => array(
+            'pretty_version' => '1.7.0',
+            'version' => '1.7.0.0',
+            'reference' => '40c7e168fcf7eeb80d8e96f7922e05ab194269c8',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../beyondcode/laravel-query-detector',
             'aliases' => array(),
             'dev_requirement' => true,
         ),
@@ -588,6 +597,17 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'itsgoingd/clockwork' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'e29be8125ce999947d60986dcd8e606c04c012ab',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../itsgoingd/clockwork',
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
+            'dev_requirement' => false,
+        ),
         'kodova/hamcrest-php' => array(
             'dev_requirement' => true,
             'replaced' => array(
@@ -615,7 +635,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '2381fd7cf5b871b9db0df601f4fdd55c221c4f20',
+            'reference' => 'c25c1d94b8fa38df50e8d839730bf32cb534b8cb',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1247,8 +1267,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0|3.0',
-                1 => '1.0.0 || 2.0.0 || 3.0.0',
+                0 => '1.0.0 || 2.0.0 || 3.0.0',
+                1 => '1.0|2.0|3.0',
             ),
         ),
         'psr/simple-cache' => array(

@@ -92,7 +92,7 @@ return [
      | Vendor files are included by default, but can be set to false.
      | This can also be set to 'js' or 'css', to only include javascript or css vendor files.
      | Vendor files are for css: font-awesome (including fonts) and highlight.js (css files)
-     | and for js: jquery and and highlight.js
+     | and for js: jquery and highlight.js
      | So if you want syntax highlighting, set it to true.
      | jQuery is set to not conflict with existing jQuery scripts.
      |
@@ -198,7 +198,8 @@ return [
                 'types' => ['SELECT'],     // Deprecated setting, is always only SELECT
             ],
             'hints'             => false,    // Show hints for common mistakes
-            'show_copy'         => false,    // Show copy button next to the query
+            'show_copy'         => false,    // Show copy button next to the query,
+            'slow_threshold'    => false,   // Only track queries that last longer than this time in ms
         ],
         'mail' => [
             'full_log' => false,
@@ -206,6 +207,7 @@ return [
         'views' => [
             'timeline' => false,  // Add the views to the timeline (Experimental)
             'data' => false,    //Note: Can slow down the application, because the data can be quite large..
+            'exclude_paths' => [], // Add the paths which you don't want to appear in the views
         ],
         'route' => [
             'label' => true,  // show complete route on bar
