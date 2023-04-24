@@ -540,13 +540,27 @@
                         </a>
                     </div>
                     <div class="text-center text-sm">{!! Lang::get('lang.debug-options') !!}</div>
+                </div></div>
+                    @if(Config::get('app.debug'))
+                        <div class="col-md-2 col-sm-6">
+                            <div class="settingiconblue">
+                                <div class="settingdivblue">
+                                    <a href="{{ url('clockwork/app') }}">
+                    <span class="fa-stack fa-2x">
+                        <i class="fa fa-server fa-stack-1x"></i>
+                    </span>
+                                    </a>
+                                </div>
+
+                                <div class="text-center text-sm">{!!Lang::get('lang.clock-work')!!}</div>
+                            </div>
+                        </div>
+                    @endif
+
                 </div>
             </div>
-        </div>
-        <!-- /.row -->
-    </div>
-    <!-- ./box-body -->
-</div>
+            </div>
+
 
 
 <div class="card card-light">

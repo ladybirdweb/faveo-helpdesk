@@ -186,6 +186,8 @@ return [
         \Yajra\DataTables\DataTablesServiceProvider::class,
         \Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        App\Providers\QueryListenProvider::class
+
     ],
     /*
       |--------------------------------------------------------------------------

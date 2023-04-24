@@ -250,6 +250,7 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
             'Composer\\CaBundle\\' => 18,
             'Complex\\' => 8,
             'Collective\\Html\\' => 16,
+            'Clockwork\\' => 10,
             'Chumper\\Zipper\\' => 15,
             'Carbon\\' => 7,
         ),
@@ -259,6 +260,7 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
             'Bugsnag\\BugsnagLaravel\\' => 23,
             'Bugsnag\\' => 8,
             'Brick\\Math\\' => 11,
+            'BeyondCode\\QueryDetector\\' => 25,
             'Barryvdh\\Debugbar\\' => 18,
         ),
         'A' => 
@@ -836,6 +838,10 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
         array (
             0 => __DIR__ . '/..' . '/laravelcollective/html/src',
         ),
+        'Clockwork\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/itsgoingd/clockwork/Clockwork',
+        ),
         'Chumper\\Zipper\\' => 
         array (
             0 => __DIR__ . '/..' . '/chumper/zipper/src/Chumper/Zipper',
@@ -859,6 +865,10 @@ class ComposerStaticInit10c1836cea18dd9470bc2e97275d9d56
         'Brick\\Math\\' => 
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
+        ),
+        'BeyondCode\\QueryDetector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/beyondcode/laravel-query-detector/src',
         ),
         'Barryvdh\\Debugbar\\' => 
         array (
