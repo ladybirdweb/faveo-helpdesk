@@ -1415,7 +1415,7 @@ return [
      */
     'error-debug'                        => 'Error logs and debugging',
     'debug-options'                      => 'Debugging options',
-    'clock-work'                         =>'Clock work',
+    'clock-work'                         => 'Clock work',
     'view-logs'                          => 'View error logs',
     'not-authorised-error-debug'         => 'You are not authorised to access the URL',
     'error-debug-settings'               => 'Error and debugging settings',
