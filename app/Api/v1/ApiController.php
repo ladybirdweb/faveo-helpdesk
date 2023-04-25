@@ -170,7 +170,7 @@ class ApiController extends Controller
             $this->request->merge(['body' => preg_replace('/[ ](?=[^>]*(?:<|$))/', '&nbsp;', nl2br($this->request->get('body')))]);
             $request->replace($this->request->except('token', 'api_key'));
             $request_data = $request->except(['token']);
-            $response = $core->post_newticket(new CreateTicketRequest($request->except('token','api_key')), $code, true);
+            $response = $core->post_newticket(new CreateTicketRequest($request->except('token', 'api_key')), $code, true);
 
             //$response = $this->ticket->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $attach);
             //return $response;
