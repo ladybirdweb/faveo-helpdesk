@@ -171,7 +171,7 @@ class UserController extends Controller
                         })
                         /* column email */
                         ->addColumn('email', function ($model) {
-                            $email = "<a href='".route('user.show', $model->id)."'>".$model->email.'</a>';
+                            $email = "<a href='".route('user.show', $model->id)."'>".e($model->email).'</a>';
 
                             return $email;
                         })
@@ -179,11 +179,11 @@ class UserController extends Controller
                         ->addColumn('mobile', function ($model) {
                             $phone = '';
                             if ($model->phone_number) {
-                                $phone = $model->ext.' '.$model->phone_number;
+                                $phone = htmlspecialchars($model->ext.' '.$model->phone_number, ENT_QUOTES, 'UTF-8');
                             }
                             $mobile = '';
                             if ($model->mobile) {
-                                $mobile = $model->mobile;
+                                $mobile = htmlspecialchars($model->mobile, ENT_QUOTES, 'UTF-8');
                             }
                             $phone = $phone.'&nbsp;&nbsp;&nbsp;'.$mobile;
 
