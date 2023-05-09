@@ -24,7 +24,7 @@
 
         <link href="{{asset("lb-faveo/css/intlTelInput.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
-{{--    <link href="{{asset("lb-faveo/css/client.min.css")}}" rel="stylesheet" type="text/css" />--}}
+{{--           <link href="{{asset("lb-faveo/css/client.min.css")}}" rel="stylesheet" type="text/css" />--}}
 
       <link href="{{asset("lb-faveo/css/app.3.0.css")}}" rel="stylesheet" type="text/css">
 
@@ -277,7 +277,7 @@
                                         <?php goto b; ?>
                                         @endif
                                         @if(Session::has('error'))
-                                        <div class="alert alert-danger alert-dismissible">
+                                        <div class="alert alert-danger alert-dismissable">
 
                                             {!! Session::get('error') !!}
 
@@ -347,16 +347,16 @@
                     <div class="content-area">
                         <div>
                             @if(Session::has('success'))
-                            <div class="alert alert-success alert-dismissible"  style="padding-right:20px">
+                            <div class="alert alert-success alert-dismissable"  style="padding-right:20px">
                                 <i class="fa  fa-check-circle"></i>
-                                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                 {{Session::get('success')}}
                             </div>
                             @endif
                             @if(Session::has('warning'))
-                            <div class="alert alert-warning alert-dismissible" style="padding-right:20px">
+                            <div class="alert alert-warning alert-dismissable" style="padding-right:20px">
                                 <i class="fa  fa-check-circle"></i>
-                                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">×</button>                                {!! Session::get('warning') !!}
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>                                {!! Session::get('warning') !!}
                             </div>
                             @endif
                             <!-- failure message -->
@@ -364,7 +364,7 @@
                             @if(Session::has('check'))
                             <?php goto a; ?>
                             @endif
-                            <div class="alert alert-danger alert-dismissible"  style="padding-right:20px" >
+                            <div class="alert alert-danger alert-dismissable"  style="padding-right:20px" >
                                 <i class="fa fa-ban"></i>
                                 <b>{!! Lang::get('lang.alert') !!} !</b>
                                 <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>

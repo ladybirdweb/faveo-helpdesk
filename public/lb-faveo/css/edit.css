@@ -70,6 +70,13 @@ ul.navbar-login li:hover{
 #section-banner .banner-content p {
     font-size: 12px
 }
+.banner-content .btn{
+text-shadow: none;
+}
+.btn-sm.btn-custom{
+    font-size: 10px;
+    border-radius: 2px;
+}
 
 .nav-categories li,
 .nav-categories li a{

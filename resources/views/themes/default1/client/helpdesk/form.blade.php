@@ -32,10 +32,10 @@ class = "nav-item active"
 
                 @if(Session::has('check'))
                 @if (count($errors) > 0)
-                <div class="alert alert-danger alert-dismissible" style="background-color: #f8d7da ;color: #721c24; border-color: #f5c6cb; padding-right:20px">
+                <div class="alert alert-danger alert-dismissable" style="background-color: #f8d7da ;color: #721c24; border-color: #f5c6cb; padding-right:20px">
                     <i class="fa fa-ban"></i>
                     <b>{!! Lang::get('lang.alert') !!} !</b>
-                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close" style="opacity:.5; ">&times;</button>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="opacity:.5; ">&times;</button>
                     @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                     @endforeach
@@ -62,9 +62,9 @@ class = "nav-item active"
     <div id="content" class="site-content col-md-9">
 
         @if(Session::has('message'))
-            <div class="alert alert-danger alert-dismissible" style="background-color: #f8d7da ;color: #721c24; border-color: #f5c6cb;">
+            <div class="alert alert-danger alert-dismissable" style="background-color: #f8d7da ;color: #721c24; border-color: #f5c6cb;">
             <i class="fas  fa-check-circle"></i>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="margin-right: 20%" >&times;</button>
+            <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close" style="margin-right: 20%" >&times;</button>
             {!! Session::get('message') !!}
         </div>
         @endif
@@ -73,10 +73,10 @@ class = "nav-item active"
         <?php goto a; ?>
         @endif
         @if(!Session::has('error'))
-                <div class="alert alert-danger alert-dismissible" style="background-color: #f8d7da ;color: #721c24; border-color: #f5c6cb;">
+                <div class="alert alert-danger alert-dismissable" style="background-color: #f8d7da ;color: #721c24; border-color: #f5c6cb;">
             <i class="fas fa-ban"></i>
             <b>{!! Lang::get('lang.alert') !!} !</b>
-            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close" style="opacity: .5; margin-right: 20px" >&times;</button>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="opacity: .5; margin-right: 20px" >&times;</button>
             <ul>
                 @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
