@@ -445,6 +445,7 @@ class FormController extends Controller
         if ($type == 'checkbox') {
             return self::jqueryCheckboxScript($fieldid, $index);
         }
+
         return '<script>
         $(".'.Str::slug($fieldname).'-'.Str::slug($value).'").on("change", function () {
             var valueid = $(this).val();
