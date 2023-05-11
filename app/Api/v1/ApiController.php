@@ -21,6 +21,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request as Input;
 use Illuminate\Support\Str;
 
@@ -142,6 +143,8 @@ class ApiController extends Controller
     {
         try {
             $user_id = $this->request->input('user_id');
+            $user_email = null;
+            $user = Auth::user();
 
             $subject = $this->request->input('subject');
             $body = $this->request->input('body');
@@ -158,6 +161,12 @@ class ApiController extends Controller
             $headers = [];
             if ($header) {
                 $headers = explode(',', $header);
+            }
+            if ($user) {
+                // Set the user's email as the email for the ticket creation
+                $user_email = $user->email;
+            } if ($user_email && $this->request->input('email') !== $user_email) {
+                throw new \Exception('Invalid email for ticket creation.');
             }
             //return $headers;
             /*
