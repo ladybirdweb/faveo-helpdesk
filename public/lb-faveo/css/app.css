@@ -421,6 +421,7 @@ ol.with-line-border > li {
 	font-weight: 700;
 	border-bottom: 1px solid #ddd;
 	position: relative;
+	color: #fff !important;
 }
 .section-title > i.line {
 	float: left;

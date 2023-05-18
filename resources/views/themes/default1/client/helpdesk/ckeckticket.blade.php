@@ -59,9 +59,9 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                     
                     @if( $common_setting->status == '1')
                         
-                    <div> 
-                            
-                        <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown">
+                    <div>
+
+                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
 
                             <i class="fas fa-exchange-alt" style="color:teal;"> </i> 
 

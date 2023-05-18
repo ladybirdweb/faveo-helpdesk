@@ -26,7 +26,7 @@ class = "nav-item active"
             <section class="box-categories">
                 
                 <h1 class="section-title h4 clearfix">
-                
+
                     <i class="line"></i>
 
                     <i class="far fa-folder-open fa-fw text-muted"></i>
