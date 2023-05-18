@@ -126,7 +126,7 @@ class = "nav-item active"
     
         <div class="widget-area">
         
-            <section id="section-categories" class="section">
+            <section id="section-categories" class="categories">
                 
                 <h2 class="section-title h4 clearfix">
 

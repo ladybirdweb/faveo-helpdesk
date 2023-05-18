@@ -33,8 +33,8 @@ class="nav-item active"
         <ul class="nav nav-tabs">
                     
             <li class="nav-item">
-                
-                <a style="cursor: pointer;" class="nav-link text-dark active" href="#tab_1" data-toggle="tab">
+
+                <a style="cursor: pointer;" class="nav-link text-dark active" id="tab_1-tab" data-bs-toggle="pill" href="#tab_1">
                 
                     <b>{!! Lang::get('lang.opened') !!}</b>
                 
@@ -44,8 +44,8 @@ class="nav-item active"
             </li>
 
             <li class="nav-item">
-                
-                <a style="cursor: pointer;" class="nav-link text-dark" href="#tab_2" data-toggle="tab">
+
+                <a class="nav-link" id="tab_2-tab" data-bs-toggle="pill" href="#tab_2" style="color: #343a40!important">
                 
                     <b>{!! Lang::get('lang.closed') !!}</b>
                 
