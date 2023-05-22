@@ -44,7 +44,7 @@
         <link rel="stylesheet" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet" type="text/css" />
 
         <link href="{{asset("lb-faveo/plugins/summernote/summernote-bs5.min.css")}}" rel="stylesheet" type="text/css" />
-        <link href="{{asset("lb-faveo/css/jquery.ui.3.2.0.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/css/jquery.ui.css")}}" rel="stylesheet" type="text/css" />
         <script src="{{asset("lb-faveo/js/jquery-3.6.3.min.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/js/jquery-migrate.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/js/popper.min.js")}}" type="text/javascript"></script>
@@ -674,7 +674,7 @@
 
         <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
         {{-- jquery ui --}}
-        <script src="{{asset("lb-faveo/js/jquery.ui.3.2.0.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/jquery.ui.js")}}" type="text/javascript"></script>
         <script>
                     $(document).ready(function () {
 
