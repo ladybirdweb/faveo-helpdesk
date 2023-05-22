@@ -659,7 +659,7 @@
 
         <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
 
-        <script src="{{asset("lb-faveo/plugins/select2/select2.full.3.2.0.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/plugins/select2/select2.full.3.2.0.min.css.js")}}" type="text/javascript"></script>
 
         <script src="{{asset("lb-faveo/plugins/moment/moment.3.2.0.js")}}" type="text/javascript"></script>
 
