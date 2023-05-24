@@ -177,19 +177,19 @@ class="nav-item active"
                                  {!! Form::label('old_password',Lang::get('lang.old_password')) !!}<span class="text-red"> *</span>
                                 <div class="form-group has-feedback {{ $errors->has('old_password') ? 'has-error' : '' }}" style="display: -webkit-box;">
                                     {!! Form::password('old_password',['class' => 'form-control']) !!}
-                                    <span class="fa fa-lock form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span> <!--change the "glyphicon glyphicon-lock form-control-feedback" to "fa fa-lock form-control-feedback" bcoz bs5 has removed the Glyphicons icon font that was included in earlier versions of Bootstrap-->
+                                    <span class="fa fa-lock form-control-feedback" style="top: 9px;left: -25px;color: #6c757d !important;"></span> <!--change the "glyphicon glyphicon-lock form-control-feedback" to "fa fa-lock form-control-feedback" bcoz bs5 has removed the Glyphicons icon font that was included in earlier versions of Bootstrap-->
                                 </div>
                                 <!-- new password -->
                                   {!! Form::label('new_password',Lang::get('lang.new_password')) !!}<span class="text-red"> *</span>
                                 <div class="form-group has-feedback {{ $errors->has('new_password') ? 'has-error' : '' }}" style="display: -webkit-box;">
                                     {!! Form::password('new_password',['class' => 'form-control']) !!}
-                                    <span class="fa fa-lock form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
+                                    <span class="fa fa-lock form-control-feedback" style="top: 9px;left: -25px;color: #6c757d !important;"></span>
                                 </div>
                                 <!-- cofirm password -->
                                  {!! Form::label('confirm_password',Lang::get('lang.confirm_password')) !!}<span class="text-red"> *</span>
                                 <div class="form-group has-feedback {{ $errors->has('confirm_password') ? 'has-error' : '' }}" style="display: -webkit-box;">
                                     {!! Form::password('confirm_password',['class' => 'form-control']) !!}
-                                    <span class="fa fa-lock form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
+                                    <span class="fa fa-lock form-control-feedback" style="top: 9px;left: -25px;color: #6c757d !important;"></span>
                                 </div>
 
                                 {!! Form::close() !!}
