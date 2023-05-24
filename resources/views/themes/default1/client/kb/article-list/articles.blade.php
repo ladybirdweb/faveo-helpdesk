@@ -68,9 +68,9 @@
             
                 <section id="section-categories" class="section">
                     
-                    <h2 class="section-title h4 clearfix">
+                    <h2 class="section-home h4 clearfix">
 
-                        <i class="line"></i>{!! Lang::get('lang.categories') !!}
+                        <b>   <i class="line"></i>{!! Lang::get('lang.categories') !!}</b>
                     
                         <small class="float-right"><i class="far fa-hdd fa-fw"></i></small>
                     </h2>

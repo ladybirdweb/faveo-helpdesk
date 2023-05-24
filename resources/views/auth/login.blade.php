@@ -65,7 +65,7 @@
                         @if($system->status == 1)
                             <span onclick="javascript: window.location.href='{!! URL::route('form') !!}';">
                                 <a href="{!! URL::route('form') !!}" class="widgetrowitem defaultwidget" style="background-image:url({{ URL::asset('lb-faveo/media/images/submitticket.png') }})">
-                                    <span class="widgetitemtitle">{!! Lang::get('lang.submit_a_ticket') !!}</span>
+                                    <div style="font-size: 13px" class="widgetitemtitle">{!! Lang::get('lang.submit_a_ticket') !!}</div>
                                 </a>
                             </span>
                         @endif

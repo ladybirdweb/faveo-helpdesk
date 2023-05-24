@@ -1,4 +1,4 @@
-.site-content .fa-ul > li a,
+i.site-content .fa-ul > li a,
 footer ul.media-list a,
 .site-info.col-md-6 a,
 .navbar .navbar-nav>li>a,
@@ -113,6 +113,24 @@ footer ul.media-list {
 .dark-mode .navbar i.sub-indicator.fa {
     /* color: #fff;*/
 }
+.dark-mode .note-icon-caret,
+.dark-mode .note-current-fontsize
+{
+    color: #000b16; !important;
+}
+.dark-mode .note-icon-caret,
+.dark-mode .note-current-fontsize,
+.dark-mode .widgetitemtitle
+{
+    color: #337ab7 !important;
+}
+.dark-mode .section-home,
+.dark-mode span,
+.dark-mode .ticket-table,
+.dark-mode .table,
+.dark-mode.reply,
+.dark-mode .comment-reply-title,
+.dark-mode .note-editable,
 .dark-mode .box-categories .section-title,
 .dark-mode .site-content .fa-ul > li a,
 .dark-mode .banner-horizontal .banner-title,
