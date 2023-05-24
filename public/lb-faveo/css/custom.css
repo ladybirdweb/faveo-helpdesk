@@ -115,6 +115,7 @@ footer ul.media-list {
 }
 .dark-mode .note-icon-caret,
 .dark-mode .note-current-fontsize
+
 {
     color: #000b16; !important;
 }
@@ -123,6 +124,9 @@ footer ul.media-list {
 .dark-mode .widgetitemtitle
 {
     color: #337ab7 !important;
+}
+.dark-mode .text-red{
+    color: red !important;
 }
 .dark-mode .section-home,
 .dark-mode span,
