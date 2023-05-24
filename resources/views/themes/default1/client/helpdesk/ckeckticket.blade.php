@@ -341,28 +341,30 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                             <div class="comment-content">
                                 
                                 @if($conversation->firstContent()=='yes')
-                                <div class="embed-responsive{{$conversation->id}} embed-responsive-16by9 "></div>
-                                <script>
-                                setTimeout(function(){
-                                    var $iframe="Id{{$conversation->id}}";
-                                    $('<iframe src="about:blank" id='+$iframe+' class="iframe" frameborder="0"  scrolling="no" width="100%" style="height:1px"></iframe>').appendTo(".embed-responsive{{$conversation->id}}");
-                                    setTimeout(function(){
-                                      $('#'+$iframe).contents().find('body').append('<body><style>body{display:inline-block;}</style>{!!$conversation->purify(true)!!}<body>');
-                                       },100)
-                                    setTimeout(function(){
-                                        var frameid=document.getElementById($iframe);
-                                        if(parseInt($("#"+$iframe).contents().find('img').css('width'))>700){
-                                            $("#"+$iframe).contents().find('img').css('width','96%');
-                                        }
-                                        frameid.contentWindow.document.body.style.width="100%";      
-                                        var iframe_height=frameid.contentWindow.document.body.scrollHeight;
-                                        frameid.style.height=iframe_height+"px";
-                                    }, 1000);
-                                }, 0);
-                                </script>                                            
-                                @else 
-                                {!! $conversation->body !!}
+                                    <div class="embed-responsive{{$conversation->id}} embed-responsive-16by9">
+                                        <div class="reply">{!! $conversation->purify(true) !!}</div>
+                                    </div>
+                                    <script>
+                                        setTimeout(function(){
+                                            var $iframe = "Id{{$conversation->id}}";
+                                            $('<iframe src="about:blank" id='+$iframe+' class="iframe" frameborder="0" scrolling="no" width="100%" style="height:1px"></iframe>').appendTo(".embed-responsive{{$conversation->id}}");
+                                            setTimeout(function(){
+                                                $('#'+$iframe).contents().find('body').append('<style>body{display:inline-block;}</style>');
+                                            }, 100);
+                                            setTimeout(function(){
+                                                var frameid = document.getElementById($iframe);
+                                                if(parseInt($("#"+$iframe).contents().find('img').css('width'))>700){
+                                                    $("#"+$iframe).contents().find('img').css('width','96%');
+                                                }
+                                                frameid.contentWindow.document.body.style.width="100%";
+                                                var iframe_height = frameid.contentWindow.document.body.scrollHeight;
+                                                frameid.style.height = iframe_height + "px";
+                                            }, 1000);
+                                        }, 0);
+                                    </script>
+                                @else
                                 @endif
+
                                             
                                 @if($conversation->id == $ij->id)
                                 <?php $ticket_form_datas = App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $tickets->id)->get(); ?>
