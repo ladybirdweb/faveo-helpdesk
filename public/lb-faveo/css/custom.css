@@ -145,7 +145,7 @@ footer ul.media-list {
 /*.dark-mode .section-title, */
 .dark-mode footer p,
 .dark-mode .box-categories .fa-ul > li > *,
-.dark-mode .fa-regular,
+.dark-mode .fa-regular,.dark-mode .section-line,
 .dark-mode footer small.text-muted,
 .dark-mode .site-content .section .fa-ul > li > .meta > *,
 .dark-mode header.entry-header h1,
