@@ -540,7 +540,7 @@ class FormController extends Controller
     public static function selectForm($field_type, $field, $required, $required_class)
     {
         $session = self::getSession();
-        $script = self::jqueryScript( $field->id, $field->name, $field_type);
+        $script = self::jqueryScript($field->id, $field->name, $field_type);
         $form_hidden = Form::hidden('fieldid[]', $field->id, ['id' => 'hidden'.$session.$field->id]).Form::label($field->label, $field->label, ['class' => $required_class]);
         $select = Form::$field_type($field->name, ['' => 'Select', 'Selects' => self::removeUnderscoreFromDB($field->values()->pluck('field_value', 'field_value')->toArray())], null, ['class' => "form-control $session$field->id", 'id' => $session.$field->id, 'required' => $required]).'</br>';
         $html = $script.$form_hidden.$select;
@@ -577,7 +577,8 @@ class FormController extends Controller
             foreach ($values as $field_value) {
                 $script = self::jqueryScript($field_value, $field->id, $field->name, $field_type, $i);
                 $checkbox .= Form::hidden('fieldid[]', $field->id, ['id' => 'f'.$session.$i]);
-                $checkbox .= Form::$field_type($field->name, $field_value, null, ['class' => "$field->id", 'id' => $session.$field->id.'_'.$i, 'required' => $required]);                $checkbox .= '<span>   '.removeUnderscore($field_value).'</span>';
+                $checkbox .= Form::$field_type($field->name, $field_value, null, ['class' => "$field->id", 'id' => $session.$field->id.'_'.$i, 'required' => $required]);
+                $checkbox .= '<span>   '.removeUnderscore($field_value).'</span>';
                 //$checkbox .="</br>";
                 $checkbox .= '<div>'.$script.'<div id=div'.$session.$field_value.'></div></div>';
                 $i++;
