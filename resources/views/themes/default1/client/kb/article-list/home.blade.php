@@ -43,13 +43,13 @@ class = "nav-item active"
         <div class="col-md-6">
 
             <section class="box-categories">
-            
-                <h1 class="section-title h4 clearfix">
-                
+
+                <h1 class="section-home h4 clearfix">
+
                     <i class="line"></i>
 
                     <i class="far fa-folder-open fa-fw text-muted"></i>
-                    
+
                     <small class="float-right">
                 
                         <a href="{{url('category-list/'.$category->slug)}}"><i class="far fa-hdd fa-fw"></i>({{count($all)}})</a>
