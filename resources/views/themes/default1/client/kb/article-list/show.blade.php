@@ -109,17 +109,17 @@ $category_id = $all->pluck('category_id')->toArray();
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                        {!! Form::label('name',Lang::get('lang.name')) !!}
+                        {!! Form::label('name',Lang::get('lang.name'),['class' => 'label']) !!}
                         {!! Form::text('name',null,['class' => 'form-control']) !!}
                         {!! $errors->first('name', '<spam class="help-block" style="red">:message</spam>') !!}
                     </div>
                     <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-                        {!! Form::label('email',Lang::get('lang.email')) !!}
+                        {!! Form::label('email',Lang::get('lang.email'),['class' => 'label']) !!}
                         {!! Form::text('email',null,['class' => 'form-control']) !!}
                         {!! $errors->first('email', '<spam class="help-block">:message</spam>') !!}
                     </div>
                     <div class="form-group {{ $errors->has('website') ? 'has-error' : '' }}">
-                        {!! Form::label('website',Lang::get('lang.website')) !!}
+                        {!! Form::label('website',Lang::get('lang.website'),['class' => 'label']) !!}
                         {!! Form::text('website',null,['class' => 'form-control']) !!}
                          {!! $errors->first('website', '<spam class="help-block">:message</spam>') !!}
                     </div>
@@ -127,7 +127,7 @@ $category_id = $all->pluck('category_id')->toArray();
                 </div>
                 <div class="col-md-8">
                     <div class="form-group {{ $errors->has('comment') ? 'has-   error' : '' }}">
-                        {!! Form::label('comment',Lang::get('lang.message')) !!}
+                        {!! Form::label('comment',Lang::get('lang.message'),['class' => 'label']) !!}
                         {!! Form::textarea('comment',null,['class' => 'form-control','size' => '30x8','id'=>'comment']) !!}
                         {!! $errors->first('comment', '<spam class="help-block">:message</spam>') !!}
                     </div>
@@ -150,10 +150,10 @@ $category_id = $all->pluck('category_id')->toArray();
             
                 <section id="section-categories" class="section">
                     
-                    <h2 class="section-title h4 clearfix">
+                    <h2 class="section-home h4 clearfix">
 
-                        <i class="line"></i>{!! Lang::get('lang.categories') !!}
-                    
+                        <b>   <i class="line"></i>{!! Lang::get('lang.categories') !!}</b>
+
                         <small class="float-right"><i class="far fa-hdd fa-fw"></i></small>
                     </h2>
 
