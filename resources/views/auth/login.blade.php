@@ -110,18 +110,17 @@
 
                         <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}" style="display: -webkit-box;">
                             {!! Form::text('email',null,['placeholder'=> Lang::get("lang.email") ,'class' => 'form-control']) !!}
-                            <span class="glyphicon glyphicon-envelope form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
+                            <span class="far fa-envelope form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
                         </div>
 
                         <div class="form-group has-feedback {{ $errors->has('password') ? 'has-error' : '' }}" style="display: -webkit-box;">
         
                             {!! Form::password('password',['placeholder'=>Lang::get("lang.password"),'class' => 'form-control']) !!}
-                            <span class="glyphicon glyphicon-lock form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
+                            <span class="  fa fa-lock form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
                         </div>
 
                         <div>
-                            <button type="submit" class="btn btn-primary btn-block btn-flat">{!! Lang::get("lang.login") !!}</button>
-                        </div>
+                            <button type="submit" class="btn btn-primary btn-block btn-flat" STYLE="width: 100%; color: white">{!! Lang::get("lang.login") !!}</button>                        </div>
 
                         <div class="row mt-2">
 

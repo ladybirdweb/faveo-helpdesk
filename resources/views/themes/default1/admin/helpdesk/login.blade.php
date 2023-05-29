@@ -6,12 +6,12 @@
           <div class="form-group has-feedback">
           <!-- email -->
             <input type="text" class="form-control" placeholder="Email"/>
-            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+            <span class="fas fa-envelope text-muted form-control-feedback"></span>
           </div>
           <div class="form-group has-feedback">
           <!-- password -->
             <input type="password" class="form-control" placeholder="Password"/>
-            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            <span class="fa  fa-lock form-control-feedback"></span>
           </div>
           <div class="row">
             <div class="col-xs-8">

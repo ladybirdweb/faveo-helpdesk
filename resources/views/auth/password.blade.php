@@ -98,21 +98,20 @@
             
                         <input type="email" class="form-control" name="email" placeholder="{!! Lang::get('lang.email') !!}" value="{{ old('email') }}">
 
-                         <span class="glyphicon glyphicon-envelope form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
+                         <span class="far fa-envelope text-muted  form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
                     </div>
                 
                     <div class="row">
 
-                        <div class="col-sm-8">
+                        <div class="col-sm-6">
 
                             <a href="{{url('auth/login')}}" class="text-center">{!! Lang::get('lang.i_know_my_password') !!}</a>    
                         </div>
-                        
-                        <div class="col-sm-4">
-                            
-                            <span class="input-group-btn">
 
-                                <button type="submit" class="btn btn-primary btn-block btn-flat">{!! Lang::get('lang.send') !!}</button>
+                        <div class="col-sm-6">
+                            
+                             <span class="input-group-btn" style="width: 65% ;margin-left: 35%">
+                                <button type="submit" class="btn btn-primary btn-block btn-flat" style="width: 100%; color: white">{!! Lang::get('lang.send') !!}</button>
                             </span>
                             <br/>
                         </div>

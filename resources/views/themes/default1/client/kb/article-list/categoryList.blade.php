@@ -25,7 +25,7 @@ class = "nav-item active"
 
             <section class="box-categories">
                 
-                <h1 class="section-home h4 clearfix">
+                <h1 class="section-title h4 clearfix">
 
                     <b>   <i class="line"></i>{!! Lang::get('lang.categories') !!}</b>
 

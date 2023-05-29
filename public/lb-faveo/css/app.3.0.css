@@ -477,13 +477,7 @@ ol.with-line-border > li {
     border-bottom: 1px solid #ddd;
     position: relative;
 }
-.section-line{
-    margin-bottom: 1em;
-    padding-bottom: 0.25em;
-    font-weight: 700;
-    border-bottom: 1px solid #ddd;
-    position: relative;
-}
+
 .section-title > i.line {
     float: left;
     width: 35%;

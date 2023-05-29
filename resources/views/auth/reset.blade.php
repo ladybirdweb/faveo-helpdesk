@@ -79,7 +79,7 @@
                 
                     <input type="email" class="form-control" name="email" placeholder="{!! Lang::get('lang.e-mail') !!}" value="{{ $email }}" readonly>
                 
-                    <span class="glyphicon glyphicon-envelope form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
+                    <span class="far fa-envelope text-muted  form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
                 </div>
                 
                 <!-- password -->
@@ -87,7 +87,7 @@
                 
                     <input type="password" class="form-control" name="password" placeholder="{!! Lang::get('lang.password') !!}">
                 
-                    <span class="glyphicon glyphicon-lock form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
+                    <span class="fa fa-lock form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
                 </div>
 
                 <!-- confirm password -->
@@ -95,7 +95,7 @@
                     
                     <input type="password" class="form-control" name="password_confirmation" placeholder="{!! Lang::get('lang.confirm_password') !!}">
                     
-                    <span class="glyphicon glyphicon-log-in form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
+                    <span class="fas fa-sign-in-alt  form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
                 </div>
                 <!-- Confirm password -->
                 <div class="form-group">

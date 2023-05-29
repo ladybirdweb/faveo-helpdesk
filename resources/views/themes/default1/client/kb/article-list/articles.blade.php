@@ -68,7 +68,7 @@
             
                 <section id="section-categories" class="section">
                     
-                    <h2 class="section-home h4 clearfix">
+                    <h2 class="section-title h4 clearfix">
 
                         <b>   <i class="line"></i>{!! Lang::get('lang.categories') !!}</b>
                     

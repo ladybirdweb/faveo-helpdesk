@@ -15,22 +15,28 @@
         <link href="{{asset("lb-faveo/media/images/favicon.ico")}}"  rel="shortcut icon" >
         
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-       
+
         <link href="{{asset("lb-faveo/css/widgetbox.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Bootstrap 4.3.1 -->
-        <link href="{{asset("lb-faveo/css/bootstrap4.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/css/bootstrap5.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Font Awesome Icons -->
         <link href="{{asset("lb-faveo/css/font-awesome-5.min.css")}}" rel="stylesheet" type="text/css" />
 
         <link href="{{asset("lb-faveo/css/intlTelInput.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
-        <link href="{{asset("lb-faveo/css/client.min.css")}}" rel="stylesheet" type="text/css" />
+        {{--           <link href="{{asset("lb-faveo/css/client.min.css")}}" rel="stylesheet" type="text/css" />--}}
+
+        <link href="{{asset("lb-faveo/css/app.3.0.css")}}" rel="stylesheet" type="text/css">
+
+        <link href="{{asset("lb-faveo/css/custom.css")}}" rel="stylesheet" type="text/css">
+
+        <link href="{{asset("lb-faveo/css/edit.css")}}" rel="stylesheet" type="text/css">
 
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
 
-         <link rel="stylesheet" href="lb-faveo/plugins/summernote/summernote-bs4.min.css">
+        <link href="{{asset("lb-faveo/plugins/summernote/summernote-lite.min.css")}}" rel="stylesheet" type="text/css" />
 
-        <script src="{{asset("lb-faveo/js/jquery-3.4.1.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/jquery-3.6.3.min.js")}}" type="text/javascript"></script>
 
         @yield('HeadInclude')
     </head>
@@ -118,7 +124,7 @@
                             <span class="navbar-toggler-icon"></span>
                         </button> <!-- collapse -->
 
-                        <div class="collapse navbar-collapse links" id="navbarSupportedContent">
+                        <div class="collapse navbar-collapse links  justify-content-end" id="navbarSupportedContent">
                             
                             <ul class="navbar-nav navbar-menu site-navigate ml-auto">
                                 
@@ -203,16 +209,14 @@
                     
                     <div id="header-search" class="site-search clearfix"><!-- #header-search -->
                         {!!Form::open(['route'=>'client.search','class'=>'search-form clearfix'])!!}
-                        <div class="form-border" style="z-index: 0;">
+                        <div class="form-border" style="z-index: 0;width: 80%;">
                             <div class="form-inline ">
-                                <div class="form-group input-group" style="width: 88%;">
-                                    <input type="text" name="s" class="search-field form-control input-lg" title="Enter search term" placeholder="{!! Lang::get('lang.have_a_question?_type_your_search_term_here') !!}" required/>
-                                </div>
-                                <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-custom btn-md" style="margin-left: 8px;">{!! Lang::get('lang.search') !!}</button>
-                                </span>
-                            </div>
-                        </div>
+                                <div class="form-group input-group" style="width: 95%">
+                                    <input type="text" name="s" class="search-field form-control " title="Enter search term" placeholder="Have a question? Type your search term here..." required="" style="width: 80%">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-custom btn-md " style="margin-left: 5% ;background-color: #009aba; hov: #00c0ef; color: #fff">Search</button>
+                                    </span>
+                                \</div>
                         {!! Form::close() !!}
                     </div>
                 </div>
@@ -412,16 +416,22 @@
                         </div>
                     </div>
             </footer><!-- #colophon -->
-            
+
             <script src="{{asset("lb-faveo/js/popper.min.js")}}" type="text/javascript"></script>
             <!-- Bootstrap 3.3.2 JS -->
-            <script src="{{asset("lb-faveo/js/bootstrap4.min.js")}}" type="text/javascript"></script>
-            
-            <script src="{{asset("lb-faveo/js/client.min.js")}}" type="text/javascript"></script>
+            <script src="{{asset("lb-faveo/js/bootstrap5.min.js")}}" type="text/javascript"></script>
+
+            {{--          <script src="{{asset("lb-faveo/js/client.min.js")}}" type="text/javascript"></script>--}}
+
+            <script src="{{asset("lb-faveo/js/autocomplete.js")}}" type="text/javascript"></script>
 
             <script src="{{asset("lb-faveo/js/superfish.min.js")}}" type="text/javascript"></script>
 
-            <script src="{{asset("lb-faveo/js/mobilemenu.min.js")}}" type="text/javascript"></script>
+            <script src="{{asset("lb-faveo/js/app.js")}}" type="text/javascript"></script>-
+
+            <script src="{{asset("lb-faveo/js/jquery.mobilemenu.js")}}" type="text/javascript"></script>
+
+            <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
 
             <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
 
@@ -429,8 +439,14 @@
 
             <script src="{{asset("lb-faveo/js/languagechanger.js")}}" type="text/javascript"></script>
 
-            <script src="lb-faveo/plugins/summernote/summernote-bs4.min.js"></script>
-            
+            <script src="{{asset("lb-faveo/js/custom.js")}}" type="text/javascript"></script>
+
+            <script src="{{asset("lb-faveo/js/html5shiv.min.js")}}" type="text/javascript"></script>
+
+            <script src="{{asset("lb-faveo/js/respond.min.js")}}" type="text/javascript"></script>
+
+            <script src="{{asset("lb-faveo/plugins/summernote/summernote-lite.min.js")}}" type="text/javascript"></script>
+
             <script>
 $(function () {
 //Enable check and uncheck all functionality
