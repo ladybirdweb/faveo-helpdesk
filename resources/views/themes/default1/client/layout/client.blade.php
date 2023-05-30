@@ -53,7 +53,7 @@
     <body>
 
         <style>
-           
+
            #dropdown_content{ padding-top: 1rem;margin: 0 !important;}
 
             #user_avatar{ border-radius: 35px;width: 70px;height: 70px;}
@@ -100,9 +100,9 @@
         </style>
 
         <div id="page" class="hfeed site text-small">
-        
+
             <header id="masthead" class="site-header" role="banner">
-        
+
                 <div class="container">
 
                     <nav id="navbar" class="site-navigation navbar navbar-expand-lg navbar-light">
@@ -137,9 +137,9 @@
                         </button> <!-- collapse -->
 
                         <div class="collapse navbar-collapse links justify-content-end" id="navbarSupportedContent">
-                            
+
                             <ul class="navbar-nav navbar-menu site-navigate ml-auto">
-                                
+
                                 <li @yield('home') class="nav-item"><a href="{{url('/')}}" class="nav-link">{!! Lang::get('lang.home') !!}</a></li>
 
                                 @if($system->first()->status == 1)
@@ -149,7 +149,7 @@
                                 @endif
 
                                 <li @yield('kb') class="nav-item dropdown">
-                                    <a href="{!! url('knowledgebase') !!}" class="dropdown-toggle nav-link"  id="navbarDropdown" role="button" data-toggle="" 
+                                    <a href="{!! url('knowledgebase') !!}" class="dropdown-toggle nav-link"  id="navbarDropdown" role="button" data-toggle=""
                                         aria-haspopup="true" aria-expanded="false">{!! Lang::get('lang.knowledge_base') !!}
                                     </a>
                                     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
@@ -162,7 +162,7 @@
                                 ?>
                                  @if(count($pages))
                                 <li @yield('pages') class="nav-item dropdown">
-                                    <a class="dropdown-toggle nav-link"  id="navbarDropdown" role="button" data-toggle="" 
+                                    <a class="dropdown-toggle nav-link"  id="navbarDropdown" role="button" data-toggle=""
                                         aria-haspopup="true" aria-expanded="false">{!! Lang::get('lang.pages') !!}
                                     </a>
                                     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
@@ -179,7 +179,7 @@
                                 </li>
 
                                 <li @yield('profile') class="nav-item dropdown">
-                                    <a href="#" class="dropdown-toggle nav-link"  id="navbarDropdown" role="button" data-toggle="" 
+                                    <a href="#" class="dropdown-toggle nav-link"  id="navbarDropdown" role="button" data-toggle=""
                                         aria-haspopup="true" aria-expanded="false">{!! Lang::get('lang.my_profile') !!}
                                     </a>
                                     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
@@ -190,9 +190,9 @@
                                                 <img id="user_avatar" src="{{Auth::user()->profile_pic}}"class="avatar" alt="User Image" height="70" width="70"/>
 
                                                 <div><strong>Hello</strong></div>
-                                                
+
                                                 <p class="banner-title ellipsize_first_name h4">{{Auth::user()->first_name." ".Auth::user()->last_name}}</p>
-                                                
+
                                                 <div class="banner-content" id="dropdown_content">
 
                                                     <a href="{{url('auth/logout')}}" class="btn btn-custom btn-sm text-white profile_btn">{!! Lang::get('lang.log_out') !!}</a>
@@ -218,29 +218,29 @@
                                     <?php
                                     if (is_object($errors)) {
                                         if ($errors->first('email') || $errors->first('password')) {
-                                            ?> class="sfHover" 
+                                            ?> class="sfHover"
                                                 <?php
                                             }
                                         }
-                                        ?> 
+                                        ?>
                                         ><a href="#"  data-toggle="collapse"   class="nav-item navbar-login d-md-none  d-none d-lg-block"
                                             <?php
                                             if (is_object($errors)) {
                                                 if ($errors->first('email') || $errors->first('password')) {
-                                                    
+
                                                 } else {
-                                                    ?> class="collapsed" 
+                                                    ?> class="collapsed"
                                                 <?php
                                             }
                                         }
-                                        ?> 
+                                        ?>
                                         data-target="#login-form">{!! Lang::get('lang.login') !!} <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i></a>
                                     </li>
                                     @endif
                                     @endif
                                     <li class="nav-item dropdown">
                                     <?php $src = Lang::getLocale().'.png'; ?>
-                                        <a href="#" class="dropdown-toggle nav-link" id="navbarDropdown" role="button" data-toggle="" aria-haspopup="true" 
+                                        <a href="#" class="dropdown-toggle nav-link" id="navbarDropdown" role="button" data-toggle="" aria-haspopup="true"
                                             aria-expanded="false">
                                             <img src="{{asset("lb-faveo/flags/$src")}}"></img>
                                         </a>
@@ -253,7 +253,7 @@
                                                 &rlm;
                                             @endif
                                                 ({{$value[1]}})</a></li>
-                                            @endforeach       
+                                            @endforeach
                                         </ul>
                                     </li>
                                 </ul>
@@ -316,14 +316,14 @@
                         </div>
                     </nav>
 
-                    <div id="header-search" class="site-search clearfix"><!-- #header-search -->
+                    <div id="header-search" class="site-search clearfix" style="margin-right: 20%; width: 100%"><!-- #header-search -->
                         {!!Form::open(['route' => 'client.search','class'=>'search-form clearfix'])!!}
                         <div class="form-border" style="z-index: 0;width: 80%;">
                             <div class="form-inline ">
                                 <div class="form-group input-group" style="width: 95%">
                                     <input type="text" name="s" class="search-field form-control " title="Enter search term" placeholder="Have a question? Type your search term here..." required="" style="width: 80%">
                                     <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-custom btn-md " style="margin-left: 5% ;background-color: #009aba; hov: #00c0ef; color: #fff">Search</button>
+                                        <button type="submit" class="btn btn-custom btn-md " style="margin-left: 25% ;background-color: #009aba; hov: #00c0ef; color: #fff">Search</button>
                                     </span>
                                 </div>
 
@@ -367,7 +367,7 @@
                             <div class="alert alert-danger alert-dismissable"  style="padding-right:20px" >
                                 <i class="fa fa-ban"></i>
                                 <b>{!! Lang::get('lang.alert') !!} !</b>
-                                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                 {{Session::get('fails')}}
                             </div>
                             <?php a: ?>

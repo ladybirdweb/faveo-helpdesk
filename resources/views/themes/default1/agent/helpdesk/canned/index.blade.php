@@ -58,10 +58,14 @@ class="nav-link active"
                 <th width="100px">{{Lang::get('lang.name')}}</th>
                 <th width="100px">{{Lang::get('lang.action')}}</th>
             </tr>
+            @if($Canneds->isEmpty())
+                <td  colspan="4" class="dataTables_empty">No data available in table</td>
+            @endif
+
             @foreach($Canneds as $Canned)
             <tr>
                 <td>{{$Canned->title }}</td>
-                <td> 
+                <td>
                     {!! Form::open(['route'=>['canned.destroy', $Canned->id],'method'=>'DELETE']) !!}
                     <a data-toggle="modal" data-target="#view{!! $Canned->id !!}" href="#" class="btn btn-info btn-xs" onClick="updateModelTitle('{{$Canned->title}}')">{!! Lang::get('lang.view') !!}</a>
                     <a href="{!! URL::route('canned.edit',$Canned->id) !!}" class="btn btn-primary btn-xs">{!! Lang::get('lang.edit') !!}</a>
@@ -81,7 +85,7 @@ class="nav-link active"
 
                             <h4 class="modal-title"></h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            
+
                         </div>
                         <div class="modal-body">
                             <p><pre>{!! $Canned->message !!}</pre></p>
