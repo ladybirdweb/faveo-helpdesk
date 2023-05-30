@@ -73,7 +73,7 @@ class="nav-item active"
                     
                             <h2 class="section-title h4 clearfix">
 
-                                <i class="line"></i>{!! Lang::get('lang.profile') !!}
+                                <i class="line" style="border-color: rgb(0, 154, 186);"></i>{!! Lang::get('lang.profile') !!}
                             </h2>
 
                             <div>
@@ -152,9 +152,11 @@ class="nav-item active"
                                 {!! Form::close() !!}
 
                                 <div class="form-group" style="padding-bottom: 10px;">
-                                    
-                                    {!! Form::submit(Lang::get('lang.update'),['class'=>'btn btn-primary float-right'])!!}
-                                </div>
+
+
+                                    <button type="submit" class="btn btn-primary float-right" style="background-color: #337ab7 !important; border-color: #337ab7 !important; color: white;">
+                                        <i class="fas fa-sync"></i> {{ Lang::get('lang.update') }}
+                                    </button>                                </div>
                             </div>
                         </section>
                     </div>
@@ -195,8 +197,10 @@ class="nav-item active"
                                 {!! Form::close() !!}
 
                                 <div class="form-group" style="padding-bottom: 10px;">
-                                    
-                                    {!! Form::submit(Lang::get('lang.update'),['class'=>'btn btn-primary float-right'])!!}
+
+                                    <button type="submit" class="btn btn-primary float-right" style="background-color: #337ab7 !important; border-color: #337ab7 !important; color: white;">
+                                        <i class="fas fa-sync"></i> {{ Lang::get('lang.update') }}
+                                    </button>
                                 </div>
                             </div>
                         </section>

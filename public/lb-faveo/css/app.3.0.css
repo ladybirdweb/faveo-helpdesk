@@ -481,7 +481,8 @@ ol.with-line-border > li {
 .section-title > i.line {
     float: left;
     width: 35%;
-    border-bottom: 1px solid #b55;
+    border-bottom: 1px solid;
+    border-color: rgb(0, 154, 186);
     position: absolute;
     bottom: -1px;
 }
@@ -1377,7 +1378,7 @@ ol.with-line-border > li {
     .error404 {
         padding-top: 2em;
         padding-bottom: 5em;
-        margin-right: 10%;
+        margin-left: 20%;
     }
     .error404 .error-title {
         font-size: 12em;

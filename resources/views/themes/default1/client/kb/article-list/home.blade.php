@@ -46,7 +46,7 @@ class = "nav-item active"
 
                 <h1 class="section-title h4 clearfix">
 
-                    <i class="line"></i>
+                    <i class="line" style="border-color: rgb(0, 154, 186);"></i>
 
                     <i class="far fa-folder-open fa-fw text-muted"></i>
 

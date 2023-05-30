@@ -49,7 +49,10 @@ class = "nav-item active"
                     {!! Form::text('email_address',null,['class' => 'form-control']) !!}
                     {!! Form::label('ticket_number',Lang::get('lang.ticket_number')) !!}<span class="text-red"> *</span>
                     {!! Form::text('ticket_number',null,['class' => 'form-control']) !!}
-                    <br/><input type="submit" value="{!! Lang::get('lang.check_ticket_status') !!}" class="btn btn-info">
+                    <br/>
+                    <button type="submit" class="btn btn-info" style=" background-color: #337ab7 !important; border-color: #337ab7 !important; color: white">
+                        <i class="fas fa-save"></i> {!! Lang::get('lang.check_ticket_status') !!}
+                    </button>
                     {!! Form::close() !!}
                 </div>
             </section>
@@ -102,7 +105,7 @@ class = "nav-item active"
 
                     <h2 class="section-title h4 clearfix mb-0">
 
-                        <i class="line"></i>{!! Lang::get('lang.submit_a_ticket') !!}
+                        <i class="line" style="border-color: rgb(0, 154, 186);"></i>{!! Lang::get('lang.submit_a_ticket') !!}
                     </h2>
 
                     <div class="row mt-4">
@@ -215,11 +218,10 @@ class = "nav-item active"
                         <?php \Illuminate\Support\Facades\Event::dispatch(new App\Events\ClientTicketForm()); ?>
                         <div class="col-md-12" id="response"> </div>
                         <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>
-                        <div class="col-md-12 form-group">
-                            {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-info float-right', 'onclick' => 'this.disabled=true;this.value="Sending, please wait...";this.form.submit();'])!!}
-                        </div>
-
-                        <div class="col-md-12" id="response"> </div>
+                                <div class="col-md-12 form-group">
+                                    {!! Form::button('<i class="fas fa-save"></i> ' . Lang::get('lang.submit'), ['type'=>'submit', 'class'=>'btn btn-info float-right', 'style'=>'background-color: #337ab7 !important; border-color: #337ab7 !important; color: white;', 'onclick' => 'this.disabled=true;this.innerHTML="Sending, please wait...";this.form.submit();', 'data-v-fce8d630']) !!}
+                                </div>
+                            <div class="col-md-12" id="response"> </div>
                         <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>
 
                     {!! Form::close() !!}

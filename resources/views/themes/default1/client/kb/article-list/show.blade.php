@@ -102,7 +102,7 @@ $category_id = $all->pluck('category_id')->toArray();
         <div id="respond" class="comment-respond form-border">
 
             <h3 id="reply-title" class="comment-reply-title section-title">
-                <i class="line"></i>{!! Lang::get('lang.leave_a_reply') !!}
+                <i class="line" style="border-color: rgb(0, 154, 186);"<></i>{!! Lang::get('lang.leave_a_reply') !!}
             </h3>
             
             {!! Form::open(['method'=>'post','url'=>'postcomment/'.$arti->slug]) !!}
@@ -152,7 +152,7 @@ $category_id = $all->pluck('category_id')->toArray();
                     
                     <h2 class="section-title h4 clearfix">
 
-                        <b>   <i class="line"></i>{!! Lang::get('lang.categories') !!}</b>
+                        <b>   <i class="line" style="border-color: rgb(0, 154, 186);"></i>{!! Lang::get('lang.categories') !!}</b>
 
                         <small class="float-right"><i class="far fa-hdd fa-fw"></i></small>
                     </h2>

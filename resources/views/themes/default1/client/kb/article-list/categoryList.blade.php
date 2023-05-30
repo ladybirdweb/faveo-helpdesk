@@ -27,7 +27,7 @@ class = "nav-item active"
                 
                 <h1 class="section-title h4 clearfix">
 
-                    <b>   <i class="line"></i>{!! Lang::get('lang.categories') !!}</b>
+                    <b>   <i class="line" style="border-color: rgb(0, 154, 186);"></i>{!! Lang::get('lang.categories') !!}</b>
 
                     <i class="far fa-folder-open fa-fw text-muted"></i>
 

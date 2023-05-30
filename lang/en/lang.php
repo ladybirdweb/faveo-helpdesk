@@ -1361,7 +1361,7 @@ return [
     'create_account'                                                                   => 'Create account',
     'you_are_here'                                                                     => 'You are here',
     'have_a_ticket'                                                                    => 'Have a ticket',
-    'check_ticket_status'                                                              => 'Check ticket status',
+    'check_ticket_status'                                                              => 'Submit',
     'choose_a_help_topic'                                                              => 'Choose a help topic',
     'ticket_status'                                                                    => 'Ticket status',
     'post_comment'                                                                     => 'Post comment',
