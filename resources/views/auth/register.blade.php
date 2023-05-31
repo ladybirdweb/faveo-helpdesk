@@ -74,7 +74,7 @@
         </div>
     </div>
 
-    <div class="col-md-6  form-helper" style="margin-left: 30%">
+    <div class="col-md-6 offset-md-3 form-helper" style="margin-left: 27%">
 
         <div class="login-box" style=" width: 490px;"  valign = "center">
             
