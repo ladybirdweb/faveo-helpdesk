@@ -69,10 +69,9 @@
     <script type="text/javascript"> $(function(){ $('.dialogerror, .dialoginfo, .dialogalert').fadeIn('slow');$("form").bind("submit", function(e){$(this).find("input:submit").attr("disabled", "disabled");});});</script>
     <script type="text/javascript" >try {if (top.location.hostname != self.location.hostname) { throw 1; }} catch (e) { top.location.href = self.location.href; }
     </script>
-
-    <div class="col-md-6 offset-md-3 form-helper">
+    <div class="d-flex justify-content-center">
     
-        <div class="login-box" style=" width: 490px;"  valign = "center">
+        <div class="login-box" style=" width: 490px;"  >
         
             <div class="form-border">
      

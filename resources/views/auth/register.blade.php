@@ -74,9 +74,8 @@
         </div>
     </div>
 
-    <div class="col-md-6 offset-md-3 form-helper" style="margin-left: 27%">
-
-        <div class="login-box" style=" width: 490px;"  valign = "center">
+    <div class="d-flex justify-content-center">
+        <div class="login-box" style=" width: 490px;">
             
             <div class="form-border">
      
@@ -88,12 +87,12 @@
                 </div>
                
                 <div>
-                    
-                    <h3 class="box-title" align="center">{{Lang::get('lang.registration')}}</h3>
-                </div>   
+                    <div class="text-center">
+                        <h3 class="box-title" >{{Lang::get('lang.registration')}}</h3>
+                    </div>   </div>
 
                 <div>
-                    
+
                     <placeholder ="Let’s set up your account in just a couple of steps.">
                 </div>      
 
