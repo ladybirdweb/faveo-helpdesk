@@ -609,8 +609,8 @@ class TicketController extends Controller
      */
     public function checkMobile($mobile)
     {
-        $check = User::where('mobile', '=', $mobile)->first();
-        if (count($check) > 0) {
+        $check = User::where('mobile', '=', $mobile);
+        if ($check && $check->count() > 0) {
             return true;
         }
 
