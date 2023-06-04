@@ -721,7 +721,7 @@ ol.with-line-border > li {
 }
 .site-search .search-field,
 .site-search .search-submit {
-	border-radius: 4px;
+	border-radius: 10px;
 }
 .site-search .search-field.loading {
 	background: url(../img/loader.gif) 99% center no-repeat;
