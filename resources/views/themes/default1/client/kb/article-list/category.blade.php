@@ -8,6 +8,22 @@
 @section('kb')
 class = "nav-item active"
 @stop
+@section('breadcrumb')
+    {{--    <div class="site-hero clearfix">--}}
+    <ol class="breadcrumb float-sm-right ">
+        <style>
+            .words {
+                margin-right: 10px; /* Adjust the value to increase or decrease the gap between list items */
+            }
+        </style>
+        <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
+        <li><a class="words" href="{!! URL::route('category-list') !!}">{!! Lang::get('lang.category') !!}</a></li>
+        <li class="words">&lt;</li>
+        <li><a  class="words"href="{!! URL::route('category-list') !!}">{!! Lang::get('lang.category_list') !!}</a></li>
+
+    </ol>
+    {{--    </div>--}}
+@stop
 
 @section('content')
 <div id="content" class="site-content col-md-9">

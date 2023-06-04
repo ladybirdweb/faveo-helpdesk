@@ -10,7 +10,7 @@
         <li class="breadcrumb-item "> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
         <li><a  class="words" href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
         <li class="words">&lt;</li>
-        <li><a  class="words" href="{{url('statuss.state')}}">{!! Lang::get('lang.ticket_status') !!}</a></li>
+        <li><a  class="words" href="{{url('#')}}">{!! Lang::get('lang.ticket_status') !!}</a></li>
     </ol>
 
 @stop
