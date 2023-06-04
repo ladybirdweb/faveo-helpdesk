@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Client\kb;
 
-use App\Http\Controllers\Client\helpdesk\UnAuthController;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\kb\CommentRequest;
 use App\Http\Requests\kb\ContactRequest;
 use App\Http\Requests\kb\SearchRequest;
 use App\Model\kb\Article;
@@ -18,7 +16,6 @@ use App\Model\kb\Settings;
 use Auth;
 // use Creativeorange\Gravatar\Gravatar;
 use Config;
-use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Illuminate\Http\Request;
 use Lang;
 use Mail;
@@ -37,7 +34,7 @@ class UserController extends Controller
      * @return response
      */
     public function getArticle(Article $article, Category $category, Settings $settings)
-    {;
+    {
         $setting = $settings->first();
         $pagination = $setting->pagination;
         if (!Auth::check() || \Auth::user()->role == 'user') {
@@ -56,9 +53,9 @@ class UserController extends Controller
     /**
      * Get excerpt from string.
      *
-     * @param string $str String to get an excerpt from
-     * @param int $startPos Position int string to start excerpt from
-     * @param int $maxLength Maximum length the excerpt may be
+     * @param string $str       String to get an excerpt from
+     * @param int    $startPos  Position int string to start excerpt from
+     * @param int    $maxLength Maximum length the excerpt may be
      *
      * @return string excerpt
      */
@@ -80,9 +77,9 @@ class UserController extends Controller
      * function to search an article.
      *
      * @param \App\Http\Requests\kb\SearchRequest $request
-     * @param \App\Model\kb\Category $category
-     * @param \App\Model\kb\Article $article
-     * @param \App\Model\kb\Settings $settings
+     * @param \App\Model\kb\Category              $category
+     * @param \App\Model\kb\Article               $article
+     * @param \App\Model\kb\Settings              $settings
      *
      * @return type view
      */
@@ -91,11 +88,11 @@ class UserController extends Controller
         $settings = $settings->first();
         $pagination = $settings->pagination;
         $search = $request->input('s');
-        $result = $article->where('name', 'LIKE', '%' . $search . '%')
-            ->orWhere('slug', 'LIKE', '%' . $search . '%')
-            ->orWhere('description', 'LIKE', '%' . $search . '%')
+        $result = $article->where('name', 'LIKE', '%'.$search.'%')
+            ->orWhere('slug', 'LIKE', '%'.$search.'%')
+            ->orWhere('description', 'LIKE', '%'.$search.'%')
             ->paginate($pagination);
-        $result->setPath('search?s=' . $search);
+        $result->setPath('search?s='.$search);
         $categorys = $category->get();
 
         return view('themes.default1.client.kb.article-list.search', compact('categorys', 'result'));
@@ -251,7 +248,7 @@ class UserController extends Controller
         if (Auth::check()) {
             // Associate the comment with the authenticated user
             $comment->article_id = Auth::id();
-            $comment->name = Auth::user()->first_name . ' ' . Auth::user()->last_name;
+            $comment->name = Auth::user()->first_name.' '.Auth::user()->last_name;
         } else {
             // Set default values for non-authenticated user
             $comment->name = $request->input('name');
@@ -264,13 +261,10 @@ class UserController extends Controller
         } else {
             return Redirect::back()->with('fails', Lang::get('lang.sorry_not_processed'));
         }
-
-
     }
 
     public function getPage($name, Page $page)
     {
-
         $page = $page->where('slug', $name)->first();
         if ($page) {
             return view('themes.default1.client.kb.article-list.pages', compact('page'));
@@ -323,8 +317,6 @@ class UserController extends Controller
         return view('themes.default1.client.kb.article-list.categoryList', compact('categorys', 'articles_id'));
     }
 
-
-
     // static function timezone($utc) {
     // 	$set = Settings::whereId('1')->first();
     // 	$tz = $set->timezone;
@@ -338,5 +330,4 @@ class UserController extends Controller
     // 	return $date;
     // 	//return substr($date, 0, -6);
     // }
-
 }
