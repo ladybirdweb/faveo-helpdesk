@@ -8,8 +8,6 @@
             }
         </style>
         <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
-{{--        <?php $category = App\Model\kb\Category::where('id', $category_id)->first(); ?>--}}
-
         <li><a  class="words" href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
 
 @stop
