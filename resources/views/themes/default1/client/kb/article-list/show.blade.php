@@ -29,10 +29,7 @@ $category_id = $all->pluck('category_id')->toArray();
         </style>
         <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
         <?php $category = App\Model\kb\Category::where('id', $category_id)->first(); ?>
-
-        <li><a  class="words" href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
-        <li class="words">&lt;</li>
-        <li><a  class="words" href="{{url('/knowledgebase')}}">{!! Lang::get('lang.knowledge_base') !!}</a></li>
+        <li><a  class="words" href="{{url('article-list')}}">{!! Lang::get('lang.article_list') !!}</a></li>
         <li class="words">&lt;</li>
         <li><a class="words" href="{{url('category-list/'.$category->slug)}}">{{$category->name}}</a></li>
         <li class="words">&lt;</li>
