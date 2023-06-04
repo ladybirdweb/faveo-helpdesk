@@ -1353,8 +1353,8 @@ return [
       | customize your views to better match your application.
       |
      */
-    'forget_password'                                                                  =>'forget password',
-    'article_list'                                                                     =>'Article list',
+    'forget_password'                                                                  => 'forget password',
+    'article_list'                                                                     => 'Article list',
     'home'                                                                             => 'Home',
     'submit_a_ticket'                                                                  => 'Submit a ticket',
     'my_profile'                                                                       => 'My profile',

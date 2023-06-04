@@ -720,7 +720,6 @@ Route::middleware('web')->group(function () {
     //to get the value for page content
     Route::get('pages/{id}', [Client\kb\UserController::class, 'getPage'])->name('pages');
 
-
     Route::get('/inbox/data', [Agent\helpdesk\TicketController::class, 'get_inbox'])->name('api.inbox');
 //    Route::get('/report', 'HomeController@getreport');
 //    Route::get('/reportdata', 'HomeController@pushdata');
