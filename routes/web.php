@@ -799,7 +799,9 @@ Route::middleware('web')->group(function () {
     //     $breadcrumbs->parent('dashboard');
     //     $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.open'), route('open.ticket'));
     // });
-
+    Route::get('check_ticket/swtich-language/{id}',[Client\helpdesk\UnAuthController::class,'changeUserLanguage']);
+Route::get('category-list/swtich-language/{id}',[Client\helpdesk\UnAuthController::class,'changeUserLanguage']);
+    Route::get('show/swtich-language/{id}',[Client\helpdesk\UnAuthController::class,'changeUserLanguage']);
     Route::get('pages/swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeUserLanguage'])->name('switch-user-lang');
     Route::get('swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeUserLanguage'])->name('switch-user-lang');
 });
