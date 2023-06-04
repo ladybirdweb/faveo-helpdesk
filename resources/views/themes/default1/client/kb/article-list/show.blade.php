@@ -19,7 +19,25 @@ $all = App\Model\kb\Relationship::where('article_id','=', $arti->id)->get();
 /* from whole attribute pick the article_id */
 $category_id = $all->pluck('category_id')->toArray();
 ?>
+@section('breadcrumb')
+    {{--<div class="site-hero clearfix">--}}
+    <ol class="breadcrumb float-sm-right ">
+        <style>
+            .words {
+                margin-right: 10px; /* Adjust the value to increase or decrease the gap between list items */
+            }
+        </style>
+        <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
+        <?php $category = App\Model\kb\Category::where('id', $category_id)->first(); ?>
 
+        <li><a  class="words" href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
+        <li class="words">&lt;</li>
+        <li><a  class="words" href="{{url('/knowledgebase')}}">{!! Lang::get('lang.knowledge_base') !!}</a></li>
+        <li class="words">&lt;</li>
+        <li><a class="words" href="{{url('category-list/'.$category->slug)}}">{{$category->name}}</a></li>
+        <li class="words">&lt;</li>
+        <li class="active">{{$arti->name}}</li> </ol>
+@stop
 <div class="site-hero clearfix">
     <ol class="breadcrumb breadcrumb-custom">
         <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
@@ -99,46 +117,194 @@ $category_id = $all->pluck('category_id')->toArray();
         </ol><!-- .comment-list -->
         @endforeach
 
-        <div id="respond" class="comment-respond form-border">
+{{--        <div id="respond" class="comment-respond form-border">--}}
 
-            <h3 id="reply-title" class="comment-reply-title section-title">
-                <i class="line" style="border-color: rgb(0, 154, 186);"<></i>{!! Lang::get('lang.leave_a_reply') !!}
-            </h3>
-            
-            {!! Form::open(['method'=>'post','url'=>'postcomment/'.$arti->slug]) !!}
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                        {!! Form::label('name',Lang::get('lang.name'),['class' => 'label']) !!}
-                        {!! Form::text('name',null,['class' => 'form-control']) !!}
-                        {!! $errors->first('name', '<spam class="help-block" style="red">:message</spam>') !!}
+{{--            <h3 id="reply-title" class="comment-reply-title section-title">--}}
+{{--                <i class="line" style="border-color: rgb(0, 154, 186);"<></i>{!! Lang::get('lang.leave_a_reply') !!}--}}
+{{--            </h3>--}}
+
+            {!! Form::open(['method'=>'post','url'=>'postcomment/'.$arti->slug,'id'=>'comment-form']) !!}
+            {!! csrf_field() !!}
+
+            <div id="respond" class="comment-respond form-border">
+                <h3 id="reply-title" class="comment-reply-title section-title">
+                    <i class="line" style="border-color: rgb(0, 154, 186);"></i>{!! Lang::get('lang.leave_a_reply') !!}
+                </h3>
+
+                @if(Auth::check())
+                    <div class="row">
+
+                        <div class="col-md-4" style="border:#f4f4f4;">
+                            <div data-v-43e70d45="" class="banner-wrapper user-data text-center clearfix" id="ban_ner" style="border-width: 5px 1px 1px; border-style: solid; border-color: rgb(0, 154, 186); border-image: initial; width: 90%" >
+                            <img id="user_avatar" src="{{Auth::user()->profile_pic}}" class="avatar" alt="User Image" style="margin-left: 5% ">
+                            <div STYLE="margin-left:5%"><strong>Hello</strong></div>
+                            <p class="banner-title ellipsize_first_name h4" STYLE="margin-left: 5%">{{Auth::user()->first_name." ".Auth::user()->last_name}}</p>
+                            <div class="banner-content" id="dropdown_content">
+                                <p data-v-43e70d45="">If you are not? </p>
+                                <a href="{{url('auth/logout')}}" class="btn btn-custom btn-sm text-white profile_btn" STYLE="width: 50%;height: 200%;margin-left: 7%;">{!! Lang::get('lang.log_out') !!}</a>
+
+                            </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-10" style="width: 65%">
+                            <div class="form-group {{ $errors->has('comment') ? 'has-error' : '' }}">
+                                {!! Form::label('comment',Lang::get('lang.message'),['class' => 'label']) !!}
+                                {!! Form::textarea('comment',null,['class' => 'form-control','size' => '30x8','id'=>'comment']) !!}
+                                {!! $errors->first('comment', '<spam class="help-block">:message</spam>') !!}
+                            </div>
+                            <button type="submit" class="btn btn-custom btn-lg float-right">
+                                {{ Lang::get('lang.post_message') }}
+                            </button>
+                        </div>
+            </div><script>
+                        function submitComment(userId, comment) {
+                            // Prepare the form data
+                            var formData = new FormData();
+                            formData.append('user_id', userId);
+                            formData.append('comment', comment);
+
+                            // If the user is not authenticated, include the name and email fields
+                            if (!userId) {
+                                var name = $("#name").val();
+                                var email = $("#email").val();
+                                formData.append('name', name);
+                                formData.append('email', email);
+                            }
+
+                            // Perform the AJAX request to submit the comment
+                            $.ajax({
+                                type: "POST",
+                                url: "{{ url('postcomment/'.$arti->slug) }}",
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                success: function(response) {
+                                    // Handle the success response
+                                    if (response.success) {
+                                        alert("Comment posted successfully!");
+                                        // You can redirect the user to a specific page or perform any other necessary action here
+                                    } else {
+                                        alert("An error occurred while processing your request. Please try again.");
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    // Handle the error response
+                                    alert("An error occurred while processing your request. Please try again.");
+                                }
+                            });
+                        }
+
+                        // Remove the error styling and message when the user types in the comment field
+                        $("#comment").on("input", function() {
+                            $(this).removeClass("has-error");
+                            $(this).next(".help-block").remove();
+                        });
+
+
+
+
+                    </script></div>
+                    {!! Form::close() !!}
+                @else
+                    {!! Form::open(['method'=>'post','url'=>'postcomment/'.$arti->slug,'id'=>'comment-form']) !!}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
+                                {!! Form::label('name', Lang::get('lang.name'), ['class' => 'label']) !!}
+                                {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'comment-name']) !!}
+                                {!! $errors->first('name', '<span class="help-block">:message</span>') !!}
+                            </div>
+
+                            <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
+                                {!! Form::label('email', Lang::get('lang.email'), ['class' => 'label']) !!}
+                                {!! Form::text('email', null, ['class' => 'form-control', 'id' => 'comment-email']) !!}
+                                {!! $errors->first('email', '<span class="help-block">:message</span>') !!}
+                            </div>
+
+                            <div class="form-group {{ $errors->has('website') ? 'has-error' : '' }}">
+                                {!! Form::label('website', Lang::get('lang.website'), ['class' => 'label']) !!}
+                                {!! Form::text('website', null, ['class' => 'form-control']) !!}
+                                {!! $errors->first('website', '<span class="help-block">:message</span>') !!}
+                            </div>
+
+                            <button type="submit" class="btn btn-custom btn-lg">{!! Lang::get('lang.post_message') !!}</button>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="form-group {{ $errors->has('comment') ? 'has-error' : '' }}">
+                                {!! Form::label('comment', Lang::get('lang.message'), ['class' => 'label']) !!}
+                                {!! Form::textarea('comment', null, ['class' => 'form-control', 'size' => '30x8', 'id' => 'comment-comment']) !!}
+                                {!! $errors->first('comment', '<span class="help-block">:message</span>') !!}
+                            </div>
+                        </div>
+
                     </div>
-                    <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-                        {!! Form::label('email',Lang::get('lang.email'),['class' => 'label']) !!}
-                        {!! Form::text('email',null,['class' => 'form-control']) !!}
-                        {!! $errors->first('email', '<spam class="help-block">:message</spam>') !!}
+                    <script>
+                        $(document).ready(function() {
+                            $("#comment-form").submit(function(event) {
+                                event.preventDefault(); // Prevent the form from submitting
+
+                                // Remove any existing error messages and reset label colors
+                                $(".help-block").remove();
+                                $(".form-group").removeClass("has-error");
+
+                                // Perform your custom validation here
+                                var name = $("#comment-name").val().trim();
+                                var email = $("#comment-email").val().trim();
+                                var comment = $("#comment-comment").val().trim();
+
+                                // Flag to track if there are any errors
+                                var hasErrors = false;
+
+                                // Check if the name field is empty
+                                if (name === "") {
+                                    $("#comment-name").parent().addClass("has-error");
+                                    $("#comment-name").after('<span class="help-block">The name field is required..</span>');
+
+                                    hasErrors = true;
+                                }
+
+                                // Check if the email field is empty or invalid
+                                if (email === "") {
+                                    $("#comment-email").parent().addClass("has-error");
+                                    $("#comment-email").after('<span class="help-block">The email field is required..</span>');
+
+                                    hasErrors = true;
+                                }
+
+                                // Check if the comment field is empty
+                                if (comment === "") {
+                                    $("#comment-comment").parent().addClass("has-error");
+                                    $("#comment-comment").after('<span class="help-block">The comment field is required..</span>');
+                                    hasErrors = true;
+                                }
+
+                                // If there are no errors, submit the form
+                                if (!hasErrors) {
+                                    $("#comment-form")[0].submit();
+                                }
+                            });
+
+                            // Remove the error styling and message when the user types in a field
+                            $(".form-control").on("input", function() {
+                                $(this).parent().removeClass("has-error");
+                            });
+                        });
+
+                    </script>
+
+
+
                     </div>
-                    <div class="form-group {{ $errors->has('website') ? 'has-error' : '' }}">
-                        {!! Form::label('website',Lang::get('lang.website'),['class' => 'label']) !!}
-                        {!! Form::text('website',null,['class' => 'form-control']) !!}
-                         {!! $errors->first('website', '<spam class="help-block">:message</spam>') !!}
-                    </div>
-                    <button type="submit" class="btn btn-custom btn-lg">{!! Lang::get('lang.post_message') !!}</button>
-                </div>
-                <div class="col-md-8">
-                    <div class="form-group {{ $errors->has('comment') ? 'has-   error' : '' }}">
-                        {!! Form::label('comment',Lang::get('lang.message'),['class' => 'label']) !!}
-                        {!! Form::textarea('comment',null,['class' => 'form-control','size' => '30x8','id'=>'comment']) !!}
-                        {!! $errors->first('comment', '<spam class="help-block">:message</spam>') !!}
-                    </div>
-                </div>	
-            </div>
+                @endif
+            </div><!-- #respond -->
             {!! Form::close() !!}
-        </div><!-- #respond -->
-    </div>
-</div>						
 
-@stop
+
+
+    </div>
+            @stop
 
 @section('category')
 

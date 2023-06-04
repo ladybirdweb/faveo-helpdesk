@@ -718,13 +718,14 @@ Route::middleware('web')->group(function () {
     /* post the cantact page to controller */
     Route::post('post-contact', [Client\kb\UserController::class, 'postContact'])->name('post-contact');
     //to get the value for page content
-    Route::get('pages/{name}', [Client\kb\UserController::class, 'getPage'])->name('pages');
+    Route::get('pages/{id}', [Client\kb\UserController::class, 'getPage'])->name('pages');
+
 
     Route::get('/inbox/data', [Agent\helpdesk\TicketController::class, 'get_inbox'])->name('api.inbox');
 //    Route::get('/report', 'HomeController@getreport');
 //    Route::get('/reportdata', 'HomeController@pushdata');
 
-    /*
+    /*reg
      * Update module
      */
     Route::get('database-update', [Update\UpgradeController::class, 'databaseUpdate'])->name('database.update');
@@ -798,5 +799,7 @@ Route::middleware('web')->group(function () {
     //     $breadcrumbs->parent('dashboard');
     //     $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.open'), route('open.ticket'));
     // });
+
+    Route::get('pages/swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeUserLanguage'])->name('switch-user-lang');
     Route::get('swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeUserLanguage'])->name('switch-user-lang');
 });

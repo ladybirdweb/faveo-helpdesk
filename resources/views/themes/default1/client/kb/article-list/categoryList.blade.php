@@ -8,10 +8,18 @@ Category List -
 class = "nav-item active"
 @stop
 
+@section('breadcrumb')
+{{--    <div class="site-hero clearfix">--}}
+<ol class="breadcrumb float-sm-right ">
+    <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
+            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.category') !!}</a></li>
+        </ol>
+{{--    </div>--}}
+@stop
 @section('content')
 
 <div id="content" class="site-content col-md-12">
-    
+
     <div class="row">
 
         @foreach($categorys as $category)
@@ -24,18 +32,17 @@ class = "nav-item active"
             ?>
 
             <section class="box-categories">
-                
+
                 <h1 class="section-title h4 clearfix">
 
-                    <b>   <i class="line" style="border-color: rgb(0, 154, 186);"></i>{!! Lang::get('lang.categories') !!}</b>
 
                     <i class="far fa-folder-open fa-fw text-muted"></i>
 
                     <small class="float-right">
-                
+
                         <a href="{{url('category-list/'.$category->slug)}}"><i class="far fa-hdd fa-fw"></i>({{count($all)}})</a>
                     </small>
-                    
+
                      <a href="{{url('category-list/'.$category->slug)}}">{{$category->name}}</a>
                 </h1>
 
@@ -54,11 +61,11 @@ class = "nav-item active"
                     ?>
                     @forelse($article as $arti)
                     <li>
-                                
+
                         <h3 class="h5" style="text-align:left">
-                        
+
                             <i class="fa-li fa fa-list-alt fa-fw text-muted"></i>
-                            
+
                             <a href="{{url('show/'.$arti->slug)}}">{{$arti->name}}</a>
 
                         </h3>
@@ -71,8 +78,9 @@ class = "nav-item active"
                 <p class="more-link text-center"><a href="{{url('category-list/'.$category->slug)}}" class="btn btn-custom btn-sm">{!! Lang::get('lang.view_all') !!}</a></p>
             </section>
         </div>
-        @endforeach  
+        @endforeach
     </div>
+
 </div>
 <!-- end of page content -->
 @stop

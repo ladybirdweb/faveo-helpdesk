@@ -5,16 +5,23 @@
 @stop
 
 @section('breadcrumb')
-    <div class="site-hero clearfix">
-        <ol class="breadcrumb breadcrumb-custom">
-            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
-            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.home') !!}</a></li>
+{{--    <div class="site-hero clearfix">--}}
+        <ol class="breadcrumb float-sm-right ">
+            <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
+
+            <li><a href="{!! URL::route('post.register') !!}">{!! Lang::get('lang.register') !!}</a></li>
         </ol>
-    </div>
+{{--    </div>--}}
 @stop
+{{--    <div class="site-hero clearfix">--}}
+{{--        <ol class="breadcrumb breadcrumb-custom">--}}
+{{--            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>--}}
+{{--            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.home') !!}</a></li>--}}
+{{--        </ol>--}}
+{{--    </div>--}}
 
 @section('content')
-   
+
     @if(Session::has('status'))
     <div class="alert alert-success alert-dismissable">
         <i class="fas fa-check-circle"> </i> <b> {!! Lang::get('lang.success') !!} </b>

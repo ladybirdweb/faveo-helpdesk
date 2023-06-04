@@ -5,10 +5,9 @@
 @stop
 
 @section('breadcrumb')
-    <div class="site-hero clearfix">
-        <ol class="breadcrumb breadcrumb-custom">
-            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
-            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.home') !!}</a></li>
+    <ol class="breadcrumb float-sm-right ">
+        <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
+            <li><a href="{!! URL::route('post.login') !!}">{!! Lang::get('lang.login') !!}</a></li>
         </ol>
     </div>
 @stop
@@ -88,20 +87,20 @@
         <script type="text/javascript" >try {if (top.location.hostname != self.location.hostname) { throw 1; }} catch (e) { top.location.href = self.location.href; }</script>
 
         <div class="d-flex justify-content-center">
-            
+
             <div class="login-box" style=" width: 490px;">
-            
+
                 <div class="form-border">
 
                     <div align="center">
 
                         <h4 style="background-color: #0084b4;"> <a href="http://www.faveohelpdesk.com" class="logo">
                             <img src="{{ asset('lb-faveo/media/images/logo2.png')}}" width="100px;"></a>
-                        </h4>   
+                        </h4>
                     </div>
 
                     <div>
-                        
+
                         <h4 class="box-title" align="center">{{Lang::get('lang.login_to_start_your_session')}}</h4>
                     </div>
 
@@ -114,7 +113,7 @@
                         </div>
 
                         <div class="form-group has-feedback {{ $errors->has('password') ? 'has-error' : '' }}" style="display: -webkit-box;">
-        
+
                             {!! Form::password('password',['placeholder'=>Lang::get("lang.password"),'class' => 'form-control']) !!}
                             <span class="  fa fa-lock form-control-feedback" style="top: 9px;left: -25px;color: #6c757d;"></span>
                         </div>
@@ -127,21 +126,21 @@
                             <div class="col-sm-4">
 
                                 <div>
-                                    
+
                                     <label>
-                                        
+
                                         <input type="checkbox" name="remember"> {!! Lang::get("lang.remember") !!}
                                     </label>
                                 </div>
                             </div>
-                            
+
                             <div class="col-sm-6">
-                 
-                                <a href="{{url('password/email')}}">{!! Lang::get("lang.iforgot") !!}</a><br> 
+
+                                <a href="{{url('password/email')}}">{!! Lang::get("lang.iforgot") !!}</a><br>
                             </div>
-                            
+
                             <div class="col-sm-2">
-                 
+
                                 <a href="{{url('auth/register')}}" class="text-center">{!! Lang::get("lang.register") !!}</a>
                             </div>
                         </div>
@@ -150,7 +149,7 @@
                             @include('themes.default1.client.layout.social-login')
                         </div>
 
-                    {!! Form::close()!!}  
+                    {!! Form::close()!!}
                 </div>
             </div>
         </div>

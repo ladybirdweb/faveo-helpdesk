@@ -39,8 +39,10 @@
         <link href="{{asset("lb-faveo/css/jquery.ui.css")}}" rel="stylesheet" type="text/css" />
         <!-- Colorpicker -->
 
-        <link href="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.css")}}" rel="stylesheet" type="text/css" />    
-        
+        <link href="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.css")}}" rel="stylesheet" type="text/css" />
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
          <script src="{{asset("lb-faveo/js/jquery-3.4.1.min.js")}}" type="text/javascript"></script>
          <script src="{{asset("lb-faveo/js/jquery-migrate.js")}}" type="text/javascript"></script>
           <script src="{{asset("lb-faveo/js/jquery.ui.js")}}" type="text/javascript"></script>
