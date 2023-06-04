@@ -598,15 +598,25 @@ ol.with-line-border > li {
 .breadcrumb {
     margin: 20px 10%;
     font-size: 0.85em;
+        width: 80%;
+    margin-left: 100%;
 }
 .breadcrumb,
 .breadcrumb a,
 .breadcrumb > .active {
     color: #fff;
+
 }
 .breadcrumb a:hover,
 .breadcrumb > .text {
     color: #ffc;
+}
+
+.breadcrumb {
+    background-color: transparent !important;
+    padding: 0 !important;
+    margin-top: 15px !important;
+    margin-left: 17% !important;
 }
 
 

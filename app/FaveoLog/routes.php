@@ -1,5 +1,6 @@
 <?php
 
+use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use Illuminate\Support\Facades\Route;
 
 Breadcrumbs::register('logs', function ($breadcrumbs) {

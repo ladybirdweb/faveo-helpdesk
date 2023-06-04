@@ -5,12 +5,10 @@
 @stop
 
 @section('breadcrumb')
-    <div class="site-hero clearfix">
-        <ol class="breadcrumb breadcrumb-custom">
-            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
-            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.home') !!}</a></li>
+    <ol class="breadcrumb float-sm-right ">
+        <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} :
+            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.forget_password') !!}</a></li>
         </ol>
-    </div>
 @stop
 
 @section('content')

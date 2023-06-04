@@ -1,5 +1,20 @@
 @extends('themes.default1.client.layout.client')
-@section('content')               
+@section('breadcrumb')
+    <style>
+    .words {
+    margin-right: 10px; /* Adjust the value to increase or decrease the gap between list items */
+    }
+    </style>
+
+    <ol class="breadcrumb float-sm-right ">
+        <li class="breadcrumb-item "> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
+        <li><a  class="words" href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
+        <li class="words">&lt;</li>
+        <li><a  class="words" href="{{url('statuss.state')}}">{!! Lang::get('lang.ticket_status') !!}</a></li>
+    </ol>
+
+@stop
+@section('content')
 <?php
 $tickets = App\Model\helpdesk\Ticket\Tickets::where('id', '=', \Crypt::decrypt($id))->first();
 $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Crypt::decrypt($id))->first();
@@ -40,15 +55,15 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
 </style>
 
 <div id="content" class="site-content col-sm-12">
-                        
+
     <article class="hentry">
-        
+
         <header class="entry-header">
-            
+
             <div class="row">
 
                 <div class="col-sm-9">
-                    
+
                     <h3 class="entry-title"><i class="fas fa-ticket-alt"> </i> {{$thread->title}}
 
                         <small> ( {{$tickets->ticket_number}} ) </small>
@@ -56,14 +71,14 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                 </div>
 
                 <div class="col-sm-3 text-right">
-                    
+
                     @if( $common_setting->status == '1')
-                        
+
                     <div>
 
                         <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
 
-                            <i class="fas fa-exchange-alt" style="color:teal;"> </i> 
+                            <i class="fas fa-exchange-alt" style="color:teal;"> </i>
 
                             {!! Lang::get('lang.change_status') !!}
 
@@ -93,18 +108,18 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
             </div>
 
             <div class="row">
-                
+
                 <div class="col-md-12 mb-1">
-                    
+
                     <div class="ticketratings float-right">
-                        
+
                         <table>
 
                             <tbody>
                             <?php $ratings = App\Model\helpdesk\Ratings\Rating::orderby('display_order')->get(); ?>
                                 <form id="foo">
                                     {!! csrf_field() !!}
-                                    @foreach($ratings as $rating) 
+                                    @foreach($ratings as $rating)
 
                                     @if($rating->rating_area == 'Helpdesk Area')
                                     <?php
@@ -117,21 +132,21 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                                 ?>
 
                                 <tr>
-                                    
+
                                     <th><div class="ticketratingtitle">{!! $rating->name !!} &nbsp;</div></th>&nbsp
 
                                     <td>
-                                        
+
                                         <?php for ($i = 1; $i <= $rating->rating_scale; $i++) { ?>
                                         <input type="radio" class="star" id="star5" name="{!! $rating->name !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
                                         <?php } ?>
-                                    </td> 
+                                    </td>
                                 </tr>
                                 @endif
                                 @endforeach
                                 </form>
                             </tbody>
-                        </table> 
+                        </table>
                     </div>
                 </div>
             </div>
@@ -140,29 +155,29 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
         <div class="entry-content clearfix">
 
             <div class="col-md-12 offset-md-5" id="loader" style="display:none;">
-                
+
                 <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
             </div>
 
             <div  id="refresh">
-                <div> 
+                <div>
                     <?php
                     $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first();
                     ?>
                     <div class="alert alert-secondary">
                         <div class="row">
-                            <div class="col-md-3"> 
+                            <div class="col-md-3">
                                 <?php
                                 $sla = $tickets->sla;
                                 $SlaPlan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', $sla)->first();
                                 ?>
-                                <b>{!! Lang::get('lang.sla_plan') !!}: {{$SlaPlan->grace_period}} </b> 
+                                <b>{!! Lang::get('lang.sla_plan') !!}: {{$SlaPlan->grace_period}} </b>
                             </div>
-                            <div class="col-md-3"> 
+                            <div class="col-md-3">
                                 <b>{!! Lang::get('lang.created_date') !!}: </b> {{ UTC::usertimezone($tickets->created_at) }}
                             </div>
-                            <div class="col-md-3"> 
-                                <b>{!! Lang::get('lang.due_date') !!}: </b> 
+                            <div class="col-md-3">
+                                <b>{!! Lang::get('lang.due_date') !!}: </b>
                                 <?php
                                 $time = $tickets->created_at;
                                 $time = date_create($time);
@@ -175,34 +190,34 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                                 @foreach($response as $last)
                                 <?php $ResponseDate = $last->created_at; ?>
                                 @endforeach
-                                <b>{!! Lang::get('lang.last_response') !!}: </b> {{ UTC::usertimezone($ResponseDate)}} 
+                                <b>{!! Lang::get('lang.last_response') !!}: </b> {{ UTC::usertimezone($ResponseDate)}}
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    
-                     <div class="col-md-6"> 
-                    
+
+                     <div class="col-md-6">
+
                         <table class="table">
-                            
+
                             <tr>
-                                
-                                <td><b>{!! Lang::get('lang.status') !!}:</b></td>       
-                                    
+
+                                <td><b>{!! Lang::get('lang.status') !!}:</b></td>
+
                                 <?php $status = App\Model\helpdesk\Ticket\Ticket_Status::where('id', '=', $tickets->status)->first(); ?>
 
                                 @if($status->id == 1)
-                                    
+
                                 <td title="{{$status->properties}}" style="color:orange">{{$status->name}}</td>
 
                                 @elseif($status->id == 2)
-                                
+
                                 <td title="{{$status->properties}}" style="color:green">{{$status->name}}</td>
-                                
+
                                 @elseif($status->id == 3)
-                                
+
                                 <td title="{{$status->properties}}" style="color:green">{{$status->name}}</td>
 
                                 @endif
@@ -210,28 +225,28 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
 
                             <tr>
 
-                                <td><b>{!! Lang::get('lang.priority') !!}:</b></td>     
+                                <td><b>{!! Lang::get('lang.priority') !!}:</b></td>
 
                                 <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first(); ?>
 
                                 @if($priority->priority_id == 1)
-                               
+
                                 <td title="{{$priority->priority_desc}}" style="color:green">{{$priority->priority_desc}}</td>
-                               
+
                                 @elseif($priority->priority_id == 2)
-                               
+
                                 <td title="{{$priority->priority_desc}}" style="color:orange">{{$priority->priority_desc}}</td>
-                               
+
                                 @elseif($priority->priority_id == 3)
-                               
+
                                 <td title="{{$priority->priority_desc}}" style="color:red">{{$priority->priority_desc}}</td>
-                               
+
                                 @endif
                             </tr>
 
                             <tr>
 
-                                <td><b>{!! Lang::get('lang.department') !!}:</b></td>   
+                                <td><b>{!! Lang::get('lang.department') !!}:</b></td>
                                 <?php
                                 $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first();
                                 $department = App\Model\helpdesk\Agent\Department::where('id', '=', $help_topic->department)->first();
@@ -241,22 +256,22 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                         </table>
                     </div>
 
-                    <div class="col-md-6"> 
-                       
+                    <div class="col-md-6">
+
                         <table class="table">
-                            
+
                             <tr>
 
-                                <td><b>{!! Lang::get('lang.help_topic') !!}:</b></td>     
+                                <td><b>{!! Lang::get('lang.help_topic') !!}:</b></td>
 
                                 <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first(); ?>
 
                                 <td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td>
                             </tr>
-                           
+
                             <tr>
 
-                                <td><b>{!! Lang::get('lang.last_message') !!}:</b></td>   
+                                <td><b>{!! Lang::get('lang.last_message') !!}:</b></td>
 
                                 <td>{{ucwords($last->poster)}}</td>
                             </tr>
@@ -265,7 +280,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                 </div>
             </div>
             <div class="comments-area mb-0" id="comments">
-                
+
                 <?php
                 $conversations = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->where('is_internal', '=', 0)->paginate(10);
                 $ij = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->first();
@@ -276,30 +291,30 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                 ?>
 
                 <ol class="comment-list" >
-                    
+
                     <li class="comment">
-                       
+
                         <article class="comment-body">
-                            
+
                             <footer class="comment-meta"
-                            <?php if ($role->role == "user") { ?> style="background-color: hsla(100, 100%, 51%, 0.15)" <?php } else { ?> style="background-color:#FFFCB3" <?php } ?>  
-                            > 
+                            <?php if ($role->role == "user") { ?> style="background-color: hsla(100, 100%, 51%, 0.15)" <?php } else { ?> style="background-color:#FFFCB3" <?php } ?>
+                            >
                                 <div class="comment-author">
 
-                                    <img src="{{$role->profile_pic}}"alt="" height="50" width="50" class="avatar" 
-                                    <?php if ($role->role == "user") { ?>style="box-shadow: 0 1px 3px #00FF26;" <?php } else { ?> style="box-shadow: 0 1px 3px #FFEC00;" <?php } ?> 
+                                    <img src="{{$role->profile_pic}}"alt="" height="50" width="50" class="avatar"
+                                    <?php if ($role->role == "user") { ?>style="box-shadow: 0 1px 3px #00FF26;" <?php } else { ?> style="box-shadow: 0 1px 3px #FFEC00;" <?php } ?>
                                     >
                                     @if($role->role == "user")
                                     <b class="fn"><a href="#" rel="external" class="url">{{$role->user_name}}</a></b>
                                     @else
                                     <b class="fn"><a href="#" rel="external" class="url">{{$role->first_name." ".$role->last_name}}</a></b>
-                                    
-                                    <div class="ticketratings float-right" style="margin-top: -12px;">   
-                                        
+
+                                    <div class="ticketratings float-right" style="margin-top: -12px;">
+
                                         <table>
 
                                             <tbody>
-                                            @foreach($ratings as $rating) 
+                                            @foreach($ratings as $rating)
                                             @if($rating->rating_area == 'Comment Area')
                                             <?php
                                             $rating_value = App\Model\helpdesk\Ratings\RatingRef::where('rating_id', '=', $rating->id)->where('thread_id', '=', $conversation->id)->first();
@@ -318,7 +333,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                                                         <?php for ($i = 1; $i <= $rating->rating_scale; $i++) { ?>
                                                             <input type="radio" class="star" id="star5" name="{!! $rating->name !!},{!! $conversation->id !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
                                                         <?php } ?>
-                                                        </td> 
+                                                        </td>
                                                     </tr>
                                                 </form>
                                             @endif
@@ -328,18 +343,18 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                                     </div>
                                     @endif
                                 </div><!-- .comment-author -->
-                                
+
                                 <div class="comment-metadata">
-                                    
+
                                     <small class="date text-muted">
-                                        
+
                                         <time datetime="2013-10-23T01:50:50+00:00"><i class="fa fa-clock-o"> </i> {{ UTC::usertimezone($conversation->created_at) }}</time>
                                     </small>
                                 </div><!-- .comment-metadata -->
                             </footer><!-- .comment-meta -->
-                            
+
                             <div class="comment-content">
-                                
+
                                 @if($conversation->firstContent()=='yes')
                                     <div class="embed-responsive{{$conversation->id}} embed-responsive-16by9">
                                         <div class="reply">{!! $conversation->purify(true) !!}</div>
@@ -365,14 +380,14 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                                 @else
                                 @endif
 
-                                            
+
                                 @if($conversation->id == $ij->id)
                                 <?php $ticket_form_datas = App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $tickets->id)->get(); ?>
                                 @if(isset($ticket_form_datas))
 
                                 <br/>
                                 <table class="table">
-                                    
+
                                     <tbody>
                                         @foreach($ticket_form_datas as $ticket_form_data)
                                         <tr>
@@ -386,7 +401,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                                 @endif
                             </div><!-- .comment-content -->
                             <br/><br/>
-                            
+
                             <div class="timeline-footer">
 
                                 @if(!$conversation->is_internal)
@@ -432,7 +447,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                                 </ul>
                             </div>
                         </article><!-- .comment-body -->
-                    </li><!-- .comment -->    
+                    </li><!-- .comment -->
                 </ol>
                 <?php
                 ?>
@@ -462,13 +477,13 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                 {{Session::get('fails1')}}
             </div>
             @endif
-            
+
             <?php $id2 = Crypt::decrypt($id); ?>
-            
+
             <div id="respond" class="comment-respond form-border">
-                
+
                 <h3 id="reply-title" class="comment-reply-title section-title"><i class="line"></i>{!! Lang::get('lang.leave_a_reply') !!}</h3>
-                @if(Auth::user()) 
+                @if(Auth::user())
                 {!! Form::open(['url'=>'post/reply/'.$id2.'#formabc']) !!}
                 @else
                 {!! Form::open(['url'=>'post-ticket-reply/'.$id.'#formabc']) !!}
@@ -478,11 +493,11 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                             <div class="form-group ">
                                 <textarea class="form-control" id="reply-input" name="comment" cols="30" rows="8"></textarea>
                             </div>
-                        </div>  
+                        </div>
                 </div>
-                
+
                 <div class="text-right">
-                    
+
                     <button type="submit" onClick="return checkFunction();" class="btn btn-custom btn-lg">{!! Lang::get('lang.post_comment') !!}</button>
                 </div>
             {!! Form::close() !!}
@@ -575,7 +590,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
             event.preventDefault();
         });
     });
-    
+
     $(function() {
 //Add text editor
     $("textarea").summernote({
@@ -619,7 +634,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                     //             link.click();
                     //         }
                     //     }, 500);
-                    // },2000);   
+                    // },2000);
                 }
             })
             return false;

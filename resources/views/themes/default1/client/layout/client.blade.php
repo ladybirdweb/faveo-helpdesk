@@ -36,6 +36,8 @@
 
         <link href="{{asset("lb-faveo/plugins/summernote/summernote-lite.min.css")}}" rel="stylesheet" type="text/css" />
 
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
        <script src="{{asset("lb-faveo/js/jquery-3.6.3.min.js")}}" type="text/javascript"></script>
 
         @yield('HeadInclude')
@@ -214,28 +216,20 @@
                                 </li>
                                 @else
                                 @if(isset($errors))
-                                <li class="nav-item"
-                                    <?php
-                                    if (is_object($errors)) {
-                                        if ($errors->first('email') || $errors->first('password')) {
-                                            ?> class="sfHover"
-                                                <?php
-                                            }
-                                        }
-                                        ?>
-                                        ><a href="#"  data-toggle="collapse"   class="nav-item navbar-login d-md-none  d-none d-lg-block"
-                                            <?php
-                                            if (is_object($errors)) {
-                                                if ($errors->first('email') || $errors->first('password')) {
+                                        <li class="nav-item">
+                                                <?php if (is_object($errors) && ($errors->first('email') || $errors->first('password'))) : ?>
+                                            <a href="#" class="nav-link sfHover" data-bs-toggle="collapse" data-bs-target="#login-form">
+                                                {!! Lang::get('lang.login') !!}
+                                                <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i>
+                                            </a>
+                                            <?php else : ?>
+                                            <a href="#" class="nav-link collapsed" data-bs-toggle="collapse" data-bs-target="#login-form">
+                                                {!! Lang::get('lang.login') !!}
+                                                <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i>
+                                            </a>
+                                            <?php endif; ?>
+                                        </li>
 
-                                                } else {
-                                                    ?> class="collapsed"
-                                                <?php
-                                            }
-                                        }
-                                        ?>
-                                        data-target="#login-form">{!! Lang::get('lang.login') !!} <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i></a>
-                                    </li>
                                     @endif
                                     @endif
                                     <li class="nav-item dropdown">
@@ -318,16 +312,20 @@
 
                     <div id="header-search" class="site-search clearfix" style="margin-right: 20%; width: 100%"><!-- #header-search -->
                         {!!Form::open(['route' => 'client.search','class'=>'search-form clearfix'])!!}
-                        <div class="form-border" style="z-index: 0;width: 80%;">
+                        <div class="form-border" style="z-index: 0;width: 85%;">
                             <div class="form-inline ">
-                                <div class="form-group input-group" style="width: 95%">
-                                    <input type="text" name="s" class="search-field form-control " title="Enter search term" placeholder="Have a question? Type your search term here..." required="" style="width: 80%">
+                                <div class="form-group input-group " style="width: 98% ">
+                                    <input type="text" name="s" class="search-field form-control" title="Enter search term" placeholder="Have a question? Type your search term here..." required="" style="width: 80%">
                                     <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-custom btn-md " style="margin-left: 25% ;background-color: #009aba; hov: #00c0ef; color: #fff">Search</button>
+                                        <button type="submit" class="btn btn-custom btn-md " style="margin-left: 20% ;background-color: #009aba; hov: #00c0ef; color: #fff ">Search</button>
                                     </span>
                                 </div>
 
-
+                                <style>
+                                    .search-field {
+                                        border-radius: 10px; /* You can adjust the value to your desired radius */
+                                    }
+                                </style>
                             </div>
                         </div>
                         {!! Form::close() !!}
@@ -335,52 +333,60 @@
                 </div>
             </header>
             <!-- Left side column. contains the logo and sidebar -->
-
-    <div class="site-hero clearfix">
-
-
-                {!! Breadcrumbs::render() !!}
+            <div class="site-hero clearfix">
+{{--                {!! \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render() !!}--}}
+                @yield('breadcrumb')
             </div>
-            <!-- Main content -->
+
+
+
             <div id="main" class="site-main clearfix">
                 <div class="container">
                     <div class="content-area">
                         <div>
+                            <!-- Success message -->
                             @if(Session::has('success'))
-                            <div class="alert alert-success alert-dismissable"  style="padding-right:20px">
-                                <i class="fa  fa-check-circle"></i>
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                {{Session::get('success')}}
-                            </div>
+                                <div class="alert alert-success alert-dismissable" style="padding-right:20px">
+                                    <i class="fa fa-check-circle"></i>
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ Session::get('success') }}
+                                </div>
                             @endif
+
+                            <!-- Warning message -->
                             @if(Session::has('warning'))
-                            <div class="alert alert-warning alert-dismissable" style="padding-right:20px">
-                                <i class="fa  fa-check-circle"></i>
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>                                {!! Session::get('warning') !!}
-                            </div>
+                                <div class="alert alert-warning alert-dismissable" style="padding-right:20px">
+                                    <i class="fa fa-check-circle"></i>
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                    {!! Session::get('warning') !!}
+                                </div>
                             @endif
-                            <!-- failure message -->
+
+                            <!-- Failure message -->
                             @if(Session::has('fails'))
-                            @if(Session::has('check'))
-                            <?php goto a; ?>
-                            @endif
-                            <div class="alert alert-danger alert-dismissable"  style="padding-right:20px" >
-                                <i class="fa fa-ban"></i>
-                                <b>{!! Lang::get('lang.alert') !!} !</b>
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                {{Session::get('fails')}}
-                            </div>
-                            <?php a: ?>
+                                @if(Session::has('check'))
+                                        <?php goto a; ?>
+                                @endif
+                                <div class="alert alert-danger alert-dismissable" style="padding-right:20px">
+                                    <i class="fa fa-ban"></i>
+                                    <b>{!! Lang::get('lang.alert') !!} !</b>
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ Session::get('fails') }}
+                                </div>
+                                    <?php a: ?>
                             @endif
                         </div>
                         <div class="row">
                             @yield('content')
-                             @yield('check')
-                             @yield('category')
+                            @yield('check')
+                            @yield('category')
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Rest of the code... -->
+
             <!-- /.content-wrapper -->
             <?php
             $footer1 = App\Model\helpdesk\Theme\Widgets::where('name', '=', 'footer1')->first();

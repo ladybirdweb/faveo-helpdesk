@@ -1283,7 +1283,7 @@ return [
       |------------------------------------------------
       |   Error Pages
       |------------------------------------------------
-     */
+     */'knowledge_base'                               => 'knowledge base',
     'not_found'                                       => 'Not found',
     'oops_page_not_found'                             => 'Oops! Page not found',
     'we_could_not_find_the_page_you_were_looking_for' => 'We could not find the page you were looking for',
@@ -1353,6 +1353,8 @@ return [
       | customize your views to better match your application.
       |
      */
+    'forget_password'                                                                  =>'forget password',
+    'article_list'                                                                     =>'Article list',
     'home'                                                                             => 'Home',
     'submit_a_ticket'                                                                  => 'Submit a ticket',
     'my_profile'                                                                       => 'My profile',

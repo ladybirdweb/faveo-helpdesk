@@ -30,11 +30,11 @@ class = "nav-item active"
         @forelse($article as $arti)
 
              <article class="hentry">
-            
+
                 <header class="entry-header">
-                        
+
                     <i class="fa fa-list-alt fa-2x fa-fw float-left text-muted"></i>
-                
+
                     <h2 class="entry-title h4">
 
                         <a href="{{url('show/'.$arti->slug)}}" onclick="toggle_visibility('foo');">{{$arti->name}}</a>
@@ -45,7 +45,7 @@ class = "nav-item active"
                 <?php $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 400); ?>
 
                 <blockquote class="blockquote archive-description" id="block" style="margin-bottom: 10px; margin-top: 10px;">
-                
+
                     <?php $content = trim(preg_replace("/<img[^>]+\>/i", "", $excerpt), " \t.") ?>
                     <p>{!! strip_tags($content) !!}</p>
 
@@ -53,15 +53,15 @@ class = "nav-item active"
                 </blockquote>
 
                 <footer class="entry-footer">
-                        
+
                     <div class="entry-meta text-muted">
-                        
-                        <span style="margin-right:0px;"><i class="far fa-clock fa-fw"></i> 
+
+                        <span style="margin-right:0px;"><i class="far fa-clock fa-fw"></i>
 
                             <span>{{$arti->created_at->format('l, d-m-Y')}}</span>
                         </span>
                     </div>
-                </footer>  
+                </footer>
             </article>
             @empty
             <p>No articles available</p>
@@ -92,9 +92,9 @@ class = "nav-item active"
 
         <div class="col-sm-12">
             <div class="widget-area">
-            
+
                 <section id="section-categories" class="section">
-                    
+
                     <h2 class="section-title h4 clearfix">
 
 {{--                        <b>   <i class="line" style="border-color: rgb(0, 154, 186);"></i>{!! Lang::get('lang.categories') !!}</b>--}}
@@ -102,7 +102,7 @@ class = "nav-item active"
                     </h2>
 
                     <ul class="nav nav-pills nav-stacked nav-categories">
-        
+
                         @foreach($categorys as $category)
                         <?php
                         $num = \App\Model\kb\Relationship::where('category_id','=', $category->id)->get();
@@ -111,9 +111,9 @@ class = "nav-item active"
                         ?>
 
                         <li class="d-flex justify-content-between align-items-center">
-                            
+
                             <a href="{{url('category-list/'.$category->slug)}}" class="list-group-item list-group-item-action" style="padding: 5px;">
-                                        
+
                                 <span class="badge badge-pill float-right" style="margin-top: 2px;">{{$numcount}}</span>
 
                                 {{$category->name}}

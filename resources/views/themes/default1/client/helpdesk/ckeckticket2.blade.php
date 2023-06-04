@@ -1,22 +1,22 @@
 @extends('themes.default1.client.layout.client')
 
 @section('HeadInclude')
-        
+
 @stop
 
 @section('breadcrumb')
-    <div class="site-hero clearfix">
-        <ol class="breadcrumb breadcrumb-custom">
-            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
+
+        <ol class="breadcrumb float-sm-right ">
+            <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
             <li><a href="#">{!! Lang::get('lang.home') !!}</a></li>
             <li class="active">{!! Lang::get('lang.ticket_status') !!}</li>
         </ol>
     </div>
-@stop	
+@stop
 
-@section('content')               
-<?php  
-$tickets = App\Model\helpdesk\Ticket\Tickets::where('id','=',\Crypt::decrypt($id))->first(); 
+@section('content')
+<?php
+$tickets = App\Model\helpdesk\Ticket\Tickets::where('id','=',\Crypt::decrypt($id))->first();
 $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt::decrypt($id))->first();
 //$user = App\User::where('id','=',$id1)->first();?>
 
@@ -27,14 +27,14 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
     <div class="col-md-9">
                             <section class="content-header"><h3 class="box-title"><i class="fa fa-user"> </i> {{$thread->title}} </h3> ( {{$tickets->ticket_number}} )
                             </section>
-    </div> 
+    </div>
                                 <div class="col-md-3">
                             <div class="pull-right">
-                                <!-- <button type="button" class="btn btn-default"><i class="fa fa-edit" style="color:green;"> </i> Edit</button> -->                            
+                                <!-- <button type="button" class="btn btn-default"><i class="fa fa-edit" style="color:green;"> </i> Edit</button> -->
                                 {{-- <button type="button" class="btn btn-default"><i class="fa fa-print" style="color:blue;"> </i> {!! link_to_route('ticket.print','Print',[$tickets->id]) !!}</button> --}}
                                 <!-- </div> -->
-                                <div class="btn-group"> 
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-exchange" style="color:teal;"> </i> 
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-exchange" style="color:teal;"> </i>
                                         {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
@@ -49,7 +49,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                            <div class="ticketratings pull-right">    
+                            <div class="ticketratings pull-right">
         <table><tbody>
                 <form id="foo">
    <tr>
@@ -60,14 +60,14 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
     <input type="radio" class="star" id="star3" name="rating" value="3"<?php echo ($tickets->rating=='3')?'checked':'' ?>/>
     <input type="radio" class="star" id="star2" name="rating" value="4"<?php echo ($tickets->rating=='4')?'checked':'' ?>/>
     <input type="radio" class="star" id="star1" name="rating" value="5"<?php echo ($tickets->rating=='5')?'checked':'' ?> />
-    </td> 
+    </td>
 </tr>
                 </form>
- </tbody> </table> 
+ </tbody> </table>
                         </div>
                             </div>
                             </div>
-                            
+
                         </div>
                                 <div class="box-body" style="margin-bottom:-10px">
                                     <div class="row">
@@ -81,24 +81,24 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
                                             </div>
                                         </div>
                                 <section class="content"  id="refresh" style="margin-bottom:-10px;margin-top:-10px">
-                                    <div class="col-md-12"> 
-                                        <?php 
+                                    <div class="col-md-12">
+                                        <?php
                                         $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id','=',$tickets->priority_id)->first();
                                         ?>
                                         <div class="callout callout-default ">
                                             <div class="row">
-                                                <div class="col-md-3"> 
+                                                <div class="col-md-3">
                                                 <?php
                                                 $sla = $tickets->sla;
                                                 $SlaPlan = App\Model\helpdesk\Manage\Sla_plan::where('id','=',1)->first();?>
-                                                    <b>{!! Lang::get('lang.sla_plan') !!}: {{$SlaPlan->grace_period}} </b> 
+                                                    <b>{!! Lang::get('lang.sla_plan') !!}: {{$SlaPlan->grace_period}} </b>
                                                 </div>
-                                                <div class="col-md-3"> 
+                                                <div class="col-md-3">
                                                     <b>{!! Lang::get('lang.created_date') !!}: </b> {{ UTC::usertimezone($tickets->created_at) }}
                                                 </div>
-                                                <div class="col-md-3"> 
-                                                    <b>{!! Lang::get('lang.due_date') !!}: </b> 
-                                                    <?php 
+                                                <div class="col-md-3">
+                                                    <b>{!! Lang::get('lang.due_date') !!}: </b>
+                                                    <?php
                                                     $time = $tickets->created_at;
                                                     $time = date_create($time);
                                                     date_add($time, date_interval_create_from_date_string($SlaPlan->grace_period));
@@ -110,12 +110,12 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
                                                 @foreach($response as $last)
                                                 <?php $ResponseDate  = $last->created_at; ?>
                                                 @endforeach
-                                                    <b>{!! Lang::get('lang.last_response') !!}: </b> {{ UTC::usertimezone($ResponseDate)}} 
+                                                    <b>{!! Lang::get('lang.last_response') !!}: </b> {{ UTC::usertimezone($ResponseDate)}}
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>      
-                                    <div class="col-md-6"> 
+                                    </div>
+                                    <div class="col-md-6">
                                         <table class="table table-hover">
                                             <!-- <tr><th></th><th></th></tr> -->
                                             <tr><td><b>{!! Lang::get('lang.status') !!}:</b></td>       <?php $status = App\Model\helpdesk\Ticket\Ticket_Status::where('id','=',$tickets->status)->first();?>
@@ -139,8 +139,8 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
                                             @endif
 
                                             </tr>
-                                            <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   
-                                        <?php 
+                                            <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>
+                                        <?php
                                         $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id','=',$tickets->help_topic_id)->first();
                                         $department = App\Model\helpdesk\Agent\Department::where('id', '=', $help_topic->department)->first();
                                         ?>
@@ -148,7 +148,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
                                         </table>
                                         <!-- </div> -->
                                     </div>
-                                    <div class="col-md-6"> 
+                                    <div class="col-md-6">
                                         <!-- <div class="callout callout-success"> -->
                                         <table class="table table-hover">
                                             <!-- <tr><th></th><th></th></tr> -->
@@ -157,7 +157,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
                                         </table>
                                     </div>
                                     <!-- </div> -->
-                                </section> 
+                                </section>
                             </div>
                         </div>
                     </div>
@@ -186,11 +186,11 @@ foreach ($conversations as $conversation) {
                     foreach($attachments as $attachment)
                     {
                         if($attachment->type == 'pdf') {
-                            
+
                         } elseif($attachment->type == 'docx') {
-                            
+
                         } else {
-                        $image = @imagecreatefromstring($attachment->file); 
+                        $image = @imagecreatefromstring($attachment->file);
                         ob_start();
                         imagejpeg($image, null, 80);
                         $data = ob_get_contents();
@@ -198,7 +198,7 @@ foreach ($conversations as $conversation) {
                         $var  =  '<img src="data:image/jpg;base64,' .  base64_encode($data)  . '" />';
                         $body = str_replace($attachment->name, "data:image/jpg;base64," .  base64_encode($data), $body);
 
-                            $string = $body;                        
+                            $string = $body;
                             $start = "<head>";
                             $end = "</head>";
                             if(strpos($string,$start) == false || strpos($string,$start) == false)
@@ -216,9 +216,9 @@ foreach ($conversations as $conversation) {
                         }
                     }
     }
-                            $string = $body;                        
+                            $string = $body;
                             $start = "<head>";
-                            $end = "</head>";                            
+                            $end = "</head>";
                             if(strpos($string,$start) == false || strpos($string,$start) == false)
                             {
                             }
@@ -235,7 +235,7 @@ foreach ($conversations as $conversation) {
                                 <ol class="comment-list" >
                                     <li class="comment">
                                         <article class="comment-body">
-                                            <footer class="comment-meta"<?php if($role->role == "user") { ?> style="background-color: hsla(100, 100%, 51%, 0.15)" <?php } else { ?> style="background-color:#FFFCB3" <?php } ?>  > 
+                                            <footer class="comment-meta"<?php if($role->role == "user") { ?> style="background-color: hsla(100, 100%, 51%, 0.15)" <?php } else { ?> style="background-color:#FFFCB3" <?php } ?>  >
                                                 <div class="comment-author">
                                                         @if($role->profile_pic)
                                                             <img src="{{asset('uploads/profilepic')}}{{'/'}}{{$role->profile_pic}}"alt="" height="50" width="50" class="avatar" <?php if($role->role == "user") { ?>style="box-shadow: 0 1px 3px #00FF26;" <?php } else { ?> style="box-shadow: 0 1px 3px #FFEC00;" <?php } ?> >
@@ -250,14 +250,14 @@ foreach ($conversations as $conversation) {
                 <form id="foo2">
    <tr>
        <th>     <div class="ticketratingtitle">Reply rating &nbsp;</div></th>&nbsp
-                <td>            
+                <td>
     <input type="radio" class="star" id="star5" name="rating2" value="1"<?php echo ($conversation->reply_rating=='1')?'checked':'' ?>  />
     <input type="radio" class="star" id="star4" name="rating2" value="2"<?php echo ($conversation->reply_rating=='2')?'checked':'' ?>  />
     <input type="radio" class="star" id="star3" name="rating2" value="3"<?php echo ($conversation->reply_rating=='3')?'checked':'' ?>  />
     <input type="radio" class="star" id="star2" name="rating2" value="4"<?php echo ($conversation->reply_rating=='4')?'checked':'' ?>  />
     <input type="radio" class="star" id="star1" name="rating2" value="5"<?php echo ($conversation->reply_rating=='5')?'checked':'' ?>  />
                 </td></tr></form></tbody></table></div>
-                             
+
                                                     @endif
                                                 </div><!-- .comment-author -->
                                                 <div class="comment-metadata">
@@ -270,13 +270,13 @@ foreach ($conversations as $conversation) {
                                                 <p>{!! $body !!}</p>
                                             </div><!-- .comment-content -->
                                             <div class="timeline-footer" style="margin-bottom:-5px">
-                                        <?php 
+                                        <?php
                                         $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id','=',$conversation->id)->get();
                                         $i = 0;
                                         foreach($attachments as $attachment) {
                                         if($attachment->poster == 'ATTACHMENT') {
                                             $i++;
-                                            } 
+                                            }
                                         }
                                         if($i>0)
                                         {
@@ -293,12 +293,12 @@ foreach ($conversations as $conversation) {
     $power = $size > 0 ? floor(log($size, 1024)) : 0;
     $value = number_format($size / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
 
-                                            
+
                                             if($attachment->poster == 'ATTACHMENT')
                                             {
                                                 if($attachment->type == 'jpg'||$attachment->type == 'JPG'||$attachment->type == 'jpeg'||$attachment->type == 'JPEG'||$attachment->type == 'png'||$attachment->type == 'PNG'||$attachment->type == 'gif'||$attachment->type == 'GIF')
                                                 {
-                                                $image = @imagecreatefromstring($attachment->file); 
+                                                $image = @imagecreatefromstring($attachment->file);
                                                 ob_start();
                                                 imagejpeg($image, null, 80);
                                                 $data = ob_get_contents();
@@ -311,22 +311,22 @@ foreach ($conversations as $conversation) {
                                                 else
                                                 {
                                                 $var = '<a style="max-width:200px;height:133px;color:#666;" href="'.URL::route('image', ['image_id' => $attachment->id]).'" target="_blank"><span class="mailbox-attachment-icon" style="background-color:#fff;">'.strtoupper($attachment->type).'</span><div class="mailbox-attachment-info"><span ><b style="word-wrap: break-word;">'.$attachment->name.'</b><br/><p>'.$value.'</p></span></div></a>';
-                                                echo '<li style="background-color:#f4f4f4;">'.$var.'</li>';   
-                                                }                                            
+                                                echo '<li style="background-color:#f4f4f4;">'.$var.'</li>';
+                                                }
                                             }
                                         }
                                         ?>
                                         </ul>
                                     </div>
                                         </article><!-- .comment-body -->
-                                    </li><!-- .comment -->    
+                                    </li><!-- .comment -->
                                 </ol>
 
 <?php
 
                                         ?>
-                                        
-                                
+
+
 <?php }
 ?>
                                         <div class="pull-right" style="margin-top:-30px;margin-bottom:-30px">
@@ -353,7 +353,7 @@ foreach ($conversations as $conversation) {
 <?php $id2 = Crypt::decrypt($id); ?>
 <div id="respond" class="comment-respond form-border">
     <h3 id="reply-title" class="comment-reply-title section-title"><i class="line"></i>{!! Lang::get('lang.leave_a_reply') !!}</h3>
-    @if(Auth::user()) 
+    @if(Auth::user())
         {!! Form::open(['url'=>'post/reply/'.$id2.'#formabc']) !!}
     @else
         {!! Form::open(['url'=>'post-ticket-reply/'.$id.'#formabc']) !!}
@@ -364,7 +364,7 @@ foreach ($conversations as $conversation) {
                     <div class="form-group ">
                         <textarea class="form-control" name="comment" cols="30" rows="8"></textarea>
                     </div>
-                </div>                                              
+                </div>
             </div>
         </div>
         <div class="text-right">
@@ -375,19 +375,19 @@ foreach ($conversations as $conversation) {
 
 
 <script type="text/javascript">
-   
+
 $(document).ready(function() {
     var Data = $('input[name="rating"]:checked').val();
     var Data2 = $('input[name="rating2"]:checked').val();
     if (Data) {
         $('input[name=rating]').rating('readOnly');
         jQuery('.star').attr('disabled', true);
-       
+
     }
-    $('input[name=rating]').change(function() { 
+    $('input[name=rating]').change(function() {
 $('#foo').submit();
     });
-    $('input[name=rating2]').change(function() { 
+    $('input[name=rating2]').change(function() {
 $('#foo2').submit();
     });
     // process the form
@@ -396,7 +396,7 @@ $('#foo2').submit();
         // get the form data
         // there are many ways to get this data using jQuery (you can use the class or id also)
         var formData = $('input[name="rating"]:checked').val();
-        
+
 //$('#foo').serialize();
         // process the form
         $.ajax({
@@ -404,14 +404,14 @@ $('#foo2').submit();
             url         : '../rating/'+<?php echo $tickets->id ?>+'/'+formData, // the url where we want to POST
             data        : formData, // our data object
             dataType    : 'json', // what type of data do we expect back from the server
-            
-            success     : function() { 
-                 
+
+            success     : function() {
+
             }
         });
-        
+
             // using the done promise callback
-            
+
         // stop the form from submitting the normal way and refreshing the page
         event.preventDefault();
     });
@@ -428,14 +428,14 @@ $('#foo2').submit();
             url         : '../rating2/'+<?php echo $thread->id ?>+'/'+formData, // the url where we want to POST
             data        : formData, // our data object
             dataType    : 'json', // what type of data do we expect back from the server
-            
-            success     : function() { 
-                 
+
+            success     : function() {
+
             }
         });
-        
+
             // using the done promise callback
-            
+
         // stop the form from submitting the normal way and refreshing the page
         event.preventDefault();
     });
@@ -473,7 +473,7 @@ $('#foo2').submit();
                     //             link.click();
                     //         }
                     //     }, 500);
-                    // },2000);   
+                    // },2000);
                 }
             })
             return false;
@@ -503,7 +503,7 @@ $('#foo2').submit();
                                 link.click();
                             }
                         }, 500);
-                    },2000);   
+                    },2000);
                 }
             })
             return false;
@@ -526,7 +526,7 @@ $('#foo2').submit();
                     var message = "Success! Your Ticket have been Opened";
                     $("#alert11").show();
                     $('#message-success1').html(message);
-                    setInterval(function(){$("#alert11").hide(); },4000);   
+                    setInterval(function(){$("#alert11").hide(); },4000);
 
                 }
             })
@@ -543,8 +543,7 @@ $('#foo2').submit();
 
 @stop
 
-                
-                    
-                
 
-               
+
+
+
