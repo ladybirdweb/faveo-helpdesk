@@ -1353,8 +1353,8 @@ return [
       | customize your views to better match your application.
       |
      */
-    'forget_password'                                                                  =>'forget password',
-    'article_list'                                                                     =>'Article list',
+    'forget_password'                                                                  => 'forget password',
+    'article_list'                                                                     => 'Article list',
     'home'                                                                             => 'Home',
     'submit_a_ticket'                                                                  => 'Submit a ticket',
     'my_profile'                                                                       => 'My profile',
@@ -1656,5 +1656,5 @@ return [
     'clean-forever'                                => 'delete permanently',
     'mail-sent-to-job-for-process'                 => 'Mail has been sent to job for process, it will appear in your mailbox once it gets processed by your selected queue service. If you don\'t recieve the mail check logs for errors or warnings.',
     'click-here-to-see-more-details'               => 'Click here to see more details',
-    'category_list'                                => 'Category list'
+    'category_list'                                => 'Category list',
 ];
