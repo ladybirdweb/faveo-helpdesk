@@ -7,7 +7,7 @@
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right ">
         <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} :
-            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.forget_password') !!}</a></li>
+            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.forgot_password') !!}</a></li>
         </ol>
 @stop
 
@@ -76,7 +76,7 @@
                 <div align="center">
                     
                     <h4 style="background-color: #0084b4;"> <a href="http://www.faveohelpdesk.com" class="logo">
-                        <img src="{{ asset('lb-faveo/media/images/logo2.png')}}" width="100px;"></a>
+                        <img src="{{ asset('lb-faveo/media/images/logo.png')}}" width="100px;"></a>
                     </h4>
                 </div>
                 

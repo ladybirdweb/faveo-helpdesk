@@ -29,23 +29,15 @@ $category_id = $all->pluck('category_id')->toArray();
         </style>
         <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
         <?php $category = App\Model\kb\Category::where('id', $category_id)->first(); ?>
+        <li><a class="words" href="{!! URL::route('home') !!}">{!! Lang::get('lang.knowledge_base') !!}</a></li>
+        <li class="words">></li>
+
         <li><a  class="words" href="{{url('article-list')}}">{!! Lang::get('lang.article_list') !!}</a></li>
-        <li class="words">&lt;</li>
+        <li class="words">></li>
         <li><a class="words" href="{{url('category-list/'.$category->slug)}}">{{$category->name}}</a></li>
-        <li class="words">&lt;</li>
+        <li class="words"> > </li>
         <li class="active">{{$arti->name}}</li> </ol>
 @stop
-<div class="site-hero clearfix">
-    <ol class="breadcrumb breadcrumb-custom">
-        <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
-        <?php $category = App\Model\kb\Category::where('id', $category_id)->first(); ?>
-        <li><a href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
-        <li><a href="{{url('/knowledgebase')}}">{!! Lang::get('lang.knowledge_base') !!}</a></li>
-        <li><a href="{{url('category-list/'.$category->slug)}}">{{$category->name}}</a></li>
-        <li class="active">{{$arti->name}}</li>
-    </ol>
-</div>
-@stop	
 @section('title')
     {!! $arti->name !!} -
 @stop	
@@ -138,7 +130,7 @@ $category_id = $all->pluck('category_id')->toArray();
                             <p class="banner-title ellipsize_first_name h4" STYLE="margin-left: 5%">{{Auth::user()->first_name." ".Auth::user()->last_name}}</p>
                             <div class="banner-content" id="dropdown_content">
                                 <p data-v-43e70d45="">If you are not? </p>
-                                <a href="{{url('auth/logout')}}" class="btn btn-custom btn-sm text-white profile_btn" STYLE="width: 50%;height: 200%;margin-left: 7%;">{!! Lang::get('lang.log_out') !!}</a>
+                                <a href="{{url('auth/logout')}}" class="btn btn-custom btn-sm text-white profile_btn" STYLE="width: 50%;height: 200%;margin-left: 7%; background-color: #009aba; hov: #00c0ef; color: #fff">{!! Lang::get('lang.log_out') !!}</a>
 
                             </div>
                             </div>
@@ -150,7 +142,7 @@ $category_id = $all->pluck('category_id')->toArray();
                                 {!! Form::textarea('comment',null,['class' => 'form-control','size' => '30x8','id'=>'comment']) !!}
                                 {!! $errors->first('comment', '<spam class="help-block">:message</spam>') !!}
                             </div>
-                            <button type="submit" class="btn btn-custom btn-lg float-right">
+                            <button type="submit" class="btn btn-custom btn-lg float-right" style="background-color: #009aba; hov: #00c0ef; color: #fff">
                                 {{ Lang::get('lang.post_message') }}
                             </button>
                         </div>
@@ -225,7 +217,7 @@ $category_id = $all->pluck('category_id')->toArray();
                                 {!! $errors->first('website', '<span class="help-block">:message</span>') !!}
                             </div>
 
-                            <button type="submit" class="btn btn-custom btn-lg">{!! Lang::get('lang.post_message') !!}</button>
+                            <button type="submit" class="btn btn-custom btn-lg" style="background-color: #009aba; hov: #00c0ef; color: #fff">{!! Lang::get('lang.post_message') !!}</button>
                         </div>
 
                         <div class="col-md-8">

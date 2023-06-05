@@ -17,8 +17,10 @@ class = "nav-item active"
             }
         </style>
         <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
+        <li><a class="words" href="{!! URL::route('form') !!}">{!! Lang::get('lang.knowledge_base') !!}</a></li>
+        <li class="words">></li>
         <li><a class="words" href="{!! URL::route('category-list') !!}">{!! Lang::get('lang.category') !!}</a></li>
-        <li class="words">&lt;</li>
+        <li class="words">></li>
         <li><a  class="words"href="{!! URL::route('category-list') !!}">{!! Lang::get('lang.category_list') !!}</a></li>
 
     </ol>
@@ -113,7 +115,7 @@ class = "nav-item active"
 
                     <h2 class="section-title h4 clearfix">
 
-{{--                        <b>   <i class="line" style="border-color: rgb(0, 154, 186);"></i>{!! Lang::get('lang.categories') !!}</b>--}}
+                        <b>   <i class="line" style="border-color: rgb(0, 154, 186);"></i>{!! Lang::get('lang.categories') !!}</b>
                         <small class="float-right"><i class="far fa-hdd fa-fw"></i></small>
                     </h2>
 

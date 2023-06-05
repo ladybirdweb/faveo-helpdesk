@@ -8,9 +8,9 @@
 
     <ol class="breadcrumb float-sm-right ">
         <li class="breadcrumb-item "> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
-        <li><a  class="words" href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
-        <li class="words">&lt;</li>
-        <li><a  class="words" href="{{url('#')}}">{!! Lang::get('lang.ticket_status') !!}</a></li>
+        <li><a  class="words" href="{{url('ticketinfo')}}">{!! Lang::get('lang.my_tickets') !!}</a></li>
+        <li class="words"> > </li>
+        <li><a  class="words" href="{{url('#')}}">{!! Lang::get('lang.check_ticket') !!}</a></li>
     </ol>
 
 @stop
@@ -76,7 +76,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
 
                     <div>
 
-                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: whitesmoke">
 
                             <i class="fas fa-exchange-alt" style="color:teal;"> </i>
 
@@ -490,15 +490,15 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                 @endif
                 <div class="row">
                         <div class="col-md-12">
-                            <div class="form-group ">
-                                <textarea class="form-control" id="reply-input" name="comment" cols="30" rows="8"></textarea>
+                            <div class="form-group " style="background-color: white">
+                                <textarea class="form-control" id="reply-input" name="comment" cols="30" rows="8" ></textarea>
                             </div>
                         </div>
                 </div>
 
                 <div class="text-right">
 
-                    <button type="submit" onClick="return checkFunction();" class="btn btn-custom btn-lg">{!! Lang::get('lang.post_comment') !!}</button>
+                    <button type="submit" onClick="return checkFunction();" class="btn btn-custom btn-lg" style="background-color: #009aba; hov: #00c0ef; color: #fff">{!! Lang::get('lang.post_comment') !!}</button>
                 </div>
             {!! Form::close() !!}
             </div>

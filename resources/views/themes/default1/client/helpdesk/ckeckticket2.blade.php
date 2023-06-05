@@ -34,7 +34,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
                                 {{-- <button type="button" class="btn btn-default"><i class="fa fa-print" style="color:blue;"> </i> {!! link_to_route('ticket.print','Print',[$tickets->id]) !!}</button> --}}
                                 <!-- </div> -->
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-exchange" style="color:teal;"> </i>
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-exchange" style="color:teal; background-color: white"> </i>
                                         {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">

@@ -197,7 +197,7 @@
 
                                                 <div class="banner-content" id="dropdown_content">
 
-                                                    <a href="{{url('auth/logout')}}" class="btn btn-custom btn-sm text-white profile_btn">{!! Lang::get('lang.log_out') !!}</a>
+                                                    <a href="{{url('auth/logout')}}" class="btn btn-custom btn-sm text-white profile_btn" style="background-color: #009aba; hov: #00c0ef; color: #fff "">{!! Lang::get('lang.log_out') !!}</a>
 
                                                     @if(Auth::user())
                                                     @if(Auth::user()->role != 'user')
@@ -206,7 +206,7 @@
                                                     @endif
                                                     @if(Auth::user())
                                                     @if(Auth::user()->role == 'user')
-                                                    <a href="{{url('client-profile')}}" class="btn btn-custom btn-sm text-white profile_btn">{!! Lang::get('lang.profile') !!}</a>
+                                                    <a href="{{url('client-profile')}}" class="btn btn-custom btn-sm text-white profile_btn" style="background-color: #009aba; hov: #00c0ef; color: #fff ">{!! Lang::get('lang.profile') !!}</a>
                                                     @endif
                                                     @endif
                                                 </div>
@@ -220,7 +220,7 @@
                                                 <?php if (is_object($errors) && ($errors->first('email') || $errors->first('password'))) : ?>
                                             <a href="#" class="nav-link sfHover" data-bs-toggle="collapse" data-bs-target="#login-form">
                                                 {!! Lang::get('lang.login') !!}
-                                                <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i>
+{{--                                                <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i>--}}
                                             </a>
                                             <?php else : ?>
                                             <a href="#" class="nav-link collapsed" data-bs-toggle="collapse" data-bs-target="#login-form">
@@ -292,7 +292,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12 text-center">
-                                            <button type="submit" class="btn btn-custom">{!! Lang::get('lang.login') !!}</button>
+                                            <button type="submit" class="btn btn-custom" style="background-color: #009aba; hov: #00c0ef; color: #fff ">{!! Lang::get('lang.login') !!}</button>
                                         {!! Form::close() !!}
                                     </div>
 

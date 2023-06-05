@@ -11,8 +11,16 @@ class = "nav-item active"
 @section('breadcrumb')
 {{--<div class="site-hero clearfix">--}}
     <ol class="breadcrumb float-sm-right ">
+        <style>
+            .words {
+                margin-right: 10px; /* Adjust the value to increase or decrease the gap between list items */
+            }
+        </style>
         <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
-        <li><a href="{!! URL::route('form') !!}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
+        <li><a class="words" href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
+        <li class="words" style="margin-right: 10px">></li>
+
+        <li><a href="{{url('form')}}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
     </ol>
 </div>
 @stop

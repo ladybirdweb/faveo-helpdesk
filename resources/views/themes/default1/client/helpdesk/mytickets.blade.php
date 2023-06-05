@@ -67,9 +67,9 @@ class="nav-item active"
                 {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
                 <div class="mailbox-controls mt-3">
                     <!-- Check all button -->
-                    <a class="btn btn-light btn-sm checkbox-toggle"><i class="far fa-square"></i></a>
-                    <a class="btn btn-light btn-sm" id="click1"><i class="fas fa-sync"></i></a>
-                    <input type="submit" class="btn btn-light text-warning btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
+                    <a class="btn btn-light btn-sm checkbox-toggle" style="background-color: whitesmoke"><i class="far fa-square"></i></a>
+                    <a class="btn btn-light btn-sm" id="click1" style="background-color: whitesmoke"><i class="fas fa-sync"></i></a>
+                    <input type="submit" class="btn btn-light text-warning btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}"style="color: #F39C12;background-color: whitesmoke">
                     <div class="float-right" id="refresh21">
                         {!! $open->count().'-'.$open->total(); !!}
                     </div>
@@ -156,9 +156,9 @@ class="nav-item active"
                 {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
                 <div class="mailbox-controls mt-3">
                     <!-- Check all button -->
-                    <a class="btn btn-light btn-sm checkbox-toggle"><i class="far fa-square"></i></a>
-                    <a class="btn btn-light btn-sm" id="click2"><i class="fas fa-sync"></i></a>
-                    <input type="submit" class="btn btn-light text-primary btn-sm" name="submit" value="{!! Lang::get('lang.open') !!}">
+                    <a class="btn btn-light btn-sm checkbox-toggle" style="background-color: whitesmoke"><i class="far fa-square" ></i></a>
+                    <a class="btn btn-light btn-sm" id="click2" style="background-color: whitesmoke"><i class="fas fa-sync"></i></a>
+                    <input type="submit" class="btn btn-light text-primary btn-sm" name="submit" value="{!! Lang::get('lang.open') !!}" style="background-color: whitesmoke">
                     <div class="float-right" id="refresh22">
                         {!! $close->count().'-'.$close->total(); !!}
                     </div>
