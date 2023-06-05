@@ -225,7 +225,7 @@
                                             <?php else : ?>
                                             <a href="#" class="nav-link collapsed" data-bs-toggle="collapse" data-bs-target="#login-form">
                                                 {!! Lang::get('lang.login') !!}
-                                                <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i>
+{{--                                                <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i>--}}
                                             </a>
                                             <?php endif; ?>
                                         </li>
