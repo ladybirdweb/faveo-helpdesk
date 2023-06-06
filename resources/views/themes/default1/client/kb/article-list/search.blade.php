@@ -1,12 +1,18 @@
 @extends('themes.default1.client.layout.client')
 @section('breadcrumb')
-<div class="site-hero">
-    <ol class="breadcrumb breadcrumb-custom">
-        <li class="text">You are here: </li>
-        <li>Home</li>
-        <li class="active">Search Results</li>
+    {{--<div class="site-hero clearfix">--}}
+    <ol class="breadcrumb float-sm-right ">
+        <style>
+            .words {
+                margin-right: 10px; /* Adjust the value to increase or decrease the gap between list items */
+            }
+        </style>
+        <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
+        <li><a class="words" href="{!! URL::route('/') !!}">{!! Lang::get('lang.home') !!}</a></li>
+        <li class="words">></li>
+        <li><a href="{!! URL::route('client.search') !!}">{!! Lang::get('lang.search_result') !!}</a></li>
     </ol>
-</div>
+
 @stop
 @section('content')
 <div id="content" class="site-content col-md-9">
@@ -46,17 +52,17 @@
 </div>
 
 
-@section('category')
-<h2 class="section-title h4 clearfix">{!! Lang::get('lang.categories') !!}<small class="pull-right"><i class="fa fa-hdd-o fa-fw"></i></small></h2>
-<ul class="nav nav-pills nav-stacked nav-categories">
+{{--@section('category')--}}
+{{--<h2 class="section-title h4 clearfix">{!! Lang::get('lang.categories') !!}<small class="pull-right"><i class="fa fa-hdd-o fa-fw"></i></small></h2>--}}
+{{--<ul class="nav nav-pills nav-stacked nav-categories">--}}
 
-    @foreach($categorys as $category)
-<?php
-$num = \App\Model\kb\Relationship::where('category_id','=', $category->id)->get();
-$article_id = $num->pluck('article_id');
-$numcount = count($article_id);
-?>
-    <li><a href="{{url('category-list/'.$category->slug)}}"><span class="badge pull-right">{{$numcount}}</span>{{$category->name}}</a></li>
-    @endforeach
-</ul>
-@stop
+{{--    @foreach($categorys as $category)--}}
+{{--<?php--}}
+{{--$num = \App\Model\kb\Relationship::where('category_id','=', $category->id)->get();--}}
+{{--$article_id = $num->pluck('article_id');--}}
+{{--$numcount = count($article_id);--}}
+{{--?>--}}
+{{--    <li><a href="{{url('category-list/'.$category->slug)}}"><span class="badge pull-right">{{$numcount}}</span>{{$category->name}}</a></li>--}}
+{{--    @endforeach--}}
+{{--</ul>--}}
+{{--@stop--}}

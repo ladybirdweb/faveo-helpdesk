@@ -17,7 +17,7 @@ class = "nav-item active"
         }
     </style>
     <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
-    <li><a class="words" href="{!! URL::route('form') !!}">{!! Lang::get('lang.knowledge_base') !!}</a></li>
+    <li><a class="words" href="{!! URL::route('home') !!}">{!! Lang::get('lang.knowledge_base') !!}</a></li>
     <li class="words">></li>
             <li><a href="{!! URL::route('category-list') !!}">{!! Lang::get('lang.category') !!}</a></li>
         </ol>
@@ -82,7 +82,7 @@ class = "nav-item active"
                     @endforelse
                 <?php } ?>
                 </ul>
-                <p class="more-link text-center"><a href="{{url('category-list/'.$category->slug)}}" class="btn btn-custom btn-sm">{!! Lang::get('lang.view_all') !!}</a></p>
+                <p class="more-link text-center"><a href="{{url('category-list/'.$category->slug)}}" class="btn btn-custom btn-sm" style="background-color: #009aba; hov: #00c0ef; color: #fff ">{!! Lang::get('lang.view_all') !!}</a></p>
             </section>
         </div>
         @endforeach

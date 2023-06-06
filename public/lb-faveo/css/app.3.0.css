@@ -205,6 +205,8 @@ fieldset[disabled] .btn-custom.active {
     border-radius: 1em;
     -webkit-transition: all 0.6s linear;
     transition: all 0.6s linear;
+    width: 100%;
+    margin-top: 0.5rem;
 }
 .btn-social > .fa-fw {
     padding-right: 0;

@@ -123,7 +123,7 @@
 
                         <div class="row mt-2">
 
-                            <div class="col-sm-4">
+                            <div class="col-sm-5">
 
                                 <div>
 
@@ -134,7 +134,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-6">
+                            <div class="col-sm-5">
 
                                 <a href="{{url('password/email')}}">{!! Lang::get("lang.iforgot") !!}</a><br>
                             </div>

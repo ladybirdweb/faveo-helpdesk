@@ -201,7 +201,7 @@
 
                                                     @if(Auth::user())
                                                     @if(Auth::user()->role != 'user')
-                                                        <a href="{{url('dashboard')}}" class="btn btn-custom btn-sm text-white profile_btn">{!! Lang::get('lang.dashboard') !!}</a>
+                                                        <a href="{{url('dashboard')}}" class="btn btn-custom btn-sm text-white profile_btn" style="background-color: #009aba; hov: #00c0ef; color: #fff ">{!! Lang::get('lang.dashboard') !!}</a>
                                                     @endif
                                                     @endif
                                                     @if(Auth::user())

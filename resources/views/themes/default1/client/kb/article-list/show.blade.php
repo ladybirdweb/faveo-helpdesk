@@ -73,7 +73,19 @@ $category_id = $all->pluck('category_id')->toArray();
 
     </article><!-- .hentry -->
 
-    <?php $comments = App\Model\kb\Comment::where('article_id', $arti->id)->where('status', '1')->get(); ?>
+    <?php
+    use Illuminate\Support\Facades\Auth;
+
+
+
+    $comments = App\Model\kb\Comment::where('article_id', $arti->id)
+        ->where('status', '1')
+        ->orWhere(function ($query) {
+            $query->where('article_id', Auth::id()); // Add this line to include the authenticated user's comment
+        })
+        ->get();
+
+?>
 
     <div id="comments" class="comments-area">
         @foreach($comments as $comment)
