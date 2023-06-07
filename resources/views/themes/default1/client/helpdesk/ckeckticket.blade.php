@@ -8,7 +8,7 @@
 
     <ol class="breadcrumb float-sm-right ">
         <li class="breadcrumb-item "> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
-        <li><a  class="words" href="{{url('ticketinfo')}}">{!! Lang::get('lang.my_tickets') !!}</a></li>
+        <li><a class="words" href="{!! URL::route('ticket') !!}">{!! Lang::get('lang.my_tickets') !!}</a></li>
         <li class="words"> > </li>
         <li><a  class="words" href="{{url('#')}}">{!! Lang::get('lang.check_ticket') !!}</a></li>
     </ol>

@@ -20,7 +20,7 @@ class = "nav-item active"
         <li><a class="words" href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
         <li class="words" style="margin-right: 10px">></li>
 
-        <li><a href="{{url('form')}}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
+        <li><a href="{!! URL::route('form') !!}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
     </ol>
 </div>
 @stop

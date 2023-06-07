@@ -261,7 +261,7 @@ $category_id = $all->pluck('category_id')->toArray();
                                 // Check if the name field is empty
                                 if (name === "") {
                                     $("#comment-name").parent().addClass("has-error");
-                                    $("#comment-name").after('<span class="help-block">The name field is required..</span>');
+                                    $("#comment-name").after('<span class="help-block">The name field is required.</span>');
 
                                     hasErrors = true;
                                 }
@@ -269,7 +269,7 @@ $category_id = $all->pluck('category_id')->toArray();
                                 // Check if the email field is empty or invalid
                                 if (email === "") {
                                     $("#comment-email").parent().addClass("has-error");
-                                    $("#comment-email").after('<span class="help-block">The email field is required..</span>');
+                                    $("#comment-email").after('<span class="help-block">The email field is required.</span>');
 
                                     hasErrors = true;
                                 }
@@ -277,7 +277,7 @@ $category_id = $all->pluck('category_id')->toArray();
                                 // Check if the comment field is empty
                                 if (comment === "") {
                                     $("#comment-comment").parent().addClass("has-error");
-                                    $("#comment-comment").after('<span class="help-block">The comment field is required..</span>');
+                                    $("#comment-comment").after('<span class="help-block">The comment field is required.</span>');
                                     hasErrors = true;
                                 }
 
