@@ -17,7 +17,6 @@ use App\Model\helpdesk\Ticket\Tickets;
 // classes
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use libphonenumber\NumberFormat;
 
 /**
  * MailController.
@@ -355,7 +354,7 @@ class MailController extends Controller
      */
     public function get_data(Request $request)
     {
-        $id=$request->input('image_id');
+        $id = $request->input('image_id');
         $attachment = \App\Model\helpdesk\Ticket\Ticket_attachments::where('id', '=', $id)->first();
         if (mime($attachment->type) == true) {
             echo "<img src=data:$attachment->type;base64,".$attachment->file.'>';

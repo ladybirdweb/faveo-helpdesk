@@ -1658,5 +1658,5 @@ return [
     'click-here-to-see-more-details'               => 'Click here to see more details',
     'category_list'                                => 'Category list',
     'check_ticket'                                 => 'Check ticket',
-    'search_result'                               => 'Search Results'
+    'search_result'                                => 'Search Results',
 ];
