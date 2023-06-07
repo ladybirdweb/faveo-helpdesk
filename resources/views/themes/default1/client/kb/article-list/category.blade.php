@@ -17,7 +17,7 @@ class = "nav-item active"
             }
         </style>
         <li class="breadcrumb-item"> <i class="fas fa-home"> </i> {!! Lang::get('lang.you_are_here') !!} : &nbsp;</li>
-        <li><a class="words" href="{!! URL::route('form') !!}">{!! Lang::get('lang.knowledge_base') !!}</a></li>
+        <li><a class="words" href="{!! URL::route('home') !!}">{!! Lang::get('lang.knowledge_base') !!}</a></li>
         <li class="words">></li>
         <li><a class="words" href="{!! URL::route('category-list') !!}">{!! Lang::get('lang.category') !!}</a></li>
         <li class="words">></li>

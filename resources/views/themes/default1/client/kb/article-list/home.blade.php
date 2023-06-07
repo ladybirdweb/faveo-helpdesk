@@ -102,7 +102,7 @@ class = "nav-item active"
                         @endforelse
                     <?php } ?>
                 </ul>
-                <p class="more-link text-center"><a href="{{url('category-list/'.$category->slug)}}" class="btn btn-custom btn-sm">{!! Lang::get('lang.view_all') !!}</a></p>
+                <p class="more-link text-center"><a href="{{url('category-list/'.$category->slug)}}" class="btn btn-custom btn-sm" style="background-color: #009aba; hov: #00c0ef; color: #fff ">{!! Lang::get('lang.view_all') !!}</a></p>
             </section>
         </div>
         @endforeach
