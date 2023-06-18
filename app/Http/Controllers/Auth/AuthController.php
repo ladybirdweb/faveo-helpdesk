@@ -187,7 +187,7 @@ class AuthController extends Controller
             $user->save();
             $message12 = '';
             $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
-            $sms = Plugin::select('status')->where('name', '=', 'SMS')->first();
+            $sms = Plugin::select('status')->where('name', '=', 'SMS')->first() ?? [];
             // Event for login
             event(new \App\Events\LoginEvent($request));
             if ($request->input('email') !== '') {
