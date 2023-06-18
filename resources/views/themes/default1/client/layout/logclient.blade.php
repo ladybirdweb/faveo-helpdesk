@@ -146,8 +146,16 @@
                             </ul>
                         </li>
 
+
                         <?php $pages = App\Model\kb\Page::where('status', '1')->where('visibility', '1')->get();
                         ?>
+
+                        <button class="navbar-toggler custom-toggler" onclick="javascript:(function() { jQuery('#navbarSupportedContent').toggle(); })()" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            
+                            <span class="navbar-toggler-icon"></span>
+                        </button> <!-- collapse -->
+
 
                         @if(count($pages))
                             <li @yield('pages') class="nav-item dropdown">
