@@ -387,6 +387,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                                         }, 0);
                                     </script>
                                 @else
+                                    <div class="reply">{!! $conversation->purify(true) !!}</div>
                                 @endif
 
 
