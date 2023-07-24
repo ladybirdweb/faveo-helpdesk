@@ -356,6 +356,14 @@ class MailController extends Controller
     {
         $id = $request->input('image_id');
         $attachment = \App\Model\helpdesk\Ticket\Ticket_attachments::where('id', '=', $id)->first();
+        $current_user = \Auth::user();
+        if(!in_array($current_user->role, ['admin', 'agent'])) {
+            $thereat = \App\Model\helpdesk\Ticket\Ticket_Thread::where('id', '=', $attachment->thread_id)->first();
+            $ticket = \App\Model\helpdesk\Ticket\Ticket::where('id', '=', $thereat->ticket_id)->first();
+            if ($ticket->user_id != $current_user->id) {
+                return redirect('unauthorized')->with('error', 'You are not authorized to view this file');
+            }
+        }
         if (mime($attachment->type) == true) {
             echo "<img src=data:$attachment->type;base64,".$attachment->file.'>';
         } else {
