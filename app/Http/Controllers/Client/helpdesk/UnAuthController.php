@@ -327,9 +327,9 @@ class UnAuthController extends Controller
     /**
      *@category function to change system's language
      *
-     *@param  string  $lang //desired language's iso code
+     * @param string $lang //desired language's iso code
      *
-     *@return response
+     * @return response
      */
     public static function changeLanguage($lang)
     {
@@ -344,8 +344,8 @@ class UnAuthController extends Controller
             // app()->setLocale($lang);
 
             \Cache::forever('language', $lang);
-        // dd(Cache::get('language'));
-        // dd()
+            // dd(Cache::get('language'));
+            // dd()
         } else {
             return false;
         }
