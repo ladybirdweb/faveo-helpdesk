@@ -51,7 +51,7 @@
         @else
             <span onclick="javascript: window.location.href='{{url('auth/login')}}';">
                 <a href="{{url('auth/login')}}" class="widgetrowitem defaultwidget"  style="background-image:url({{ URL::asset('lb-faveo/media/images/register.png') }})">
-                    <span class="widgetitemtitle">{!! Lang::get('lang.login') !!}</span>
+                    <span class="widgetitemtitle" style="color: rgb(0, 154, 186)">{!! Lang::get('lang.login') !!}</span>
                 </a>
             </span>
         @endif
@@ -62,7 +62,7 @@
                 @if($system->status == 1)
                     <span onclick="javascript: window.location.href='{!! URL::route('form') !!}';">
                         <a href="{!! URL::route('form') !!}" class="widgetrowitem defaultwidget" style="background-image:url({{ URL::asset('lb-faveo/media/images/submitticket.png') }})">
-                            <span class="widgetitemtitle">{!! Lang::get('lang.submit_a_ticket') !!}</span>
+                            <span class="widgetitemtitle" style="color: rgb(0, 154, 186)">{!! Lang::get('lang.submit_a_ticket') !!}</span>
                         </a>
                     </span>
                 @endif
@@ -70,12 +70,12 @@
         @endif
             <span onclick="javascript: window.location.href='{{url('mytickets')}}';">
                 <a href="{{url('mytickets')}}" class="widgetrowitem defaultwidget" style="background-image:url({{ URL::asset('lb-faveo/media/images/news.png') }})">
-                    <span class="widgetitemtitle">{!! Lang::get('lang.my_tickets') !!}</span>
+                    <span class="widgetitemtitle" style="color: rgb(0, 154, 186)">{!! Lang::get('lang.my_tickets') !!}</span>
                 </a>
             </span>
             <span onclick="javascript: window.location.href='{{url('/knowledgebase')}}';">
                 <a href="{{url('/knowledgebase')}}" class="widgetrowitem defaultwidget" style="background-image:url({{ URL::asset('lb-faveo/media/images/knowledgebase.png') }})">
-                    <span class="widgetitemtitle">{!! Lang::get('lang.knowledge_base') !!}</span>
+                    <span class="widgetitemtitle" style="color: rgb(0, 154, 186)">{!! Lang::get('lang.knowledge_base') !!}</span>
                 </a>
             </span>
         </div>

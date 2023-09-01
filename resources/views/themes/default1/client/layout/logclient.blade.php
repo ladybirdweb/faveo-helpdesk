@@ -207,16 +207,17 @@
                         </div>
                     </nav>
 
-                    <div id="header-search" class="site-search clearfix" style="margin-right: 20%; width: 100%"><!-- #header-search -->
-                    {!!Form::open(['route' => 'client.search','class'=>'search-form clearfix'])!!}
-                    <div class="form-border" style="z-index: 0;width: 85%;">
-                        <div class="form-inline ">
-                            <div class="form-group input-group " style="width: 98% ">
-                                <input type="text" name="s" class="search-field form-control" title="Enter search term" placeholder="Have a question? Type your search term here..." required="" style="width: 80%">
-                                <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-custom btn-md " style="margin-left: 20% ;background-color: #009aba; hov: #00c0ef; color: #fff ">Search</button>
+                    <div id="header-search" class="site-search clearfix" style="margin-right: 90%; width: 100%"><!-- #header-search -->
+                        {!!Form::open(['route' => 'client.search','class'=>'search-form clearfix'])!!}
+                        <div class="form-border" style="z-index: 0;width: 95%;">
+                            <div class="form-inline">
+                                <div  class="form-group input-group" style="width: 100%;">
+                                    <input  type="text" name="s" class="search-field form-control input-lg mr-3" title="Enter search term" placeholder="Have a question? Type your search term here..." style="border-color: rgb(62, 200, 28);" required>
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-custom btn-md" style="border-color: rgb(0, 192, 239); background-color: rgb(0, 154, 186);">Search</button>
                                     </span>
-                            </div>
+                                </div>
+                            </div><!----><!----></div>
 
                             <style>
                                 .search-field {
