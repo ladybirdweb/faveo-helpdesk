@@ -2321,7 +2321,7 @@ class TicketController extends Controller
      *
      *@param null
      *
-     *@return string //script to load tooltip data
+     * @return string //script to load tooltip data
      */
     public static function tooltip($ticketid)
     {
@@ -2672,7 +2672,7 @@ class TicketController extends Controller
      *
      *@param srting array $t_id, $p_id
      *
-     *@return null
+     * @return null
      */
     public function sendMergeNotification($p_id, $t_id)
     {
