@@ -98,7 +98,7 @@ class SettingsController2 extends Controller
 
     /**
      * @param int $id
-     * @param $compant instance of company table
+     * @param     $compant instance of company table
      *
      * get the form for company setting page
      *
@@ -118,7 +118,7 @@ class SettingsController2 extends Controller
 
     /**
      * @param int $id
-     * @param $compant instance of company table
+     * @param     $compant instance of company table
      *
      * get the form for company setting page
      *
@@ -189,7 +189,7 @@ class SettingsController2 extends Controller
 
     /**
      * @param int $id
-     * @param $compant instance of company table
+     * @param     $compant instance of company table
      *
      * get the form for company setting page
      *
@@ -244,7 +244,7 @@ class SettingsController2 extends Controller
     /**
      * function to delete system logo.
      *
-     *  @return type string
+     * @return type string
      */
     public function deleteLogo()
     {
@@ -684,7 +684,7 @@ class SettingsController2 extends Controller
     /**
      * 	To display the list of ratings in the system.
      *
-     *  @return type View
+     * @return type View
      */
     public function RatingSettings()
     {
@@ -696,7 +696,7 @@ class SettingsController2 extends Controller
     /**
      * 	To store rating data.
      *
-     *  @return type Redirect
+     * @return type Redirect
      */
     public function PostRatingSettings($slug)
     {
@@ -721,7 +721,7 @@ class SettingsController2 extends Controller
     /**
      *  To delete a type of rating.
      *
-     * 	@return type Redirect
+     * @return type Redirect
      */
     public function RatingDelete($slug)
     {
@@ -733,7 +733,7 @@ class SettingsController2 extends Controller
     /**
      *  Generate Api key.
      *
-     *  @return type json
+     * @return type json
      */
     public function generateApiKey()
     {
