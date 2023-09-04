@@ -315,7 +315,7 @@
                         <div class="form-border" style="z-index: 0;width: 95%;">
                             <div class="form-inline">
                                 <div  class="form-group input-group" style="width: 100%;">
-                                    <input  type="text" name="s" class="search-field form-control input-lg mr-3" title="Enter search term" placeholder="Have a question? Type your search term here..." style="border-color: rgb(62, 200, 28);" required>
+                                    <input  type="text" name="s" class="search-field form-control input-lg mr-3" title="Enter search term" placeholder="Have a question? Type your search term here..."  required>
                                     <span class="input-group-btn">
                                         <button type="submit" class="btn btn-custom btn-md" style="border-color: rgb(0, 192, 239); background-color: rgb(0, 154, 186);">Search</button>
                                     </span>
