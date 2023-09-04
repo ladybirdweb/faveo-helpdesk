@@ -208,6 +208,7 @@
                                             </div>
                                         </div>
                                     </li>
+<<<<<<< HEAD
                                 </ul>
                             </li>
                         @endif
@@ -219,9 +220,9 @@
                 <div class="form-border" style="z-index: 0;width: 95%;">
                     <div class="form-inline">
                         <div  class="form-group input-group" style="width: 100%;">
-                            <input  type="text" name="s" class="search-field form-control input-lg mr-3" title="Enter search term" placeholder="Have a question? Type your search term here..."  required>
+                            <input  type="text" name="s" class="search-field form-control input-lg mr-3" title="Enter search term" placeholder="{{trans('lang.have_a_question?_type_your_search_term_here')}}"  required>
                             <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-custom btn-md" style="border-color: rgb(0, 192, 239); background-color: rgb(0, 154, 186);">Search</button>
+                                        <button type="submit" class="btn btn-custom btn-md" style="border-color: rgb(0, 192, 239); background-color: rgb(0, 154, 186);">{{trans('lang.search')}}</button>
                                     </span>
                         </div>
 
@@ -306,6 +307,7 @@
                             </section><!-- #section-about -->
                         </div>
                     </div>
+
                 @endif
                 @if($footer2->title == null)
                 @else
@@ -346,6 +348,7 @@
                         </div>
                     </div>
                 @endif
+
             </div>
             <div class="clearfix"></div>
             <hr style="color:#E5E5E5"/>
