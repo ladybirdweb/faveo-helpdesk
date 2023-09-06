@@ -437,7 +437,7 @@ class TicketController extends Controller
 
             return response()->json(compact('result'));
         }
-        $result = ['success' => 'Replyed successfully'];
+        $result = ['success' => 'Replied successfully'];
 
         return response()->json(compact('result'));
     }
