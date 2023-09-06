@@ -315,9 +315,9 @@ class FilterControllerOld extends Controller
     /**
      *@category function to format and return user tickets
      *
-     *@param  string  $segment
+     * @param string $segment
      *
-     *@return builder
+     * @return builder
      */
     public function formatUserTickets($segment)
     {

@@ -45,11 +45,11 @@ class Sys_userRequest extends Request
     /**
      *@category Funcion to set rule if send opt is enabled
      *
-     *@param  object  $settings (instance of Model common settings)
+     * @param object $settings (instance of Model common settings)
      *
      *@author manish.verma@ladybirdweb.com
      *
-     *@return array|int
+     * @return array|int
      */
     public function check($settings)
     {
@@ -83,7 +83,7 @@ class Sys_userRequest extends Request
      *
      *@param null
      *
-     *@return array
+     * @return array
      */
     public function onlyMobleRequired()
     {
