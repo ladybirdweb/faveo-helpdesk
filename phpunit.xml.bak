@@ -22,7 +22,7 @@
         </whitelist>
     </filter>
     <php>
-        <env name="APP_ENV" value="testing"/>
+        <env name="APP_ENV" value="testing"/> 
         <env name="DB_CONNECTION" value="testing"/>
         <env name="DB_DATABASE" value="testing_db"/>
         <env name="CACHE_DRIVER" value="array"/>
