@@ -437,7 +437,7 @@ class TicketController extends Controller
 
             return response()->json(compact('result'));
         }
-        $result = ['success' => 'Replied successfully'];
+        $result = ['success' => Lang::get('lang.you_have_successfully_replied_to_your_ticket')];
 
         return response()->json(compact('result'));
     }

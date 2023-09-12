@@ -1824,20 +1824,18 @@ if ($thread->title != "") {
                     $("#t1").hide();
                     $("#show3").show();
                     $('html, body').animate({
-                    scrollTop: $("#form3").offset().top
+                    scrollTop: $("#inboxactions").offset().top
                 }, 500);
             },
             success: function(json) {
 
                 setTimeout(function () {
                     location.reload();
-                    $("#alert21").show();
-
-                    $('#message-success2').html(json.result.success);
                 }, 1000);
 
-
-                $('html, body').animate({ scrollTop: $("#inboxactions").offset().top }, 500);
+                $("#alert21").show();
+                $('#message-success2').html(json.result.success);
+                //$('html, body').animate({ scrollTop: $("#inboxactions").offset().top }, 500);
             },
 
                 error: function(json) {
