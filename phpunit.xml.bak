@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="bootstrap/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false">
+    <testsuites>
+        <testsuite name="all">
+            <directory>./tests/</directory>
+        </testsuite>
+        <testsuite name="unit">
+            <directory>./tests/unit</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">app/</directory>
+        </whitelist>
+    </filter>
+    <php>
+        <env name="APP_ENV" value="testing"/> 
+        <env name="DB_CONNECTION" value="testing"/>
+        <env name="DB_DATABASE" value="testing_db"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="MAIL_MAILER" value="mail"/>
+        <env name="APP_URL" value="http://localhost:8000"/>
+        <env name="DB_DATABASE" value="testing_db"/>
+        <env name="DB_INSTALL" value="1"/>
+    </php>
+</phpunit>
