@@ -156,7 +156,6 @@
                             <span class="navbar-toggler-icon"></span>
                         </button> <!-- collapse -->
 
-
                         @if(count($pages))
                             <li @yield('pages') class="nav-item dropdown">
                                 <a class="dropdown-toggle nav-link"  id="navbarDropdown" role="button" data-toggle=""
@@ -208,7 +207,6 @@
                                             </div>
                                         </div>
                                     </li>
-<<<<<<< HEAD
                                 </ul>
                             </li>
                         @endif

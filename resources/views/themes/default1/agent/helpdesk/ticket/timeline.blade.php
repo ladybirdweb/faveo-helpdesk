@@ -139,17 +139,29 @@ if ($thread->title != "") {
             if ($group->can_edit_ticket == 1) {
                 ?>
             <button type="button" class="btn btn-sm btn-default btn-tool">
+<<<<<<< HEAD
                 <i class="fas fa-edit" style="color:green;"></i> {{trans('lang.edit')}}
+=======
+                <i class="fas fa-edit" style="color:green;"></i> Edit
+>>>>>>> 8b838c20f (changes)
             </button>            <?php } ?>
 
             <?php if ($group->can_assign_ticket == 1) { ?>
             <button type="button" class="btn btn-sm btn-default btn-tool">
+<<<<<<< HEAD
                 <i class="fas fa-hand-point-right" style="color:orange;"></i> {{trans('lang.assign')}}
+=======
+                <i class="fas fa-hand-point-right" style="color:orange;"></i> Assign
+>>>>>>> 8b838c20f (changes)
             </button>            <?php } ?>
 
             @if($tickets->assigned_to == Auth::user()->id)
                 <button type="button" id="surrender_button" class="btn btn-sm btn-default btn-tool" data-toggle="modal" data-target="#surrender">
+<<<<<<< HEAD
                     <i class="fas fa-arrows-alt" style="color:red;"></i> {{trans('lang.surrender')}}
+=======
+                    <i class="fas fa-arrows-alt" style="color:red;"></i> Surrender
+>>>>>>> 8b838c20f (changes)
                 </button>
             @endif
 
@@ -157,7 +169,11 @@ if ($thread->title != "") {
             <?php \Illuminate\Support\Facades\Event::dispatch('show-add-event-btn', []); ?>
 
             <a href="{{url('ticket/print/'.$tickets->id)}}" target="_blank" class="btn btn-default btn-tool btn-sm">
+<<<<<<< HEAD
                 <i class="fas fa-print"></i> {{trans('lang.generate_pdf')}}
+=======
+                <i class="fas fa-print"></i> Generate PDF
+>>>>>>> 8b838c20f (changes)
             </a>            <div class="btn-group">
                 <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="d1"><i class="fas fa-exchange-alt" style="color:teal;" id="hidespin"> </i><i class="fa fa-spinner fa-spin" style="color:teal; display:none;" id="spin"></i>
                     {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
