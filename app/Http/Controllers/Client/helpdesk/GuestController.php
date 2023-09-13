@@ -125,9 +125,9 @@ class GuestController extends Controller
     /**
      *@category fucntion to check if mobile number is unqique or not
      *
-     *@param  string  $mobile
+     * @param string $mobile
      *
-     *@return bool true(if mobile exists in users table)/false (if mobile does not exist in user table)
+     * @return bool true(if mobile exists in users table)/false (if mobile does not exist in user table)
      */
     public function checkMobile($mobile)
     {
