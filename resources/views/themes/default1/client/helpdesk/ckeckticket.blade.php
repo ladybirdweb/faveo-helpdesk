@@ -1,5 +1,6 @@
 @extends('themes.default1.client.layout.client')
 @section('breadcrumb')
+
     <style>
     .words {
     margin-right: 10px; /* Adjust the value to increase or decrease the gap between list items */
@@ -21,6 +22,14 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
 //$user = App\User::where('id','=',$id1)->first();
 ?>
 <!-- Main content -->
+
+
+<div id="alert11" class="alert alert-dismissable alert-success" style="display: none;" role="aler">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <span id="message-success1" ></span>
+</div>
+
+
 <style type="text/css">
     .caret {
         border-left: 4px solid transparent;
@@ -622,19 +631,19 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                     $("#refresh").load("../check_ticket/{!! $id !!}  #refresh");
                     $("#refresh").show();
                     $("#loader").hide();
-                    // $("#d1").trigger("click");
-                    // var message = "Success! Your Ticket have been Closed";
-                    // $("#alert11").show();
-                    // $('#message-success1').html(message);
-                    // setInterval(function(){
-                    //     $("#alert11").hide();
-                    //     setTimeout(function() {
-                    //         var link = document.querySelector('#load-inbox');
-                    //         if(link) {
-                    //             link.click();
-                    //         }
-                    //     }, 500);
-                    // },2000);
+                    $("#d1").trigger("click");
+                    var message = "Success! Your Ticket have been Closed";
+                    $("#alert11").show();
+                    $('#message-success1').html(message);
+                    setInterval(function(){
+                        $("#alert11").hide();
+                        setTimeout(function() {
+                            var link = document.querySelector('#load-inbox');
+                            if(link) {
+                                link.click();
+                            }
+                        }, 500);
+                    },2000);
                 }
             })
             return false;
