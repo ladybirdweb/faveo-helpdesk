@@ -17,7 +17,7 @@ use Mail;
 class PhpMailController extends Controller
 {
     /**
-     *@var variable to instantiate common mailer class
+     * @var variable to instantiate common mailer class
      */
     public function __construct()
     {
