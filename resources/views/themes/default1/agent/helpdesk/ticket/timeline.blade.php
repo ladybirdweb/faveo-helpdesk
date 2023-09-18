@@ -1835,7 +1835,6 @@ if ($thread->title != "") {
 
                 $("#alert21").show();
                 $('#message-success2').html(json.result.success);
-                //$('html, body').animate({ scrollTop: $("#inboxactions").offset().top }, 500);
             },
 
                 error: function(json) {
