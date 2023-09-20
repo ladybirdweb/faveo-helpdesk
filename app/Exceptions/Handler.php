@@ -59,7 +59,7 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * @param $request
+     * @param            $request
      * @param \Throwable $e
      *
      * @throws \Throwable
