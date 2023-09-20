@@ -68,8 +68,8 @@ class TicketControllerTest extends TestCase
                 'priority_id'   => 2,
                 'sla'           => 2,
                 'help_topic_id' => 1,
-                'status'        => 1,
-                'source'        => 1,
+                'status' => 1,
+                'source' => 1
             ]
         );
         $ticket->save();
