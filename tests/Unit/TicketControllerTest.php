@@ -106,6 +106,7 @@ class TicketControllerTest extends TestCase
 
         $user = User::latest()->first();
 
+
         $this->actingAs($user);
 
         $this->assertAuthenticated();
