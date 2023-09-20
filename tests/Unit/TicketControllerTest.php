@@ -72,7 +72,6 @@ class TicketControllerTest extends TestCase
                 'source'        => 1,
             ]
         );
-
         $ticket->save();
         $ticket->dept_id = 1;
         $ticket->save();
