@@ -365,7 +365,7 @@ Route::middleware('web')->group(function () {
         Route::patch('search-user', [Agent\helpdesk\TicketController::class, 'usersearch']);
         Route::patch('add-user', [Agent\helpdesk\TicketController::class, 'useradd']);
         Route::post('remove-user', [Agent\helpdesk\TicketController::class, 'userremove']);
-        Route::post('select_all', [Agent\helpdesk\TicketController::class, 'select_all'])->name('select_all');
+        Route::post('select/all', [Agent\helpdesk\TicketController::class, 'select_all'])->name('select_all');
         Route::post('canned/{id}', [Agent\helpdesk\CannedController::class, 'get_canned']);
         // Route::get('message' , 'MessageController@show');
         Route::post('lock', [Agent\helpdesk\TicketController::class, 'lock'])->name('lock');
@@ -531,7 +531,7 @@ Route::middleware('web')->group(function () {
     //===================================================================================
     Route::middleware('auth')->group(function () {
         Route::get('client-profile', [Client\helpdesk\GuestController::class, 'getProfile'])->name('client.profile'); /*  User profile get  */
-        Route::post('select_all', [Agent\helpdesk\TicketController::class, 'select_all'])->name('select_all');
+        Route::post('select/all', [Agent\helpdesk\TicketController::class, 'select_all'])->name('select_all');
 
         Route::get('mytickets', [Client\helpdesk\GuestController::class, 'getMyticket'])->name('ticket2');
         Route::get('myticket/{id}', [Client\helpdesk\GuestController::class, 'thread'])->name('ticket'); /* Get my tickets */

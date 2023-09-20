@@ -13,7 +13,7 @@
             <directory>./tests/</directory>
         </testsuite>
         <testsuite name="unit">
-            <directory>./tests/unit</directory>
+            <directory>./tests/Unit</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -23,14 +23,14 @@
     </filter>
     <php>
         <env name="APP_ENV" value="testing"/> 
-        <env name="DB_CONNECTION" value="testing"/>
-        <env name="DB_DATABASE" value="testing_db"/>
+<!--        <env name="DB_CONNECTION" value="testing"/>-->
+<!--        <env name="DB_DATABASE" value="testing_db"/>-->
         <env name="CACHE_DRIVER" value="array"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="MAIL_MAILER" value="mail"/>
         <env name="APP_URL" value="http://localhost:8000"/>
-        <env name="DB_DATABASE" value="testing_db"/>
+<!--        <env name="DB_DATABASE" value="testing_db"/>-->
         <env name="DB_INSTALL" value="1"/>
     </php>
 </phpunit>
