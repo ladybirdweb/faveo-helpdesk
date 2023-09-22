@@ -72,7 +72,7 @@ class NotificationController extends Controller
      *
      *  @param company
      *
-     *  @return mail
+     * @return mail
      * */
     public function send_notification_to_admin($company)
     {
@@ -102,7 +102,7 @@ class NotificationController extends Controller
     /**
      *  Department Manager Notification/Report.
      *
-     *  @return mail
+     * @return mail
      * */
     public function send_notification_to_manager($company)
     {
@@ -138,7 +138,7 @@ class NotificationController extends Controller
     /**
      *  Team Lead Notification/Report.
      *
-     *  @return mail
+     * @return mail
      * */
     public function send_notification_to_team_lead($company)
     {
@@ -174,7 +174,7 @@ class NotificationController extends Controller
     /**
      *  Agent Notification/Report.
      *
-     *  @return mail
+     * @return mail
      * */
     public function send_notification_to_agent($company)
     {
