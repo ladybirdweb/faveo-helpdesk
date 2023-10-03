@@ -1833,10 +1833,11 @@ if ($thread->title != "") {
                 }, 500);
             },
             success: function(json) {
-
+                $("#show3").hide();
+                $("#t1").show();
                 setTimeout(function () {
                     location.reload();
-                }, 1000);
+                }, 4000);
 
                 $("#alert21").show();
                 $('#message-success2').html(json.result.success);
