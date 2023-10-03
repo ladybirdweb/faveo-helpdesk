@@ -63,7 +63,7 @@ Route::prefix('api/v1')->group(function () {
     /*
      * FCM token response
      */
-    Route::post('fcmtoken', [Common\PushNotificationController::class, 'fcmToken'])->name('fcmtoken');
+    //Route::post('fcmtoken', [Common\PushNotificationController::class, 'fcmToken'])->name('fcmtoken');
 });
 /*
  * ================================================================================================
