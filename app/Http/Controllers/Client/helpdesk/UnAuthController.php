@@ -361,8 +361,6 @@ class UnAuthController extends Controller
             } else {
                 Session::put('language', $lang);
             }
-        }
-
         return redirect()->back();
     }
 

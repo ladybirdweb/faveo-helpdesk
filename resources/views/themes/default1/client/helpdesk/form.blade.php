@@ -57,7 +57,7 @@ class = "nav-item active"
                     {!! Form::text('email_address',null,['class' => 'form-control form-group']) !!}
                     {!! Form::label('ticket_number',Lang::get('lang.ticket_number')) !!}<span class="text-red"> *</span>
                     {!! Form::text('ticket_number',null,['class' => 'form-control form-group']) !!}
-                    <button type="submit" class="btn btn-info" style=" background-color: #337ab7 !important; border-color: #337ab7 !important; color: white">
+                    <button type="submit" class="btn btn-info" style=" border-color: rgb(0, 192, 239); background-color: rgb(0, 154, 186) !important; color: white">
                         <i class="fas fa-save"></i> {!! Lang::get('lang.check_ticket_status') !!}
                     </button>
                     {!! Form::close() !!}
@@ -226,7 +226,7 @@ class = "nav-item active"
                         <div class="col-md-12" id="response"> </div>
                         <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>
                                 <div class="col-md-12 form-group">
-                                    {!! Form::button('<i class="fas fa-save"></i> ' . Lang::get('lang.submit'), ['type'=>'submit', 'class'=>'btn btn-info float-right', 'style'=>'background-color: #337ab7 !important; border-color: #337ab7 !important; color: white;', 'onclick' => 'this.disabled=true;this.innerHTML="Sending, please wait...";this.form.submit();', 'data-v-fce8d630']) !!}
+                                    {!! Form::button('<i class="fas fa-save"></i> ' . Lang::get('lang.submit'), ['type'=>'submit', 'class'=>'btn btn-info float-right', 'style'=>'style="border-color: rgb(0, 192, 239); background-color: rgb(0, 154, 186); color: white;', 'onclick' => 'this.disabled=true;this.innerHTML="Sending, please wait...";this.form.submit();', 'data-v-fce8d630']) !!}
                                 </div>
                             <div class="col-md-12" id="response"> </div>
                         <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>

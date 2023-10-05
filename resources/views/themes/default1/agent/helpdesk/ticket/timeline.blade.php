@@ -137,28 +137,33 @@ if ($thread->title != "") {
 
             if ($group->can_edit_ticket == 1) {
                 ?>
-                <button type="button" class="btn btn-sm btn-default btn-tool" id="Edit_Ticket" data-toggle="modal" data-target="#Edit"><i class="fas fa-edit" style="color:green;"> </i> {!! Lang::get('lang.edit') !!}</button>
-            <?php } ?>
+            <button type="button" class="btn btn-sm btn-default btn-tool">
+                <i class="fas fa-edit" style="color:green;"></i> Edit
+            </button>            <?php } ?>
 
             <?php if ($group->can_assign_ticket == 1) { ?>
-                <button type="button" class="btn btn-sm btn-default btn-tool" data-toggle="modal" data-target="#assign{{$tickets->id}}"><i class="fas fa-hand-point-right" style="color:orange;"> </i> {!! Lang::get('lang.assign') !!}</button>
-            <?php } ?>
+            <button type="button" class="btn btn-sm btn-default btn-tool">
+                <i class="fas fa-hand-point-right" style="color:orange;"></i> Assign
+            </button>            <?php } ?>
 
             @if($tickets->assigned_to == Auth::user()->id)
-            <button type="button" id="surrender_button" class="btn btn-sm btn-default btn-tool" data-toggle="modal" data-target="#surrender"> <i class="fas fa-arrows-alt" style="color:red;"> </i>  {!! Lang::get('lang.surrender') !!}</button>
+                <button type="button" id="surrender_button" class="btn btn-sm btn-default btn-tool" data-toggle="modal" data-target="#surrender">
+                    <i class="fas fa-arrows-alt" style="color:red;"></i> Surrender
+                </button>
             @endif
 
 
             <?php \Illuminate\Support\Facades\Event::dispatch('show-add-event-btn', []); ?>
 
-            <a href="{{url('ticket/print/'.$tickets->id)}}" target="_blank" class="btn btn-default btn-tool btn-sm"><i class="fas fa-print" > </i> {!! Lang::get('lang.generate_pdf') !!}</a>
-            <div class="btn-group">
+            <a href="{{url('ticket/print/'.$tickets->id)}}" target="_blank" class="btn btn-default btn-tool btn-sm">
+                <i class="fas fa-print"></i> Generate PDF
+            </a>            <div class="btn-group">
                 <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="d1"><i class="fas fa-exchange-alt" style="color:teal;" id="hidespin"> </i><i class="fa fa-spinner fa-spin" style="color:teal; display:none;" id="spin"></i>
                     {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
                 </button>
                 <div class="dropdown-menu">
                     <a href="#" id="open" class="dropdown-item"><i class="fas fa-folder-open" style="color:red;"> </i> {!! Lang::get('lang.open') !!}</a>
-                   
+
                     <?php if ( $tickets_approval->status==7) {?>
                   @if(Auth::user()->role == 'admin')
                      <a href="#" id="approval_close" class="dropdown-item"><i class="fas fa-thumbs-up" style="color:red;"> </i> {!! Lang::get('lang.approval') !!}</a>
