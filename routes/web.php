@@ -525,7 +525,7 @@ Route::middleware('web')->group(function () {
     Route::get('check_ticket/{id}', [Client\helpdesk\GuestController::class, 'get_ticket_email'])->name('check_ticket'); //detail ticket information
 
     // show ticket via have a ticket
-    Route::get('show-ticket/{id}/{code}', [Client\helpdesk\UnAuthController::class, 'showTicketCode'])->name('show.ticket'); //detail ticket information
+    Route::get('show-ticket/{ids}/{code}', [Client\helpdesk\UnAuthController::class, 'showTicketCode'])->name('show.ticket'); //detail ticket information
 
     //testing ckeditor
     //===================================================================================
@@ -708,6 +708,10 @@ Route::middleware('web')->group(function () {
     Route::post('show/rating/{id}', [Client\helpdesk\UnAuthController::class, 'rating'])->name('show.rating'); /* Get overall Ratings */
     Route::post('show/rating2/{id}', [Client\helpdesk\UnAuthController::class, 'ratingReply'])->name('show.rating2'); /* Get reply Ratings */
     Route::get('show/change-status/{status}/{id}', [Client\helpdesk\UnAuthController::class, 'changeStatus'])->name('show.change.status'); /* Get reply Ratings */
+    Route::post('show/close/{id}', [Client\helpdesk\UnAuthController::class, 'close'])->name('show.close'); /* Get reply Ratings */
+    Route::post('show/open/{id}', [Client\helpdesk\UnAuthController::class, 'open'])->name('show.open'); /* Get reply Ratings */
+    Route::post('show/resolve/{id}', [Client\helpdesk\UnAuthController::class, 'resolve'])->name('show.resolve'); /* Get reply Ratings */
+
     /* get the home page */
     Route::get('knowledgebase', [Client\kb\UserController::class, 'home'])->name('home');
     /* get the faq value to user */
@@ -800,7 +804,7 @@ Route::middleware('web')->group(function () {
     // });
     Route::get('check_ticket/swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeUserLanguage']);
     Route::get('category-list/swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeUserLanguage']);
-    Route::get('show/swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeUserLanguage']);
+    Route::get('show-ticket/{ids}/swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeLanguage']);
     Route::get('pages/swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeUserLanguage'])->name('switch-user-lang');
     Route::get('swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeUserLanguage'])->name('switch-user-lang');
 });
