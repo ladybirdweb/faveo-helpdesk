@@ -330,26 +330,26 @@ class UnAuthController extends Controller
      *
      * @return response
      */
-    public static function changeLanguage($ids,$lang)
+    public static function changeLanguage($ids, $lang)
     {
-       /* if(Cache::has('language'))
-        {
-          return Cache::get('language');
-        } else return 'false';
-         Cache::put('language',$);
-        $path = base_path('lang');  // Path to check available language packages
-        if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
-            // dd(array_key_exists($lang, Config::get('languages')));
-            // app()->setLocale($lang);
+        /* if(Cache::has('language'))
+         {
+           return Cache::get('language');
+         } else return 'false';
+          Cache::put('language',$);
+         $path = base_path('lang');  // Path to check available language packages
+         if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
+             // dd(array_key_exists($lang, Config::get('languages')));
+             // app()->setLocale($lang);
 
-            \Cache::forever('language', $lang);
-            // dd(Cache::get('language'));
-            // dd()
-        } else {
-            return false;
-        }
+             \Cache::forever('language', $lang);
+             // dd(Cache::get('language'));
+             // dd()
+         } else {
+             return false;
+         }
 
-        return true;*/
+         return true;*/
 
         $path = base_path('lang');  // Path to check available language packages
         if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
@@ -361,7 +361,8 @@ class UnAuthController extends Controller
             } else {
                 Session::put('language', $lang);
             }
-            }
+        }
+
         return redirect()->back();
     }
 
@@ -461,7 +462,6 @@ class UnAuthController extends Controller
 
     public function close($id, Tickets $ticket)
     {
-
         $tickets = Tickets::where('id', '=', $id)->first();
         $tickets->status = 3;
         $ticket_status = Ticket_Status::where('id', '=', 3)->first();
@@ -500,12 +500,10 @@ class UnAuthController extends Controller
         }
 
         return Lang::get('lang.your_ticket_has_been').' '.$ticket_status->state;
-
     }
 
     public function open($id, Tickets $ticket)
     {
-
         $ticket_status = $ticket->where('id', '=', $id)->first();
         $ticket_status->status = 1;
         $ticket_status->reopened_at = date('Y-m-d H:i:s');
@@ -519,13 +517,11 @@ class UnAuthController extends Controller
         $thread->body = $ticket_status->message.' '.$user->user_name;
         $thread->save();
 
-
         return 'your ticket'.$ticket_status->ticket_number.' has been opened';
     }
 
     public function resolve($id, Tickets $ticket)
     {
-
         $ticket_status = $ticket->where('id', '=', $id)->first();
 
         $ticket_status->status = 2;

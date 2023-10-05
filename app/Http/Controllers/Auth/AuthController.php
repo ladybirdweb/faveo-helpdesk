@@ -410,8 +410,9 @@ class AuthController extends Controller
                                 return \Redirect::route($request->input('referer'));
                             }
 
-                           // return \Redirect::route('/');
+                            // return \Redirect::route('/');
                         }
+
                         return redirect()->intended($this->redirectPath());
                     }
                 }
