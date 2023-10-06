@@ -331,7 +331,7 @@ class UnAuthController extends Controller
      *
      * @return response
      */
-    public static function changeLanguage($ids,$lang)
+    public static function changeLanguage($ids, $lang)
     {
         /* if(Cache::has('language'))
          {
@@ -365,9 +365,9 @@ class UnAuthController extends Controller
                 Session::put('language', $lang);
             }
         }
+
         return redirect()->back();
     }
-
 
     // Follow up tickets
     public function followup()
