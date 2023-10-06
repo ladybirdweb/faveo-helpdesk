@@ -341,10 +341,18 @@ class UnAuthController extends Controller
          $path = base_path('lang');  // Path to check available language packages
          if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
              // dd(array_key_exists($lang, Config::get('languages')));
-             return false;
-         }
-         return true;
-         return true;*/
+       // app()->setLocale($lang);
+
+            \Cache::forever('language', $lang);
+            // dd(Cache::get('language'));
+            // dd()
+        } else {
+            return false;
+        }
+
+        return true;
+
+        */
 
         $path = base_path('lang');  // Path to check available language packages
         if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
