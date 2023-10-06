@@ -447,7 +447,6 @@ class UnAuthController extends Controller
         return redirect()->back();
     }
 
-
     public function close($id, Tickets $ticket)
     {
         $tickets = Tickets::where('id', '=', $id)->first();
