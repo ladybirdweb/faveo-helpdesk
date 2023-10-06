@@ -331,27 +331,35 @@ class UnAuthController extends Controller
      *
      * @return response
      */
-    public static function changeLanguage($lang)
+    public static function changeLanguage($ids,$lang)
     {
-//        if(Cache::has('language'))
-//        {
-//          return Cache::get('language');
-//        } else return 'false';
-//         Cache::put('language',$);
+        /* if(Cache::has('language'))
+         {
+           return Cache::get('language');
+         } else return 'false';
+          Cache::put('language',$);
+         $path = base_path('lang');  // Path to check available language packages
+         if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
+             // dd(array_key_exists($lang, Config::get('languages')));
+             return false;
+         }
+         return true;
+         return true;*/
+
         $path = base_path('lang');  // Path to check available language packages
         if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
-            // dd(array_key_exists($lang, Config::get('languages')));
-            // app()->setLocale($lang);
-
-            \Cache::forever('language', $lang);
-            // dd(Cache::get('language'));
-            // dd()
-        } else {
-            return false;
+            if (Auth::check()) {
+                $id = Auth::user()->id;
+                $user = User::find($id);
+                $user->user_language = $lang;
+                $user->save();
+            } else {
+                Session::put('language', $lang);
+            }
         }
-
-        return true;
+        return redirect()->back();
     }
+
 
     // Follow up tickets
     public function followup()
