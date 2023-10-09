@@ -263,14 +263,13 @@ class UserController extends Controller
 
     public function getPage($name, Page $page)
     {
-        $page = $page->where('slug' , $name);
+        $page = $page->where('slug', $name);
 
         if (!Auth::check() || \Auth::user()->role == 'user') {
             $page = $page
-                    ->where(['status' => 1,'visibility'=>1])
+                    ->where(['status' => 1, 'visibility'=>1])
                     ->first();
-        }
-        else {
+        } else {
             $page = $page->where('status', 1)->first();
         }
 

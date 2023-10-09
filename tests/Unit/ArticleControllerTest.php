@@ -7,16 +7,16 @@ use App\Http\Requests\kb\ArticleUpdate;
 use App\Http\Requests\kb\CategoryRequest;
 use App\Model\kb\Article;
 use App\Model\kb\Category;
-use App\Model\kb\Comment;
 use App\Model\kb\Relationship;
 use App\User;
 use Faker\Factory as FakerFactory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Tests\TestCase;
-use Illuminate\Support\Facades\Lang;
+
 class ArticleControllerTest extends TestCase
 {
     //use DatabaseTransactions;
@@ -57,6 +57,7 @@ class ArticleControllerTest extends TestCase
 
         $this->assertAuthenticated();
     }
+
     /** @test */
     public function it_can_display_the_article_index_page()
     {
@@ -64,16 +65,16 @@ class ArticleControllerTest extends TestCase
 
         $response->assertStatus(200);
     }
+
     public function testStoreArticleWithCategories()
     {
-
         // Create a Category model for testing
         $data = [
-            'name' => 'Test Category',
+            'name'        => 'Test Category',
             'description' => 'Test Category Description',
         ];
 
-        $validator = Validator::make($data, (new CategoryRequest)->rules());
+        $validator = Validator::make($data, (new CategoryRequest())->rules());
 
         $this->assertTrue($validator->passes());
 
@@ -84,29 +85,27 @@ class ArticleControllerTest extends TestCase
         $this->assertDatabaseHas('kb_category', $data);
         $category = Category::latest()->first();
 
-
         // Article data
         $articleData = [
-            'name' => 'Test Article',
-            'description'=>'Test Article Description',
-            'category_id'=>$category->id,
-            'year' => '2023',
-            'month' => '10',
-            'day' => '03',
-            'hour' => '12',
-            'minute' => '30',
+            'name'       => 'Test Article',
+            'description'=> 'Test Article Description',
+            'category_id'=> $category->id,
+            'year'       => '2023',
+            'month'      => '10',
+            'day'        => '03',
+            'hour'       => '12',
+            'minute'     => '30',
         ];
 
         $articleRequest = new ArticleRequest($articleData);
 
         // Act
         try {
-            $validator = Validator::make($articleData, (new ArticleRequest)->rules());
+            $validator = Validator::make($articleData, (new ArticleRequest())->rules());
 
             $this->assertTrue($validator->passes());
             $response = $this->post(route('article.store'), $articleData);
             $response->assertStatus(200);
-
         } catch (Exception $e) {
             $response = null;
         }
@@ -117,48 +116,47 @@ class ArticleControllerTest extends TestCase
 
             $article = Article::latest()->first();
 
-            $article_relationship = new Relationship;
+            $article_relationship = new Relationship();
 
             $article_relationship->category_id = $category->id;
-            $article_relationship->article_id=$article->id;
+            $article_relationship->article_id = $article->id;
             $article_relationship->save();
-
 
             // Verify that the article was created and the category relationship exists
             $this->assertDatabaseHas('kb_article', [
-                'name' => $articleData['name'],
-                'slug' => Str::slug($articleData['name'], '-'),
-                'publish_time' => $articleData['year'] . '-' . $articleData['month'] . '-' . $articleData['day'] . ' ' . $articleData['hour'] . ':' . $articleData['minute'] . ':00',
+                'name'         => $articleData['name'],
+                'slug'         => Str::slug($articleData['name'], '-'),
+                'publish_time' => $articleData['year'].'-'.$articleData['month'].'-'.$articleData['day'].' '.$articleData['hour'].':'.$articleData['minute'].':00',
             ]);
 
             // Check if the category relationship exists
             $this->assertDatabaseHas('kb_article_relationship', [
                 'category_id' => $category->id,
-                'article_id' => Article::latest()->first()->id, // Get the ID of the latest created article
+                'article_id'  => Article::latest()->first()->id, // Get the ID of the latest created article
             ]);
         } else {
-            $this->fail("Exception thrown: " . $e->getMessage());
+            $this->fail('Exception thrown: '.$e->getMessage());
         }
     }
 
     public function testEditArticle()
     {
         // Arrange
-        $article = Article::latest()->first();// Create a sample Article for testing
+        $article = Article::latest()->first(); // Create a sample Article for testing
         $relationship = Relationship::latest()->first(); // Create a sample Relationship for testing
-        $category =  Category::latest()->first();// Create a sample Category for testing
-
+        $category = Category::latest()->first(); // Create a sample Category for testing
 
         $assign = $relationship->where('article_id', 'id')->pluck('category_id');
         $category = $category->pluck('id', 'name');
 
-        $response = $this->get("/article/{$article->id}/edit",
-            ['category' => $category,
-                'article' =>$article,
-                'assign'=>$assign
-            ]);
+        $response = $this->get(
+            "/article/{$article->id}/edit",
+            ['category'   => $category,
+                'article' => $article,
+                'assign'  => $assign,
+            ]
+        );
         $response->assertStatus(200);
-
     }
 
     public function testUpdateArticle()
@@ -167,24 +165,23 @@ class ArticleControllerTest extends TestCase
         $category = Category::latest()->first();
 
         $data = [
-            'id' => $article->id,
-            'name' => 'Updated Article Name',
+            'id'          => $article->id,
+            'name'        => 'Updated Article Name',
             'description' => 'Updated Description',
-            'slug' => Str::slug('Updated Article Name', '-'),
-            'category_id' => [1,2],
-            'year' => '2023',
-            'month' => '10',
-            'day' => '03',
-            'hour' => '2',
-            'minute' => '20',
+            'slug'        => Str::slug('Updated Article Name', '-'),
+            'category_id' => [1, 2],
+            'year'        => '2023',
+            'month'       => '10',
+            'day'         => '03',
+            'hour'        => '2',
+            'minute'      => '20',
         ];
 
-
-        $validator = Validator::make($data, (new ArticleUpdate)->rules());
+        $validator = Validator::make($data, (new ArticleUpdate())->rules());
 
         $this->assertTrue($validator->passes());
 
-        $response = $this->put(route('article.update',$article->id),$data);
+        $response = $this->put(route('article.update', $article->id), $data);
 
         $response->assertStatus(302);
 
@@ -195,25 +192,23 @@ class ArticleControllerTest extends TestCase
         $article = Article::latest()->first();
         $relation = new Relationship();
         $relation->category_id = $category->id;
-        $relation->article_id=$article->id;
+        $relation->article_id = $article->id;
         $relation->save();
-
     }
 
     /** @test */
-   public function it_can_delete_a_category()
+    public function it_can_delete_a_category()
     {
-// Create a sample article, relationship
+        // Create a sample article, relationship
         $article = Article::latest()->first();
         $relationship = Relationship::find($article->id);
 
         // Ensure the destroy route works as expected
 
-       $response = $this->get("/article/delete/{$article->slug}");
+        $response = $this->get("/article/delete/{$article->slug}");
 
-    // Assert that success message is flashed
-    $response->assertSessionHas('success', Lang::get('lang.article_deleted_successfully'));
-
+        // Assert that success message is flashed
+        $response->assertSessionHas('success', Lang::get('lang.article_deleted_successfully'));
 
         // Create a category
         $category = Category::latest()->first();
@@ -227,7 +222,6 @@ class ArticleControllerTest extends TestCase
         // Assert that the category is deleted from the database
         $this->assertDatabaseMissing('kb_category', ['id' => $category->id]);
     }
-
 
     public function it_cannot_delete_a_article_if_related()
     {

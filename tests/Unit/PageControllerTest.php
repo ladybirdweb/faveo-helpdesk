@@ -2,8 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Http\Requests\kb\CategoryRequest;
-use App\Model\kb\Category;
+use App\Http\Requests\kb\PageRequest;
 use App\Model\kb\Page;
 use App\User;
 use Faker\Factory as FakerFactory;
@@ -11,11 +10,10 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
-use App\Http\Requests\kb\PageRequest;
 
 class PageControllerTest extends TestCase
 {
-   use DatabaseTransactions;
+    use DatabaseTransactions;
     protected $user; // Declare a user property
 
     // Set up the authenticated user before each test
@@ -67,16 +65,16 @@ class PageControllerTest extends TestCase
         $response = $this->get('/page/create');
 
         $response->assertStatus(200);
-
     }
+
     public function testValidationPasses()
     {
         $data = [
-            'name' => 'New Page',
+            'name'        => 'New Page',
             'description' => 'Page Description',
         ];
 
-        $validator = Validator::make($data, (new PageRequest)->rules());
+        $validator = Validator::make($data, (new PageRequest())->rules());
 
         $this->assertTrue($validator->passes());
 
@@ -93,7 +91,7 @@ class PageControllerTest extends TestCase
             'description' => 'Page Description',
         ];
 
-        $validator = Validator::make($data, (new PageRequest)->rules());
+        $validator = Validator::make($data, (new PageRequest())->rules());
 
         $this->assertFalse($validator->passes());
         $this->assertTrue($validator->fails());
@@ -103,11 +101,11 @@ class PageControllerTest extends TestCase
     public function testValidationFailsWhenNameNotUnique()
     {
         $data = [
-            'name' => 'Page1',
+            'name'        => 'Page1',
             'description' => 'Page Description',
         ];
 
-        $validator = Validator::make($data, (new PageRequest)->rules());
+        $validator = Validator::make($data, (new PageRequest())->rules());
 
         $this->assertFalse($validator->passes());
         $this->assertTrue($validator->fails());
@@ -120,7 +118,7 @@ class PageControllerTest extends TestCase
             'name' => 'New',
         ];
 
-        $validator = Validator::make($data, (new PageRequest)->rules());
+        $validator = Validator::make($data, (new PageRequest())->rules());
 
         $this->assertFalse($validator->passes());
         $this->assertTrue($validator->fails());
@@ -131,10 +129,9 @@ class PageControllerTest extends TestCase
     {
         $page = Page::latest()->first();
 
-        $response = $this->get('/page/' . $page->id . '/edit');
+        $response = $this->get('/page/'.$page->id.'/edit');
 
         $response->assertStatus(200);
-
     }
 
     public function testUpdatePage()
@@ -142,14 +139,14 @@ class PageControllerTest extends TestCase
         $page = Page::latest()->first();
 
         $data = [
-            'name' => 'Updated Page Name',
+            'name'        => 'Updated Page Name',
             'description' => 'Updated Description',
         ];
 
-        $validator = Validator::make($data, (new PageRequest)->rules());
+        $validator = Validator::make($data, (new PageRequest())->rules());
 
         $this->assertTrue($validator->passes());
-        $response = $this->put('/page/' . $page->id, $data);
+        $response = $this->put('/page/'.$page->id, $data);
 
         $response->assertStatus(302); // Assuming a successful update redirects
         $this->assertDatabaseHas('kb_pages', $data);
@@ -161,14 +158,14 @@ class PageControllerTest extends TestCase
         $page = Page::latest()->first();
 
         $data = [
-            'name' => 'Page1',
+            'name'        => 'Page1',
             'description' => 'Updated Description',
         ];
 
-        $validator = Validator::make($data, (new PageRequest)->rules());
+        $validator = Validator::make($data, (new PageRequest())->rules());
 
         $this->assertFalse($validator->passes());
-        $response = $this->put('/page/' . $page->id, $data);
+        $response = $this->put('/page/'.$page->id, $data);
         $response->assertStatus(302);
         $this->assertTrue($validator->fails());
         $this->assertTrue($validator->errors()->has('name'));
@@ -178,11 +175,10 @@ class PageControllerTest extends TestCase
     {
         $page = Page::latest()->first();
 
-        $response = $this->delete('/page/' . $page->id);
+        $response = $this->delete('/page/'.$page->id);
 
         $response->assertStatus(302); // Assuming a successful deletion redirects
         $this->assertDatabaseMissing('kb_pages', ['id' => $page->id]);
         // You can add more assertions as needed.
     }
-
 }

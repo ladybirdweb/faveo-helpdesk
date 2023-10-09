@@ -3,12 +3,9 @@
 namespace Tests\Unit;
 
 use App\Http\Requests\kb\CategoryRequest;
-use App\Model\helpdesk\Ticket\Ticket_Thread;
-use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\kb\Category;
 use App\Model\kb\Relationship;
 use App\User;
-use DateTimeZone;
 use Faker\Factory as FakerFactory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +13,6 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Tests\TestCase;
-use UTC;
 
 class CategoryControllerTest extends TestCase
 {
@@ -70,20 +66,19 @@ class CategoryControllerTest extends TestCase
     public function testValidationPasses()
     {
         $data = [
-            'name' => 'New Category',
+            'name'        => 'New Category',
             'description' => 'Category Description',
         ];
 
-        $validator = Validator::make($data, (new CategoryRequest)->rules());
+        $validator = Validator::make($data, (new CategoryRequest())->rules());
 
-       $this->assertTrue($validator->passes());
+        $this->assertTrue($validator->passes());
 
         $response = $this->post(route('category.store'), $data);
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
         $this->assertDatabaseHas('kb_category', $data);
-
     }
 
     public function testValidationFailsWhenNameMissing()
@@ -92,7 +87,7 @@ class CategoryControllerTest extends TestCase
             'description' => 'Category Description',
         ];
 
-        $validator = Validator::make($data, (new CategoryRequest)->rules());
+        $validator = Validator::make($data, (new CategoryRequest())->rules());
 
         $this->assertFalse($validator->passes());
         $this->assertTrue($validator->fails());
@@ -102,11 +97,11 @@ class CategoryControllerTest extends TestCase
     public function testValidationFailsWhenNameExceedsMaxLength()
     {
         $data = [
-            'name' => str_repeat('A', 251),
+            'name'        => str_repeat('A', 251),
             'description' => 'Category Description',
         ];
 
-        $validator = Validator::make($data, (new CategoryRequest)->rules());
+        $validator = Validator::make($data, (new CategoryRequest())->rules());
 
         $this->assertFalse($validator->passes());
         $this->assertTrue($validator->fails());
@@ -116,11 +111,11 @@ class CategoryControllerTest extends TestCase
     public function testValidationFailsWhenNameNotUnique()
     {
         $data = [
-            'name' => 'Greetings',
+            'name'        => 'Greetings',
             'description' => 'Category Description',
         ];
 
-        $validator = Validator::make($data, (new CategoryRequest)->rules());
+        $validator = Validator::make($data, (new CategoryRequest())->rules());
 
         $this->assertFalse($validator->passes());
         $this->assertTrue($validator->fails());
@@ -133,22 +128,23 @@ class CategoryControllerTest extends TestCase
             'name' => 'New Category',
         ];
 
-        $validator = Validator::make($data, (new CategoryRequest)->rules());
+        $validator = Validator::make($data, (new CategoryRequest())->rules());
 
         $this->assertFalse($validator->passes());
         $this->assertTrue($validator->fails());
         $this->assertTrue($validator->errors()->has('description'));
     }
 
-
     public function testEditCategory()
     {
         $category = Category::latest()->first();
         $categories = Category::pluck('name', 'id')->toArray();
-        $response = $this->get("/category/{$category->id}/edit",
-            ['category' => $category,
-            'categories' => $categories,
-        ]);
+        $response = $this->get(
+            "/category/{$category->id}/edit",
+            ['category'      => $category,
+                'categories' => $categories,
+            ]
+        );
         $response->assertStatus(200);
     }
 
@@ -159,11 +155,11 @@ class CategoryControllerTest extends TestCase
         $category = Category::latest()->first();
 
         $data = [
-            'name' => 'Updated Category Name',
+            'name'        => 'Updated Category Name',
             'description' => 'Updated Description',
         ];
 
-        $validator = Validator::make($data, (new CategoryRequest)->rules());
+        $validator = Validator::make($data, (new CategoryRequest())->rules());
 
         $this->assertTrue($validator->passes());
 
@@ -174,7 +170,6 @@ class CategoryControllerTest extends TestCase
         $this->assertDatabaseHas('kb_category', $data);
     }
 
-
     /** @test */
     public function it_cannot_update_an_existing_category()
     {
@@ -182,24 +177,22 @@ class CategoryControllerTest extends TestCase
         $category = Category::latest()->first();
 
         $data = [
-            'name' => 'Greetings',
+            'name'        => 'Greetings',
             'description' => 'Updated Description',
         ];
 
-        $validator = Validator::make($data, (new CategoryRequest)->rules());
+        $validator = Validator::make($data, (new CategoryRequest())->rules());
 
         $this->assertFalse($validator->passes());
         $response = $this->put(route('category.update', $category->id), $data);
         $response->assertStatus(302);
         $this->assertTrue($validator->fails());
         $this->assertTrue($validator->errors()->has('name'));
-
     }
 
     /** @test */
     public function it_can_delete_a_category()
     {
-
         // Create a category
         $category = Category::latest()->first();
 
@@ -217,7 +210,6 @@ class CategoryControllerTest extends TestCase
 
         // Assert that the response has a success message
         $response->assertSessionHas('success', Lang::get('lang.category_deleted_successfully'));
-
     }
 
     /** @test */

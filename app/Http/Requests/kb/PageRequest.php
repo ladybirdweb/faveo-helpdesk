@@ -26,8 +26,8 @@ class PageRequest extends Request
         $id = $this->segment(2);
 
         return [
-            'name' => 'required|unique:kb_pages,name,'.$id,
-            'description' =>'required',
+            'name'        => 'required|unique:kb_pages,name,'.$id,
+            'description' => 'required',
         ];
     }
 }
