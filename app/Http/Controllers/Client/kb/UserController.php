@@ -124,7 +124,7 @@ class UserController extends Controller
         if ($arti) {
             return view('themes.default1.client.kb.article-list.show', compact('arti'));
         } else {
-            return redirect('404');
+            return Redirect::back()->with('fails', Lang::get('lang.sorry_not_processed'));
         }
     }
 
@@ -150,7 +150,6 @@ class UserController extends Controller
         if (Config::get('database.install') == '%0%') {
             return redirect('step1');
         } else {
-            //$categorys = $category->get();
             $categorys = $category->get();
             // $categorys->setPath('home');
             /* direct to view with $article_id */
@@ -235,7 +234,6 @@ class UserController extends Controller
     {
         $request->validate([
             'comment' => 'required',
-
         ]);
 
         $article = $article->where('slug', $slug)->first();
@@ -265,7 +263,17 @@ class UserController extends Controller
 
     public function getPage($name, Page $page)
     {
-        $page = $page->where('slug', $name)->first();
+        $page = $page->where('slug' , $name);
+
+        if (!Auth::check() || \Auth::user()->role == 'user') {
+            $page = $page
+                    ->where(['status' => 1,'visibility'=>1])
+                    ->first();
+        }
+        else {
+            $page = $page->where('status', 1)->first();
+        }
+
         if ($page) {
             return view('themes.default1.client.kb.article-list.pages', compact('page'));
         } else {

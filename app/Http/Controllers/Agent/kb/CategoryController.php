@@ -40,7 +40,7 @@ class CategoryController extends Controller
         // checking authentication
         $this->middleware('auth');
         // checking roles
-        $this->middleware('roles');
+        $this->middleware('role.agent');
         SettingsController::language();
     }
 

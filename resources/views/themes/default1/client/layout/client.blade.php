@@ -160,7 +160,11 @@
                                     </ul>
                                 </li>
 
-                                 <?php $pages = App\Model\kb\Page::where('status', '1')->where('visibility', '1')->get();
+                                 <?php
+                                    if(!Auth::check() || Auth::user()->role == 'user')
+                                 $pages = App\Model\kb\Page::where('status', '1')->where('visibility', '1')->get();
+                                    else
+                                        $pages = App\Model\kb\Page::where('status', '1')->get();
                                 ?>
                                  @if(count($pages))
                                 <li @yield('pages') class="nav-item dropdown">

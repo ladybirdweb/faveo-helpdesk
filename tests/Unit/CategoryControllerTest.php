@@ -1,0 +1,241 @@
+<?php
+
+namespace Tests\Unit;
+
+use App\Http\Requests\kb\CategoryRequest;
+use App\Model\helpdesk\Ticket\Ticket_Thread;
+use App\Model\helpdesk\Ticket\Tickets;
+use App\Model\kb\Category;
+use App\Model\kb\Relationship;
+use App\User;
+use DateTimeZone;
+use Faker\Factory as FakerFactory;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Tests\TestCase;
+use UTC;
+
+class CategoryControllerTest extends TestCase
+{
+    //use DatabaseTransactions;
+    protected $user; // Declare a user property
+
+    // Set up the authenticated user before each test
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $faker = FakerFactory::create();
+
+        //Create User -> Agent
+
+        //$str = Str::random(10);
+        $str = 'demopass';
+        $password = Hash::make($str);
+        $email = $faker->unique()->email();
+        $user = new User([
+            'first_name'   => $faker->firstName(),
+            'last_name'    => $faker->lastName(),
+            'email'        => $email,
+            'user_name'    => $faker->unique()->userName(),
+            'password'     => $password,
+            'assign_group' => 1,
+            'primary_dpt'  => 1,
+            'active'       => 1,
+            'role'         => 'agent',
+            'agent_tzone'  => 81,
+        ]);
+        $user->save();
+
+        // Check if data is inserted
+        $this->assertDatabaseHas('users', ['email'=>$email]);
+
+        // Authenticate as the created user
+        $this->actingAs($user);
+
+        $this->assertAuthenticated();
+    }
+
+    /** @test */
+    public function it_can_display_the_category_index_page()
+    {
+        $response = $this->get(route('category.index'));
+
+        $response->assertStatus(200);
+    }
+
+    public function testValidationPasses()
+    {
+        $data = [
+            'name' => 'New Category',
+            'description' => 'Category Description',
+        ];
+
+        $validator = Validator::make($data, (new CategoryRequest)->rules());
+
+       $this->assertTrue($validator->passes());
+
+        $response = $this->post(route('category.store'), $data);
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('success');
+        $this->assertDatabaseHas('kb_category', $data);
+
+    }
+
+    public function testValidationFailsWhenNameMissing()
+    {
+        $data = [
+            'description' => 'Category Description',
+        ];
+
+        $validator = Validator::make($data, (new CategoryRequest)->rules());
+
+        $this->assertFalse($validator->passes());
+        $this->assertTrue($validator->fails());
+        $this->assertTrue($validator->errors()->has('name'));
+    }
+
+    public function testValidationFailsWhenNameExceedsMaxLength()
+    {
+        $data = [
+            'name' => str_repeat('A', 251),
+            'description' => 'Category Description',
+        ];
+
+        $validator = Validator::make($data, (new CategoryRequest)->rules());
+
+        $this->assertFalse($validator->passes());
+        $this->assertTrue($validator->fails());
+        $this->assertTrue($validator->errors()->has('name'));
+    }
+
+    public function testValidationFailsWhenNameNotUnique()
+    {
+        $data = [
+            'name' => 'Greetings',
+            'description' => 'Category Description',
+        ];
+
+        $validator = Validator::make($data, (new CategoryRequest)->rules());
+
+        $this->assertFalse($validator->passes());
+        $this->assertTrue($validator->fails());
+        $this->assertTrue($validator->errors()->has('name'));
+    }
+
+    public function testValidationFailsWhenDescriptionMissing()
+    {
+        $data = [
+            'name' => 'New Category',
+        ];
+
+        $validator = Validator::make($data, (new CategoryRequest)->rules());
+
+        $this->assertFalse($validator->passes());
+        $this->assertTrue($validator->fails());
+        $this->assertTrue($validator->errors()->has('description'));
+    }
+
+
+    public function testEditCategory()
+    {
+        $category = Category::latest()->first();
+        $categories = Category::pluck('name', 'id')->toArray();
+        $response = $this->get("/category/{$category->id}/edit",
+            ['category' => $category,
+            'categories' => $categories,
+        ]);
+        $response->assertStatus(200);
+    }
+
+    /** @test */
+    public function it_can_update_an_existing_category()
+    {
+        // Retrieve an existing category from the database
+        $category = Category::latest()->first();
+
+        $data = [
+            'name' => 'Updated Category Name',
+            'description' => 'Updated Description',
+        ];
+
+        $validator = Validator::make($data, (new CategoryRequest)->rules());
+
+        $this->assertTrue($validator->passes());
+
+        $response = $this->put(route('category.update', $category->id), $data);
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('success');
+        $this->assertDatabaseHas('kb_category', $data);
+    }
+
+
+    /** @test */
+    public function it_cannot_update_an_existing_category()
+    {
+        // Retrieve an existing category from the database
+        $category = Category::latest()->first();
+
+        $data = [
+            'name' => 'Greetings',
+            'description' => 'Updated Description',
+        ];
+
+        $validator = Validator::make($data, (new CategoryRequest)->rules());
+
+        $this->assertFalse($validator->passes());
+        $response = $this->put(route('category.update', $category->id), $data);
+        $response->assertStatus(302);
+        $this->assertTrue($validator->fails());
+        $this->assertTrue($validator->errors()->has('name'));
+
+    }
+
+    /** @test */
+    public function it_can_delete_a_category()
+    {
+
+        // Create a category
+        $category = Category::latest()->first();
+
+        // Create a related relationship (you may need to adjust this based on your actual relationships)
+        $relation = Relationship::find($category->id);
+
+        // Call the destroy method with the category ID
+        $response = $this->get("/category/delete/{$category->id}");
+
+        // Assert that the category is deleted from the database
+        $this->assertDatabaseMissing('kb_category', ['id' => $category->id]);
+
+        // Assert that the response is a redirect
+        $response->assertRedirect();
+
+        // Assert that the response has a success message
+        $response->assertSessionHas('success', Lang::get('lang.category_deleted_successfully'));
+
+    }
+
+    /** @test */
+    public function it_cannot_delete_a_category_if_related()
+    {
+        // Create a category
+        $category = Category::find(1);
+
+        // Call the destroy method with the category ID (without creating related records)
+        $response = $this->get("/category/delete/{$category->id}");
+
+        // Assert that the category is not deleted from the database
+        $this->assertDatabaseHas('kb_category', ['id' => $category->id]);
+
+        // Assert that the response is a redirect
+        $response->assertRedirect();
+
+        // Assert that the response has a failure message
+        $response->assertSessionHas('fails', Lang::get('lang.category_not_deleted'));
+    }
+}
