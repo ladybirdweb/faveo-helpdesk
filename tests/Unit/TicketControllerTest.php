@@ -14,10 +14,6 @@ class TicketControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
-
-
-
-
     /**
      * A basic unit test example.
      *
@@ -37,9 +33,6 @@ class TicketControllerTest extends TestCase
             'role'       => 'user',
         ]);
         $user->save();
-
-
-
 
         // Authenticate as the created user
 
@@ -76,8 +69,6 @@ class TicketControllerTest extends TestCase
 
         $response = $this->post(route('select_all'), [
             'select_all' => [$ticket->id],
-
-
 
             'submit'     => 'Open',
 
