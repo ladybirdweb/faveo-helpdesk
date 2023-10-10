@@ -88,7 +88,7 @@ return [
         ],
     ],
 
-     /*
+    /*
       |--------------------------------------------------------------------------
       | Custom Validation Attributes
       |--------------------------------------------------------------------------
@@ -98,11 +98,11 @@ return [
       | of "email". This simply helps us make messages a little cleaner.
       |
      */
-    
+
     'attributes' => [
-        'email' => 'عنوان البريد الإلكتروني',
+        'email'    => 'عنوان البريد الإلكتروني',
         'password' => 'كلمة المرور',
         // Add more attribute translations in Arabic as needed
     ],
-    
+
 ];
