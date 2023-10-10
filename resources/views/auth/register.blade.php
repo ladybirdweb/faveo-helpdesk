@@ -171,7 +171,7 @@
                   
                     <div class="checkbox icheck" align="center">
                         <label class="mb-0">
-                           Already got an account? <a href="{{url('auth/login')}}" class="text-center">{!! Lang::get('lang.login') !!}</a>                
+                           {{trans('lang.already_got_an_account?')}} <a href="{{url('auth/login')}}" class="text-center">{!! Lang::get('lang.login') !!}</a>
                         </label>
                     </div>
                     <div class="row">

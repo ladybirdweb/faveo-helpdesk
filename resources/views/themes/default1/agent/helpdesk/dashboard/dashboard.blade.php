@@ -153,7 +153,7 @@ class="nav-item d-none d-sm-inline-block active"
 				<div class="row">
 					
 					<div class='col-sm-2'>
-						{!! Form::label('date', 'Start Date:') !!}
+						{!! Form::label('date', trans('lang.start_date')) !!}
 						{!! Form::text('start_date',null,['class'=>'form-control','id'=>'datepicker4'])!!}
 					</div>
 					
@@ -184,7 +184,7 @@ class="nav-item d-none d-sm-inline-block active"
 
 					<div class='col-sm-2'>
 
-						{!! Form::label('start_time', 'End Date:') !!}
+						{!! Form::label('start_time', trans('lang.end_date')) !!}
 						{!! Form::text('end_date',null,['class'=>'form-control','id'=>'datetimepicker3'])!!}
 					</div>
 
@@ -202,7 +202,7 @@ class="nav-item d-none d-sm-inline-block active"
 
 					<div class='col-sm-1'>
 						{!! Form::label('filter', 'Filter:',['style' => 'visibility:hidden;']) !!}<br>
-						<input type="submit" class="btn btn-primary">
+						<button type="submit" class="btn btn-primary">{{trans('lang.submit')}}</button>
 					</div>
 				</div>
 
@@ -253,7 +253,7 @@ class="nav-item d-none d-sm-inline-block active"
 			$statuses = $flattened->keys();
 			?>
 			<tr>
-				<th>Department</th>
+				<th>{{trans('lang.department')}}</th>
 				@forelse($statuses as $status)
 				 <th>{!! $status !!}</th>
 				@empty 

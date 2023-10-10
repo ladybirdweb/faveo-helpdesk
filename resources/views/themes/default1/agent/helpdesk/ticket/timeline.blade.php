@@ -1,4 +1,5 @@
 @extends('themes.default1.agent.layout.agent')
+<meta charset="utf-8">
 
 @section('Tickets')
 class="nav-link active"
@@ -195,7 +196,7 @@ if ($thread->title != "") {
                         <?php }
                         ?>
                         <?php if ($group->can_ban_email == 1) { ?>
-                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#banemail"><i class="fas fa-ban" style="color:red;"></i> {!! Lang::get('lang.ban_email') !!}</a>
+                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#banemail"><i class="fas fa-ban" style="color:red;"></i> {{trans('lang.ban_email')}}</a>
                         <?php 
                         \Illuminate\Support\Facades\Event::dispatch('ticket.details.more.list',[$tickets]);
                         }
@@ -323,7 +324,7 @@ if ($thread->title != "") {
             
             <div class="card-header">
                 
-                <h3 class="card-title">Actions</h3>
+                <h3 class="card-title">{{trans('lang.action')}}</h3>
             </div>
 
                     <div class="card-body">
@@ -510,7 +511,7 @@ if ($thread->title != "") {
             <div class="card card-light">
                 
                 <div class="card-header">
-                    <h3 class="card-title">Ticket Conversation</h3>
+                    <h3 class="card-title">{{trans('lang.ticket_conversation')}}</h3>
                 </div>
 
                 <div class="card-body">
@@ -918,7 +919,7 @@ if ($thread->title != "") {
 
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal" id="dismis2">{!! Lang::get('lang.close') !!}</button>
-                        <button id="ban" type="button" class="btn btn-warning" >{!! Lang::get('lang.ban_email') !!}</button>
+                        <button id="ban" type="button" class="btn btn-warning" >{{trans('lang.ban_email')}}</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->

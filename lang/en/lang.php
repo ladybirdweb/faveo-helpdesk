@@ -1660,4 +1660,23 @@ return [
     'category_list'                                => 'Category list',
     'check_ticket'                                 => 'Check ticket',
     'search_result'                                => 'Search Results',
+    'already_got_an_account?'                      => 'Alreaddy got an account?',
+    'message-choose'                               => 'Choose File(s)',
+    'Ticket details'                               => 'Ticket Conversation',
+    'provider'                                     => 'Providers',
+    'facebook'                                     => 'Facebook',
+    'google'                                       => 'Google',
+    'github'                                       => 'Github',
+    'twitter'                                      => 'Twitter',
+    'linkedin'                                     => 'Linkedin',
+    'bitbucket'                                    => 'Bitbucket',
+    'Please_choose_your_Email_Fetching_timing'     => 'Please choose your Email Fetching timing',
+    'Please_choose_your_ Email_ Notification_timing' => 'Please choose your Email Notification timing',
+    'Please_choose_your_Auto-close_Workflow_timing' => 'Please choose your Auto-close Workflow timing',
+    'lockout_period:'                               => 'Lockout Period:',
+    'Lockout_Message:'                             => 'Lockout Message:',
+    'please_enter_valid_no_days'                   => 'Please enter valid no of days',
+    'author'                                           =>'Author',
+    'system_logs' => 'System logs'
+
 ];

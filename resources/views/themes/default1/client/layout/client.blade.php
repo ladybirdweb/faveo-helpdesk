@@ -191,7 +191,7 @@
 
                                                 <img id="user_avatar" src="{{Auth::user()->profile_pic}}"class="avatar" alt="User Image" height="70" width="70"/>
 
-                                                <div><strong>Hello</strong></div>
+                                                <div><strong>{{trans('lang.hello')}}</strong></div>
 
                                                 <p class="banner-title ellipsize_first_name h4">{{Auth::user()->first_name." ".Auth::user()->last_name}}</p>
 
@@ -315,9 +315,9 @@
                         <div class="form-border" style="z-index: 0;width: 85%;">
                             <div class="form-inline ">
                                 <div class="form-group input-group " style="width: 98% ">
-                                    <input type="text" name="s" class="search-field form-control" title="Enter search term" placeholder="Have a question? Type your search term here..." required="" style="width: 80%">
+                                    <input type="text" name="s" class="search-field form-control" title="Enter search term" placeholder="{{trans('lang.have_a_question?_type_your_search_term_here')}}" required="" style="width: 80%">
                                     <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-custom btn-md " style="margin-left: 20% ;background-color: #009aba; hov: #00c0ef; color: #fff ">Search</button>
+                                        <button type="submit" class="btn btn-custom btn-md " style="margin-left: 20% ;background-color: #009aba; hov: #00c0ef; color: #fff ">{{trans('lang.search')}}</button>
                                     </span>
                                 </div>
 

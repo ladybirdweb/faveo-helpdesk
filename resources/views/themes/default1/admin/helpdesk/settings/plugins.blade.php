@@ -85,8 +85,13 @@ class="nav-link active"
     <div class="card-body">
         
         {!! Datatable::table()
-        ->addColumn('Name','Description','Author','Website','Version')       // these are the column headings to be shown
-        ->setUrl('getplugin')   // this is the route where data will be retrieved
+    ->addColumn(
+        trans('lang.name'),
+        trans('lang.description'), // Translate the 'Description' column heading
+        trans('lang.author'),      // Translate the 'Author' column heading
+        trans('lang.website'),     // Translate the 'Website' column heading
+        trans('lang.version')      // Translate the 'Version' column heading
+    )        ->setUrl('getplugin')   // this is the route where data will be retrieved
         ->render() !!}
     </div>
 </div>

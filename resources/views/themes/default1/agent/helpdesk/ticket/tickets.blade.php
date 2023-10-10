@@ -117,7 +117,7 @@ if (Request::has('assigned'))
             @elseif($activepage == 'overdue')
             {{Lang::get('lang.overdue')}}
             @elseif($activepage == 'closed')
-            {{Lang::get('lang.closed')}}
+{{--            {{Lang::get('lang.closed')}}--}}
             @elseif($activepage == 'approval')
             {{Lang::get('lang.approval')}}
             @elseif($activepage == 0)

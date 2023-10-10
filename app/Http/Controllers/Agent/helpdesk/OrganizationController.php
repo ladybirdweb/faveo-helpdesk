@@ -69,6 +69,8 @@ class OrganizationController extends Controller
      */
     public function org_list()
     {
+
+        $modalTitle = __('lang.your_translation_key_here');
         // chumper datable package call to display Advance datatable
         return \Datatable::collection(Organization::all())
                         /* searchable name */
@@ -108,7 +110,7 @@ class OrganizationController extends Controller
 			        <div class="modal-dialog">
 			            <div class="modal-content">
                 			<div class="modal-header">
-                                <h4 class="modal-title">Are You Sure ?</h4>
+                                <h4 class="modal-title">{{ $modalTitle }}</h4>
                     			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 			</div>
                 			<div class="modal-body">
