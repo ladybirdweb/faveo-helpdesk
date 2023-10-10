@@ -63,7 +63,7 @@ class SettingsController extends Controller
 
     /**
      * @param int $id
-     * @param $compant instance of company table
+     * @param     $compant instance of company table
      *
      * get the form for company setting page
      *
@@ -118,7 +118,7 @@ class SettingsController extends Controller
     /**
      * function to delete system logo.
      *
-     *  @return type string
+     * @return type string
      */
     public function deleteLogo()
     {
@@ -583,7 +583,7 @@ class SettingsController extends Controller
     /**
      *  Generate Api key.
      *
-     *  @return type json
+     * @return type json
      */
     public function generateApiKey()
     {
@@ -604,7 +604,7 @@ class SettingsController extends Controller
 
     /**
      * @param int $id
-     * @param $compant instance of company table
+     * @param     $compant instance of company table
      *
      * get the form for company setting page
      *
@@ -624,7 +624,7 @@ class SettingsController extends Controller
 
     /**
      * @param int $id
-     * @param $compant instance of company table
+     * @param     $compant instance of company table
      *
      * get the form for company setting page
      *
@@ -644,7 +644,7 @@ class SettingsController extends Controller
 
     /**
      * @param int $id
-     * @param $compant instance of company table
+     * @param     $compant instance of company table
      *
      * get the form for company setting page
      *
@@ -780,7 +780,7 @@ class SettingsController extends Controller
     /**
      *  To display the list of ratings in the system.
      *
-     *  @return type View
+     * @return type View
      */
     public function RatingSettings()
     {
@@ -814,7 +814,7 @@ class SettingsController extends Controller
     /**
      *  To store rating data.
      *
-     *  @return type Redirect
+     * @return type Redirect
      */
     public function PostRatingSettings($id, Rating $ratings, RatingUpdateRequest $request)
     {
@@ -875,7 +875,7 @@ class SettingsController extends Controller
     /**
      *  To delete a type of rating.
      *
-     *  @return type Redirect
+     * @return type Redirect
      */
     public function RatingDelete($slug, \App\Model\helpdesk\Ratings\RatingRef $ratingrefs)
     {

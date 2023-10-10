@@ -69,7 +69,6 @@ class OrganizationController extends Controller
      */
     public function org_list()
     {
-
         $modalTitle = __('lang.your_translation_key_here');
         // chumper datable package call to display Advance datatable
         return \Datatable::collection(Organization::all())

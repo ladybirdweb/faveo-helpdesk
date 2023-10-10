@@ -1,7 +1,7 @@
 <?php
 
 return[
-    'storage'                       =>'تخزين',
+    'storage'                       => 'تخزين',
     'root'                          => 'جذر',
     'system_logs'                   => 'سجلات النظام',
     'default'                       => 'الافتراضي',

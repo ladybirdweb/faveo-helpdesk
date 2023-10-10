@@ -1,4 +1,5 @@
 <?php
+
 return [
     'sEmptyTable'     => 'لا تتوفر بيانات في الجدول',
     'sInfo'           => 'عرض _START_ إلى _END_ من إجمالي _TOTAL_ إدخال',

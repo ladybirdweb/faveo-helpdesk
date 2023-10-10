@@ -37,7 +37,7 @@ class TaskRequest extends Request
     {
         return [
             'fetching-commands.required_if'     => trans('lang.Please_choose_your_Email_Fetching_timing'),
-            'notification-commands.required_if' =>trans('lang.Please_choose_your_ Email_ Notification_timing'),
+            'notification-commands.required_if' => trans('lang.Please_choose_your_ Email_ Notification_timing'),
             'work-commands.required_if'         => trans('lang.Please_choose_your_Auto-close_Workflow_timing'),
             'workflow-dailyAt.required_if'      => 'Please enter the time for Auto-close Workflow timing',
             'notification-dailyAt.required_if'  => 'Please enter the time for Email Notification timing',
