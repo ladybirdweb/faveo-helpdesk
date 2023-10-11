@@ -229,16 +229,19 @@ $category_id = $all->pluck('category_id')->toArray();
                                 {!! $errors->first('website', '<span class="help-block">:message</span>') !!}
                             </div>
 
-                            <button type="submit" class="btn btn-custom btn-lg" style="background-color: #009aba; hov: #00c0ef; color: #fff">{!! Lang::get('lang.post_message') !!}</button>
                         </div>
 
-                        <div class="col-md-8">
+                        <div class="col-md-10" style="width: 65%">
                             <div class="form-group {{ $errors->has('comment') ? 'has-error' : '' }}">
-                                {!! Form::label('comment', Lang::get('lang.message'), ['class' => 'label']) !!}
-                                {!! Form::textarea('comment', null, ['class' => 'form-control', 'size' => '30x8', 'id' => 'comment-comment']) !!}
-                                {!! $errors->first('comment', '<span class="help-block">:message</span>') !!}
+                                {!! Form::label('comment',Lang::get('lang.message'),['class' => 'label']) !!}
+                                {!! Form::textarea('comment',null,['class' => 'form-control','size' => '30x8','id'=>'comment']) !!}
+                                {!! $errors->first('comment', '<spam class="help-block">:message</spam>') !!}
                             </div>
+                            <button type="submit" class="btn btn-custom btn-lg float-right" style="background-color: #009aba; hov: #00c0ef; color: #fff">
+                                {{ Lang::get('lang.post_message') }}
+                            </button>
                         </div>
+
 
                     </div>
                     <script>

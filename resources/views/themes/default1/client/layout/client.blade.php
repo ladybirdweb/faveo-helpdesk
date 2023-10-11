@@ -132,7 +132,7 @@
                             </a>
                         </div>
 
-                        <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                        <button class="navbar-toggler custom-toggler" onclick="javascript:(function() { jQuery('#navbarSupportedContent').toggle(); })()" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 
                             <span class="navbar-toggler-icon"></span>
@@ -310,7 +310,7 @@
                         </div>
                     </nav>
 
-                    <div id="header-search" class="site-search clearfix" style="margin-right: 20%; width: 100%"><!-- #header-search -->
+                    <div id="header-search" class="site-search clearfix" style="margin-right: 90%; width: 100%"><!-- #header-search -->
                         {!!Form::open(['route' => 'client.search','class'=>'search-form clearfix'])!!}
                         <div class="form-border" style="z-index: 0;width: 85%;">
                             <div class="form-inline ">
@@ -320,7 +320,7 @@
                                         <button type="submit" class="btn btn-custom btn-md " style="margin-left: 20% ;background-color: #009aba; hov: #00c0ef; color: #fff ">{{trans('lang.search')}}</button>
                                     </span>
                                 </div>
-
+                            </div><!----><!----></div>
                                 <style>
                                     .search-field {
                                         border-radius: 10px; /* You can adjust the value to your desired radius */
