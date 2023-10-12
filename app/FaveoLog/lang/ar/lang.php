@@ -2,6 +2,6 @@
 
 return[
     'logs'        => 'مؤلف',
-    'system_logs'=> 'سجلات النظام',
+    'system_logs' => 'سجلات النظام',
 
 ];

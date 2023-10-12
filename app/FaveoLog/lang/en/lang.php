@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'logs' => 'Logs',
+    'logs'        => 'Logs',
     'system_logs' => 'System logs',
 ];
