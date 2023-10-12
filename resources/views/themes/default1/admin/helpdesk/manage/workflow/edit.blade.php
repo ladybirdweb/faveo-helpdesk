@@ -282,7 +282,7 @@ class="nav-link active"
                                 <td>
                                     <select class="form-control" onChange="selectdata({!! $i !!})" id="selected{!! $i !!}" name="action[{!! $i !!}][a]" required>
                                         <option value="">-- {!! Lang::get('lang.select_an_action') !!} --</option>
-                                        <optgroup label="Ticket">        
+                                        <optgroup label={{trans('lang.ticket')}}>
                                             <option value="reject" <?php
                                             if ($workflow_action->condition == 'reject') {
                                                 echo "selected='selected'";

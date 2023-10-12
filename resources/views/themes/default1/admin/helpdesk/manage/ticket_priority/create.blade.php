@@ -87,8 +87,8 @@ class="nav-link active"
 
                 <div class="form-group col-sm-3 {{ $errors->has('ispublic') ? 'has-error' : '' }}">
                     {!! Form::label('ispublic',Lang::get('lang.visibility')) !!}&nbsp;<span class="text-red"> *</span><br/>
-                    <input type="radio"  name="ispublic" value="1" checked>&nbsp;&nbsp;Public&nbsp;&nbsp;
-                    <input type="radio"  name="ispublic" value="0" >&nbsp;&nbsp;Private
+                    <input type="radio"  name="ispublic" value="1" checked>{{Lang::get('lang.public')}}
+                    <input type="radio"  name="ispublic" value="0" >&nbsp;&nbsp;{{Lang::get('lang.private')}}
                 </div>
             </div>  
             <!-- Admin Note  : Textarea :  -->

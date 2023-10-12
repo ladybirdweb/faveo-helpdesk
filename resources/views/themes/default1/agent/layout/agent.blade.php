@@ -310,7 +310,7 @@
                                         class="img-size-50">
                                 </li>
                                 
-                                <li class="dropdown-footer"><a class="text-dark" href="{{ url('notifications-list')}}">View all</a>
+                                <li class="dropdown-footer"><a class="text-dark" href="{{ url('notifications-list')}}">{{trans('lang.view_all')}}</a>
                             </ul>
                         </div>
                     </li>
@@ -445,6 +445,7 @@
 
                             <li class="nav-header">{!! Lang::get('lang.Departments') !!}</li>
 
+
                             <?php
                             $flattened = $department->flatMap(function ($values) {
                                 return $values->keyBy('status');
@@ -472,7 +473,7 @@
                                 
                                 <a href="#" @if($dept2 === $name) @yield('ticket-bar') @endif class="nav-link">
                                     <i class="nav-icon fas fa-folder-open"></i>
-                                    <p>{!! $name !!}<i class="right fas fa-angle-left"></i></p>
+                                    <p>{!!trans('lang.'.strtolower($name))!!}<i class="right fas fa-angle-left"></i></p>
                                 </a>
                                 
                                 @foreach($statuses as $status)
@@ -483,7 +484,7 @@
                                     <li class="nav-item">
                                         <a href="{!! url('tickets?departments='.$name.'&status='.$dept->get($status)->status) !!}" @if($status2 == $dept->get($status)->status && $dept2 === $name) @yield('inbox') @endif class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>{!!$dept->get($status)->status !!}</p>
+                                            <p>{!!trans('lang.'.strtolower($dept->get($status)->status)) !!}</p>
                                             <small class="right badge badge-success">{{$dept->get($status)->count}}</small>
                                         </a>
                                     </li>

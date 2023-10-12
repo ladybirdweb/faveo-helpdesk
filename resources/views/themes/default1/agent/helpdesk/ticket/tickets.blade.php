@@ -185,7 +185,7 @@ if (Request::has('assigned'))
                 @foreach($statuses as $ticket_status)    
                 <a href="javascript:;"  class="dropdown-item" onclick="changeStatus({!! $ticket_status -> id !!}, '{!! $ticket_status->name !!}')" 
                     data-toggle="modal" data-target="#myModal">
-                    {!! $ticket_status->name !!}
+                    {{trans('lang.'.strtolower($ticket_status->name)) }}
                 </a>
                 @endforeach
             </div>

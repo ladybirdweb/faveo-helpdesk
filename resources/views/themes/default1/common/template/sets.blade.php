@@ -44,7 +44,7 @@ class="nav-link active"
         <h3 class="card-title">{!! Lang::get('lang.list_of_templates_sets') !!}</h3>
         <div class="card-tools">
             <button class="btn btn-default btn-tool" data-toggle="modal" data-target="#create" title="Create" id="2create">
-                <i class="fas fa-plus"> </i> Create
+                <i class="fas fa-plus"> </i> {{Lang::get('lang.create')}}
             </button>
         </div>
     </div><!-- /.box-header -->
@@ -134,7 +134,7 @@ class="nav-link active"
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
-                                        <span>Are you sure you want to Delete ?</span>
+                                        <span>{{Lang::get('lang.are_you_sure_you_want_to_delete')}}</span>&nbsp;
                                     </div>
                                     <div class="modal-footer justify-content-between">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

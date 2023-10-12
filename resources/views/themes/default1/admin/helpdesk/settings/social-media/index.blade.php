@@ -20,7 +20,7 @@ class="nav-link active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{\Illuminate\Support\Facades\Lang::get('lang.social-media')}}</h1>
+    <h1>{{\Illuminate\Support\Facades\Lang::get('lang.social-media')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -32,7 +32,7 @@ class="nav-link active"
 @section('content')
 @if (count($errors) > 0)
 <div class="alert alert-danger">
-    <strong>Whoops!</strong> There were some problems with your input.<br><br>
+    <strong>{{Lang::get('lang.woops')}}</strong> {{Lang::get('lang.theirisproblem')}}<br><br>
     <ul>
         @foreach ($errors->all() as $error)
         <li>{{ $error }}</li>
@@ -77,14 +77,13 @@ class="nav-link active"
                         <td>{{\Illuminate\Support\Facades\Lang::get('lang.facebook')}}</td>
                         <td>
                             @if($social->checkActive('facebook')===true)
-                            <span style="color: green">{{trans('lang.active')}}</span>
-                            @else 
-                            <span style="color: red">{{trans('lang.inactive')}}</span>
+                                <span style="color: green">{{trans('lang.active')}}</span>
+                            @else
+                                <span style="color: red">{{trans('lang.inactive')}}</span>
                             @endif
                         </td>
                         <td>
-                            <a href="{{url('social/media/facebook')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>
-                        </td>
+                            <a href="{{url('social/media/facebook')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>                        </td>
                     </tr>
                     <tr>
                         <td>{{\Illuminate\Support\Facades\Lang::get('lang.google')}}</td>
@@ -94,11 +93,9 @@ class="nav-link active"
                             @else
                                 <span style="color: red">{{trans('lang.inactive')}}</span>
                             @endif
-
                         </td>
                         <td>
-                            <a href="{{url('social/media/google')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>
-                        </td>
+                            <a href="{{url('social/media/google')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>                        </td>
                     </tr>
                     <tr>
                         <td>{{\Illuminate\Support\Facades\Lang::get('lang.github')}}</td>
@@ -110,8 +107,7 @@ class="nav-link active"
                             @endif
                         </td>
                         <td>
-                            <a href="{{url('social/media/github')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>
-                        </td>
+                            <a href="{{url('social/media/github')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>                        </td>
                     </tr>
                     <tr>
                         <td>{{\Illuminate\Support\Facades\Lang::get('lang.twitter')}}</td>
@@ -123,8 +119,7 @@ class="nav-link active"
                             @endif
                         </td>
                         <td>
-                            <a href="{{url('social/media/twitter')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>
-                        </td>
+                            <a href="{{url('social/media/twitter')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>                        </td>
                     </tr>
                     <tr>
                         <td>{{\Illuminate\Support\Facades\Lang::get('lang.linkedin')}}</td>
@@ -136,8 +131,7 @@ class="nav-link active"
                             @endif
                         </td>
                         <td>
-                            <a href="{{url('social/media/linkedin')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>
-                        </td>
+                            <a href="{{url('social/media/linkedin')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>                        </td>
                     </tr>
                     <tr>
                         <td>{{\Illuminate\Support\Facades\Lang::get('lang.bitbucket')}}</td>
@@ -149,8 +143,7 @@ class="nav-link active"
                             @endif
                         </td>
                         <td>
-                            <a href="{{url('social/media/bitbucket')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>
-                        </td>
+                            <a href="{{url('social/media/bitbucket')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>                        </td>
                     </tr>
                 </tbody>
             </table>

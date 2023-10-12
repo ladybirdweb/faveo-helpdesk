@@ -69,7 +69,6 @@ class OrganizationController extends Controller
      */
     public function org_list()
     {
-        $modalTitle = __('lang.your_translation_key_here');
         // chumper datable package call to display Advance datatable
         return \Datatable::collection(Organization::all())
                         /* searchable name */
@@ -109,15 +108,15 @@ class OrganizationController extends Controller
 			        <div class="modal-dialog">
 			            <div class="modal-content">
                 			<div class="modal-header">
-                                <h4 class="modal-title">{{ $modalTitle }}</h4>
+                                 <h4 class="modal-title">'.\Lang::get('lang.are_you_sure').'</h4>
                     			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 			</div>
                 			<div class="modal-body">
                 				'.$model->user_name.'
                 			</div>
                 			<div class="modal-footer justify-content-between">
-                    			<button type="button" class="btn btn-default" data-dismiss="modal" id="dismis2">Close</button>
-                    			<a href="'.route('org.delete', $model->id).'"><button class="btn btn-danger">delete</button></a>
+                    			<button type="button" class="btn btn-default" data-dismiss="modal" id="dismis2">'.\Lang::get('lang.close').'</button>
+                    			<a href="'.route('org.delete', $model->id).'"><button class="btn btn-danger">'.\Lang::get('lang.delete').'</button></a>
                 			</div>
             			</div><!-- /.modal-content -->
         			</div><!-- /.modal-dialog -->

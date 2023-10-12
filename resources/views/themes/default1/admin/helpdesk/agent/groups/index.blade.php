@@ -81,9 +81,9 @@ class="nav-link active"
                     @endif
                 <td>
                     {!! Form::open(['route'=>['groups.destroy', $group->id],'method'=>'DELETE']) !!}
-                    <a href="{{route('groups.edit', $group->id)}}" class="btn btn-primary btn-xs"><i class="fas fa-edit"> </i> Edit</a>
+                    <a href="{{route('groups.edit', $group->id)}}" class="btn btn-primary btn-xs"><i class="fas fa-edit"> </i> {{trans('lang.edit')}}</a>
                     <!-- To pop up a confirm Message -->
-                    {!! Form::button('<i class="fas fa-trash"> </i> Delete',
+                    {!! Form::button('<i class="fas fa-trash"> </i>'.trans('lang.delete'),
                     ['type' => 'submit',
                     'class'=> 'btn btn-danger btn-xs',
                     'onclick'=>'return confirm("Are you sure?")'])

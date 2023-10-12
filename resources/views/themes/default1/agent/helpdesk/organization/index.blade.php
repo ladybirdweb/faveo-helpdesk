@@ -1,4 +1,4 @@
-@extends('themes.default1.agent.layout.agent')
+    @extends('themes.default1.agent.layout.agent')
 
 @section('Users')
 class="nav-link active"
@@ -40,9 +40,9 @@ class="nav-link active"
 @endif
 
 <div class="card card-light">
-    
+
     <div class="card-header">
-    
+
         <h3 class="card-title">{{Lang::get('lang.organization_list')}}</h3>
 
         <div class="card-tools">
@@ -51,9 +51,9 @@ class="nav-link active"
         </div>
 
     </div>
-    
+
     <div class="card-body">
-    
+
         {!! Datatable::table()
         ->addColumn(Lang::get('lang.name'),
         Lang::get('lang.website'),

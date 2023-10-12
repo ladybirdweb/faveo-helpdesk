@@ -6,7 +6,6 @@ use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\kb\PageRequest;
 // request
-use App\Http\Requests\kb\PageUpdate;
 use App\Model\kb\Page;
 use Datatable;
 // Model
@@ -91,15 +90,15 @@ class PageController extends Controller
         			<div class="modal-dialog">
             			<div class="modal-content">
                 			<div class="modal-header">
-                                <h4 class="modal-title">Delete</h4>
+                                <h4 class="modal-title">'.Lang::get('lang.delete').'</h4>
                     			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 			</div>
                 			<div class="modal-body">
-                				Are you sure you want to delete <b>'.$model->name.'</b> ?
+                			<span>'.Lang::get('lang.are_you_sure_you_want_to_delete').'</span>&nbsp;<b>'.$model->name.'</b> ?
                 			</div>
                 			<div class="modal-footer justify-content-between">
-	                    		<button type="button" class="btn btn-default" data-dismiss="modal" id="dismis2">Close</button>
-    			                <a href="page/delete/'.$model->id.'"><button class="btn btn-danger">Delete</button></a>
+	                    		<button type="button" class="btn btn-default" data-dismiss="modal" id="dismis2">'.Lang::get('lang.close').'</button>
+    			                <a href="page/delete/'.$model->id.'"><button class="btn btn-danger">'.Lang::get('lang.delete').'</button></a>
 			                </div>
 		            	</div>
 			        </div>

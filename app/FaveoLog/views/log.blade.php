@@ -41,10 +41,10 @@ class="nav-link active"
 <div class="container-fluid">
     <div class="card card-light">
         <div class="card-header">
-            <h3 class="card-title">{{Lang::get('lang.system_logs')}}</h3>
+            <h3 class="card-title">{{Lang::get('log::lang.system_logs')}}</h3>
             <div class="card-tools">
-                <a href="?dl={{ base64_encode($current_file) }}" class="btn btn-primary btn-sm text-white"><span class="fas fa-download"></span> Download file</a>
-                <a id="delete-log" href="?del={{ base64_encode($current_file) }}" class="btn btn-danger btn-sm text-white"><span class="fas fa-trash"></span> Delete file</a>
+                <a href="?dl={{ base64_encode($current_file) }}" class="btn btn-primary btn-sm text-white"><span class="fas fa-download"></span>{{trans('lang.download_file')}}</a>
+                <a id="delete-log" href="?del={{ base64_encode($current_file) }}" class="btn btn-danger btn-sm text-white"><span class="fas fa-trash"></span>{{trans('lang.delete_file')}}</a>
             </div>
         </div>
         <div class="card-body">
@@ -61,7 +61,7 @@ class="nav-link active"
                 <div class="col-md-10 table-container">
                     @if ($logs === null)
                     <div>
-                        Log file >50M, please download it.
+                        {{trans('lang.log_file_50M_please_download_it.')}}
                     </div>
                     @else
                     <table id="table-log" class="table table-striped">

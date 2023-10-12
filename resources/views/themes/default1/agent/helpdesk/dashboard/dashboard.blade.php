@@ -255,7 +255,7 @@ class="nav-item d-none d-sm-inline-block active"
 			<tr>
 				<th>{{trans('lang.department')}}</th>
 				@forelse($statuses as $status)
-				 <th>{!! $status !!}</th>
+				 <th>{{trans('lang.'.strtolower($status))}}</th>
 				@empty 
 				
 				@endforelse

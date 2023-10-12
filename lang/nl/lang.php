@@ -1609,4 +1609,6 @@ return [
     'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
     //updated 15-5-2017
     'session-expired' => 'Session expired or invalid, please try again.',
+    //updated 10-10-2023
+    'what_should_be_done_with_content_owned_by_this_user' => 'Wat moet er gebeuren met de inhoud die eigendom is van deze gebruiker',
 ];

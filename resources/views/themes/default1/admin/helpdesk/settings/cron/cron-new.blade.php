@@ -1,7 +1,7 @@
 {!! Form::model($emails,['url' => 'post-scheduler', 'method' => 'PATCH']) !!}
 @if (count($errors) > 0)
 <div class="alert alert-danger">
-    <strong>{{trans('lang.whoops')}}!</strong> {{\Illuminate\Support\Facades\Lang::get('lang.theirisproblem')}}<br><br>
+    <strong>{{Lang::get('lang.woops')}}</strong> {{Lang::get('lang.theirisproblem')}}<br><br>
     <ul>
         @foreach ($errors->all() as $error)
         <li>{{ $error }}</li>
