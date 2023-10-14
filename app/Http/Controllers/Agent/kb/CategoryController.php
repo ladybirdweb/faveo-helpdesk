@@ -150,9 +150,9 @@ class CategoryController extends Controller
         try {
             $category->fill($request->input())->save();
 
-            return Redirect::back()->with('success', Lang::get('lang.category_inserted_successfully'));
+            return redirect('category')->with('success', Lang::get('lang.category_inserted_successfully'));
         } catch (Exception $e) {
-            return Redirect::back()->with('fails', Lang::get('lang.category_not_inserted').'<li>'.$e->getMessage().'</li>');
+            return redirect('category')->with('fails', Lang::get('lang.category_not_inserted').'<li>'.$e->getMessage().'</li>');
         }
     }
 
