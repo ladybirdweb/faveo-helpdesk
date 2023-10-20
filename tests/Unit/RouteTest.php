@@ -2,10 +2,10 @@
 
 namespace Tests\Unit;
 
+use App\User;
+use Faker\Factory as FakerFactory;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
-use Faker\Factory as FakerFactory;
-use App\User;
 
 class RouteTest extends TestCase
 {
@@ -30,16 +30,16 @@ class RouteTest extends TestCase
         $password = Hash::make($str);
         $email = $faker->unique()->email();
         $user = new User([
-            'first_name' => $faker->firstName(),
-            'last_name' => $faker->lastName(),
-            'email' => $email,
-            'user_name' => $faker->unique()->userName(),
-            'password' => $password,
+            'first_name'   => $faker->firstName(),
+            'last_name'    => $faker->lastName(),
+            'email'        => $email,
+            'user_name'    => $faker->unique()->userName(),
+            'password'     => $password,
             'assign_group' => 1,
-            'primary_dpt' => 1,
-            'active' => 1,
-            'role' => 'agent',
-            'agent_tzone' => 81,
+            'primary_dpt'  => 1,
+            'active'       => 1,
+            'role'         => 'agent',
+            'agent_tzone'  => 81,
         ]);
         $user->save();
 
@@ -50,6 +50,5 @@ class RouteTest extends TestCase
         $this->actingAs($user);
 
         $this->assertAuthenticated();
-
     }
 }
