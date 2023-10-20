@@ -70,7 +70,7 @@ class QueueController extends Controller
                 }
             }
 
-            return redirect()->back()->with('success',trans('lang.updated'));
+            return redirect()->back()->with('success', trans('lang.updated'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
