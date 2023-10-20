@@ -65,7 +65,7 @@ class SetupTestEnv extends Command
         //closing the database connection
         DB::disconnect('mysql');
 
-        $this->createEnv($dbUsername, $dbPassword,$dbName);
+        $this->createEnv($dbUsername, $dbPassword, $dbName);
 
         $this->updateAppUrl();
 
