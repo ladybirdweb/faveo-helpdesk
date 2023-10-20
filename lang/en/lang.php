@@ -1682,4 +1682,8 @@ return [
     'delete_file'                                          => 'Delete file',
     'log_file_50M_please_download_it.'                     => 'Log file >50M, please download it.',
     'support'                                              => 'Support',
+    'optional'                                             => 'Optional',
+    'activated'                                            => 'Activated',
+    'add-child'                                            => 'Add Child',
+    'save-successful'                                      => ' Saved Successfully',
 ];

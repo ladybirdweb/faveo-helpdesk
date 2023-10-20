@@ -73,7 +73,7 @@ class="nav-link active"
                             {!! link_to_route('forms.show', Lang::get('lang.view_this_form') ,[$form->id],['id'=>'View','class'=>'btn btn-primary btn-sm']) !!}
                         </div>
                         <div class="btn-group">
-                            {!! link_to_route('forms.add.child', 'Add Child' ,[$form->id],['id'=>'add-child','class'=>'btn btn-primary btn-sm']) !!}
+                            {!! link_to_route('forms.add.child', Lang::get('lang.add-child') ,[$form->id],['id'=>'add-child','class'=>'btn btn-primary btn-sm']) !!}
                         </div>
                         <div class="btn-group">
                             <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete{{$form->id}}">{!! Lang::get('lang.delete_from') !!}

@@ -57,7 +57,7 @@
                             <div class="col-md-6">
                                 {!! Form::open(['id'=>'merge-form','method' => 'PATCH'] )!!}
                                 <label>{!! Lang::get('lang.title') !!}</label>
-                                <input type="text" name='title' class="form-control" value="" placeholder="Optional" />
+                                <input type="text" name='title' class="form-control" value="" placeholder="{{trans('lang.optional')}}" />
                             </div>
                             <div class="col-md-6">
                                 <label>{!! Lang::get('lang.select-pparent-ticket') !!}</label>

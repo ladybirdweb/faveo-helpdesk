@@ -214,7 +214,7 @@ class SettingsController extends Controller
         try {
             $widget->save();
 
-            return redirect()->back()->with('success', $widget->name.' Saved Successfully');
+            return redirect()->back()->with('success', $widget->name.trans('lang.save-successful'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->errorInfo[2]);
         }

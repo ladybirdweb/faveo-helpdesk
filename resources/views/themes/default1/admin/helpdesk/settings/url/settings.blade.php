@@ -61,7 +61,7 @@ class="nav-link active"
 @endif
 <div class="card card-light">
     <div class="card-header">
-        <h3 class="card-title">URL Settings</h3>
+        <h3 class="card-title">URL {{trans('lang.settings')}}</h3>
     </div>
 
     <div class="card-body">
