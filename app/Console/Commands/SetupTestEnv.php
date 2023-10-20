@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Model\helpdesk\Settings\System;
+use Database\Seeders\v_2_0_0\DatabaseSeeder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
@@ -15,7 +16,7 @@ class SetupTestEnv extends Command
      *
      * @var string
      */
-    protected $signature = 'testing-setup {--username=} {--password=}';
+    protected $signature = 'testing-setup {--username=} {--password=} {--database=}';
 
     /**
      * The console command description.
@@ -43,10 +44,11 @@ class SetupTestEnv extends Command
     {
         $dbUsername = $this->option('username') ? $this->option('username') : env('DB_USERNAME');
         $dbPassword = $this->option('password') ? $this->option('password') : (env('DB_PASSWORD'));
+        $dbName = $this->option('database') ? $this->option('database') : 'testing_db';
+
         $this->setupConfig($dbUsername, $dbPassword);
 
         echo "\nCreating database...\n";
-        $dbName = 'testing_db';
         createDB($dbName);
         echo "\nDatabase Created Successfully!\n";
 
@@ -63,7 +65,7 @@ class SetupTestEnv extends Command
         //closing the database connection
         DB::disconnect('mysql');
 
-        $this->createEnv($dbUsername, $dbPassword);
+        $this->createEnv($dbUsername, $dbPassword,$dbName);
 
         $this->updateAppUrl();
 
@@ -144,7 +146,7 @@ class SetupTestEnv extends Command
     {
         try {
             echo "\nSeeding...\n";
-            Artisan::call('db:seed', ['--force' => true]);
+            Artisan::call('db:seed', ['--class' => DatabaseSeeder::class, '--force' => true]);
             echo Artisan::output();
             echo "\nSeeded Successfully!\n";
         } catch (\Exception $e) {
@@ -159,7 +161,13 @@ class SetupTestEnv extends Command
      */
     private function updateAppUrl()
     {
-        return System::first()->update(['url' => 'http://localhost:8000']);
+        $system = System::latest()->first();
+
+        if ($system) {
+            $system->update(['url' => 'http://localhost:8000']);
+        } else {
+            echo "\nData doesn't exists";
+        }
     }
 
     /**
@@ -167,13 +175,15 @@ class SetupTestEnv extends Command
      *
      * @param string $dbUsername
      * @param string $dbPassword
+     * @param string $dbName
      *
      * @return null
      */
-    private function createEnv(string $dbUsername, string $dbPassword)
+    private function createEnv(string $dbUsername, string $dbPassword, string $dbName)
     {
         $env['DB_USERNAME'] = $dbUsername;
         $env['DB_PASSWORD'] = $dbPassword;
+        $env['DB_DATABASE'] = $dbName;
         $env['APP_ENV'] = 'development';
 
         $config = '';
@@ -182,7 +192,7 @@ class SetupTestEnv extends Command
             $config .= "{$key}={$val}\n";
         }
 
-        $envLocation = base_path().DIRECTORY_SEPARATOR.'.env';
+        $envLocation = base_path().DIRECTORY_SEPARATOR.'.env.testing';
 
         if (is_file($envLocation)) {
             echo "\nEnvironment file already exists. It is assumed that username and password in the file is correct\n";
@@ -191,7 +201,7 @@ class SetupTestEnv extends Command
         }
 
         // Write environment file
-        $fp = fopen(base_path().DIRECTORY_SEPARATOR.'.env', 'w');
+        $fp = fopen(base_path().DIRECTORY_SEPARATOR.'.env.testing', 'w');
         fwrite($fp, $config);
         fclose($fp);
     }
