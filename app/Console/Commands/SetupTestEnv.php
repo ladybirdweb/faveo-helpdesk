@@ -196,7 +196,6 @@ class SetupTestEnv extends Command
 
         if (is_file($envLocation)) {
             echo "\nEnvironment file already exists. It is assumed that username and password in the file is correct\n";
-
             return;
         }
 
