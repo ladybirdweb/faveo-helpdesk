@@ -55,6 +55,9 @@ class SetupTestEnv extends Command
         //setting up new database name
         Config::set('database.connections.mysql.database', $dbName);
 
+        //setting up app env to testing
+        Config::set('app.env', 'testing');
+
         //opening a database connection
         DB::purge('mysql');
 
@@ -184,6 +187,11 @@ class SetupTestEnv extends Command
         $env['DB_USERNAME'] = $dbUsername;
         $env['DB_PASSWORD'] = $dbPassword;
         $env['DB_DATABASE'] = $dbName;
+        $env['BACKUP_DB_HOST'] = 'localhost';
+        $env['BACKUP_DB_DATABASE'] = 'testing_archive';
+        $env['BACKUP_DB_USERNAME'] = $dbUsername;
+        $env['BACKUP_DB_PASSWORD'] = $dbPassword;
+        $env['BACKUP_DB_PORT'] = 3306;
         $env['APP_ENV'] = 'development';
 
         $config = '';
