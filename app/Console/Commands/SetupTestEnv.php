@@ -197,6 +197,7 @@ class SetupTestEnv extends Command
 
             return;
         }
+        
         // Write environment file
         $fp = fopen(base_path().DIRECTORY_SEPARATOR.'.env', 'w');
         fwrite($fp, $config);
