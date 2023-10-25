@@ -19,7 +19,7 @@ class RouteTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /*public function test_store_user()
+    public function test_store_user()
     {
         $faker = FakerFactory::create();
 
@@ -35,11 +35,8 @@ class RouteTest extends TestCase
             'email'        => $email,
             'user_name'    => $faker->unique()->userName(),
             'password'     => $password,
-            'assign_group' => 1,
-            'primary_dpt'  => 1,
             'active'       => 1,
-            'role'         => 'agent',
-            'agent_tzone'  => 81,
+            'role'         => 'user',
         ]);
         $user->save();
 
@@ -50,10 +47,5 @@ class RouteTest extends TestCase
         $this->actingAs($user);
 
         $this->assertAuthenticated();
-
     }
-
-
-
-    }*/
 }
