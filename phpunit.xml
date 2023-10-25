@@ -13,7 +13,7 @@
       <directory>./tests/</directory>
     </testsuite>
     <testsuite name="unit">
-      <directory>./tests/unit</directory>
+      <directory>./tests/Unit</directory>
     </testsuite>
   </testsuites>
   <filter>
