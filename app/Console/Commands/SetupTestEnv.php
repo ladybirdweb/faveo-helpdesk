@@ -3,11 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Model\helpdesk\Settings\System;
+use Database\Seeders\v_2_0_0\DatabaseSeeder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Database\Seeders\v_2_0_0\DatabaseSeeder;
 
 class SetupTestEnv extends Command
 {
