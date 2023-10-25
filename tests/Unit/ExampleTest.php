@@ -3,10 +3,10 @@
 namespace Tests\Unit;
 
 use App\User;
+use Faker\Factory as FakerFactory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Tests\TestCase;
-use Faker\Factory as FakerFactory;
 
 class ExampleTest extends TestCase
 {
