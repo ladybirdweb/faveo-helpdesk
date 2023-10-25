@@ -50,7 +50,5 @@ class RouteTest extends TestCase
         $this->actingAs($user);
 
         $this->assertAuthenticated();
-
-
     }
 }
