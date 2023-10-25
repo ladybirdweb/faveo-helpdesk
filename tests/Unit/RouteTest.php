@@ -50,5 +50,8 @@ class RouteTest extends TestCase
         $this->actingAs($user);
 
         $this->assertAuthenticated();
+
+        $this->assertDatabaseMissing('users', ['email' => $email]);
+
     }
 }
