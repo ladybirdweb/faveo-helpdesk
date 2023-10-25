@@ -55,8 +55,6 @@ class SetupTestEnv extends Command
         //setting up new database name
         Config::set('database.connections.mysql.database', $dbName);
 
-        //setting up app env to testing
-        Config::set('app.env', 'testing');
 
         //opening a database connection
         DB::purge('mysql');
@@ -178,20 +176,13 @@ class SetupTestEnv extends Command
      *
      * @param string $dbUsername
      * @param string $dbPassword
-     * @param string $dbName
      *
      * @return null
      */
-    private function createEnv(string $dbUsername, string $dbPassword, string $dbName)
+    private function createEnv(string $dbUsername, string $dbPassword)
     {
         $env['DB_USERNAME'] = $dbUsername;
         $env['DB_PASSWORD'] = $dbPassword;
-        $env['DB_DATABASE'] = $dbName;
-        $env['BACKUP_DB_HOST'] = 'localhost';
-        $env['BACKUP_DB_DATABASE'] = 'testing_archive';
-        $env['BACKUP_DB_USERNAME'] = $dbUsername;
-        $env['BACKUP_DB_PASSWORD'] = $dbPassword;
-        $env['BACKUP_DB_PORT'] = 3306;
         $env['APP_ENV'] = 'development';
 
         $config = '';
@@ -200,7 +191,7 @@ class SetupTestEnv extends Command
             $config .= "{$key}={$val}\n";
         }
 
-        $envLocation = base_path().DIRECTORY_SEPARATOR.'.env.testing';
+        $envLocation = base_path().DIRECTORY_SEPARATOR.'.env';
 
         if (is_file($envLocation)) {
             echo "\nEnvironment file already exists. It is assumed that username and password in the file is correct\n";
@@ -208,7 +199,7 @@ class SetupTestEnv extends Command
             return;
         }
         // Write environment file
-        $fp = fopen(base_path().DIRECTORY_SEPARATOR.'.env.testing', 'w');
+        $fp = fopen(base_path().DIRECTORY_SEPARATOR.'.env', 'w');
         fwrite($fp, $config);
         fclose($fp);
     }
