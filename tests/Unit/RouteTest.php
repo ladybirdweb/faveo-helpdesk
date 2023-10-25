@@ -44,13 +44,13 @@ class RouteTest extends TestCase
         $user->save();
 
         // Check if data is inserted
-        //$this->assertDatabaseHas('users', ['email' => $email]);
+        $this->assertDatabaseHas('users', ['email' => $email]);
 
         // Authenticate as the created user
         $this->actingAs($user);
 
         $this->assertAuthenticated();
 
-        $this->assertDatabaseMissing('users', ['email' => $email]);
+        //$this->assertDatabaseMissing('users', ['email' => $email]);
     }
 }
