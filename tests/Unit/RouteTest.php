@@ -25,7 +25,6 @@ class RouteTest extends TestCase
         $faker = FakerFactory::create();
 
         //Create User -> Agent
-
         $str = Str::random(10);
         $password = Hash::make($str);
         $email = $faker->unique()->email();
