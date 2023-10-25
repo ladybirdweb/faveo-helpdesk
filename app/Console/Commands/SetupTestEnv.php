@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Database\Seeders\v_2_0_0\DatabaseSeeder;
 
 class SetupTestEnv extends Command
 {
@@ -15,7 +16,7 @@ class SetupTestEnv extends Command
      *
      * @var string
      */
-    protected $signature = 'testing-setup {--username=} {--password=}';
+    protected $signature = 'testing-setup {--username=} {--password=} {--database=}';
 
     /**
      * The console command description.
@@ -43,10 +44,11 @@ class SetupTestEnv extends Command
     {
         $dbUsername = $this->option('username') ? $this->option('username') : env('DB_USERNAME');
         $dbPassword = $this->option('password') ? $this->option('password') : (env('DB_PASSWORD'));
+        $dbName = $this->option('database') ? $this->option('database') : 'testing_db';
+
         $this->setupConfig($dbUsername, $dbPassword);
 
         echo "\nCreating database...\n";
-        $dbName = 'testing_db';
         createDB($dbName);
         echo "\nDatabase Created Successfully!\n";
 
@@ -144,7 +146,7 @@ class SetupTestEnv extends Command
     {
         try {
             echo "\nSeeding...\n";
-            Artisan::call('db:seed', ['--force' => true]);
+            Artisan::call('db:seed', ['--class' => DatabaseSeeder::class, '--force' => true]);
             echo Artisan::output();
             echo "\nSeeded Successfully!\n";
         } catch (\Exception $e) {
@@ -159,7 +161,13 @@ class SetupTestEnv extends Command
      */
     private function updateAppUrl()
     {
-        return System::first()->update(['url' => 'http://localhost:8000']);
+        $system = System::latest()->first();
+
+        if ($system) {
+            $system->update(['url' => 'http://localhost:8000']);
+        } else {
+            echo "\nData doesn't exists";
+        }
     }
 
     /**
