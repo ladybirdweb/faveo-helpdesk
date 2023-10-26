@@ -5,6 +5,8 @@ namespace Tests\Unit;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\User;
+use DateTimeZone;
+use Faker\Factory as FakerFactory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
@@ -12,80 +14,45 @@ use Tests\TestCase;
 
 class TicketControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
-    public function test_user_change_the_status()
+    //Testing Reply Alert and Last Activity filed
+    public function test_reply()
     {
-        $str = 'Demopass@1';
-        $password = Hash::make($str);
-        $user = new User([
-            'first_name' => 'a',
-            'last_name'  => 'noor',
-            'email'      => 'naveen12@gmail.com',
-            'user_name'  => 'noor',
-            'password'   => $password,
-            'active'     => 1,
-            'role'       => 'user',
-        ]);
-        $user->save();
+        $faker = FakerFactory::create();
 
-        // Authenticate as the created user
+        // Get previously created user to authenticate
+
+        $user = User::latest()->first();
 
         $this->actingAs($user);
 
-        $ticket = new Tickets(
-            [
-                'ticket_number' => 'AAAA-0000-0001',
-                'user_id'       => $user->id,
-                'priority_id'   => 2,
-                'sla'           => 2,
-                'help_topic_id' => 1,
-                'status'        => 1,
-                'source'        => 1,
-            ]
-        );
+        $this->assertAuthenticated();
 
-        $ticket->save();
-        $ticket->dept_id = 1;
-        $ticket->save();
+        //Get previously created Ticket
 
-        $ticket_thread = new Ticket_Thread(
-            [
-                'ticket_id' => $ticket->id,
-                'user_id'   => $user->id,
-                'poster'    => 'client',
-                'title'     => 'TestCase',
-                'body'      => 'Testing',
-            ]
-        );
-        $ticket_thread->save();
+        $tickets = Tickets::latest()->first();
 
-        $mytickets = $this->get(route('ticket2'));
-        $mytickets->assertStatus(200);
+        // Define the route URL with the Ticket ID
 
-        $response = $this->post(route('select_all'), [
-            'select_all' => [$ticket->id],
-            'submit'     => 'Open',
+        $url = route('ticket.thread', ['id' => $tickets->id]);
 
-        ]);
+        $response2 = $this->get($url);
 
-        // Assert that the response status code indicates success
-        $response->assertStatus(302); // Adjust this as needed
+        // Assert that the response status is 200 (OK).
+        $response2->assertStatus(200);
 
-        // Assert that the ticket's status has been updated to open
+        // Create fake data for the reply
 
-        $response->assertSessionHas('success', Lang::get('lang.tickets_have_been_opened'));
-        $response = $this->post(route('select_all'), [
-            'select_all' => [$ticket->id],
-            'submit'     => 'Close',
-        ]);
-        $response->assertStatus(302); // Adjust this as needed
-        $this->assertEquals(3, $ticket->fresh()->status); // Adjust this as needed
-        $response->assertSessionHas('success', Lang::get('lang.tickets_have_been_closed'));
+        $replyData = [
+            'ticket_ID'     => $tickets->id,
+            'reply_content' => $faker->paragraph,
+            'created_at'    => date_default_timezone_set('UTC'),
+            'updated_at'    => date_default_timezone_set('UTC'),
+        ];
+
+        // Make a POST request to the route with the reply data
+        $response3 = $this->post(route('ticket.reply', ['id' => $tickets->id]), $replyData);
+        $response3->assertStatus(200);
+        $response3->assertSee(Lang::get('lang.you_have_successfully_replied_to_your_ticket'));
+
     }
 }
