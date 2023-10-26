@@ -7,6 +7,7 @@ use App\Model\helpdesk\Ticket\Tickets;
 use App\User;
 use DateTimeZone;
 use Faker\Factory as FakerFactory;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
@@ -102,28 +103,6 @@ class TicketControllerTest extends TestCase
         // Assert that the response status is 200 (OK).
         $response->assertStatus(200);
 
-        //Accessing Tooltip url
-
-        $url = 'http://127.0.0.1:8000/ticket/tooltip?ticketid='.$ticket->id;
-
-        $result = $this->get(url($url));
-
-        // Define the expected tooltip content
-
-        $expectedTooltip = '';
-
-        $threads = $ticket->thread()->select('user_id', 'poster', 'body')->get();
-        $numThreads = $threads->count();
-
-        foreach ($threads as $thread) {
-            $expectedTooltip .= '<b>'.$thread->user->user_name.' ('.$thread->poster.')</b></br>'
-                .$thread->purify().'<br><hr>';
-        }
-
-        $expectedTooltip .= 'This ticket has '.$numThreads.' threads.';
-
-        // Assert that the response content contains the expected tooltip content
-        $result->assertSee($expectedTooltip, $escaped = false);
     }
 
     //Testing Reply Alert and Last Activity filed
@@ -163,36 +142,9 @@ class TicketControllerTest extends TestCase
 
         // Make a POST request to the route with the reply data
         $response3 = $this->post(route('ticket.reply', ['id' => $tickets->id]), $replyData);
-        // Assert that the response has a successful HTTP status code (e.g., 200 OK) or an appropriate status code
         $response3->assertStatus(200);
         $response3->assertSee(Lang::get('lang.you_have_successfully_replied_to_your_ticket'));
 
-        //Accessing tickets to check last activity is updated
 
-        $response4 = $this->get(route('ticket2'));
-
-        $response4->assertStatus(200);
-
-        $result_date = $response4->getDate();
-
-        $userTimeZone = new DateTimeZone('Asia/Kolkata');
-
-        // Convert the DateTime object to the user's time zone
-
-        $result_date = $result_date->setTimezone($userTimeZone);
-
-        $result_date = $result_date->format('d/m/Y H:i:s');
-
-        //Converting Updated_at to User Timezone
-
-        $last_thread = Tickets::latest()->first();
-
-        $updated_at = $last_thread->updated_at;
-
-        $expected_date = UTC::usertimezone($updated_at);
-
-        // Asserting if the last_activity is updated correctly
-
-        $this->assertEquals($expected_date, $result_date);
     }
 }

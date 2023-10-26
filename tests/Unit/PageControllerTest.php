@@ -7,13 +7,13 @@ use App\Model\kb\Page;
 use App\User;
 use Faker\Factory as FakerFactory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
 class PageControllerTest extends TestCase
 {
-    use DatabaseTransactions;
     protected $user; // Declare a user property
 
     // Set up the authenticated user before each test
@@ -55,6 +55,7 @@ class PageControllerTest extends TestCase
     /** @test */
     public function it_can_display_the_page_index_page()
     {
+        $this->setUp();
         $response = $this->get(route('page.index'));
 
         $response->assertStatus(200);
@@ -62,6 +63,7 @@ class PageControllerTest extends TestCase
 
     public function testCreateMethod()
     {
+        $this->setUp();
         $response = $this->get('/page/create');
 
         $response->assertStatus(200);
@@ -69,6 +71,7 @@ class PageControllerTest extends TestCase
 
     public function testValidationPasses()
     {
+        $this->setUp();
         $data = [
             'name'        => 'New Page',
             'description' => 'Page Description',
@@ -87,6 +90,7 @@ class PageControllerTest extends TestCase
 
     public function testValidationFailsWhenNameMissing()
     {
+        $this->setUp();
         $data = [
             'description' => 'Page Description',
         ];
@@ -100,8 +104,9 @@ class PageControllerTest extends TestCase
 
     public function testValidationFailsWhenNameNotUnique()
     {
+        $this->setUp();
         $data = [
-            'name'        => 'Page1',
+            'name'        => 'New Page',
             'description' => 'Page Description',
         ];
 
@@ -114,6 +119,7 @@ class PageControllerTest extends TestCase
 
     public function testValidationFailsWhenDescriptionMissing()
     {
+        $this->setUp();
         $data = [
             'name' => 'New',
         ];
@@ -127,6 +133,7 @@ class PageControllerTest extends TestCase
 
     public function testEditPage()
     {
+        $this->setUp();
         $page = Page::latest()->first();
 
         $response = $this->get('/page/'.$page->id.'/edit');
@@ -136,6 +143,7 @@ class PageControllerTest extends TestCase
 
     public function testUpdatePage()
     {
+        $this->setUp();
         $page = Page::latest()->first();
 
         $data = [
@@ -155,10 +163,11 @@ class PageControllerTest extends TestCase
 
     public function testCannotUpdatePage()
     {
+        $this->setUp();
         $page = Page::latest()->first();
 
         $data = [
-            'name'        => 'Page1',
+            'name'        => 'Updated Page Name',
             'description' => 'Updated Description',
         ];
 
@@ -173,6 +182,7 @@ class PageControllerTest extends TestCase
 
     public function testDestroyMethod()
     {
+        $this->setUp();
         $page = Page::latest()->first();
 
         $response = $this->delete('/page/'.$page->id);
