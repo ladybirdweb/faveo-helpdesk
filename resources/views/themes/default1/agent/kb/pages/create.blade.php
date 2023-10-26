@@ -83,7 +83,7 @@ class="nav-item menu-open"
                     
                     <div class="form-group col-sm-12 {{ $errors->has('description') ? 'has-error' : '' }}">
                         {!! Form::label('description',Lang::get('lang.description')) !!}
-
+                        <span class="text-red"> *</span>
                         <div class="form-group" style="background-color:white">
                             {!! Form::textarea('description',null,['class' => 'form-control color','size' => '110x15','id'=>'myNicEditor','placeholder'=>Lang::get('lang.enter_the_description')]) !!}
                         </div>

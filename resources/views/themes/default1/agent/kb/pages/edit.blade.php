@@ -35,7 +35,7 @@ class="nav-item menu-open"
 
 @section('content')
 
-{!! Form::model($page,['url' => 'page/'.$page->slug, 'method' => 'PATCH','files'=>true]) !!}
+{!! Form::model($page,['url' => 'page/'.$page->id, 'method' => 'PATCH','files'=>true]) !!}
 
 @if(Session::has('errors'))
 <?php //dd($errors); ?>
@@ -130,7 +130,7 @@ class="nav-item menu-open"
             </div>
 
             <div class="card-footer">
-               
+
                 {!! Form::submit(Lang::get('lang.publish'),['class'=>'btn btn-primary'])!!}
             </div>
         </div>

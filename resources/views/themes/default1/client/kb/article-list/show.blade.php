@@ -254,9 +254,22 @@ $category_id = $all->pluck('category_id')->toArray();
                                 $(".form-group").removeClass("has-error");
 
                                 // Perform your custom validation here
-                                var name = $("#comment-name").val().trim();
-                                var email = $("#comment-email").val().trim();
-                                var comment = $("#comment-comment").val().trim();
+                                var nameElement = $("#comment-name");
+                                var emailElement = $("#comment-email");
+                                var commentElement = $("#comment-comment");
+
+                                if (nameElement.length > 0) {
+                                    var name = nameElement.val().trim();
+                                }
+
+                                if (emailElement.length > 0) {
+                                    var email = emailElement.val().trim();
+                                }
+
+                                if (commentElement.length > 0) {
+                                    var comment = commentElement.val().trim();
+                                }
+
 
                                 // Flag to track if there are any errors
                                 var hasErrors = false;

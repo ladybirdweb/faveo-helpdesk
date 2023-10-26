@@ -23,11 +23,14 @@ class ArticleUpdate extends Request
      */
     public function rules()
     {
-        $id = $this->segments()[1];
+        //$id = $this->segments()[1];
+        $segments = $this->segments();
+
+        $id = isset($segments[1]) ? $segments[1] : null;
 
         return [
-            'name'        => 'required',
-            'slug'        => 'required|unique:kb_article,slug,'.$id.',id',
+            'name'        => 'required|unique:kb_article,name,'.$id,
+            'slug'        => 'required|unique:kb_article,slug,'.$id,
             'description' => 'required',
             'category_id' => 'required',
         ];
