@@ -82,7 +82,7 @@
                 
                 <div>
 
-                    <h3 class="box-title" align="center">Forgot your password</h3>
+                    <h3 class="box-title" align="center">{{trans('lang.forgot_password')}}</h3>
                 </div> 
                        
                 <!-- form open -->

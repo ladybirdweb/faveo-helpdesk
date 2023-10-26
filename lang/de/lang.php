@@ -1158,4 +1158,6 @@ return [
     'selected-user-is-already-the-owner' => 'Der ausgewählte Benutzer ist bereits Inhaber dieses Tickets.',
     //updated 15-5-2017
     'session-expired' => 'Die Sitzung ist abgelaufen oder ungültig. Bitte versuchen Sie es erneut.',
+    //updated 10-10-2023
+    'what_should_be_done_with_content_owned_by_this_user'=> 'Was soll mit Inhalten geschehen, die diesem Benutzer gehören',
 ];

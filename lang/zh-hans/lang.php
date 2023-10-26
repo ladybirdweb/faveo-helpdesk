@@ -1709,4 +1709,6 @@ return [
     'ticket_type_updated_successfully' => '工单类型更新成功',
     'ticket_type_deleted_successfully' => '工单类型删除成功',
     'create_new_ticket'                => '创建工单',
+    //updated 10-10-2023
+    'what_should_be_done_with_content_owned_by_this_user'  => '应如何处理该用户拥有的内容',
 ];

@@ -26,6 +26,29 @@ foreach($segments as $seg){
                 "sPaginationType": "full_numbers",
                 "bProcessing": true,
                 "bServerSide": true,
+                "oLanguage": {
+                    "sEmptyTable": "{!! Lang::get('datatables.sEmptyTable') !!}",
+                    "sInfo": "{!! Lang::get('datatables.sInfo') !!}",
+                    "sInfoEmpty": "{!! Lang::get('datatables.sInfoEmpty') !!}",
+                    "sInfoFiltered": "{!! Lang::get('datatables.sInfoFiltered') !!}",
+                    "sInfoPostFix": "{!! Lang::get('datatables.sInfoPostFix') !!}",
+                    "sInfoThousands": "{!! Lang::get('datatables.sInfoThousands') !!}",
+                    "sLengthMenu": "{!! Lang::get('datatables.sLengthMenu') !!}",
+                    "sLoadingRecords": "{!! Lang::get('datatables.sLoadingRecords') !!}",
+                    "sProcessing": "{!! Lang::get('datatables.sProcessing') !!}",
+                    "sSearch": "{!! Lang::get('datatables.sSearch') !!}",
+                    "sZeroRecords": "{!! Lang::get('datatables.sZeroRecords') !!}",
+                    "oPaginate": {
+                        "sFirst": "{!! Lang::get('datatables.oPaginate.sFirst') !!}",
+                        "sLast": "{!! Lang::get('datatables.oPaginate.sLast') !!}",
+                        "sNext": "{!! Lang::get('datatables.oPaginate.sNext') !!}",
+                        "sPrevious": "{!! Lang::get('datatables.oPaginate.sPrevious') !!}"
+                    },
+                    "oAria": {
+                        "sSortAscending": "{!! Lang::get('datatables.oAria.sSortAscending') !!}",
+                        "sSortDescending": "{!! Lang::get('datatables.oAria.sortDescending') !!}"
+                    },
+                },
                 "ajax": {
                     url: "{{url('user-list')}}",
                     data: function (d) {

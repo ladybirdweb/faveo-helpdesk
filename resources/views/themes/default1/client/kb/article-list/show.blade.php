@@ -138,7 +138,7 @@ $category_id = $all->pluck('category_id')->toArray();
                         <div class="col-md-4" style="border:#f4f4f4;">
                             <div data-v-43e70d45="" class="banner-wrapper user-data text-center clearfix" id="ban_ner" style="border-width: 5px 1px 1px; border-style: solid; border-color: rgb(0, 154, 186); border-image: initial; width: 90%" >
                             <img id="user_avatar" src="{{Auth::user()->profile_pic}}" class="avatar" alt="User Image" style="margin-left: 5% ">
-                            <div STYLE="margin-left:5%"><strong>Hello</strong></div>
+                                <div STYLE="margin-left:5%"><strong>{{trans('lang.hello')}}</strong></div>
                             <p class="banner-title ellipsize_first_name h4" STYLE="margin-left: 5%">{{Auth::user()->first_name." ".Auth::user()->last_name}}</p>
                             <div class="banner-content" id="dropdown_content">
                                 <p data-v-43e70d45="">If you are not? </p>
@@ -254,9 +254,22 @@ $category_id = $all->pluck('category_id')->toArray();
                                 $(".form-group").removeClass("has-error");
 
                                 // Perform your custom validation here
-                                var name = $("#comment-name").val().trim();
-                                var email = $("#comment-email").val().trim();
-                                var comment = $("#comment-comment").val().trim();
+                                var nameElement = $("#comment-name");
+                                var emailElement = $("#comment-email");
+                                var commentElement = $("#comment-comment");
+
+                                if (nameElement.length > 0) {
+                                    var name = nameElement.val().trim();
+                                }
+
+                                if (emailElement.length > 0) {
+                                    var email = emailElement.val().trim();
+                                }
+
+                                if (commentElement.length > 0) {
+                                    var comment = commentElement.val().trim();
+                                }
+
 
                                 // Flag to track if there are any errors
                                 var hasErrors = false;

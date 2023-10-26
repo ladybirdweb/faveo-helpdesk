@@ -34,7 +34,7 @@ class="nav-link active"
 
 @if (count($errors) > 0)
 <div class="alert alert-danger">
-    <strong>Whoops!</strong> There were some problems with your input.<br><br>
+    <strong>{{Lang::get('lang.woops')}}</strong> {{Lang::get('lang.theirisproblem')}} <br><br>
     <ul>
         @foreach ($errors->all() as $error)
         <li>{{ $error }}</li>
@@ -61,7 +61,7 @@ class="nav-link active"
 @endif
 <div class="card card-light">
     <div class="card-header">
-        <h3 class="card-title">URL Settings</h3>
+        <h3 class="card-title">URL {{trans('lang.settings')}}</h3>
     </div>
 
     <div class="card-body">

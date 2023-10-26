@@ -160,7 +160,11 @@
                                     </ul>
                                 </li>
 
-                                 <?php $pages = App\Model\kb\Page::where('status', '1')->where('visibility', '1')->get();
+                                 <?php
+                                    if(!Auth::check() || Auth::user()->role == 'user')
+                                 $pages = App\Model\kb\Page::where('status', '1')->where('visibility', '1')->get();
+                                    else
+                                        $pages = App\Model\kb\Page::where('status', '1')->get();
                                 ?>
                                  @if(count($pages))
                                 <li @yield('pages') class="nav-item dropdown">
@@ -191,7 +195,7 @@
 
                                                 <img id="user_avatar" src="{{Auth::user()->profile_pic}}"class="avatar" alt="User Image" height="70" width="70"/>
 
-                                                <div><strong>Hello</strong></div>
+                                                <div><strong>{{trans('lang.hello')}}</strong></div>
 
                                                 <p class="banner-title ellipsize_first_name h4">{{Auth::user()->first_name." ".Auth::user()->last_name}}</p>
 
@@ -312,12 +316,12 @@
 
                     <div id="header-search" class="site-search clearfix" style="margin-right: 90%; width: 100%"><!-- #header-search -->
                         {!!Form::open(['route' => 'client.search','class'=>'search-form clearfix'])!!}
-                        <div class="form-border" style="z-index: 0;width: 95%;">
-                            <div class="form-inline">
-                                <div  class="form-group input-group" style="width: 100%;">
-                                    <input  type="text" name="s" class="search-field form-control input-lg mr-3" title="Enter search term" placeholder="Have a question? Type your search term here..."  required>
+                        <div class="form-border" style="z-index: 0;width: 85%;">
+                            <div class="form-inline ">
+                                <div class="form-group input-group " style="width: 98% ">
+                                    <input type="text" name="s" class="search-field form-control" title="Enter search term" placeholder="{{trans('lang.have_a_question?_type_your_search_term_here')}}" required="" style="width: 80%">
                                     <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-custom btn-md" style="border-color: rgb(0, 192, 239); background-color: rgb(0, 154, 186);">Search</button>
+                                        <button type="submit" class="btn btn-custom btn-md " style="margin-left: 20% ;background-color: #009aba; hov: #00c0ef; color: #fff ">{{trans('lang.search')}}</button>
                                     </span>
                                 </div>
                             </div><!----><!----></div>

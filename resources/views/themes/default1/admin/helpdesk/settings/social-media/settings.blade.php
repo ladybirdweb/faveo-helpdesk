@@ -33,7 +33,7 @@ class="nav-link active"
 {!! Form::open(['url' => 'social/media/'.$provider, 'method' => 'POST']) !!}
 @if (count($errors) > 0)
 <div class="alert alert-danger">
-    <strong>Whoops!</strong> There were some problems with your input.<br><br>
+    <strong>{{Lang::get('lang.woops')}}</strong> {{Lang::get('lang.theirisproblem')}}<br><br>
     <ul>
         @foreach ($errors->all() as $error)
         <li>{{ $error }}</li>
@@ -103,10 +103,10 @@ class="nav-link active"
                             {!! Form::label('status',Lang::get('lang.status')) !!} 
                         </div>
                         <div class="col-md-6">
-                            <p>{!! Form::radio('status',1,$social->checkActive($provider))!!} Active</p>
+                            <p>{!! Form::radio('status',1,$social->checkActive($provider)) .Lang::get('lang.active')!!}</p>
                         </div>
                         <div class="col-md-6">
-                            <p>{!! Form::radio('status',0,$social->checkInactive($provider)) !!} Inactive</p>
+                            <p>{!! Form::radio('status',0,$social->checkInactive($provider)) .Lang::get('lang.inactive')!!} </p>
                         </div>
                         <div class="col-md-12">
                             <i>Activate login via {{ucfirst($provider)}}</i>

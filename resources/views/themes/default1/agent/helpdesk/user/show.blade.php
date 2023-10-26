@@ -1296,9 +1296,9 @@ class="nav-link active"
                         </div>
 
                         <div class="modal-body">
-                            What should be done with content owned by this user?</br>
 
-
+                            <p>{!! Lang::get('lang.what_should_be_done_with_content_owned_by_this_user') !!}?</p>
+<br>
                             <?php $user = App\User::where('id', $users->id)->first(); ?>
                             @if($user->role == 'agent')
                             {!! Form::label('delete_all_content',Lang::get('lang.delete_all_content')) !!} <span class="text-red"> *</span>

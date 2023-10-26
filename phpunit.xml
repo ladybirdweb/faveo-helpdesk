@@ -8,6 +8,7 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false">
+
     <testsuites>
         <testsuite name="all">
             <directory>./tests/</directory>
@@ -34,4 +35,3 @@
         <env name="DB_INSTALL" value="1"/>
     </php>
 </phpunit>
-

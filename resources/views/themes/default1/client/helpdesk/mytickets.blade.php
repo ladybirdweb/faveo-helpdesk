@@ -138,7 +138,8 @@ class="nav-item active"
                                 <td class="mailbox-priority"><spam>{{$priority->priority}}</spam></td>
 
                         <td class="mailbox-last-reply" style="color: {!! $rep !!}">{!! $username !!}</td>
-                        <td class="mailbox-last-activity">{!! $title->updated_at !!}</td>
+                        <?php $updated = $title->updated_at ?>
+                        <td class="mailbox-last-activity">{!! UTC::usertimezone($updated) !!}</td>
                         <?php $status = App\Model\helpdesk\Ticket\Ticket_Status::where('id', '=', $ticket->status)->first(); ?>
                         <td class="mailbox-date">{!! $status->name !!}</td>
                         </tr>

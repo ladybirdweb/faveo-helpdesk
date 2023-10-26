@@ -56,8 +56,8 @@ class="nav-link active"
                     <td>{!! $rating->display_order !!}</td>
                     <td>{!! $rating->rating_area !!}</td>
                     <td>
-                        {!! link_to_route('rating.edit','Edit Ratings',[$rating->id],['class'=>'btn btn-primary btn-sm']) !!}
-                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete{{$rating->id}}">Delete</button>
+                        {!! link_to_route('rating.edit',trans('lang.edit_ratings'),[$rating->id],['class'=>'btn btn-primary btn-sm']) !!}
+                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete{{$rating->id}}">{{trans('lang.delete')}}</button>
                         <div class="modal fade" id="delete{{$rating->id}}">
                             <div class="modal-dialog">
                                 <div class="modal-content">

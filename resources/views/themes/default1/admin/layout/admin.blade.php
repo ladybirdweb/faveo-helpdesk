@@ -690,7 +690,7 @@
                             <li class="nav-item">
                                 <a href="{{ url('logs') }}" @yield('Log') class="nav-link">
                                     <i class="nav-icon fas fa-lock"></i>
-                                    <p>Logs</p>
+                                    <p>{{Lang::get('log::lang.logs')}}</p>
                                 </a>
                             </li>
                             @endif

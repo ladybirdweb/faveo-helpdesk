@@ -46,7 +46,7 @@ class ArticleController extends Controller
         // checking authentication
         $this->middleware('auth');
         // checking roles
-        $this->middleware('roles');
+        $this->middleware('role.agent');
         SettingsController::language();
     }
 
@@ -91,15 +91,15 @@ class ArticleController extends Controller
         			<div class="modal-dialog">
             			<div class="modal-content">
                 			<div class="modal-header">
-                                <h4 class="modal-title">Delete</h4>
+                                <h4 class="modal-title">'.Lang::get('lang.delete').'</h4>
                     			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 			</div>
                 			<div class="modal-body">
-                				Are you sure you want to delete <b> '.$model->name.' </b> ?
+                				<span>'.Lang::get('lang.are_you_sure_you_want_to_delete').'</span>&nbsp; <b> '.$model->name.' </b> ?
                 			</div>
                 			<div class="modal-footer justify-content-between">
-                    			<button type="button" class="btn btn-default" data-dismiss="modal" id="dismis2">Close</button>
-                    			<a href='.url("article/delete/$model->slug").'><button class="btn btn-danger">delete</button></a>
+                    			<button type="button" class="btn btn-default" data-dismiss="modal" id="dismis2">'.Lang::get('lang.close').'</button>
+                    			<a href='.url("article/delete/$model->slug").'><button class="btn btn-danger">'.Lang::get('lang.delete').'</button></a>
                 			</div>
             			</div>
         			</div>

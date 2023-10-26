@@ -671,7 +671,7 @@ return [
     'form_name'                             => 'Nombre del formulario',
     'view_this_form'                        => 'Ver este formulario',
     'delete_from'                           => 'Eliminar formulario',
-    'are_you_sure_you_want_to_delete'       => 'estas seguro que quieres borrarlo',
+    'are_you_sure_you_want_to_delete'       => 'Estas seguro que quieres borrarlo',
     'close'                                 => 'Cerca',
     'instructions'                          => 'Instrucciones',
     'instructions_on_creating_form'         => 'Seleccione el tipo de campo que desea agregar al formulario de abajo y haga clic en el menú desplegable "Tipo". No olvide establecer las opciones de campo si el tipo es select, checkbox o radio. Separe cada opción con una coma. Una vez que haya terminado de crear el formulario, puede guardar el formulario haciendo clic en el botón "Guardar formulario"',
@@ -1664,4 +1664,6 @@ Puede ingresar el número de días de registros de base de datos que se eliminar
 
     //updates 22-2-2017
     'invalid-date-range' => 'Invalid date range',
+    //updated 10-10-2023
+    'what_should_be_done_with_content_owned_by_this_user' => '¿Qué se debe hacer con el contenido propiedad de este usuario',
 ];

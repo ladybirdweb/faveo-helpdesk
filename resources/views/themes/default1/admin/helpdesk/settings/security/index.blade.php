@@ -65,7 +65,7 @@ class="nav-link active"
         <div class="form-group {{ $errors->has('lockout_message') ? 'has-error' : '' }}">
             <div class="row">
                 <div class="col-md-3">
-                    <label for="title">Lockout Message: <span class="text-red"> *</span></label>
+                    <label for="title">{{trans('lang.Lockout_Message:')}}<span class="text-red"> *</span></label>
                 </div>
                 <div  class="col-md-9">
                     <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.security_msg1') !!}</div>
@@ -87,7 +87,7 @@ class="nav-link active"
         <div class="form-group {{ $errors->has('lockout_period') ? 'has-error' : '' }}"> 
             <div class="row">
                 <div class="col-md-3">
-                    <label for="title">Lockout Period: <span class="text-red"> *</span></label>
+                    <label for="title">{{trans('lang.lockout_period:')}}<span class="text-red"> *</span></label>
                 </div>
                 <div class="col-md-8">
                     <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.security_msg3') !!}</div>

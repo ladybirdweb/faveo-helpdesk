@@ -6,7 +6,6 @@ use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\kb\PageRequest;
 // request
-use App\Http\Requests\kb\PageUpdate;
 use App\Model\kb\Page;
 use Datatable;
 // Model
@@ -38,7 +37,7 @@ class PageController extends Controller
         // checking authentication
         $this->middleware('auth');
         // checking roles
-        $this->middleware('roles');
+        $this->middleware('role.agent');
         $this->page = $page;
         SettingsController::language();
     }
@@ -86,20 +85,20 @@ class PageController extends Controller
                         /* add column Actions */
                         /* there are action buttons and modal popup to delete a data column */
                         ->addColumn('Actions', function ($model) {
-                            return '<span  data-toggle="modal" data-target="#deletepage'.$model->id.'"><a href="#" ><button class="btn btn-danger btn-xs"></a> '.\Lang::get('lang.delete').'</button></span>&nbsp;<a href=page/'.$model->slug.'/edit class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp;<a href=pages/'.$model->slug.' class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>
+                            return '<span  data-toggle="modal" data-target="#deletepage'.$model->id.'"><a href="#" ><button class="btn btn-danger btn-xs"></a> '.\Lang::get('lang.delete').'</button></span>&nbsp;<a href=page/'.$model->id.'/edit class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp;<a href=pages/'.$model->slug.' class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>
 				<div class="modal fade" id="deletepage'.$model->id.'">
         			<div class="modal-dialog">
             			<div class="modal-content">
                 			<div class="modal-header">
-                                <h4 class="modal-title">Delete</h4>
+                                <h4 class="modal-title">'.Lang::get('lang.delete').'</h4>
                     			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 			</div>
                 			<div class="modal-body">
-                				Are you sure you want to delete <b>'.$model->name.'</b> ?
+                			<span>'.Lang::get('lang.are_you_sure_you_want_to_delete').'</span>&nbsp;<b>'.$model->name.'</b> ?
                 			</div>
                 			<div class="modal-footer justify-content-between">
-	                    		<button type="button" class="btn btn-default" data-dismiss="modal" id="dismis2">Close</button>
-    			                <a href="page/delete/'.$model->id.'"><button class="btn btn-danger">Delete</button></a>
+	                    		<button type="button" class="btn btn-default" data-dismiss="modal" id="dismis2">'.Lang::get('lang.close').'</button>
+    			                <a href="page/delete/'.$model->id.'"><button class="btn btn-danger">'.Lang::get('lang.delete').'</button></a>
 			                </div>
 		            	</div>
 			        </div>
@@ -150,7 +149,7 @@ class PageController extends Controller
     public function edit($slug)
     {
         try {
-            $page = $this->page->where('slug', $slug)->first();
+            $page = $this->page->where('id', $slug)->first();
 
             return view('themes.default1.agent.kb.pages.edit', compact('page'));
         } catch (Exception $e) {
@@ -169,7 +168,7 @@ class PageController extends Controller
     public function update($slug, PageRequest $request)
     {
         // get pages with respect to slug
-        $pages = $this->page->where('slug', $slug)->first();
+        $pages = $this->page->where('id', $slug)->first();
         $sl = $request->input('name');
         $slug = Str::slug($sl, '-');
 

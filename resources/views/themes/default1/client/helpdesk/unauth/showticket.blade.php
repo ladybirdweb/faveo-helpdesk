@@ -1,174 +1,265 @@
 @extends('themes.default1.client.layout.client')
 
-@section('content')               
+@section('content')
 <?php
 $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->first();
 //$user = App\User::where('id','=',$id1)->first();
 ?>
+
+<style type="text/css">
+    .caret {
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 4px solid;
+        display: inline-block;
+        height: 0;
+        margin-left: 2px;
+        vertical-align: middle;
+        width: 0;
+    }
+
+    .mailbox-attachments li{float:left;width:200px;border:1px solid #eee;margin-bottom:10px;margin-right:10px}
+
+    .mailbox-attachment-name{font-weight:bold;color:#666;word-break: break-word;}
+
+    .mailbox-attachment-icon,.mailbox-attachment-info,.mailbox-attachment-size{display:block}
+
+    .mailbox-attachment-info{padding:10px;background:#f4f4f4;height: auto;}
+
+    .mailbox-attachment-size{color:#999;font-size:12px}
+
+    .mailbox-attachment-icon{text-align:center;font-size:65px;color:#666;padding:20px 10px}
+
+    .mailbox-attachment-icon.has-img{padding:0}
+
+    .mailbox-attachment-icon.has-img>img{max-width:100%;height:auto}
+
+    #clearfix {display: inline-block!important;list-style-type: none!important;}
+
+    .ml40 {margin-left: -40px!important;}
+</style>
+
+
 <!-- Main content -->
-<div class="box box-primary">
-    <div class="box-header">
-        <div class="row">
-            <div class="col-md-9">
-                <section class="content-header"><h3 class="box-title"><i class="fa fa-user"> </i> {{$thread->title}} </h3> ( {{$tickets->ticket_number}} )
-                </section>
-            </div> 
-            <div class="col-md-3">
-                <div class="pull-right">
-                    <!-- <button type="button" class="btn btn-default"><i class="fa fa-edit" style="color:green;"> </i> Edit</button> -->                            
-                    {{-- <button type="button" class="btn btn-default"><i class="fa fa-print" style="color:blue;"> </i> {!! link_to_route('ticket.print','Print',[$tickets->id]) !!}</button> --}}
-                    <!-- </div> -->
-                    <div class="btn-group"> 
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-exchange" style="color:teal;"> </i> 
-                            {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
-                        </button>
-                        <?php $statuses = \App\Model\helpdesk\Ticket\Ticket_Status::all(); ?>
+<div id="content" class="site-content col-sm-12">
 
-                        <ul class="dropdown-menu" id='cc_page'>
-                            @foreach($statuses as $status)
-                            <?php if ($status->name == 'Deleted' or $status->name == 'Accepted') continue; ?>
-                            <li class="search_r"><a href="#" onclick="changeStatus({!! $status->id !!})"><i class="{!! $status->icon_class !!}" style="color:#FFD600;"> </i>{!! $status->name !!}</a>
-                            </li>
-                            @endforeach
+    <article class="hentry">
+        <header class="entry-header">
+            <div class="row">
 
-                        </ul>
-                    </div>
+                <div class="col-sm-9">
+
+                    <h3 class="entry-title"><i class="fas fa-ticket-alt"> </i> {{$thread->title}}
+
+                        <small> ( {{$tickets->ticket_number}} ) </small>
+                    </h3>
+                </div>
+
+                <div class="col-sm-3 text-right">
+
+                        <div>
+                            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: whitesmoke">
+
+                                <i class="fas fa-exchange-alt" style="color:teal;"> </i>
+
+                                {!! Lang::get('lang.change_status') !!}
+
+                                <span class="caret"></span>
+                            </button>
+                                <?php $statuses = \App\Model\helpdesk\Ticket\Ticket_Status::all(); ?>
+
+                            <div class="dropdown-menu">
+
+                                <a class="dropdown-item" href="#" id="open">
+                                    <i class="fas fa-folder-open" style="color:#FFD600;"> </i> {!! Lang::get('lang.open') !!}
+                                </a>
+
+                                <a class="dropdown-item" href="#" id="close">
+                                    <i class="fas fa-check" style="color:#15F109;"> </i> {!! Lang::get('lang.close') !!}
+                                </a>
+
+                                <a class="dropdown-item" href="#" id="resolved">
+                                    <i class="fas fa-check-circle " style="color:#0EF1BE;"> </i> {!! Lang::get('lang.resolved') !!}
+                                </a>
+                            </div>
+                        </div>
                     {!! Form::close() !!}
                 </div>
             </div>
-        </div>
         <br/>
         <div class="row">
-            <div class="col-md-12">
-                <div class="alert alert-success alert-dismissable" id="alert11" style="display:none;">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <i class="fa  fa-check-circle"></i> <span id="message-success1">
-                    </span>
-                </div>
-                <div class="ticketratings pull-right">    
-                    <table><tbody>
-                            <?php $ratings = App\Model\helpdesk\Ratings\Rating::orderby('display_order')->get(); ?>
+
+            <div class="col-md-12 mb-1">
+
+                <div class="ticketratings float-right">
+
+                    <table>
+
+                        <tbody>
+                        <?php $ratings = App\Model\helpdesk\Ratings\Rating::orderby('display_order')->get(); ?>
                         <form id="foo">
                             {!! csrf_field() !!}
-                            @foreach($ratings as $rating) 
+                            @foreach($ratings as $rating)
 
-                            @if($rating->rating_area == 'Helpdesk Area')
-                            <?php
-                            $rating_value = App\Model\helpdesk\Ratings\RatingRef::where('rating_id', '=', $rating->id)->where('ticket_id', '=', $tickets->id)->first();
-                            if ($rating_value == null) {
-                                $ratingval = '0';
-                            } else {
-                                $ratingval = $rating_value->rating_value;
-                            }
-                            ?>
-                            <tr>
-                                <th><div class="ticketratingtitle">{!! $rating->name !!} &nbsp;</div></th>&nbsp
-                            <td>
-                                <?php for ($i = 1; $i <= $rating->rating_scale; $i++) { ?>
-                                    <input type="radio" class="star" id="star5" name="{!! $rating->name !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
-                                <?php } ?>
-                            </td> 
-                            </tr>
-                            @endif
+                                @if($rating->rating_area == 'Helpdesk Area')
+                                        <?php
+                                        $rating_value = App\Model\helpdesk\Ratings\RatingRef::where('rating_id', '=', $rating->id)->where('ticket_id', '=', $tickets->id)->first();
+                                        if ($rating_value == null) {
+                                            $ratingval = '0';
+                                        } else {
+                                            $ratingval = $rating_value->rating_value;
+                                        }
+                                        ?>
+
+                                    <tr>
+
+                                        <th><div class="ticketratingtitle">{!! $rating->name !!} &nbsp;</div></th>&nbsp
+
+                                        <td>
+
+                                                <?php for ($i = 1; $i <= $rating->rating_scale; $i++) { ?>
+                                            <input type="radio" class="star" id="star5" name="{!! $rating->name !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
+                                            <?php } ?>
+                                        </td>
+                                    </tr>
+                                @endif
                             @endforeach
-                        </form></tbody> </table> 
+                        </form>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="box-body" style="margin-bottom:-10px">
-        <div class="row">
-            <div id="loader" style="display:none;">
-                <div class="col-xs-5">
-                </div>
-                <div class="col-xs-1">
-                    <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                </div>
-                <div class="col-xs-6">
-                </div>
+    </header>
+
+        <div class="entry-content clearfix">
+
+            <div class="col-md-12 offset-md-5" id="loader" style="display:none;">
+
+                <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
             </div>
-            <section class="content"  id="refresh" style="margin-bottom:-10px;margin-top:-10px">
-                <div class="col-md-12"> 
+
+            <div  id="refresh">
+                <div>
                     <?php
                     $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first();
                     ?>
-                    <div class="callout callout-default ">
+                    <div class="alert alert-secondary">
                         <div class="row">
-                            <div class="col-md-3"> 
+                            <div class="col-md-3">
                                 <?php
                                 $sla = $tickets->sla;
-                                $SlaPlan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', 1)->first();
+                                $SlaPlan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', $sla)->first();
                                 ?>
-                                <b>{!! Lang::get('lang.sla_plan') !!}: {{$SlaPlan->grace_period}} </b> 
+                                <b>{!! Lang::get('lang.sla_plan') !!}: {{$SlaPlan->grace_period}} </b>
                             </div>
-                            <div class="col-md-3"> 
+                            <div class="col-md-3">
                                 <b>{!! Lang::get('lang.created_date') !!}: </b> {{ UTC::usertimezone($tickets->created_at) }}
                             </div>
-                            <div class="col-md-3"> 
-                                <b>{!! Lang::get('lang.due_date') !!}: </b> 
+                            <div class="col-md-3">
+                                <b>{!! Lang::get('lang.due_date') !!}: </b>
                                 <?php
                                 $time = $tickets->created_at;
                                 $time = date_create($time);
                                 date_add($time, date_interval_create_from_date_string($SlaPlan->grace_period));
-                                echo UTC::usertimezone(date_format($time, 'd/m/Y H:i:s'));
+                                echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
                                 ?>
                             </div>
                             <div class="col-md-3">
                                 <?php $response = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->where('is_internal', '=', 0)->get(); ?>
                                 @foreach($response as $last)
-                                <?php $ResponseDate = $last->created_at; ?>
+                                        <?php $ResponseDate = $last->created_at; ?>
                                 @endforeach
-                                <b>{!! Lang::get('lang.last_response') !!}: </b> {{ UTC::usertimezone($ResponseDate)}} 
+                                <b>{!! Lang::get('lang.last_response') !!}: </b> {{ UTC::usertimezone($ResponseDate)}}
                             </div>
                         </div>
                     </div>
-                </div>      
-                <div class="col-md-6"> 
-                    <table class="table table-hover">
-                        <!-- <tr><th></th><th></th></tr> -->
-                        <tr><td><b>{!! Lang::get('lang.status') !!}:</b></td>       <?php $status = App\Model\helpdesk\Ticket\Ticket_Status::where('id', '=', $tickets->status)->first(); ?>
-
-                            @if($status->id == 1)
-                            <td title="{{$status->properties}}" style="color:orange">{{$status->name}}</td></tr>
-                        @elseif($status->id == 2)
-                        <td title="{{$status->properties}}" style="color:green">{{$status->name}}</td></tr>
-                        @elseif($status->id == 3)
-                        <td title="{{$status->properties}}" style="color:green">{{$status->name}}</td></tr>
-                        @endif
-
-                        <tr><td><b>{!! Lang::get('lang.priority') !!}:</b></td>     <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first(); ?>
-
-                            @if($priority->priority_id == 1)
-                            <td title="{{$priority->priority_desc}}" style="color:green">{{$priority->priority_desc}}</td>
-                            @elseif($priority->priority_id == 2)
-                            <td title="{{$priority->priority_desc}}" style="color:orange">{{$priority->priority_desc}}</td>
-                            @elseif($priority->priority_id == 3)
-                            <td title="{{$priority->priority_desc}}" style="color:red">{{$priority->priority_desc}}</td>
-                            @endif
-
-                        </tr>
-                        <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   
-                            <?php
-                            $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first();
-                            $department = App\Model\helpdesk\Agent\Department::where('id', '=', $help_topic->department)->first();
-                            ?>
-                            <td title="{{ $department->name }}">{!! $department->name !!}</td></tr>
-                    </table>
-                    <!-- </div> -->
                 </div>
-                <div class="col-md-6"> 
-                    <!-- <div class="callout callout-success"> -->
-                    <table class="table table-hover">
-                        <!-- <tr><th></th><th></th></tr> -->
-                        <tr><td><b>{!! Lang::get('lang.help_topic') !!}:</b></td>     <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first(); ?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
-                        <tr><td><b>{!! Lang::get('lang.last_message') !!}:</b></td>   <td>{{ucwords($last->poster)}}</td></tr>
-                    </table>
-                </div>
-                <!-- </div> -->
-            </section> 
-        </div>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <table class="table">
+
+                            <tr>
+
+                                <td><b>{!! Lang::get('lang.status') !!}:</b></td>
+
+                                <?php $status = App\Model\helpdesk\Ticket\Ticket_Status::where('id', '=', $tickets->status)->first(); ?>
+
+                                @if($status->id == 1)
+
+                                    <td title="{{$status->properties}}" style="color:orange">{{$status->name}}</td>
+
+                                @elseif($status->id == 2)
+
+                                    <td title="{{$status->properties}}" style="color:green">{{$status->name}}</td>
+
+                                @elseif($status->id == 3)
+
+                                    <td title="{{$status->properties}}" style="color:green">{{$status->name}}</td>
+
+                                @endif
+                            </tr>
+
+                            <tr>
+
+                                <td><b>{!! Lang::get('lang.priority') !!}:</b></td>
+
+                                <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first(); ?>
+
+                                @if($priority->priority_id == 1)
+
+                                    <td title="{{$priority->priority_desc}}" style="color:green">{{$priority->priority_desc}}</td>
+
+                                @elseif($priority->priority_id == 2)
+
+                                    <td title="{{$priority->priority_desc}}" style="color:orange">{{$priority->priority_desc}}</td>
+
+                                @elseif($priority->priority_id == 3)
+
+                                    <td title="{{$priority->priority_desc}}" style="color:red">{{$priority->priority_desc}}</td>
+
+                                @endif
+                            </tr>
+
+                            <tr>
+
+                                <td><b>{!! Lang::get('lang.department') !!}:</b></td>
+                                <?php
+                                $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first();
+                                $department = App\Model\helpdesk\Agent\Department::where('id', '=', $help_topic->department)->first();
+                                ?>
+                                <td title="{{ $department->name }}">{!! $department->name !!}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <table class="table">
+
+                            <tr>
+
+                                <td><b>{!! Lang::get('lang.help_topic') !!}:</b></td>
+
+                                <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first(); ?>
+
+                                <td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td>
+                            </tr>
+
+                            <tr>
+
+                                <td><b>{!! Lang::get('lang.last_message') !!}:</b></td>
+
+                                <td>{{ucwords($last->poster)}}</td>
+                            </tr>
+                        </table>
+                    </div>
     </div>
 </div>
+            <div class="comments-area mb-0" id="comments">
 <?php
 $conversations = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->where('is_internal', '=', 0)->paginate(10);
 foreach ($conversations as $conversation) {
@@ -179,11 +270,12 @@ foreach ($conversations as $conversation) {
     $time = $ConvDate[1];
     $time = substr($time, 0, -3);
     if (isset($data) && $date == $data) {
-        
+
     } else {
         $data = $ConvDate[0];
     }
     $role = App\User::where('id', '=', $conversation->user_id)->first();
+
 
     $attachment = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $conversation->id)->first();
     if ($attachment == null) {
@@ -193,9 +285,9 @@ foreach ($conversations as $conversation) {
         $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $conversation->id)->orderBy('id', 'DESC')->get();
         foreach ($attachments as $attachment) {
             if ($attachment->type == 'pdf') {
-                
+
             } elseif ($attachment->type == 'docx') {
-                
+
             } else {
                 $image = @imagecreatefromstring($attachment->file);
                 ob_start();
@@ -209,7 +301,7 @@ foreach ($conversations as $conversation) {
                 $start = "<head>";
                 $end = "</head>";
                 if (strpos($string, $start) == false || strpos($string, $start) == false) {
-                    
+
                 } else {
                     $ini = strpos($string, $start);
                     $ini += strlen($start);
@@ -225,7 +317,7 @@ foreach ($conversations as $conversation) {
     $start = "<head>";
     $end = "</head>";
     if (strpos($string, $start) == false || strpos($string, $start) == false) {
-        
+
     } else {
         $ini = strpos($string, $start);
         $ini += strlen($start);
@@ -237,8 +329,9 @@ foreach ($conversations as $conversation) {
     ?>
     <ol class="comment-list" >
         <li class="comment">
+
             <article class="comment-body">
-                <footer class="comment-meta"<?php if ($role->role == "user") { ?> style="background-color: hsla(100, 100%, 51%, 0.15)" <?php } else { ?> style="background-color:#FFFCB3" <?php } ?>  > 
+                <footer class="comment-meta"<?php if ($role->role == "user") { ?> style="background-color: hsla(100, 100%, 51%, 0.15)" <?php } else { ?> style="background-color:#FFFCB3" <?php } ?>  >
                     <div class="comment-author">
 
                         <img src="{{$role->profile_pic}}"alt="" height="50" width="50" class="avatar" <?php if ($role->role == "user") { ?>style="box-shadow: 0 1px 3px #00FF26;" <?php } else { ?> style="box-shadow: 0 1px 3px #FFEC00;" <?php } ?> >
@@ -247,7 +340,7 @@ foreach ($conversations as $conversation) {
                         @else
                         <b class="fn"><a href="#" rel="external" class="url">{{$role->first_name." ".$role->last_name}}</a></b>
                         <div class="ticketratings pull-right">   <table><tbody>
-                                    @foreach($ratings as $rating) 
+                                    @foreach($ratings as $rating)
                                     @if($rating->rating_area == 'Comment Area')
                                     <?php
                                     $rating_value = App\Model\helpdesk\Ratings\RatingRef::where('rating_id', '=', $rating->id)->where('thread_id', '=', $conversation->id)->first();
@@ -269,7 +362,7 @@ foreach ($conversations as $conversation) {
                         <input type="radio" class="star" id="star3" name="rating" value="3"<?php echo ($tickets->rating == '3') ? 'checked' : '' ?>/>
                         <input type="radio" class="star" id="star2" name="rating" value="4"<?php echo ($tickets->rating == '4') ? 'checked' : '' ?>/>
                         <input type="radio" class="star" id="star1" name="rating" value="5"<?php echo ($tickets->rating == '5') ? 'checked' : '' ?> />-->
-                                    </td> 
+                                    </td>
                                     </tr>
                                 </form>
                                 @endif
@@ -325,7 +418,7 @@ foreach ($conversations as $conversation) {
                     </ul>
                 </div>
             </article><!-- .comment-body -->
-        </li><!-- .comment -->    
+        </li><!-- .comment -->
     </ol>
 
     <?php
@@ -335,7 +428,7 @@ foreach ($conversations as $conversation) {
 <?php }
 ?>
 <div class="pull-right" style="margin-top:-30px;margin-bottom:-30px">
-    <?php echo $conversations->setPath(route('show.ticket', ['id' => $tickets->id, 'token' => $token]))->render(); ?>
+    <?php echo $conversations->setPath(route('show.ticket', ['ids' => $tickets->id, 'code' => $token]))->render(); ?>
 </div>
 <br/><br/>
 @if(Session::has('success1'))
@@ -355,48 +448,77 @@ foreach ($conversations as $conversation) {
 </div>
 @endif
 <?php $id2 = $tickets->id; ?>
-<div id="respond" class="comment-respond form-border">
-    <h3 id="reply-title" class="comment-reply-title section-title"><i class="line" style="border-color: rgb(0, 154, 186);"></i>{!! Lang::get('lang.leave_a_reply') !!}</h3>
-    {!! Form::open(['url'=>'post-ticket-reply/'.$tickets->id.'#formabc']) !!}
-    <div class="row">
-        <div class="form-group">
-            <div class="col-md-12">
-                <div class="form-group ">
-                    <textarea class="form-control" name="comment" cols="30" rows="8"></textarea>
+
+                <div id="respond" class="comment-respond form-border">
+
+                    <h3 id="reply-title" class="comment-reply-title section-title"><i class="line"></i>{!! Lang::get('lang.leave_a_reply') !!}</h3>
+                    @if(Auth::user())
+                        {!! Form::open(['url'=>'post/reply/'.$id2.'#formabc']) !!}
+                    @else
+                        {!! Form::open(['url'=>'post-ticket-reply/'.$tickets->id.'#formabc']) !!}
+                    @endif
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group " style="background-color: white">
+                                <textarea class="form-control" id="reply-input" name="comment" cols="30" rows="8" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-right">
+
+                        <button type="submit" onClick="return checkFunction();" class="btn btn-custom btn-lg" style="background-color: #009aba; hov: #00c0ef; color: #fff">{!! Lang::get('lang.post_comment') !!}</button>
+                    </div>
+                    {!! Form::close() !!}
                 </div>
-            </div>                                              
+            </div>
         </div>
-    </div>
-    <div class="text-right">
-        <button type="submit" class="btn btn-custom btn-lg">{!! Lang::get('lang.post_comment') !!}</button>
-    </div>
-    {!! Form::close() !!}
+    </article>
 </div>
 
+
 <script type="text/javascript">
-//    $("#cc_page").on('click', '.search_r', function() {
-//        var search_r = $('a', this).attr('id');
-//        $.ajax({
-//            type: "GET",
-//            url: "../ticket/status/{{$tickets->id}}/" + search_r,
-//            beforeSend: function() {
-//                $("#refresh").hide();
-//                $("#loader").show();
-//            },
-//            success: function(response) {
-//                $("#refresh").load("../show-ticket/{!! $tickets->id !!}/{!! $token !!}  #refresh");
-//                $("#refresh").show();
-//                $("#loader").hide();
-//                var message = response;
-//                $("#alert11").show();
-//                $('#message-success1').html(message);
-//                setInterval(function() {
-//                    $("#alert11").hide();
-//                }, 4000);
-//            }
-//        });
-//        return false;
-//    });
+
+$("#cc_page").on('click', '.search_r', function () {
+    var search_r = $('a', this).attr('id');
+    $.ajax({
+        type: "GET",
+        url: "../../show/change-status/"+ id +"/"+ {!! $tickets->id !!},
+        beforeSend: function () {
+            $("#refresh").hide();
+            $("#loader").show();
+        },
+        success: function (response) {
+            $("#refresh").load("../show-ticket/{!! $tickets->id !!}/{!! $token !!}  #refresh");
+            $("#refresh").show();
+            $("#loader").hide();
+            var message = response;
+            $("#alert11").show();
+            $('#message-success1').html(message);
+            setInterval(function () {
+                $("#alert11").hide();
+            }, 4000);
+        }
+    });
+    return false;
+});
+
+
+$(function() {
+//Add text editor
+    $("textarea").summernote({
+        height: 300,
+        tabsize: 2,
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']]
+        ]
+    });
+});
 
     $(document).ready(function() {
         var Data = $('input[name="rating"]:checked').val();
@@ -473,5 +595,97 @@ foreach ($conversations as $conversation) {
             })
             return false;
     }
+
+jQuery(document).ready(function () {
+    // Close a ticket
+    $('#close').on('click', function (e) {
+        $.ajax({
+            type: "POST",
+
+            url: "../../show/close/{!! $tickets->id !!}",
+            data:{"_token": "{{ csrf_token() }}"},
+            beforeSend: function () {
+                $("#refresh").hide();
+                $("#loader").show();
+            },
+            success: function (response) {
+                $("#refresh").load("../../show-ticket/{!! $tickets->id !!}/{!! $token !!}  #refresh");
+                $("#refresh").show();
+                $("#loader").hide();
+                // $("#d1").trigger("click");
+                // var message = "Success! Your Ticket have been Closed";
+                // $("#alert11").show();
+                // $('#message-success1').html(message);
+                // setInterval(function(){
+                //     $("#alert11").hide();
+                //     setTimeout(function() {
+                //         var link = document.querySelector('#load-inbox');
+                //         if(link) {
+                //             link.click();
+                //         }
+                //     }, 500);
+                // },2000);
+            }
+        })
+        return false;
+    });
+
+    // Resolved  a ticket
+    $('#resolved').on('click', function (e) {
+        $.ajax({
+            type: "POST",
+            url: "../../show/resolve/{!! $tickets->id !!}",
+            data:{"_token": "{{ csrf_token() }}"},
+            beforeSend: function () {
+                $("#refresh").hide();
+                $("#loader").show();
+            },
+            success: function (response) {
+                $("#refresh").load("../../show-ticket/{!! $tickets->id !!}/{!! $token !!}  #refresh");
+                $("#refresh").show();
+                $("#loader").hide();
+                var message = "Success! Your Ticket have been Resolved";
+                $("#alert11").show();
+                $('#message-success1').html(message);
+                setInterval(function () {
+                    $("#alert11").hide();
+                    setTimeout(function () {
+                        var link = document.querySelector('#load-inbox');
+                        if (link) {
+                            link.click();
+                        }
+                    }, 500);
+                }, 2000);
+            }
+        })
+        return false;
+    });
+
+    // Open a ticket
+    $('#open').on('click', function (e) {
+        $.ajax({
+            type: "POST",
+            url: "../../show/open/{!! $tickets->id !!}",
+            data:{"_token": "{{ csrf_token() }}"},
+            beforeSend: function () {
+                $("#refresh").hide();
+                $("#loader").show();
+            },
+            success: function (response) {
+                $("#refresh").load("../../show-ticket/{!! $tickets->id !!}/{!! $token !!}  #refresh");
+                $("#refresh").show();
+                $("#loader").hide();
+
+                var message = "Success! Your Ticket have been Opened";
+                $("#alert11").show();
+                $('#message-success1').html(message);
+                setInterval(function () {
+                    $("#alert11").hide();
+                }, 4000);
+            }
+        })
+        return false;
+    });
+});
 </script>
 @stop

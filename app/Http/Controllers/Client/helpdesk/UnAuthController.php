@@ -331,17 +331,17 @@ class UnAuthController extends Controller
      *
      * @return response
      */
-    public static function changeLanguage($lang)
+    public static function changeLanguage($ids, $lang)
     {
-//        if(Cache::has('language'))
-//        {
-//          return Cache::get('language');
-//        } else return 'false';
-//         Cache::put('language',$);
-        $path = base_path('lang');  // Path to check available language packages
-        if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
-            // dd(array_key_exists($lang, Config::get('languages')));
-            // app()->setLocale($lang);
+        /* if(Cache::has('language'))
+         {
+           return Cache::get('language');
+         } else return 'false';
+          Cache::put('language',$);
+         $path = base_path('lang');  // Path to check available language packages
+         if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
+             // dd(array_key_exists($lang, Config::get('languages')));
+       // app()->setLocale($lang);
 
             \Cache::forever('language', $lang);
             // dd(Cache::get('language'));
@@ -351,6 +351,22 @@ class UnAuthController extends Controller
         }
 
         return true;
+
+        */
+
+        $path = base_path('lang');  // Path to check available language packages
+        if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
+            if (Auth::check()) {
+                $id = Auth::user()->id;
+                $user = User::find($id);
+                $user->user_language = $lang;
+                $user->save();
+            } else {
+                Session::put('language', $lang);
+            }
+        }
+
+        return redirect()->back();
     }
 
     // Follow up tickets
@@ -445,5 +461,85 @@ class UnAuthController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    public function close($id, Tickets $ticket)
+    {
+        $tickets = Tickets::where('id', '=', $id)->first();
+        $tickets->status = 3;
+        $ticket_status = Ticket_Status::where('id', '=', 3)->first();
+        if ($ticket_status->state == 'closed') {
+            $tickets->closed = $ticket_status->id;
+            $tickets->closed_at = date('Y-m-d H:i:s');
+        }
+        $tickets->save();
+        $ticket_thread = Ticket_Thread::where('ticket_id', '=', $ticket_status->id)->first();
+        $ticket_subject = $ticket_thread->title;
+
+        $user = User::where('id', '=', $tickets->user_id)->first();
+
+        $thread = new Ticket_Thread();
+        $thread->ticket_id = $tickets->id;
+        $thread->user_id = $tickets->user_id;
+        $thread->is_internal = 1;
+        $thread->body = $ticket_status->message.' '.$user->user_name;
+        $thread->save();
+
+        $email = $user->email;
+        $user_name = $user->user_name;
+        $ticket_number = $tickets->ticket_number;
+
+        $sending_emails = Emails::where('department', '=', $ticket_status->dept_id)->first();
+        if ($sending_emails == null) {
+            $from_email = $this->system_mail();
+        } else {
+            $from_email = $sending_emails->id;
+        }
+
+        try {
+            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
+        } catch (\Exception $e) {
+            return 0;
+        }
+
+        return Lang::get('lang.your_ticket_has_been').' '.$ticket_status->state;
+    }
+
+    public function open($id, Tickets $ticket)
+    {
+        $ticket_status = $ticket->where('id', '=', $id)->first();
+        $ticket_status->status = 1;
+        $ticket_status->reopened_at = date('Y-m-d H:i:s');
+        $ticket_status->save();
+        $ticket_status_message = Ticket_Status::where('id', '=', $ticket_status->status)->first();
+        $thread = new Ticket_Thread();
+        $user = User::where('id', '=', $ticket->user_id)->first();
+        $thread->ticket_id = $ticket_status->id;
+        $thread->user_id = $ticket->user_id;
+        $thread->is_internal = 1;
+        $thread->body = $ticket_status->message.' '.$user->user_name;
+        $thread->save();
+
+        return 'your ticket'.$ticket_status->ticket_number.' has been opened';
+    }
+
+    public function resolve($id, Tickets $ticket)
+    {
+        $ticket_status = $ticket->where('id', '=', $id)->first();
+
+        $ticket_status->status = 2;
+        $ticket_status->closed = 1;
+        $ticket_status->closed_at = date('Y-m-d H:i:s');
+        $ticket_status->save();
+        $ticket_status_message = Ticket_Status::where('id', '=', $ticket_status->status)->first();
+        $thread = new Ticket_Thread();
+        $user = User::where('id', '=', $ticket->user_id)->first();
+        $thread->ticket_id = $ticket_status->id;
+        $thread->user_id = $ticket->user_id;
+        $thread->is_internal = 1;
+
+        $thread->save();
+
+        return Lang::get('lang.your_ticket_has_been').' '.$ticket_status->state;
     }
 }

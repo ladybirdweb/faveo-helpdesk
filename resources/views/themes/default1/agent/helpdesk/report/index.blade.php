@@ -138,7 +138,7 @@ class="active"
 
                     <div class='col-sm-1'>
                         {!! Form::label('filter', 'Filter:',['style' => 'visibility:hidden;']) !!}<br>
-                        <input type="submit" class="btn btn-primary" value="Submit" id="submit">
+                        <input type="submit" class="btn btn-primary" value="{{trans('lang.submit')}}" id="submit">
                     </div>
                     <br/>
                     <div class="col-md-4">
@@ -149,9 +149,9 @@ class="active"
 
                         <div class="float-right">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-default" id="click_day">Day</button>
-                                <button type="button" class="btn btn-default" id="click_week">Week</button>
-                                <button type="button" class="btn btn-default" id="click_month">Month</button>
+                                <button type="button" class="btn btn-default" id="click_day">{{trans('lang.day')}}</button>
+                                <button type="button" class="btn btn-default" id="click_week">{{trans('lang.week')}}</button>
+                                <button type="button" class="btn btn-default" id="click_month">{{trans('lang.month')}}</button>
                             </div>
                         </div>
                     </div>

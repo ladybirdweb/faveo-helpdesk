@@ -13,12 +13,12 @@ use Tests\TestCase;
 class TicketControllerTest extends TestCase
 {
     use DatabaseTransactions;
-
     /**
      * A basic unit test example.
      *
      * @return void
      */
+  
     public function test_user_change_the_status()
     {
         $str = 'Demopass@1';
@@ -49,9 +49,11 @@ class TicketControllerTest extends TestCase
                 'source'        => 1,
             ]
         );
+
         $ticket->save();
         $ticket->dept_id = 1;
         $ticket->save();
+
 
         $ticket_thread = new Ticket_Thread(
             [
@@ -69,7 +71,6 @@ class TicketControllerTest extends TestCase
 
         $response = $this->post(route('select_all'), [
             'select_all' => [$ticket->id],
-
             'submit'     => 'Open',
 
         ]);
@@ -87,5 +88,6 @@ class TicketControllerTest extends TestCase
         $response->assertStatus(302); // Adjust this as needed
         $this->assertEquals(3, $ticket->fresh()->status); // Adjust this as needed
         $response->assertSessionHas('success', Lang::get('lang.tickets_have_been_closed'));
+
     }
 }
