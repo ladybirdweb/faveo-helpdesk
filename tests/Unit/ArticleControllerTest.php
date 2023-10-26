@@ -34,13 +34,13 @@ class ArticleControllerTest extends TestCase
         $password = Hash::make($str);
         $email = $faker->unique()->email();
         $user = new User([
-            'first_name' => $faker->firstName(),
-            'last_name' => $faker->lastName(),
-            'email' => $email,
-            'user_name' => $faker->unique()->userName(),
-            'password' => $password,
-            'active' => 1,
-            'role' => 'agent',
+            'first_name'  => $faker->firstName(),
+            'last_name'   => $faker->lastName(),
+            'email'       => $email,
+            'user_name'   => $faker->unique()->userName(),
+            'password'    => $password,
+            'active'      => 1,
+            'role'        => 'agent',
             'agent_tzone' => 81,
         ]);
         $user->save();
