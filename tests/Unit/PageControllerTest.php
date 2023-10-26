@@ -8,8 +8,8 @@ use App\User;
 use Faker\Factory as FakerFactory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Tests\TestCase;
-Use Illuminate\Support\Str;
 
 class PageControllerTest extends TestCase
 {

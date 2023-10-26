@@ -8,8 +8,9 @@ use App\User;
 use Faker\Factory as FakerFactory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
-use Tests\TestCase;
 use Illuminate\Support\Str;
+use Tests\TestCase;
+
 class TicketControllerTest extends TestCase
 {
     /**
@@ -153,7 +154,7 @@ class TicketControllerTest extends TestCase
             'user_name'    => $faker->unique()->userName(),
             'password'     => $password,
             'active'       => 1,
-            'role'       => 'user',
+            'role'         => 'user',
         ]);
         $user->save();
 
