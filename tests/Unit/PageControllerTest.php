@@ -6,8 +6,6 @@ use App\Http\Requests\kb\PageRequest;
 use App\Model\kb\Page;
 use App\User;
 use Faker\Factory as FakerFactory;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
