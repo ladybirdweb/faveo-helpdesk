@@ -1829,17 +1829,21 @@ if ($thread->title != "") {
                     $("#t1").hide();
                     $("#show3").show();
                     $('html, body').animate({
-                    scrollTop: $("#form3").offset().top
+                    scrollTop: $("#inboxactions").offset().top
                 }, 500);
             },
             success: function(json) {
+                $("#show3").hide();
+                $("#t1").show();
+                setTimeout(function () {
+                    location.reload();
+                }, 4000);
+
                 $("#alert21").show();
                 $('#message-success2').html(json.result.success);
-                location.reload();
-                
-                    // $('html, body').animate({ scrollTop: $("#heading").offset().top }, 500);
             },
-                    error: function(json) {
+
+                error: function(json) {
                     $("#show3").hide();
                     $("#t1").show();
                     var res = "";
@@ -1851,6 +1855,7 @@ if ($thread->title != "") {
             }
             })
             return false;
+
     });
 // Surrender
             $('#Surrender').on('click', function() {
@@ -2152,7 +2157,7 @@ echo $ticket_data->title;
                             // $("#alert21").show();
                             // $('#message-success2').html(message);
                             $('#replybtn').attr('disabled', false);
-                            // setInterval(function(){$("#alert21").hide(); },8000);  
+                            // setInterval(function(){$("#alert21").hide(); },8000);
                     } else if (response == 1 || response == 4){
                     // alert(response);
                     // var message = "{{Lang::get('lang.access-ticket')}}"+locktime/(60*1000)

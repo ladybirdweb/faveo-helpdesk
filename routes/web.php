@@ -347,6 +347,7 @@ Route::middleware('web')->group(function () {
 
         Route::post('/newticket/post', [Agent\helpdesk\TicketController::class, 'post_newticket'])->name('post.newticket'); /*  Post Create New Ticket */
         Route::get('/thread/{id}', [Agent\helpdesk\TicketController::class, 'thread'])->name('ticket.thread'); /*  Get Thread by ID */
+        Route::get('ticket/tooltip', [Agent\helpdesk\TicketController::class, 'getTooltip'])->name('ticket.tooltip');
 
         Route::post('/thread/reply/{id}', [Agent\helpdesk\TicketController::class, 'reply'])->name('ticket.reply'); /*  Patch Thread Reply */
         Route::patch('/internal/note/{id}', [Agent\helpdesk\TicketController::class, 'InternalNote'])->name('Internal.note'); /*  Patch Internal Note */
