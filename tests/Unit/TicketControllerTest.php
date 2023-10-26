@@ -5,14 +5,11 @@ namespace Tests\Unit;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\User;
-use DateTimeZone;
 use Faker\Factory as FakerFactory;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
 use Tests\TestCase;
-use UTC;
 
 class TicketControllerTest extends TestCase
 {
@@ -102,7 +99,6 @@ class TicketControllerTest extends TestCase
 
         // Assert that the response status is 200 (OK).
         $response->assertStatus(200);
-
     }
 
     //Testing Reply Alert and Last Activity filed
@@ -144,7 +140,5 @@ class TicketControllerTest extends TestCase
         $response3 = $this->post(route('ticket.reply', ['id' => $tickets->id]), $replyData);
         $response3->assertStatus(200);
         $response3->assertSee(Lang::get('lang.you_have_successfully_replied_to_your_ticket'));
-
-
     }
 }
