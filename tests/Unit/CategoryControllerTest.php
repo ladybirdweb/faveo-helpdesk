@@ -26,8 +26,7 @@ class CategoryControllerTest extends TestCase
 
         //Create User -> Agent
 
-        //$str = Str::random(10);
-        $str = 'demopass';
+        $str = Str::random(10);
         $password = Hash::make($str);
         $email = $faker->unique()->email();
         $user = new User([

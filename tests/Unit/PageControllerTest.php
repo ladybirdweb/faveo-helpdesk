@@ -9,6 +9,7 @@ use Faker\Factory as FakerFactory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
+Use Illuminate\Support\Str;
 
 class PageControllerTest extends TestCase
 {
@@ -23,8 +24,7 @@ class PageControllerTest extends TestCase
 
         //Create User -> Agent
 
-        //$str = Str::random(10);
-        $str = 'demopass';
+        $str = Str::random(10);
         $password = Hash::make($str);
         $email = $faker->unique()->email();
         $user = new User([
