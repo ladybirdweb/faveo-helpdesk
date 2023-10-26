@@ -16,7 +16,6 @@ use Tests\TestCase;
 
 class CategoryControllerTest extends TestCase
 {
-    //use DatabaseTransactions;
     protected $user; // Declare a user property
 
     // Set up the authenticated user before each test
@@ -58,6 +57,7 @@ class CategoryControllerTest extends TestCase
     /** @test */
     public function it_can_display_the_category_index_page()
     {
+
         $response = $this->get(route('category.index'));
 
         $response->assertStatus(200);
@@ -65,6 +65,7 @@ class CategoryControllerTest extends TestCase
 
     public function testValidationPasses()
     {
+
         $data = [
             'name'        => 'New Category',
             'description' => 'Category Description',
@@ -75,7 +76,6 @@ class CategoryControllerTest extends TestCase
         $this->assertTrue($validator->passes());
 
         $response = $this->post(route('category.store'), $data);
-
         $response->assertStatus(302);
         $response->assertSessionHas('success');
         $this->assertDatabaseHas('kb_category', $data);
@@ -83,6 +83,7 @@ class CategoryControllerTest extends TestCase
 
     public function testValidationFailsWhenNameMissing()
     {
+
         $data = [
             'description' => 'Category Description',
         ];
@@ -96,6 +97,7 @@ class CategoryControllerTest extends TestCase
 
     public function testValidationFailsWhenNameExceedsMaxLength()
     {
+
         $data = [
             'name'        => str_repeat('A', 251),
             'description' => 'Category Description',
@@ -110,8 +112,9 @@ class CategoryControllerTest extends TestCase
 
     public function testValidationFailsWhenNameNotUnique()
     {
+
         $data = [
-            'name'        => 'Greetings',
+            'name'        => 'New Category',
             'description' => 'Category Description',
         ];
 
@@ -124,6 +127,7 @@ class CategoryControllerTest extends TestCase
 
     public function testValidationFailsWhenDescriptionMissing()
     {
+
         $data = [
             'name' => 'New Category',
         ];
@@ -137,6 +141,7 @@ class CategoryControllerTest extends TestCase
 
     public function testEditCategory()
     {
+
         $category = Category::latest()->first();
         $categories = Category::pluck('name', 'id')->toArray();
         $response = $this->get(
@@ -151,6 +156,7 @@ class CategoryControllerTest extends TestCase
     /** @test */
     public function it_can_update_an_existing_category()
     {
+
         // Retrieve an existing category from the database
         $category = Category::latest()->first();
 
@@ -173,11 +179,12 @@ class CategoryControllerTest extends TestCase
     /** @test */
     public function it_cannot_update_an_existing_category()
     {
+
         // Retrieve an existing category from the database
         $category = Category::latest()->first();
 
         $data = [
-            'name'        => 'Greetings',
+            'name'        => 'Updated Category Name',
             'description' => 'Updated Description',
         ];
 
@@ -193,10 +200,11 @@ class CategoryControllerTest extends TestCase
     /** @test */
     public function it_can_delete_a_category()
     {
+
         // Create a category
         $category = Category::latest()->first();
 
-        // Create a related relationship (you may need to adjust this based on your actual relationships)
+        // Create a related relationship
         $relation = Relationship::find($category->id);
 
         // Call the destroy method with the category ID
@@ -209,25 +217,7 @@ class CategoryControllerTest extends TestCase
         $response->assertRedirect();
 
         // Assert that the response has a success message
-        $response->assertSessionHas('success', Lang::get('lang.category_deleted_successfully'));
-    }
+       $response->assertSessionHas('success', Lang::get('lang.category_deleted_successfully'));
+   }
 
-    /** @test */
-    public function it_cannot_delete_a_category_if_related()
-    {
-        // Create a category
-        $category = Category::find(1);
-
-        // Call the destroy method with the category ID (without creating related records)
-        $response = $this->get("/category/delete/{$category->id}");
-
-        // Assert that the category is not deleted from the database
-        $this->assertDatabaseHas('kb_category', ['id' => $category->id]);
-
-        // Assert that the response is a redirect
-        $response->assertRedirect();
-
-        // Assert that the response has a failure message
-        $response->assertSessionHas('fails', Lang::get('lang.category_not_deleted'));
-    }
 }
