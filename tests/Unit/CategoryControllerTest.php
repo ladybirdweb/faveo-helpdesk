@@ -7,7 +7,6 @@ use App\Model\kb\Category;
 use App\Model\kb\Relationship;
 use App\User;
 use Faker\Factory as FakerFactory;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Validator;
@@ -57,7 +56,6 @@ class CategoryControllerTest extends TestCase
     /** @test */
     public function it_can_display_the_category_index_page()
     {
-
         $response = $this->get(route('category.index'));
 
         $response->assertStatus(200);
@@ -65,7 +63,6 @@ class CategoryControllerTest extends TestCase
 
     public function testValidationPasses()
     {
-
         $data = [
             'name'        => 'New Category',
             'description' => 'Category Description',
@@ -83,7 +80,6 @@ class CategoryControllerTest extends TestCase
 
     public function testValidationFailsWhenNameMissing()
     {
-
         $data = [
             'description' => 'Category Description',
         ];
@@ -97,7 +93,6 @@ class CategoryControllerTest extends TestCase
 
     public function testValidationFailsWhenNameExceedsMaxLength()
     {
-
         $data = [
             'name'        => str_repeat('A', 251),
             'description' => 'Category Description',
@@ -112,7 +107,6 @@ class CategoryControllerTest extends TestCase
 
     public function testValidationFailsWhenNameNotUnique()
     {
-
         $data = [
             'name'        => 'New Category',
             'description' => 'Category Description',
@@ -127,7 +121,6 @@ class CategoryControllerTest extends TestCase
 
     public function testValidationFailsWhenDescriptionMissing()
     {
-
         $data = [
             'name' => 'New Category',
         ];
@@ -141,7 +134,6 @@ class CategoryControllerTest extends TestCase
 
     public function testEditCategory()
     {
-
         $category = Category::latest()->first();
         $categories = Category::pluck('name', 'id')->toArray();
         $response = $this->get(
@@ -156,7 +148,6 @@ class CategoryControllerTest extends TestCase
     /** @test */
     public function it_can_update_an_existing_category()
     {
-
         // Retrieve an existing category from the database
         $category = Category::latest()->first();
 
@@ -179,7 +170,6 @@ class CategoryControllerTest extends TestCase
     /** @test */
     public function it_cannot_update_an_existing_category()
     {
-
         // Retrieve an existing category from the database
         $category = Category::latest()->first();
 
@@ -200,7 +190,6 @@ class CategoryControllerTest extends TestCase
     /** @test */
     public function it_can_delete_a_category()
     {
-
         // Create a category
         $category = Category::latest()->first();
 
@@ -217,7 +206,6 @@ class CategoryControllerTest extends TestCase
         $response->assertRedirect();
 
         // Assert that the response has a success message
-       $response->assertSessionHas('success', Lang::get('lang.category_deleted_successfully'));
-   }
-
+        $response->assertSessionHas('success', Lang::get('lang.category_deleted_successfully'));
+    }
 }
