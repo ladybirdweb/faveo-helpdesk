@@ -93,7 +93,7 @@ class="nav-link active"
     </div>
     
     <div class="card-body">
-        
+
         {!!$table->render('vendor.Chumper.template')!!}
 
         {!! $table->script('vendor.Chumper.user-javascript') !!}

@@ -114,7 +114,7 @@ class="nav-link active"
         <!-- /.box-body -->
     </div>
     <div class="card-footer">
-        {!! Form::submit('Save',['class'=>'btn btn-success']) !!}
+        {!! Form::submit(Lang::get('storage::lang.save'),['class'=>'btn btn-success']) !!}
         {!! Form::close() !!}
     </div>
     <!-- /.box -->

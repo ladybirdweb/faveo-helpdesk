@@ -20,7 +20,7 @@ class="nav-link active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>Social Media</h1>
+    <h1>{{\Illuminate\Support\Facades\Lang::get('lang.social-media')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -32,7 +32,7 @@ class="nav-link active"
 @section('content')
 @if (count($errors) > 0)
 <div class="alert alert-danger">
-    <strong>Whoops!</strong> There were some problems with your input.<br><br>
+    <strong>{{Lang::get('lang.woops')}}</strong> {{Lang::get('lang.theirisproblem')}}<br><br>
     <ul>
         @foreach ($errors->all() as $error)
         <li>{{ $error }}</li>
@@ -59,7 +59,7 @@ class="nav-link active"
 @endif
 <div class="card card-light">
     <div class="card-header">
-        <h3 class="card-title">Social Media</h3>
+        <h3 class="card-title">{{trans('lang.social-media')}}</h3>
     </div>
 
     <div class="card-body">
@@ -67,89 +67,83 @@ class="nav-link active"
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>Provider</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>{{trans('lang.provider')}}</th>
+                        <th>{{trans('lang.status')}}</th>
+                        <th>{{trans('lang.action')}}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Facebook</td>
+                        <td>{{\Illuminate\Support\Facades\Lang::get('lang.facebook')}}</td>
                         <td>
                             @if($social->checkActive('facebook')===true)
-                            <span style="color: green">Active</span>
-                            @else 
-                            <span style="color: red">Inactive</span>
+                                <span style="color: green">{{trans('lang.active')}}</span>
+                            @else
+                                <span style="color: red">{{trans('lang.inactive')}}</span>
                             @endif
                         </td>
                         <td>
-                            <a href="{{url('social/media/facebook')}}" class="btn btn-primary">Settings</a>
-                        </td>
+                            <a href="{{url('social/media/facebook')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>                        </td>
                     </tr>
                     <tr>
-                        <td>Google</td>
+                        <td>{{\Illuminate\Support\Facades\Lang::get('lang.google')}}</td>
                         <td>
                             @if($social->checkActive('google')===true)
-                            <span style="color: green">Active</span>
-                            @else 
-                            <span style="color: red">Inactive</span>
+                                <span style="color: green">{{trans('lang.active')}}</span>
+                            @else
+                                <span style="color: red">{{trans('lang.inactive')}}</span>
                             @endif
                         </td>
                         <td>
-                            <a href="{{url('social/media/google')}}" class="btn btn-primary">Settings</a>
-                        </td>
+                            <a href="{{url('social/media/google')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>                        </td>
                     </tr>
                     <tr>
-                        <td>Github</td>
+                        <td>{{\Illuminate\Support\Facades\Lang::get('lang.github')}}</td>
                         <td>
                             @if($social->checkActive('github')===true)
-                            <span style="color: green">Active</span>
-                            @else 
-                            <span style="color: red">Inactive</span>
+                                <span style="color: green">{{trans('lang.active')}}</span>
+                            @else
+                                <span style="color: red">{{trans('lang.inactive')}}</span>
                             @endif
                         </td>
                         <td>
-                            <a href="{{url('social/media/github')}}" class="btn btn-primary">Settings</a>
-                        </td>
+                            <a href="{{url('social/media/github')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>                        </td>
                     </tr>
                     <tr>
-                        <td>Twitter</td>
+                        <td>{{\Illuminate\Support\Facades\Lang::get('lang.twitter')}}</td>
                         <td>
                             @if($social->checkActive('twitter')===true)
-                            <span style="color: green">Active</span>
-                            @else 
-                            <span style="color: red">Inactive</span>
+                                <span style="color: green">{{trans('lang.active')}}</span>
+                            @else
+                                <span style="color: red">{{trans('lang.inactive')}}</span>
                             @endif
                         </td>
                         <td>
-                            <a href="{{url('social/media/twitter')}}" class="btn btn-primary">Settings</a>
-                        </td>
+                            <a href="{{url('social/media/twitter')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>                        </td>
                     </tr>
                     <tr>
-                        <td>Linkedin</td>
+                        <td>{{\Illuminate\Support\Facades\Lang::get('lang.linkedin')}}</td>
                         <td>
                             @if($social->checkActive('linkedin')===true)
-                            <span style="color: green">Active</span>
-                            @else 
-                            <span style="color: red">Inactive</span>
+                                <span style="color: green">{{trans('lang.active')}}</span>
+                            @else
+                                <span style="color: red">{{trans('lang.inactive')}}</span>
                             @endif
                         </td>
                         <td>
-                            <a href="{{url('social/media/linkedin')}}" class="btn btn-primary">Settings</a>
-                        </td>
+                            <a href="{{url('social/media/linkedin')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>                        </td>
                     </tr>
                     <tr>
-                        <td>Bitbucket</td>
+                        <td>{{\Illuminate\Support\Facades\Lang::get('lang.bitbucket')}}</td>
                         <td>
                             @if($social->checkActive('bitbucket')===true)
-                            <span style="color: green">Active</span>
-                            @else 
-                            <span style="color: red">Inactive</span>
+                                <span style="color: green">{{trans('lang.active')}}</span>
+                            @else
+                                <span style="color: red">{{trans('lang.inactive')}}</span>
                             @endif
                         </td>
                         <td>
-                            <a href="{{url('social/media/bitbucket')}}" class="btn btn-primary">Settings</a>
-                        </td>
+                            <a href="{{url('social/media/bitbucket')}}" class="btn btn-primary">{{trans('lang.settings')}}</a>                        </td>
                     </tr>
                 </tbody>
             </table>

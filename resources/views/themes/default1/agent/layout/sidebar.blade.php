@@ -9,7 +9,7 @@
 @stop
 @section('sidebar')
 
-<li class="nav-header">KNOWLEDGE BASE</li>
+<li class="nav-header">{{strtoupper(trans('lang.knowledge_base'))}}</li>
 
 <li @yield('category-menu-parent') class="nav-item">
                                 

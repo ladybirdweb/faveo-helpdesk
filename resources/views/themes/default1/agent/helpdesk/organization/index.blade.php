@@ -1,4 +1,4 @@
-@extends('themes.default1.agent.layout.agent')
+    @extends('themes.default1.agent.layout.agent')
 
 @section('Users')
 class="nav-link active"
@@ -40,20 +40,20 @@ class="nav-link active"
 @endif
 
 <div class="card card-light">
-    
+
     <div class="card-header">
-    
+
         <h3 class="card-title">{{Lang::get('lang.organization_list')}}</h3>
-    
+
         <div class="card-tools">
-    
-            <a href="{{route('organizations.create')}}" class="btn btn-default btn-tool"><i class="fas fa-plus"> </i> {{Lang::get('lang.create_organization')}}</a>        
+
+            <a href="{{route('organizations.create')}}" class="btn btn-default btn-tool"><i class="fas fa-plus"> </i> {{Lang::get('lang.create_organization')}}</a>
         </div>
 
     </div>
-    
+
     <div class="card-body">
-    
+
         {!! Datatable::table()
         ->addColumn(Lang::get('lang.name'),
         Lang::get('lang.website'),

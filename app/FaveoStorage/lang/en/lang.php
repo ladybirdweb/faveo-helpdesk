@@ -13,4 +13,5 @@ return [
     'container' => 'Container',
     'endpoint'  => 'End Point',
     'url_type'  => 'Url Type',
+    'save'      => 'Save',
 ];

@@ -66,8 +66,8 @@ class="nav-link active"
            </a>
 
             <div class="btn-group" id="toggle_event_editing" style="float: right; margin-bottom: 10">
-                <button type="button"  class="btn {{$user_status->status == '0' ? 'btn-info' : 'btn-default'}} locked_active">Inactive</button>
-                <button type="button"  class="btn {{$user_status->status == '1' ? 'btn-info' : 'btn-default'}} unlocked_inactive">Active</button>
+                <button type="button"  class="btn {{$user_status->status == '0' ? 'btn-info' : 'btn-default'}} locked_active">{{Lang::get('lang.inactive')}}</button>
+                <button type="button"  class="btn {{$user_status->status == '1' ? 'btn-info' : 'btn-default'}} unlocked_inactive">{{Lang::get('lang.active')}}</button>
             </div>
         </div>
         <div class="priority-table" style="padding-top: 10px">

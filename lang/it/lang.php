@@ -1594,4 +1594,7 @@ return [
     'all-users'      => 'Tutti gli utenti',
     //update 21-12-2016
     'selected-user-is-already-the-owner' => 'L\'utente selezionato è già il proprietario del ticket.',
+    //updated 10-10-2023
+    'what_should_be_done_with_content_owned_by_this_user' => 'Cosa si dovrebbe fare con i contenuti di proprietà di questo utente',
+
 ];

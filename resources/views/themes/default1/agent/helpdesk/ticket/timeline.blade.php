@@ -1,4 +1,5 @@
 @extends('themes.default1.agent.layout.agent')
+<meta charset="utf-8">
 
 @section('Tickets')
 class="nav-link active"
@@ -138,17 +139,17 @@ if ($thread->title != "") {
             if ($group->can_edit_ticket == 1) {
                 ?>
             <button type="button" class="btn btn-sm btn-default btn-tool">
-                <i class="fas fa-edit" style="color:green;"></i> Edit
+                <i class="fas fa-edit" style="color:green;"></i> {{trans('lang.edit')}}
             </button>            <?php } ?>
 
             <?php if ($group->can_assign_ticket == 1) { ?>
             <button type="button" class="btn btn-sm btn-default btn-tool">
-                <i class="fas fa-hand-point-right" style="color:orange;"></i> Assign
+                <i class="fas fa-hand-point-right" style="color:orange;"></i> {{trans('lang.assign')}}
             </button>            <?php } ?>
 
             @if($tickets->assigned_to == Auth::user()->id)
                 <button type="button" id="surrender_button" class="btn btn-sm btn-default btn-tool" data-toggle="modal" data-target="#surrender">
-                    <i class="fas fa-arrows-alt" style="color:red;"></i> Surrender
+                    <i class="fas fa-arrows-alt" style="color:red;"></i> {{trans('lang.surrender')}}
                 </button>
             @endif
 
@@ -156,7 +157,7 @@ if ($thread->title != "") {
             <?php \Illuminate\Support\Facades\Event::dispatch('show-add-event-btn', []); ?>
 
             <a href="{{url('ticket/print/'.$tickets->id)}}" target="_blank" class="btn btn-default btn-tool btn-sm">
-                <i class="fas fa-print"></i> Generate PDF
+                <i class="fas fa-print"></i> {{trans('lang.generate_pdf')}}
             </a>            <div class="btn-group">
                 <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="d1"><i class="fas fa-exchange-alt" style="color:teal;" id="hidespin"> </i><i class="fa fa-spinner fa-spin" style="color:teal; display:none;" id="spin"></i>
                     {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
@@ -200,7 +201,7 @@ if ($thread->title != "") {
                         <?php }
                         ?>
                         <?php if ($group->can_ban_email == 1) { ?>
-                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#banemail"><i class="fas fa-ban" style="color:red;"></i> {!! Lang::get('lang.ban_email') !!}</a>
+                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#banemail"><i class="fas fa-ban" style="color:red;"></i> {{trans('lang.ban_email')}}</a>
                         <?php 
                         \Illuminate\Support\Facades\Event::dispatch('ticket.details.more.list',[$tickets]);
                         }
@@ -328,7 +329,7 @@ if ($thread->title != "") {
             
             <div class="card-header">
                 
-                <h3 class="card-title">Actions</h3>
+                <h3 class="card-title">{{trans('lang.action')}}</h3>
             </div>
 
                     <div class="card-body">
@@ -515,7 +516,7 @@ if ($thread->title != "") {
             <div class="card card-light">
                 
                 <div class="card-header">
-                    <h3 class="card-title">Ticket Conversation</h3>
+                    <h3 class="card-title">{{trans('lang.ticket_conversation')}}</h3>
                 </div>
 
                 <div class="card-body">
@@ -923,7 +924,7 @@ if ($thread->title != "") {
 
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal" id="dismis2">{!! Lang::get('lang.close') !!}</button>
-                        <button id="ban" type="button" class="btn btn-warning" >{!! Lang::get('lang.ban_email') !!}</button>
+                        <button id="ban" type="button" class="btn btn-warning" >{{trans('lang.ban_email')}}</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->

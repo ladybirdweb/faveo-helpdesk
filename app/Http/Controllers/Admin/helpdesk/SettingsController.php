@@ -763,7 +763,7 @@ class SettingsController extends Controller
     {
         $days = Input::get('no_of_days');
         if ($days == null) {
-            return redirect()->back()->with('fails', 'Please enter valid no of days');
+            return redirect()->back()->with('fails', \Illuminate\Support\Facades\Lang::get('lang.please_enter_valid_no_days'));
         }
         $date = new DateTime();
         $date->modify($days.' day');

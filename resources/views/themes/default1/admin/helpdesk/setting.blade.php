@@ -656,7 +656,7 @@
 </div>
 <div class="card card-light">
     <div class="card-header">
-        <h3 class="card-title">Logs</h3>
+        <h3 class="card-title">{{Lang::get('log::lang.logs')}}</h3>
     </div>
     <!-- /.box-header -->
     <div class="card-body">
@@ -671,7 +671,7 @@
                             </span>
                         </a>
                     </div>
-                    <div class="text-center text-sm">Logs</div>
+                    <div class="text-center text-sm">{{Lang::get('log::lang.logs')}}</div>
                 </div>
             </div>
         </div>

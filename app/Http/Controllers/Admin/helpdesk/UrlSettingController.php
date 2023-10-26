@@ -36,7 +36,7 @@ class UrlSettingController extends Controller
             $string = $string_www.$sting_ssl;
             $this->writeHtaccess($string);
 
-            return redirect()->back()->with('success', 'updated');
+            return redirect()->back()->with('success', trans('lang.updated'));
         } catch (Exception $ex) {
             dd($ex);
 

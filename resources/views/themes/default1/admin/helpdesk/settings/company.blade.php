@@ -108,7 +108,7 @@ class="nav-link active"
             <div class="col-md-2">
                 <!-- logo -->
                 {!! Form::label('logo',Lang::get('lang.logo')) !!}
-                <div class="btn bg-olive btn-file" style="color:blue"> Upload file
+                <div class="btn bg-olive btn-file" style="color:blue"> {{Lang::get('lang.upload_file')}}
                     {!! Form::file('logo') !!}
                 </div>
             </div>

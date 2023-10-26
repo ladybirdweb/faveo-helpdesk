@@ -213,7 +213,7 @@ if (Auth::user()->role == 'agent') {
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default no">{{Lang::get('lang.cancel')}}</button>
-                <button type="button" class="btn btn-primary yes" data-dismiss="modal">{{Lang::get('lang.ok')}}</button>
+                <button type="button" class="btn btn-primary yes" data-dismiss="modal">{{Lang::get('lang.yes')}}</button>
             </div>
         </div>
     </div>
