@@ -36,8 +36,6 @@ class CategoryControllerTest extends TestCase
             'email'        => $email,
             'user_name'    => $faker->unique()->userName(),
             'password'     => $password,
-            'assign_group' => 1,
-            'primary_dpt'  => 1,
             'active'       => 1,
             'role'         => 'agent',
             'agent_tzone'  => 81,
