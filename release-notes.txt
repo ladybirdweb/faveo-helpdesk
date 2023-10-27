@@ -8,6 +8,77 @@
                                           | |                         
                                           |_|                         
 |=====================================================
+| v2.0.3 Added Unit Test cases
+|=====================================================
+
+### Updates
+- Fixes #8188 (Integrate with Jenkin & Codacy)
+- Fixes #8245 (Added Arabic Language support)
+
+### Bug Fixes
+- Fixes #8213
+- Fixes #8180
+- Fixes #727
+- Fixes #566
+- Fixes #697
+
+
+|=====================================================
+| v2.0.2 Theme Update and Clockwork Feature Addition
+|=====================================================
+"This release updates the theme to the latest version, enhancing the UI design of the system while maintaining the same user experience."
+
+## Updates ##
+- Updated jQuery version to v3.6.3.
+- Updated Bootstrap version to v5.
+- Updated AdminLTE theme to v3.2.0.
+- Added the clock-work debugging feature.
+
+## Bugfixes ##
+- Fixed an issue where selecting a custom field in the create ticket would result in a 500 error.
+- Addressed XSS injection vulnerability.
+- Resolved internal server error when no user with a mobile number exists.
+- Fixed the issue where the token value was made public during the ticket creation via API v1.
+- Added SECURITY.md
+
+## Changes logs ##
+- Jquery version v3.6.3
+- Bootstrap version V5
+
+|=====================================================
+| v2.0.1 Minor Bug Fixes
+|=====================================================
+### Bug Fixes
+- Fixes #8006 (Faveo Api Install Issue)
+- Fixes #8106 (Faveo-Helpdesk Community Edition - CLI install fails (GUI install is fine))
+- Fixes #8114 (When we click on the register button and categories button getting the below error.)
+- Fixes #8068
+
+### Change Logs
+- Updated Bugnag Key
+
+|=====================================================
+| v2.0.0 Laravel Upgrade, PHP 8.1, Mysql 8 and InnoDB
+|=====================================================
+
+#### Updates
+- We updated Laravel, PHP, and Mysql versions.
+- We included a Manual update feature too.
+
+#### Steps to Manual Update
+- Replace or Rebase the code in an existing file path
+- Update the Php version to 8.1
+- Run "**_composer dump-autoload_**"
+- Then run "**_php artisan database:sync_**"
+- Now your application updated to our latest version
+
+**Change Logs**
+- Php 8.1 supports
+- Laravel 9 supports
+- Mysql 8 supports
+- InnoDB driver supports
+
+|=====================================================
 | v1.11.1 Urgent security patch
 |=====================================================
 This release is a patch update for the high-level security risk found and reported by [Shahrir Shafie](https://www.linkedin.com/in/shahrir-shafie-884293117) in the vulnerable API endpoints.
