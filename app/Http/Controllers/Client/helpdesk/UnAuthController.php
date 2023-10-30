@@ -338,10 +338,10 @@ class UnAuthController extends Controller
 //           return Cache::get('language');
 //         } else return 'false';
 //          Cache::put('language',$);
-         $path = base_path('lang');  // Path to check available language packages
-         if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
-             // dd(array_key_exists($lang, Config::get('languages')));
-       // app()->setLocale($lang);
+        $path = base_path('lang');  // Path to check available language packages
+        if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
+            // dd(array_key_exists($lang, Config::get('languages')));
+            // app()->setLocale($lang);
 
             \Cache::forever('language', $lang);
             // dd(Cache::get('language'));
@@ -352,19 +352,19 @@ class UnAuthController extends Controller
 
         return true;
 
-      /*  $path = base_path('lang');  // Path to check available language packages
-        if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
-            if (Auth::check()) {
-                $id = Auth::user()->id;
-                $user = User::find($id);
-                $user->user_language = $lang;
-                $user->save();
-            } else {
-                Session::put('language', $lang);
-            }
-        }
+        /*  $path = base_path('lang');  // Path to check available language packages
+          if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
+              if (Auth::check()) {
+                  $id = Auth::user()->id;
+                  $user = User::find($id);
+                  $user->user_language = $lang;
+                  $user->save();
+              } else {
+                  Session::put('language', $lang);
+              }
+          }
 
-        return redirect()->back();*/
+          return redirect()->back();*/
     }
 
     // Follow up tickets
