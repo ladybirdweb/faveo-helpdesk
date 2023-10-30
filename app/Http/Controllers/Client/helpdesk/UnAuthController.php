@@ -331,13 +331,13 @@ class UnAuthController extends Controller
      *
      * @return response
      */
-    public static function changeLanguage($ids, $lang)
+    public static function changeLanguage($lang)
     {
-        /* if(Cache::has('language'))
-         {
-           return Cache::get('language');
-         } else return 'false';
-          Cache::put('language',$);
+//        if(Cache::has('language'))
+//         {
+//           return Cache::get('language');
+//         } else return 'false';
+//          Cache::put('language',$);
          $path = base_path('lang');  // Path to check available language packages
          if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
              // dd(array_key_exists($lang, Config::get('languages')));
@@ -352,9 +352,7 @@ class UnAuthController extends Controller
 
         return true;
 
-        */
-
-        $path = base_path('lang');  // Path to check available language packages
+      /*  $path = base_path('lang');  // Path to check available language packages
         if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
             if (Auth::check()) {
                 $id = Auth::user()->id;
@@ -366,7 +364,7 @@ class UnAuthController extends Controller
             }
         }
 
-        return redirect()->back();
+        return redirect()->back();*/
     }
 
     // Follow up tickets

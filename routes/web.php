@@ -806,7 +806,7 @@ Route::middleware('web')->group(function () {
     // });
     Route::get('check_ticket/swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeUserLanguage']);
     Route::get('category-list/swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeUserLanguage']);
-    Route::get('show-ticket/{ids}/swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeLanguage']);
+    Route::get('show/swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeUserLanguage']);
     Route::get('pages/swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeUserLanguage'])->name('switch-user-lang');
     Route::get('swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeUserLanguage'])->name('switch-user-lang');
     Route::get('thread/swtich-language/{id}', [Client\helpdesk\UnAuthController::class, 'changeUserLanguage'])->name('switch-user-lang');
