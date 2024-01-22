@@ -169,6 +169,7 @@ class UpgradeController extends Controller
                 }
             }
             echo '</ul>';
+
             //Artisan::call('migrate', ['--force' => true]);
             return true;
         } catch (Exception $ex) {
@@ -397,6 +398,7 @@ class UpgradeController extends Controller
         try {
             if (Utility::getFileVersion() > Utility::getDatabaseVersion()) {
                 $url = url('database-upgrade');
+
                 //$string = "Your Database is outdated please upgrade <a href=$url>Now !</a>";
                 return view('themes.default1.update.database', compact('url'));
             } else {

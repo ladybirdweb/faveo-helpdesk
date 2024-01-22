@@ -196,6 +196,7 @@ class FormController extends Controller
             //dd($form);
             if ($form) {
                 $fields = $form->fields();
+
                 //dd($fields);
                 return view('themes.default1.admin.helpdesk.manage.form.edit', compact('form', 'fields', 'select_forms'));
             }
@@ -215,6 +216,7 @@ class FormController extends Controller
             //dd($form);
             if ($form) {
                 $fields = $form->fields();
+
                 //dd($fields);
                 return view('themes.default1.admin.helpdesk.manage.form.add-child', compact('form', 'fields', 'select_forms'));
             }

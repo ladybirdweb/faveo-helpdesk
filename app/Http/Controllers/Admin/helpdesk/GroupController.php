@@ -168,9 +168,11 @@ class GroupController extends Controller
         //Updating admin_notes field
         $adminNotes = $request->input('admin_notes');
         $var->admin_notes = $adminNotes;
+
         /* Check whether function success or not */
         try {
             $var->save();
+
             /* redirect to Index page with Success Message */
             return redirect('groups')->with('success', Lang::get('lang.group_updated_successfully'));
         } catch (Exception $e) {
@@ -198,9 +200,11 @@ class GroupController extends Controller
         }
         $group_assign_department->where('group_id', $id)->delete();
         $groups = $group->whereId($id)->first();
+
         /* Check whether function success or not */
         try {
             $groups->delete();
+
             /* redirect to Index page with Success Message */
             return redirect('groups')->with('success', Lang::get('lang.group_deleted_successfully'));
         } catch (Exception $e) {
