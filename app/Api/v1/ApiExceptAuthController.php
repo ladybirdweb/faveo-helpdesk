@@ -42,6 +42,7 @@ class ApiExceptAuthController extends Controller
             $url = $url.'api/v1/helpdesk/check-url';
             //return $url;
             $result = $this->CallGetApi($url);
+
 //            dd($result);
             return response()->json(compact('result'));
         } catch (\Exception $ex) {

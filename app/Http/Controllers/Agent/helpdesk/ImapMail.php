@@ -25,6 +25,7 @@ class ImapMail extends Mailbox
     {
         //dd($this->getImapStream());
         $mailsIds = imap_search($this->getImapStream(), $criteria, SE_UID);
+
         //dd($mailsIds);
         return $mailsIds ? $mailsIds : [];
     }

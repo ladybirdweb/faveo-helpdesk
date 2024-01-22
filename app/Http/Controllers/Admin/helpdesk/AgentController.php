@@ -235,6 +235,7 @@ class AgentController extends Controller
         foreach ($requests as $req) {
             DB::insert('insert into team_assign_agent (team_id, agent_id) values (?,?)', [$req, $id]);
         }
+
         //Todo For success and failure conditions
         try {
             if ($request->input('country_code') != '' or $request->input('country_code') != null) {
@@ -304,6 +305,7 @@ class AgentController extends Controller
         for ($i = 0; $i < $length; $i++) {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
+
         // return random string
         return $randomString;
     }

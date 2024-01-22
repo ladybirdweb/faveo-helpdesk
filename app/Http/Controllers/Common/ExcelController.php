@@ -15,6 +15,7 @@ class ExcelController extends Controller
         if (count($data) == 0) {
             throw new Exception('No data');
         }
+
         //dd(Excel::download(new UserExport($data), $filename.'.'.'xls'));
         return Excel::download(new UserExport($data), $filename.'.'.'xlsx');
     }

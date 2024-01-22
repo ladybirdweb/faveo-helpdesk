@@ -64,6 +64,7 @@ class TokenAuthController extends Controller
         }
 
         $user_id = \Auth::user();
+
         // if no errors are encountered we can return a JWT
         return response()->json(compact('token', 'user_id'));
     }
@@ -91,6 +92,7 @@ class TokenAuthController extends Controller
 
             return response()->json(compact('error'));
         }
+
         //dd($user);
         return response()->json(compact('user'));
     }
@@ -174,8 +176,8 @@ class TokenAuthController extends Controller
                 $password_reset_table = \DB::table('password_resets')->where('email', '=', $user->email)->first();
                 if (isset($password_reset_table)) {
                     $password_reset_table = \DB::table('password_resets')->where('email', '=', $user->email)->update(['token' => $code, 'created_at' => $date]);
-                    // $password_reset_table->token = $code;
-                    // $password_reset_table->update(['token' => $code]);
+                // $password_reset_table->token = $code;
+                // $password_reset_table->update(['token' => $code]);
                 } else {
                     $create_password_reset = \DB::table('password_resets')->insert(['email' => $user->email, 'token' => $code, 'created_at' => $date]);
                 }
