@@ -209,6 +209,7 @@ class GuestController extends Controller
         $tickets = $tickets->where('user_id', '=', $user_id)->first();
         //dd($ticket);
         $thread = $thread->where('ticket_id', $tickets->id)->first();
+
         //dd($thread);
         // $tickets = $tickets->whereId($id)->first();
         return view('themes.default1.client.guest-user.view_ticket', compact('thread', 'tickets'));
@@ -424,6 +425,7 @@ class GuestController extends Controller
                     if (Hash::check(Input::get('otp'), $otp->otp)) {
                         Otp::where('user_id', '=', Input::get('u_id'))
                             ->update(['otp' => '']);
+
                         // User::where('id', '=', $user->id)
                         //     ->update(['active' => 1]);
                         // $this->openTicketAfterVerification($user->id);

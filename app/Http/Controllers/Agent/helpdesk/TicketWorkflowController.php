@@ -201,6 +201,7 @@ class TicketWorkflowController extends Controller
         } elseif ($condition == 'ends') {
             $return = $this->checkEnds($statement, $to_check);
         }
+
 //        elseif($condition == 'match') {
 //
 //        } elseif($condition == 'not_match') {

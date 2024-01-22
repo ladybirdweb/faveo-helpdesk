@@ -380,6 +380,7 @@ class EmailsController extends Controller
             }
             //dd($ex->getMessage());
             loging('mail-config', $message);
+
             //Log::error($ex->getMessage());
             return $this->jsonResponse('fails', $message);
         }

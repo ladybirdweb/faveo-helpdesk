@@ -178,6 +178,7 @@ class OrganizationController extends Controller
         try {
             /* select the field by id  */
             $orgs = $org->whereId($id)->first();
+
             /* To view page */
             return view('themes.default1.agent.helpdesk.organization.show', compact('orgs'));
         } catch (Exception $e) {
@@ -198,6 +199,7 @@ class OrganizationController extends Controller
         try {
             /* select the field by id  */
             $orgs = $org->whereId($id)->first();
+
             /* To view page */
             return view('themes.default1.agent.helpdesk.organization.edit', compact('orgs'));
         } catch (Exception $e) {
@@ -254,6 +256,7 @@ class OrganizationController extends Controller
             /* Delete the field selected from the table */
             /* Check whether function success or not */
             $orgs->delete();
+
             /* redirect to Index page with Success Message */
             return redirect('organizations')->with('success', Lang::get('lang.organization_deleted_successfully'));
         } catch (Exception $e) {

@@ -576,6 +576,7 @@ class FilterController extends Controller
             $query->whereIn('tickets.team_id', $teams)
                     ->orWhereIn('tickets.assigned_to', $users);
         });
+
         // dd($table->toSql());
         return $table;
     }
@@ -899,6 +900,7 @@ class FilterController extends Controller
         } else {
             $table = $table->where('tickets.id', '=', null);
         }
+
         // dd($table->toSql());
         return $table;
     }

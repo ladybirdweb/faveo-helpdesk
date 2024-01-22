@@ -118,6 +118,7 @@ class HelptopicController extends Controller
             }
             /* Check whether function success or not */
             $topic->fill($request->except('custom_form', 'auto_assign'))->save();
+
             // $topics->fill($request->except('custom_form','auto_assign'))->save();
             /* redirect to Index page with Success Message */
             return redirect('helptopic')->with('success', Lang::get('lang.helptopic_created_successfully'));
@@ -192,6 +193,7 @@ class HelptopicController extends Controller
                     ->where('id', '=', 1)
                     ->update(['help_topic' => $id]);
             }
+
             /* redirect to Index page with Success Message */
             return redirect('helptopic')->with('success', Lang::get('lang.helptopic_updated_successfully'));
         } catch (Exception $e) {
@@ -238,9 +240,11 @@ class HelptopicController extends Controller
             }
             $message = $ticket.$email;
             $topics = $topic->whereId($id)->first();
+
             /* Check whether function success or not */
             try {
                 $topics->delete();
+
                 /* redirect to Index page with Success Message */
                 return redirect('helptopic')->with('success', Lang::get('lang.helptopic_deleted_successfully').$message);
             } catch (Exception $e) {

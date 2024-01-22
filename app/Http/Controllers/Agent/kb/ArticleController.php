@@ -68,6 +68,7 @@ class ArticleController extends Controller
                 ->select('id', 'name', 'description', 'publish_time', 'slug')
                 ->orderBy('publish_time', 'desc')
                 ->get();
+
         // returns chumper datatable
         return Datatable::Collection($articles)
 
@@ -136,6 +137,7 @@ class ArticleController extends Controller
     {
         /* get the attributes of the category */
         $category = $category->pluck('id', 'name');
+
         /* get the create page  */
         try {
             return view('themes.default1.agent.kb.article.create', compact('category'));
@@ -169,6 +171,7 @@ class ArticleController extends Controller
         foreach ($requests as $req) {
             DB::insert('insert into kb_article_relationship (category_id, article_id) values (?,?)', [$req, $id]);
         }
+
         /* insert the values to the article table  */
         try {
             $article->fill($request->except('slug'))->save();
@@ -203,6 +206,7 @@ class ArticleController extends Controller
         /* get the selected article and display it at edit page  */
         /* Get the selected article with id */
         $article = $article->whereId($id)->first();
+
         /* send to the edit page */
         try {
             return view('themes.default1.agent.kb.article.edit', compact('assign', 'article', 'category'));
@@ -244,6 +248,7 @@ class ArticleController extends Controller
         foreach ($requests as $req) {
             DB::insert('insert into kb_article_relationship (category_id, article_id) values (?,?)', [$req, $id]);
         }
+
         /* update the value to the table */
         try {
             $article->fill($request->all())->save();

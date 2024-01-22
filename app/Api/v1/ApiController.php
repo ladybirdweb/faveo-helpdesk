@@ -743,6 +743,7 @@ class ApiController extends Controller
 
             $url = $url.'/api/v1/helpdesk/check-url?api_key='.$this->request->input('api_key').'&token='.\Config::get('app.token');
             $result = $this->CallGetApi($url);
+
             //dd($result);
             return response()->json(compact('result'));
         } catch (\Exception $ex) {

@@ -45,6 +45,7 @@ class SlaController extends Controller
         try {
             /* Declare a Variable $slas to store all Values From Sla_plan Table */
             $slas = $sla->get();
+
             /* Listing the values From Sla_plan Table */
             return view('themes.default1.admin.helpdesk.manage.sla.index', compact('slas'));
         } catch (Exception $e) {
@@ -81,6 +82,7 @@ class SlaController extends Controller
             /* Fill the request values to Sla_plan Table  */
             /* Check whether function success or not */
             $sla->fill($request->input())->save();
+
             /* redirect to Index page with Success Message */
             return redirect('sla')->with('success', Lang::get('lang.sla_plan_created_successfully'));
         } catch (Exception $e) {
@@ -196,9 +198,11 @@ class SlaController extends Controller
             $message = $ticket.$dept.$topic;
             /* Delete a perticular field from the database by delete() using Id */
             $slas = Sla_plan::whereId($id)->first();
+
             /* Check whether function success or not */
             try {
                 $slas->delete();
+
                 /* redirect to Index page with Success Message */
                 return redirect('sla')->with('success', Lang::get('lang.sla_plan_deleted_successfully').$message);
             } catch (Exception $e) {

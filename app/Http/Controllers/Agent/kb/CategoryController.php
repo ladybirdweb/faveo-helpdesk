@@ -123,6 +123,7 @@ class CategoryController extends Controller
     {
         /* Get the all attributes in the category model */
         $category = $category->pluck('name', 'id')->toArray();
+
         /* get the view page to create new category with all attributes
           of category model */
         try {
@@ -146,6 +147,7 @@ class CategoryController extends Controller
         $sl = $request->input('name');
         $slug = Str::slug($sl, '-');
         $category->slug = $slug;
+
         // send success message to index page
         try {
             $category->fill($request->input())->save();
@@ -169,6 +171,7 @@ class CategoryController extends Controller
         /* get the atributes of the category model whose id == $id */
         $category = Category::whereId($id)->first();
         $categories = Category::pluck('name', 'id')->toArray();
+
         /* get the Edit page the selected category via id */
         return view('themes.default1.agent.kb.category.edit', compact('category', 'categories'));
     }
@@ -188,6 +191,7 @@ class CategoryController extends Controller
         $category = Category::where('id', $id)->first();
         $sl = $request->input('name');
         $slug = Str::slug($sl, '-');
+
         /* update the values at the table via model according with the request */
         //redirct to index page with success message
         try {
@@ -218,6 +222,7 @@ class CategoryController extends Controller
         } else {
             /*  delete the category selected, id == $id */
             $category = $category->whereId($id)->first();
+
             // redirect to index with success message
             try {
                 $category->delete();

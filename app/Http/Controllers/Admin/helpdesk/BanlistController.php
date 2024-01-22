@@ -87,6 +87,7 @@ class BanlistController extends Controller
                 $use->ban = $request->input('ban');
                 $use->internal_note = $request->input('internal_note');
                 $use->save();
+
                 // $user->create($request->input())->save();
                 return redirect('banlist')->with('success', Lang::get('lang.email_banned_sucessfully'));
             } else {

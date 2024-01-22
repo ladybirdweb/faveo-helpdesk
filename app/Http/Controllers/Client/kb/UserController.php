@@ -141,6 +141,7 @@ class UserController extends Controller
         /* from whole attribute pick the article_id */
         $article_id = $all->pluck('article_id');
         $categorys = $category->get();
+
         /* direct to view with $article_id */
         return view('themes.default1.client.kb.article-list.category', compact('all', 'id', 'categorys', 'article_id'));
     }

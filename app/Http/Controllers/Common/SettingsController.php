@@ -553,6 +553,7 @@ class SettingsController extends Controller
                 $attributes[$key]['author'] = $field['author'];
             }
         }
+
         //dd($attributes);
         return $attributes;
     }
