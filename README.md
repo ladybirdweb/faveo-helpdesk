@@ -46,6 +46,10 @@ To run Faveo your host just needs a couple of things:
   * PHP Extensions: Imap, Mbstring, Mcrypt, OpenSSL, PDO, Tokenizer, XML, Zip
   * Web Server Extension: Pretty URLs or Search Engine Friendly URLs have to be enabled in your web server configuration
 
+Installation Guide
+--------------------------
+The installation steps for Faveo Community is same as that of Faveo. Please refer to our <a href="https://docs.faveohelpdesk.com/" target="_blank">Installation Guide</a> here.
+
 Faveo Web Hosting
 --------------------------
 <a href="http://www.store.ladybirdwebhost.com/" target="_blank">Ladybird Web Host</a> Offers hosting with minimum requirement to host Faveo web application. Faveo has been tested on Ladybird Web Host servers &amp; works very well in their server environment. All web hosting packages offered by Ladybird Web Host come with 30 day money back gurantee.</p>
@@ -66,11 +70,6 @@ Find demo, installation, configuration, tutorial videos on our channel <a href="
 Road Map for Community Edition
 --------------------------
 See what all features are going to be part of upcoming releases <a href="http://www.faveohelpdesk.com/faveo-helpdesk-road-map" target="_blank">here</a>
-
-Faveo Probe
---------------------------
-Helps verify whether your server can run Faveo or not. 
-<a href="https://github.com/ladybirdweb/faveo-probe" target="_blank">Download here</a>
 
 Faveo Community
 --------------------------
