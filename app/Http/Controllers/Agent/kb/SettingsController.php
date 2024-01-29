@@ -56,6 +56,7 @@ class SettingsController extends Controller
         /* get the setting where the id == 1 */
         $settings = $settings->whereId('1')->first();
         $time = $time->get();
+
         //$date = $date->get();
         return view('themes.default1.agent.kb.settings.settings', compact('date', 'settings', 'time'));
     }

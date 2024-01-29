@@ -155,6 +155,7 @@ class CannedController extends Controller
             /* delete the selected field */
             /* Check whether function success or not */
             $canned->delete();
+
             /* redirect to Index page with Success Message */
             return redirect()->route('canned.list')->with('success', Lang::get('lang.canned_response_deleted'));
         } catch (Exception $e) {
@@ -180,6 +181,7 @@ class CannedController extends Controller
         } else {
             $msg = '';
         }
+
         // returning the canned response in JSON format
         return \Response::json($msg);
     }

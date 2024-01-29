@@ -18,6 +18,7 @@ class UrlSettingController extends Controller
         $url = $request->url();
         $www = $this->checkWWW($url);
         $https = $this->checkHTTP($url);
+
         //dd($www, $https);
         try {
             return view('themes.default1.admin.helpdesk.settings.url.settings', compact('www', 'https'));

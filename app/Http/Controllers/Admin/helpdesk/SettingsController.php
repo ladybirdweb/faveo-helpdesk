@@ -74,6 +74,7 @@ class SettingsController extends Controller
         try {
             /* fetch the values of company from company table */
             $companys = $company->whereId('1')->first();
+
             /* Direct to Company Settings Page */
             return view('themes.default1.admin.helpdesk.settings.company', compact('companys'));
         } catch (Exception $e) {
@@ -104,9 +105,11 @@ class SettingsController extends Controller
         if ($request->input('use_logo') == null) {
             $companys->use_logo = '0';
         }
+
         /* Check whether function success or not */
         try {
             $companys->fill($request->except('logo'))->save();
+
             /* redirect to Index page with Success Message */
             return redirect('getcompany')->with('success', Lang::get('lang.company_updated_successfully'));
         } catch (Exception $e) {
@@ -167,6 +170,7 @@ class SettingsController extends Controller
             $email_mandatory = $common_settings->select('status')
                     ->where('option_name', '=', 'email_mandatory')
                     ->first();
+
             /* Direct to System Settings Page */
             return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp', 'email_mandatory'));
         } catch (Exception $e) {
@@ -215,6 +219,7 @@ class SettingsController extends Controller
                 $sett->status = $itil;
                 $sett->save();
             }
+
             /* redirect to Index page with Success Message */
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
         } catch (Exception $e) {
@@ -242,6 +247,7 @@ class SettingsController extends Controller
             $slas = $sla->get();
             /* Fetch the values from Help_topic table */
             $topics = $topic->get();
+
             /* Direct to Ticket Settings Page */
             return view('themes.default1.admin.helpdesk.settings.ticket', compact('tickets', 'slas', 'topics', 'priority'));
         } catch (Exception $e) {
@@ -276,6 +282,7 @@ class SettingsController extends Controller
             $tickets->collision_avoid = $request->input('collision_avoid');
             /* Check whether function success or not */
             $tickets->save();
+
             /* redirect to Index page with Success Message */
             return redirect('getticket')->with('success', Lang::get('lang.ticket_updated_successfully'));
         } catch (Exception $e) {
@@ -302,6 +309,7 @@ class SettingsController extends Controller
             $templates = $template->get();
             /* Fetch the values from Emails table */
             $emails1 = $email1->get();
+
             /* Direct to Email Settings Page */
             return view('themes.default1.admin.helpdesk.settings.email', compact('emails', 'templates', 'emails1'));
         } catch (Exception $e) {
@@ -334,6 +342,7 @@ class SettingsController extends Controller
             $emails->attachment = $request->input('attachment');
             /* Check whether function success or not */
             $emails->save();
+
             /* redirect to Index page with Success Message */
             return redirect('getemail')->with('success', Lang::get('lang.email_updated_successfully'));
         } catch (Exception $e) {
@@ -435,6 +444,7 @@ class SettingsController extends Controller
             }
             $work->save();
             $this->saveConditions();
+
             /* redirect to Index page with Success Message */
             return redirect('job-scheduler')->with('success', Lang::get('lang.job-scheduler-success'));
         } catch (Exception $e) {
@@ -455,6 +465,7 @@ class SettingsController extends Controller
         try {
             /* fetch the values of responder from responder table */
             $responders = $responder->whereId('1')->first();
+
             /* Direct to Responder Settings Page */
             return view('themes.default1.admin.helpdesk.settings.responder', compact('responders'));
         } catch (Exception $e) {
@@ -484,6 +495,7 @@ class SettingsController extends Controller
             /* fill the values to coompany table */
             /* Check whether function success or not */
             $responders->save();
+
             /* redirect to Index page with Success Message */
             return redirect('getresponder')->with('success', Lang::get('lang.auto_response_updated_successfully'));
         } catch (Exception $e) {
@@ -504,6 +516,7 @@ class SettingsController extends Controller
         try {
             /* fetch the values of alert from alert table */
             $alerts = $alert->whereId('1')->first();
+
             /* Direct to Alert Settings Page */
             return view('themes.default1.admin.helpdesk.settings.alert', compact('alerts'));
         } catch (Exception $e) {
@@ -572,6 +585,7 @@ class SettingsController extends Controller
             /* fill the values to coompany table */
             /* Check whether function success or not */
             $alerts->save();
+
             /* redirect to Index page with Success Message */
             return redirect('getalert')->with('success', Lang::get('lang.alert_&_notices_updated_successfully'));
         } catch (Exception $e) {
@@ -615,6 +629,7 @@ class SettingsController extends Controller
         try {
             /* fetch the values of company from company table */
             $statuss = \DB::table('ticket_status')->get();
+
             /* Direct to Company Settings Page */
             return view('themes.default1.admin.helpdesk.settings.status', compact('statuss'));
         } catch (Exception $e) {
@@ -635,6 +650,7 @@ class SettingsController extends Controller
         try {
             /* fetch the values of company from company table */
             $status = \DB::table('ticket_status')->where('id', '=', $id)->first();
+
             /* Direct to Company Settings Page */
             return view('themes.default1.admin.helpdesk.settings.status-edit', compact('status'));
         } catch (Exception $e) {
@@ -667,6 +683,7 @@ class SettingsController extends Controller
             }
             $statuss->sort = $request->input('sort');
             $statuss->save();
+
             /* Direct to Company Settings Page */
             return redirect()->back()->with('success', Lang::get('lang.status_has_been_updated_successfully'));
         } catch (Exception $e) {
@@ -698,6 +715,7 @@ class SettingsController extends Controller
             }
             $statuss->sort = $request->input('sort');
             $statuss->save();
+
             /* Direct to Company Settings Page */
             return redirect()->back()->with('success', Lang::get('lang.status_has_been_created_successfully'));
         } catch (Exception $ex) {
@@ -718,6 +736,7 @@ class SettingsController extends Controller
             if ($id > 5) {
                 /* fetch the values of company from company table */
                 \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->delete();
+
                 /* Direct to Company Settings Page */
                 return redirect()->back()->with('success', Lang::get('lang.status_has_been_deleted'));
             } else {

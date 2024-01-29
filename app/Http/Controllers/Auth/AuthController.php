@@ -77,6 +77,7 @@ class AuthController extends Controller
         }
         //dd(\Config::get('services'));
         $s = Socialite::driver($provider)->redirect();
+
         //dd('dscd');
         return $s;
     }
@@ -114,6 +115,7 @@ class AuthController extends Controller
                 }
                 Auth::login($user);
             }
+
             //after login redirecting to home page
             return redirect('/');
         } catch (\Exception $ex) {
