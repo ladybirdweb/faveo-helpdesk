@@ -51,6 +51,7 @@ class FilterControllerOld extends Controller
         if ((is_array($tags) && count($tags) > 0) || (is_array($labels) && count($labels) > 0)) {
             $render = true;
         }
+
         // return \Datatables::of($table)->make();
         return \Ttable::getTable($table);
     }

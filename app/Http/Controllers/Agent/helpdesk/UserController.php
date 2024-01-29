@@ -149,6 +149,7 @@ class UserController extends Controller
                 $query->orWhere('country_code', 'LIKE', '%'.$search.'%');
             });
         }
+
         // displaying list of users with chumper datatables
         // return \Datatable::collection(User::where('role', "!=", "admin")->get())
         return \Yajra\DataTables\Facades\DataTables::of($users)
@@ -338,6 +339,7 @@ class UserController extends Controller
 
                 return redirect('user')->with('success', Lang::get('lang.User-Created-Successfully'));
             }
+
 //            $user->save();
             /* redirect to Index page with Success Message */
             return redirect('user')->with('success', Lang::get('lang.User-Created-Successfully'));
@@ -676,6 +678,7 @@ class UserController extends Controller
         $user = new User();
         /* select the field where id = $id(request Id) */
         $users = $user->whereId($id)->first();
+
         /* Update the value by selected field  */
         /* Check whether function success or not */
         try {
@@ -697,6 +700,7 @@ class UserController extends Controller
 
                 $this->storeUserOrgRelation($id, $orgid);
             }
+
             /* redirect to Index page with Success Message */
             return redirect('user')->with('success', Lang::get('lang.User-profile-Updated-Successfully'));
         } catch (Exception $e) {
@@ -932,6 +936,7 @@ class UserController extends Controller
             $user_org->org_id = $org->id;
             $user_org->user_id = $id;
             $user_org->save();
+
             // for success return 0
             return 0;
         }
@@ -956,6 +961,7 @@ class UserController extends Controller
         for ($i = 0; $i < $length; $i++) {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
+
         // return random string
         return $randomString;
     }
@@ -1061,6 +1067,7 @@ class UserController extends Controller
                     if (Hash::check(Input::get('otp'), $otp->otp)) {
                         Otp::where('user_id', '=', Input::get('u_id'))
                                 ->update(['otp' => '']);
+
                         // User::where('id', '=', $user->id)
                         //     ->update(['active' => 1]);
                         // $this->openTicketAfterVerification($user->id);

@@ -150,6 +150,7 @@ class TeamController extends Controller
         $users = DB::table('team_assign_agent')->select('team_assign_agent.id', 'team_assign_agent.team_id', 'users.user_name', 'users.first_name', 'users.last_name', 'users.active', 'users.assign_group', 'users.primary_dpt', 'users.role')
           ->join('users', 'users.id', '=', 'team_assign_agent.agent_id')
           ->where('team_assign_agent.team_id', '=', $id);
+
 //           ->get();
         // dd($users);
         return \Datatable::query($users)
@@ -219,6 +220,7 @@ class TeamController extends Controller
             }
             // dd($a_id);
             $user = $user->whereIn('id', $a_id)->where('active', '=', 1)->orderBy('first_name')->get();
+
             // dd($user);
             return view('themes.default1.admin.helpdesk.agent.teams.edit', compact('agent_id', 'user', 'teams'));
         } catch (Exception $e) {
@@ -250,10 +252,12 @@ class TeamController extends Controller
         $alert = $request->input('assign_alert');
         $teams->assign_alert = $alert;
         $teams->save(); //saving check box
+
         //updating whole field
         /* Check whether function success or not */
         try {
             $teams->fill($request->except('team_lead'))->save();
+
             /* redirect to Index page with Success Message */
             return redirect('teams')->with('success', Lang::get('lang.teams_updated_successfully'));
         } catch (Exception $e) {
@@ -279,6 +283,7 @@ class TeamController extends Controller
             $tickets = DB::table('tickets')->where('team_id', '=', $id)->update(['team_id' => null]);
             /* Check whether function success or not */
             $teams->delete();
+
             /* redirect to Index page with Success Message */
             return redirect('teams')->with('success', Lang::get('lang.teams_deleted_successfully'));
         } catch (Exception $e) {

@@ -249,6 +249,7 @@ class FormController extends Controller
 //                        }
 //                    }
                 }
+
                 // dd($result);
                 return Redirect::back()->with('success', Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is').' '.$result[0].'. ');
             } else {

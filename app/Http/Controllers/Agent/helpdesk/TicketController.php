@@ -501,6 +501,7 @@ class TicketController extends Controller
         $ticket = Tickets::where('tickets.id', '=', $id)->first();
         $html = view('themes.default1.agent.helpdesk.ticket.pdf', compact('id', 'ticket', 'tickets'))->render();
         $html1 = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+
         /**
          * This statement throws error with php7.1.
          *
@@ -2457,6 +2458,7 @@ class TicketController extends Controller
             $ticket = Tickets::where('id', $thread->ticket_id)->first();
             $html = view('themes.default1.agent.helpdesk.ticket.thread-pdf', compact('thread', 'system', 'company', 'ticket'))->render();
             $html1 = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+
             /**
              * This statement throws error with php7.1.
              *
