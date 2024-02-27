@@ -138,14 +138,14 @@ if ($thread->title != "") {
 
             if ($group->can_edit_ticket == 1) {
                 ?>
-            <button type="button" class="btn btn-sm btn-default btn-tool">
+            <button type="button" class="btn btn-sm btn-default btn-tool" data-toggle="modal" data-target="#Edit">
 
                 <i class="fas fa-edit" style="color:green;"></i> {{trans('lang.edit')}}
 
             </button>            <?php } ?>
 
             <?php if ($group->can_assign_ticket == 1) { ?>
-            <button type="button" class="btn btn-sm btn-default btn-tool">
+            <button type="button" class="btn btn-sm btn-default btn-tool" data-toggle="modal" data-target="#assign{{$tickets->id}}">
 
                 <i class="fas fa-hand-point-right" style="color:orange;"></i> {{trans('lang.assign')}}
 
