@@ -24,7 +24,7 @@ class LanguageMiddleware
             $lang = $this->getLangFromSessionOrCache();
         }
 
-        if ($lang == '' or !array_key_exists($lang, Config::get('languages'))) {
+        if ($lang == '' || !array_key_exists($lang, Config::get('languages'))) {
             // no user, session or system language: use the configured default (APP_LOCALE)
             $lang = Config::get('app.locale');
         }
