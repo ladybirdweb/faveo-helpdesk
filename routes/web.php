@@ -556,7 +556,9 @@ Route::middleware('web')->group(function () {
     //===================================================================================
     Route::middleware('auth')->group(function () {
         Route::get('client-profile', [Client\helpdesk\GuestController::class, 'getProfile'])->name('client.profile'); /*  User profile get  */
-        //Route::post('select/all', [Agent\helpdesk\TicketController::class, 'select_all'])->name('select_all');
+        // Customer bulk Close/Open on "My tickets". Distinct name from the agent 'select_all' route;
+        // select_all() itself restricts the 'user' role to Close/Open on its own tickets.
+        Route::post('select/all', [Agent\helpdesk\TicketController::class, 'select_all'])->name('client.select_all');
 
         Route::get('mytickets', [Client\helpdesk\GuestController::class, 'getMyticket'])->name('ticket2');
         Route::get('myticket/{id}', [Client\helpdesk\GuestController::class, 'thread'])->name('ticket'); /* Get my tickets */
@@ -591,6 +593,7 @@ Route::middleware('web')->group(function () {
     Route::post('/post-serial', [Installer\helpdesk\InstallController::class, 'postSerialKeyToFaveo'])->name('post.serialkey');
     Route::post('/CheckSerial', [Installer\helpdesk\InstallController::class, 'PostSerialKey'])->name('CheckSerial');
     Route::get('/JavaScript-disabled', [Installer\helpdesk\InstallController::class, 'jsDisabled'])->name('js-disabled');
+    Route::post('/pre-license', [Installer\helpdesk\InstallController::class, 'licAgreement'])->name('licAgreement');
     Route::get('/step1', [Installer\helpdesk\InstallController::class, 'licence'])->name('licence');
     Route::post('/step1post', [Installer\helpdesk\InstallController::class, 'licencecheck'])->name('postlicence');
     Route::get('/step2', [Installer\helpdesk\InstallController::class, 'prerequisites'])->name('prerequisites');

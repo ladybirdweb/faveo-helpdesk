@@ -558,6 +558,92 @@ class TicketControllerTest extends TestCase
             ->assertSessionHas('fails', 'None Selected!');
     }
 
+    // ── Regression coverage for the customer-deletes-any-ticket report ───────
+    //
+    // Pre-fix: routes/web.php registered 'select/all' under the auth-only
+    // group and select_all()/delete() did no ownership check, so any logged-in
+    // customer could destroy another customer's or an agent's ticket.
+
+    public function test_client_select_all_route_rejects_an_end_user_deleting_anothers_ticket()
+    {
+        $victimOwner = $this->makeEndUser();
+        $victimTicket = $this->makeTicket($victimOwner);
+
+        $attacker = $this->makeEndUser();
+        $this->actingAs($attacker);
+
+        $this->post(route('client.select_all'), [
+            'select_all' => [$victimTicket->id],
+            'submit'     => 'Delete',
+        ])->assertStatus(302)->assertSessionHas('fails', 'Unauthorized');
+
+        $this->assertEquals(1, $victimTicket->fresh()->status, "victim's ticket must be untouched");
+        $this->assertEquals(0, $victimTicket->fresh()->is_deleted);
+    }
+
+    public function test_client_select_all_route_rejects_an_end_user_deleting_anothers_ticket_forever()
+    {
+        $victimOwner = $this->makeEndUser();
+        $victimTicket = $this->makeTicket($victimOwner);
+        $id = $victimTicket->id;
+
+        $attacker = $this->makeEndUser();
+        $this->actingAs($attacker);
+
+        $this->post(route('client.select_all'), [
+            'select_all' => [$id],
+            'submit'     => 'Delete forever',
+        ])->assertStatus(302)->assertSessionHas('fails', 'Unauthorized');
+
+        $this->assertDatabaseHas('tickets', ['id' => $id]);
+    }
+
+    public function test_client_select_all_route_lets_an_end_user_close_their_own_ticket()
+    {
+        $owner = $this->makeEndUser();
+        $ticket = $this->makeTicket($owner);
+        $this->actingAs($owner);
+
+        $this->post(route('client.select_all'), [
+            'select_all' => [$ticket->id],
+            'submit'     => 'Close',
+        ])->assertStatus(302);
+
+        $this->assertEquals(3, $ticket->fresh()->status, 'the feature the route exists for must keep working');
+    }
+
+    public function test_client_select_all_route_does_not_close_anothers_ticket()
+    {
+        $victimOwner = $this->makeEndUser();
+        $victimTicket = $this->makeTicket($victimOwner);
+
+        $attacker = $this->makeEndUser();
+        $this->actingAs($attacker);
+
+        $this->post(route('client.select_all'), [
+            'select_all' => [$victimTicket->id],
+            'submit'     => 'Close',
+        ]);
+
+        $this->assertEquals(1, $victimTicket->fresh()->status, 'ownership scoping must still apply');
+    }
+
+    public function test_agent_select_all_route_is_refused_for_an_end_user()
+    {
+        $victimOwner = $this->makeEndUser();
+        $victimTicket = $this->makeTicket($victimOwner);
+
+        $attacker = $this->makeEndUser();
+        $this->actingAs($attacker);
+
+        $this->post(route('select_all'), [
+            'select_all' => [$victimTicket->id],
+            'submit'     => 'Delete',
+        ])->assertStatus(302)->assertSessionHas('fails', 'You are not Authorised');
+
+        $this->assertEquals(1, $victimTicket->fresh()->status);
+    }
+
     // ── Single-ticket status actions ─────────────────────────────────────────
 
     public function test_close_route_sets_status_to_closed()
