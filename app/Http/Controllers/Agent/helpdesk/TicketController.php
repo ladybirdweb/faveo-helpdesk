@@ -1840,7 +1840,11 @@ class TicketController extends Controller
         if (Input::has('select_all')) {
             $selectall = Input::get('select_all');
             $value = Input::get('submit');
-            foreach ($selectall as $delete) {
+            // Customers may only close/reopen their own tickets; never delete.
+            if (Auth::user()->role === 'user' && !in_array($value, ['Close', 'Open'], true)) {
+                return redirect()->back()->with('fails', 'Unauthorized');
+            }
+            foreach ((array) $selectall as $delete) {
                 $ticket = Tickets::whereId($delete)->first();
                 if (!$ticket) {
                     continue;
